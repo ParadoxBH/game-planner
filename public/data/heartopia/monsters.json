@@ -1,0 +1,10 @@
+[
+  {
+    "id": "heart_mob_1",
+    "name": "Slime da Floresta",
+    "level": 1,
+    "drops": [
+      { "itemId": "heart_item_1", "chance": 0.5 }
+    ]
+  }
+]

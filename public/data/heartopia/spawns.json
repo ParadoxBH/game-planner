@@ -1,0 +1,8 @@
+[
+  {
+    "id": "heart_spawn_1",
+    "entityId": "heart_mob_1",
+    "type": "monster",
+    "position": [ 50, 50 ]
+  }
+]

@@ -1,4 +1,3 @@
-import React from "react";
 import {
   AppBar,
   Toolbar,
@@ -7,58 +6,87 @@ import {
   Box,
   Container,
   Stack,
+  Breadcrumbs
 } from "@mui/material";
 import {
-  Explore,
-  MenuBook,
   Construction,
   Map,
   Pets,
   Assignment,
+  NavigateNext
 } from "@mui/icons-material";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const navItems = [
-  //{ label: 'Guias', path: "guide", icon: <MenuBook /> },
-  { label: "Mapa", path: "map", icon: <Map /> },
-  //{ label: 'Itens', path: "itens", icon: <Construction /> },
-  //{ label: 'Monstros', path: "enemys", icon: <Pets /> },
-  //{ label: 'Quests', path: "quests", icon: <Assignment /> },
-  //{ label: 'Receitas', path: "recipes", icon: <Explore /> },
+  { label: "Mapa", pathSuffix: "map", icon: <Map /> },
+  { label: 'Itens', pathSuffix: "items", icon: <Construction /> },
+  { label: 'Monstros', pathSuffix: "monsters", icon: <Pets /> },
+  { label: 'Quests', pathSuffix: "quests", icon: <Assignment /> },
 ];
 
 export function Header() {
+  const location = useLocation();
+  const pathParts = location.pathname.split('/').filter(Boolean);
+  
+  // Basic heuristic: Se a rota for /game/:gameId/..., extrai o gameId
+  const isGameRoute = pathParts[0] === 'game' && pathParts.length >= 2;
+  const gameId = isGameRoute ? pathParts[1] : null;
+
   return (
     <AppBar position="static" sx={{ backgroundColor: "#1a1a1a" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Stack sx={{ flexGrow: 1 }} alignItems={"start"}>
-            {/* LOGO */}
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              color="primary"
-              sx={{ fontWeight: "bold", letterSpacing: 1 }}
-            >
-              Game Planner
-            </Typography>
+            <Breadcrumbs separator={<NavigateNext fontSize="small" color="primary" />} aria-label="breadcrumb">
+              <Link to="/" style={{ textDecoration: 'none' }}>
+                <Typography
+                  variant="h6"
+                  noWrap
+                  component="div"
+                  color="primary"
+                  sx={{ fontWeight: "bold", letterSpacing: 1 }}
+                >
+                  Game Planner
+                </Typography>
+              </Link>
+              {gameId && (
+                <Link to={`/game/${gameId}`} style={{ textDecoration: 'none' }}>
+                  <Typography
+                    variant="h6"
+                    noWrap
+                    component="div"
+                    color="text.secondary"
+                    sx={{ textTransform: 'capitalize', fontWeight: "bold" }}
+                  >
+                    {gameId}
+                  </Typography>
+                </Link>
+              )}
+            </Breadcrumbs>
           </Stack>
 
-          {/* LINKS DE NAVEGAÇÃO */}
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {navItems.map((item) => (
-              <Button
-                key={item.label}
-                component={Link} // O botão do MUI agora se comporta como um Link
-                to={item.path}   // Ex: "/mapa"
-                startIcon={item.icon}
-                sx={{ my: 2, color: "white", display: "flex", mx: 1 }}
-              >
-                {item.label}
-              </Button>
-            ))}
-          </Box>
+          {/* Somente exibe abas extras se estiver dentro de um jogo */}
+          {gameId && (
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              {navItems.map((item) => (
+                <Button
+                  key={item.label}
+                  component={Link} 
+                  to={`/game/${gameId}/${item.pathSuffix}`}
+                  startIcon={item.icon}
+                  sx={{ 
+                    my: 2, 
+                    color: "white", 
+                    display: "flex", 
+                    mx: 1,
+                    ...(location.pathname.includes(item.pathSuffix) && { borderBottom: '2px solid #ff4400', borderRadius: 0 })
+                  }}
+                >
+                  {item.label}
+                </Button>
+              ))}
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>

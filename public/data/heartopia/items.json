@@ -1,0 +1,14 @@
+[
+  {
+    "id": "heart_item_1",
+    "name": "Madeira de Carvalho",
+    "type": "resource",
+    "description": "Madeira básica usada para construção."
+  },
+  {
+    "id": "heart_item_2",
+    "name": "Pedra Lascada",
+    "type": "resource",
+    "description": "Uma pedra resistente para ferramentas iniciais."
+  }
+]

@@ -2,29 +2,30 @@ import Typography from "@mui/material/Typography";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { MapView } from "./components/MapView";
 import { Home } from "./components/Home";
+import { MainLayout } from "./layouts/MainLayout";
+import { GameDashboard } from "./components/GameDashboard";
 
 export function RoutesPage() {
   return (
     <Routes>
-      {/* Rota Inicial */}
-      <Route
-        path="/"
-        element={
-          <Home/>
-        }
-      />
+      <Route element={<MainLayout />}>
+        {/* Rota Inicial (Seleção de Jogo) */}
+        <Route path="/" element={<Home />} />
 
-      {/* Rota do Mapa */}
-      <Route path="/map" element={<MapView/>} />
+        {/* Rotas de um jogo específico */}
+        <Route path="/game/:gameId">
+          <Route index element={<GameDashboard />} />
+          <Route path="map" element={<MapView />} />
 
-      {/* Outras rotas (Exemplos) */}
-      <Route
-        path="/itens"
-        element={<Typography p={4}>Lista de Itens</Typography>}
-      />
+          {/* Placeholders adicionais baseados nos novos botões da Header */}
+          <Route path="items" element={<Typography p={4} variant="h4">Lista de Itens (Em Breve)</Typography>} />
+          <Route path="monsters" element={<Typography p={4} variant="h4">Lista de Monstros (Em Breve)</Typography>} />
+          <Route path="quests" element={<Typography p={4} variant="h4">Lista de Missões (Em Breve)</Typography>} />
+        </Route>
 
-      {/* Redirecionar rotas inexistentes para a home */}
-      <Route path="*" element={<Navigate to="/" />} />
+        {/* Redirecionar rotas inexistentes para a home */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Route>
     </Routes>
   );
 }
