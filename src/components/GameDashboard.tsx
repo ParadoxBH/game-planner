@@ -38,10 +38,10 @@ export function GameDashboard() {
           variant="outlined"
           size="large"
           startIcon={<Pets />}
-          onClick={() => navigate(`/game/${gameId}/monsters`)}
+          onClick={() => navigate(`/game/${gameId}/entity`)}
           sx={{ py: 2, px: 4, borderRadius: 2 }}
         >
-          Monstros
+          Entidades
         </Button>
         <Button
           variant="outlined"

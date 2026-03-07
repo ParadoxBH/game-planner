@@ -1,14 +1,14 @@
 [
   {
-    "id": "heart_item_1",
-    "name": "Madeira de Carvalho",
+    "id": "mirtilo",
+    "name": "Mirtilo",
     "type": "resource",
-    "description": "Madeira básica usada para construção."
+    "description": "Coma mais mirtilo e mantenha os olhos brilhantes"
   },
   {
-    "id": "heart_item_2",
-    "name": "Pedra Lascada",
+    "id": "graveto",
+    "name": "Galho de Arbusto",
     "type": "resource",
-    "description": "Uma pedra resistente para ferramentas iniciais."
+    "description": "Um ramo comum"
   }
 ]

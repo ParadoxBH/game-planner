@@ -1,0 +1,18 @@
+[
+  {
+    "id": "brush_berry",
+    "name": "Arbusto de Mirtilo",
+    "category": "resource",
+    "drops": [
+      {
+        "itemId": "mirtilo",
+        "chance": 1
+      },
+      {
+        "itemId": "graveto",
+        "chance": 1,
+        "quant": 3
+      }
+    ]
+  }
+]

@@ -19,7 +19,7 @@ export function RoutesPage() {
 
           {/* Placeholders adicionais baseados nos novos botões da Header */}
           <Route path="items" element={<Typography p={4} variant="h4">Lista de Itens (Em Breve)</Typography>} />
-          <Route path="monsters" element={<Typography p={4} variant="h4">Lista de Monstros (Em Breve)</Typography>} />
+          <Route path="entity" element={<Typography p={4} variant="h4">Lista de Entidades (Em Breve)</Typography>} />
           <Route path="quests" element={<Typography p={4} variant="h4">Lista de Missões (Em Breve)</Typography>} />
         </Route>
 

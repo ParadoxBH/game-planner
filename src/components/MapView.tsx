@@ -37,6 +37,13 @@ interface Spawn {
   entityId: string;
   type: string;
   position: [number, number];
+  mapId?: string;
+}
+
+interface GameEntity {
+  id: string;
+  name: string;
+  category: string;
 }
 
 interface CursorTrackerProps {
@@ -246,6 +253,20 @@ export const MapView = () => {
     error: spawnError,
   } = useGameData<Spawn[]>(gameId, "spawns");
 
+  const {
+    data: entities,
+  } = useGameData<GameEntity[]>(gameId, "entity");
+
+  const entityLookup = useMemo(() => {
+    const lookup: Record<string, GameEntity> = {};
+    if (entities) {
+      entities.forEach(e => {
+        lookup[e.id] = e;
+      });
+    }
+    return lookup;
+  }, [entities]);
+
   if (loadingGame) return <Box sx={{ p: 4 }}><Typography>Carregando mapa...</Typography></Box>;
   if (!gameInfo || !selectedMap) return <Box sx={{ p: 4 }}><Typography>Jogo ou mapa não encontrado.</Typography></Box>;
 
@@ -307,15 +328,26 @@ export const MapView = () => {
 
         {!loadingSpawns &&
           spawns &&
-          spawns.map((spawn) => (
-            <Marker key={spawn.id} position={spawn.position}>
-              <Popup>
-                <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>{spawn.entityId}</Typography>
-                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1 }}>Tipo: {spawn.type}</Typography>
-                <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>[{spawn.position[0].toFixed(1)}, {spawn.position[1].toFixed(1)}]</Typography>
-              </Popup>
-            </Marker>
-          ))}
+          spawns
+            .filter((spawn: any) => !spawn.mapId || spawn.mapId === selectedMapId)
+            .map((spawn) => {
+              const entity = entityLookup[spawn.entityId];
+              return (
+                <Marker key={spawn.id} position={spawn.position}>
+                  <Popup>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+                      {entity?.name || spawn.entityId}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1 }}>
+                      Categoria: {entity?.category || spawn.type}
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
+                      [{spawn.position[0].toFixed(1)}, {spawn.position[1].toFixed(1)}]
+                    </Typography>
+                  </Popup>
+                </Marker>
+              );
+            })}
       </MapContainer>
 
       <MapInfoOverlay 

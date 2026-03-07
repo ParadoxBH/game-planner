@@ -1,8 +1,38 @@
 [
   {
-    "id": "heart_spawn_1",
-    "entityId": "heart_mob_1",
-    "type": "monster",
-    "position": [ 50, 50 ]
+    "id": "berry_1",
+    "entityId": "brush_berry",
+    "mapId": "main",
+    "position": [
+      -31,
+      -285
+    ]
+  },
+  {
+    "id": "berry_2",
+    "entityId": "brush_berry",
+    "mapId": "main",
+    "position": [
+      -8,
+      -277
+    ]
+  },
+  {
+    "id": "berry_3",
+    "entityId": "brush_berry",
+    "mapId": "main",
+    "position": [
+      33,
+      -275
+    ]
+  },
+  {
+    "id": "berry_4",
+    "entityId": "brush_berry",
+    "mapId": "main",
+    "position": [
+      53,
+      -289
+    ]
   }
 ]
