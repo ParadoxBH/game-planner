@@ -2,11 +2,35 @@
   {
     "id": "apogea",
     "name": "Apogea",
-    "description": "Exploração e sobrevivência em um mundo focado em coleta de recursos."
+    "description": "Exploração e sobrevivência em um mundo focado em coleta de recursos.",
+    "maps": [
+      {
+        "id": "minimap",
+        "name": "Minimap Principal",
+        "type": "layered",
+        "urlPattern": "https://paszqa.github.io/quickapogean/Map/Levels/combined_y{layer}_minimap.png",
+        "layers": 16,
+        "bounds": [[0, 0], [1000, 1000]],
+        "minZoom": -2,
+        "maxZoom": 2
+      }
+    ]
   },
   {
     "id": "heartopia",
     "name": "Heartopia",
-    "description": "Um RPG aconchegante focado em construção, crafting e amizades."
+    "description": "Um RPG aconchegante focado em construção, crafting e amizades.",
+    "maps": [
+      {
+        "id": "main",
+        "name": "Mapa Global",
+        "type": "single",
+        "url": "/data/heartopia/map.png",
+        "bounds": [[-790.57, -790.57], [790.57, 790.57]],
+        "minZoom": -2,
+        "maxZoom": 4,
+        "thumbnail": "/data/heartopia/map.png"
+      }
+    ]
   }
 ]
