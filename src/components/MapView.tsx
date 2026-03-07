@@ -9,7 +9,9 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import { useGameData } from "../hooks/useGameData";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { SimplifiedEntity } from "./SimplifiedEntity";
+import { EntityDrawer } from "./EntityDrawer";
 import { loadGamesList } from "../services/dataLoader";
 
 interface MapMetadata {
@@ -44,6 +46,23 @@ interface GameEntity {
   id: string;
   name: string;
   category: string;
+  drops?: {
+    itemId: string;
+    chance: number;
+    quant: number;
+  }[];
+}
+
+interface GameItem {
+  id: string;
+  name: string;
+  type: string;
+  description: string;
+}
+
+export interface NavigationItem {
+  type: "entity" | "item";
+  id: string;
 }
 
 interface CursorTrackerProps {
@@ -229,6 +248,31 @@ export const MapView = () => {
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [selectedMapId, setSelectedMapId] = useState<string>("");
   const [loadingGame, setLoadingGame] = useState(true);
+  const [navigationStack, setNavigationStack] = useState<NavigationItem[]>([]);
+  const mapRef = useRef<any>(null);
+
+  const drawerOpen = navigationStack.length > 0;
+
+  const handlePush = (item: NavigationItem) => {
+    setNavigationStack(prev => [...prev, item]);
+  };
+
+  const handlePop = () => {
+    setNavigationStack(prev => prev.slice(0, -1));
+  };
+
+  const handleCloseDrawer = () => {
+    setNavigationStack([]);
+  };
+
+  // Garantir que o mapa redimensione quando o drawer abrir/fechar
+  useEffect(() => {
+    if (mapRef.current) {
+      setTimeout(() => {
+        mapRef.current.invalidateSize();
+      }, 300); // Aguarda a animação do drawer
+    }
+  }, [drawerOpen]);
 
   useEffect(() => {
     loadGamesList().then(games => {
@@ -257,6 +301,10 @@ export const MapView = () => {
     data: entities,
   } = useGameData<GameEntity[]>(gameId, "entity");
 
+  const {
+    data: items,
+  } = useGameData<GameItem[]>(gameId, "items");
+
   const entityLookup = useMemo(() => {
     const lookup: Record<string, GameEntity> = {};
     if (entities) {
@@ -277,11 +325,15 @@ export const MapView = () => {
         height: "100%",
         backgroundColor: "#0b0b0b",
         position: "relative",
+        display: "flex", // Adicionado para layout lado a lado
+        overflow: "hidden",
       }}
     >
-      <MapContainer
-        key={`${gameId}-${selectedMapId}`} // Force re-mount on map change
-        crs={CRS.Simple}
+      <Box sx={{ flexGrow: 1, position: "relative", height: "100%" }}>
+        <MapContainer
+          key={`${gameId}-${selectedMapId}`} // Force re-mount on map change
+          ref={mapRef}
+          crs={CRS.Simple}
         bounds={selectedMap.bounds as LatLngBoundsExpression}
         center={selectedMap.type === "layered" ? [500, 500] : [0, 0]}
         zoom={selectedMap.minZoom}
@@ -335,28 +387,41 @@ export const MapView = () => {
               return (
                 <Marker key={spawn.id} position={spawn.position}>
                   <Popup>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
-                      {entity?.name || spawn.entityId}
-                    </Typography>
-                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1 }}>
-                      Categoria: {entity?.category || spawn.type}
-                    </Typography>
-                    <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
-                      [{spawn.position[0].toFixed(1)}, {spawn.position[1].toFixed(1)}]
-                    </Typography>
+                    <SimplifiedEntity 
+                      entity={entity || { id: spawn.entityId, name: spawn.entityId, category: spawn.type }} 
+                      onExpand={() => {
+                        handlePush({ type: "entity", id: spawn.entityId });
+                      }}
+                    />
                   </Popup>
                 </Marker>
               );
             })}
-      </MapContainer>
+        </MapContainer>
 
-      <MapInfoOverlay 
-        gameName={gameInfo.name} 
-        coords={cursorCoords} 
-        maps={gameInfo.maps}
-        selectedMapId={selectedMapId}
-        onSelectMap={setSelectedMapId}
-      />
+        <MapInfoOverlay 
+          gameName={gameInfo.name} 
+          coords={cursorCoords} 
+          maps={gameInfo.maps}
+          selectedMapId={selectedMapId}
+          onSelectMap={setSelectedMapId}
+        />
+      </Box>
+
+      {/* Side Drawer */}
+      {drawerOpen && (
+        <EntityDrawer 
+          stack={navigationStack}
+          entities={entities || []}
+          items={items || []}
+          spawns={spawns || []}
+          maps={gameInfo.maps}
+          onSelectMap={setSelectedMapId}
+          onPush={handlePush}
+          onPop={handlePop}
+          onClose={handleCloseDrawer} 
+        />
+      )}
     </Box>
   );
 };

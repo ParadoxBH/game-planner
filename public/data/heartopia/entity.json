@@ -6,7 +6,8 @@
     "drops": [
       {
         "itemId": "mirtilo",
-        "chance": 1
+        "chance": 1,
+        "quant": 1
       },
       {
         "itemId": "graveto",
