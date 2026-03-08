@@ -6,6 +6,7 @@ import {
   Marker,
   Popup,
   ImageOverlay,
+  TileLayer,
   useMapEvents,
 } from "react-leaflet";
 import { useGameData } from "../hooks/useGameData";
@@ -17,13 +18,15 @@ import { loadGamesList } from "../services/dataLoader";
 interface MapMetadata {
   id: string;
   name: string;
-  type: "single" | "layered";
+  type: "single" | "layered" | "tile";
   url?: string;
   urlPattern?: string;
   layers?: number;
   bounds: [[number, number], [number, number]];
   minZoom: number;
   maxZoom: number;
+  tileMinZoom?: number;
+  tileMaxZoom?: number;
   thumbnail?: string;
 }
 
@@ -358,6 +361,17 @@ export const MapView = () => {
           <ImageOverlay
             url={selectedMap.url}
             bounds={selectedMap.bounds as LatLngBoundsExpression}
+          />
+        )}
+        
+        {selectedMap.type === "tile" && selectedMap.url && (
+          <TileLayer
+            url={selectedMap.url}
+            minZoom={selectedMap.minZoom}
+            maxZoom={selectedMap.maxZoom}
+            minNativeZoom={selectedMap.tileMinZoom ?? 4}
+            maxNativeZoom={selectedMap.tileMaxZoom ?? 4}
+            noWrap={true}
           />
         )}
 
