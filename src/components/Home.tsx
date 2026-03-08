@@ -113,7 +113,7 @@ export function Home() {
                 <CardMedia
                   component="img"
                   height="200"
-                  image={game.thumbnail || `/public/data/${game.id}/logo.png`}
+                  image={game.thumbnail || `/public/img/${game.id}/logo.png`}
                   alt={`Thumbnail of ${game.name}`}
                   sx={{ filter: "brightness(0.8)" }}
                 />
