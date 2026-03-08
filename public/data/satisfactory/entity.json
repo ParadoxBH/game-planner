@@ -46,5 +46,41 @@
         "time": 2
       }
     ]
+  },
+  {
+    "id": "power_slug_l1",
+    "name": "Power Slug (Blue)",
+    "category": "resource",
+    "drops": [
+      {
+        "itemId": "power_slug_l1",
+        "chance": 1,
+        "quant": 1
+      }
+    ]
+  },
+  {
+    "id": "power_slug_l2",
+    "name": "Power Slug (Yellow)",
+    "category": "resource",
+    "drops": [
+      {
+        "itemId": "power_slug_l2",
+        "chance": 1,
+        "quant": 1
+      }
+    ]
+  },
+  {
+    "id": "power_slug_l3",
+    "name": "Power Slug (Purple)",
+    "category": "resource",
+    "drops": [
+      {
+        "itemId": "power_slug_l3",
+        "chance": 1,
+        "quant": 1
+      }
+    ]
   }
 ]

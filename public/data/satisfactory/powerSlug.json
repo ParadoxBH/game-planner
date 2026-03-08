@@ -1,0 +1,652 @@
+[
+    {
+        "ID": "BP_Crystal12_12",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -39479.77734375,
+            "y": 276042.21875,
+            "z": -2510.846923828125,
+            "rotation": 255.61787874393951
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -39479.77734375,
+                    "y": 276042.21875,
+                    "z": -2510.846923828125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal27_27",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -54543.35546875,
+            "y": 270830.1875,
+            "z": -1451.72412109375,
+            "rotation": 232.89628601074219
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -54543.35546875,
+                    "y": 270830.1875,
+                    "z": -1451.72412109375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal3_3",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -64958.64453125,
+            "y": 268214,
+            "z": -3016.97998046875,
+            "rotation": 115.72634887695312
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -64958.64453125,
+                    "y": 268214,
+                    "z": -3016.97998046875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal1_0",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -56825.71875,
+            "y": 234985.296875,
+            "z": -2647.916259765625,
+            "rotation": 2.682861328125
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -56825.71875,
+                    "y": 234985.296875,
+                    "z": -2647.916259765625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal13_13",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -18183.1796875,
+            "y": 263638.65625,
+            "z": 1988.0001220703125,
+            "rotation": 282.76116943359375
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -18183.1796875,
+                    "y": 263638.65625,
+                    "z": 1988.0001220703125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal14_14",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -18093.9140625,
+            "y": 272198.40625,
+            "z": -5811.16748046875,
+            "rotation": 59.966461181640625
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -18093.9140625,
+                    "y": 272198.40625,
+                    "z": -5811.16748046875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal16_16",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -44644.91015625,
+            "y": 229139.5,
+            "z": 277.98199462890625,
+            "rotation": 142.4869499206543
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -44644.91015625,
+                    "y": 229139.5,
+                    "z": 277.98199462890625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal31_7",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -12908.09375,
+            "y": 291933.8125,
+            "z": -1779.264892578125,
+            "rotation": 149.7876358032226
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -12908.09375,
+                    "y": 291933.8125,
+                    "z": -1779.264892578125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal35",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -91820.109375,
+            "y": 249822.171875,
+            "z": -3181.374267578125,
+            "rotation": 128.35334777832031
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -91820.109375,
+                    "y": 249822.171875,
+                    "z": -3181.374267578125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal26_26",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -70297.375,
+            "y": 292339.21875,
+            "z": -6331.5673828125,
+            "rotation": 301.11618041992188
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -70297.375,
+                    "y": 292339.21875,
+                    "z": -6331.5673828125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal32_11",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -54766.41015625,
+            "y": 283464.59375,
+            "z": -1426.6380615234375,
+            "rotation": 243.32998657226562
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -54766.41015625,
+                    "y": 283464.59375,
+                    "z": -1426.6380615234375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal28_28",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -78244.0703125,
+            "y": 270755.125,
+            "z": -3966.489501953125,
+            "rotation": 311.22517395019531
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -78244.0703125,
+                    "y": 270755.125,
+                    "z": -3966.489501953125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal36",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -15141.16796875,
+            "y": 218878.703125,
+            "z": 232.74456787109375,
+            "rotation": 196.37235260009766
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -15141.16796875,
+                    "y": 218878.703125,
+                    "z": 232.74456787109375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal7_7",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": 10052.9375,
+            "y": 276179.96875,
+            "z": -5657.83203125,
+            "rotation": 123.07009887695312
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 10052.9375,
+                    "y": 276179.96875,
+                    "z": -5657.83203125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal30_3",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -11948.3671875,
+            "y": 302673.125,
+            "z": -1881.1641845703125,
+            "rotation": 209.34476470947266
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -11948.3671875,
+                    "y": 302673.125,
+                    "z": -1881.1641845703125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal15_15",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -4365.59765625,
+            "y": 290254.25,
+            "z": 2358.487548828125,
+            "rotation": 14.7962646484375
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -4365.59765625,
+                    "y": 290254.25,
+                    "z": 2358.487548828125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal2_2",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": 6632.5,
+            "y": 292644.25,
+            "z": 1160.996337890625,
+            "rotation": 151.02007293701166
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 6632.5,
+                    "y": 292644.25,
+                    "z": 1160.996337890625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal34",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -87052.046875,
+            "y": 276875.28125,
+            "z": -3049.356201171875,
+            "rotation": 150.86338806152349
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -87052.046875,
+                    "y": 276875.28125,
+                    "z": -3049.356201171875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal11_11",
+        "Name": "",
+        "ClassName": "BP_Crystal_C",
+        "location": {
+            "x": -53805.79296875,
+            "y": 300084.34375,
+            "z": -6722.62353515625,
+            "rotation": 359.33984374999994
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -53805.79296875,
+                    "y": 300084.34375,
+                    "z": -6722.62353515625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal_mk29",
+        "Name": "",
+        "ClassName": "BP_Crystal_mk2_C",
+        "location": {
+            "x": -55705.3828125,
+            "y": 250303.546875,
+            "z": -1964.357177734375,
+            "rotation": 194.57448577880859
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -55705.3828125,
+                    "y": 250303.546875,
+                    "z": -1964.357177734375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal_mk211",
+        "Name": "",
+        "ClassName": "BP_Crystal_mk2_C",
+        "location": {
+            "x": -12194.98828125,
+            "y": 283251.25,
+            "z": 3348.228515625,
+            "rotation": 220.87998962402344
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -12194.98828125,
+                    "y": 283251.25,
+                    "z": 3348.228515625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal_mk26_5",
+        "Name": "",
+        "ClassName": "BP_Crystal_mk2_C",
+        "location": {
+            "x": -71178.8671875,
+            "y": 282572.96875,
+            "z": -3690.357666015625,
+            "rotation": 81.255523681640625
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -71178.8671875,
+                    "y": 282572.96875,
+                    "z": -3690.357666015625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal_mk27_6",
+        "Name": "",
+        "ClassName": "BP_Crystal_mk2_C",
+        "location": {
+            "x": -91286.1953125,
+            "y": 271310.28125,
+            "z": -6500.02587890625,
+            "rotation": 285.27986145019531
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -91286.1953125,
+                    "y": 271310.28125,
+                    "z": -6500.02587890625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal_mk25_4",
+        "Name": "",
+        "ClassName": "BP_Crystal_mk2_C",
+        "location": {
+            "x": -31863.052734375,
+            "y": 304196.125,
+            "z": -1471.3424072265625,
+            "rotation": 202.03620147705078
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -31863.052734375,
+                    "y": 304196.125,
+                    "z": -1471.3424072265625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal_mk24_3",
+        "Name": "",
+        "ClassName": "BP_Crystal_mk2_C",
+        "location": {
+            "x": -5944.2109375,
+            "y": 266008.28125,
+            "z": 676.99810791015625,
+            "rotation": 90.438259303569794
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -5944.2109375,
+                    "y": 266008.28125,
+                    "z": 676.99810791015625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_Crystal_mk33_2",
+        "Name": "",
+        "ClassName": "BP_Crystal_mk3_C",
+        "location": {
+            "x": -19009.1015625,
+            "y": 272696.15625,
+            "z": 10535.1015625,
+            "rotation": 309.75173950195312
+        },
+        "features": {
+            "properties": {
+                "name": "",
+                "type": "Power Slug"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -19009.1015625,
+                    "y": 272696.15625,
+                    "z": 10535.1015625
+                },
+                "type": "Point"
+            }
+        }
+    }
+]

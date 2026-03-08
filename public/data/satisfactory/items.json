@@ -40,5 +40,29 @@
     "name": "Fio de Cobre",
     "description": "Feito de lingotes de cobre.",
     "category": "parts"
+  },
+  {
+    "id": "power_slug_l1",
+    "name": "Power Slug (Blue)",
+    "description": "A strange slug radiating a strange power",
+    "category": "parts",
+    "maxStack": 50,
+    "icon": "/img/satisfactory/itens/Blue_Power_Slug.webp"
+  },
+  {
+    "id": "power_slug_l2",
+    "name": "Power Slug (Yellow)",
+    "description": "A strange slug radiating a strange power",
+    "category": "parts",
+    "maxStack": 50,
+    "icon": "/img/satisfactory/itens/Yellow_Power_Slug.webp"
+  },
+  {
+    "id": "power_slug_l3",
+    "name": "Power Slug (Purple)",
+    "description": "A strange slug radiating a strange power",
+    "category": "parts",
+    "maxStack": 50,
+    "icon": "/img/satisfactory/itens/Purple_Power_Slug.webp"
   }
 ]
