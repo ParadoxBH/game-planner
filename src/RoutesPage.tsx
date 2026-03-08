@@ -1,9 +1,10 @@
-import Typography from "@mui/material/Typography";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { MapView } from "./components/MapView";
 import { Home } from "./components/Home";
 import { MainLayout } from "./layouts/MainLayout";
 import { GameDashboard } from "./components/GameDashboard";
+import { ItemsPage } from "./components/ItemsPage";
+import { Typography } from "@mui/material";
 
 export function RoutesPage() {
   return (
@@ -18,7 +19,7 @@ export function RoutesPage() {
           <Route path="map" element={<MapView />} />
 
           {/* Placeholders adicionais baseados nos novos botões da Header */}
-          <Route path="items" element={<Typography p={4} variant="h4">Lista de Itens (Em Breve)</Typography>} />
+          <Route path="items" element={<ItemsPage />} />
           <Route path="entity" element={<Typography p={4} variant="h4">Lista de Entidades (Em Breve)</Typography>} />
           <Route path="quests" element={<Typography p={4} variant="h4">Lista de Missões (Em Breve)</Typography>} />
         </Route>
