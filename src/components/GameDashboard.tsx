@@ -1,8 +1,9 @@
-import { Box, Button, Typography, Stack } from "@mui/material";
+import { Box, Button, Typography, Stack, useTheme } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { Map, Construction, Pets, Assignment } from "@mui/icons-material";
 
 export function GameDashboard() {
+  const theme = useTheme();
   const { gameId } = useParams();
   const navigate = useNavigate();
 
@@ -12,7 +13,7 @@ export function GameDashboard() {
   return (
     <Box sx={{ p: 4, width: "100%", maxWidth: "1200px", mx: "auto" }}>
       <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', mb: 4 }}>
-        Dashboard: <span style={{ color: '#ff4400' }}>{gameId ? capitalize(gameId) : ''}</span>
+        Dashboard: <span style={{ color: theme.palette.primary.main }}>{gameId ? capitalize(gameId) : ''}</span>
       </Typography>
 
       <Stack spacing={2} direction="row" flexWrap="wrap" useFlexGap sx={{ mt: 4 }}>
@@ -21,7 +22,7 @@ export function GameDashboard() {
           size="large"
           startIcon={<Map />}
           onClick={() => navigate(`/game/${gameId}/map`)}
-          sx={{ py: 2, px: 4, borderRadius: 2 }}
+          sx={{ py: 2, px: 4, borderRadius: 1 }}
         >
           Mapa Interativo
         </Button>
@@ -30,7 +31,7 @@ export function GameDashboard() {
           size="large"
           startIcon={<Construction />}
           onClick={() => navigate(`/game/${gameId}/items`)}
-          sx={{ py: 2, px: 4, borderRadius: 2 }}
+          sx={{ py: 2, px: 4, borderRadius: 1 }}
         >
           Itens & Recursos
         </Button>
@@ -39,7 +40,7 @@ export function GameDashboard() {
           size="large"
           startIcon={<Pets />}
           onClick={() => navigate(`/game/${gameId}/entity`)}
-          sx={{ py: 2, px: 4, borderRadius: 2 }}
+          sx={{ py: 2, px: 4, borderRadius: 1 }}
         >
           Entidades
         </Button>
@@ -48,7 +49,7 @@ export function GameDashboard() {
           size="large"
           startIcon={<Assignment />}
           onClick={() => navigate(`/game/${gameId}/quests`)}
-          sx={{ py: 2, px: 4, borderRadius: 2 }}
+          sx={{ py: 2, px: 4, borderRadius: 1 }}
         >
           Missões
         </Button>

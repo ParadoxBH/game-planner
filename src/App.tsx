@@ -1,24 +1,17 @@
 import {
   CssBaseline,
   ThemeProvider,
-  createTheme,
 } from "@mui/material";
 import "./App.css";
 import "leaflet/dist/leaflet.css";
 import { BrowserRouter } from "react-router-dom";
 import { RoutesPage } from "./RoutesPage";
 
-// Definindo um tema escuro para o "clima" de Wiki de Jogo
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-    primary: { main: "#ff4400" }, // Um laranja vivo para destaque
-  },
-});
+import { theme } from "./theme/theme";
 
 function App() {
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline /> {/* Reseta o CSS padrão do navegador */}
       <BrowserRouter>
           <RoutesPage />

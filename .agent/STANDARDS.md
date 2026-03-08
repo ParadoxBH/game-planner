@@ -3,10 +3,31 @@
 This document defines architectural and design standards to ensure consistency.
 
 ## 🎨 Design System
-- **Theme**: Dark mode by default (`#0b0b0b` / `#0d0d0d`).
-- **Accent Color**: Orange (`#ff4400`).
-- **Typography**: Clean, sans-serif (Inter/Roboto). Monospace for IDs and coordinates.
+- **Theme**: Dark mode by default (`#0b0b0b` / `#0d0d0d`). Centralized in `src/theme/theme.ts`.
+- **Accent Color**: Orange (`#ff4400`). Use `primary.main` from theme.
+- **Typography**: Clean, sans-serif (Inter/Roboto). 
+  - Titles: `h4`, `h6`.
+  - Subtitles/Labels: `subtitle2` (Uppercase, 700 weight).
+  - Values/Captions: `body2` or `caption`.
+- **Spacing (Design Tokens)**:
+  - `sectionGap`: Large spacing between major blocks (3 units).
+  - `itemGap`: Spacing between items in a list (1.5 units).
+  - `fieldGap`: Small spacing between a label and its value (0.5 units).
 - **Glassmorphism**: `backdropFilter: "blur(16px)"`, `backgroundColor: "rgba(11, 11, 11, 0.8)"`.
+- **Borders**: Standardized via MUI `Divider` and `Paper` overrides. Use `border: 1` and `borderColor: "divider"`.
+
+## 🛠️ Styling Rules
+1. **No Hardcoded `sx`**: Avoid writing ad-hoc colors, spacing, or borders in `sx` props.
+2. **No All-Caps**: Never use `textTransform: "uppercase"`. Prefer normal sentence case or title case.
+3. **Use Theme Tokens**: Access tokens via `theme.designTokens` (requires `useTheme` hook).
+4. **Boxed Info (OutputField, DataCard & DataChip)**: Use standardized components for information display:
+   - `<DataCard />`: Generic clickable/static container with project borders/background.
+   - `<OutputField />`: Labeled information using `DataCard` for values.
+   - `<DataChip />`: Small labels for counts/quantities (e.g., `x5`).
+   - Standardized prefixes: "X:" and "Y:" for coordinates.
+5. **MUI Components**: Prefer MUI components (`Paper`, `Stack`, `Box`, `Typography`) over raw HTML to benefit from theme-based styling.
+6. **Prefer Stack over Box**: Avoid using `<Box />` just to wrap multiple `<Typography />` or other layout elements. Prioritize `<Stack />` for vertical or horizontal grouping to maintain consistent alignment and spacing.
+7. **Consistency First**: If a new recurring style is needed, add it to `theme.ts` as a token or component override before using it.
 
 ## 📂 Data Structure
 Data in `public/data/[game-id]/`:

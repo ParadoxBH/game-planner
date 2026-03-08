@@ -12,8 +12,10 @@ import {
 import { divIcon } from "leaflet";
 import { useGameData } from "../hooks/useGameData";
 import { useState, useEffect, useMemo, useRef } from "react";
+import { useTheme } from "@mui/material/styles";
 import { SimplifiedEntity } from "./SimplifiedEntity";
 import { EntityDrawer } from "./EntityDrawer";
+import { OutputField } from "./common/OutputField";
 import { loadGamesList } from "../services/dataLoader";
 
 interface MapMetadata {
@@ -117,11 +119,12 @@ const MapInfoOverlay = ({
         bottom: 12,
         left: 12,
         zIndex: 1000,
-        backgroundColor: "rgba(11, 11, 11, 0.8)",
+        backgroundColor: "designTokens.colors.glassBg",
         backdropFilter: "blur(16px)",
-        borderRadius: "4px",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
-        color: "white",
+        borderRadius: 1,
+        border: 1,
+        borderColor: "divider",
+        color: "text.primary",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -133,16 +136,15 @@ const MapInfoOverlay = ({
         <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
           <Stack alignItems={"start"}>
             <Typography
-              variant="caption"
-              sx={{ color: "rgba(255, 255, 255, 0.5)", fontWeight: 600 }}
+              variant="subtitle2"
+              sx={{ color: "designTokens.colors.fieldLabel", fontSize: "0.65rem" }}
             >
               Explorando
             </Typography>
             <Typography
-              variant="h5"
-              sx={{ fontWeight: 700, letterSpacing: "-0.5px" }}
+              variant="h6"
+              sx={{ letterSpacing: "-0.5px" }}
             >
-              
               {currentMap?.name || gameName}
             </Typography>
           </Stack>
@@ -153,8 +155,9 @@ const MapInfoOverlay = ({
             sx={{
               width: 56,
               height: 56,
-              borderRadius: "4px",
-              border: "2px solid white",
+              borderRadius: 1,
+              border: 1,
+              borderColor: "divider",
               overflow: "hidden",
               cursor: "pointer",
               position: "relative",
@@ -168,21 +171,33 @@ const MapInfoOverlay = ({
               alt="Map Preview"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
-            <Box sx={{ 
-              position: "absolute", 
-              bottom: 0, 
-              width: "100%", 
-              bgcolor: "rgba(0,0,0,0.6)", 
-              textAlign: "center" 
-            }}>
-              <Typography variant="caption" sx={{ fontSize: "9px", fontWeight: "bold" }}>MAPAS</Typography>
-            </Box>
+            <Stack
+              sx={{
+                position: "absolute",
+                bottom: 0,
+                width: "100%",
+                bgcolor: "rgba(0,0,0,0.6)",
+                textAlign: "center",
+              }}
+            >
+              <Typography variant="caption" sx={{ fontSize: "9px", fontWeight: 800 }}>
+                MAPAS
+              </Typography>
+            </Stack>
           </Box>
         </Stack>
 
         <Collapse in={expanded}>
-          <Box sx={{ mt: 1, mb: 1 }}>
-            <Typography variant="caption" sx={{ color: "rgba(255, 255, 255, 0.5)", mb: 1, display: "block" }}>
+          <Stack spacing={1} sx={{ mt: 1, mb: 1 }}>
+            <Typography
+              variant="subtitle2"
+              sx={{
+                color: "designTokens.colors.fieldLabel",
+                mb: 1,
+                display: "block",
+                fontSize: "0.65rem",
+              }}
+            >
               SELECIONAR MAPA
             </Typography>
             <Stack direction="row" spacing={1} sx={{ overflowX: "auto", pb: 1 }}>
@@ -196,57 +211,56 @@ const MapInfoOverlay = ({
                   sx={{
                     minWidth: 80,
                     height: 80,
-                    borderRadius: "8px",
-                    border: selectedMapId === map.id ? "2px solid #ff4400" : "1px solid rgba(255, 255, 255, 0.2)",
+                    borderRadius: 1,
+                    border: selectedMapId === map.id ? 2 : 1,
+                    borderColor:
+                      selectedMapId === map.id ? "primary.main" : "divider",
                     overflow: "hidden",
                     cursor: "pointer",
                     position: "relative",
                     opacity: selectedMapId === map.id ? 1 : 0.7,
                     transition: "all 0.2s",
-                    "&:hover": { opacity: 1, borderColor: "rgba(255,255,255,0.5)" }
+                    "&:hover": { opacity: 1, borderColor: "rgba(255,255,255,0.5)" },
                   }}
                 >
-                  <img src={map.thumbnail || "https://placehold.co/100x100/333/fff?text=Map"} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  <Typography variant="caption" sx={{ 
-                    position: "absolute", 
-                    bottom: 0, 
-                    width: "100%", 
-                    bgcolor: "rgba(0,0,0,0.7)", 
-                    fontSize: "10px", 
-                    textAlign: "center",
-                    p: 0.5
-                  }}>
+                  <img
+                    src={
+                      map.thumbnail ||
+                      "https://placehold.co/100x100/333/fff?text=Map"
+                    }
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      position: "absolute",
+                      bottom: 0,
+                      width: "100%",
+                      bgcolor: "rgba(0,0,0,0.7)",
+                      fontSize: "10px",
+                      textAlign: "center",
+                      p: 0.5,
+                    }}
+                  >
                     {map.name}
                   </Typography>
                 </Box>
               ))}
             </Stack>
-          </Box>
+          </Stack>
         </Collapse>
 
-        <Stack direction={"row"}>
-          <Stack flex={1}>
-            <Typography
-              variant="caption"
-              sx={{ color: "rgba(255, 255, 255, 0.5)", fontWeight: 600 }}
-            >
-              Região
-            </Typography>
-            <Typography variant="body1" sx={{ fontWeight: 600 }}>
-              {region}
-            </Typography>
-          </Stack>
-          <Stack flex={1}>
-            <Typography
-              variant="caption"
-              sx={{ color: "rgba(255, 255, 255, 0.5)", fontWeight: 600 }}
-            >
-              Coordenadas
-            </Typography>
-            <Typography variant="body1" sx={{ fontWeight: 600, fontFamily: "monospace" }}>
-              {coords[1].toFixed(1)}x, {coords[0].toFixed(1)}y
-            </Typography>
-          </Stack>
+        <Stack direction={"row"} spacing={1.5}>
+          <OutputField 
+            label="Região" 
+            values={[region]} 
+            flex={1} 
+          />
+          <OutputField 
+            label="Coordenadas" 
+            values={[`X: ${coords[1].toFixed(1)}`, `Y: ${coords[0].toFixed(1)}`]} 
+            flex={1.5} 
+          />
         </Stack>
       </Stack>
     </Paper>
@@ -297,6 +311,7 @@ const createCustomCRS = (bounds: [[number, number], [number, number]], tileRange
 };
 
 export const MapView = () => {
+  const theme = useTheme();
   const { gameId } = useParams();
   const [cursorCoords, setCursorCoords] = useState<[number, number]>([0, 0]);
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
@@ -387,8 +402,18 @@ export const MapView = () => {
     return [0, 0] as [number, number];
   }, [selectedMap]);
 
-  if (loadingGame) return <Box sx={{ p: 4 }}><Typography>Carregando mapa...</Typography></Box>;
-  if (!gameInfo || !selectedMap) return <Box sx={{ p: 4 }}><Typography>Jogo ou mapa não encontrado.</Typography></Box>;
+  if (loadingGame)
+    return (
+      <Stack sx={{ p: 4 }}>
+        <Typography>Carregando mapa...</Typography>
+      </Stack>
+    );
+  if (!gameInfo || !selectedMap)
+    return (
+      <Stack sx={{ p: 4 }}>
+        <Typography>Jogo ou mapa não encontrado.</Typography>
+      </Stack>
+    );
 
   return (
     <Box
@@ -445,20 +470,22 @@ export const MapView = () => {
         )}
 
         {spawnError && (
-          <Box
+          <Stack
             sx={{
               position: "absolute",
               top: 10,
               left: 10,
-              bgcolor: "rgba(255,0,0,0.8)",
+              bgcolor: "error.main",
               color: "white",
               p: 1,
               zIndex: 1000,
-              borderRadius: "4px",
+              borderRadius: 1,
             }}
           >
-            <Typography variant="caption">Erro ao carregar spawns: {spawnError}</Typography>
-          </Box>
+            <Typography variant="caption">
+              Erro ao carregar spawns: {spawnError}
+            </Typography>
+          </Stack>
         )}
 
         {!loadingSpawns &&
@@ -475,9 +502,9 @@ export const MapView = () => {
                         <div style="
                           width: 32px;
                           height: 32px;
-                          border: 2px solid #ff4400;
-                          border-radius: 4px;
-                          background: rgba(0,0,0,0.6);
+                          border: 2px solid ${theme.palette.primary.main};
+                          border-radius: ${theme.shape.borderRadius}px;
+                          background: ${theme.designTokens.colors.glassBg};
                           display: flex;
                           align-items: center;
                           justify-content: center;
