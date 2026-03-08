@@ -50,5 +50,33 @@
         "thumbnail": "/map/heartopia/map.png"
       }
     ]
+  },
+  {
+    "id": "satisfactory",
+    "name": "Satisfactory",
+    "description": "Um simulador de construção de fábricas em primeira pessoa em um planeta alienígena.",
+    "maps": [
+      {
+        "id": "massage-2-abb-b-realistic",
+        "name": "Mapa Realista",
+        "type": "tile",
+        "url": "/map/satisfactory/realisticLayer/{z}/{x}/{y}.png",
+        "bounds": [
+          [
+            -375,
+            -375
+          ],
+          [
+            375,
+            375
+          ]
+        ],
+        "minZoom": 0,
+        "maxZoom": 10,
+        "tileMinZoom": 4,
+        "tileMaxZoom": 4,
+        "thumbnail": "/map/satisfactory/realisticLayer/thumb.png"
+      }
+    ]
   }
 ]

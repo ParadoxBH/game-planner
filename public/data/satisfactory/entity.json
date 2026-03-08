@@ -1,0 +1,50 @@
+[
+  {
+    "id": "iron_node",
+    "name": "Nó de Ferro",
+    "category": "resource",
+    "drops": [
+      {
+        "itemId": "iron_ore",
+        "chance": 1,
+        "quant": 1
+      }
+    ]
+  },
+  {
+    "id": "copper_node",
+    "name": "Nó de Cobre",
+    "category": "resource",
+    "drops": [
+      {
+        "itemId": "copper_ore",
+        "chance": 1,
+        "quant": 1
+      }
+    ]
+  },
+  {
+    "id": "limestone_node",
+    "name": "Nó de Calcário",
+    "category": "resource",
+    "drops": [
+      {
+        "itemId": "limestone",
+        "chance": 1,
+        "quant": 1
+      }
+    ]
+  },
+  {
+    "id": "smelter",
+    "name": "Fundição",
+    "category": "production",
+    "recipes": [
+      {
+        "input": [{ "itemId": "iron_ore", "quant": 1 }],
+        "output": [{ "itemId": "iron_ingot", "quant": 1 }],
+        "time": 2
+      }
+    ]
+  }
+]

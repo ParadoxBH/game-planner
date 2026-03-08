@@ -1,0 +1,26 @@
+[
+  {
+    "id": "spawn_iron_1",
+    "entityId": "iron_node",
+    "position": [100, 100],
+    "note": "Pure Iron Node"
+  },
+  {
+    "id": "spawn_iron_2",
+    "entityId": "iron_node",
+    "position": [150, 120],
+    "note": "Normal Iron Node"
+  },
+  {
+    "id": "spawn_copper_1",
+    "entityId": "copper_node",
+    "position": [-200, 300],
+    "note": "Pure Copper Node"
+  },
+  {
+    "id": "spawn_limestone_1",
+    "entityId": "limestone_node",
+    "position": [500, -500],
+    "note": "Normal Limestone Node"
+  }
+]

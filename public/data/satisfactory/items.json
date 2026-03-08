@@ -1,0 +1,44 @@
+[
+  {
+    "id": "iron_ore",
+    "name": "Minério de Ferro",
+    "description": "Recurso básico extraído de nós de ferro.",
+    "category": "ore"
+  },
+  {
+    "id": "copper_ore",
+    "name": "Minério de Cobre",
+    "description": "Recurso básico extraído de nós de cobre.",
+    "category": "ore"
+  },
+  {
+    "id": "limestone",
+    "name": "Calcário",
+    "description": "Usado principalmente para fazer Concreto.",
+    "category": "ore"
+  },
+  {
+    "id": "iron_ingot",
+    "name": "Lingote de Ferro",
+    "description": "Fundido a partir de Minério de Ferro.",
+    "category": "ingot"
+  },
+  {
+    "id": "iron_plate",
+    "name": "Chapa de Ferro",
+    "description": "Componente básico de construção.",
+    "category": "parts"
+  },
+  {
+    "id": "iron_rod",
+    "name": "Vara de Ferro",
+    "description": "Componente básico de construção.",
+    "category": "parts"
+  },
+  {
+    "id": "wire",
+    "name": "Fio de Cobre",
+    "description": "Feito de lingotes de cobre.",
+    "category": "parts"
+  }
+]
