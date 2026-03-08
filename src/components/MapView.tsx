@@ -1,5 +1,5 @@
 import { Box, Typography, Paper, Stack, Collapse } from "@mui/material";
-import { CRS, type LatLngBoundsExpression } from "leaflet";
+import { CRS, type LatLngBoundsExpression, Transformation } from "leaflet";
 import { useParams } from "react-router-dom";
 import {
   MapContainer,
@@ -27,6 +27,11 @@ interface MapMetadata {
   maxZoom: number;
   tileMinZoom?: number;
   tileMaxZoom?: number;
+  tileRange?: {
+    z: number;
+    min: [number, number];
+    max: [number, number];
+  };
   thumbnail?: string;
 }
 
@@ -236,13 +241,56 @@ const MapInfoOverlay = ({
               Coordenadas
             </Typography>
             <Typography variant="body1" sx={{ fontWeight: 600, fontFamily: "monospace" }}>
-              {coords[0].toFixed(1)}x, {coords[1].toFixed(1)}y
+              {coords[1].toFixed(1)}x, {coords[0].toFixed(1)}y
             </Typography>
           </Stack>
         </Stack>
       </Stack>
     </Paper>
   );
+};
+
+/**
+ * Creates a custom CRS for Leaflet based on the provided bounds.
+ * This ensures that the map's coordinate system matches the "meters" or "units"
+ * defined in the bounds, instead of fixed pixel coordinates.
+ */
+const createCustomCRS = (bounds: [[number, number], [number, number]], tileRange?: MapMetadata['tileRange']) => {
+  const [min, max] = bounds;
+  const width = Math.abs(max[1] - min[1]);
+  const height = Math.abs(max[0] - min[0]);
+  
+  if (tileRange) {
+    const scale = 256 / Math.pow(2, tileRange.z);
+    const pixelMinX = tileRange.min[0] * scale;
+    const pixelMaxX = tileRange.max[0] * scale;
+    const pixelMinY = tileRange.min[1] * scale;
+    const pixelMaxY = tileRange.max[1] * scale;
+
+    const scaleX = (pixelMaxX - pixelMinX) / width;
+    const offsetX = pixelMinX - min[1] * scaleX;
+
+    const scaleY = (pixelMinY - pixelMaxY) / height;
+    const offsetY = pixelMinY - max[0] * scaleY;
+
+    return Object.assign({}, CRS.Simple, {
+      transformation: new Transformation(scaleX, offsetX, scaleY, offsetY)
+    });
+  }
+
+  const scaleX = 256 / width;
+  const scaleY = -256 / height;
+  
+  const transformation = new Transformation(
+    scaleX, 
+    -min[1] * scaleX, 
+    scaleY, 
+    -max[0] * scaleY
+  );
+
+  return Object.assign({}, CRS.Simple, {
+    transformation: transformation,
+  });
 };
 
 export const MapView = () => {
@@ -318,6 +366,24 @@ export const MapView = () => {
     return lookup;
   }, [entities]);
 
+  const customCRS = useMemo(() => {
+    if (selectedMap) {
+      return createCustomCRS(
+        selectedMap.bounds as [[number, number], [number, number]],
+        selectedMap.tileRange
+      );
+    }
+    return CRS.Simple;
+  }, [selectedMap]);
+
+  const mapCenter = useMemo(() => {
+    if (selectedMap) {
+      const [min, max] = selectedMap.bounds;
+      return [(min[0] + max[0]) / 2, (min[1] + max[1]) / 2] as [number, number];
+    }
+    return [0, 0] as [number, number];
+  }, [selectedMap]);
+
   if (loadingGame) return <Box sx={{ p: 4 }}><Typography>Carregando mapa...</Typography></Box>;
   if (!gameInfo || !selectedMap) return <Box sx={{ p: 4 }}><Typography>Jogo ou mapa não encontrado.</Typography></Box>;
 
@@ -336,9 +402,9 @@ export const MapView = () => {
         <MapContainer
           key={`${gameId}-${selectedMapId}`} // Force re-mount on map change
           ref={mapRef}
-          crs={CRS.Simple}
-        bounds={selectedMap.bounds as LatLngBoundsExpression}
-        center={selectedMap.type === "layered" ? [500, 500] : [0, 0]}
+          crs={customCRS}
+          bounds={selectedMap.bounds as LatLngBoundsExpression}
+          center={mapCenter}
         zoom={selectedMap.minZoom}
         maxZoom={selectedMap.maxZoom}
         minZoom={selectedMap.minZoom}
@@ -399,7 +465,10 @@ export const MapView = () => {
             .map((spawn) => {
               const entity = entityLookup[spawn.entityId];
               return (
-                <Marker key={spawn.id} position={spawn.position}>
+                <Marker 
+                  key={spawn.id} 
+                  position={gameId === 'satisfactory' ? [spawn.position[0], spawn.position[1]] : spawn.position}
+                >
                   <Popup>
                     <SimplifiedEntity 
                       entity={entity || { id: spawn.entityId, name: spawn.entityId, category: spawn.type }} 

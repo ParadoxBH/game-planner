@@ -63,18 +63,23 @@
         "url": "/map/satisfactory/realisticLayer/{z}/{x}/{y}.png",
         "bounds": [
           [
-            -375,
-            -375
+            -2700,
+            -2700
           ],
           [
-            375,
-            375
+            2700,
+            2700
           ]
         ],
-        "minZoom": 0,
+        "minZoom": 3,
         "maxZoom": 10,
         "tileMinZoom": 4,
         "tileMaxZoom": 4,
+        "tileRange": {
+          "z": 4,
+          "min": [1, 0],
+          "max": [10, 10]
+        },
         "thumbnail": "/map/satisfactory/realisticLayer/thumb.png"
       }
     ]
