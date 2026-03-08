@@ -9,6 +9,7 @@ import {
   TileLayer,
   useMapEvents,
 } from "react-leaflet";
+import { divIcon } from "leaflet";
 import { useGameData } from "../hooks/useGameData";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { SimplifiedEntity } from "./SimplifiedEntity";
@@ -54,6 +55,7 @@ interface GameEntity {
   id: string;
   name: string;
   category: string;
+  icon?: string;
   drops?: {
     itemId: string;
     chance: number;
@@ -66,6 +68,7 @@ interface GameItem {
   name: string;
   type: string;
   description: string;
+  icon?: string;
 }
 
 export interface NavigationItem {
@@ -463,15 +466,42 @@ export const MapView = () => {
           spawns
             .filter((spawn: any) => !spawn.mapId || spawn.mapId === selectedMapId)
             .map((spawn) => {
-              const entity = entityLookup[spawn.entityId];
               return (
-                <Marker 
-                  key={spawn.id} 
-                  position={gameId === 'satisfactory' ? [spawn.position[0], spawn.position[1]] : spawn.position}
-                >
+                  <Marker 
+                    key={spawn.id} 
+                    position={gameId === 'satisfactory' ? [spawn.position[0], spawn.position[1]] : spawn.position}
+                    icon={divIcon({
+                      html: `
+                        <div style="
+                          width: 32px;
+                          height: 32px;
+                          border: 2px solid #ff4400;
+                          border-radius: 4px;
+                          background: rgba(0,0,0,0.6);
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          overflow: hidden;
+                          box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+                          transform: translate(-16px, -16px);
+                        ">
+                          <img src="${items?.find(i => i.id === spawn.entityId)?.icon || '/img/placeholder.png'}" 
+                               style="width: 85%; height: 85%; object-fit: contain;" />
+                        </div>
+                      `,
+                      className: 'custom-entity-icon',
+                    })}
+                  >
                   <Popup>
                     <SimplifiedEntity 
-                      entity={entity || { id: spawn.entityId, name: spawn.entityId, category: spawn.type }} 
+                      entity={(() => {
+                        const entity = entityLookup[spawn.entityId];
+                        const icon = items?.find(i => i.id === spawn.entityId)?.icon;
+                        return entity 
+                          ? { ...entity, icon } 
+                          : { id: spawn.entityId, name: spawn.entityId, category: spawn.type, icon };
+                      })()} 
+                      position={spawn.position as [number, number]}
                       onExpand={() => {
                         handlePush({ type: "entity", id: spawn.entityId });
                       }}

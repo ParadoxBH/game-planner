@@ -35,6 +35,7 @@ interface GameItem {
   name: string;
   type: string;
   description: string;
+  icon?: string;
 }
 
 interface Spawn {
@@ -99,7 +100,8 @@ export const EntityDrawer = ({
     const counts: Record<string, number> = {};
     
     relevantSpawns.forEach(s => {
-      const mapId = s.mapId || "default";
+      // Se o spawn não tem mapId, associamos ao primeiro mapa do jogo (fallback comum)
+      const mapId = s.mapId || (maps.length > 0 ? maps[0].id : "default");
       counts[mapId] = (counts[mapId] || 0) + 1;
     });
 
@@ -203,14 +205,35 @@ export const EntityDrawer = ({
                         },
                       }}
                     >
-                      <Box>
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                          {drop.itemId.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: "rgba(255,255,255,0.4)" }}>
-                          Chance: {(drop.chance * 100).toFixed(0)}%
-                        </Typography>
-                      </Box>
+                      <Stack direction="row" spacing={1.5} alignItems="center">
+                        <Box sx={{ 
+                          width: 32, 
+                          height: 32, 
+                          borderRadius: "4px", 
+                          bgcolor: "rgba(255,255,255,0.05)",
+                          overflow: "hidden",
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                          {(() => {
+                            const itemData = items.find(i => i.id === drop.itemId);
+                            return itemData?.icon ? (
+                              <img src={itemData.icon} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                            ) : (
+                              <InventoryIcon sx={{ fontSize: 18, opacity: 0.3 }} />
+                            );
+                          })()}
+                        </Box>
+                        <Box>
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                            {items.find(i => i.id === drop.itemId)?.name || drop.itemId.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: "rgba(255,255,255,0.4)" }}>
+                            Chance: {(drop.chance * 100).toFixed(0)}%
+                          </Typography>
+                        </Box>
+                      </Stack>
                       <Typography variant="body2" sx={{ fontWeight: 800, color: "primary.main" }}>
                         x{drop.quant}
                       </Typography>
