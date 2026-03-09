@@ -512,7 +512,7 @@ export const MapView = () => {
                           box-shadow: 0 2px 8px rgba(0,0,0,0.5);
                           transform: translate(-16px, -16px);
                         ">
-                          <img src="${items?.find(i => i.id === spawn.entityId)?.icon || '/img/placeholder.png'}" 
+                          <img src="${entityLookup[spawn.entityId]?.icon || items?.find(i => i.id === spawn.entityId)?.icon || '/img/placeholder.png'}" 
                                style="width: 85%; height: 85%; object-fit: contain;" />
                         </div>
                       `,
@@ -523,10 +523,14 @@ export const MapView = () => {
                     <SimplifiedEntity 
                       entity={(() => {
                         const entity = entityLookup[spawn.entityId];
-                        const icon = items?.find(i => i.id === spawn.entityId)?.icon;
                         return entity 
-                          ? { ...entity, icon } 
-                          : { id: spawn.entityId, name: spawn.entityId, category: spawn.type, icon };
+                          ? entity 
+                          : { 
+                              id: spawn.entityId, 
+                              name: spawn.entityId, 
+                              category: spawn.type, 
+                              icon: items?.find(i => i.id === spawn.entityId)?.icon 
+                            };
                       })()} 
                       position={spawn.position as [number, number]}
                       onExpand={() => {

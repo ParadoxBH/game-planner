@@ -22,12 +22,19 @@ interface EntityDrop {
   itemId: string;
   chance: number;
   quant: number;
+  maxQuant?: number;
 }
 
 interface GameEntity {
   id: string;
   name: string;
   category: string;
+  icon?: string;
+  requirements?: {
+    itemId: string;
+    quant: number;
+    maxQuant?: number;
+  }[];
   drops?: EntityDrop[];
 }
 
@@ -185,32 +192,132 @@ export const EntityDrawer = ({
         {currentItem.type === "entity" ? (
           /* ENTITY VIEW */
           <Stack spacing={theme.designTokens.spacing.sectionGap}>
-            <Stack spacing={0.5}>
-              <Typography
-                variant="overline"
+            <Stack direction="row" spacing={2} alignItems="center">
+              <DataCard
                 sx={{
-                  color: "primary.main",
-                  fontWeight: 700,
-                  letterSpacing: "1px",
-                  textTransform: "none",
+                  width: 80,
+                  height: 80,
+                  p: 0,
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  backgroundColor: "rgba(0,0,0,0.2)",
                 }}
               >
-                {currentEntity?.category || "Geral"}
-              </Typography>
-              <Typography variant="h4" sx={{ mt: 0, lineHeight: 1.1 }}>
-                {currentEntity?.name || currentItem.id}
-              </Typography>
-              <Typography
-                variant="caption"
-                sx={{
-                  color: "text.secondary",
-                  display: "block",
-                  fontFamily: "monospace",
-                }}
-              >
-                ID: {currentItem.id}
-              </Typography>
+                {currentEntity?.icon ? (
+                  <img
+                    src={currentEntity.icon}
+                    alt={currentEntity.name}
+                    style={{
+                      width: "85%",
+                      height: "85%",
+                      objectFit: "contain",
+                    }}
+                  />
+                ) : (
+                  <InventoryIcon
+                    sx={{ fontSize: 40, color: "text.disabled" }}
+                  />
+                )}
+              </DataCard>
+              <Stack spacing={0.5}>
+                <Typography
+                  variant="overline"
+                  sx={{
+                    color: "primary.main",
+                    fontWeight: 700,
+                    letterSpacing: "1px",
+                    textTransform: "none",
+                  }}
+                >
+                  {currentEntity?.category || "Geral"}
+                </Typography>
+                <Typography variant="h4" sx={{ mt: 0, lineHeight: 1.1 }}>
+                  {currentEntity?.name || currentItem.id}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: "text.secondary",
+                    display: "block",
+                    fontFamily: "monospace",
+                  }}
+                >
+                  ID: {currentItem.id}
+                </Typography>
+              </Stack>
             </Stack>
+
+            {currentEntity?.requirements && currentEntity.requirements.length > 0 && (
+              <Box>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  spacing={1}
+                  sx={{ mb: 2 }}
+                >
+                  <TravelExploreIcon sx={{ color: "primary.main", fontSize: 20 }} />
+                  <Typography variant="subtitle2">Requisitos de Coleta</Typography>
+                </Stack>
+                <Stack spacing={theme.designTokens.spacing.itemGap}>
+                  {currentEntity.requirements.map((req, index) => {
+                    const itemData = items.find((i) => i.id === req.itemId);
+                    return (
+                      <DataCard
+                        key={`${req.itemId}-${index}`}
+                        onClick={() =>
+                          onPush({ type: "item", id: req.itemId })
+                        }
+                        sx={{ justifyContent: "space-between" }}
+                      >
+                        <Stack
+                          direction="row"
+                          spacing={1.5}
+                          alignItems="center"
+                        >
+                          <Box
+                            sx={{
+                              width: 32,
+                              height: 32,
+                              borderRadius: 1,
+                              bgcolor: "rgba(255,255,255,0.05)",
+                              overflow: "hidden",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            {itemData?.icon ? (
+                              <img
+                                src={itemData.icon}
+                                style={{
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "contain",
+                                }}
+                              />
+                            ) : (
+                              <InventoryIcon
+                                sx={{ fontSize: 18, opacity: 0.3 }}
+                              />
+                            )}
+                          </Box>
+                          <Typography
+                            variant="body2"
+                            sx={{ fontWeight: 600 }}
+                          >
+                            {itemData?.name || req.itemId.replace(/_/g, " ")}
+                          </Typography>
+                        </Stack>
+                        <DataChip
+                          size="small"
+                          label={req.maxQuant ? `${req.quant}-${req.maxQuant}` : `x${req.quant}`}
+                        />
+                      </DataCard>
+                    );
+                  })}
+                </Stack>
+              </Box>
+            )}
 
             <Box>
               <Stack
@@ -284,7 +391,7 @@ export const EntityDrawer = ({
                         </Stack>
                         <DataChip
                           size="small"
-                          label={`x${drop.quant}`}
+                          label={drop.maxQuant ? `${drop.quant}-${drop.maxQuant}` : `x${drop.quant}`}
                         />
                       </DataCard>
                     );
@@ -382,31 +489,59 @@ export const EntityDrawer = ({
         ) : (
           /* ITEM VIEW */
           <Stack spacing={theme.designTokens.spacing.sectionGap}>
-            <Stack spacing={0.5}>
-              <Typography
-                variant="overline"
+            <Stack direction="row" spacing={2} alignItems="center">
+              <DataCard
                 sx={{
-                  color: "primary.main",
-                  fontWeight: 700,
-                  letterSpacing: "1px",
-                  textTransform: "none",
+                  width: 80,
+                  height: 80,
+                  p: 0,
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  backgroundColor: "rgba(0,0,0,0.2)",
                 }}
               >
-                {currentItemData?.type || "Item"}
-              </Typography>
-              <Typography variant="h4" sx={{ mt: 0, lineHeight: 1.1 }}>
-                {currentItemData?.name || currentItem.id}
-              </Typography>
-              <Typography
-                variant="caption"
-                sx={{
-                  color: "text.secondary",
-                  display: "block",
-                  fontFamily: "monospace",
-                }}
-              >
-                ID: {currentItem.id}
-              </Typography>
+                {currentItemData?.icon ? (
+                  <img
+                    src={currentItemData.icon}
+                    alt={currentItemData.name}
+                    style={{
+                      width: "85%",
+                      height: "85%",
+                      objectFit: "contain",
+                    }}
+                  />
+                ) : (
+                  <InventoryIcon
+                    sx={{ fontSize: 40, color: "text.disabled" }}
+                  />
+                )}
+              </DataCard>
+              <Stack spacing={0.5}>
+                <Typography
+                  variant="overline"
+                  sx={{
+                    color: "primary.main",
+                    fontWeight: 700,
+                    letterSpacing: "1px",
+                    textTransform: "none",
+                  }}
+                >
+                  {currentItemData?.type || "Item"}
+                </Typography>
+                <Typography variant="h4" sx={{ mt: 0, lineHeight: 1.1 }}>
+                  {currentItemData?.name || currentItem.id}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: "text.secondary",
+                    display: "block",
+                    fontFamily: "monospace",
+                  }}
+                >
+                  ID: {currentItem.id}
+                </Typography>
+              </Stack>
             </Stack>
 
             <Stack
@@ -455,7 +590,36 @@ export const EntityDrawer = ({
                     <DataCard
                       key={entity.id}
                       onClick={() => onPush({ type: "entity", id: entity.id })}
+                      sx={{ gap: 1.5 }}
                     >
+                      <Box
+                        sx={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: 1,
+                          bgcolor: "rgba(255,255,255,0.05)",
+                          overflow: "hidden",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexShrink: 0
+                        }}
+                      >
+                        {entity.icon ? (
+                          <img
+                            src={entity.icon}
+                            style={{
+                              width: "85%",
+                              height: "85%",
+                              objectFit: "contain",
+                            }}
+                          />
+                        ) : (
+                          <InventoryIcon
+                            sx={{ fontSize: 18, opacity: 0.3 }}
+                          />
+                        )}
+                      </Box>
                       <Stack alignItems={"start"}>
                         <Typography variant="body2" sx={{ fontWeight: 600 }}>
                           {entity.name}
