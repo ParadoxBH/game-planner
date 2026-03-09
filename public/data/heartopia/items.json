@@ -1,5 +1,145 @@
 [
   {
+    "id": "energia",
+    "name": "Energia",
+    "category": [
+      "currency",
+      "wallet"
+    ],
+    "description": "Necessária para realizar atividades físicas.",
+    "icon": "/img/heartopia/stats/energia.png"
+  },
+  {
+    "id": "amorita",
+    "name": "Amorita",
+    "category": [
+      "currency",
+      "wallet"
+    ],
+    "description": "Uma moeda especial em forma de coração.",
+    "icon": "/img/heartopia/stats/amorita.png"
+  },
+  {
+    "id": "creditos_gala_moda",
+    "name": "Créditos de Gala de Moda",
+    "category": [
+      "currency",
+      "wallet"
+    ],
+    "description": "Utilizados para transações relacionadas à moda.",
+    "icon": "/img/heartopia/stats/creditos_gala_moda.png"
+  },
+  {
+    "id": "cristal_luar",
+    "name": "Cristal do Luar",
+    "category": [
+      "currency",
+      "wallet"
+    ],
+    "description": "Um cristal brilhante que contém a essência do luar.",
+    "icon": "/img/heartopia/stats/cristal_luar.png"
+  },
+  {
+    "id": "estrela_desejavel",
+    "name": "Estrela Desejável",
+    "category": [
+      "currency",
+      "wallet"
+    ],
+    "description": "Uma estrela que concede pequenos desejos.",
+    "icon": "/img/heartopia/stats/estrela_desejavel.png"
+  },
+  {
+    "id": "gema_energia_harmoniosa",
+    "name": "Gema de Energia Harmoniosa",
+    "category": [
+      "currency",
+      "wallet"
+    ],
+    "description": "Uma gema que pulsa com energia equilibrada.",
+    "icon": "/img/heartopia/stats/gema_energia_harmoniosa.png"
+  },
+  {
+    "id": "medalha_merito",
+    "name": "Medalha de Mérito",
+    "category": [
+      "currency",
+      "wallet"
+    ],
+    "description": "Concedida por grandes conquistas.",
+    "icon": "/img/heartopia/stats/medalha_merito.png"
+  },
+  {
+    "id": "ouro",
+    "name": "Ouro",
+    "category": [
+      "currency",
+      "wallet"
+    ],
+    "description": "Moeda de ouro valiosa.",
+    "icon": "/img/heartopia/stats/ouro.png"
+  },
+  {
+    "id": "passe_show",
+    "name": "Passe de Show",
+    "category": [
+      "currency",
+      "wallet"
+    ],
+    "description": "Garante entrada em apresentações especiais.",
+    "icon": "/img/heartopia/stats/passe_show.png"
+  },
+  {
+    "id": "passe_show_temporario",
+    "name": "Passe de Show Temporário",
+    "category": [
+      "currency",
+      "wallet"
+    ],
+    "description": "Passe de acesso por tempo limitado.",
+    "icon": "/img/heartopia/stats/passe_show_temporario.png"
+  },
+  {
+    "id": "progresso_sonho",
+    "name": "Progresso do Sonho",
+    "category": [
+      "currency",
+      "wallet"
+    ],
+    "description": "Representa o avanço em seus sonhos e metas.",
+    "icon": "/img/heartopia/stats/progresso_sonho.png"
+  },
+  {
+    "id": "vale_expansao_hobby",
+    "name": "Vale de Expansão de Hobby",
+    "category": [
+      "currency",
+      "wallet"
+    ],
+    "description": "Usado para expandir horizontes em seus passatempos.",
+    "icon": "/img/heartopia/stats/vale_expansao_hobby.png"
+  },
+  {
+    "id": "vale_hobby_aprimorado",
+    "name": "Vale de Hobby Aprimorado",
+    "category": [
+      "currency",
+      "wallet"
+    ],
+    "description": "Permite melhorias significativas em seus hobbies.",
+    "icon": "/img/heartopia/stats/vale_hobby_aprimorado.png"
+  },
+  {
+    "id": "vale_publicacao",
+    "name": "Vale de Publicação",
+    "category": [
+      "currency",
+      "wallet"
+    ],
+    "description": "Necessário para publicar seus trabalhos.",
+    "icon": "/img/heartopia/stats/vale_publicacao.png"
+  },
+  {
     "id": "bambu",
     "name": "Bambu",
     "category": "resource",

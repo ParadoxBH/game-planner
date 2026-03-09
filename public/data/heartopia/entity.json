@@ -3,7 +3,9 @@
     "id": "arbusto_flores",
     "name": "Arbusto de Flores",
     "category": "resource",
-    "drops": [],
+    "drops": [
+      { "itemId": "galho_arbusto", "chance": 1, "quant": 3, "maxQuant": 6 }
+    ],
     "icon": "/img/heartopia/coletaveis/arbusto_flores.png"
   },
   {
@@ -24,21 +26,37 @@
     "id": "arbusto_mirtilo",
     "name": "Arbusto de Mirtilo",
     "category": "resource",
-    "drops": [],
+    "drops": [
+      { "itemId": "mirtilo", "chance": 1, "quant": 1 },
+      { "itemId": "galho_arbusto", "chance": 1, "quant": 3 }
+    ],
     "icon": "/img/heartopia/coletaveis/arbusto_mirtilo.png"
   },
   {
     "id": "arvore",
     "name": "Árvore",
     "category": "resource",
-    "drops": [],
+    "requirements": [
+      { "itemId": "energia", "quant": 3 },
+      { "itemId": "machado", "quant": 1 }
+    ],
+    "drops": [
+      { "itemId": "madeira", "chance": 1, "quant": 1 },
+      { "itemId": "madeira_qualidade", "chance": 1, "quant": 2 }
+    ],
     "icon": "/img/heartopia/coletaveis/arvore.png"
   },
   {
     "id": "arvore_abeto",
     "name": "Árvore Abeto",
     "category": "resource",
-    "drops": [],
+    "requirements": [
+      { "itemId": "energia", "quant": 3 },
+      { "itemId": "machado", "quant": 1 }
+    ],
+    "drops": [
+      { "itemId": "madeira", "chance": 1, "quant": 3 }
+    ],
     "icon": "/img/heartopia/coletaveis/arvore_abeto.png"
   },
   {
@@ -52,14 +70,28 @@
     "id": "arvore_maca",
     "name": "Macieira",
     "category": "resource",
-    "drops": [],
+    "requirements": [
+      { "itemId": "energia", "quant": 3 },
+      { "itemId": "machado", "quant": 1 }
+    ],
+    "drops": [
+      { "itemId": "maca", "chance": 1, "quant": 1 },
+      { "itemId": "madeira", "chance": 1, "quant": 2 }
+    ],
     "icon": "/img/heartopia/coletaveis/arvore_maca.png"
   },
   {
     "id": "arvore_pinheiro",
     "name": "Pinheiro",
     "category": "resource",
-    "drops": [],
+    "requirements": [
+      { "itemId": "energia", "quant": 3 },
+      { "itemId": "machado", "quant": 1 }
+    ],
+    "drops": [
+      { "itemId": "madeira_qualidade", "chance": 1, "quant": 2 },
+      { "itemId": "madeira", "chance": 1, "quant": 1 }
+    ],
     "icon": "/img/heartopia/coletaveis/arvore_pinheiro.png"
   },
   {
