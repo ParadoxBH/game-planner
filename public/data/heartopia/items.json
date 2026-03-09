@@ -1,17 +1,776 @@
 [
   {
+    "id": "bambu",
+    "name": "Bambu",
+    "category": "resource",
+    "description": "Um talo de bambu resistente.",
+    "icon": "/img/heartopia/recursos/bambu.png"
+  },
+  {
+    "id": "carne",
+    "name": "Carne",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Proteína fresca para cozinhar.",
+    "icon": "/img/heartopia/recursos/carne.png"
+  },
+  {
+    "id": "carvalho_delicado",
+    "name": "Carvalho Delicado",
+    "category": [
+      "resource",
+      "wood"
+    ],
+    "description": "Madeira de carvalho com textura suave.",
+    "icon": "/img/heartopia/recursos/carvalho_delicado.png"
+  },
+  {
+    "id": "cha_preto",
+    "name": "Chá Preto",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Folhas de chá preto secas.",
+    "icon": "/img/heartopia/recursos/cha_preto.png"
+  },
+  {
+    "id": "champignon",
+    "name": "Champignon",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Um cogumelo champignon comum.",
+    "icon": "/img/heartopia/recursos/champignon.png"
+  },
+  {
+    "id": "champignon_estranho_azul",
+    "name": "Champignon Estranho Azul",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Um champignon com um brilho azul peculiar.",
+    "icon": "/img/heartopia/recursos/champignon_estranho_azul.png"
+  },
+  {
+    "id": "champignon_estranho_rosa",
+    "name": "Champignon Estranho Rosa",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Um champignon com tonalidade rosada incomum.",
+    "icon": "/img/heartopia/recursos/champignon_estranho_rosa.png"
+  },
+  {
+    "id": "champignon_estranho_verde",
+    "name": "Champignon Estranho Verde",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Um champignon verde misterioso.",
+    "icon": "/img/heartopia/recursos/champignon_estranho_verde.png"
+  },
+  {
+    "id": "cogumelo_ostra",
+    "name": "Cogumelo Ostra",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Um cogumelo que parece uma ostra.",
+    "icon": "/img/heartopia/recursos/cogumelo_ostra.png"
+  },
+  {
+    "id": "cogumelo_ostra_estranho_amarelo",
+    "name": "Cogumelo Ostra Estranho Amarelo",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Uma variação amarela vibrante do cogumelo ostra.",
+    "icon": "/img/heartopia/recursos/cogumelo_ostra_estranho_amarelo.png"
+  },
+  {
+    "id": "cogumelo_ostra_estranho_rosa",
+    "name": "Cogumelo Ostra Estranho Rosa",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Uma variação rosa do cogumelo ostra.",
+    "icon": "/img/heartopia/recursos/cogumelo_ostra_estranho_rosa.png"
+  },
+  {
+    "id": "cogumelo_ostra_estranho_roxo",
+    "name": "Cogumelo Ostra Estranho Roxo",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Uma variação roxa do cogumelo ostra.",
+    "icon": "/img/heartopia/recursos/cogumelo_ostra_estranho_roxo.png"
+  },
+  {
+    "id": "doce_amarelo",
+    "name": "Doce Amarelo",
+    "category": [
+      "resource",
+      "sweet"
+    ],
+    "description": "Um doce amarelo açucarado.",
+    "icon": "/img/heartopia/recursos/doce_amarelo.png"
+  },
+  {
+    "id": "doce_azul",
+    "name": "Doce Azul",
+    "category": [
+      "resource",
+      "sweet"
+    ],
+    "description": "Um doce azul refrescante.",
+    "icon": "/img/heartopia/recursos/doce_azul.png"
+  },
+  {
+    "id": "doce_laranja",
+    "name": "Doce Laranja",
+    "category": [
+      "resource",
+      "sweet"
+    ],
+    "description": "Um doce cítrico de laranja.",
+    "icon": "/img/heartopia/recursos/doce_laranja.png"
+  },
+  {
+    "id": "doce_turquesa",
+    "name": "Doce Turquesa",
+    "category": [
+      "resource",
+      "sweet"
+    ],
+    "description": "Um doce de cor turquesa exótica.",
+    "icon": "/img/heartopia/recursos/doce_turquesa.png"
+  },
+  {
+    "id": "doce_verde",
+    "name": "Doce Verde",
+    "category": [
+      "resource",
+      "sweet"
+    ],
+    "description": "Um doce verde de ervas.",
+    "icon": "/img/heartopia/recursos/doce_verde.png"
+  },
+  {
+    "id": "doce_vermelho",
+    "name": "Doce Vermelho",
+    "category": [
+      "resource",
+      "sweet"
+    ],
+    "description": "Um doce vermelho de morango.",
+    "icon": "/img/heartopia/recursos/doce_vermelho.png"
+  },
+  {
+    "id": "feijao_azuki",
+    "name": "Feijão Azuki",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Pequenos feijões vermelhos doces.",
+    "icon": "/img/heartopia/recursos/feijao_azuki.png"
+  },
+  {
+    "id": "fluorita_pura",
+    "name": "Fluorita Pura",
+    "category": "resource",
+    "description": "Um cristal de fluorita perfeitamente lapidado.",
+    "icon": "/img/heartopia/recursos/fluorita_pura.png"
+  },
+  {
+    "id": "framboesa",
+    "name": "Framboesa",
+    "category": [
+      "resource",
+      "berry"
+    ],
+    "description": "Pequena e suculenta framboesa.",
+    "icon": "/img/heartopia/recursos/framboesa.png"
+  },
+  {
+    "id": "galho_arbusto",
+    "name": "Galho de Arbusto",
+    "category": "resource",
+    "description": "Um ramo comum.",
+    "icon": "/img/heartopia/recursos/galho_arbusto.png"
+  },
+  {
+    "id": "graos_cafe",
+    "name": "Grãos de Café",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Grãos de café aromáticos.",
+    "icon": "/img/heartopia/recursos/graos_cafe.png"
+  },
+  {
+    "id": "leite",
+    "name": "Leite",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Leite fresco e nutritivo.",
+    "icon": "/img/heartopia/recursos/leite.png"
+  },
+  {
+    "id": "maca",
+    "name": "Maçã",
+    "category": [
+      "resource",
+      "fruit"
+    ],
+    "description": "Uma maçã vermelha e crocante.",
+    "icon": "/img/heartopia/recursos/maca.png"
+  },
+  {
+    "id": "macarrao_arroz",
+    "name": "Macarrão de Arroz",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Macarrão de arroz leve.",
+    "icon": "/img/heartopia/recursos/macarrao_arroz.png"
+  },
+  {
+    "id": "madeira",
+    "name": "Madeira",
+    "category": [
+      "resource",
+      "wood"
+    ],
+    "description": "Um pedaço de madeira comum.",
+    "icon": "/img/heartopia/recursos/madeira.png"
+  },
+  {
+    "id": "madeira_qualidade",
+    "name": "Madeira de Qualidade",
+    "category": [
+      "resource",
+      "wood"
+    ],
+    "description": "Madeira resistente de alta qualidade.",
+    "icon": "/img/heartopia/recursos/madeira_qualidade.png"
+  },
+  {
+    "id": "madeira_rara",
+    "name": "Madeira Rara",
+    "category": [
+      "resource",
+      "wood"
+    ],
+    "description": "Um tipo de madeira extremamente raro.",
+    "icon": "/img/heartopia/recursos/madeira_rara.png"
+  },
+  {
+    "id": "manteiga",
+    "name": "Manteiga",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Manteiga cremosa.",
+    "icon": "/img/heartopia/recursos/manteiga.png"
+  },
+  {
+    "id": "matsutake",
+    "name": "Matsutake",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Um cogumelo matsutake valorizado.",
+    "icon": "/img/heartopia/recursos/matsutake.png"
+  },
+  {
+    "id": "meteoro_ciano",
+    "name": "Meteoro Ciano",
+    "category": [
+      "resource",
+      "meteor"
+    ],
+    "description": "Fragmento de meteoro de cor ciano.",
+    "icon": "/img/heartopia/recursos/meteoro_ciano.png"
+  },
+  {
+    "id": "meteoro_cinza",
+    "name": "Meteoro Cinza",
+    "category": [
+      "resource",
+      "meteor"
+    ],
+    "description": "Fragmento de meteoro cinza metálico.",
+    "icon": "/img/heartopia/recursos/meteoro_cinza.png"
+  },
+  {
+    "id": "meteoro_laranja",
+    "name": "Meteoro Laranja",
+    "category": [
+      "resource",
+      "meteor"
+    ],
+    "description": "Fragmento de meteoro laranja brilhante.",
+    "icon": "/img/heartopia/recursos/meteoro_laranja.png"
+  },
+  {
+    "id": "meteoro_roxo",
+    "name": "Meteoro Roxo",
+    "category": [
+      "resource",
+      "meteor"
+    ],
+    "description": "Fragmento de meteoro roxo profundo.",
+    "icon": "/img/heartopia/recursos/meteoro_roxo.png"
+  },
+  {
+    "id": "meteoro_verde",
+    "name": "Meteoro Verde",
+    "category": [
+      "resource",
+      "meteor"
+    ],
+    "description": "Fragmento de meteoro esverdeado.",
+    "icon": "/img/heartopia/recursos/meteoro_verde.png"
+  },
+  {
+    "id": "minerio",
+    "name": "Minério",
+    "category": "resource",
+    "description": "Fragmento de minério bruto.",
+    "icon": "/img/heartopia/recursos/minerio.png"
+  },
+  {
     "id": "mirtilo",
     "name": "Mirtilo",
     "category": [
       "resource",
       "berry"
     ],
-    "description": "Coma mais mirtilo e mantenha os olhos brilhantes"
+    "description": "Coma mais mirtilo e mantenha os olhos brilhantes.",
+    "icon": "/img/heartopia/recursos/mirtilo.png"
   },
   {
-    "id": "graveto",
-    "name": "Galho de Arbusto",
+    "id": "mirtilo_recurso",
+    "name": "Mirtilo",
+    "category": [
+      "resource",
+      "berry"
+    ],
+    "description": "Pequena e azulada baga de mirtilo.",
+    "icon": "/img/heartopia/recursos/mirtilo.png"
+  },
+  {
+    "id": "ovo",
+    "name": "Ovo",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Um ovo fresco de galinha.",
+    "icon": "/img/heartopia/recursos/ovo.png"
+  },
+  {
+    "id": "pedra",
+    "name": "Pedra",
     "category": "resource",
-    "description": "Um ramo comum"
+    "description": "Uma pedra comum.",
+    "icon": "/img/heartopia/recursos/pedra.png"
+  },
+  {
+    "id": "po_matcha",
+    "name": "Pó Matcha",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Pó de chá verde matcha de alta qualidade.",
+    "icon": "/img/heartopia/recursos/po_matcha.png"
+  },
+  {
+    "id": "porcino",
+    "name": "Porcino",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Um cogumelo porcino terrestre.",
+    "icon": "/img/heartopia/recursos/porcino.png"
+  },
+  {
+    "id": "porcino_estranho_amarelo",
+    "name": "Porcino Estranho Amarelo",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Uma variação amarela do cogumelo porcino.",
+    "icon": "/img/heartopia/recursos/porcino_estranho_amarelo.png"
+  },
+  {
+    "id": "porcino_estranho_roxo",
+    "name": "Porcino Estranho Roxo",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Uma variação roxa do cogumelo porcino.",
+    "icon": "/img/heartopia/recursos/porcino_estranho_roxo.png"
+  },
+  {
+    "id": "porcino_estranho_vermelho",
+    "name": "Porcino Estranho Vermelho",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Uma variação vermelha do cogumelo porcino.",
+    "icon": "/img/heartopia/recursos/porcino_estranho_vermelho.png"
+  },
+  {
+    "id": "queijo",
+    "name": "Queijo",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Um pedaço de queijo saboroso.",
+    "icon": "/img/heartopia/recursos/queijo.png"
+  },
+  {
+    "id": "roce_roxo",
+    "name": "Roce Roxo",
+    "category": "resource",
+    "description": "Uma pedra de roce de cor roxa.",
+    "icon": "/img/heartopia/recursos/roce_roxo.png"
+  },
+  {
+    "id": "shiitake",
+    "name": "Shiitake",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Um cogumelo shiitake clássico.",
+    "icon": "/img/heartopia/recursos/shiitake.png"
+  },
+  {
+    "id": "shiitake_estranho_azul",
+    "name": "Shiitake Estranho Azul",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Uma variação azul do cogumelo shiitake.",
+    "icon": "/img/heartopia/recursos/shiitake_estranho_azul.png"
+  },
+  {
+    "id": "shitake_estranho_vermelho",
+    "name": "Shitake Estranho Vermelho",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Uma variação vermelha do cogumelo shiitake.",
+    "icon": "/img/heartopia/recursos/shitake_estranho_vermelho.png"
+  },
+  {
+    "id": "shittake_estranho_roxo",
+    "name": "Shittake Estranho Roxo",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Uma variação roxa do cogumelo shiitake.",
+    "icon": "/img/heartopia/recursos/shittake_estranho_roxo.png"
+  },
+  {
+    "id": "tangerina",
+    "name": "Tangerina",
+    "category": [
+      "resource",
+      "fruit"
+    ],
+    "description": "Uma tangerina cítrica e doce.",
+    "icon": "/img/heartopia/recursos/tangerina.png"
+  },
+  {
+    "id": "trufa_negra",
+    "name": "Trufa Negra",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Uma trufa negra rara e aromática.",
+    "icon": "/img/heartopia/recursos/trufa_negra.png"
+  },
+  {
+    "id": "arroz_marisco",
+    "name": "Arroz de Marisco",
+    "category": "food",
+    "description": "Um prato reconfortante de arroz com mariscos.",
+    "icon": "/img/heartopia/comidas/arroz_marisco.png"
+  },
+  {
+    "id": "bagel_peixe_defumado",
+    "name": "Bagel de Peixe Defumado",
+    "category": "food",
+    "description": "Um bagel recheado com peixe defumado.",
+    "icon": "/img/heartopia/comidas/bagel_peixe_defumado.png"
+  },
+  {
+    "id": "banquete_aurora",
+    "name": "Banquete Aurora",
+    "category": "food",
+    "description": "Um banquete magnífico digno de reis.",
+    "icon": "/img/heartopia/comidas/banquete_aurora.png"
+  },
+  {
+    "id": "bolo_queijo",
+    "name": "Bolo de Queijo",
+    "category": "food",
+    "description": "Um cheesecake cremoso e delicioso.",
+    "icon": "/img/heartopia/comidas/bolo_queijo.png"
+  },
+  {
+    "id": "cafe",
+    "name": "Café",
+    "category": "food",
+    "description": "Uma xícara quente de café.",
+    "icon": "/img/heartopia/comidas/cafe.png"
+  },
+  {
+    "id": "cafe_gelado",
+    "name": "Café Gelado",
+    "category": "food",
+    "description": "Um café gelado refrescante.",
+    "icon": "/img/heartopia/comidas/cafe_gelado.png"
+  },
+  {
+    "id": "caldo_cremoso_nabo",
+    "name": "Caldo Cremoso de Nabo",
+    "category": "food",
+    "description": "Um caldo quente e denso de nabo.",
+    "icon": "/img/heartopia/comidas/caldo_cremoso_nabo.png"
+  },
+  {
+    "id": "carne_pure_nabo",
+    "name": "Carne com Purê de Nabo",
+    "category": "food",
+    "description": "Um prato equilibrado de carne e nabo.",
+    "icon": "/img/heartopia/comidas/carne_pure_nabo.png"
+  },
+  {
+    "id": "champignon_assado",
+    "name": "Champignon Assado",
+    "category": "food",
+    "description": "Champignons perfeitamente assados.",
+    "icon": "/img/heartopia/comidas/champignon_assado.png"
+  },
+  {
+    "id": "cogumelo_assado",
+    "name": "Cogumelo Assado",
+    "category": "food",
+    "description": "Uma mistura de cogumelos assados.",
+    "icon": "/img/heartopia/comidas/cogumelo_assado.png"
+  },
+  {
+    "id": "cogumelo_ostra_assado",
+    "name": "Cogumelo Ostra Assado",
+    "category": "food",
+    "description": "Cogumelos ostra temperados e assados.",
+    "icon": "/img/heartopia/comidas/cogumelo_ostra_assado.png"
+  },
+  {
+    "id": "ensopado_rustico",
+    "name": "Ensopado Rústico",
+    "category": "food",
+    "description": "Um ensopado caseiro e saboroso.",
+    "icon": "/img/heartopia/comidas/ensopado_rustico.png"
+  },
+  {
+    "id": "geleia_framboesa",
+    "name": "Geleia de Framboesa",
+    "category": "food",
+    "description": "Geleia doce feita com framboesas frescas.",
+    "icon": "/img/heartopia/comidas/geleia_framboesa.png"
+  },
+  {
+    "id": "geleia_maca",
+    "name": "Geleia de Maçã",
+    "category": "food",
+    "description": "Geleia de maçã suave.",
+    "icon": "/img/heartopia/comidas/geleia_maca.png"
+  },
+  {
+    "id": "geleia_mirtilo",
+    "name": "Geleia de Mirtilo",
+    "category": "food",
+    "description": "Geleia de mirtilo rica em sabor.",
+    "icon": "/img/heartopia/comidas/geleia_mirtilo.png"
+  },
+  {
+    "id": "geleia_mista",
+    "name": "Geleia Mista",
+    "category": "food",
+    "description": "Uma mistura equilibrada de várias geleias.",
+    "icon": "/img/heartopia/comidas/geleia_mista.png"
+  },
+  {
+    "id": "geleia_tangerina",
+    "name": "Geleia de Tangerina",
+    "category": "food",
+    "description": "Geleia cítrica de tangerina.",
+    "icon": "/img/heartopia/comidas/geleia_tangerina.png"
+  },
+  {
+    "id": "isca_peixe_fritas",
+    "name": "Isca de Peixe com Fritas",
+    "category": "food",
+    "description": "Peixe frito crocante acompanhado de batatas.",
+    "icon": "/img/heartopia/comidas/isca_peixe_fritas.png"
+  },
+  {
+    "id": "latte",
+    "name": "Latte",
+    "category": "food",
+    "description": "Café com leite cremoso.",
+    "icon": "/img/heartopia/comidas/latte.png"
+  },
+  {
+    "id": "latte_gelado",
+    "name": "Latte Gelado",
+    "category": "food",
+    "description": "Latte refrescante servido com gelo.",
+    "icon": "/img/heartopia/comidas/latte_gelado.png"
+  },
+  {
+    "id": "macarrao_trufa_negra_creme",
+    "name": "Macarrão com Trufa Negra e Creme",
+    "category": "food",
+    "description": "Massa sofisticada com trufas e creme.",
+    "icon": "/img/heartopia/comidas/macarrao_trufa_negra_creme.png"
+  },
+  {
+    "id": "panqueca_acucar_po",
+    "name": "Panqueca com Açúcar de Pó",
+    "category": "food",
+    "description": "Panquecas polvilhadas com açúcar.",
+    "icon": "/img/heartopia/comidas/panqueca_acucar_po.png"
+  },
+  {
+    "id": "panqueca_acucar_po_framboesa",
+    "name": "Panqueca com Açúcar e Framboesa",
+    "category": "food",
+    "description": "Panquecas com framboesas e açúcar.",
+    "icon": "/img/heartopia/comidas/panqueca_acucar_po_framboesa.png"
+  },
+  {
+    "id": "panqueca_acucar_po_maca",
+    "name": "Panqueca com Açúcar e Maçã",
+    "category": "food",
+    "description": "Panquecas com pedaços de maçã e açúcar.",
+    "icon": "/img/heartopia/comidas/panqueca_acucar_po_maca.png"
+  },
+  {
+    "id": "panqueca_acucar_po_mirtilo",
+    "name": "Panqueca com Açúcar e Mirtilo",
+    "category": "food",
+    "description": "Panquecas com mirtilos e açúcar.",
+    "icon": "/img/heartopia/comidas/panqueca_acucar_po_mirtilo.png"
+  },
+  {
+    "id": "panqueca_acucar_po_tangerina",
+    "name": "Panqueca com Açúcar e Tangerina",
+    "category": "food",
+    "description": "Panquecas com tangerina e açúcar.",
+    "icon": "/img/heartopia/comidas/panqueca_acucar_po_tangerina.png"
+  },
+  {
+    "id": "porcino_assado",
+    "name": "Porcino Assado",
+    "category": "food",
+    "description": "Cogumelos porcino suculentos e assados.",
+    "icon": "/img/heartopia/comidas/porcino_assado.png"
+  },
+  {
+    "id": "salada_rural",
+    "name": "Salada Rural",
+    "category": "food",
+    "description": "Uma salada fresca com ingredientes do campo.",
+    "icon": "/img/heartopia/comidas/salada_rural.png"
+  },
+  {
+    "id": "shiitake_assado",
+    "name": "Shiitake Assado",
+    "category": "food",
+    "description": "Cogumelos shiitake bem assados.",
+    "icon": "/img/heartopia/comidas/shiitake_assado.png"
+  },
+  {
+    "id": "torta_cogumelos",
+    "name": "Torta de Cogumelos",
+    "category": "food",
+    "description": "Uma torta salgada recheada de cogumelos.",
+    "icon": "/img/heartopia/comidas/torta_cogumelos.png"
+  },
+  {
+    "id": "machado",
+    "name": "Machado",
+    "category": "tool",
+    "description": "Uma ferramenta para cortar madeira.",
+    "icon": "/img/heartopia/ferramentas/machado.png"
+  },
+  {
+    "id": "rede_bolha",
+    "name": "Rede de Bolha",
+    "category": "tool",
+    "description": "Uma rede mágica para capturar bolhas.",
+    "icon": "/img/heartopia/ferramentas/rede_bolha.png"
+  },
+  {
+    "id": "regador",
+    "name": "Regador",
+    "category": "tool",
+    "description": "Uma ferramenta para regar plantas.",
+    "icon": "/img/heartopia/ferramentas/regador.png"
+  },
+  {
+    "id": "scanner_passaro",
+    "name": "Scanner de Pássaro",
+    "category": "tool",
+    "description": "Um scanner tecnológico para identificar pássaros.",
+    "icon": "/img/heartopia/ferramentas/scanner_passaro.png"
+  },
+  {
+    "id": "tablet",
+    "name": "Tablet",
+    "category": "tool",
+    "description": "Um dispositivo eletrônico multifuncional.",
+    "icon": "/img/heartopia/ferramentas/tablet.png"
+  },
+  {
+    "id": "vara_pesca",
+    "name": "Vara de Pesca",
+    "category": "tool",
+    "description": "Uma vara resistente para pescar.",
+    "icon": "/img/heartopia/ferramentas/vara_pesca.png"
   }
 ]
