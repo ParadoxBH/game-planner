@@ -149,5 +149,77 @@
     "category": "resource",
     "drops": [],
     "icon": "/img/heartopia/coletaveis/trufa_negra.png"
+  },
+  {
+    "id": "albert_jr",
+    "name": "Albert Jr.",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/albert_jr.png"
+  },
+  {
+    "id": "andrew",
+    "name": "Andrew",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/andrew.png"
+  },
+  {
+    "id": "annie",
+    "name": "Annie",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/annie.png"
+  },
+  {
+    "id": "azure",
+    "name": "Azure",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/azure.png"
+  },
+  {
+    "id": "bailey_j",
+    "name": "Bailey J.",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/bailey_j.png"
+  },
+  {
+    "id": "blanc",
+    "name": "Blanc",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/blanc.png"
+  },
+  {
+    "id": "colecionador",
+    "name": "Colecionador",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/colecionador.png"
+  },
+  {
+    "id": "dorothee",
+    "name": "Dorothee",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/dorothee.png"
+  },
+  {
+    "id": "ka_ching",
+    "name": "Ka-ching",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/ka_ching.png"
+  },
+  {
+    "id": "massimo",
+    "name": "Massimo",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/massimo.png"
+  },
+  {
+    "id": "naniwa",
+    "name": "Naniwa",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/naniwa.png"
+  },
+  {
+    "id": "sr_joan",
+    "name": "Sr. Joan",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/sr_joan.png"
   }
 ]
