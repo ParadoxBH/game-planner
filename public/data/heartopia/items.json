@@ -2,13 +2,16 @@
   {
     "id": "mirtilo",
     "name": "Mirtilo",
-    "type": "resource",
+    "category": [
+      "resource",
+      "berry"
+    ],
     "description": "Coma mais mirtilo e mantenha os olhos brilhantes"
   },
   {
     "id": "graveto",
     "name": "Galho de Arbusto",
-    "type": "resource",
+    "category": "resource",
     "description": "Um ramo comum"
   }
 ]

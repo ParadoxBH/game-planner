@@ -24,7 +24,7 @@ interface GameItem {
   id: string;
   name: string;
   description: string;
-  category: string;
+  category?: string | string[];
   icon?: string;
 }
 
@@ -36,7 +36,15 @@ export function ItemsPage() {
 
   const categories = useMemo(() => {
     if (!items) return [];
-    const cats = new Set(items.map(item => item.category));
+    const cats = new Set<string>();
+    items.forEach(item => {
+      const itemCats = item.category;
+      if (Array.isArray(itemCats)) {
+        itemCats.forEach(c => cats.add(c));
+      } else if (itemCats) {
+        cats.add(itemCats);
+      }
+    });
     return Array.from(cats).sort();
   }, [items]);
 
@@ -45,7 +53,11 @@ export function ItemsPage() {
     return items.filter(item => {
       const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                             item.id.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = !selectedCategory || item.category === selectedCategory;
+      
+      const itemCats = item.category;
+      const categoriesList = Array.isArray(itemCats) ? itemCats : (itemCats ? [itemCats] : []);
+      
+      const matchesCategory = !selectedCategory || categoriesList.includes(selectedCategory);
       return matchesSearch && matchesCategory;
     });
   }, [items, searchTerm, selectedCategory]);
@@ -175,9 +187,13 @@ export function ItemsPage() {
                       )}
                     </Box>
                     <Box>
-                      <Typography variant="subtitle2" sx={{ color: 'text.disabled', fontSize: '0.65rem' }}>
-                        {item.category}
-                      </Typography>
+                      <Stack direction="row" spacing={0.5} sx={{ mb: 0.5, flexWrap: 'wrap', gap: 0.5 }}>
+                        {(Array.isArray(item.category) ? (item.category) as string[] : [item.category].filter(Boolean) as string[]).map(cat => (
+                          <Typography key={cat} variant="subtitle2" sx={{ color: 'primary.main', fontSize: '0.65rem', fontWeight: 600 }}>
+                            #{cat}
+                          </Typography>
+                        ))}
+                      </Stack>
                       <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: 700, lineHeight: 1.2 }}>
                         {item.name}
                       </Typography>
