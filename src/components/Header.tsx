@@ -20,6 +20,7 @@ import { Link, useLocation } from 'react-router-dom';
 const navItems = [
   { label: "Mapa", pathSuffix: "map", icon: <Map /> },
   { label: 'Itens', pathSuffix: "items", icon: <Construction /> },
+  { label: 'Receitas', pathSuffix: "recipes", icon: <Assignment /> },
   { label: 'Criaturas', pathSuffix: "creatures", icon: <Pets /> },
   { label: 'Quests', pathSuffix: "quests", icon: <Assignment /> },
 ];

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "recipe_graveto_refinado",
+    "name": "Graveto Polido",
+    "stations": ["Bancada de Trabalho"],
+    "ingredients": [
+      { "type": "item", "id": "graveto", "amount": 2 }
+    ],
+    "products": [
+      { "type": "item", "id": "graveto_polido", "amount": 1 }
+    ],
+    "unlock": [
+      { "type": "level", "subject": "Coleta", "value": "2" }
+    ]
+  },
+  {
+    "id": "recipe_suco_mirtilo",
+    "name": "Suco de Mirtilo",
+    "stations": ["Liquidificador"],
+    "ingredients": [
+      { "type": "item", "id": "mirtilo", "amount": 5 }
+    ],
+    "products": [
+      { "type": "item", "id": "suco_mirtilo", "amount": 1 }
+    ],
+    "unlock": [
+      { "type": "quest", "value": "Sede de Aventura" }
+    ]
+  },
+  {
+    "id": "recipe_plantar_mirtilo",
+    "name": "Plantar Arbusto de Mirtilo",
+    "stations": ["Vaso de Planta"],
+    "ingredients": [
+      { "type": "item", "id": "mirtilo", "amount": 1 }
+    ],
+    "products": [
+      { "type": "entity", "id": "brush_berry", "amount": 1 }
+    ],
+    "unlock": [
+      { "type": "level", "subject": "Jardinagem", "value": "3" }
+    ]
+  }
+]

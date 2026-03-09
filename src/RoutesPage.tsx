@@ -4,6 +4,7 @@ import { Home } from "./components/Home";
 import { MainLayout } from "./layouts/MainLayout";
 import { GameDashboard } from "./components/GameDashboard";
 import { ItemsPage } from "./components/ItemsPage";
+import { RecipesPage } from "./components/RecipesPage";
 import { Typography } from "@mui/material";
 
 export function RoutesPage() {
@@ -20,6 +21,7 @@ export function RoutesPage() {
 
           {/* Placeholders adicionais baseados nos novos botões da Header */}
           <Route path="items" element={<ItemsPage />} />
+          <Route path="recipes" element={<RecipesPage />} />
           <Route path="entity" element={<Typography p={4} variant="h4">Lista de Entidades (Em Breve)</Typography>} />
           <Route path="quests" element={<Typography p={4} variant="h4">Lista de Missões (Em Breve)</Typography>} />
         </Route>
