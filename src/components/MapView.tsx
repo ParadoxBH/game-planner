@@ -48,9 +48,11 @@ interface GameInfo {
 interface Spawn {
   id: string;
   entityId: string;
-  type: string;
+  type?: "position" | "range" | "geom";
+  mode?: "once" | "respawn";
   position: [number, number];
   mapId?: string;
+  respawnDelay?: number;
 }
 
 interface GameEntity {
@@ -62,6 +64,7 @@ interface GameEntity {
     itemId: string;
     chance: number;
     quant: number;
+    maxQuant?: number;
   }[];
 }
 
@@ -528,11 +531,13 @@ export const MapView = () => {
                           : { 
                               id: spawn.entityId, 
                               name: spawn.entityId, 
-                              category: spawn.type, 
+                              category: spawn.type || 'resource', 
                               icon: items?.find(i => i.id === spawn.entityId)?.icon 
                             };
                       })()} 
                       position={spawn.position as [number, number]}
+                      mode={spawn.mode}
+                      respawnDelay={spawn.respawnDelay}
                       onExpand={() => {
                         handlePush({ type: "entity", id: spawn.entityId });
                       }}

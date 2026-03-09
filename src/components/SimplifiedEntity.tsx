@@ -12,12 +12,16 @@ interface SimplifiedEntityProps {
     icon?: string;
   };
   position: [number, number];
+  mode?: "once" | "respawn";
+  respawnDelay?: number;
   onExpand: () => void;
 }
 
 export const SimplifiedEntity = ({
   entity,
   position,
+  mode,
+  respawnDelay,
   onExpand,
 }: SimplifiedEntityProps) => {
   const theme = useTheme();
@@ -72,6 +76,13 @@ export const SimplifiedEntity = ({
           label="Coordenadas" 
           values={[`X: ${position[1].toFixed(1)}`, `Y: ${position[0].toFixed(1)}`]}
         />
+
+        {mode === "respawn" && respawnDelay && (
+          <OutputField 
+            label="Respawn" 
+            values={[`${respawnDelay} min`]}
+          />
+        )}
 
         <Button
           variant="contained"

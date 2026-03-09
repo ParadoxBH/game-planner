@@ -49,9 +49,11 @@ interface GameItem {
 interface Spawn {
   id: string;
   entityId: string;
-  type: string;
+  type?: "position" | "range" | "geom";
+  mode?: "once" | "respawn";
   position: [number, number];
   mapId?: string;
+  respawnDelay?: number;
 }
 
 interface MapMetadata {
