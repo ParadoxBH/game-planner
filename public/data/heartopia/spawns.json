@@ -3,6 +3,7 @@
     "id": "berry_1",
     "entityId": "arbusto_mirtilo",
     "mapId": "main",
+    "mode": "respawn",
     "position": [
       -31,
       -285
@@ -12,6 +13,7 @@
     "id": "berry_2",
     "entityId": "arbusto_mirtilo",
     "mapId": "main",
+    "mode": "respawn",
     "position": [
       -8,
       -277
@@ -21,6 +23,7 @@
     "id": "berry_3",
     "entityId": "arbusto_mirtilo",
     "mapId": "main",
+    "mode": "respawn",
     "position": [
       33,
       -275
@@ -30,9 +33,66 @@
     "id": "berry_4",
     "entityId": "arbusto_mirtilo",
     "mapId": "main",
+    "mode": "respawn",
     "position": [
       53,
       -289
     ]
+  },
+  {
+    "id": "truffle_1",
+    "entityId": "trufa_negra_coletavel",
+    "mapId": "main",
+    "mode": "respawn",
+    "position": [200, 630],
+    "respawnDelay": 15
+  },
+  {
+    "id": "truffle_2",
+    "entityId": "trufa_negra_coletavel",
+    "mapId": "main",
+    "mode": "respawn",
+    "position": [210, 660],
+    "respawnDelay": 15
+  },
+  {
+    "id": "truffle_3",
+    "entityId": "trufa_negra_coletavel",
+    "mapId": "main",
+    "mode": "respawn",
+    "position": [245, 650],
+    "respawnDelay": 15
+  },
+  {
+    "id": "truffle_4",
+    "entityId": "trufa_negra_coletavel",
+    "mapId": "main",
+    "mode": "respawn",
+    "position": [240, 675],
+    "respawnDelay": 15
+  },
+  {
+    "id": "truffle_5",
+    "entityId": "trufa_negra_coletavel",
+    "mapId": "main",
+    "mode": "respawn",
+    "position": [270, 680],
+    "respawnDelay": 15
+  },
+  {
+    "id": "truffle_6",
+    "entityId": "trufa_negra_coletavel",
+    "mapId": "main",
+    "mode": "respawn",
+    "position": [285, 700],
+    "respawnDelay": 15
+  },
+  {
+    "id": "truffle_7",
+    "entityId": "trufa_negra_coletavel",
+    "mapId": "main",
+    "mode": "respawn",
+    "position": [215, 725],
+    "respawnDelay": 15
   }
 ]

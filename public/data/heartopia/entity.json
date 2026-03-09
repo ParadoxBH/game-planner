@@ -147,7 +147,9 @@
     "id": "trufa_negra_coletavel",
     "name": "Trufa Negra",
     "category": "resource",
-    "drops": [],
+    "drops": [
+      { "itemId": "trufa_negra", "chance": 1, "quant": 3 }
+    ],
     "icon": "/img/heartopia/coletaveis/trufa_negra.png"
   },
   {
