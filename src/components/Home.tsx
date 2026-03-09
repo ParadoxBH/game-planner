@@ -74,7 +74,7 @@ export function Home() {
         textAlign="center"
         sx={{ mb: 6 }}
       >
-        Escolha um jogo para acessar seu guia e mapa interativo.
+        Escolha um jogo para acessar seu guia.
       </Typography>
 
       <Box
