@@ -1,19 +1,121 @@
 [
   {
-    "id": "brush_berry",
+    "id": "arbusto_flores",
+    "name": "Arbusto de Flores",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/arbusto_flores.png"
+  },
+  {
+    "id": "arbusto_framboesa",
+    "name": "Arbusto de Framboesa",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/arbusto_framboesa.png"
+  },
+  {
+    "id": "arbusto_lavanda",
+    "name": "Arbusto de Lavanda",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/arbusto_lavanda.png"
+  },
+  {
+    "id": "arbusto_mirtilo",
     "name": "Arbusto de Mirtilo",
     "category": "resource",
-    "drops": [
-      {
-        "itemId": "mirtilo",
-        "chance": 1,
-        "quant": 1
-      },
-      {
-        "itemId": "graveto",
-        "chance": 1,
-        "quant": 3
-      }
-    ]
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/arbusto_mirtilo.png"
+  },
+  {
+    "id": "arvore",
+    "name": "Árvore",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/arvore.png"
+  },
+  {
+    "id": "arvore_abeto",
+    "name": "Árvore Abeto",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/arvore_abeto.png"
+  },
+  {
+    "id": "arvore_grande",
+    "name": "Árvore Grande",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/arvore_grande.png"
+  },
+  {
+    "id": "arvore_maca",
+    "name": "Macieira",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/arvore_maca.png"
+  },
+  {
+    "id": "arvore_pinheiro",
+    "name": "Pinheiro",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/arvore_pinheiro.png"
+  },
+  {
+    "id": "arvore_tangerina",
+    "name": "Tangerineira",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/arvore_tangerina.png"
+  },
+  {
+    "id": "bambu_coletavel",
+    "name": "Bambu",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/bambu.png"
+  },
+  {
+    "id": "carvalho_andarilho",
+    "name": "Carvalho Andarilho",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/carvalho_andarilho.png"
+  },
+  {
+    "id": "champignon_coletavel",
+    "name": "Champignon",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/champignon.png"
+  },
+  {
+    "id": "minerio",
+    "name": "Minério",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/minerio.png"
+  },
+  {
+    "id": "minerio_fluorita",
+    "name": "Minério de Fluorita",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/minerio_fluorita.png"
+  },
+  {
+    "id": "pedra",
+    "name": "Pedra",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/pedra.png"
+  },
+  {
+    "id": "trufa_negra_coletavel",
+    "name": "Trufa Negra",
+    "category": "resource",
+    "drops": [],
+    "icon": "/img/heartopia/coletaveis/trufa_negra.png"
   }
 ]

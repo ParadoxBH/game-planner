@@ -1,7 +1,7 @@
 [
   {
     "id": "berry_1",
-    "entityId": "brush_berry",
+    "entityId": "arbusto_mirtilo",
     "mapId": "main",
     "position": [
       -31,
@@ -10,7 +10,7 @@
   },
   {
     "id": "berry_2",
-    "entityId": "brush_berry",
+    "entityId": "arbusto_mirtilo",
     "mapId": "main",
     "position": [
       -8,
@@ -19,7 +19,7 @@
   },
   {
     "id": "berry_3",
-    "entityId": "brush_berry",
+    "entityId": "arbusto_mirtilo",
     "mapId": "main",
     "position": [
       33,
@@ -28,7 +28,7 @@
   },
   {
     "id": "berry_4",
-    "entityId": "brush_berry",
+    "entityId": "arbusto_mirtilo",
     "mapId": "main",
     "position": [
       53,
