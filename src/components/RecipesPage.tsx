@@ -20,14 +20,15 @@ import {
   KeyboardDoubleArrowRight,
   Lock,
   Bolt,
-  Assignment
+  Assignment,
+  Category
 } from "@mui/icons-material";
 import { useParams } from "react-router-dom";
 import { useGameData } from "../hooks/useGameData";
 import { useState, useMemo } from "react";
 
 interface RecipeIngredient {
-  type?: 'item' | 'entity'; // Default to item if not specified
+  type?: 'item' | 'entity' | 'category'; // Default to item if not specified
   id: string;
   name?: string;
   amount: number;
@@ -284,18 +285,29 @@ export function RecipesPage() {
                             <Stack spacing={1}>
                               <Typography variant="overline" sx={{ color: 'text.disabled', lineHeight: 1 }}>Ingredientes</Typography>
                               {recipe.ingredients.map((ing, idx) => {
-                                const source = getSourceData(ing.type, ing.id);
+                                const source = getSourceData(ing.type as any, ing.id);
                                 return (
                                   <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                    <Paper variant="outlined" sx={{ p: 0.5, display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, backgroundColor: 'rgba(0,0,0,0.2)' }}>
-                                      {source?.icon ? (
+                                    <Paper variant="outlined" sx={{ 
+                                      p: 0.5, 
+                                      display: 'flex', 
+                                      alignItems: 'center', 
+                                      justifyContent: 'center', 
+                                      width: 32, 
+                                      height: 32, 
+                                      backgroundColor: 'rgba(0,0,0,0.2)',
+                                      borderColor: ing.type === 'category' ? 'warning.dark' : 'divider'
+                                    }}>
+                                      {ing.type === 'category' ? (
+                                        <Category sx={{ fontSize: 16, color: 'warning.main' }} />
+                                      ) : source?.icon ? (
                                         <img src={source.icon} alt={ing.id} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                                       ) : (
                                         <Inventory sx={{ fontSize: 16, color: 'text.disabled' }} />
                                       )}
                                     </Paper>
                                     <Typography variant="body2" sx={{ flexGrow: 1 }}>
-                                      {ing.name || source?.name || ing.id}
+                                      {ing.type === 'category' ? `Qualquer ${ing.id}` : (ing.name || source?.name || ing.id)}
                                     </Typography>
                                     <Chip label={`x${ing.amount}`} size="small" sx={{ height: 20, fontSize: '0.7rem' }} />
                                   </Box>
@@ -361,7 +373,7 @@ export function RecipesPage() {
                             gap: 1
                           }}>
                             <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: '#ffbb00', fontWeight: 600 }}>
-                              <Lock sx={{ fontSize: '0.9rem' }} /> REQUISITOS DE DESBLOQUEIO
+                              <Lock sx={{ fontSize: '0.9rem' }} /> Requisito
                             </Typography>
                             <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
                               {recipe.unlock.map((req, idx) => {
