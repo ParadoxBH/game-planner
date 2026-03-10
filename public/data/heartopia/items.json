@@ -912,5 +912,22 @@
     "category": "tool",
     "description": "Uma vara resistente para pescar.",
     "icon": "/img/heartopia/ferramentas/vara_pesca.png"
+  },
+  {
+    "id": "ovo_cozido_termal",
+    "name": "Ovo Termal",
+    "category": "food",
+    "description": "Um ovo cozinhado em uma fonte termal.",
+    "icon": "/img/heartopia/comidas/ovo_cozido_termal.png"
+  },
+  {
+    "id": "vale_musica",
+    "name": "Vale Publicação Musical",
+    "category": [
+      "currency",
+      "wallet"
+    ],
+    "description": "Um vale que permite publicar uma musica.",
+    "icon": "/img/heartopia/stats/vale_musica.png"
   }
 ]
