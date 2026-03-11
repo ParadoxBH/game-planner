@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "id": "energia",
     "name": "Energia",
@@ -144,7 +144,8 @@
     "name": "Bambu",
     "category": "resource",
     "description": "Um talo de bambu resistente.",
-    "icon": "/img/heartopia/recursos/bambu.png"
+    "icon": "/img/heartopia/recursos/bambu.png",
+    "sellPrice": 7
   },
   {
     "id": "carne",
@@ -154,7 +155,8 @@
       "ingredient"
     ],
     "description": "Proteína fresca para cozinhar.",
-    "icon": "/img/heartopia/recursos/carne.png"
+    "icon": "/img/heartopia/recursos/carne.png",
+    "sellPrice": 100
   },
   {
     "id": "carvalho_delicado",
@@ -164,7 +166,8 @@
       "wood"
     ],
     "description": "Madeira de carvalho com textura suave.",
-    "icon": "/img/heartopia/recursos/carvalho_delicado.png"
+    "icon": "/img/heartopia/recursos/carvalho_delicado.png",
+    "sellPrice": 150
   },
   {
     "id": "cha_preto",
@@ -174,7 +177,8 @@
       "ingredient"
     ],
     "description": "Folhas de chá preto secas.",
-    "icon": "/img/heartopia/recursos/cha_preto.png"
+    "icon": "/img/heartopia/recursos/cha_preto.png",
+    "sellPrice": 125
   },
   {
     "id": "champignon",
@@ -184,7 +188,8 @@
       "mushroom"
     ],
     "description": "Um cogumelo champignon comum.",
-    "icon": "/img/heartopia/recursos/champignon.png"
+    "icon": "/img/heartopia/recursos/champignon.png",
+    "sellPrice": 16
   },
   {
     "id": "champignon_estranho_azul",
@@ -224,7 +229,8 @@
       "mushroom"
     ],
     "description": "Um cogumelo que parece uma ostra.",
-    "icon": "/img/heartopia/recursos/cogumelo_ostra.png"
+    "icon": "/img/heartopia/recursos/cogumelo_ostra.png",
+    "sellPrice": 16
   },
   {
     "id": "cogumelo_ostra_estranho_amarelo",
@@ -324,14 +330,16 @@
       "ingredient"
     ],
     "description": "Pequenos feijões vermelhos doces.",
-    "icon": "/img/heartopia/recursos/feijao_azuki.png"
+    "icon": "/img/heartopia/recursos/feijao_azuki.png",
+    "sellPrice": 25
   },
   {
     "id": "fluorita_pura",
     "name": "Fluorita Pura",
     "category": "resource",
     "description": "Um cristal de fluorita perfeitamente lapidado.",
-    "icon": "/img/heartopia/recursos/fluorita_pura.png"
+    "icon": "/img/heartopia/recursos/fluorita_pura.png",
+    "sellPrice": 150
   },
   {
     "id": "framboesa",
@@ -341,14 +349,16 @@
       "berry"
     ],
     "description": "Pequena e suculenta framboesa.",
-    "icon": "/img/heartopia/recursos/framboesa.png"
+    "icon": "/img/heartopia/recursos/framboesa.png",
+    "sellPrice": 26
   },
   {
     "id": "galho_arbusto",
     "name": "Galho de Arbusto",
     "category": "resource",
     "description": "Um ramo comum.",
-    "icon": "/img/heartopia/recursos/galho_arbusto.png"
+    "icon": "/img/heartopia/recursos/galho_arbusto.png",
+    "sellPrice": 5
   },
   {
     "id": "graos_cafe",
@@ -358,7 +368,8 @@
       "ingredient"
     ],
     "description": "Grãos de café aromáticos.",
-    "icon": "/img/heartopia/recursos/graos_cafe.png"
+    "icon": "/img/heartopia/recursos/graos_cafe.png",
+    "sellPrice": 25
   },
   {
     "id": "leite",
@@ -368,7 +379,8 @@
       "ingredient"
     ],
     "description": "Leite fresco e nutritivo.",
-    "icon": "/img/heartopia/recursos/leite.png"
+    "icon": "/img/heartopia/recursos/leite.png",
+    "sellPrice": 26
   },
   {
     "id": "maca",
@@ -378,7 +390,8 @@
       "fruit"
     ],
     "description": "Uma maçã vermelha e crocante.",
-    "icon": "/img/heartopia/recursos/maca.png"
+    "icon": "/img/heartopia/recursos/maca.png",
+    "sellPrice": 28
   },
   {
     "id": "macarrao_arroz",
@@ -388,7 +401,8 @@
       "ingredient"
     ],
     "description": "Macarrão de arroz leve.",
-    "icon": "/img/heartopia/recursos/macarrao_arroz.png"
+    "icon": "/img/heartopia/recursos/macarrao_arroz.png",
+    "sellPrice": 25
   },
   {
     "id": "madeira",
@@ -398,7 +412,8 @@
       "wood"
     ],
     "description": "Um pedaço de madeira comum.",
-    "icon": "/img/heartopia/recursos/madeira.png"
+    "icon": "/img/heartopia/recursos/madeira.png",
+    "sellPrice": 6
   },
   {
     "id": "madeira_qualidade",
@@ -408,7 +423,8 @@
       "wood"
     ],
     "description": "Madeira resistente de alta qualidade.",
-    "icon": "/img/heartopia/recursos/madeira_qualidade.png"
+    "icon": "/img/heartopia/recursos/madeira_qualidade.png",
+    "sellPrice": 12
   },
   {
     "id": "madeira_rara",
@@ -418,7 +434,8 @@
       "wood"
     ],
     "description": "Um tipo de madeira extremamente raro.",
-    "icon": "/img/heartopia/recursos/madeira_rara.png"
+    "icon": "/img/heartopia/recursos/madeira_rara.png",
+    "sellPrice": 50
   },
   {
     "id": "manteiga",
@@ -428,7 +445,8 @@
       "ingredient"
     ],
     "description": "Manteiga cremosa.",
-    "icon": "/img/heartopia/recursos/manteiga.png"
+    "icon": "/img/heartopia/recursos/manteiga.png",
+    "sellPrice": 75
   },
   {
     "id": "matsutake",
@@ -448,7 +466,8 @@
       "meteor"
     ],
     "description": "Fragmento de meteoro de cor ciano.",
-    "icon": "/img/heartopia/recursos/meteoro_ciano.png"
+    "icon": "/img/heartopia/recursos/meteoro_ciano.png",
+    "sellPrice": 150
   },
   {
     "id": "meteoro_cinza",
@@ -495,7 +514,8 @@
     "name": "Minério",
     "category": "resource",
     "description": "Fragmento de minério bruto.",
-    "icon": "/img/heartopia/recursos/minerio.png"
+    "icon": "/img/heartopia/recursos/minerio.png",
+    "sellPrice": 14
   },
   {
     "id": "mirtilo",
@@ -505,7 +525,8 @@
       "berry"
     ],
     "description": "Coma mais mirtilo e mantenha os olhos brilhantes.",
-    "icon": "/img/heartopia/recursos/mirtilo.png"
+    "icon": "/img/heartopia/recursos/mirtilo.png",
+    "sellPrice": 16
   },
   {
     "id": "mirtilo_recurso",
@@ -515,7 +536,8 @@
       "berry"
     ],
     "description": "Pequena e azulada baga de mirtilo.",
-    "icon": "/img/heartopia/recursos/mirtilo.png"
+    "icon": "/img/heartopia/recursos/mirtilo.png",
+    "sellPrice": 16
   },
   {
     "id": "ovo",
@@ -525,14 +547,16 @@
       "ingredient"
     ],
     "description": "Um ovo fresco de galinha.",
-    "icon": "/img/heartopia/recursos/ovo.png"
+    "icon": "/img/heartopia/recursos/ovo.png",
+    "sellPrice": 50
   },
   {
     "id": "pedra",
     "name": "Pedra",
     "category": "resource",
     "description": "Uma pedra comum.",
-    "icon": "/img/heartopia/recursos/pedra.png"
+    "icon": "/img/heartopia/recursos/pedra.png",
+    "sellPrice": 8
   },
   {
     "id": "po_matcha",
@@ -542,7 +566,8 @@
       "ingredient"
     ],
     "description": "Pó de chá verde matcha de alta qualidade.",
-    "icon": "/img/heartopia/recursos/po_matcha.png"
+    "icon": "/img/heartopia/recursos/po_matcha.png",
+    "sellPrice": 125
   },
   {
     "id": "porcino",
@@ -552,7 +577,8 @@
       "mushroom"
     ],
     "description": "Um cogumelo porcino terrestre.",
-    "icon": "/img/heartopia/recursos/porcino.png"
+    "icon": "/img/heartopia/recursos/porcino.png",
+    "sellPrice": 16
   },
   {
     "id": "porcino_estranho_amarelo",
@@ -572,7 +598,8 @@
       "mushroom"
     ],
     "description": "Uma variação roxa do cogumelo porcino.",
-    "icon": "/img/heartopia/recursos/porcino_estranho_roxo.png"
+    "icon": "/img/heartopia/recursos/porcino_estranho_roxo.png",
+    "sellPrice": 16
   },
   {
     "id": "porcino_estranho_vermelho",
@@ -582,7 +609,8 @@
       "mushroom"
     ],
     "description": "Uma variação vermelha do cogumelo porcino.",
-    "icon": "/img/heartopia/recursos/porcino_estranho_vermelho.png"
+    "icon": "/img/heartopia/recursos/porcino_estranho_vermelho.png",
+    "sellPrice": 16
   },
   {
     "id": "queijo",
@@ -592,7 +620,8 @@
       "ingredient"
     ],
     "description": "Um pedaço de queijo saboroso.",
-    "icon": "/img/heartopia/recursos/queijo.png"
+    "icon": "/img/heartopia/recursos/queijo.png",
+    "sellPrice": 50
   },
   {
     "id": "roce_roxo",
@@ -609,7 +638,8 @@
       "mushroom"
     ],
     "description": "Um cogumelo shiitake clássico.",
-    "icon": "/img/heartopia/recursos/shiitake.png"
+    "icon": "/img/heartopia/recursos/shiitake.png",
+    "sellPrice": 16
   },
   {
     "id": "shiitake_estranho_azul",
@@ -619,7 +649,8 @@
       "mushroom"
     ],
     "description": "Uma variação azul do cogumelo shiitake.",
-    "icon": "/img/heartopia/recursos/shiitake_estranho_azul.png"
+    "icon": "/img/heartopia/recursos/shiitake_estranho_azul.png",
+    "sellPrice": 16
   },
   {
     "id": "shitake_estranho_vermelho",
@@ -629,7 +660,8 @@
       "mushroom"
     ],
     "description": "Uma variação vermelha do cogumelo shiitake.",
-    "icon": "/img/heartopia/recursos/shitake_estranho_vermelho.png"
+    "icon": "/img/heartopia/recursos/shitake_estranho_vermelho.png",
+    "sellPrice": 16
   },
   {
     "id": "shittake_estranho_roxo",
@@ -639,7 +671,8 @@
       "mushroom"
     ],
     "description": "Uma variação roxa do cogumelo shiitake.",
-    "icon": "/img/heartopia/recursos/shittake_estranho_roxo.png"
+    "icon": "/img/heartopia/recursos/shittake_estranho_roxo.png",
+    "sellPrice": 16
   },
   {
     "id": "tangerina",
@@ -649,7 +682,8 @@
       "fruit"
     ],
     "description": "Uma tangerina cítrica e doce.",
-    "icon": "/img/heartopia/recursos/tangerina.png"
+    "icon": "/img/heartopia/recursos/tangerina.png",
+    "sellPrice": 28
   },
   {
     "id": "trufa_negra",
@@ -659,14 +693,16 @@
       "mushroom"
     ],
     "description": "Uma trufa negra rara e aromática.",
-    "icon": "/img/heartopia/recursos/trufa_negra.png"
+    "icon": "/img/heartopia/recursos/trufa_negra.png",
+    "sellPrice": 99
   },
   {
     "id": "arroz_marisco",
     "name": "Arroz de Marisco",
     "category": "food",
     "description": "Um prato reconfortante de arroz com mariscos.",
-    "icon": "/img/heartopia/comidas/arroz_marisco.png"
+    "icon": "/img/heartopia/comidas/arroz_marisco.png",
+    "sellPrice": 490
   },
   {
     "id": "bagel_peixe_defumado",
@@ -680,7 +716,8 @@
     "name": "Banquete Aurora",
     "category": "food",
     "description": "Um banquete magnífico digno de reis.",
-    "icon": "/img/heartopia/comidas/banquete_aurora.png"
+    "icon": "/img/heartopia/comidas/banquete_aurora.png",
+    "sellPrice": 1630
   },
   {
     "id": "bolo_queijo",
@@ -694,7 +731,8 @@
     "name": "Café",
     "category": "food",
     "description": "Uma xícara quente de café.",
-    "icon": "/img/heartopia/comidas/cafe.png"
+    "icon": "/img/heartopia/comidas/cafe.png",
+    "sellPrice": 290
   },
   {
     "id": "cafe_gelado",
@@ -711,7 +749,8 @@
     "name": "Caldo Cremoso de Nabo",
     "category": "food",
     "description": "Um caldo quente e denso de nabo.",
-    "icon": "/img/heartopia/comidas/caldo_cremoso_nabo.png"
+    "icon": "/img/heartopia/comidas/caldo_cremoso_nabo.png",
+    "sellPrice": 340
   },
   {
     "id": "carne_pure_nabo",
@@ -795,7 +834,8 @@
     "name": "Latte",
     "category": "food",
     "description": "Café com leite cremoso.",
-    "icon": "/img/heartopia/comidas/latte.png"
+    "icon": "/img/heartopia/comidas/latte.png",
+    "sellPrice": 300
   },
   {
     "id": "latte_gelado",
@@ -805,7 +845,8 @@
       "cafe_gelado"
     ],
     "description": "Latte refrescante servido com gelo.",
-    "icon": "/img/heartopia/comidas/latte_gelado.png"
+    "icon": "/img/heartopia/comidas/latte_gelado.png",
+    "sellPrice": 280
   },
   {
     "id": "macarrao_trufa_negra_creme",
@@ -832,7 +873,8 @@
       "panqueca_acucar_po"
     ],
     "description": "Panquecas com framboesas e açúcar.",
-    "icon": "/img/heartopia/comidas/panqueca_acucar_po_framboesa.png"
+    "icon": "/img/heartopia/comidas/panqueca_acucar_po_framboesa.png",
+    "sellPrice": 350
   },
   {
     "id": "panqueca_acucar_po_maca",
@@ -842,7 +884,8 @@
       "panqueca_acucar_po"
     ],
     "description": "Panquecas com pedaços de maçã e açúcar.",
-    "icon": "/img/heartopia/comidas/panqueca_acucar_po_maca.png"
+    "icon": "/img/heartopia/comidas/panqueca_acucar_po_maca.png",
+    "sellPrice": 360
   },
   {
     "id": "panqueca_acucar_po_mirtilo",
@@ -862,7 +905,8 @@
       "panqueca_acucar_po"
     ],
     "description": "Panquecas com tangerina e açúcar.",
-    "icon": "/img/heartopia/comidas/panqueca_acucar_po_tangerina.png"
+    "icon": "/img/heartopia/comidas/panqueca_acucar_po_tangerina.png",
+    "sellPrice": 360
   },
   {
     "id": "porcino_assado",
@@ -939,7 +983,8 @@
     "name": "Ovo Termal",
     "category": "food",
     "description": "Um ovo cozinhado em uma fonte termal.",
-    "icon": "/img/heartopia/comidas/ovo_cozido_termal.png"
+    "icon": "/img/heartopia/comidas/ovo_cozido_termal.png",
+    "sellPrice": 130
   },
   {
     "id": "vale_musica",
@@ -959,7 +1004,8 @@
       "ingredient"
     ],
     "description": "Um vegetal crocante e nutritivo.",
-    "icon": "/img/heartopia/agricultura/nabo.png"
+    "icon": "/img/heartopia/agricultura/nabo.png",
+    "sellPrice": 30
   },
   {
     "id": "acucar_po",
@@ -969,6 +1015,77 @@
       "ingredient"
     ],
     "description": "Açúcar finamente moído, perfeito para doces.",
-    "icon": "/img/heartopia/culinaria/acucar_po.png"
+    "icon": "/img/heartopia/culinaria/acucar_po.png",
+    "sellPrice": 25
+  },
+  {
+    "id": "tomate",
+    "name": "Tomate",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Um tomate suculento e vermelho.",
+    "sellPrice": 30
+  },
+  {
+    "id": "batata",
+    "name": "Batata",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Um tubérculo versátil.",
+    "sellPrice": 90
+  },
+  {
+    "id": "trigo",
+    "name": "Trigo",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Grãos de trigo dourados.",
+    "sellPrice": 285
+  },
+  {
+    "id": "alface_americano",
+    "name": "Alface Americano",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Folhas de alface crocantes.",
+    "sellPrice": 435
+  },
+  {
+    "id": "abacaxi",
+    "name": "Abacaxi",
+    "category": [
+      "resource",
+      "fruit"
+    ],
+    "description": "Uma fruta tropical doce e ácida.",
+    "sellPrice": 86
+  },
+  {
+    "id": "oleo",
+    "name": "Óleo",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Óleo vegetal para cozinhar.",
+    "sellPrice": 50
+  },
+  {
+    "id": "ovo_pasteurizado",
+    "name": "Ovo Pasteurizado",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Ovos processados com segurança.",
+    "sellPrice": 50
   }
 ]
