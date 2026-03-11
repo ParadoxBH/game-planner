@@ -1,4 +1,4 @@
-import { Button, Typography, Stack, useTheme, Grid, Card, CardContent, CardActionArea } from "@mui/material";
+import { Button, Typography, Stack, useTheme, Grid, Card, Box, CardContent, CardActionArea } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { Map, Construction, Pets, Assignment } from "@mui/icons-material";
 import { StyledContainer } from "./common/StyledContainer";
