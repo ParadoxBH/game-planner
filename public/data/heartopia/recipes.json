@@ -2,182 +2,444 @@
   {
     "id": "recipe_cafe_gelado",
     "name": "Café Gelado",
-    "stations": ["Fogão Pinguim"],
+    "stations": [
+      "cooking",
+      "gala_moda_neve"
+    ],
     "ingredients": [
-      { "type": "item", "id": "acucar_po", "amount": 1 },
-      { "type": "item", "id": "graos_cafe", "amount": 3 }
+      {
+        "type": "item",
+        "id": "acucar_po",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "graos_cafe",
+        "amount": 3
+      }
     ],
     "products": [
-      { "type": "item", "id": "cafe_gelado", "amount": 1 }
+      {
+        "type": "item",
+        "id": "cafe_gelado",
+        "amount": 1
+      }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_moda_neve" }
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
     ]
   },
   {
     "id": "recipe_latte_gelado",
     "name": "Latte Gelado",
-    "stations": ["Fogão Pinguim"],
+    "stations": [
+      "cooking",
+      "gala_moda_neve"
+    ],
     "ingredients": [
-      { "type": "item", "id": "acucar_po", "amount": 1 },
-      { "type": "item", "id": "graos_cafe", "amount": 1 },
-      { "type": "item", "id": "leite", "amount": 2 }
+      {
+        "type": "item",
+        "id": "acucar_po",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "graos_cafe",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 2
+      }
     ],
     "products": [
-      { "type": "item", "id": "latte_gelado", "amount": 1 }
+      {
+        "type": "item",
+        "id": "latte_gelado",
+        "amount": 1
+      }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_moda_neve" }
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
     ]
   },
   {
     "id": "recipe_carne_pure_nabo",
     "name": "Carne com Purê de Nabo",
-    "stations": ["Fogão Pinguim"],
+    "stations": [
+      "cooking",
+      "gala_moda_neve"
+    ],
     "ingredients": [
-      { "type": "item", "id": "carne", "amount": 2 },
-      { "type": "item", "id": "manteiga", "amount": 1 },
-      { "type": "item", "id": "nabo", "amount": 1 }
+      {
+        "type": "item",
+        "id": "carne",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "manteiga",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "nabo",
+        "amount": 1
+      }
     ],
     "products": [
-      { "type": "item", "id": "carne_pure_nabo", "amount": 1 }
+      {
+        "type": "item",
+        "id": "carne_pure_nabo",
+        "amount": 1
+      }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_moda_neve" }
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
     ]
   },
   {
     "id": "recipe_caldo_cremoso_nabo",
     "name": "Caldo Cremoso de Nabo",
-    "stations": ["Fogão Pinguim"],
+    "stations": [
+      "cooking",
+      "gala_moda_neve"
+    ],
     "ingredients": [
-      { "type": "item", "id": "leite", "amount": 1 },
-      { "type": "item", "id": "manteiga", "amount": 1 },
-      { "type": "item", "id": "nabo", "amount": 2 }
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "manteiga",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "nabo",
+        "amount": 2
+      }
     ],
     "products": [
-      { "type": "item", "id": "caldo_cremoso_nabo", "amount": 1 }
+      {
+        "type": "item",
+        "id": "caldo_cremoso_nabo",
+        "amount": 1
+      }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_moda_neve" }
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
     ]
   },
   {
     "id": "recipe_panqueca_acucar_po_classica",
     "name": "Panqueca com Açúcar em Pó Clássica",
-    "stations": ["Fogão Pinguim"],
+    "stations": [
+      "cooking",
+      "gala_moda_neve"
+    ],
     "ingredients": [
-      { "type": "item", "id": "ovo", "amount": 1 },
-      { "type": "item", "id": "leite", "amount": 1 },
-      { "type": "item", "id": "acucar_po", "amount": 1 },
-      { "type": "category", "id": "fruta", "amount": 1 }
+      {
+        "type": "item",
+        "id": "ovo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "acucar_po",
+        "amount": 1
+      },
+      {
+        "type": "category",
+        "id": "fruta",
+        "amount": 1
+      }
     ],
     "products": [
-      { "type": "item", "id": "panqueca_acucar_po", "amount": 1 }
+      {
+        "type": "item",
+        "id": "panqueca_acucar_po",
+        "amount": 1
+      }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_moda_neve" }
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
     ]
   },
   {
     "id": "recipe_panqueca_acucar_po_mirtilo",
     "name": "Panqueca com Açúcar em Pó e Mirtilo",
-    "stations": ["Fogão Pinguim"],
+    "stations": [
+      "cooking",
+      "gala_moda_neve"
+    ],
     "ingredients": [
-      { "type": "item", "id": "ovo", "amount": 1 },
-      { "type": "item", "id": "leite", "amount": 1 },
-      { "type": "item", "id": "acucar_po", "amount": 1 },
-      { "type": "item", "id": "mirtilo", "amount": 1 }
+      {
+        "type": "item",
+        "id": "ovo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "acucar_po",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "mirtilo",
+        "amount": 1
+      }
     ],
     "products": [
-      { "type": "item", "id": "panqueca_acucar_po_mirtilo", "amount": 1 }
+      {
+        "type": "item",
+        "id": "panqueca_acucar_po_mirtilo",
+        "amount": 1
+      }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_moda_neve" }
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
     ]
   },
   {
     "id": "recipe_panqueca_acucar_po_framboesa",
     "name": "Panqueca com Açúcar em Pó e Framboesa",
-    "stations": ["Fogão Pinguim"],
+    "stations": [
+      "cooking",
+      "gala_moda_neve"
+    ],
     "ingredients": [
-      { "type": "item", "id": "ovo", "amount": 1 },
-      { "type": "item", "id": "leite", "amount": 1 },
-      { "type": "item", "id": "acucar_po", "amount": 1 },
-      { "type": "item", "id": "framboesa", "amount": 1 }
+      {
+        "type": "item",
+        "id": "ovo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "acucar_po",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "framboesa",
+        "amount": 1
+      }
     ],
     "products": [
-      { "type": "item", "id": "panqueca_acucar_po_framboesa", "amount": 1 }
+      {
+        "type": "item",
+        "id": "panqueca_acucar_po_framboesa",
+        "amount": 1
+      }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_moda_neve" }
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
     ]
   },
   {
     "id": "recipe_panqueca_acucar_po_maca",
     "name": "Panqueca com Açúcar em Pó e Maça",
-    "stations": ["Fogão Pinguim"],
+    "stations": [
+      "cooking",
+      "gala_moda_neve"
+    ],
     "ingredients": [
-      { "type": "item", "id": "ovo", "amount": 1 },
-      { "type": "item", "id": "leite", "amount": 1 },
-      { "type": "item", "id": "acucar_po", "amount": 1 },
-      { "type": "item", "id": "maca", "amount": 1 }
+      {
+        "type": "item",
+        "id": "ovo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "acucar_po",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "maca",
+        "amount": 1
+      }
     ],
     "products": [
-      { "type": "item", "id": "panqueca_acucar_po_maca", "amount": 1 }
+      {
+        "type": "item",
+        "id": "panqueca_acucar_po_maca",
+        "amount": 1
+      }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_moda_neve" }
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
     ]
   },
   {
     "id": "recipe_panqueca_acucar_po_tangerina",
     "name": "Panqueca com Açúcar em Pó e Tangerina",
-    "stations": ["Fogão Pinguim"],
+    "stations": [
+      "cooking",
+      "gala_moda_neve"
+    ],
     "ingredients": [
-      { "type": "item", "id": "ovo", "amount": 1 },
-      { "type": "item", "id": "leite", "amount": 1 },
-      { "type": "item", "id": "acucar_po", "amount": 1 },
-      { "type": "item", "id": "tangerina", "amount": 1 }
+      {
+        "type": "item",
+        "id": "ovo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "acucar_po",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "tangerina",
+        "amount": 1
+      }
     ],
     "products": [
-      { "type": "item", "id": "panqueca_acucar_po_tangerina", "amount": 1 }
+      {
+        "type": "item",
+        "id": "panqueca_acucar_po_tangerina",
+        "amount": 1
+      }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_moda_neve" }
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
     ]
   },
   {
     "id": "recipe_banquete_aurora",
     "name": "Banquete da Aurora",
-    "stations": ["Fogão Pinguim"],
+    "stations": [
+      "cooking",
+      "gala_moda_neve"
+    ],
     "ingredients": [
-      { "type": "item", "id": "carne_pure_nabo", "amount": 1 },
-      { "type": "item", "id": "caldo_cremoso_nabo", "amount": 1 },
-      { "type": "category", "id": "cafe_gelado", "amount": 1 },
-      { "type": "category", "id": "panqueca_acucar_po", "amount": 1 }
+      {
+        "type": "item",
+        "id": "carne_pure_nabo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "caldo_cremoso_nabo",
+        "amount": 1
+      },
+      {
+        "type": "category",
+        "id": "cafe_gelado",
+        "amount": 1
+      },
+      {
+        "type": "category",
+        "id": "panqueca_acucar_po",
+        "amount": 1
+      }
     ],
     "products": [
-      { "type": "item", "id": "banquete_aurora", "amount": 1 }
+      {
+        "type": "item",
+        "id": "banquete_aurora",
+        "amount": 1
+      }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_moda_neve" }
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
     ]
   },
   {
     "id": "recipe_fabricar_fogao_pinguim",
     "name": "Fabricar Fogão Pinguim",
-    "stations": ["Bancada de Trabalho"],
+    "stations": [
+      "workbench"
+    ],
     "ingredients": [
-      { "type": "item", "id": "pedra", "amount": 8 },
-      { "type": "item", "id": "madeira_qualidade", "amount": 12 },
-      { "type": "item", "id": "kit_materiais_pinguim", "amount": 1 }
+      {
+        "type": "item",
+        "id": "pedra",
+        "amount": 8
+      },
+      {
+        "type": "item",
+        "id": "madeira_qualidade",
+        "amount": 12
+      },
+      {
+        "type": "item",
+        "id": "kit_materiais_pinguim",
+        "amount": 1
+      }
     ],
     "products": [
-      { "type": "entity", "id": "fogao_pinguim", "amount": 1 }
+      {
+        "type": "entity",
+        "id": "fogao_pinguim",
+        "amount": 1
+      }
     ],
     "unlock": [
-      { "type": "quest", "subject": "Massimo", "value": "As aventuras da Princesa Stella" }
+      {
+        "type": "quest",
+        "subject": "Massimo",
+        "value": "As aventuras da Princesa Stella"
+      }
     ]
   }
 ]

@@ -298,6 +298,7 @@
     "name": "Fogão Pinguim",
     "category": [
       "appliance",
+      "cooking",
       "gala_moda_neve"
     ],
     "icon": "/img/heartopia/eletrodomestico/fogao_pinguim.png"

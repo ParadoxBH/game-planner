@@ -349,7 +349,8 @@
     "name": "Framboesa",
     "category": [
       "resource",
-      "berry"
+      "berry",
+      "ingredient_geleia"
     ],
     "description": "Pequena e suculenta framboesa.",
     "icon": "/img/heartopia/recursos/framboesa.png",
@@ -368,7 +369,8 @@
     "name": "Grãos de Café",
     "category": [
       "resource",
-      "ingredient"
+      "ingredient",
+      "ingredient_cafe"
     ],
     "description": "Grãos de café aromáticos.",
     "icon": "/img/heartopia/recursos/graos_cafe.png",
@@ -380,7 +382,8 @@
     "name": "Leite",
     "category": [
       "resource",
-      "ingredient"
+      "ingredient",
+      "ingredient_cafe"
     ],
     "description": "Leite fresco e nutritivo.",
     "icon": "/img/heartopia/recursos/leite.png",
@@ -392,7 +395,8 @@
     "name": "Maçã",
     "category": [
       "resource",
-      "fruit"
+      "fruit",
+      "ingredient_geleia"
     ],
     "description": "Uma maçã vermelha e crocante.",
     "icon": "/img/heartopia/recursos/maca.png",
@@ -529,20 +533,10 @@
     "name": "Mirtilo",
     "category": [
       "resource",
-      "berry"
+      "berry",
+      "ingredient_geleia"
     ],
     "description": "Coma mais mirtilo e mantenha os olhos brilhantes.",
-    "icon": "/img/heartopia/recursos/mirtilo.png",
-    "sellPrice": 16
-  },
-  {
-    "id": "mirtilo_recurso",
-    "name": "Mirtilo",
-    "category": [
-      "resource",
-      "berry"
-    ],
-    "description": "Pequena e azulada baga de mirtilo.",
     "icon": "/img/heartopia/recursos/mirtilo.png",
     "sellPrice": 16
   },
@@ -689,7 +683,8 @@
     "name": "Tangerina",
     "category": [
       "resource",
-      "fruit"
+      "fruit",
+      "ingredient_geleia"
     ],
     "description": "Uma tangerina cítrica e doce.",
     "icon": "/img/heartopia/recursos/tangerina.png",
@@ -1029,7 +1024,8 @@
     "name": "Nabo",
     "category": [
       "resource",
-      "ingredient"
+      "ingredient",
+      "gala_moda_neve"
     ],
     "description": "Um vegetal crocante e nutritivo.",
     "icon": "/img/heartopia/agricultura/nabo.png",
@@ -1041,7 +1037,8 @@
     "name": "Açúcar em Pó",
     "category": [
       "resource",
-      "ingredient"
+      "ingredient",
+      "gala_moda_neve"
     ],
     "description": "Açúcar finamente moído, perfeito para doces.",
     "icon": "/img/heartopia/culinaria/acucar_po.png",
@@ -1056,7 +1053,19 @@
       "ingredient"
     ],
     "description": "Um tomate suculento e vermelho.",
+    "icon": "/img/heartopia/agricultura/tomate.png",
     "sellPrice": 30
+  },
+  {
+    "id": "cenoura",
+    "name": "Cenoura",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Um vegetal alaranjado e rico em vitaminas.",
+    "icon": "/img/heartopia/agricultura/cenoura.png",
+    "sellPrice": 45
   },
   {
     "id": "batata",
@@ -1066,6 +1075,7 @@
       "ingredient"
     ],
     "description": "Um tubérculo versátil.",
+    "icon": "/img/heartopia/agricultura/semente_batata.png",
     "sellPrice": 90
   },
   {
@@ -1076,6 +1086,7 @@
       "ingredient"
     ],
     "description": "Grãos de trigo dourados.",
+    "icon": "/img/heartopia/agricultura/trigo.png",
     "sellPrice": 285
   },
   {
@@ -1086,6 +1097,7 @@
       "ingredient"
     ],
     "description": "Folhas de alface crocantes.",
+    "icon": "/img/heartopia/agricultura/alface_americana.png",
     "sellPrice": 435
   },
   {
@@ -1093,9 +1105,10 @@
     "name": "Abacaxi",
     "category": [
       "resource",
-      "fruit"
+      "vegetable"
     ],
     "description": "Uma fruta tropical doce e ácida.",
+    "icon": "/img/heartopia/agricultura/semente_abacaxi.png",
     "sellPrice": 86
   },
   {
@@ -1107,7 +1120,8 @@
     ],
     "description": "Óleo vegetal para cozinhar.",
     "sellPrice": 50,
-    "buyPrice": 100
+    "buyPrice": 100,
+    "icon": "/img/heartopia/culinaria/oleo.png"
   },
   {
     "id": "ovo_pasteurizado",
@@ -1118,16 +1132,20 @@
     ],
     "description": "Ovos processados com segurança.",
     "sellPrice": 50,
-    "buyPrice": 100
+    "buyPrice": 100,
+    "icon": "/img/heartopia/culinaria/ovo_pasteurizado.png"
   },
   {
     "id": "semente_papoula_himalaia_vermelha",
     "name": "Semente de Papoula-Himalaia Vermelha",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "flower",
+      "gala_moda_neve"
     ],
     "description": "Sementes para plantar Papoula-Himalaia Vermelha.",
+    "icon": "/img/heartopia/agricultura/semente_papoula_himalaia_vermelha.png",
     "buyPrice": 30
   },
   {
@@ -1135,9 +1153,12 @@
     "name": "Semente de Papoula-Himalaia Amarela",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "flower",
+      "gala_moda_neve"
     ],
     "description": "Sementes para plantar Papoula-Himalaia Amarela.",
+    "icon": "/img/heartopia/agricultura/semente_papoula_himalaia_amarela.png",
     "buyPrice": 30
   },
   {
@@ -1145,9 +1166,12 @@
     "name": "Semente de Papoula-Himalaia Branca",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "flower",
+      "gala_moda_neve"
     ],
     "description": "Sementes para plantar Papoula-Himalaia Branca.",
+    "icon": "/img/heartopia/agricultura/semente_papoula_himalaia_branca.png",
     "buyPrice": 30
   },
   {
@@ -1155,9 +1179,12 @@
     "name": "Semente de Nabo",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "vegetable",
+      "gala_moda_neve"
     ],
     "description": "Sementes para plantar Nabo.",
+    "icon": "/img/heartopia/agricultura/semente_nabo.png",
     "buyPrice": 10
   },
   {
@@ -1165,9 +1192,11 @@
     "name": "Semente de Tomate",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "vegetable"
     ],
     "description": "Sementes para plantar Tomate.",
+    "icon": "/img/heartopia/agricultura/semente_tomate.png",
     "buyPrice": 10
   },
   {
@@ -1175,9 +1204,11 @@
     "name": "Semente de Batata",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "vegetable"
     ],
     "description": "Sementes para plantar Batata.",
+    "icon": "/img/heartopia/agricultura/semente_batata.png",
     "buyPrice": 30
   },
   {
@@ -1185,9 +1216,11 @@
     "name": "Semente de Trigo",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "vegetable"
     ],
     "description": "Sementes para plantar Trigo.",
+    "icon": "/img/heartopia/agricultura/semente_trigo.png",
     "buyPrice": 95
   },
   {
@@ -1195,9 +1228,11 @@
     "name": "Semente de Alface Americano",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "vegetable"
     ],
     "description": "Sementes para plantar Alface Americano.",
+    "icon": "/img/heartopia/agricultura/semente_alface_americana.png",
     "buyPrice": 145
   },
   {
@@ -1205,9 +1240,11 @@
     "name": "Semente de Abacaxi",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "vegetable"
     ],
     "description": "Sementes para plantar Abacaxi.",
+    "icon": "/img/heartopia/agricultura/semente_abacaxi.png",
     "buyPrice": 15
   },
   {
@@ -1215,9 +1252,11 @@
     "name": "Semente de Cenoura",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "vegetable"
     ],
     "description": "Sementes para plantar Cenoura.",
+    "icon": "/img/heartopia/agricultura/semente_cenoura.png",
     "buyPrice": 50
   },
   {
@@ -1225,9 +1264,11 @@
     "name": "Semente de Margarida Vermelha",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "flower"
     ],
     "description": "Sementes para plantar Margarida Vermelha.",
+    "icon": "/img/heartopia/agricultura/semente_margarida_vermelha.png",
     "buyPrice": 30
   },
   {
@@ -1235,9 +1276,11 @@
     "name": "Semente de Margarida Branca",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "flower"
     ],
     "description": "Sementes para plantar Margarida Branca.",
+    "icon": "/img/heartopia/agricultura/semente_margarida_branca.png",
     "buyPrice": 30
   },
   {
@@ -1245,9 +1288,11 @@
     "name": "Semente de Amor-perfeito Vermelho",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "flower"
     ],
     "description": "Sementes para plantar Amor-perfeito Vermelho.",
+    "icon": "/img/heartopia/agricultura/semente_amor_perfeito_vermelho.png",
     "buyPrice": 30
   },
   {
@@ -1255,9 +1300,11 @@
     "name": "Semente de Amor-perfeito Amarelo",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "flower"
     ],
     "description": "Sementes para plantar Amor-perfeito Amarelo.",
+    "icon": "/img/heartopia/agricultura/semente_amor_perfeito_amarelo.png",
     "buyPrice": 30
   },
   {
@@ -1265,9 +1312,11 @@
     "name": "Semente de Papoula Vermelha",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "flower"
     ],
     "description": "Sementes para plantar Papoula Vermelha.",
+    "icon": "/img/heartopia/agricultura/semente_papoula_vermelha.png",
     "buyPrice": 60
   },
   {
@@ -1275,9 +1324,11 @@
     "name": "Semente de Papoula Amarela",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "flower"
     ],
     "description": "Sementes para plantar Papoula Amarela.",
+    "icon": "/img/heartopia/agricultura/semente_papoula_amarela.png",
     "buyPrice": 60
   },
   {
@@ -1285,9 +1336,11 @@
     "name": "Semente de Papoula Branca",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "flower"
     ],
     "description": "Sementes para plantar Papoula Branca.",
+    "icon": "/img/heartopia/agricultura/semente_papoula_branca.png",
     "buyPrice": 60
   },
   {
@@ -1295,9 +1348,11 @@
     "name": "Semente de Antúrio Vermelho",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "flower"
     ],
     "description": "Sementes para plantar Antúrio Vermelho.",
+    "icon": "/img/heartopia/agricultura/semente_anturio_vermelho.png",
     "buyPrice": 60
   },
   {
@@ -1305,9 +1360,11 @@
     "name": "Semente de Antúrio Amarelo",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "flower"
     ],
     "description": "Sementes para plantar Antúrio Amarelo.",
+    "icon": "/img/heartopia/agricultura/semente_anturio_amarela.png",
     "buyPrice": 60
   },
   {
@@ -1315,9 +1372,11 @@
     "name": "Semente de Antúrio Branco",
     "category": [
       "resource",
-      "seed"
+      "seed",
+      "flower"
     ],
     "description": "Sementes para plantar Antúrio Branco.",
+    "icon": "/img/heartopia/agricultura/semente_anturio_branco.png",
     "buyPrice": 60
   },
   {
@@ -1327,6 +1386,7 @@
       "wallet",
       "gala_moda_neve"
     ],
-    "description": "Durante a Gala de Moda, participe dos eventos para obter fichas de moda da temporada e usá-las na Loja de Moda de Azure para comprar diversos itens de moda."
+    "description": "Durante a Gala de Moda, participe dos eventos para obter fichas de moda da temporada e usá-las na Loja de Moda de Azure para comprar diversos itens de moda.",
+    "icon": "/img/heartopia/stats/gala_moda_neve_moeda.png"
   }
 ]
