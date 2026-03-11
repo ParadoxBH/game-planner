@@ -28,6 +28,9 @@ This document defines architectural and design standards to ensure consistency.
 5. **MUI Components**: Prefer MUI components (`Paper`, `Stack`, `Box`, `Typography`) over raw HTML to benefit from theme-based styling.
 6. **Prefer Stack over Box**: Avoid using `<Box />` just to wrap multiple `<Typography />` or other layout elements. Prioritize `<Stack />` for vertical or horizontal grouping to maintain consistent alignment and spacing.
 7. **Consistency First**: If a new recurring style is needed, add it to `theme.ts` as a token or component override before using it.
+8. **Page Structure (StyledContainer)**: ALWAYS use `<StyledContainer />` as the root component for any new Page. It should be the primary building block for page layouts.
+9. **Custom Components**: Proactively create new custom components for any UI pattern that can be reused across the application. Avoid duplicating complex JSX logic.
+10. **No Build Commands**: Do NOT run `npm run build` or any automated verification commands. The user handles the live application and validation.
 
 ## 📂 Data Structure
 Data in `public/data/[game-id]/`:

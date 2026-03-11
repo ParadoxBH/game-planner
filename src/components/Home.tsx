@@ -6,17 +6,12 @@ import {
   CardMedia,
   CircularProgress,
   Typography,
+  Grid
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loadGamesList } from "../services/dataLoader";
-
-interface GameInfo {
-  id: string;
-  name: string;
-  description: string;
-  thumbnail: string;
-}
+import { StyledContainer } from "./common/StyledContainer";
 
 export function Home() {
   const [games, setGames] = useState<GameInfo[]>([]);
@@ -38,12 +33,7 @@ export function Home() {
 
   if (loading) {
     return (
-      <Box
-        display="flex"
-        flex={1}
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Box display="flex" flex={1} alignItems="center" justifyContent="center">
         <CircularProgress />
       </Box>
     );
@@ -51,47 +41,20 @@ export function Home() {
 
   if (error) {
     return (
-      <Box
-        display="flex"
-        flex={1}
-        alignItems="center"
-        justifyContent="center"
-        color="error.main"
-      >
+      <Box display="flex" flex={1} alignItems="center" justifyContent="center" color="error.main">
         <Typography>Erro ao carregar jogos: {error}</Typography>
       </Box>
     );
   }
 
   return (
-    <Box sx={{ p: 4, width: "100%", maxWidth: "1200px", mx: "auto" }}>
-      <Typography variant="h2" gutterBottom textAlign="center" sx={{ mb: 1, fontWeight: 'bold' }}>
-        Selecione um Jogo
-      </Typography>
-      <Typography
-        variant="h5"
-        color="textSecondary"
-        textAlign="center"
-        sx={{ mb: 6 }}
-      >
-        Escolha um jogo para acessar seu guia.
-      </Typography>
-
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 4,
-          justifyContent: "center",
-        }}
-      >
+    <StyledContainer
+      title="Selecione um Jogo"
+      label="Escolha um jogo para acessar seu guia interativo."
+    >
+      <Grid container spacing={4} justifyContent="center">
         {games.map((game) => (
-          <Box
-            key={game.id}
-            sx={{
-              width: { xs: "100%", sm: "calc(50% - 16px)", md: "calc(33.333% - 21.33px)" },
-            }}
-          >
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={game.id}>
             <Card
               sx={{
                 height: "100%",
@@ -100,10 +63,12 @@ export function Home() {
                 transition: "transform 0.2s ease-in-out, box-shadow 0.2s",
                 "&:hover": {
                   transform: "translateY(-4px)",
-                  boxShadow: 6,
+                  boxShadow: 10,
                 },
-                backgroundColor: "background.paper",
+                backgroundColor: "rgba(255, 255, 255, 0.02)",
+                backdropFilter: "blur(10px)",
                 borderRadius: 2,
+                border: "1px solid rgba(255, 255, 255, 0.05)"
               }}
             >
               <CardActionArea
@@ -115,21 +80,21 @@ export function Home() {
                   height="200"
                   image={game.thumbnail || `/public/img/${game.id}/logo.png`}
                   alt={`Thumbnail of ${game.name}`}
-                  sx={{ filter: "brightness(0.8)" }}
+                  sx={{ filter: "brightness(0.7)" }}
                 />
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography gutterBottom variant="h5" component="h2" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                  <Typography gutterBottom variant="h5" component="h2" sx={{ fontWeight: 800, color: 'primary.main' }}>
                     {game.name}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
                     {game.description}
                   </Typography>
                 </CardContent>
               </CardActionArea>
             </Card>
-          </Box>
+          </Grid>
         ))}
-      </Box>
-    </Box>
+      </Grid>
+    </StyledContainer>
   );
 }
