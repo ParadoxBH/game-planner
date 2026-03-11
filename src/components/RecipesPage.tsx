@@ -62,13 +62,22 @@ interface GameRecipe {
 interface GameItem {
   id: string;
   name: string;
+  category?: string | string[];
   icon?: string;
+  sellPrice?: number;
+  buyPrice?: number;
 }
 
 interface GameEntity {
   id: string;
   name: string;
+  category?: string | string[];
   icon?: string;
+}
+
+interface GameEvent {
+  id: string;
+  name: string;
 }
 
 export function RecipesPage() {
@@ -76,6 +85,7 @@ export function RecipesPage() {
   const { data: recipes, loading: loadingRecipes, error: errorRecipes } = useGameData<GameRecipe[]>(gameId, "recipes");
   const { data: items } = useGameData<GameItem[]>(gameId, "items");
   const { data: entities } = useGameData<GameEntity[]>(gameId, "entity");
+  const { data: events } = useGameData<GameEvent[]>(gameId, "events");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStation, setSelectedStation] = useState<string | null>(null);
 
@@ -89,6 +99,14 @@ export function RecipesPage() {
     }
     return map;
   }, [items, entities]);
+
+  const eventsMap = useMemo(() => {
+    const map = new Map<string, string>();
+    if (events) {
+      events.forEach(e => map.set(e.id, e.name));
+    }
+    return map;
+  }, [events]);
 
   const getSourceData = (type: 'item' | 'entity' | undefined, id: string) => {
     const key = `${type || 'item'}:${id}`;
@@ -381,22 +399,26 @@ export function RecipesPage() {
                                 let color = "#ffbb00";
                                 let label = req.type;
 
-                                if (req.type === 'level') {
-                                  Icon = Bolt;
-                                  label = "Nível";
-                                } else if (req.type === 'quest') {
-                                  Icon = Assignment;
-                                  label = "Missão";
-                                } else if (req.type === 'upgrade') {
-                                  Icon = Construction;
-                                  label = "Upgrade";
-                                }
+                                  if (req.type === 'level') {
+                                    Icon = Bolt;
+                                    label = "Nível";
+                                  } else if (req.type === 'quest') {
+                                    Icon = Assignment;
+                                    label = "Missão";
+                                  } else if (req.type === 'upgrade') {
+                                    Icon = Construction;
+                                    label = "Upgrade";
+                                  } else if (req.type === 'event') {
+                                    label = "Evento";
+                                  }
+  
+                                  const displayValue = req.type === 'event' ? (eventsMap.get(req.value) || req.value) : req.value;
 
-                                return (
-                                  <Typography key={idx} variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, fontSize: '0.8rem' }}>
-                                    <Icon sx={{ fontSize: '1rem', color }} /> 
-                                    <b>{label}{req.subject ? ` de ${req.subject}` : ''}:</b> {req.value}
-                                  </Typography>
+                                  return (
+                                    <Typography key={idx} variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, fontSize: '0.8rem' }}>
+                                      <Icon sx={{ fontSize: '1rem', color }} /> 
+                                      <b>{label}{req.subject ? ` de ${req.subject}` : ''}:</b> {displayValue}
+                                    </Typography>
                                 );
                               })}
                             </Stack>

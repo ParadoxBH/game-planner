@@ -8,7 +8,7 @@ interface SimplifiedEntityProps {
   entity: {
     id: string;
     name: string;
-    category: string;
+    category: string | string[];
     icon?: string;
   };
   position: [number, number];
@@ -62,9 +62,11 @@ export const SimplifiedEntity = ({
               sx={{
                 color: "text.secondary",
                 display: "block",
+                fontSize: "0.65rem",
+                fontWeight: 600
               }}
             >
-              {entity.category}
+              {(Array.isArray(entity.category) ? entity.category : [entity.category]).map(cat => `#${cat}`).join(' ')}
             </Typography>
           </Stack>
         </Stack>

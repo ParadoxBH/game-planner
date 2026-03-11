@@ -56,6 +56,7 @@ interface GameShop {
 interface GameItem {
   id: string;
   name: string;
+  category?: string | string[];
   icon?: string;
   sellPrice?: number;
   buyPrice?: number;
@@ -64,7 +65,13 @@ interface GameItem {
 interface GameEntity {
   id: string;
   name: string;
+  category?: string | string[];
   icon?: string;
+}
+
+interface GameEvent {
+  id: string;
+  name: string;
 }
 
 interface GameConfig {
@@ -81,6 +88,7 @@ export function ShopsPage() {
   const { data: shops, loading: loadingShops } = useGameData<GameShop[]>(gameId, "shops");
   const { data: items } = useGameData<GameItem[]>(gameId, "items");
   const { data: entities } = useGameData<GameEntity[]>(gameId, "entity");
+  const { data: events } = useGameData<GameEvent[]>(gameId, "events");
   const [selectedShopIndex, setSelectedShopIndex] = useState(0);
 
   const itemsMap = useMemo(() => {
@@ -94,6 +102,12 @@ export function ShopsPage() {
     if (entities) entities.forEach(entity => map.set(entity.id, entity));
     return map;
   }, [entities]);
+
+  const eventsMap = useMemo(() => {
+    const map = new Map<string, GameEvent>();
+    if (events) events.forEach(event => map.set(event.id, event));
+    return map;
+  }, [events]);
 
   const currentShop = shops?.[selectedShopIndex];
   const currentNpc = currentShop ? entitiesMap.get(currentShop.npcId) : null;
@@ -233,11 +247,15 @@ export function ShopsPage() {
                         <Typography variant="overline" sx={{ color: '#ffbb00', fontWeight: 800, display: 'flex', alignItems: 'center', gap: 0.5, mb: 1 }}>
                           <Lock sx={{ fontSize: '1rem' }} /> REQUISITOS
                         </Typography>
-                        {currentShop.conditions.map((cond, i) => (
-                          <Typography key={i} variant="body2" sx={{ fontSize: '0.85rem' }}>
-                            • {cond.description}
-                          </Typography>
-                        ))}
+                        {currentShop.conditions.map((cond, i) => {
+                          const eventName = cond.type === 'event' ? eventsMap.get(cond.id)?.name : null;
+                          return (
+                            <Typography key={i} variant="body2" sx={{ fontSize: '0.85rem' }}>
+                              • {eventName ? `Evento: ${eventName}` : cond.description}
+                              {eventName && cond.description && ` (${cond.description})`}
+                            </Typography>
+                          );
+                        })}
                       </Box>
                     )}
                   </CardContent>
@@ -280,7 +298,10 @@ export function ShopsPage() {
                             p: 0.5,
                             display: 'flex'
                           }}>
-                            <Tooltip title={shopItem.conditions.map(c => c.description).join(", ")}>
+                            <Tooltip title={shopItem.conditions.map(c => {
+                              const eventName = c.type === 'event' ? eventsMap.get(c.id)?.name : null;
+                              return eventName ? `Evento: ${eventName}${c.description ? ` (${c.description})` : ''}` : c.description;
+                            }).join(", ")}>
                               <Lock sx={{ color: '#ffbb00', fontSize: '1.2rem' }} />
                             </Tooltip>
                           </Box>
@@ -352,11 +373,15 @@ export function ShopsPage() {
 
                           {shopItem.conditions && shopItem.conditions.length > 0 && (
                             <Box sx={{ mt: 1.5, p: 1, borderRadius: 1, backgroundColor: 'rgba(255, 187, 0, 0.05)', border: '1px dashed rgba(255, 187, 0, 0.2)' }}>
-                              {shopItem.conditions.map((c, i) => (
-                                <Typography key={i} variant="caption" sx={{ color: '#ffbb00', display: 'block', fontSize: '0.75rem' }}>
-                                  • {c.description}
-                                </Typography>
-                              ))}
+                              {shopItem.conditions.map((c, i) => {
+                                const eventName = c.type === 'event' ? eventsMap.get(c.id)?.name : null;
+                                return (
+                                  <Typography key={i} variant="caption" sx={{ color: '#ffbb00', display: 'block', fontSize: '0.75rem' }}>
+                                    • {eventName ? `Evento: ${eventName}` : c.description}
+                                    {eventName && c.description && ` (${c.description})`}
+                                  </Typography>
+                                );
+                              })}
                             </Box>
                           )}
                         </CardContent>

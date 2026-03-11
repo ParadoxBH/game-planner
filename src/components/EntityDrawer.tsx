@@ -28,7 +28,7 @@ interface EntityDrop {
 interface GameEntity {
   id: string;
   name: string;
-  category: string;
+  category: string | string[];
   icon?: string;
   requirements?: {
     itemId: string;
@@ -41,7 +41,8 @@ interface GameEntity {
 interface GameItem {
   id: string;
   name: string;
-  type: string;
+  type?: string;
+  category?: string | string[];
   description: string;
   icon?: string;
 }
@@ -231,7 +232,7 @@ export const EntityDrawer = ({
                     textTransform: "none",
                   }}
                 >
-                  {currentEntity?.category || "Geral"}
+                  {(Array.isArray(currentEntity?.category) ? currentEntity?.category : [currentEntity?.category]).filter(Boolean).map(cat => `#${cat}`).join(' ') || "Geral"}
                 </Typography>
                 <Typography variant="h4" sx={{ mt: 0, lineHeight: 1.1 }}>
                   {currentEntity?.name || currentItem.id}
@@ -528,7 +529,7 @@ export const EntityDrawer = ({
                     textTransform: "none",
                   }}
                 >
-                  {currentItemData?.type || "Item"}
+                  {(Array.isArray(currentItemData?.category) ? currentItemData?.category : [currentItemData?.category]).filter(Boolean).map(cat => `#${cat}`).join(' ') || currentItemData?.type || "Item"}
                 </Typography>
                 <Typography variant="h4" sx={{ mt: 0, lineHeight: 1.1 }}>
                   {currentItemData?.name || currentItem.id}
@@ -630,7 +631,7 @@ export const EntityDrawer = ({
                           variant="caption"
                           sx={{ color: "text.secondary" }}
                         >
-                          {entity.category}
+                          {(Array.isArray(entity.category) ? entity.category : [entity.category]).map(cat => `#${cat}`).join(' ')}
                         </Typography>
                       </Stack>
                     </DataCard>

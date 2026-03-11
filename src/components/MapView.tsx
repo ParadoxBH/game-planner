@@ -58,7 +58,7 @@ interface Spawn {
 interface GameEntity {
   id: string;
   name: string;
-  category: string;
+  category: string | string[];
   icon?: string;
   drops?: {
     itemId: string;
@@ -71,7 +71,8 @@ interface GameEntity {
 interface GameItem {
   id: string;
   name: string;
-  type: string;
+  type?: string;
+  category?: string | string[];
   description: string;
   icon?: string;
 }

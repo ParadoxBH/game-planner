@@ -187,9 +187,9 @@ export function ItemsPage() {
                       )}
                     </Box>
                     <Box>
-                      <Stack direction="row" spacing={0.5} sx={{ mb: 0.5, flexWrap: 'wrap', gap: 0.5 }}>
-                        {(Array.isArray(item.category) ? (item.category) as string[] : [item.category].filter(Boolean) as string[]).map(cat => (
-                          <Typography key={cat} variant="subtitle2" sx={{ color: 'primary.main', fontSize: '0.65rem', fontWeight: 600 }}>
+                      <Stack direction="row" spacing={0.5} sx={{ mb: 0.5, flexWrap: 'wrap' }}>
+                        {(Array.isArray(item.category) ? item.category : [item.category]).filter(Boolean).map(cat => (
+                          <Typography key={cat} variant="subtitle2" sx={{ color: 'primary.main', fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase' }}>
                             #{cat}
                           </Typography>
                         ))}

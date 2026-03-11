@@ -17,17 +17,20 @@ import {
   Grass,
   People,
   Foundation,
-  Storefront
+  Storefront,
+  Event
 } from "@mui/icons-material";
 import { Link, useLocation } from 'react-router-dom';
 import { useGameData } from "../hooks/useGameData";
 import { useMemo } from "react";
+import type { GameEntity } from "./EntityPage";
 
 const navItems = [
   { label: "Mapa", pathSuffix: "map", icon: <Map /> },
   { label: 'Itens', pathSuffix: "items", icon: <Construction /> },
   { label: 'Receitas', pathSuffix: "recipes", icon: <Assignment /> },
   { label: 'Loja', pathSuffix: "shops", icon: <Storefront /> },
+  { label: 'Eventos', pathSuffix: "events", icon: <Event /> },
   { label: 'Quests', pathSuffix: "quests", icon: <Assignment /> },
 ];
 
@@ -49,13 +52,19 @@ export function Header() {
   const isGameRoute = pathParts[0] === 'game' && pathParts.length >= 2;
   const gameId = isGameRoute ? pathParts[1] : null;
 
-  const { data: entities } = useGameData<any[]>(gameId || "", "entity");
+  const { data: entities } = useGameData<GameEntity[]>(gameId || "", "entity");
 
   const dynamicEntityCategories = useMemo(() => {
     if (!entities) return [];
     const sets = new Set<string>();
     entities.forEach(e => {
-      if (e.category) sets.add(e.category.toLowerCase());
+      if (e.category) {
+        if (Array.isArray(e.category)) {
+          sets.add(e.category[0].toLowerCase());
+        } else {
+          sets.add(e.category.toLowerCase());
+        }
+      }
     });
     return Array.from(sets).sort().map(cat => ({
       label: cat.charAt(0).toUpperCase() + cat.slice(1),

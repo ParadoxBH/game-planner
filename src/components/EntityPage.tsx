@@ -29,10 +29,10 @@ interface EntityDrop {
   maxQuant?: number;
 }
 
-interface GameEntity {
+export interface GameEntity {
   id: string;
   name: string;
-  category: string;
+  category: string | string[];
   icon?: string;
   requirements?: {
     itemId: string;
@@ -53,9 +53,10 @@ export function EntityPage() {
     if (!entities) return [];
     const cats = new Set<string>();
     entities.forEach(entity => {
-      if (entity.category) {
-        cats.add(entity.category);
-      }
+      const catsArr = Array.isArray(entity.category) ? entity.category : [entity.category];
+      catsArr.forEach(cat => {
+        if (cat) cats.add(cat);
+      });
     });
     return Array.from(cats).sort();
   }, [entities]);
@@ -67,7 +68,8 @@ export function EntityPage() {
                             entity.id.toLowerCase().includes(searchTerm.toLowerCase());
       
       const effectiveCategory = urlCategory || selectedCategory;
-      const matchesCategory = !effectiveCategory || effectiveCategory === 'all' || entity.category === effectiveCategory;
+      const entityCats = Array.isArray(entity.category) ? entity.category : [entity.category];
+      const matchesCategory = !effectiveCategory || effectiveCategory === 'all' || entityCats.includes(effectiveCategory);
       return matchesSearch && matchesCategory;
     });
   }, [entities, searchTerm, urlCategory, selectedCategory]);
@@ -206,9 +208,13 @@ export function EntityPage() {
                       )}
                     </Box>
                     <Box>
-                      <Typography variant="subtitle2" sx={{ color: 'primary.main', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                        {entity.category}
-                      </Typography>
+                      <Stack direction="row" spacing={0.5} sx={{ mb: 0.5, flexWrap: 'wrap' }}>
+                        {(Array.isArray(entity.category) ? entity.category : [entity.category]).map(cat => (
+                          <Typography key={cat} variant="subtitle2" sx={{ color: 'primary.main', fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase' }}>
+                            #{cat}
+                          </Typography>
+                        ))}
+                      </Stack>
                       <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: 700, lineHeight: 1.2 }}>
                         {entity.name}
                       </Typography>
