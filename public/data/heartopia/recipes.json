@@ -11,7 +11,7 @@
       { "type": "item", "id": "cafe_gelado", "amount": 1 }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_da_neve" }
+      { "type": "event", "value": "gala_moda_neve" }
     ]
   },
   {
@@ -27,7 +27,7 @@
       { "type": "item", "id": "latte_gelado", "amount": 1 }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_da_neve" }
+      { "type": "event", "value": "gala_moda_neve" }
     ]
   },
   {
@@ -43,7 +43,7 @@
       { "type": "item", "id": "carne_pure_nabo", "amount": 1 }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_da_neve" }
+      { "type": "event", "value": "gala_moda_neve" }
     ]
   },
   {
@@ -59,7 +59,7 @@
       { "type": "item", "id": "caldo_cremoso_nabo", "amount": 1 }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_da_neve" }
+      { "type": "event", "value": "gala_moda_neve" }
     ]
   },
   {
@@ -76,7 +76,7 @@
       { "type": "item", "id": "panqueca_acucar_po", "amount": 1 }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_da_neve" }
+      { "type": "event", "value": "gala_moda_neve" }
     ]
   },
   {
@@ -93,7 +93,7 @@
       { "type": "item", "id": "panqueca_acucar_po_mirtilo", "amount": 1 }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_da_neve" }
+      { "type": "event", "value": "gala_moda_neve" }
     ]
   },
   {
@@ -110,7 +110,7 @@
       { "type": "item", "id": "panqueca_acucar_po_framboesa", "amount": 1 }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_da_neve" }
+      { "type": "event", "value": "gala_moda_neve" }
     ]
   },
   {
@@ -127,7 +127,7 @@
       { "type": "item", "id": "panqueca_acucar_po_maca", "amount": 1 }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_da_neve" }
+      { "type": "event", "value": "gala_moda_neve" }
     ]
   },
   {
@@ -144,7 +144,7 @@
       { "type": "item", "id": "panqueca_acucar_po_tangerina", "amount": 1 }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_da_neve" }
+      { "type": "event", "value": "gala_moda_neve" }
     ]
   },
   {
@@ -161,7 +161,7 @@
       { "type": "item", "id": "banquete_aurora", "amount": 1 }
     ],
     "unlock": [
-      { "type": "event", "value": "gala_da_neve" }
+      { "type": "event", "value": "gala_moda_neve" }
     ]
   },
   {

@@ -4,7 +4,12 @@
     "name": "Arbusto de Flores",
     "category": "resource",
     "drops": [
-      { "itemId": "galho_arbusto", "chance": 1, "quant": 3, "maxQuant": 6 }
+      {
+        "itemId": "galho_arbusto",
+        "chance": 1,
+        "quant": 3,
+        "maxQuant": 6
+      }
     ],
     "icon": "/img/heartopia/coletaveis/arbusto_flores.png"
   },
@@ -27,8 +32,16 @@
     "name": "Arbusto de Mirtilo",
     "category": "resource",
     "drops": [
-      { "itemId": "mirtilo", "chance": 1, "quant": 1 },
-      { "itemId": "galho_arbusto", "chance": 1, "quant": 3 }
+      {
+        "itemId": "mirtilo",
+        "chance": 1,
+        "quant": 1
+      },
+      {
+        "itemId": "galho_arbusto",
+        "chance": 1,
+        "quant": 3
+      }
     ],
     "icon": "/img/heartopia/coletaveis/arbusto_mirtilo.png"
   },
@@ -37,12 +50,26 @@
     "name": "Árvore",
     "category": "resource",
     "requirements": [
-      { "itemId": "energia", "quant": 3 },
-      { "itemId": "machado", "quant": 1 }
+      {
+        "itemId": "energia",
+        "quant": 3
+      },
+      {
+        "itemId": "machado",
+        "quant": 1
+      }
     ],
     "drops": [
-      { "itemId": "madeira", "chance": 1, "quant": 1 },
-      { "itemId": "madeira_qualidade", "chance": 1, "quant": 2 }
+      {
+        "itemId": "madeira",
+        "chance": 1,
+        "quant": 1
+      },
+      {
+        "itemId": "madeira_qualidade",
+        "chance": 1,
+        "quant": 2
+      }
     ],
     "icon": "/img/heartopia/coletaveis/arvore.png"
   },
@@ -51,11 +78,21 @@
     "name": "Árvore Abeto",
     "category": "resource",
     "requirements": [
-      { "itemId": "energia", "quant": 3 },
-      { "itemId": "machado", "quant": 1 }
+      {
+        "itemId": "energia",
+        "quant": 3
+      },
+      {
+        "itemId": "machado",
+        "quant": 1
+      }
     ],
     "drops": [
-      { "itemId": "madeira", "chance": 1, "quant": 3 }
+      {
+        "itemId": "madeira",
+        "chance": 1,
+        "quant": 3
+      }
     ],
     "icon": "/img/heartopia/coletaveis/arvore_abeto.png"
   },
@@ -71,12 +108,26 @@
     "name": "Macieira",
     "category": "resource",
     "requirements": [
-      { "itemId": "energia", "quant": 3 },
-      { "itemId": "machado", "quant": 1 }
+      {
+        "itemId": "energia",
+        "quant": 3
+      },
+      {
+        "itemId": "machado",
+        "quant": 1
+      }
     ],
     "drops": [
-      { "itemId": "maca", "chance": 1, "quant": 1 },
-      { "itemId": "madeira", "chance": 1, "quant": 2 }
+      {
+        "itemId": "maca",
+        "chance": 1,
+        "quant": 1
+      },
+      {
+        "itemId": "madeira",
+        "chance": 1,
+        "quant": 2
+      }
     ],
     "icon": "/img/heartopia/coletaveis/arvore_maca.png"
   },
@@ -85,12 +136,26 @@
     "name": "Pinheiro",
     "category": "resource",
     "requirements": [
-      { "itemId": "energia", "quant": 3 },
-      { "itemId": "machado", "quant": 1 }
+      {
+        "itemId": "energia",
+        "quant": 3
+      },
+      {
+        "itemId": "machado",
+        "quant": 1
+      }
     ],
     "drops": [
-      { "itemId": "madeira_qualidade", "chance": 1, "quant": 2 },
-      { "itemId": "madeira", "chance": 1, "quant": 1 }
+      {
+        "itemId": "madeira_qualidade",
+        "chance": 1,
+        "quant": 2
+      },
+      {
+        "itemId": "madeira",
+        "chance": 1,
+        "quant": 1
+      }
     ],
     "icon": "/img/heartopia/coletaveis/arvore_pinheiro.png"
   },
@@ -148,7 +213,11 @@
     "name": "Trufa Negra",
     "category": "resource",
     "drops": [
-      { "itemId": "trufa_negra", "chance": 1, "quant": 3 }
+      {
+        "itemId": "trufa_negra",
+        "chance": 1,
+        "quant": 3
+      }
     ],
     "icon": "/img/heartopia/coletaveis/trufa_negra.png"
   },
@@ -227,7 +296,10 @@
   {
     "id": "fogao_pinguim",
     "name": "Fogão Pinguim",
-    "category": "appliance",
+    "category": [
+      "appliance",
+      "gala_moda_neve"
+    ],
     "icon": "/img/heartopia/eletrodomestico/fogao_pinguim.png"
   }
 ]
