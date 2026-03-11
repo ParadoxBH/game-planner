@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "id": "energia",
     "name": "Energia",
@@ -699,7 +699,10 @@
   {
     "id": "cafe_gelado",
     "name": "Café Gelado",
-    "category": "food",
+    "category": [
+      "food",
+      "cafe_gelado"
+    ],
     "description": "Um café gelado refrescante.",
     "icon": "/img/heartopia/comidas/cafe_gelado.png"
   },
@@ -797,7 +800,10 @@
   {
     "id": "latte_gelado",
     "name": "Latte Gelado",
-    "category": "food",
+    "category": [
+      "food",
+      "cafe_gelado"
+    ],
     "description": "Latte refrescante servido com gelo.",
     "icon": "/img/heartopia/comidas/latte_gelado.png"
   },
@@ -811,35 +817,50 @@
   {
     "id": "panqueca_acucar_po",
     "name": "Panqueca com Açúcar de Pó",
-    "category": "food",
+    "category": [
+      "food",
+      "panqueca_acucar_po"
+    ],
     "description": "Panquecas polvilhadas com açúcar.",
     "icon": "/img/heartopia/comidas/panqueca_acucar_po.png"
   },
   {
     "id": "panqueca_acucar_po_framboesa",
     "name": "Panqueca com Açúcar e Framboesa",
-    "category": "food",
+    "category": [
+      "food",
+      "panqueca_acucar_po"
+    ],
     "description": "Panquecas com framboesas e açúcar.",
     "icon": "/img/heartopia/comidas/panqueca_acucar_po_framboesa.png"
   },
   {
     "id": "panqueca_acucar_po_maca",
     "name": "Panqueca com Açúcar e Maçã",
-    "category": "food",
+    "category": [
+      "food",
+      "panqueca_acucar_po"
+    ],
     "description": "Panquecas com pedaços de maçã e açúcar.",
     "icon": "/img/heartopia/comidas/panqueca_acucar_po_maca.png"
   },
   {
     "id": "panqueca_acucar_po_mirtilo",
     "name": "Panqueca com Açúcar e Mirtilo",
-    "category": "food",
+    "category": [
+      "food",
+      "panqueca_acucar_po"
+    ],
     "description": "Panquecas com mirtilos e açúcar.",
     "icon": "/img/heartopia/comidas/panqueca_acucar_po_mirtilo.png"
   },
   {
     "id": "panqueca_acucar_po_tangerina",
     "name": "Panqueca com Açúcar e Tangerina",
-    "category": "food",
+    "category": [
+      "food",
+      "panqueca_acucar_po"
+    ],
     "description": "Panquecas com tangerina e açúcar.",
     "icon": "/img/heartopia/comidas/panqueca_acucar_po_tangerina.png"
   },
@@ -929,5 +950,25 @@
     ],
     "description": "Um vale que permite publicar uma musica.",
     "icon": "/img/heartopia/stats/vale_musica.png"
+  },
+  {
+    "id": "nabo",
+    "name": "Nabo",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Um vegetal crocante e nutritivo.",
+    "icon": "/img/heartopia/agricultura/nabo.png"
+  },
+  {
+    "id": "acucar_po",
+    "name": "Açúcar em Pó",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "description": "Açúcar finamente moído, perfeito para doces.",
+    "icon": "/img/heartopia/culinaria/acucar_po.png"
   }
 ]

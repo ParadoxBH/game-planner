@@ -223,5 +223,11 @@
     "name": "Sr. Joan",
     "category": "npc",
     "icon": "/img/heartopia/npc/sr_joan.png"
+  },
+  {
+    "id": "fogao_pinguim",
+    "name": "Fogão Pinguim",
+    "category": "appliance",
+    "icon": "/img/heartopia/eletrodomestico/fogao_pinguim.png"
   }
 ]
