@@ -441,5 +441,169 @@
         "value": "As aventuras da Princesa Stella"
       }
     ]
+  },
+  {
+    "id": "recipe_plantar_nabo",
+    "name": "Plantar Nabo",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_nabo", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "nabo_planta", "amount": 1 }],
+    "unlock": [
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
+    ]
+  },
+  {
+    "id": "recipe_plantar_tomate",
+    "name": "Plantar Tomate",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_tomate", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "tomate_planta", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_batata",
+    "name": "Plantar Batata",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_batata", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "batata_planta", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_trigo",
+    "name": "Plantar Trigo",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_trigo", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "trigo_planta", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_alface_americana",
+    "name": "Plantar Alface Americano",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_alface_americano", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "alface_americana_planta", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_abacaxi",
+    "name": "Plantar Abacaxi",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_abacaxi", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "abacaxi_planta", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_cenoura",
+    "name": "Plantar Cenoura",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_cenoura", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "cenoura_planta", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_papoula_himalaia_vermelha",
+    "name": "Plantar Papoula-Himalaia Vermelha",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_papoula_himalaia_vermelha", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "papoula_himalaia_vermelha_planta", "amount": 1 }],
+    "unlock": [
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
+    ]
+  },
+  {
+    "id": "recipe_plantar_papoula_himalaia_amarela",
+    "name": "Plantar Papoula-Himalaia Amarela",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_papoula_himalaia_amarela", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "papoula_himalaia_amarela_planta", "amount": 1 }],
+    "unlock": [
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
+    ]
+  },
+  {
+    "id": "recipe_plantar_papoula_himalaia_branca",
+    "name": "Plantar Papoula-Himalaia Branca",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_papoula_himalaia_branca", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "papoula_himalaia_branca_planta", "amount": 1 }],
+    "unlock": [
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
+    ]
+  },
+  {
+    "id": "recipe_plantar_margarida_vermelha",
+    "name": "Plantar Margarida Vermelha",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_margarida_vermelha", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "margarida_vermelha_planta", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_margarida_branca",
+    "name": "Plantar Margarida Branca",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_margarida_branca", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "margarida_branca_planta", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_amor_perfeito_vermelho",
+    "name": "Plantar Amor-perfeito Vermelho",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_amor_perfeito_vermelho", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "amor_perfeito_vermelho_planta", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_amor_perfeito_amarelo",
+    "name": "Plantar Amor-perfeito Amarelo",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_amor_perfeito_amarelo", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "amor_perfeito_amarelo_planta", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_papoula_vermelha",
+    "name": "Plantar Papoula Vermelha",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_papoula_vermelha", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "papoula_vermelha_planta", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_papoula_amarela",
+    "name": "Plantar Papoula Amarela",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_papoula_amarela", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "papoula_amarela_planta", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_papoula_branca",
+    "name": "Plantar Papoula Branca",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_papoula_branca", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "papoula_branca_planta", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_anturio_vermelho",
+    "name": "Plantar Antúrio Vermelho",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_anturio_vermelho", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "anturio_vermelho_planta", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_anturio_amarelo",
+    "name": "Plantar Antúrio Amarelo",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_anturio_amarelo", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "anturio_amarelo_planta", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_anturio_branco",
+    "name": "Plantar Antúrio Branco",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_anturio_branco", "amount": 1 }],
+    "products": [{ "type": "entity", "id": "anturio_branco_planta", "amount": 1 }]
   }
 ]

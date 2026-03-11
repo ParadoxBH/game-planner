@@ -302,5 +302,140 @@
       "gala_moda_neve"
     ],
     "icon": "/img/heartopia/eletrodomestico/fogao_pinguim.png"
+  },
+  {
+    "id": "caixa_planta",
+    "name": "Caixa de Planta",
+    "category": [
+      "plant"
+    ],
+    "icon": "/img/heartopia/agricultura/caixa_planta.png"
+  },
+  {
+    "id": "nabo_planta",
+    "name": "Nabo",
+    "category": ["plant", "gala_moda_neve"],
+    "drops": [{ "itemId": "nabo", "chance": 1, "quant": 1 }],
+    "icon": "/img/heartopia/agricultura/nabo.png"
+  },
+  {
+    "id": "tomate_planta",
+    "name": "Tomate",
+    "category": "plant",
+    "drops": [{ "itemId": "tomate", "chance": 1, "quant": 1 }],
+    "icon": "/img/heartopia/agricultura/tomate.png"
+  },
+  {
+    "id": "batata_planta",
+    "name": "Batata",
+    "category": "plant",
+    "drops": [{ "itemId": "batata", "chance": 1, "quant": 1 }],
+    "icon": "/img/heartopia/agricultura/semente_batata.png"
+  },
+  {
+    "id": "trigo_planta",
+    "name": "Trigo",
+    "category": "plant",
+    "drops": [{ "itemId": "trigo", "chance": 1, "quant": 1 }],
+    "icon": "/img/heartopia/agricultura/trigo.png"
+  },
+  {
+    "id": "alface_americana_planta",
+    "name": "Alface Americano",
+    "category": "plant",
+    "drops": [{ "itemId": "alface_americano", "chance": 1, "quant": 1 }],
+    "icon": "/img/heartopia/agricultura/alface_americana.png"
+  },
+  {
+    "id": "abacaxi_planta",
+    "name": "Abacaxi",
+    "category": "plant",
+    "drops": [{ "itemId": "abacaxi", "chance": 1, "quant": 1 }],
+    "icon": "/img/heartopia/agricultura/semente_abacaxi.png"
+  },
+  {
+    "id": "cenoura_planta",
+    "name": "Cenoura",
+    "category": "plant",
+    "drops": [{ "itemId": "cenoura", "chance": 1, "quant": 1 }],
+    "icon": "/img/heartopia/agricultura/cenoura.png"
+  },
+  {
+    "id": "papoula_himalaia_vermelha_planta",
+    "name": "Papoula-Himalaia Vermelha",
+    "category": ["plant", "flower", "gala_moda_neve"],
+    "icon": "/img/heartopia/agricultura/semente_papoula_himalaia_vermelha.png"
+  },
+  {
+    "id": "papoula_himalaia_amarela_planta",
+    "name": "Papoula-Himalaia Amarela",
+    "category": ["plant", "flower", "gala_moda_neve"],
+    "icon": "/img/heartopia/agricultura/semente_papoula_himalaia_amarela.png"
+  },
+  {
+    "id": "papoula_himalaia_branca_planta",
+    "name": "Papoula-Himalaia Branca",
+    "category": ["plant", "flower", "gala_moda_neve"],
+    "icon": "/img/heartopia/agricultura/semente_papoula_himalaia_branca.png"
+  },
+  {
+    "id": "margarida_vermelha_planta",
+    "name": "Margarida Vermelha",
+    "category": ["plant", "flower"],
+    "icon": "/img/heartopia/agricultura/semente_margarida_vermelha.png"
+  },
+  {
+    "id": "margarida_branca_planta",
+    "name": "Margarida Branca",
+    "category": ["plant", "flower"],
+    "icon": "/img/heartopia/agricultura/semente_margarida_branca.png"
+  },
+  {
+    "id": "amor_perfeito_vermelho_planta",
+    "name": "Amor-perfeito Vermelho",
+    "category": ["plant", "flower"],
+    "icon": "/img/heartopia/agricultura/semente_amor_perfeito_vermelho.png"
+  },
+  {
+    "id": "amor_perfeito_amarelo_planta",
+    "name": "Amor-perfeito Amarelo",
+    "category": ["plant", "flower"],
+    "icon": "/img/heartopia/agricultura/semente_amor_perfeito_amarelo.png"
+  },
+  {
+    "id": "papoula_vermelha_planta",
+    "name": "Papoula Vermelha",
+    "category": ["plant", "flower"],
+    "icon": "/img/heartopia/agricultura/semente_papoula_vermelha.png"
+  },
+  {
+    "id": "papoula_amarela_planta",
+    "name": "Papoula Amarela",
+    "category": ["plant", "flower"],
+    "icon": "/img/heartopia/agricultura/semente_papoula_amarela.png"
+  },
+  {
+    "id": "papoula_branca_planta",
+    "name": "Papoula Branca",
+    "category": ["plant", "flower"],
+    "icon": "/img/heartopia/agricultura/semente_papoula_branca.png"
+  },
+  {
+    "id": "anturio_vermelho_planta",
+    "name": "Antúrio Vermelho",
+    "category": ["plant", "flower"],
+    "icon": "/img/heartopia/agricultura/semente_anturio_vermelho.png"
+  },
+  {
+    "id": "anturio_amarelo_planta",
+    "name": "Antúrio Amarelo",
+    "category": ["plant", "flower"],
+    "icon": "/img/heartopia/agricultura/semente_anturio_amarela.png"
+  },
+  {
+    "id": "anturio_branco_planta",
+    "name": "Antúrio Branco",
+    "category": ["plant", "flower"],
+    "icon": "/img/heartopia/agricultura/semente_anturio_branco.png"
   }
 ]
