@@ -1,0 +1,49 @@
+[
+  {
+    "id": "blanc_shop",
+    "npcId": "blanc",
+    "resetType": "diario",
+    "items": [
+      { "id": "semente_papoula_himalaia_vermelha", "conditions": [{ "type": "event", "id": "gala_moda_gelo", "description": "Evento: Gala de Moda de Gelo" }] },
+      { "id": "semente_papoula_himalaia_amarela", "conditions": [{ "type": "event", "id": "gala_moda_gelo", "description": "Evento: Gala de Moda de Gelo" }] },
+      { "id": "semente_papoula_himalaia_branca", "conditions": [{ "type": "event", "id": "gala_moda_gelo", "description": "Evento: Gala de Moda de Gelo" }] },
+      { "id": "semente_nabo", "conditions": [{ "type": "event", "id": "gala_moda_gelo", "description": "Evento: Gala de Moda de Gelo" }] },
+      { "id": "semente_tomate" },
+      { "id": "semente_batata" },
+      { "id": "semente_trigo" },
+      { "id": "semente_alface_americano" },
+      { "id": "semente_abacaxi" },
+      { "id": "semente_cenoura" },
+      { "id": "semente_margarida_vermelha" },
+      { "id": "semente_margarida_branca" },
+      { "id": "semente_amor_perfeito_vermelho" },
+      { "id": "semente_amor_perfeito_amarelo" },
+      { "id": "semente_papoula_vermelha" },
+      { "id": "semente_papoula_amarela" },
+      { "id": "semente_papoula_branca" },
+      { "id": "semente_anturio_vermelho" },
+      { "id": "semente_anturio_amarelo" },
+      { "id": "semente_anturio_branco" }
+    ]
+  },
+  {
+    "id": "massimo_shop",
+    "npcId": "massimo",
+    "resetType": "diario",
+    "items": [
+      { "id": "acucar_po", "conditions": [{ "type": "event", "id": "gala_moda_gelo", "description": "Evento: Gala de Moda de Gelo" }] },
+      { "id": "carne" },
+      { "id": "ovo" },
+      { "id": "leite" },
+      { "id": "queijo" },
+      { "id": "manteiga" },
+      { "id": "graos_cafe" },
+      { "id": "cha_preto" },
+      { "id": "po_matcha" },
+      { "id": "macarrao_arroz" },
+      { "id": "feijao_azuki" },
+      { "id": "oleo" },
+      { "id": "ovo_pasteurizado" }
+    ]
+  }
+]

@@ -156,7 +156,8 @@
     ],
     "description": "Proteína fresca para cozinhar.",
     "icon": "/img/heartopia/recursos/carne.png",
-    "sellPrice": 100
+    "sellPrice": 100,
+    "buyPrice": 200
   },
   {
     "id": "carvalho_delicado",
@@ -178,7 +179,8 @@
     ],
     "description": "Folhas de chá preto secas.",
     "icon": "/img/heartopia/recursos/cha_preto.png",
-    "sellPrice": 125
+    "sellPrice": 125,
+    "buyPrice": 250
   },
   {
     "id": "champignon",
@@ -331,7 +333,8 @@
     ],
     "description": "Pequenos feijões vermelhos doces.",
     "icon": "/img/heartopia/recursos/feijao_azuki.png",
-    "sellPrice": 25
+    "sellPrice": 25,
+    "buyPrice": 50
   },
   {
     "id": "fluorita_pura",
@@ -369,7 +372,8 @@
     ],
     "description": "Grãos de café aromáticos.",
     "icon": "/img/heartopia/recursos/graos_cafe.png",
-    "sellPrice": 25
+    "sellPrice": 25,
+    "buyPrice": 30
   },
   {
     "id": "leite",
@@ -380,7 +384,8 @@
     ],
     "description": "Leite fresco e nutritivo.",
     "icon": "/img/heartopia/recursos/leite.png",
-    "sellPrice": 26
+    "sellPrice": 26,
+    "buyPrice": 50
   },
   {
     "id": "maca",
@@ -402,7 +407,8 @@
     ],
     "description": "Macarrão de arroz leve.",
     "icon": "/img/heartopia/recursos/macarrao_arroz.png",
-    "sellPrice": 25
+    "sellPrice": 25,
+    "buyPrice": 50
   },
   {
     "id": "madeira",
@@ -446,7 +452,8 @@
     ],
     "description": "Manteiga cremosa.",
     "icon": "/img/heartopia/recursos/manteiga.png",
-    "sellPrice": 75
+    "sellPrice": 75,
+    "buyPrice": 150
   },
   {
     "id": "matsutake",
@@ -548,7 +555,8 @@
     ],
     "description": "Um ovo fresco de galinha.",
     "icon": "/img/heartopia/recursos/ovo.png",
-    "sellPrice": 50
+    "sellPrice": 50,
+    "buyPrice": 100
   },
   {
     "id": "pedra",
@@ -567,7 +575,8 @@
     ],
     "description": "Pó de chá verde matcha de alta qualidade.",
     "icon": "/img/heartopia/recursos/po_matcha.png",
-    "sellPrice": 125
+    "sellPrice": 125,
+    "buyPrice": 250
   },
   {
     "id": "porcino",
@@ -621,7 +630,8 @@
     ],
     "description": "Um pedaço de queijo saboroso.",
     "icon": "/img/heartopia/recursos/queijo.png",
-    "sellPrice": 50
+    "sellPrice": 50,
+    "buyPrice": 60
   },
   {
     "id": "roce_roxo",
@@ -1005,7 +1015,8 @@
     ],
     "description": "Um vegetal crocante e nutritivo.",
     "icon": "/img/heartopia/agricultura/nabo.png",
-    "sellPrice": 30
+    "sellPrice": 30,
+    "buyPrice": 50
   },
   {
     "id": "acucar_po",
@@ -1016,7 +1027,8 @@
     ],
     "description": "Açúcar finamente moído, perfeito para doces.",
     "icon": "/img/heartopia/culinaria/acucar_po.png",
-    "sellPrice": 25
+    "sellPrice": 25,
+    "buyPrice": 50
   },
   {
     "id": "tomate",
@@ -1076,7 +1088,8 @@
       "ingredient"
     ],
     "description": "Óleo vegetal para cozinhar.",
-    "sellPrice": 50
+    "sellPrice": 50,
+    "buyPrice": 100
   },
   {
     "id": "ovo_pasteurizado",
@@ -1086,6 +1099,207 @@
       "ingredient"
     ],
     "description": "Ovos processados com segurança.",
-    "sellPrice": 50
+    "sellPrice": 50,
+    "buyPrice": 100
+  },
+  {
+    "id": "semente_papoula_himalaia_vermelha",
+    "name": "Semente de Papoula-Himalaia Vermelha",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Papoula-Himalaia Vermelha.",
+    "buyPrice": 30
+  },
+  {
+    "id": "semente_papoula_himalaia_amarela",
+    "name": "Semente de Papoula-Himalaia Amarela",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Papoula-Himalaia Amarela.",
+    "buyPrice": 30
+  },
+  {
+    "id": "semente_papoula_himalaia_branca",
+    "name": "Semente de Papoula-Himalaia Branca",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Papoula-Himalaia Branca.",
+    "buyPrice": 30
+  },
+  {
+    "id": "semente_nabo",
+    "name": "Semente de Nabo",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Nabo.",
+    "buyPrice": 10
+  },
+  {
+    "id": "semente_tomate",
+    "name": "Semente de Tomate",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Tomate.",
+    "buyPrice": 10
+  },
+  {
+    "id": "semente_batata",
+    "name": "Semente de Batata",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Batata.",
+    "buyPrice": 30
+  },
+  {
+    "id": "semente_trigo",
+    "name": "Semente de Trigo",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Trigo.",
+    "buyPrice": 95
+  },
+  {
+    "id": "semente_alface_americano",
+    "name": "Semente de Alface Americano",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Alface Americano.",
+    "buyPrice": 145
+  },
+  {
+    "id": "semente_abacaxi",
+    "name": "Semente de Abacaxi",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Abacaxi.",
+    "buyPrice": 15
+  },
+  {
+    "id": "semente_cenoura",
+    "name": "Semente de Cenoura",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Cenoura.",
+    "buyPrice": 50
+  },
+  {
+    "id": "semente_margarida_vermelha",
+    "name": "Semente de Margarida Vermelha",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Margarida Vermelha.",
+    "buyPrice": 30
+  },
+  {
+    "id": "semente_margarida_branca",
+    "name": "Semente de Margarida Branca",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Margarida Branca.",
+    "buyPrice": 30
+  },
+  {
+    "id": "semente_amor_perfeito_vermelho",
+    "name": "Semente de Amor-perfeito Vermelho",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Amor-perfeito Vermelho.",
+    "buyPrice": 30
+  },
+  {
+    "id": "semente_amor_perfeito_amarelo",
+    "name": "Semente de Amor-perfeito Amarelo",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Amor-perfeito Amarelo.",
+    "buyPrice": 30
+  },
+  {
+    "id": "semente_papoula_vermelha",
+    "name": "Semente de Papoula Vermelha",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Papoula Vermelha.",
+    "buyPrice": 60
+  },
+  {
+    "id": "semente_papoula_amarela",
+    "name": "Semente de Papoula Amarela",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Papoula Amarela.",
+    "buyPrice": 60
+  },
+  {
+    "id": "semente_papoula_branca",
+    "name": "Semente de Papoula Branca",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Papoula Branca.",
+    "buyPrice": 60
+  },
+  {
+    "id": "semente_anturio_vermelho",
+    "name": "Semente de Antúrio Vermelho",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Antúrio Vermelho.",
+    "buyPrice": 60
+  },
+  {
+    "id": "semente_anturio_amarelo",
+    "name": "Semente de Antúrio Amarelo",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Antúrio Amarelo.",
+    "buyPrice": 60
+  },
+  {
+    "id": "semente_anturio_branco",
+    "name": "Semente de Antúrio Branco",
+    "category": [
+      "resource",
+      "seed"
+    ],
+    "description": "Sementes para plantar Antúrio Branco.",
+    "buyPrice": 60
   }
 ]
