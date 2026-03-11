@@ -191,7 +191,7 @@ export function RecipesPage() {
       {filteredRecipes.length > 0 ? (
         <Grid container spacing={3}>
           {filteredRecipes.map(recipe => (
-            <Grid size={{ xs: 12, lg: 6 }} key={recipe.id}>
+            <Grid size={{ xs: 12, lg: 4 }} key={recipe.id}>
               <RecipeCard
                 name={recipe.name}
                 stations={recipe.stations}

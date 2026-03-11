@@ -1,13 +1,13 @@
 import { 
   Box, 
   Typography, 
-  Grid, 
   Card, 
   CardContent, 
   Chip, 
   Stack,
   Divider,
-  Paper
+  Paper,
+  Tooltip
 } from "@mui/material";
 import { 
   Construction,
@@ -49,6 +49,76 @@ interface RecipeCardProps {
   eventsMap: Map<string, string>;
 }
 
+function RecipeItem({ 
+  source, 
+  amount, 
+  type, 
+  id,
+  isProduct 
+}: { 
+  source?: { name: string; icon?: string; type: 'item' | 'entity' };
+  amount: number;
+  type?: 'item' | 'entity' | 'category';
+  id: string;
+  isProduct?: boolean;
+}) {
+  const name = type === 'category' ? `Qualquer ${id}` : (source?.name || id);
+  const icon = type === 'category' ? <Category sx={{ fontSize: 28, color: 'warning.main' }} /> : 
+               source?.icon ? <img src={source.icon} alt={id} style={{ width: '100%', height: '100%', objectFit: 'contain' }} /> :
+               type === 'entity' ? <Bolt sx={{ fontSize: 28, color: 'secondary.main' }} /> : 
+               <Inventory sx={{ fontSize: 28, color: isProduct ? 'primary.main' : 'text.disabled' }} />;
+
+  return (
+    <Tooltip title={name} arrow>
+      <Box sx={{ position: 'relative', width: 56, height: 56 }}>
+        <Paper variant="outlined" sx={{ 
+          width: '100%', 
+          height: '100%', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          p: 0.75,
+          backgroundColor: 'rgba(0,0,0,0.2)',
+          borderColor: type === 'category' ? 'warning.dark' : 
+                       type === 'entity' ? 'secondary.dark' : 
+                       isProduct ? 'primary.dark' : 'divider',
+          borderRadius: 1,
+          overflow: 'hidden',
+          transition: 'transform 0.2s',
+          '&:hover': {
+            transform: 'scale(1.05)',
+            borderColor: 'primary.main'
+          }
+        }}>
+          {icon}
+        </Paper>
+        <Box sx={{ 
+          position: 'absolute', 
+          bottom: -6, 
+          right: -6, 
+          backgroundColor: isProduct ? 'primary.main' : 'background.paper',
+          color: isProduct ? 'primary.contrastText' : 'text.primary',
+          borderRadius: '10px',
+          px: 1,
+          minWidth: 22,
+          height: 22,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: '2px solid',
+          borderColor: '#121212', // Match background
+          boxShadow: 4,
+          zIndex: 1
+        }}>
+          <Typography variant="caption" sx={{ fontWeight: 800, fontSize: '0.75rem' }}>
+            {amount}
+          </Typography>
+        </Box>
+      </Box>
+    </Tooltip>
+  );
+}
+
 export function RecipeCard({
   name,
   stations,
@@ -74,125 +144,73 @@ export function RecipeCard({
         borderColor: 'rgba(255, 255, 255, 0.15)',
       }
     }}>
-      <CardContent>
-        <Stack spacing={2}>
-          {/* Recipe Title & Stations */}
-          <Box>
-            <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: 700 }}>
+      <CardContent sx={{ p: '16px !important' }}>
+        <Stack spacing={2.5}>
+          {/* Header: Name and Stations */}
+          <Stack alignItems="stretch" textAlign={"start"}>
+            <Stack direction="row" alignItems={"center"} justifyContent="space-between">
+              <Typography variant="subtitle2" sx={{ color: 'text.secondary', fontWeight: 500, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: 1 }}>
+                Receita
+              </Typography>
+              <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }}>
+                {stations.map(s => (
+                  <Chip 
+                    key={s} 
+                    label={s} 
+                    size="small" 
+                    icon={<Construction sx={{ fontSize: '0.8rem !important' }} />} 
+                    sx={{ backgroundColor: 'rgba(255,255,255,0.05)', fontSize: '0.65rem', height: 20 }} 
+                  />
+                ))}
+              </Stack>
+            </Stack>
+            <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: 700, lineHeight: 1.2 }}>
               {name}
             </Typography>
-            <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-              {stations.map(s => (
-                <Chip 
-                  key={s} 
-                  label={s} 
-                  size="small" 
-                  icon={<Construction sx={{ fontSize: '1rem' }} />} 
-                  sx={{ backgroundColor: 'rgba(255,255,255,0.05)', fontSize: '0.7rem' }} 
+          </Stack>
+
+          {/* Crafting Flow */}
+          <Stack direction="row" spacing={3} alignItems="center" justifyContent={"space-between"} sx={{ flexWrap: 'wrap', rowGap: 2 }}>
+            {/* Ingredients */}
+            <Stack direction="row" spacing={1.5} sx={{ display: 'flex', alignItems: 'center' }}>
+              {ingredients.map((ing, idx) => (
+                <RecipeItem 
+                  key={idx} 
+                  source={getSourceData(ing.type as any, ing.id)} 
+                  amount={ing.amount} 
+                  type={ing.type} 
+                  id={ing.id} 
                 />
               ))}
             </Stack>
-          </Box>
-
-          <Divider sx={{ borderColor: 'rgba(255,255,255,0.05)' }} />
-
-          {/* Crafting Process */}
-          <Grid container spacing={2} alignItems="center">
-            {/* Ingredients */}
-            <Grid size={{ xs: 12, md: 5 }}>
-              <Stack spacing={1}>
-                <Typography variant="overline" sx={{ color: 'text.disabled', lineHeight: 1 }}>Ingredientes</Typography>
-                {ingredients.map((ing, idx) => {
-                  const source = getSourceData(ing.type as any, ing.id);
-                  return (
-                    <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Paper variant="outlined" sx={{ 
-                        p: 0.5, 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        justifyContent: 'center', 
-                        width: 32, 
-                        height: 32, 
-                        backgroundColor: 'rgba(0,0,0,0.2)',
-                        borderColor: ing.type === 'category' ? 'warning.dark' : 'divider'
-                      }}>
-                        {ing.type === 'category' ? (
-                          <Category sx={{ fontSize: 16, color: 'warning.main' }} />
-                        ) : source?.icon ? (
-                          <img src={source.icon} alt={ing.id} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                        ) : (
-                          <Inventory sx={{ fontSize: 16, color: 'text.disabled' }} />
-                        )}
-                      </Paper>
-                      <Typography variant="body2" sx={{ flexGrow: 1 }}>
-                        {ing.type === 'category' ? `Qualquer ${ing.id}` : (ing.name || source?.name || ing.id)}
-                      </Typography>
-                      <Chip label={`x${ing.amount}`} size="small" sx={{ height: 20, fontSize: '0.7rem' }} />
-                    </Box>
-                  );
-                })}
-              </Stack>
-            </Grid>
-
-            <Grid size={{ xs: 12, md: 1 }} sx={{ display: 'flex', justifyContent: 'center' }}>
-              <KeyboardDoubleArrowRight sx={{ color: 'text.disabled', display: { xs: 'none', md: 'block' } }} />
-            </Grid>
+            
+            <Box sx={{ display: 'flex', alignItems: 'center', opacity: 0.3 }}>
+              <KeyboardDoubleArrowRight sx={{ fontSize: 24 }} />
+            </Box>
 
             {/* Products */}
-            <Grid size={{ xs: 12, md: 5 }}>
-              <Stack spacing={1}>
-                <Typography variant="overline" sx={{ color: 'primary.main', lineHeight: 1 }}>Produtos</Typography>
-                {products.map((prod, idx) => {
-                  const source = getSourceData(prod.type, prod.id);
-                  return (
-                    <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Paper variant="outlined" sx={{ 
-                        p: 0.5, 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        justifyContent: 'center', 
-                        width: 32, 
-                        height: 32, 
-                        backgroundColor: 'rgba(0,0,0,0.2)', 
-                        borderColor: prod.type === 'entity' ? 'secondary.dark' : 'primary.dark' 
-                      }}>
-                        {source?.icon ? (
-                          <img src={source.icon} alt={prod.id} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                        ) : (
-                          prod.type === 'entity' ? <Bolt sx={{ fontSize: 16, color: 'secondary.main' }} /> : <Inventory sx={{ fontSize: 16, color: 'primary.main' }} />
-                        )}
-                      </Paper>
-                      <Typography variant="body2" sx={{ flexGrow: 1, fontWeight: 600 }}>
-                        {prod.name || source?.name || prod.id}
-                      </Typography>
-                      <Chip 
-                        color={prod.type === 'entity' ? "secondary" : "primary"} 
-                        label={`x${prod.amount}`} 
-                        size="small" 
-                        sx={{ height: 20, fontSize: '0.7rem' }} 
-                      />
-                    </Box>
-                  );
-                })}
-              </Stack>
-            </Grid>
-          </Grid>
+            <Stack direction="row" spacing={1.5} sx={{ display: 'flex', alignItems: 'center' }}>
+              {products.map((prod, idx) => (
+                <RecipeItem 
+                  key={idx} 
+                  source={getSourceData(prod.type, prod.id)} 
+                  amount={prod.amount} 
+                  type={prod.type} 
+                  id={prod.id} 
+                  isProduct 
+                />
+              ))}
+            </Stack>
+          </Stack>
 
           {/* Unlock Requirements */}
           {unlock && unlock.length > 0 && (
             <Box sx={{ 
-              mt: 1, 
               p: 1.5, 
               borderRadius: 1, 
-              backgroundColor: 'rgba(255, 68, 0, 0.05)', 
-              border: '1px dashed rgba(255, 68, 0, 0.2)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 1
+              backgroundColor: 'rgba(255, 187, 0, 0.05)', 
+              border: '1px dashed rgba(255, 187, 0, 0.2)',
             }}>
-              <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: '#ffbb00', fontWeight: 600 }}>
-                <Lock sx={{ fontSize: '0.9rem' }} /> Requisito
-              </Typography>
               <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
                 {unlock.map((req, idx) => {
                   let Icon = Lock;
@@ -215,9 +233,9 @@ export function RecipeCard({
                   const displayValue = req.type === 'event' ? (eventsMap.get(req.value) || req.value) : req.value;
 
                   return (
-                    <Typography key={idx} variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, fontSize: '0.8rem' }}>
-                      <Icon sx={{ fontSize: '1rem', color }} /> 
-                      <b>{label}{req.subject ? ` de ${req.subject}` : ''}:</b> {displayValue}
+                    <Typography key={idx} variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, fontSize: '0.75rem', color: 'text.secondary' }}>
+                      <Icon sx={{ fontSize: '0.9rem', color }} /> 
+                      <Box component="span" sx={{ color: 'text.primary', fontWeight: 600 }}>{label}:</Box> {displayValue}
                     </Typography>
                   );
                 })}
