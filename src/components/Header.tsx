@@ -16,7 +16,8 @@ import {
   NavigateNext,
   Grass,
   People,
-  Foundation
+  Foundation,
+  Storefront
 } from "@mui/icons-material";
 import { Link, useLocation } from 'react-router-dom';
 import { useGameData } from "../hooks/useGameData";
@@ -26,6 +27,7 @@ const navItems = [
   { label: "Mapa", pathSuffix: "map", icon: <Map /> },
   { label: 'Itens', pathSuffix: "items", icon: <Construction /> },
   { label: 'Receitas', pathSuffix: "recipes", icon: <Assignment /> },
+  { label: 'Loja', pathSuffix: "shops", icon: <Storefront /> },
   { label: 'Quests', pathSuffix: "quests", icon: <Assignment /> },
 ];
 
