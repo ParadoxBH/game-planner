@@ -47,7 +47,7 @@ interface ShopItem {
 interface GameShop {
   id: string;
   npcId: string;
-  resetType?: string;
+  resetType?: 'diario' | 'semanal';
   resetTime?: string;
   conditions?: ShopCondition[];
   items: ShopItem[];
@@ -67,8 +67,17 @@ interface GameEntity {
   icon?: string;
 }
 
+interface GameConfig {
+  id: string;
+  resetes?: {
+    diario?: { horario: number },
+    semanal?: { horario: number, dia: "domingo" | "segunda" | "terca" | "quarta" | "quinta" | "sexta" | "sabado" },
+  };
+}
+
 export function ShopsPage() {
   const { gameId } = useParams<{ gameId: string }>();
+  const { data: gameConfig } = useGameData<GameConfig>(gameId, "game");
   const { data: shops, loading: loadingShops } = useGameData<GameShop[]>(gameId, "shops");
   const { data: items } = useGameData<GameItem[]>(gameId, "items");
   const { data: entities } = useGameData<GameEntity[]>(gameId, "entity");
@@ -186,15 +195,28 @@ export function ShopsPage() {
                         <Chip 
                           size="small" 
                           icon={<Refresh sx={{ fontSize: '1rem' }} />} 
-                          label={`Reseta: ${currentShop.resetType}`} 
+                          label={`Reseta: ${currentShop.resetType === 'diario' ? 'Diário' : 'Semanal'}`} 
                           sx={{ backgroundColor: 'rgba(255, 68, 0, 0.1)', color: '#ff4400' }}
                         />
                       )}
-                      {currentShop.resetTime && (
+                      {(currentShop.resetTime || (currentShop.resetType && gameConfig?.resetes?.[currentShop.resetType])) && (
                         <Chip 
                           size="small" 
                           icon={<AccessTime sx={{ fontSize: '1rem' }} />} 
-                          label={currentShop.resetTime} 
+                          label={currentShop.resetTime || 
+                            (() => {
+                              if (!currentShop.resetType || !gameConfig?.resetes?.[currentShop.resetType]) return '';
+                              const reset = gameConfig.resetes[currentShop.resetType];
+                              if (!reset) return '';
+                              
+                              const timeStr = `${String(reset.horario).padStart(2, '0')}:00`;
+                              if ('dia' in reset && reset.dia) {
+                                const diaCapitalized = reset.dia.charAt(0).toUpperCase() + reset.dia.slice(1);
+                                return `${diaCapitalized} ${timeStr}`;
+                              }
+                              return timeStr;
+                            })()
+                          } 
                           sx={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
                         />
                       )}
