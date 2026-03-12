@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "id": "energia",
     "name": "Energia",
@@ -1388,5 +1388,114 @@
     ],
     "description": "Durante a Gala de Moda, participe dos eventos para obter fichas de moda da temporada e usá-las na Loja de Moda de Azure para comprar diversos itens de moda.",
     "icon": "/img/heartopia/stats/gala_moda_neve_moeda.png"
+  },
+  {
+    "id": "perfume_sereia",
+    "name": "Perfume de Sereia",
+    "category": [
+      "resource",
+      "lure"
+    ],
+    "description": "Um perfume encantador que atrai peixes raros.",
+    "icon": "/img/heartopia/ferramentas/perfume_sereia.png"
+  },
+  {
+    "id": "fertilizante",
+    "name": "Fertilizante",
+    "category": [
+      "resource",
+      "agriculture"
+    ],
+    "description": "Saco de fertilizante para acelerar o crescimento das plantas.",
+    "icon": "/img/heartopia/ferramentas/fertilizante.png"
+  },
+  {
+    "id": "rosa_pluma_nevada",
+    "name": "Rosa Pluma Nevada",
+    "category": [
+      "resource",
+      "flower"
+    ],
+    "description": "Uma rosa rara que floresce no frio intenso.",
+    "icon": "/img/heartopia/outros/rosa_pluma_nevada.png"
+  },
+  {
+    "id": "varinha_magica_iridescente_rosa",
+    "name": "Varinha magica iridescente rosa",
+    "category": [
+      "resource",
+      "toy"
+    ],
+    "description": "Uma pequena estrela que brilha with várias cores.",
+    "icon": "/img/heartopia/outros/varinha_magica_iridescente_rosa.png"
+  },
+  {
+    "id": "fumaca_fria_iridescente_rosa",
+    "name": "Fumaça Fria Iridescente Rosa",
+    "category": [
+      "resource",
+      "toy"
+    ],
+    "description": "Fogos de artifício que brilham sem queimar.",
+    "icon": "/img/heartopia/outros/fumaca_fria_iridescente_rosa.png"
+  },
+  {
+    "id": "elixir",
+    "name": "elixir",
+    "category": [
+      "resource",
+      "agriculture"
+    ],
+    "description": "Reduz imediatamente 15 minutos do tempo de crescimento do cultivo. Efeitos são cumulativos se usado repetidamente na mesma planta",
+    "icon": "/img/heartopia/ferramentas/elixir.png"
+  },
+  {
+    "id": "laranja",
+    "name": "Laranja",
+    "category": [
+      "resource",
+      "fruit"
+    ],
+    "description": "Uma laranja suculenta e vitaminada.",
+    "icon": "/img/heartopia/recursos/laranja.png"
+  },
+  {
+    "id": "salada_especial_chef",
+    "name": "Salada Especial do Chef",
+    "category": [
+      "food"
+    ],
+    "description": "Uma salada gourmet preparada pelos melhores chefs.",
+    "icon": "/img/heartopia/comidas/salada_rural.png"
+  },
+  {
+    "id": "kit_reparo",
+    "name": "Kit de Reparo",
+    "category": [
+      "resource",
+      "tool"
+    ],
+    "description": "Ferramentas essenciais para consertar equipamentos.",
+    "icon": "/img/heartopia/ferramentas/kit_reparo.png"
+  },
+  {
+    "id": "fluorita_impecavel",
+    "name": "Fluorita Impecável",
+    "category": [
+      "resource",
+      "mineral"
+    ],
+    "description": "Uma pedra de fluorita sem nenhuma imperfeição.",
+    "icon": "/img/heartopia/recursos/fluorita_pura.png"
+  },
+  {
+    "id": "madeira_carvalho_andarilho",
+    "name": "Madeira de Carvalho Andarilho",
+    "category": [
+      "resource",
+      "wood"
+    ],
+    "description": "Madeira mística obtida de um Carvalho Andarilho.",
+    "icon": "/img/heartopia/recursos/madeira_rara.png"
   }
 ]

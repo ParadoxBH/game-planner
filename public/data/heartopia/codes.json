@@ -1,1 +1,590 @@
-[]
+[
+  {
+    "code": "tangyuan0303y",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-03-09",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "38bloom2026",
+    "rewards": [
+      {
+        "id": "perfume_sereia",
+        "quantity": 2,
+        "type": "item"
+      },
+      {
+        "id": "ouro",
+        "quantity": 10000,
+        "type": "item"
+      },
+      {
+        "id": "ovo",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-03-09",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "k9r8m2q7a5",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-03-09",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "n5q7m9l2a4",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-03-02",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "p7a9k2m6r8",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-02-23",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "x8r2m9q5l7",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-02-16",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "SPRINGFEST2026",
+    "rewards": [
+      {
+        "id": "cristal_luar",
+        "quantity": 10,
+        "type": "item"
+      },
+      {
+        "id": "ouro",
+        "quantity": 8888,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-02-16",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "love214",
+    "rewards": [
+      {
+        "id": "rosa_pluma_nevada",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "varinha_magica_iridescente_rosa",
+        "quantity": 2,
+        "type": "item"
+      },
+      {
+        "id": "fumaca_fria_iridescente_rosa",
+        "quantity": 1,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-02-16",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "q6p9m4a7k",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-02-09",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "a9l5k7m2r8",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-02-02",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "r4p8n6m2q9",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-26",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "heartopia10m",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-23",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "lifewithline",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-23",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "happy2026",
+    "rewards": [
+      {
+        "id": "cristal_luar",
+        "quantity": 10,
+        "type": "item"
+      },
+      {
+        "id": "ouro",
+        "quantity": 8888,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-21",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "k7m9q2a8l5",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-19",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "r4a8x2n",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "elixir",
+        "quantity": 10,
+        "type": "item"
+      },
+      {
+        "id": "tangerina",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-14",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "top1thanks",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 2,
+        "type": "item"
+      },
+      {
+        "id": "tangerina",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-14",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "heartopia5m",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-14",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "true5mthks",
+    "rewards": [
+      {
+        "id": "madeira_qualidade",
+        "quantity": 10,
+        "type": "item"
+      },
+      {
+        "id": "salada_especial_chef",
+        "quantity": 2,
+        "type": "item"
+      },
+      {
+        "id": "galho_arbusto",
+        "quantity": 20,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-14",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "letsparty",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 15,
+        "type": "item"
+      },
+      {
+        "id": "ouro",
+        "quantity": 5000,
+        "type": "item"
+      },
+      {
+        "id": "kit_reparo",
+        "quantity": 3,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-13",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "b8n2k5l",
+    "rewards": [
+      {
+        "id": "fluorita_impecavel",
+        "quantity": 2,
+        "type": "item"
+      },
+      {
+        "id": "madeira_rara",
+        "quantity": 6,
+        "type": "item"
+      },
+      {
+        "id": "pedra",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-13",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "dcthx4u",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-12",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "m7r9q4a",
+    "rewards": [
+      {
+        "id": "perfume_sereia",
+        "quantity": 2,
+        "type": "item"
+      },
+      {
+        "id": "ouro",
+        "quantity": 10000,
+        "type": "item"
+      },
+      {
+        "id": "ovo",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-12",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "x2l8k6p",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      },
+      {
+        "id": "maca",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-12",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "h9q3a7m5",
+    "rewards": [
+      {
+        "id": "madeira_carvalho_andarilho",
+        "quantity": 2,
+        "type": "item"
+      },
+      {
+        "id": "leite",
+        "quantity": 10,
+        "type": "item"
+      },
+      {
+        "id": "maca",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-12",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "z4p6n8r2",
+    "rewards": [
+      {
+        "id": "galho_arbusto",
+        "quantity": 20,
+        "type": "item"
+      },
+      {
+        "id": "madeira_qualidade",
+        "quantity": 10,
+        "type": "item"
+      },
+      {
+        "id": "salada_especial_chef",
+        "quantity": 2,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-09",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "a7k9m2q8l",
+    "rewards": [
+      {
+        "id": "mirtilo",
+        "quantity": 10,
+        "type": "item"
+      },
+      {
+        "id": "kit_reparo",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-08",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "letsbuild",
+    "rewards": [
+      {
+        "id": "mirtilo",
+        "quantity": 10,
+        "type": "item"
+      },
+      {
+        "id": "kit_reparo",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-08",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "letsdressup",
+    "rewards": [
+      {
+        "id": "mirtilo",
+        "quantity": 10,
+        "type": "item"
+      },
+      {
+        "id": "kit_reparo",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-01-08",
+    "expiresAt": "2026-03-31"
+  }
+]
