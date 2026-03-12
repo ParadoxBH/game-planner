@@ -1487,5 +1487,15 @@
     ],
     "description": "Madeira mística obtida de um Carvalho Andarilho.",
     "icon": "/img/heartopia/recursos/madeira_rara.png"
+  },
+  {
+    "id": "kit_materiais_pinguim",
+    "name": "Kit de Materiais Pinguinzinho",
+    "category": [
+      "resource",
+      "gala_moda_neve"
+    ],
+    "description": "Pode fabricar vários móveis ou materiais construtivos da Gala da Neve",
+    "icon": "/img/heartopia/stats/kit_materiais_pinguim.png"
   }
 ]
