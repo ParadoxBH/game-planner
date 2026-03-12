@@ -1050,7 +1050,7 @@
     "name": "Tomate",
     "category": [
       "resource",
-      "ingredient"
+      "vegetable"
     ],
     "description": "Um tomate suculento e vermelho.",
     "icon": "/img/heartopia/agricultura/tomate.png",
@@ -1061,7 +1061,7 @@
     "name": "Cenoura",
     "category": [
       "resource",
-      "ingredient"
+      "vegetable"
     ],
     "description": "Um vegetal alaranjado e rico em vitaminas.",
     "icon": "/img/heartopia/agricultura/cenoura.png",
@@ -1072,10 +1072,10 @@
     "name": "Batata",
     "category": [
       "resource",
-      "ingredient"
+      "vegetable"
     ],
     "description": "Um tubérculo versátil.",
-    "icon": "/img/heartopia/agricultura/semente_batata.png",
+    "icon": "/img/heartopia/agricultura/batata.png",
     "sellPrice": 90
   },
   {
@@ -1083,7 +1083,7 @@
     "name": "Trigo",
     "category": [
       "resource",
-      "ingredient"
+      "vegetable"
     ],
     "description": "Grãos de trigo dourados.",
     "icon": "/img/heartopia/agricultura/trigo.png",
@@ -1094,7 +1094,7 @@
     "name": "Alface Americano",
     "category": [
       "resource",
-      "ingredient"
+      "vegetable"
     ],
     "description": "Folhas de alface crocantes.",
     "icon": "/img/heartopia/agricultura/alface_americana.png",
@@ -1108,7 +1108,7 @@
       "vegetable"
     ],
     "description": "Uma fruta tropical doce e ácida.",
-    "icon": "/img/heartopia/agricultura/semente_abacaxi.png",
+    "icon": "/img/heartopia/agricultura/abacaxi.png",
     "sellPrice": 86
   },
   {
@@ -1133,7 +1133,7 @@
     "description": "Ovos processados com segurança.",
     "sellPrice": 50,
     "buyPrice": 100,
-    "icon": "/img/heartopia/culinaria/ovo_pasteurizado.png"
+    "icon": "/img/heartopia/comidas/ovo_pasteurizado.png"
   },
   {
     "id": "semente_papoula_himalaia_vermelha",
@@ -1441,23 +1441,13 @@
   },
   {
     "id": "elixir",
-    "name": "elixir",
+    "name": "Elixir",
     "category": [
       "resource",
       "agriculture"
     ],
     "description": "Reduz imediatamente 15 minutos do tempo de crescimento do cultivo. Efeitos são cumulativos se usado repetidamente na mesma planta",
     "icon": "/img/heartopia/ferramentas/elixir.png"
-  },
-  {
-    "id": "laranja",
-    "name": "Laranja",
-    "category": [
-      "resource",
-      "fruit"
-    ],
-    "description": "Uma laranja suculenta e vitaminada.",
-    "icon": "/img/heartopia/recursos/laranja.png"
   },
   {
     "id": "salada_especial_chef",
