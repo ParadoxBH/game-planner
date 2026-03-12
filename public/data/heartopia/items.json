@@ -1130,10 +1130,10 @@
       "resource",
       "ingredient"
     ],
-    "description": "Ovos processados com segurança.",
+    "description": "Ovos selecionados.",
     "sellPrice": 50,
     "buyPrice": 100,
-    "icon": "/img/heartopia/comidas/ovo_pasteurizado.png"
+    "icon": "/img/heartopia/culinaria/ovo_pasteurizado.png"
   },
   {
     "id": "semente_papoula_himalaia_vermelha",
@@ -1407,7 +1407,8 @@
       "agriculture"
     ],
     "description": "Saco de fertilizante para acelerar o crescimento das plantas.",
-    "icon": "/img/heartopia/ferramentas/fertilizante.png"
+    "icon": "/img/heartopia/ferramentas/fertilizante.png",
+    "buyPrice": 160
   },
   {
     "id": "rosa_pluma_nevada",
@@ -1447,7 +1448,8 @@
       "agriculture"
     ],
     "description": "Reduz imediatamente 15 minutos do tempo de crescimento do cultivo. Efeitos são cumulativos se usado repetidamente na mesma planta",
-    "icon": "/img/heartopia/ferramentas/elixir.png"
+    "icon": "/img/heartopia/ferramentas/elixir.png",
+    "buyPrice": 50
   },
   {
     "id": "salada_especial_chef",
@@ -1497,5 +1499,37 @@
     ],
     "description": "Pode fabricar vários móveis ou materiais construtivos da Gala da Neve",
     "icon": "/img/heartopia/stats/kit_materiais_pinguim.png"
+  },
+  {
+    "id": "fertilizante_caseiro",
+    "name": "Fertilizante Caseiro",
+    "category": [
+      "resource",
+      "agriculture"
+    ],
+    "description": "Saco de fertilizante para acelerar o crescimento das plantas.",
+    "icon": "/img/heartopia/ferramentas/fertilizante.png"
+  },
+  {
+    "id": "fertilizante_qualidade",
+    "name": "Fertilizante de Qualidade",
+    "category": [
+      "resource",
+      "agriculture"
+    ],
+    "description": "Saco de fertilizante para acelerar o crescimento das plantas.",
+    "icon": "/img/heartopia/ferramentas/fertilizante_qualidade.png",
+    "buyPrice": 450
+  },
+  {
+    "id": "elixir_qualidade",
+    "name": "Elixir de Qualidade",
+    "category": [
+      "resource",
+      "agriculture"
+    ],
+    "description": "Reduz imediatamente 1 hora do tempo de crescimento do cultivo. Efeitos são cumulativos se usado repetidamente na mesma planta",
+    "icon": "/img/heartopia/ferramentas/elixir_qualidade.png",
+    "buyPrice": 200
   }
 ]
