@@ -11,6 +11,7 @@ import { useGameData } from "../hooks/useGameData";
 import { useState, useMemo } from "react";
 import { StyledContainer } from "./common/StyledContainer";
 import { EntityCard, type GameEntity } from "./entities/EntityCard";
+export type { GameEntity };
 
 export function EntityPage() {
   const { gameId, category: urlCategory } = useParams<{ gameId: string; category?: string }>();

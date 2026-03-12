@@ -18,7 +18,8 @@ import {
   People,
   Foundation,
   Storefront,
-  Event
+  Event,
+  Redeem
 } from "@mui/icons-material";
 import { Link, useLocation } from 'react-router-dom';
 import { useGameData } from "../hooks/useGameData";
@@ -31,6 +32,7 @@ const navItems = [
   { label: 'Receitas', pathSuffix: "recipes", icon: <Assignment /> },
   { label: 'Loja', pathSuffix: "shops", icon: <Storefront /> },
   { label: 'Eventos', pathSuffix: "events", icon: <Event /> },
+  { label: 'Códigos', pathSuffix: "codes", icon: <Redeem /> },
   { label: 'Quests', pathSuffix: "quests", icon: <Assignment /> },
 ];
 
