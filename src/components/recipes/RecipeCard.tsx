@@ -5,9 +5,7 @@ import {
   CardContent, 
   Chip, 
   Stack,
-  Divider,
-  Paper,
-  Tooltip
+  Divider
 } from "@mui/material";
 import { 
   Construction,
@@ -15,9 +13,9 @@ import {
   KeyboardDoubleArrowRight,
   Lock,
   Bolt,
-  Assignment,
-  Category
+  Assignment
 } from "@mui/icons-material";
+import { ItemChip } from "../common/ItemChip";
 
 export interface RecipeIngredient {
   type?: 'item' | 'entity' | 'category';
@@ -49,75 +47,7 @@ interface RecipeCardProps {
   eventsMap: Map<string, string>;
 }
 
-function RecipeItem({ 
-  source, 
-  amount, 
-  type, 
-  id,
-  isProduct 
-}: { 
-  source?: { name: string; icon?: string; type: 'item' | 'entity' };
-  amount: number;
-  type?: 'item' | 'entity' | 'category';
-  id: string;
-  isProduct?: boolean;
-}) {
-  const name = type === 'category' ? `Qualquer ${id}` : (source?.name || id);
-  const icon = type === 'category' ? <Category sx={{ fontSize: 28, color: 'warning.main' }} /> : 
-               source?.icon ? <img src={source.icon} alt={id} style={{ width: '100%', height: '100%', objectFit: 'contain' }} /> :
-               type === 'entity' ? <Bolt sx={{ fontSize: 28, color: 'secondary.main' }} /> : 
-               <Inventory sx={{ fontSize: 28, color: isProduct ? 'primary.main' : 'text.disabled' }} />;
 
-  return (
-    <Tooltip title={name} arrow>
-      <Box sx={{ position: 'relative', width: 56, height: 56 }}>
-        <Paper variant="outlined" sx={{ 
-          width: '100%', 
-          height: '100%', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          p: 0.75,
-          backgroundColor: 'rgba(0,0,0,0.2)',
-          borderColor: type === 'category' ? 'warning.dark' : 
-                       type === 'entity' ? 'secondary.dark' : 
-                       isProduct ? 'primary.dark' : 'divider',
-          borderRadius: 1,
-          overflow: 'hidden',
-          transition: 'transform 0.2s',
-          '&:hover': {
-            transform: 'scale(1.05)',
-            borderColor: 'primary.main'
-          }
-        }}>
-          {icon}
-        </Paper>
-        <Box sx={{ 
-          position: 'absolute', 
-          bottom: -6, 
-          right: -6, 
-          backgroundColor: isProduct ? 'primary.main' : 'background.paper',
-          color: isProduct ? 'primary.contrastText' : 'text.primary',
-          borderRadius: '10px',
-          px: 1,
-          minWidth: 22,
-          height: 22,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          border: '2px solid',
-          borderColor: '#121212', // Match background
-          boxShadow: 4,
-          zIndex: 1
-        }}>
-          <Typography variant="caption" sx={{ fontWeight: 800, fontSize: '0.75rem' }}>
-            {amount}
-          </Typography>
-        </Box>
-      </Box>
-    </Tooltip>
-  );
-}
 
 export function RecipeCard({
   name,
@@ -173,15 +103,19 @@ export function RecipeCard({
           <Stack direction="row" spacing={3} alignItems="center" justifyContent={"space-between"} sx={{ flexWrap: 'wrap', rowGap: 2 }}>
             {/* Ingredients */}
             <Stack direction="row" spacing={1.5} sx={{ display: 'flex', alignItems: 'center' }}>
-              {ingredients.map((ing, idx) => (
-                <RecipeItem 
-                  key={idx} 
-                  source={getSourceData(ing.type as any, ing.id)} 
-                  amount={ing.amount} 
-                  type={ing.type} 
-                  id={ing.id} 
-                />
-              ))}
+              {ingredients.map((ing, idx) => {
+                const source = getSourceData(ing.type as any, ing.id);
+                return (
+                  <ItemChip 
+                    key={idx} 
+                    id={ing.id}
+                    name={source?.name}
+                    icon={source?.icon}
+                    amount={ing.amount} 
+                    type={ing.type} 
+                  />
+                );
+              })}
             </Stack>
             
             <Box sx={{ display: 'flex', alignItems: 'center', opacity: 0.3 }}>
@@ -190,16 +124,20 @@ export function RecipeCard({
 
             {/* Products */}
             <Stack direction="row" spacing={1.5} sx={{ display: 'flex', alignItems: 'center' }}>
-              {products.map((prod, idx) => (
-                <RecipeItem 
-                  key={idx} 
-                  source={getSourceData(prod.type, prod.id)} 
-                  amount={prod.amount} 
-                  type={prod.type} 
-                  id={prod.id} 
-                  isProduct 
-                />
-              ))}
+              {products.map((prod, idx) => {
+                const source = getSourceData(prod.type, prod.id);
+                return (
+                  <ItemChip 
+                    key={idx} 
+                    id={prod.id}
+                    name={source?.name}
+                    icon={source?.icon}
+                    amount={prod.amount} 
+                    type={prod.type} 
+                    isProduct 
+                  />
+                );
+              })}
             </Stack>
           </Stack>
 

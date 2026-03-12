@@ -30,6 +30,7 @@ import { useParams } from "react-router-dom";
 import { useGameData } from "../hooks/useGameData";
 import { useState, useMemo, useEffect } from "react";
 import { StyledContainer } from "./common/StyledContainer";
+import { ItemChip } from "./common/ItemChip";
 import { redemptionService } from "../services/redemptionService";
 
 interface Reward {
@@ -278,30 +279,14 @@ export function CodesPage() {
                           {c.rewards.map((r, rIdx) => {
                             const item = itemsMap.get(r.id);
                             return (
-                              <Tooltip key={rIdx} title={`${r.quantity}x ${item?.name || r.id}`}>
-                                <Paper variant="outlined" sx={{ 
-                                  p: 0.75, 
-                                  backgroundColor: 'rgba(0,0,0,0.2)',
-                                  borderRadius: 1,
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: 1,
-                                  borderColor: 'divider',
-                                  transition: 'all 0.2s',
-                                  '&:hover': { borderColor: 'primary.main', transform: 'scale(1.05)' }
-                                }}>
-                                  <Box sx={{ width: 24, height: 24, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    {item?.icon ? (
-                                      <img src={item.icon} alt={r.id} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                                    ) : (
-                                      <Inventory sx={{ fontSize: 16, color: 'text.disabled' }} />
-                                    )}
-                                  </Box>
-                                  <Typography variant="caption" sx={{ fontWeight: 700 }}>
-                                    x{r.quantity}
-                                  </Typography>
-                                </Paper>
-                              </Tooltip>
+                              <ItemChip
+                                key={rIdx}
+                                id={r.id}
+                                name={item?.name}
+                                icon={item?.icon}
+                                amount={r.quantity}
+                                size="small"
+                              />
                             );
                           })}
                         </Stack>
