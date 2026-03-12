@@ -7,11 +7,11 @@ import {
   Tooltip
 } from "@mui/material";
 import { 
-  Storefront,
   Lock,
   Payments,
   SwapHoriz
 } from "@mui/icons-material";
+import { ItemChip } from "../common/ItemChip";
 
 export interface ShopCondition {
   type: string;
@@ -70,7 +70,7 @@ export function ShopItemCard({
           position: 'absolute', 
           top: 8, 
           right: 8, 
-          zIndex: 1,
+          zIndex: 2,
           background: 'rgba(0,0,0,0.6)',
           borderRadius: 1,
           p: 0.5,
@@ -86,65 +86,63 @@ export function ShopItemCard({
       )}
       <CardContent>
         <Stack direction="row" spacing={2} alignItems="center">
-          <Box sx={{ 
-            width: 56, 
-            height: 56, 
-            borderRadius: 1.5, 
-            backgroundColor: 'rgba(0,0,0,0.3)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            p: 1
-          }}>
-            {baseItem?.icon ? (
-              <img src={baseItem.icon} alt={baseItem.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-            ) : (
-              <Storefront sx={{ color: 'text.disabled' }} />
-            )}
-          </Box>
+          <ItemChip 
+            id={shopItem.id}
+            name={baseItem?.name}
+            icon={baseItem?.icon}
+            amount={shopItem.amount}
+            isProduct={true}
+          />
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
               {baseItem?.name || shopItem.id}
             </Typography>
-            {shopItem.amount && (
-              <Typography variant="caption" color="text.secondary">
-                Qtd: {shopItem.amount}
-              </Typography>
-            )}
           </Box>
         </Stack>
 
         <Box sx={{ mt: 2 }}>
           {shopItem.exchange ? (
-            <Stack spacing={0.5}>
+            <Stack spacing={1}>
               <Typography variant="caption" sx={{ color: 'secondary.main', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 0.5 }}>
                 <SwapHoriz sx={{ fontSize: '1rem' }} /> TROCAR POR:
               </Typography>
-              {shopItem.exchange.map((ex, i) => {
-                const exItem = itemsMap.get(ex.id);
-                return (
-                  <Stack key={i} direction="row" alignItems="center" spacing={1} sx={{ p: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: 1 }}>
-                    {exItem?.icon && <img src={exItem.icon} alt="" style={{ width: 16, height: 16 }} />}
-                    <Typography variant="caption">{exItem?.name || ex.id}</Typography>
-                    <Typography variant="caption" sx={{ ml: 'auto', fontWeight: 600 }}>x{ex.amount}</Typography>
-                  </Stack>
-                );
-              })}
+              <Stack direction="row" spacing={1} flexWrap="wrap">
+                {shopItem.exchange.map((ex, i) => {
+                  const exItem = itemsMap.get(ex.id);
+                  return (
+                    <ItemChip 
+                      key={i}
+                      id={ex.id}
+                      name={exItem?.name}
+                      icon={exItem?.icon}
+                      amount={ex.amount}
+                      size="medium"
+                    />
+                  );
+                })}
+              </Stack>
             </Stack>
           ) : (
-            <Stack direction="row" alignItems="center" spacing={1} sx={{ 
-              mt: 1, 
-              p: 1, 
-              borderRadius: 1.5, 
-              backgroundColor: 'rgba(255, 68, 0, 0.05)',
-              color: 'primary.main'
-            }}>
-              <Payments sx={{ fontSize: '1.2rem' }} />
-              <Typography sx={{ fontWeight: 800, fontSize: '1.1rem' }}>{price}</Typography>
-              <Typography variant="caption" color="text.secondary">
-                {currencyItem?.name || currency}
+            <Stack spacing={0.5}>
+              <Typography variant="caption" sx={{ color: 'primary.main', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                <Payments sx={{ fontSize: '1rem' }} /> VALOR:
               </Typography>
-              {currencyItem?.icon && <img src={currencyItem.icon} alt="" style={{ width: 20, height: 20, marginLeft: 'auto' }} />}
+              <Stack direction="row" alignItems="center" spacing={1} sx={{ 
+                p: 0.5, 
+                pr: 1.5,
+                borderRadius: 2, 
+                backgroundColor: 'rgba(255, 68, 0, 0.05)',
+                color: 'primary.main',
+                width: 'fit-content'
+              }}>
+                <ItemChip 
+                  id={currency}
+                  name={currencyItem?.name}
+                  icon={currencyItem?.icon}
+                  size="small"
+                />
+                <Typography sx={{ fontWeight: 800, fontSize: '1.1rem' }}>{price}</Typography>
+              </Stack>
             </Stack>
           )}
         </Box>

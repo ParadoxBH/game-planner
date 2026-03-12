@@ -5,6 +5,8 @@ import {
   TextField,
   Stack,
   InputAdornment,
+  type SxProps,
+  type Theme,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import type { ReactNode } from "react";
@@ -19,6 +21,10 @@ interface StyledContainerProps {
   };
   actionsStart?: ReactNode;
   children?: ReactNode;
+  sx?: {
+    root?: SxProps<Theme>;
+    container?: SxProps<Theme>;
+  };
 }
 
 export function StyledContainer({
@@ -29,9 +35,10 @@ export function StyledContainer({
   onChangeSearch,
   actionsStart,
   children,
+  sx,
 }: StyledContainerProps) {
   return (
-    <Container maxWidth="xl" sx={{ py: 2, flex: 1, overflowY: "hidden" }}>
+    <Container maxWidth="xl" sx={{ py: 2, flex: 1, overflowY: "hidden", ...sx?.root }}>
       <Stack spacing={1} sx={{ flex: 1, height: "100%", overflowY: "hidden" }}>
         {/* Header Section */}
         <Stack
@@ -93,7 +100,7 @@ export function StyledContainer({
         >
           {actionsStart}
         </Stack>}
-        <Stack sx={{ overflowY: "auto", flex: 1 }}>{children}</Stack>
+        <Stack sx={{ overflowY: "auto", flex: 1, ...sx?.container }}>{children}</Stack>
       </Stack>
     </Container>
   );
