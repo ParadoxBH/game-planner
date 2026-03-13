@@ -189,5 +189,105 @@
         ]
       }
     ]
+  },
+  {
+    "id": "ka_ching_shop",
+    "npcId": "ka_ching",
+    "resetType": "diario",
+    "name": "Vendedora de Miudezas",
+    "groups": [
+      {
+        "name": "Geral",
+        "items": [
+          {
+            "id": "tintura",
+            "amount": 200
+          },
+          {
+            "id": "kit_reparo",
+            "amount": 200
+          },
+          {
+            "id": "kit_reparo_agil",
+            "amount": 200,
+            "price": 2,
+            "currency": "cristal_luar"
+          }
+        ]
+      },
+      {
+        "name": "Skin das Ferramentas",
+        "items":[
+          {
+            "id": "mesa_artesao",
+            "type": "entity",
+            "amount": 1,
+            "resetType": "unique"
+          }
+        ]
+      },
+      {
+        "name": "Caixa de Quebra-Cabeça",
+        "items":[
+          {
+            "id": "quebra_cabeca_16",
+            "amount": 5
+          },
+          {
+            "id": "quebra_cabeca_36",
+            "amount": 5
+          },
+          {
+            "id": "quebra_cabeca_100",
+            "amount": 3,
+            "price": 80,
+            "currency": "estrela_desejavel"
+          }
+        ]
+      },
+      {
+        "name": "Ferramentas de Criação",
+        "items":[
+          {
+            "id": "prancheta",
+            "type": "entity"
+          },
+          {
+            "id": "tinta_estampa",
+            "amount": 3,
+            "price": 50,
+            "currency": "cristal_luar"
+          },
+          {
+            "id": "mesa_criacao_livros",
+            "type": "entity",
+            "amount": 1,
+            "resetType": "unique"
+          },
+          {
+            "id": "mesa_criacao_livros",
+            "type": "entity",
+            "amount": 1,
+            "resetType": "unique",
+            "price": 30,
+            "currency": "cristal_luar"
+          },
+          {
+            "id": "vitrola_clean",
+            "type": "entity",
+            "amount": 1,
+            "resetType": "unique"
+          },
+          {
+            "id": "vitrola_clean",
+            "type": "entity",
+            "amount": 1,
+            "resetType": "unique",
+            "price": 40,
+            "currency": "cristal_luar"
+          }
+        ]
+      }
+    ]
   }
 ]

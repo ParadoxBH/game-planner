@@ -201,7 +201,8 @@
       "mushroom"
     ],
     "description": "Um champignon com um brilho azul peculiar.",
-    "icon": "/img/heartopia/recursos/champignon_estranho_azul.png"
+    "icon": "/img/heartopia/recursos/champignon_estranho_azul.png",
+    "sellPrice": 16
   },
   {
     "id": "champignon_estranho_rosa",
@@ -679,6 +680,17 @@
     "sellPrice": 16
   },
   {
+    "id": "shittake_estranho_vermelho",
+    "name": "Shittake Estranho Vermelho",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "description": "Uma variação vermelho do cogumelo shiitake.",
+    "icon": "/img/heartopia/recursos/shittake_estranho_vermelho.png",
+    "sellPrice": 16
+  },
+  {
     "id": "tangerina",
     "name": "Tangerina",
     "category": [
@@ -751,7 +763,8 @@
       "gala_moda_neve"
     ],
     "description": "Um café gelado refrescante.",
-    "icon": "/img/heartopia/comidas/cafe_gelado.png"
+    "icon": "/img/heartopia/comidas/cafe_gelado.png",
+    "sellPrice": 280
   },
   {
     "id": "caldo_cremoso_nabo",
@@ -807,7 +820,8 @@
     "name": "Geleia de Framboesa",
     "category": "food",
     "description": "Geleia doce feita com framboesas frescas.",
-    "icon": "/img/heartopia/comidas/geleia_framboesa.png"
+    "icon": "/img/heartopia/comidas/geleia_framboesa.png",
+    "sellPrice": 26
   },
   {
     "id": "geleia_maca",
@@ -836,6 +850,14 @@
     "category": "food",
     "description": "Geleia cítrica de tangerina.",
     "icon": "/img/heartopia/comidas/geleia_tangerina.png"
+  },
+  {
+    "id": "isca",
+    "name": "Isca",
+    "category": "tool",
+    "description": "Isca de Peixe",
+    "icon": "/img/heartopia/ferramentas/isca.png",
+    "sellPrice": 50
   },
   {
     "id": "isca_peixe_fritas",
@@ -940,7 +962,8 @@
     "name": "Salada Rural",
     "category": "food",
     "description": "Uma salada fresca com ingredientes do campo.",
-    "icon": "/img/heartopia/comidas/salada_rural.png"
+    "icon": "/img/heartopia/comidas/salada_rural.png",
+    "sellPrice": 90
   },
   {
     "id": "shiitake_assado",
@@ -985,6 +1008,30 @@
     "icon": "/img/heartopia/ferramentas/scanner_passaro.png"
   },
   {
+    "id": "racao_passaro",
+    "name": "Ração de Pássaro",
+    "category": "utilitario",
+    "description": "Ração utilizada para atrair passaro em poleiros",
+    "icon": "/img/heartopia/ferramentas/racao_passaro.png",
+    "sellPrice": 100
+  },
+  {
+    "id": "tintura",
+    "name": "Tintura",
+    "category": "wall",
+    "description": "Pinte moveis e decorações",
+    "icon": "/img/heartopia/stats/tintura.png",
+    "sellPrice": 50,
+    "buyPrice": 100
+  },
+  {
+    "id": "tinta_estampa",
+    "name": "Tinta de Estampa",
+    "category": "wall",
+    "description": "Estampe roupas e decorações",
+    "icon": "/img/heartopia/stats/tinta_estampa.png"
+  },
+  {
     "id": "tablet",
     "name": "Tablet",
     "category": "tool",
@@ -1000,7 +1047,7 @@
   },
   {
     "id": "ovo_cozido_termal",
-    "name": "Ovo Termal",
+    "name": "Ovo Cozido Termal",
     "category": [
       "food",
       "gala_moda_neve"
@@ -1029,8 +1076,7 @@
     ],
     "description": "Um vegetal crocante e nutritivo.",
     "icon": "/img/heartopia/agricultura/nabo.png",
-    "sellPrice": 30,
-    "buyPrice": 50
+    "sellPrice": 30
   },
   {
     "id": "acucar_po",
@@ -1065,7 +1111,7 @@
     ],
     "description": "Um vegetal alaranjado e rico em vitaminas.",
     "icon": "/img/heartopia/agricultura/cenoura.png",
-    "sellPrice": 45
+    "sellPrice": 155
   },
   {
     "id": "batata",
@@ -1109,7 +1155,7 @@
     ],
     "description": "Uma fruta tropical doce e ácida.",
     "icon": "/img/heartopia/agricultura/abacaxi.png",
-    "sellPrice": 86
+    "sellPrice": 52
   },
   {
     "id": "oleo",
@@ -1146,7 +1192,8 @@
     ],
     "description": "Sementes para plantar Papoula-Himalaia Vermelha.",
     "icon": "/img/heartopia/agricultura/semente_papoula_himalaia_vermelha.png",
-    "buyPrice": 30
+    "buyPrice": 30,
+    "sellPrice": 15
   },
   {
     "id": "semente_papoula_himalaia_amarela",
@@ -1159,7 +1206,8 @@
     ],
     "description": "Sementes para plantar Papoula-Himalaia Amarela.",
     "icon": "/img/heartopia/agricultura/semente_papoula_himalaia_amarela.png",
-    "buyPrice": 30
+    "buyPrice": 30,
+    "sellPrice": 15
   },
   {
     "id": "semente_papoula_himalaia_branca",
@@ -1172,7 +1220,8 @@
     ],
     "description": "Sementes para plantar Papoula-Himalaia Branca.",
     "icon": "/img/heartopia/agricultura/semente_papoula_himalaia_branca.png",
-    "buyPrice": 30
+    "buyPrice": 30,
+    "sellPrice": 15
   },
   {
     "id": "semente_nabo",
@@ -1197,7 +1246,8 @@
     ],
     "description": "Sementes para plantar Tomate.",
     "icon": "/img/heartopia/agricultura/semente_tomate.png",
-    "buyPrice": 10
+    "buyPrice": 10,
+    "sellPrice": 5
   },
   {
     "id": "semente_batata",
@@ -1209,7 +1259,8 @@
     ],
     "description": "Sementes para plantar Batata.",
     "icon": "/img/heartopia/agricultura/semente_batata.png",
-    "buyPrice": 30
+    "buyPrice": 30,
+    "sellPrice": 15
   },
   {
     "id": "semente_trigo",
@@ -1221,7 +1272,8 @@
     ],
     "description": "Sementes para plantar Trigo.",
     "icon": "/img/heartopia/agricultura/semente_trigo.png",
-    "buyPrice": 95
+    "buyPrice": 95,
+    "sellPrice": 47
   },
   {
     "id": "semente_alface_americano",
@@ -1233,7 +1285,8 @@
     ],
     "description": "Sementes para plantar Alface Americano.",
     "icon": "/img/heartopia/agricultura/semente_alface_americana.png",
-    "buyPrice": 145
+    "buyPrice": 145,
+    "sellPrice": 72
   },
   {
     "id": "semente_abacaxi",
@@ -1257,7 +1310,35 @@
     ],
     "description": "Sementes para plantar Cenoura.",
     "icon": "/img/heartopia/agricultura/semente_cenoura.png",
-    "buyPrice": 50
+    "buyPrice": 50,
+    "sellPrice": 25
+  },
+  {
+    "id": "quebra_cabeca_16",
+    "name": "Quebra Cabeça 16 Peças",
+    "category": [
+      "quebra_cabeca"
+    ],
+    "icon": "/img/heartopia/outros/quebra_cabeca.png",
+    "buyPrice": 1500,
+    "sellPrice": 1630
+  },
+  {
+    "id": "quebra_cabeca_36",
+    "name": "Quebra Cabeça 36 Peças",
+    "category": [
+      "quebra_cabeca"
+    ],
+    "icon": "/img/heartopia/outros/quebra_cabeca.png",
+    "buyPrice": 3000
+  },
+  {
+    "id": "quebra_cabeca_100",
+    "name": "Quebra Cabeça 100 Peças",
+    "category": [
+      "quebra_cabeca"
+    ],
+    "icon": "/img/heartopia/outros/quebra_cabeca.png"
   },
   {
     "id": "semente_margarida_vermelha",
@@ -1269,7 +1350,20 @@
     ],
     "description": "Sementes para plantar Margarida Vermelha.",
     "icon": "/img/heartopia/agricultura/semente_margarida_vermelha.png",
-    "buyPrice": 30
+    "buyPrice": 30,
+    "sellPrice": 15
+  },
+  {
+    "id": "semente_margarida_rosa",
+    "name": "Semente de Margarida Rosa",
+    "category": [
+      "resource",
+      "seed",
+      "flower"
+    ],
+    "description": "Sementes para plantar Margarida Rosa.",
+    "icon": "/img/heartopia/agricultura/semente_margarida_rosa.png",
+    "sellPrice": 25
   },
   {
     "id": "semente_margarida_branca",
@@ -1458,7 +1552,8 @@
       "food"
     ],
     "description": "Uma salada gourmet preparada pelos melhores chefs.",
-    "icon": "/img/heartopia/comidas/salada_rural.png"
+    "icon": "/img/heartopia/comidas/salada_rural.png",
+    "sellPrice": 90
   },
   {
     "id": "kit_reparo",
@@ -1468,7 +1563,18 @@
       "tool"
     ],
     "description": "Ferramentas essenciais para consertar equipamentos.",
-    "icon": "/img/heartopia/ferramentas/kit_reparo.png"
+    "icon": "/img/heartopia/ferramentas/kit_reparo.png",
+    "buyPrice": 200
+  },
+  {
+    "id": "kit_reparo_agil",
+    "name": "Kit de Reparo Agil",
+    "category": [
+      "resource",
+      "tool"
+    ],
+    "description": "Ferramentas essenciais para consertar equipamentos.",
+    "icon": "/img/heartopia/ferramentas/kit_reparo_agil.png"
   },
   {
     "id": "fluorita_impecavel",
@@ -1531,5 +1637,97 @@
     "description": "Reduz imediatamente 1 hora do tempo de crescimento do cultivo. Efeitos são cumulativos se usado repetidamente na mesma planta",
     "icon": "/img/heartopia/ferramentas/elixir_qualidade.png",
     "buyPrice": 200
+  },
+  {
+    "id": "amor_perfeito_vermelho",
+    "name": "Amor-perfeito Vermelho",
+    "category": [
+      "resource",
+      "agriculture",
+      "flor"
+    ],
+    "icon": "/img/heartopia/agricultura/amor_perfeito_vermelho.png",
+    "sellPrice": 100
+  },
+  {
+    "id": "amor_perfeito_amarelo",
+    "name": "Amor-perfeito Amarelo",
+    "category": [
+      "resource",
+      "agriculture",
+      "flor"
+    ],
+    "icon": "/img/heartopia/agricultura/amor_perfeito_amarelo.png",
+    "sellPrice": 100
+  },
+  {
+    "id": "margarida_vermelha",
+    "name": "Margarida Vermelha",
+    "category": [
+      "resource",
+      "agriculture",
+      "flor"
+    ],
+    "icon": "/img/heartopia/agricultura/margarida_vermelha.png",
+    "sellPrice": 100
+  },
+  {
+    "id": "margarida_branca",
+    "name": "Margarida Branca",
+    "category": [
+      "resource",
+      "agriculture",
+      "flor"
+    ],
+    "icon": "/img/heartopia/agricultura/margarida_branca.png",
+    "sellPrice": 100
+  },
+  {
+    "id": "papoula_himalaia_vermelha",
+    "name": "Papoula-Himalaia Vermelha",
+    "category": [
+      "resource",
+      "agriculture",
+      "flor",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/agricultura/papoula_himalaia_vermelha.png",
+    "sellPrice": 125
+  },
+  {
+    "id": "papoula_himalaia_amarela",
+    "name": "Papoula-Himalaia Amarela",
+    "category": [
+      "resource",
+      "agriculture",
+      "flor",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/agricultura/papoula_himalaia_amarela.png",
+    "sellPrice": 125
+  },
+  {
+    "id": "papoula_himalaia_branca",
+    "name": "Papoula-Himalaia Branca",
+    "category": [
+      "resource",
+      "agriculture",
+      "flor",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/agricultura/papoula_himalaia_branca.png",
+    "sellPrice": 125
+  },
+  {
+    "id": "papoula_himalaia_rosa",
+    "name": "Papoula-Himalaia Rosa",
+    "category": [
+      "resource",
+      "agriculture",
+      "flor",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/agricultura/papoula_himalaia_rosa.png",
+    "sellPrice": 190
   }
 ]
