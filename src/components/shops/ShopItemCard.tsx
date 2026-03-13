@@ -23,7 +23,7 @@ export interface ShopCondition {
 export interface ShopExchange {
   id: string;
   amount: number;
-  type?: 'item' | 'entity';
+  type?: 'item' | 'entity' | 'skill';
 }
 
 export interface ShopGroup {
@@ -34,7 +34,7 @@ export interface ShopGroup {
 
 export interface ShopItem {
   id: string;
-  type?: 'item' | 'entity';
+  type?: 'item' | 'entity' | 'skill';
   amount?: number;
   price?: number;
   currency?: string;
@@ -135,7 +135,7 @@ export function ShopItemCard({
             icon={icon}
             amount={shopItem.amount}
             isProduct={true}
-            type={isEntity ? 'entity' : 'item'}
+            type={shopItem.type || 'item'}
           />
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
@@ -162,7 +162,7 @@ export function ShopItemCard({
                       icon={exData?.icon}
                       amount={ex.amount}
                       size="medium"
-                      type={isExEntity ? 'entity' : 'item'}
+                      type={ex.type || 'item'}
                     />
                   );
                 })}

@@ -7,14 +7,15 @@ import {
 import { 
   Inventory,
   Bolt,
-  Category
+  Category,
+  AutoFixHigh
 } from "@mui/icons-material";
 
 export interface ItemChipProps {
   id: string;
   name?: string;
   amount?: number;
-  type?: 'item' | 'entity' | 'category';
+  type?: 'item' | 'entity' | 'category' | 'skill';
   icon?: string;
   isProduct?: boolean;
   size?: 'small' | 'medium' | 'large';
@@ -63,6 +64,9 @@ export function ItemChip({
     if (type === 'entity') {
       return <Bolt sx={{ fontSize: iconSize, color: 'secondary.main' }} />;
     }
+    if (type === 'skill') {
+      return <AutoFixHigh sx={{ fontSize: iconSize, color: 'warning.light' }} />;
+    }
     return <Inventory sx={{ fontSize: iconSize, color: isProduct ? 'primary.main' : 'text.disabled' }} />;
   };
 
@@ -79,6 +83,7 @@ export function ItemChip({
           backgroundColor: 'rgba(0,0,0,0.2)',
           borderColor: type === 'category' ? 'warning.dark' : 
                        type === 'entity' ? 'secondary.dark' : 
+                       type === 'skill' ? 'warning.main' :
                        isProduct ? 'primary.dark' : 'divider',
           borderRadius: 1,
           overflow: 'hidden',
