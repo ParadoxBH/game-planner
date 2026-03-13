@@ -25,7 +25,7 @@ import {
 interface GameShop {
   id: string;
   npcId: string;
-  resetType?: "diario" | "semanal";
+  resetType?: "diario" | "semanal" | "unique";
   resetTime?: string;
   conditions?: ShopCondition[];
   items: ShopItem[];
@@ -249,7 +249,7 @@ export function ShopsPage() {
                     />
                   )}
                   {(currentShop.resetTime ||
-                    (currentShop.resetType &&
+                    (currentShop.resetType && currentShop.resetType != "unique" &&
                       gameConfig?.resetes?.[currentShop.resetType])) && (
                     <Chip
                       size="small"
@@ -258,7 +258,7 @@ export function ShopsPage() {
                         currentShop.resetTime ||
                         (() => {
                           if (
-                            !currentShop.resetType ||
+                            !(currentShop.resetType && currentShop.resetType != "unique") ||
                             !gameConfig?.resetes?.[currentShop.resetType]
                           )
                             return "";

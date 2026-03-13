@@ -2,7 +2,6 @@ import {
   Box, 
   Typography, 
   Grid, 
-  Chip, 
   Stack,
   CircularProgress
 } from "@mui/material";
@@ -11,6 +10,8 @@ import { useGameData } from "../hooks/useGameData";
 import { useState, useMemo } from "react";
 import { StyledContainer } from "./common/StyledContainer";
 import { RecipeCard, type RecipeIngredient, type RecipeProduct, type RecipeUnlock } from "./recipes/RecipeCard";
+import { PickSelector } from "./common/PickSelector";
+import { Build } from "@mui/icons-material";
 
 interface GameRecipe {
   id: string;
@@ -161,31 +162,14 @@ export function RecipesPage() {
       onChangeSearch={setSearchTerm}
       search={{ placeholder: "Pesquisar receitas, ingredientes..." }}
       actionsStart={
-        <>
-          <Chip
-            label="Todas Estações"
-            onClick={() => setSelectedStation(null)}
-            sx={{
-              backgroundColor: !selectedStation ? 'primary.main' : 'rgba(255, 255, 255, 0.03)',
-              color: 'text.primary',
-              borderRadius: 1,
-              '&:hover': { backgroundColor: !selectedStation ? 'primary.main' : 'rgba(255, 255, 255, 0.08)' }
-            }}
-          />
-          {stationsList.map(station => (
-            <Chip
-              key={station}
-              label={station}
-              onClick={() => setSelectedStation(station)}
-              sx={{
-                backgroundColor: selectedStation === station ? 'primary.main' : 'rgba(255, 255, 255, 0.03)',
-                color: 'text.primary',
-                borderRadius: 1,
-                '&:hover': { backgroundColor: selectedStation === station ? 'primary.main' : 'rgba(255, 255, 255, 0.08)' }
-              }}
-            />
-          ))}
-        </>
+        <PickSelector
+          label="Estação"
+          value={selectedStation}
+          options={stationsList}
+          onChange={setSelectedStation}
+          allLabel="Todas Estações"
+          icon={<Build sx={{ fontSize: 18 }} />}
+        />
       }
     >
       {filteredRecipes.length > 0 ? (

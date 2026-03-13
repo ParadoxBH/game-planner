@@ -10,12 +10,18 @@ import {
   Tooltip
 } from "@mui/material";
 import { 
-  Inventory
+  Inventory,
+  Sell,
+  ShoppingCart,
+  SwapHoriz
 } from "@mui/icons-material";
 import { useParams } from "react-router-dom";
 import { useGameData } from "../hooks/useGameData";
 import { useState, useMemo } from "react";
 import { StyledContainer } from "./common/StyledContainer";
+import { FormControlLabel, Switch } from "@mui/material";
+import { ItemChip } from "./common/ItemChip";
+import { PickSelector } from "./common/PickSelector";
 
 interface GameItem {
   id: string;
@@ -23,6 +29,8 @@ interface GameItem {
   description: string;
   category?: string | string[];
   icon?: string;
+  sellPrice?: number;
+  buyPrice?: number;
 }
 
 export function ItemsPage() {
@@ -30,6 +38,8 @@ export function ItemsPage() {
   const { data: items, loading, error } = useGameData<GameItem[]>(gameId, "items");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [tradeStatus, setTradeStatus] = useState<string | null>(null);
+  const [showPrices, setShowPrices] = useState(false);
 
   const categories = useMemo(() => {
     if (!items) return [];
@@ -55,9 +65,21 @@ export function ItemsPage() {
       const categoriesList = Array.isArray(itemCats) ? itemCats : (itemCats ? [itemCats] : []);
       
       const matchesCategory = !selectedCategory || categoriesList.includes(selectedCategory);
-      return matchesSearch && matchesCategory;
+
+      let matchesTradeStatus = true;
+      if (tradeStatus === "Compraveis") {
+        matchesTradeStatus = item.buyPrice !== undefined;
+      } else if (tradeStatus === "Vendiveis") {
+        matchesTradeStatus = item.sellPrice !== undefined;
+      } else if (tradeStatus === "Não Comercializados") {
+        matchesTradeStatus = item.buyPrice === undefined && item.sellPrice === undefined;
+      } else if (tradeStatus === "Comercializados") {
+        matchesTradeStatus = item.buyPrice !== undefined || item.sellPrice !== undefined;
+      }
+
+      return matchesSearch && matchesCategory && matchesTradeStatus;
     });
-  }, [items, searchTerm, selectedCategory]);
+  }, [items, searchTerm, selectedCategory, tradeStatus]);
 
   if (loading) {
     return (
@@ -84,29 +106,36 @@ export function ItemsPage() {
       search={{ placeholder: "Pesquisar itens..." }}
       actionsStart={
         <>
-          <Chip
-            label="Todos"
-            onClick={() => setSelectedCategory(null)}
-            sx={{
-              backgroundColor: !selectedCategory ? 'primary.main' : 'rgba(255, 255, 255, 0.03)',
-              color: 'text.primary',
-              borderRadius: 1,
-              '&:hover': { backgroundColor: !selectedCategory ? 'primary.main' : 'rgba(255, 255, 255, 0.08)' }
-            }}
+          <PickSelector
+            label="Categoria"
+            value={selectedCategory}
+            options={categories}
+            onChange={setSelectedCategory}
           />
-          {categories.map(cat => (
-            <Chip
-              key={cat}
-              label={cat}
-              onClick={() => setSelectedCategory(cat)}
-              sx={{
-                backgroundColor: selectedCategory === cat ? 'primary.main' : 'rgba(255, 255, 255, 0.03)',
-                color: 'text.primary',
-                borderRadius: 1,
-                '&:hover': { backgroundColor: selectedCategory === cat ? 'primary.main' : 'rgba(255, 255, 255, 0.08)' }
-              }}
-            />
-          ))}
+          <PickSelector
+            label="Status"
+            value={tradeStatus}
+            options={["Compraveis", "Vendiveis", "Comercializados", "Não Comercializados"]}
+            onChange={setTradeStatus}
+            icon={<SwapHoriz sx={{ fontSize: 18 }} />}
+          />
+          <Box sx={{ flexGrow: 1 }} />
+          <FormControlLabel
+            control={
+              <Switch 
+                checked={showPrices} 
+                onChange={(e) => setShowPrices(e.target.checked)} 
+                color="primary"
+                size="small"
+              />
+            }
+            label={
+              <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 600 }}>
+                Mostrar Preços
+              </Typography>
+            }
+            sx={{ ml: 1 }}
+          />
         </>
       }
     >
@@ -169,7 +198,7 @@ export function ItemsPage() {
                   <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.5)', mb: 2, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                     {item.description || "Nenhuma descrição disponível para este item."}
                   </Typography>
-                  <Stack direction="row" spacing={1}>
+                  <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
                     <Tooltip title="ID do Item">
                       <Chip 
                         size="small" 
@@ -183,6 +212,37 @@ export function ItemsPage() {
                         }} 
                       />
                     </Tooltip>
+
+                    {showPrices && (item.sellPrice !== undefined || item.buyPrice !== undefined) && (
+                      <Stack direction="row" spacing={0.5}>
+                        {item.buyPrice !== undefined && (
+                          <Tooltip title="Preço de Compra">
+                            <Stack direction="row" spacing={0.5} alignItems="center" sx={{ 
+                              backgroundColor: 'rgba(76, 175, 80, 0.05)', 
+                              px: 0.5, 
+                              borderRadius: 0.5,
+                              border: '1px solid rgba(76, 175, 80, 0.1)'
+                            }}>
+                              <ShoppingCart sx={{ fontSize: 12, color: 'success.main' }} />
+                              <ItemChip id="ouro" amount={item.buyPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+                            </Stack>
+                          </Tooltip>
+                        )}
+                        {item.sellPrice !== undefined && (
+                          <Tooltip title="Preço de Venda">
+                            <Stack direction="row" spacing={0.5} alignItems="center" sx={{ 
+                              backgroundColor: 'rgba(255, 152, 0, 0.05)', 
+                              px: 0.5, 
+                              borderRadius: 0.5,
+                              border: '1px solid rgba(255, 152, 0, 0.1)'
+                            }}>
+                              <Sell sx={{ fontSize: 12, color: 'warning.main' }} />
+                              <ItemChip id="ouro" amount={item.sellPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+                            </Stack>
+                          </Tooltip>
+                        )}
+                      </Stack>
+                    )}
                   </Stack>
                 </CardContent>
               </Card>

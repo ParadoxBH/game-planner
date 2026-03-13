@@ -2,7 +2,6 @@ import {
   Box, 
   Typography, 
   Grid, 
-  Chip, 
   Stack,
   CircularProgress
 } from "@mui/material";
@@ -11,6 +10,8 @@ import { useGameData } from "../hooks/useGameData";
 import { useState, useMemo } from "react";
 import { StyledContainer } from "./common/StyledContainer";
 import { EntityCard, type GameEntity } from "./entities/EntityCard";
+import { PickSelector } from "./common/PickSelector";
+import { FilterList } from "@mui/icons-material";
 export type { GameEntity };
 
 export function EntityPage() {
@@ -72,31 +73,13 @@ export function EntityPage() {
       onChangeSearch={setSearchTerm}
       search={{ placeholder: "Pesquisar entidades..." }}
       actionsStart={showChips ? (
-        <>
-          <Chip
-            label="Todos"
-            onClick={() => setSelectedCategory(null)}
-            sx={{
-              backgroundColor: !selectedCategory ? 'primary.main' : 'rgba(255, 255, 255, 0.03)',
-              color: 'text.primary',
-              borderRadius: 1,
-              '&:hover': { backgroundColor: !selectedCategory ? 'primary.main' : 'rgba(255, 255, 255, 0.08)' }
-            }}
-          />
-          {categories.map(cat => (
-            <Chip
-              key={cat}
-              label={cat.charAt(0).toUpperCase() + cat.slice(1)}
-              onClick={() => setSelectedCategory(cat)}
-              sx={{
-                backgroundColor: selectedCategory === cat ? 'primary.main' : 'rgba(255, 255, 255, 0.03)',
-                color: 'text.primary',
-                borderRadius: 1,
-                '&:hover': { backgroundColor: selectedCategory === cat ? 'primary.main' : 'rgba(255, 255, 255, 0.08)' }
-              }}
-            />
-          ))}
-        </>
+        <PickSelector
+          label="Categoria"
+          value={selectedCategory}
+          options={categories}
+          onChange={setSelectedCategory}
+          icon={<FilterList sx={{ fontSize: 18 }} />}
+        />
       ) : null}
     >
       {/* Entities Grid */}
