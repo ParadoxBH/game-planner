@@ -857,7 +857,8 @@
     "category": "tool",
     "description": "Isca de Peixe",
     "icon": "/img/heartopia/ferramentas/isca.png",
-    "sellPrice": 50
+    "sellPrice": 50,
+    "buyPrice": 200
   },
   {
     "id": "isca_peixe_fritas",
@@ -1488,10 +1489,23 @@
     "name": "Perfume de Sereia",
     "category": [
       "resource",
+      "fishing",
       "lure"
     ],
     "description": "Um perfume encantador que atrai peixes raros.",
     "icon": "/img/heartopia/ferramentas/perfume_sereia.png"
+  },
+  {
+    "id": "atrativo_sereia",
+    "name": "Atrativo de Sereia",
+    "category": [
+      "resource",
+      "fishing",
+      "lure"
+    ],
+    "description": "Por 1 minuto após o uso, atrai continuamente o cardume para a área de pesca onde foi usado. (Máx. 3 peixes ao mesmo tempo)",
+    "icon": "/img/heartopia/ferramentas/atrativo_sereia.png",
+    "buyPrice": 2000
   },
   {
     "id": "fertilizante",
@@ -1729,5 +1743,16 @@
     ],
     "icon": "/img/heartopia/agricultura/papoula_himalaia_rosa.png",
     "sellPrice": 190
+  },
+  {
+    "id": "vale_hobby_aprimorado_escultura_neve",
+    "name": "Vale Hobby Aprimorado de Escultura de Neve",
+    "category": [
+      "station",
+      "escultura_neve",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/stats/vale_hobby_aprimorado_escultura_neve.png"
+
   }
 ]

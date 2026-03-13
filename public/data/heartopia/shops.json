@@ -3,9 +3,10 @@
     "id": "blanc_shop",
     "npcId": "blanc",
     "resetType": "diario",
+    "name": "Loja de Jardinagem",
     "groups": [
       {
-        "name": "Geral",
+        "name": "Exclusivo da Gala da Neve",
         "items": [
           {
             "id": "semente_papoula_himalaia_vermelha",
@@ -46,7 +47,43 @@
                 "description": ""
               }
             ]
+          }
+        ]
+      },
+      {
+        "name": "Caixa de Plantas",
+        "items": [
+          {
+            "id": "caixa_planta",
+            "amount": 8,
+            "type": "entity",
+            "resetType": "unique"
           },
+          {
+            "id": "caixa_planta",
+            "amount": 8,
+            "type": "entity",
+            "resetType": "unique"
+          },
+          {
+            "id": "caixa_planta",
+            "amount": 8,
+            "price": 500,
+            "type": "entity",
+            "resetType": "unique"
+          },
+          {
+            "id": "caixa_planta",
+            "amount": 8,
+            "price": 1700,
+            "type": "entity",
+            "resetType": "unique"
+          }
+        ]
+      },
+      {
+        "name": "Semente de Cultivo",
+        "items": [
           {
             "id": "semente_tomate"
           },
@@ -64,7 +101,12 @@
           },
           {
             "id": "semente_cenoura"
-          },
+          }
+        ]
+      },
+      {
+        "name": "Semente de Flor",
+        "items": [
           {
             "id": "semente_margarida_vermelha"
           },
@@ -94,7 +136,12 @@
           },
           {
             "id": "semente_anturio_branco"
-          },
+          }
+        ]
+      },
+      {
+        "name": "Ferramenta Especial",
+        "items": [
           {
             "id": "fertilizante",
             "amount": 25,
@@ -123,9 +170,10 @@
     "id": "massimo_shop",
     "npcId": "massimo",
     "resetType": "diario",
+    "name": "Loja de Receitas",
     "groups": [
       {
-        "name": "Geral",
+        "name": "Exclusivo da Gala da Neve",
         "items": [
           {
             "id": "acucar_po",
@@ -137,7 +185,12 @@
                 "description": ""
               }
             ]
-          },
+          }
+        ]
+      },
+      {
+        "name": "Ingrediente",
+        "items": [
           {
             "id": "carne",
             "amount": 50
@@ -217,7 +270,7 @@
       },
       {
         "name": "Skin das Ferramentas",
-        "items":[
+        "items": [
           {
             "id": "mesa_artesao",
             "type": "entity",
@@ -228,7 +281,7 @@
       },
       {
         "name": "Caixa de Quebra-Cabeça",
-        "items":[
+        "items": [
           {
             "id": "quebra_cabeca_16",
             "amount": 5
@@ -247,7 +300,7 @@
       },
       {
         "name": "Ferramentas de Criação",
-        "items":[
+        "items": [
           {
             "id": "prancheta",
             "type": "entity"
@@ -288,6 +341,70 @@
           }
         ]
       }
+    ]
+  },
+  {
+    "id": "vanya_shop",
+    "npcId": "vanya",
+    "name": "Loja de Pesca",
+    "groups": [
+      {
+        "name": "Isca",
+        "items": [
+          {
+            "id": "isca",
+            "amount": 50
+          }
+        ]
+      },
+      {
+        "name": "Ferramenta Especial",
+        "items": [
+          {
+            "id": "atrativo_sereia",
+            "amount": 100,
+            "price": 1,
+            "currency": "estrela_desejavel"
+          },
+          {
+            "id": "atrativo_sereia",
+            "amount": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hobby_moda_shop",
+    "npcId": "azure",
+    "name": "Hobby da Moda",
+    "groups": [
+      {
+        "name": "Escultura de Neve",
+        "items": [
+          { 
+            "id": "escultura_neve",
+            "type": "ability",
+            "price": 100,
+            "currency": "estrela_desejavel",
+            "resetType": "unique"
+          },
+          { 
+            "id": "vale_hobby_aprimorado_escultura_neve",
+            "amount": 10,
+            "price": 50,
+            "currency": "estrela_desejavel",
+            "resetType": "unique"
+          },
+          { 
+            "id": "bancada_bola_neve",
+            "type": "entity",
+            "amount": 2,
+            "resetType": "unique"
+          }
+        ]
+      }
+
     ]
   }
 ]
