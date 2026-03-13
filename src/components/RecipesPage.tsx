@@ -15,7 +15,7 @@ import { Build } from "@mui/icons-material";
 
 interface GameRecipe {
   id: string;
-  name: string;
+  name?: string;
   stations?: string[];
   ProducedIn?: string[]; // Satisfactory format
   ingredients?: RecipeIngredient[];
@@ -109,14 +109,18 @@ export function RecipesPage() {
         }));
       }
 
+      const recipeProducts = products;
+      const fallbackName = recipe.name || (recipeProducts.length > 0 ? (recipeProducts[0].name || getSourceData('item', recipeProducts[0].id)?.name || recipeProducts[0].id) : recipe.id);
+
       return {
         ...recipe,
+        name: fallbackName,
         stations,
         ingredients,
-        products
+        products: recipeProducts
       };
     });
-  }, [recipes]);
+  }, [recipes, getSourceData]);
 
   const stationsList = useMemo(() => {
     const stations = new Set<string>();
