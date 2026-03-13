@@ -11,7 +11,7 @@ import {
   CardContent,
   CircularProgress,
 } from "@mui/material";
-import { Storefront, AccessTime, Refresh, Lock } from "@mui/icons-material";
+import { Storefront, AccessTime, Lock, Refresh } from "@mui/icons-material";
 import { useParams } from "react-router-dom";
 import { useGameData } from "../hooks/useGameData";
 import { useState, useMemo } from "react";
@@ -20,15 +20,16 @@ import {
   ShopItemCard,
   type ShopItem,
   type ShopCondition,
+  type ShopGroup
 } from "./shops/ShopItemCard";
 
 interface GameShop {
   id: string;
+  name?: string;
   npcId: string;
-  resetType?: "diario" | "semanal" | "unique";
   resetTime?: string;
   conditions?: ShopCondition[];
-  items: ShopItem[];
+  groups: ShopGroup[];
 }
 
 interface GameItem {
@@ -45,6 +46,8 @@ interface GameEntity {
   name: string;
   category?: string | string[];
   icon?: string;
+  buyPrice?: number;
+  sellPrice?: number;
 }
 
 interface GameEvent {
@@ -52,27 +55,9 @@ interface GameEvent {
   name: string;
 }
 
-interface GameConfig {
-  id: string;
-  resetes?: {
-    diario?: { horario: number };
-    semanal?: {
-      horario: number;
-      dia:
-        | "domingo"
-        | "segunda"
-        | "terca"
-        | "quarta"
-        | "quinta"
-        | "sexta"
-        | "sabado";
-    };
-  };
-}
 
 export function ShopsPage() {
   const { gameId } = useParams<{ gameId: string }>();
-  const { data: gameConfig } = useGameData<GameConfig>(gameId, "game");
   const { data: shops, loading: loadingShops } = useGameData<GameShop[]>(
     gameId,
     "shops",
@@ -173,7 +158,7 @@ export function ShopsPage() {
             return (
               <Tab
                 key={shop.id}
-                label={npc?.name || shop.npcId}
+                label={shop.name || npc?.name || shop.npcId}
                 icon={
                   npc?.icon ? (
                     <Avatar
@@ -228,7 +213,7 @@ export function ShopsPage() {
                   align="center"
                   sx={{ fontWeight: 700, mb: 1 }}
                 >
-                  {currentNpc?.name || currentShop.npcId}
+                  {currentShop.name || currentNpc?.name || currentShop.npcId}
                 </Typography>
 
                 <Stack
@@ -237,45 +222,11 @@ export function ShopsPage() {
                   justifyContent="center"
                   sx={{ mb: 2 }}
                 >
-                  {currentShop.resetType && (
-                    <Chip
-                      size="small"
-                      icon={<Refresh sx={{ fontSize: "1rem" }} />}
-                      label={`Reseta: ${currentShop.resetType === "diario" ? "Diário" : "Semanal"}`}
-                      sx={{
-                        backgroundColor: "rgba(255, 68, 0, 0.1)",
-                        color: "#ff4400",
-                      }}
-                    />
-                  )}
-                  {(currentShop.resetTime ||
-                    (currentShop.resetType && currentShop.resetType != "unique" &&
-                      gameConfig?.resetes?.[currentShop.resetType])) && (
+                  {currentShop.resetTime && (
                     <Chip
                       size="small"
                       icon={<AccessTime sx={{ fontSize: "1rem" }} />}
-                      label={
-                        currentShop.resetTime ||
-                        (() => {
-                          if (
-                            !(currentShop.resetType && currentShop.resetType != "unique") ||
-                            !gameConfig?.resetes?.[currentShop.resetType]
-                          )
-                            return "";
-                          const reset =
-                            gameConfig.resetes[currentShop.resetType];
-                          if (!reset) return "";
-
-                          const timeStr = `${String(reset.horario).padStart(2, "0")}:00`;
-                          if ("dia" in reset && reset.dia) {
-                            const diaCapitalized =
-                              reset.dia.charAt(0).toUpperCase() +
-                              reset.dia.slice(1);
-                            return `${diaCapitalized} ${timeStr}`;
-                          }
-                          return timeStr;
-                        })()
-                      }
+                      label={currentShop.resetTime}
                       sx={{ backgroundColor: "rgba(255, 255, 255, 0.05)" }}
                     />
                   )}
@@ -332,23 +283,46 @@ export function ShopsPage() {
             </Card>
           </Stack>
 
-          {/* Items List */}
-          <Stack flex={1} sx={{ overflowY: "auto" }}>
-            <Grid size={{ xs: 12, md: 8, lg: 9 }}>
-              <Grid container spacing={2}>
-                {currentShop.items.map((shopItem, idx) => (
-                  <Grid size={{ xs: 12, sm: 6, lg: 4 }} key={idx}>
-                    <ShopItemCard
-                      shopItem={shopItem}
-                      baseItem={itemsMap.get(shopItem.id)}
-                      currencyItem={itemsMap.get(shopItem.currency || "ouro")}
-                      eventsMap={eventsMap}
-                      itemsMap={itemsMap}
+          {/* Groups and Items List */}
+          <Stack flex={1} sx={{ overflowY: "auto", pr: 1 }}>
+            {currentShop.groups.map((group, idx) => (
+              <Box key={`group-${idx}`} sx={{ mb: 4 }}>
+                <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 2 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary' }}>
+                    {group.name}
+                  </Typography>
+                  {group.resetType && (
+                    <Chip
+                      size="small"
+                      icon={<Refresh sx={{ fontSize: "0.9rem" }} />}
+                      label={group.resetType === 'diario' ? 'Diário' : group.resetType === 'semanal' ? 'Semanal' : 'Único'}
+                      sx={{ 
+                        backgroundColor: 'rgba(255, 68, 0, 0.08)', 
+                        color: '#ff4400',
+                        height: 24,
+                        '& .MuiChip-label': { px: 1, fontWeight: 700, fontSize: '0.7rem' }
+                      }}
                     />
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
+                  )}
+                  <Box sx={{ flexGrow: 1, height: '1px', background: 'rgba(255, 255, 255, 0.05)' }} />
+                </Stack>
+                <Grid container spacing={2}>
+                  {group.items.map((shopItem: ShopItem, itemIdx: number) => (
+                    <Grid size={{ xs: 12, sm: 6, lg: 4 }} key={`group-item-${itemIdx}`}>
+                      <ShopItemCard
+                        shopItem={shopItem}
+                        baseItem={itemsMap.get(shopItem.id)}
+                        baseEntity={entitiesMap.get(shopItem.id)}
+                        currencyItem={itemsMap.get(shopItem.currency || "ouro")}
+                        eventsMap={eventsMap}
+                        itemsMap={itemsMap}
+                        entitiesMap={entitiesMap}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            ))}
           </Stack>
         </Stack>
       )}

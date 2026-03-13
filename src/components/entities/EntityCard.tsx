@@ -10,8 +10,11 @@ import {
 import { 
   Category as CategoryIcon,
   TravelExplore as RequirementsIcon,
-  Inventory as DropsIcon
+  Inventory as DropsIcon,
+  ShoppingCart,
+  Sell
 } from "@mui/icons-material";
+import { ItemChip } from "../common/ItemChip";
 
 export interface EntityDrop {
   itemId: string;
@@ -31,14 +34,17 @@ export interface GameEntity {
     maxQuant?: number;
   }[];
   drops?: EntityDrop[];
+  buyPrice?: number;
+  sellPrice?: number;
 }
 
 interface EntityCardProps {
   entity: GameEntity;
+  showPrices?: boolean;
   onClick: () => void;
 }
 
-export function EntityCard({ entity, onClick }: EntityCardProps) {
+export function EntityCard({ entity, showPrices, onClick }: EntityCardProps) {
   return (
     <Card sx={{ 
       backgroundColor: 'rgba(255, 255, 255, 0.02)', 
@@ -112,6 +118,37 @@ export function EntityCard({ entity, onClick }: EntityCardProps) {
             </Stack>
           )}
         </Stack>
+        
+        {showPrices && (entity.sellPrice !== undefined || entity.buyPrice !== undefined) && (
+          <Stack direction="row" spacing={0.5} sx={{ mb: 2 }}>
+            {entity.buyPrice !== undefined && (
+              <Tooltip title="Preço de Compra">
+                <Stack direction="row" spacing={0.5} alignItems="center" sx={{ 
+                  backgroundColor: 'rgba(76, 175, 80, 0.05)', 
+                  px: 0.5, 
+                  borderRadius: 0.5,
+                  border: '1px solid rgba(76, 175, 80, 0.1)'
+                }}>
+                  <ShoppingCart sx={{ fontSize: 12, color: 'success.main' }} />
+                  <ItemChip id="ouro" amount={entity.buyPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+                </Stack>
+              </Tooltip>
+            )}
+            {entity.sellPrice !== undefined && (
+              <Tooltip title="Preço de Venda">
+                <Stack direction="row" spacing={0.5} alignItems="center" sx={{ 
+                  backgroundColor: 'rgba(255, 152, 0, 0.05)', 
+                  px: 0.5, 
+                  borderRadius: 0.5,
+                  border: '1px solid rgba(255, 152, 0, 0.1)'
+                }}>
+                  <Sell sx={{ fontSize: 12, color: 'warning.main' }} />
+                  <ItemChip id="ouro" amount={entity.sellPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+                </Stack>
+              </Tooltip>
+            )}
+          </Stack>
+        )}
         
         <Box sx={{ mt: 'auto' }}>
           <Tooltip title="ID da Entidade">

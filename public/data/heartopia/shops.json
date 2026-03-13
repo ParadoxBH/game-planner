@@ -3,54 +3,191 @@
     "id": "blanc_shop",
     "npcId": "blanc",
     "resetType": "diario",
-    "items": [
-      { "id": "semente_papoula_himalaia_vermelha", "conditions": [{ "type": "event", "id": "gala_moda_neve", "description": "" }] },
-      { "id": "semente_papoula_himalaia_amarela", "conditions": [{ "type": "event", "id": "gala_moda_neve", "description": "" }] },
-      { "id": "semente_papoula_himalaia_branca", "conditions": [{ "type": "event", "id": "gala_moda_neve", "description": "" }] },
-      { "id": "semente_nabo", "conditions": [{ "type": "event", "id": "gala_moda_neve", "description": "" }] },
-      
-      { "id": "semente_tomate" },
-      { "id": "semente_batata" },
-      { "id": "semente_trigo" },
-      { "id": "semente_alface_americano" },
-      { "id": "semente_abacaxi" },
-      { "id": "semente_cenoura" },
-      { "id": "semente_margarida_vermelha" },
-      { "id": "semente_margarida_branca" },
-      { "id": "semente_amor_perfeito_vermelho" },
-      { "id": "semente_amor_perfeito_amarelo" },
-      { "id": "semente_papoula_vermelha" },
-      { "id": "semente_papoula_amarela" },
-      { "id": "semente_papoula_branca" },
-      { "id": "semente_anturio_vermelho" },
-      { "id": "semente_anturio_amarelo" },
-      { "id": "semente_anturio_branco" },
-
-      { "id": "fertilizante", "amount": 25, "resetType": "semanal" },
-      { "id": "fertilizante_qualidade", "amount": 12, "resetType": "semanal" },
-      { "id": "elixir", "amount": 8, "resetType": "semanal" },
-      { "id": "elixir_qualidade", "amount": 5, "resetType": "semanal" }
+    "groups": [
+      {
+        "name": "Geral",
+        "items": [
+          {
+            "id": "semente_papoula_himalaia_vermelha",
+            "conditions": [
+              {
+                "type": "event",
+                "id": "gala_moda_neve",
+                "description": ""
+              }
+            ]
+          },
+          {
+            "id": "semente_papoula_himalaia_amarela",
+            "conditions": [
+              {
+                "type": "event",
+                "id": "gala_moda_neve",
+                "description": ""
+              }
+            ]
+          },
+          {
+            "id": "semente_papoula_himalaia_branca",
+            "conditions": [
+              {
+                "type": "event",
+                "id": "gala_moda_neve",
+                "description": ""
+              }
+            ]
+          },
+          {
+            "id": "semente_nabo",
+            "conditions": [
+              {
+                "type": "event",
+                "id": "gala_moda_neve",
+                "description": ""
+              }
+            ]
+          },
+          {
+            "id": "semente_tomate"
+          },
+          {
+            "id": "semente_batata"
+          },
+          {
+            "id": "semente_trigo"
+          },
+          {
+            "id": "semente_alface_americano"
+          },
+          {
+            "id": "semente_abacaxi"
+          },
+          {
+            "id": "semente_cenoura"
+          },
+          {
+            "id": "semente_margarida_vermelha"
+          },
+          {
+            "id": "semente_margarida_branca"
+          },
+          {
+            "id": "semente_amor_perfeito_vermelho"
+          },
+          {
+            "id": "semente_amor_perfeito_amarelo"
+          },
+          {
+            "id": "semente_papoula_vermelha"
+          },
+          {
+            "id": "semente_papoula_amarela"
+          },
+          {
+            "id": "semente_papoula_branca"
+          },
+          {
+            "id": "semente_anturio_vermelho"
+          },
+          {
+            "id": "semente_anturio_amarelo"
+          },
+          {
+            "id": "semente_anturio_branco"
+          },
+          {
+            "id": "fertilizante",
+            "amount": 25,
+            "resetType": "semanal"
+          },
+          {
+            "id": "fertilizante_qualidade",
+            "amount": 12,
+            "resetType": "semanal"
+          },
+          {
+            "id": "elixir",
+            "amount": 8,
+            "resetType": "semanal"
+          },
+          {
+            "id": "elixir_qualidade",
+            "amount": 5,
+            "resetType": "semanal"
+          }
+        ]
+      }
     ]
   },
   {
     "id": "massimo_shop",
     "npcId": "massimo",
     "resetType": "diario",
-    "items": [
-      { "id": "acucar_po", "amount": 50, "conditions": [{ "type": "event", "id": "gala_moda_neve", "description": "" }] },
-      
-      { "id": "carne", "amount": 50 },
-      { "id": "ovo", "amount": 50 },
-      { "id": "leite", "amount": 50 },
-      { "id": "queijo", "amount": 50 },
-      { "id": "manteiga", "amount": 50 },
-      { "id": "graos_cafe", "amount": 50 },
-      { "id": "cha_preto", "amount": 50 },
-      { "id": "po_matcha", "amount": 50 },
-      { "id": "macarrao_arroz", "amount": 50 },
-      { "id": "feijao_azuki", "amount": 50 },
-      { "id": "oleo", "amount": 50 },
-      { "id": "ovo_pasteurizado", "amount": 50 }
+    "groups": [
+      {
+        "name": "Geral",
+        "items": [
+          {
+            "id": "acucar_po",
+            "amount": 50,
+            "conditions": [
+              {
+                "type": "event",
+                "id": "gala_moda_neve",
+                "description": ""
+              }
+            ]
+          },
+          {
+            "id": "carne",
+            "amount": 50
+          },
+          {
+            "id": "ovo",
+            "amount": 50
+          },
+          {
+            "id": "leite",
+            "amount": 50
+          },
+          {
+            "id": "queijo",
+            "amount": 50
+          },
+          {
+            "id": "manteiga",
+            "amount": 50
+          },
+          {
+            "id": "graos_cafe",
+            "amount": 50
+          },
+          {
+            "id": "cha_preto",
+            "amount": 50
+          },
+          {
+            "id": "po_matcha",
+            "amount": 50
+          },
+          {
+            "id": "macarrao_arroz",
+            "amount": 50
+          },
+          {
+            "id": "feijao_azuki",
+            "amount": 50
+          },
+          {
+            "id": "oleo",
+            "amount": 50
+          },
+          {
+            "id": "ovo_pasteurizado",
+            "amount": 50
+          }
+        ]
+      }
     ]
   }
 ]

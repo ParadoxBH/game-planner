@@ -9,7 +9,8 @@ import {
 import { 
   Lock,
   Payments,
-  SwapHoriz
+  SwapHoriz,
+  Refresh
 } from "@mui/icons-material";
 import { ItemChip } from "../common/ItemChip";
 
@@ -22,13 +23,22 @@ export interface ShopCondition {
 export interface ShopExchange {
   id: string;
   amount: number;
+  type?: 'item' | 'entity';
+}
+
+export interface ShopGroup {
+  name: string;
+  resetType?: "diario" | "semanal" | "unique";
+  items: ShopItem[];
 }
 
 export interface ShopItem {
   id: string;
+  type?: 'item' | 'entity';
   amount?: number;
   price?: number;
   currency?: string;
+  resetType?: "diario" | "semanal" | "unique";
   exchange?: ShopExchange[];
   conditions?: ShopCondition[];
 }
@@ -36,19 +46,31 @@ export interface ShopItem {
 interface ShopItemCardProps {
   shopItem: ShopItem;
   baseItem?: { name: string; icon?: string; buyPrice?: number; sellPrice?: number };
+  baseEntity?: { name: string; icon?: string; buyPrice?: number; sellPrice?: number };
   currencyItem?: { name: string; icon?: string };
   eventsMap: Map<string, { name: string }>;
   itemsMap: Map<string, { name: string; icon?: string }>;
+  entitiesMap: Map<string, { name: string; icon?: string }>;
 }
 
 export function ShopItemCard({ 
   shopItem, 
   baseItem, 
+  baseEntity,
   currencyItem, 
   eventsMap, 
-  itemsMap 
+  itemsMap,
+  entitiesMap
 }: ShopItemCardProps) {
-  const price = shopItem.price ?? baseItem?.buyPrice ?? baseItem?.sellPrice ?? '???';
+  const isEntity = shopItem.type === 'entity';
+  const name = isEntity ? baseEntity?.name : baseItem?.name;
+  const icon = isEntity ? baseEntity?.icon : baseItem?.icon;
+  
+  const price = shopItem.price ?? 
+                (isEntity 
+                  ? (baseEntity?.buyPrice ?? baseEntity?.sellPrice) 
+                  : (baseItem?.buyPrice ?? baseItem?.sellPrice)) ?? 
+                '???';
   const currency = shopItem.currency || 'ouro';
 
   return (
@@ -65,6 +87,27 @@ export function ShopItemCard({
         borderColor: 'rgba(255, 68, 0, 0.2)'
       }
     }}>
+      {shopItem.resetType && (
+        <Box sx={{ 
+          position: 'absolute', 
+          bottom: 8, 
+          right: 8, 
+          zIndex: 2,
+          background: 'rgba(255, 68, 0, 0.1)',
+          borderRadius: 1,
+          px: 0.8,
+          py: 0.3,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 0.5,
+          border: '1px solid rgba(255, 68, 0, 0.2)'
+        }}>
+          <Refresh sx={{ color: '#ff4400', fontSize: '0.9rem' }} />
+          <Typography variant="caption" sx={{ color: '#ff4400', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.65rem' }}>
+            {shopItem.resetType === 'diario' ? 'Diário' : shopItem.resetType === 'semanal' ? 'Semanal' : 'Único'}
+          </Typography>
+        </Box>
+      )}
       {shopItem.conditions && shopItem.conditions.length > 0 && (
         <Box sx={{ 
           position: 'absolute', 
@@ -88,14 +131,15 @@ export function ShopItemCard({
         <Stack direction="row" spacing={2} alignItems="center">
           <ItemChip 
             id={shopItem.id}
-            name={baseItem?.name}
-            icon={baseItem?.icon}
+            name={name}
+            icon={icon}
             amount={shopItem.amount}
             isProduct={true}
+            type={isEntity ? 'entity' : 'item'}
           />
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
-              {baseItem?.name || shopItem.id}
+              {name || shopItem.id}
             </Typography>
           </Box>
         </Stack>
@@ -108,15 +152,17 @@ export function ShopItemCard({
               </Typography>
               <Stack direction="row" spacing={1} flexWrap="wrap">
                 {shopItem.exchange.map((ex, i) => {
-                  const exItem = itemsMap.get(ex.id);
+                  const isExEntity = ex.type === 'entity';
+                  const exData = isExEntity ? entitiesMap.get(ex.id) : itemsMap.get(ex.id);
                   return (
                     <ItemChip 
                       key={i}
                       id={ex.id}
-                      name={exItem?.name}
-                      icon={exItem?.icon}
+                      name={exData?.name}
+                      icon={exData?.icon}
                       amount={ex.amount}
                       size="medium"
+                      type={isExEntity ? 'entity' : 'item'}
                     />
                   );
                 })}
