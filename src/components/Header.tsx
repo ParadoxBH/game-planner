@@ -76,7 +76,8 @@ export function Header() {
     const sets = new Set<string>();
     items.forEach(item => {
       const cats = Array.isArray(item.category) ? item.category : (item.category ? [item.category] : []);
-      cats.forEach((c: string) => sets.add(c.toLowerCase()));
+      if(cats.length > 0)
+        sets.add(cats[0].toLowerCase());
     });
     return Array.from(sets).sort().map(cat => ({
       label: cat.charAt(0).toUpperCase() + cat.slice(1),
