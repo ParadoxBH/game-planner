@@ -9,6 +9,8 @@ import { EntityPage } from "./components/EntityPage";
 import { ShopsPage } from "./components/ShopsPage";
 import { EventsPage } from "./components/EventsPage";
 import { CodesPage } from "./components/CodesPage";
+import { CalculatorPage } from "./components/CalculatorPage";
+import { CraftingCalculator } from "./components/calculators/CraftingCalculator";
 import { Typography } from "@mui/material";
 
 export function RoutesPage() {
@@ -30,6 +32,10 @@ export function RoutesPage() {
           <Route path="shops/list/:category?" element={<ShopsPage />} />
           <Route path="events" element={<EventsPage />} />
           <Route path="codes" element={<CodesPage />} />
+          <Route path="calculator">
+            <Route index element={<CalculatorPage />} />
+            <Route path="crafting" element={<CraftingCalculator />} />
+          </Route>
           <Route path="quests" element={<Typography p={4} variant="h4">Lista de Missões (Em Breve)</Typography>} />
         </Route>
 

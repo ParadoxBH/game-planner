@@ -1,35 +1,15 @@
-import { Button, Typography, Stack, useTheme, Grid, Card, Box, CardContent, CardActionArea } from "@mui/material";
+import { Typography, Grid, Card, Box, CardActionArea } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
-import { 
-  Map, 
-  Construction, 
-  Pets, 
-  Assignment, 
-  Storefront, 
-  Restaurant, 
-  Event, 
-  ConfirmationNumber 
-} from "@mui/icons-material";
 import { StyledContainer } from "./common/StyledContainer";
+import { useNavigation } from "../hooks/useNavigation";
 
 export function GameDashboard() {
-  const theme = useTheme();
-  const { gameId } = useParams();
+  const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
+  const { menuItems } = useNavigation(gameId || null);
 
   // Função auxiliar para capitalizar a primeira letra
   const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
-  const menuItems = [
-    { title: "Mapa Interativo", icon: <Map sx={{ fontSize: 40 }} />, path: `/game/${gameId}/map`, color: theme.palette.primary.main },
-    { title: "Itens & Recursos", icon: <Construction sx={{ fontSize: 40 }} />, path: `/game/${gameId}/items/list`, color: "#4caf50" },
-    { title: "Entidades", icon: <Pets sx={{ fontSize: 40 }} />, path: `/game/${gameId}/entity/list`, color: "#ff9800" },
-    { title: "Receitas", icon: <Restaurant sx={{ fontSize: 40 }} />, path: `/game/${gameId}/recipes/list`, color: "#f44336" },
-    { title: "Lojas", icon: <Storefront sx={{ fontSize: 40 }} />, path: `/game/${gameId}/shops/list`, color: "#9c27b0" },
-    { title: "Eventos", icon: <Event sx={{ fontSize: 40 }} />, path: `/game/${gameId}/events`, color: "#e91e63" },
-    { title: "Códigos", icon: <ConfirmationNumber sx={{ fontSize: 40 }} />, path: `/game/${gameId}/codes`, color: "#795548" },
-    { title: "Missões", icon: <Assignment sx={{ fontSize: 40 }} />, path: `/game/${gameId}/quests`, color: "#2196f3" },
-  ];
 
   return (
     <StyledContainer
@@ -38,8 +18,9 @@ export function GameDashboard() {
     >
       <Grid container spacing={3}>
         {menuItems.map((item) => (
-          <Grid size={{ xs: 12, sm: 6, md: 3 }} key={item.title}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }} key={item.id}>
             <Card sx={{ 
+              height: '100%',
               borderRadius: 2, 
               backgroundColor: 'rgba(255, 255, 255, 0.02)',
               border: '1px solid rgba(255, 255, 255, 0.05)',
@@ -50,17 +31,21 @@ export function GameDashboard() {
                 borderColor: item.color
               }
             }}>
-              <CardActionArea onClick={() => navigate(item.path)} sx={{ p: 4, textAlign: 'center' }}>
+              <CardActionArea onClick={() => navigate(item.path)} sx={{ p: 4, textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <Box sx={{ 
                   color: item.color, 
                   mb: 2,
                   display: 'flex',
                   justifyContent: 'center'
                 }}>
-                  {item.icon}
+                  {item.icon && (
+                    <Box sx={{ "& svg": { fontSize: 40 } }}>
+                      {item.icon}
+                    </Box>
+                  )}
                 </Box>
                 <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                  {item.title}
+                  {item.label}
                 </Typography>
               </CardActionArea>
             </Card>
