@@ -178,7 +178,7 @@ export function EntityPage() {
                 entity={entity}
                 showPrices={showPrices}
                 onClick={() =>
-                  navigate(`/game/${gameId}/map?entity=${entity.id}`)
+                  navigate(`/game/${gameId}/entity/view/${entity.id}`)
                 }
               />
             </Grid>

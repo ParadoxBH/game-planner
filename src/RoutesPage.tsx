@@ -6,6 +6,7 @@ import { GameDashboard } from "./components/GameDashboard";
 import { ItemsPage } from "./components/ItemsPage";
 import { RecipesPage } from "./components/RecipesPage";
 import { EntityPage } from "./components/EntityPage";
+import { EntityDetailsPage } from "./components/EntityDetailsPage";
 import { ShopsPage } from "./components/ShopsPage";
 import { EventsPage } from "./components/EventsPage";
 import { CodesPage } from "./components/CodesPage";
@@ -31,6 +32,7 @@ export function RoutesPage() {
           <Route path="items/view/:itemId" element={<ItemDetailsPage />} />
           <Route path="recipes/list/:category?" element={<RecipesPage />} />
           <Route path="entity/list/:category?" element={<EntityPage />} />
+          <Route path="entity/view/:entityId" element={<EntityDetailsPage />} />
           <Route path="shops/list/:category?" element={<ShopsPage />} />
           <Route path="events" element={<EventsPage />} />
           <Route path="codes" element={<CodesPage />} />

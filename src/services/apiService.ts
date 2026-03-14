@@ -85,9 +85,17 @@ export class ApiService {
       maxQuant: d.maxQuant,
     }));
 
+    const recipes = this.data.recipes
+      .map((r) => this.normalizeRecipe(r))
+      .filter((r) => r.normalizedProducts.some((p) => p.id === entityId && p.type === "entity"));
+
+    const spawns = this.data.spawns.filter((s) => s.entityId === entityId);
+
     return {
       entity,
       drops,
+      recipes,
+      spawns,
     };
   }
 

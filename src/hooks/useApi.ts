@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
-import { loadGameData } from "../services/dataLoader";
+import { loadGameData, loadGamesList } from "../services/dataLoader";
 import { ApiService } from "../services/apiService";
 import type { GameDataPayload, NormalizedRecipe } from "../types/apiModels";
-import type { Item, Entity } from "../types/gameModels";
+import type { Item, Entity, GameInfo } from "../types/gameModels";
 
 export function useApi(gameId: string | undefined) {
   const [data, setData] = useState<GameDataPayload | null>(null);
@@ -21,10 +21,15 @@ export function useApi(gameId: string | undefined) {
 
     const datasets = ["items", "recipes", "entity", "shops", "events", "spawns", "codes"];
 
-    Promise.all(datasets.map((ds) => loadGameData<any>(gameId, ds)))
-      .then(([items, recipes, entities, shops, events, spawns, codes]) => {
+    Promise.all([
+      ...(datasets.map((ds) => loadGameData<any>(gameId, ds)) as Promise<any>[]),
+      loadGamesList()
+    ])
+      .then((results) => {
+        const [items, recipes, entities, shops, events, spawns, codes, games] = results as any[];
         if (isMounted) {
-          setData({ items, recipes, entities, shops, events, spawns, codes });
+          const gameInfo = games.find((g: any) => g.id === gameId);
+          setData({ items, recipes, entities, shops, events, spawns, codes, gameInfo });
           setLoading(false);
         }
       })

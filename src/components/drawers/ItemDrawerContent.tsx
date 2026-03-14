@@ -163,6 +163,30 @@ export const ItemDrawerContent = ({
                       .join(" ")}
                   </Typography>
                 </Stack>
+                <Stack direction="row" spacing={1} alignItems="center" sx={{ ml: 'auto' }}>
+                  {(() => {
+                    const drop = entity.drops?.find(d => d.itemId === itemId);
+                    if (!drop) return null;
+                    return (
+                      <>
+                        <Typography variant="caption" sx={{ color: "primary.main", fontWeight: 700 }}>
+                          {(drop.chance * 100).toFixed(0)}%
+                        </Typography>
+                        <Box sx={{ 
+                          px: 0.8, 
+                          py: 0.2, 
+                          borderRadius: 0.5, 
+                          bgcolor: 'rgba(255,255,255,0.05)',
+                          border: '1px solid rgba(255,255,255,0.1)'
+                        }}>
+                          <Typography variant="caption" sx={{ fontWeight: 800, fontSize: '10px' }}>
+                            {drop.maxQuant ? `${drop.quant}-${drop.maxQuant}` : `x${drop.quant}`}
+                          </Typography>
+                        </Box>
+                      </>
+                    );
+                  })()}
+                </Stack>
               </DataCard>
             ))}
           </Stack>

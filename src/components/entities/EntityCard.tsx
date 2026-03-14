@@ -14,6 +14,7 @@ import {
   ShoppingCart,
   Sell
 } from "@mui/icons-material";
+import { useNavigate, useParams } from "react-router-dom";
 import { ItemChip } from "../common/ItemChip";
 import type { Entity } from "../../types/gameModels";
 
@@ -24,6 +25,9 @@ interface EntityCardProps {
 }
 
 export function EntityCard({ entity, showPrices, onClick }: EntityCardProps) {
+  const navigate = useNavigate();
+  const { gameId } = useParams<{ gameId: string }>();
+
   return (
     <Card sx={{ 
       backgroundColor: 'rgba(255, 255, 255, 0.02)', 
@@ -128,15 +132,18 @@ export function EntityCard({ entity, showPrices, onClick }: EntityCardProps) {
             )}
           </Stack>
         )}
-        
+
         <Box sx={{ mt: 'auto' }}>
           <Tooltip title="ID da Entidade">
-            <Chip 
-              size="small" 
-              label={entity.id} 
-              sx={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.03)', 
-                color: 'text.disabled', 
+            <Chip
+              size="small"
+              label={entity.id}
+              onClick={() =>
+                  navigate(`/game/${gameId}/entity/view/${entity.id}`)
+                }
+              sx={{
+                backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                color: 'text.disabled',
                 fontSize: '0.6rem',
                 fontFamily: 'monospace',
                 borderRadius: 0.5,

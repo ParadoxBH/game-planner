@@ -1,10 +1,10 @@
-import type { Item, Recipe, Entity, Shop, GameEvent, RedemptionCode } from "./gameModels";
+import type { Item, Recipe, Entity, Shop, GameEvent, RedemptionCode, GameDataTypes } from "./gameModels";
 
 export interface NormalizedRecipe extends Recipe {
   normalizedName: string;
   normalizedStations: string[];
-  normalizedIngredients: { id: string; name?: string; amount: number }[];
-  normalizedProducts: { id: string; name?: string; amount: number }[];
+  normalizedIngredients: { id: string; name?: string; amount: number; type?: GameDataTypes }[];
+  normalizedProducts: { id: string; name?: string; amount: number; type?: GameDataTypes }[];
 }
 
 export interface ItemDetails {
@@ -31,6 +31,8 @@ export interface EntityDetails {
     quant: number;
     maxQuant?: number;
   }[];
+  recipes: NormalizedRecipe[];
+  spawns: any[];
 }
 
 export interface ShopDetails {
@@ -46,4 +48,5 @@ export interface GameDataPayload {
   events: GameEvent[];
   spawns: any[];
   codes: RedemptionCode[];
+  gameInfo?: any;
 }

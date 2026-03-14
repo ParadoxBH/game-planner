@@ -114,10 +114,16 @@ export function ItemChip({
   };
 
   const handleClick = (e: React.MouseEvent) => {
-    if (type === 'item' && !disableLink && gameId) {
-      e.preventDefault();
-      e.stopPropagation();
-      navigate(`/game/${gameId}/items/view/${id}`);
+    if (!disableLink && gameId) {
+      if (type === 'item') {
+        e.preventDefault();
+        e.stopPropagation();
+        navigate(`/game/${gameId}/items/view/${id}`);
+      } else if (type === 'entity') {
+        e.preventDefault();
+        e.stopPropagation();
+        navigate(`/game/${gameId}/entity/view/${id}`);
+      }
     }
   };
 
