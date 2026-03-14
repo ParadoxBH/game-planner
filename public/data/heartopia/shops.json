@@ -101,6 +101,12 @@
           },
           {
             "id": "semente_cenoura"
+          },
+          {
+            "id": "semente_morango"
+          },
+          {
+            "id": "semente_milho"
           }
         ]
       },
@@ -136,6 +142,24 @@
           },
           {
             "id": "semente_anturio_branco"
+          },
+          {
+            "id": "semente_copo_leite_vermelha"
+          },
+          {
+            "id": "semente_copo_leite_amarela"
+          },
+          {
+            "id": "semente_copo_leite_branca"
+          },
+          {
+            "id": "semente_gloria_manha_vermelha"
+          },
+          {
+            "id": "semente_gloria_manha_amarela"
+          },
+          {
+            "id": "semente_gloria_manha_branca"
           }
         ]
       },
@@ -150,6 +174,18 @@
           {
             "id": "fertilizante_qualidade",
             "amount": 12,
+            "resetType": "semanal"
+          },
+          {
+            "id": "po_cultivo_arco_iris",
+            "amount": 100,
+            "resetType": "semanal",
+            "price": 2,
+            "currency": "estrela_desejavel"
+          },
+          {
+            "id": "po_cultivo_arco_iris",
+            "amount": 10,
             "resetType": "semanal"
           },
           {

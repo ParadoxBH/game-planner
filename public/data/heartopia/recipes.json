@@ -575,4 +575,54 @@
     "ingredients": [{ "type": "item", "id": "semente_anturio_branco", "amount": 1 }],
     "products": [{ "type": "item", "id": "anturio_branco", "amount": 1 }]
   }
+
+  ,
+  {
+    "id": "recipe_plantar_copo_leite_vermelha",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_copo_leite_vermelha", "amount": 1 }],
+    "products": [{ "type": "item", "id": "copo_leite_vermelha", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_copo_leite_amarela",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_copo_leite_amarela", "amount": 1 }],
+    "products": [{ "type": "item", "id": "copo_leite_amarela", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_copo_leite_branca",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_copo_leite_branca", "amount": 1 }],
+    "products": [{ "type": "item", "id": "copo_leite_branca", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_gloria_manha_branca",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_gloria_manha_branca", "amount": 1 }],
+    "products": [{ "type": "item", "id": "gloria_manha_branca", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_gloria_manha_amarela",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_gloria_manha_amarela", "amount": 1 }],
+    "products": [{ "type": "item", "id": "gloria_manha_amarela", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_gloria_manha_branca",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_gloria_manha_branca", "amount": 1 }],
+    "products": [{ "type": "item", "id": "gloria_manha_branca", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_milho",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_milho", "amount": 1 }],
+    "products": [{ "type": "item", "id": "milho", "amount": 1 }]
+  },
+  {
+    "id": "recipe_plantar_morango",
+    "stations": ["caixa_planta"],
+    "ingredients": [{ "type": "item", "id": "semente_morango", "amount": 1 }],
+    "products": [{ "type": "item", "id": "morango", "amount": 1 }]
+  }
 ]

@@ -1475,6 +1475,39 @@
     "buyPrice": 60
   },
   {
+    "id": "anturio_vermelho",
+    "name": "Antúrio Vermelho",
+    "category": [
+      "resource",
+      "seed",
+      "flower"
+    ],
+    "description": "Plantar Antúrio Vermelho.",
+    "icon": "/img/heartopia/agricultura/anturio_vermelho.png"
+  },
+  {
+    "id": "anturio_amarelo",
+    "name": "Semente de Antúrio Amarelo",
+    "category": [
+      "resource",
+      "seed",
+      "flower"
+    ],
+    "description": "Plantar Antúrio Amarelo.",
+    "icon": "/img/heartopia/agricultura/anturio_amarela.png"
+  },
+  {
+    "id": "anturio_branco",
+    "name": "Semente de Antúrio Branco",
+    "category": [
+      "resource",
+      "seed",
+      "flower"
+    ],
+    "description": "Plantar Antúrio Branco.",
+    "icon": "/img/heartopia/agricultura/anturio_branco.png"
+  },
+  {
     "id": "moeda_gala_moda_neve",
     "name": "Fichas de Moda",
     "category": [
@@ -1753,6 +1786,173 @@
       "gala_moda_neve"
     ],
     "icon": "/img/heartopia/stats/vale_hobby_aprimorado_escultura_neve.png"
-
+  },
+  {
+    "id": "po_cultivo_arco_iris",
+    "name": "Pó de Cultivo Arco-íris",
+    "category": [
+      "agriculture"
+    ],
+    "icon": "/img/heartopia/ferramentas/po_cultivo_arco_iris.png",
+    "buyPrice": 3000
+  },
+  {
+    "id": "semente_gloria_manha_vermelha",
+    "name": "Semente de Glória-da-manhã Vermelha",
+    "category": [
+      "resource",
+      "seed",
+      "flower"
+    ],
+    "icon": "/img/heartopia/agricultura/semente_gloria_manha_vermelha.png",
+    "buyPrice": 90
+  },
+  {
+    "id": "semente_gloria_manha_amarela",
+    "name": "Semente de Glória-da-manhã Amarela",
+    "category": [
+      "resource",
+      "seed",
+      "flower"
+    ],
+    "icon": "/img/heartopia/agricultura/semente_gloria_manha_amarela.png",
+    "buyPrice": 90
+  },
+  {
+    "id": "semente_gloria_manha_branca",
+    "name": "Semente de Glória-da-manhã Abranca",
+    "category": [
+      "resource",
+      "seed",
+      "flower"
+    ],
+    "icon": "/img/heartopia/agricultura/semente_gloria_manha_branca.png",
+    "buyPrice": 90
+  },
+  {
+    "id": "semente_copo_leite_vermelha",
+    "name": "Semente de Copo-de-leite Vermelha",
+    "category": [
+      "resource",
+      "seed",
+      "flower"
+    ],
+    "icon": "/img/heartopia/agricultura/semente_copo_leite_vermelha.png",
+    "buyPrice": 90
+  },
+  {
+    "id": "semente_copo_leite_amarela",
+    "name": "Semente de Copo-de-leite Amarela",
+    "category": [
+      "resource",
+      "seed",
+      "flower"
+    ],
+    "icon": "/img/heartopia/agricultura/semente_copo_leite_amarela.png",
+    "buyPrice": 90
+  },
+  {
+    "id": "semente_copo_leite_branca",
+    "name": "Semente de Copo-de-leite Branca",
+    "category": [
+      "resource",
+      "seed",
+      "flower"
+    ],
+    "icon": "/img/heartopia/agricultura/semente_copo_leite_branca.png",
+    "buyPrice": 90
+  },
+  {
+    "id": "gloria_manha_vermelha",
+    "name": "Glória-da-manhã Vermelha",
+    "category": [
+      "resource",
+      "flower"
+    ],
+    "icon": "/img/heartopia/agricultura/gloria_manha_vermelha.png"
+  },
+  {
+    "id": "gloria_manha_amarela",
+    "name": "Glória-da-manhã Amarela",
+    "category": [
+      "resource",
+      "flower"
+    ],
+    "icon": "/img/heartopia/agricultura/gloria_manha_amarela.png"
+  },
+  {
+    "id": "gloria_manha_branca",
+    "name": "Glória-da-manhã Branca",
+    "category": [
+      "resource",
+      "flower"
+    ],
+    "icon": "/img/heartopia/agricultura/gloria_manha_branca.png"
+  },
+  {
+    "id": "copo_leite_vermelha",
+    "name": "Copo-de-leite Vermelha",
+    "category": [
+      "resource",
+      "flower"
+    ],
+    "icon": "/img/heartopia/agricultura/copo_leite_vermelha.png"
+  },
+  {
+    "id": "copo_leite_amarela",
+    "name": "Copo-de-leite Amarela",
+    "category": [
+      "resource",
+      "flower"
+    ],
+    "icon": "/img/heartopia/agricultura/copo_leite_amarela.png"
+  },
+  {
+    "id": "copo_leite_branca",
+    "name": "Copo-de-leite Branca",
+    "category": [
+      "resource",
+      "flower"
+    ],
+    "icon": "/img/heartopia/agricultura/copo_leite_branca.png"
+  },
+  {
+    "id": "semente_morango",
+    "name": "Semente de Morango",
+    "category": [
+      "resource",
+      "seed",
+      "vegetable"
+    ],
+    "icon": "/img/heartopia/agricultura/semente_morango.png",
+    "buyPrice": 125
+  },
+  {
+    "id": "morango",
+    "name": "Morango",
+    "category": [
+      "resource",
+      "vegetable"
+    ],
+    "icon": "/img/heartopia/agricultura/morango.png"
+  },
+  {
+    "id": "semente_milho",
+    "name": "Semente_milho",
+    "category": [
+      "resource",
+      "vegetable"
+    ],
+    "icon": "/img/heartopia/agricultura/semente_milho.png",
+    "buyPrice": 170
+  },
+  {
+    "id": "milho",
+    "name": "Milho",
+    "category": [
+      "resource",
+      "vegetable"
+    ],
+    "icon": "/img/heartopia/agricultura/milho.png"
   }
 ]
