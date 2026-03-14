@@ -10,6 +10,7 @@ import {
   Category,
   AutoFixHigh
 } from "@mui/icons-material";
+import { useNavigate, useParams } from "react-router-dom";
 
 export interface ItemChipProps {
   id: string;
@@ -19,6 +20,7 @@ export interface ItemChipProps {
   icon?: string;
   isProduct?: boolean;
   size?: 'small' | 'medium' | 'large';
+  disableLink?: boolean;
 }
 
 /**
@@ -32,8 +34,12 @@ export function ItemChip({
   type = 'item',
   icon: iconSrc,
   isProduct = false,
-  size = 'large'
+  size = 'large',
+  disableLink = false
 }: ItemChipProps) {
+  const navigate = useNavigate();
+  const { gameId } = useParams<{ gameId: string }>();
+
   const formatAmount = (num: number) => {
     if (num < 1000) return num.toString();
     if (num < 1000000) {
@@ -70,9 +76,25 @@ export function ItemChip({
     return <Inventory sx={{ fontSize: iconSize, color: isProduct ? 'primary.main' : 'text.disabled' }} />;
   };
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (type === 'item' && !disableLink && gameId) {
+      e.preventDefault();
+      e.stopPropagation();
+      navigate(`/game/${gameId}/items/view/${id}`);
+    }
+  };
+
   return (
     <Tooltip title={tooltipTitle} arrow>
-      <Box sx={{ position: 'relative', width: boxSize, height: boxSize }}>
+      <Box 
+        onClick={handleClick}
+        sx={{ 
+          position: 'relative', 
+          width: boxSize, 
+          height: boxSize,
+          cursor: (type === 'item' && !disableLink) ? 'pointer' : 'default'
+        }}
+      >
         <Paper variant="outlined" sx={{ 
           width: '100%', 
           height: '100%', 
@@ -89,8 +111,9 @@ export function ItemChip({
           overflow: 'hidden',
           transition: 'transform 0.2s',
           '&:hover': {
-            transform: 'scale(1.05)',
-            borderColor: 'primary.main'
+            transform: (type === 'item' && !disableLink) ? 'scale(1.1)' : 'scale(1.05)',
+            borderColor: 'primary.main',
+            boxShadow: (type === 'item' && !disableLink) ? '0 0 15px rgba(255, 68, 0, 0.3)' : 'none'
           }
         }}>
           {renderIcon()}

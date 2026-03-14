@@ -11,6 +11,7 @@ import { EventsPage } from "./components/EventsPage";
 import { CodesPage } from "./components/CodesPage";
 import { CalculatorPage } from "./components/CalculatorPage";
 import { CraftingCalculator } from "./components/calculators/CraftingCalculator";
+import { ItemDetailsPage } from "./components/ItemDetailsPage";
 import { Typography } from "@mui/material";
 
 export function RoutesPage() {
@@ -27,6 +28,7 @@ export function RoutesPage() {
 
           {/* Placeholders adicionais baseados nos novos botões da Header */}
           <Route path="items/list/:category?" element={<ItemsPage />} />
+          <Route path="items/view/:itemId" element={<ItemDetailsPage />} />
           <Route path="recipes/list/:category?" element={<RecipesPage />} />
           <Route path="entity/list/:category?" element={<EntityPage />} />
           <Route path="shops/list/:category?" element={<ShopsPage />} />
