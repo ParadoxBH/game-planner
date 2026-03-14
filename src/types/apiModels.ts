@@ -40,6 +40,24 @@ export interface ShopDetails {
   npc?: Entity;
 }
 
+export interface RecipeDetails {
+  recipe: NormalizedRecipe;
+  ingredients: {
+    id: string;
+    name?: string;
+    amount: number;
+    type?: GameDataTypes;
+    data?: Item | Entity;
+  }[];
+  products: {
+    id: string;
+    name?: string;
+    amount: number;
+    type?: GameDataTypes;
+    data?: Item | Entity;
+  }[];
+}
+
 export interface GameDataPayload {
   items: Item[];
   recipes: Recipe[];

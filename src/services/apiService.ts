@@ -7,6 +7,7 @@ import type {
   NormalizedRecipe,
   ItemDetails,
   EntityDetails,
+  RecipeDetails,
   ShopDetails,
   GameDataPayload,
 } from "../types/apiModels";
@@ -108,6 +109,33 @@ export class ApiService {
     return {
       shop,
       npc,
+    };
+  }
+
+  public getRecipeDetails(recipeId: string): RecipeDetails | null {
+    const rawRecipe = this.data.recipes.find((r) => r.id === recipeId);
+    if (!rawRecipe) return null;
+
+    const recipe = this.normalizeRecipe(rawRecipe);
+
+    const ingredients = recipe.normalizedIngredients.map((ing) => ({
+      ...ing,
+      data: ing.type === "entity" 
+        ? this.data.entities.find((e) => e.id === ing.id)
+        : this.data.items.find((i) => i.id === ing.id),
+    }));
+
+    const products = recipe.normalizedProducts.map((p) => ({
+      ...p,
+      data: p.type === "entity"
+        ? this.data.entities.find((e) => e.id === p.id)
+        : this.data.items.find((i) => i.id === p.id),
+    }));
+
+    return {
+      recipe,
+      ingredients,
+      products,
     };
   }
 

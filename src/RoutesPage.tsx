@@ -13,6 +13,7 @@ import { CodesPage } from "./components/CodesPage";
 import { CalculatorPage } from "./components/CalculatorPage";
 import { CraftingCalculator } from "./components/calculators/CraftingCalculator";
 import { ItemDetailsPage } from "./components/ItemDetailsPage";
+import { RecipeDetailsPage } from "./components/RecipeDetailsPage";
 import { Typography } from "@mui/material";
 
 export function RoutesPage() {
@@ -31,6 +32,7 @@ export function RoutesPage() {
           <Route path="items/list/:category?" element={<ItemsPage />} />
           <Route path="items/view/:itemId" element={<ItemDetailsPage />} />
           <Route path="recipes/list/:category?" element={<RecipesPage />} />
+          <Route path="recipes/view/:recipeId" element={<RecipeDetailsPage />} />
           <Route path="entity/list/:category?" element={<EntityPage />} />
           <Route path="entity/view/:entityId" element={<EntityDetailsPage />} />
           <Route path="shops/list/:category?" element={<ShopsPage />} />

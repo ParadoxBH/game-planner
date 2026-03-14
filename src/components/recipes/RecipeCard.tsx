@@ -13,11 +13,13 @@ import {
   Bolt,
   Assignment
 } from "@mui/icons-material";
+import { useNavigate, useParams } from "react-router-dom";
 import { ItemChip } from "../common/ItemChip";
 
 import type { GameDataTypes, RecipeItem, RecipeUnlock } from "../../types/gameModels";
 
 interface RecipeCardProps {
+  id: string;
   name: string;
   stations: string[];
   ingredients: RecipeItem[];
@@ -30,6 +32,7 @@ interface RecipeCardProps {
 
 
 export function RecipeCard({
+  id,
   name,
   stations,
   ingredients,
@@ -38,9 +41,15 @@ export function RecipeCard({
   getSourceData,
   eventsMap
 }: RecipeCardProps) {
+  const { gameId } = useParams<{ gameId: string }>();
+  const navigate = useNavigate();
+
   return (
-    <Card sx={{ 
-      backgroundColor: 'rgba(255, 255, 255, 0.02)', 
+    <Card 
+      onClick={() => navigate(`/game/${gameId}/recipes/view/${id}`)}
+      sx={{ 
+        cursor: 'pointer',
+        backgroundColor: 'rgba(255, 255, 255, 0.02)', 
       backdropFilter: 'blur(16px)',
       borderRadius: 1,
       border: 1,

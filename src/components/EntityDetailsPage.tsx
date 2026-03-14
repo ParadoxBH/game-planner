@@ -270,6 +270,7 @@ export function EntityDetailsPage() {
                 {recipes.map((recipe) => (
                   <Grid size={{ xs: 12, lg: 6 }} key={recipe.id}>
                     <RecipeCard
+                      id={recipe.id}
                       name={recipe.normalizedName}
                       stations={recipe.normalizedStations}
                       ingredients={recipe.normalizedIngredients}

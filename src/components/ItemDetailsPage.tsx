@@ -163,6 +163,7 @@ export function ItemDetailsPage() {
                 {productionRecipes.map((recipe) => (
                   <Grid size={{ xs: 12, lg: 6 }} key={recipe.id}>
                     <RecipeCard
+                      id={recipe.id}
                       name={recipe.normalizedName}
                       stations={recipe.normalizedStations}
                       ingredients={recipe.normalizedIngredients}
@@ -198,6 +199,7 @@ export function ItemDetailsPage() {
                 {usagesAsIngredient.map((recipe) => (
                   <Grid size={{ xs: 12, lg: 6 }} key={recipe.id}>
                     <RecipeCard
+                      id={recipe.id}
                       name={recipe.normalizedName}
                       stations={recipe.normalizedStations}
                       ingredients={recipe.normalizedIngredients}

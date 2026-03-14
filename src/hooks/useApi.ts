@@ -70,6 +70,10 @@ export function useApi(gameId: string | undefined) {
     return apiService ? apiService.getShopDetails(shopId) : null;
   };
 
+  const getRecipeDetails = (recipeId: string) => {
+    return apiService ? apiService.getRecipeDetails(recipeId) : null;
+  };
+
   const getRecipesList = (filter?: (recipe: NormalizedRecipe) => boolean) => {
     if (!apiService) return [];
     const normalized = data?.recipes.map(r => apiService.normalizeRecipe(r)) || [];
@@ -86,6 +90,7 @@ export function useApi(gameId: string | undefined) {
     getItemDetails,
     getEntityDetails,
     getShopDetails,
+    getRecipeDetails,
     getItemsList,
     getEntityList,
     getRecipesList,
