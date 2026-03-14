@@ -15,7 +15,7 @@ import {
   Refresh
 } from "@mui/icons-material";
 import { ItemChip } from "../common/ItemChip";
-import { type ShopItem } from "./ShopItemCard";
+import type { ShopItem } from "../../types/gameModels";
 
 interface ItemShopCardProps {
   shop: {

@@ -8,54 +8,35 @@ import {
   CircularProgress,
   IconButton,
   Tooltip,
-  Paper,
   Divider,
   Snackbar,
   Alert,
   Switch,
-  FormControlLabel,
-  Button
+  FormControlLabel
 } from "@mui/material";
 import { 
   ContentCopy,
   Redeem,
   CalendarToday,
   TimerOff,
-  Inventory,
   CheckCircle,
   RadioButtonUnchecked,
   FilterList
 } from "@mui/icons-material";
 import { useParams } from "react-router-dom";
-import { useGameData } from "../hooks/useGameData";
+import { useApi } from "../hooks/useApi";
 import { useState, useMemo, useEffect } from "react";
 import { StyledContainer } from "./common/StyledContainer";
 import { ItemChip } from "./common/ItemChip";
 import { redemptionService } from "../services/redemptionService";
-
-interface Reward {
-  id: string;
-  quantity: number;
-  type: string;
-}
-
-interface RedemptionCode {
-  code: string;
-  rewards: Reward[];
-  addedAt: string;
-  expiresAt: string;
-}
-
-interface GameItem {
-  id: string;
-  name: string;
-  icon?: string;
-}
+import type { Item, RedemptionCode } from "../types/gameModels";
 
 export function CodesPage() {
   const { gameId } = useParams<{ gameId: string }>();
-  const { data: codes, loading: codesLoading, error: codesError } = useGameData<RedemptionCode[]>(gameId, "codes");
-  const { data: items } = useGameData<GameItem[]>(gameId, "items");
+  const { loading: codesLoading, error: codesError, getCodesList, getItemsList } = useApi(gameId);
+  
+  const codes = useMemo<RedemptionCode[]>(() => getCodesList(), [getCodesList]);
+  const items = useMemo<Item[]>(() => getItemsList(), [getItemsList]);
   
   const [copySuccess, setCopySuccess] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -74,14 +55,14 @@ export function CodesPage() {
   }, [gameId]);
 
   const itemsMap = useMemo(() => {
-    const map = new Map<string, GameItem>();
+    const map = new Map<string, Item>();
     if (items) {
       items.forEach(item => map.set(item.id, item));
     }
     return map;
   }, [items]);
 
-  const filteredCodes = useMemo(() => {
+  const filteredCodes = useMemo<RedemptionCode[]>(() => {
     if (!codes) return [];
     
     const now = new Date();
@@ -276,7 +257,7 @@ export function CodesPage() {
                           Recompensas
                         </Typography>
                         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ gap: 1 }}>
-                          {c.rewards.map((r, rIdx) => {
+                          {c.rewards.map((r: { id: string; quantity: number }, rIdx: number) => {
                             const item = itemsMap.get(r.id);
                             return (
                               <ItemChip

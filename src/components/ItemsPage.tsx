@@ -17,37 +17,28 @@ import {
   SwapHoriz
 } from "@mui/icons-material";
 import { useParams, useNavigate } from "react-router-dom";
-import { useGameData } from "../hooks/useGameData";
+import { useApi } from "../hooks/useApi";
 import { useState, useMemo } from "react";
 import { StyledContainer } from "./common/StyledContainer";
 import { FormControlLabel, Switch } from "@mui/material";
 import { ItemChip } from "./common/ItemChip";
 import { PickSelector } from "./common/PickSelector";
 
-interface GameItem {
-  id: string;
-  name: string;
-  description: string;
-  category?: string | string[];
-  icon?: string;
-  sellPrice?: number;
-  buyPrice?: number;
-}
-
 export function ItemsPage() {
   const { gameId, category: urlCategory } = useParams<{ gameId: string; category?: string }>();
   const navigate = useNavigate();
 
-  const { data: items, loading, error } = useGameData<GameItem[]>(gameId, "items");
+  const { loading, error, getItemsList } = useApi(gameId);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
   const [tradeStatus, setTradeStatus] = useState<string | null>(null);
   const [showPrices, setShowPrices] = useState(false);
 
+  const allItems = useMemo(() => getItemsList(), [getItemsList]);
+
   const categories = useMemo(() => {
-    if (!items) return [];
     const cats = new Set<string>();
-    items.forEach(item => {
+    allItems.forEach(item => {
       const itemCats = item.category;
       if (Array.isArray(itemCats) && itemCats[0]) {
         cats.add(itemCats[0]);
@@ -56,14 +47,13 @@ export function ItemsPage() {
       }
     });
     return Array.from(cats).sort();
-  }, [items]);
+  }, [allItems]);
 
   const subCategories = useMemo(() => {
-    if (!items) return [];
     const cats = new Set<string>();
     
     // Filter items that match current primary selection
-    const relevantItems = items.filter(item => {
+    const relevantItems = allItems.filter(item => {
       const itemCats = item.category;
       const catsArr = Array.isArray(itemCats) ? itemCats : (itemCats ? [itemCats] : []);
       const primary = catsArr[0];
@@ -77,11 +67,10 @@ export function ItemsPage() {
       }
     });
     return Array.from(cats).sort();
-  }, [items, urlCategory]);
+  }, [allItems, urlCategory]);
 
   const filteredItems = useMemo(() => {
-    if (!items) return [];
-    return items.filter(item => {
+    return allItems.filter(item => {
       const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                             item.id.toLowerCase().includes(searchTerm.toLowerCase());
       
@@ -106,7 +95,7 @@ export function ItemsPage() {
 
       return matchesSearch && matchesPrimary && matchesSub && matchesTradeStatus;
     });
-  }, [items, searchTerm, urlCategory, selectedSubCategory, tradeStatus]);
+  }, [allItems, searchTerm, urlCategory, selectedSubCategory, tradeStatus]);
 
   if (loading) {
     return (

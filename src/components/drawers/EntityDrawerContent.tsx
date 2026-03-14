@@ -6,34 +6,8 @@ import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
 import type { Theme } from "@mui/material/styles";
 
-interface EntityDrop {
-  itemId: string;
-  chance: number;
-  quant: number;
-  maxQuant?: number;
-}
-
-interface GameEntity {
-  id: string;
-  name: string;
-  category: string | string[];
-  icon?: string;
-  requirements?: {
-    itemId: string;
-    quant: number;
-    maxQuant?: number;
-  }[];
-  drops?: EntityDrop[];
-}
-
-interface GameItem {
-  id: string;
-  name: string;
-  type?: string;
-  category?: string | string[];
-  description: string;
-  icon?: string;
-}
+import { useApi } from "../../hooks/useApi";
+import type { Entity, Item } from "../../types/gameModels";
 
 interface MapOccurrence {
   id: string;
@@ -44,8 +18,8 @@ interface MapOccurrence {
 
 interface EntityDrawerContentProps {
   entityId: string;
-  currentEntity: GameEntity | null | undefined;
-  items: GameItem[];
+  currentEntity: Entity | null | undefined;
+  items: Item[];
   theme: Theme & { designTokens: any };
   mapOccurrences: MapOccurrence[];
   onPush: (item: { type: "entity" | "item"; id: string }) => void;

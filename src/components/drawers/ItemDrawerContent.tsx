@@ -4,32 +4,12 @@ import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import { DataCard } from "../common/DataCard";
 import type { Theme } from "@mui/material/styles";
 
-interface GameEntity {
-  id: string;
-  name: string;
-  category: string | string[];
-  icon?: string;
-  drops?: {
-    itemId: string;
-    chance: number;
-    quant: number;
-    maxQuant?: number;
-  }[];
-}
-
-interface GameItem {
-  id: string;
-  name: string;
-  type?: string;
-  category?: string | string[];
-  description: string;
-  icon?: string;
-}
+import type { Entity, Item } from "../../types/gameModels";
 
 interface ItemDrawerContentProps {
   itemId: string;
-  currentItemData: GameItem | null | undefined;
-  droppedBy: GameEntity[];
+  currentItemData: Item | undefined;
+  droppedBy: Entity[];
   theme: Theme & { designTokens: any };
   onPush: (item: { type: "entity" | "item"; id: string }) => void;
 }
@@ -85,7 +65,6 @@ export const ItemDrawerContent = ({
               .filter(Boolean)
               .map((cat) => `#${cat}`)
               .join(" ") ||
-              currentItemData?.type ||
               "Item"}
           </Typography>
           <Typography variant="h4" sx={{ mt: 0, lineHeight: 1.1 }}>

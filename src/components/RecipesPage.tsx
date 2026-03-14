@@ -6,145 +6,69 @@ import {
   CircularProgress
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
-import { useGameData } from "../hooks/useGameData";
+import { useApi } from "../hooks/useApi";
 import { useState, useMemo } from "react";
 import { StyledContainer } from "./common/StyledContainer";
-import { RecipeCard, type RecipeIngredient, type RecipeProduct, type RecipeUnlock } from "./recipes/RecipeCard";
+import { RecipeCard } from "./recipes/RecipeCard";
 import { PickSelector } from "./common/PickSelector";
 import { Build } from "@mui/icons-material";
-
-interface GameRecipe {
-  id: string;
-  name?: string;
-  stations?: string[];
-  ProducedIn?: string[]; // Satisfactory format
-  ingredients?: RecipeIngredient[];
-  Ingredients?: any[]; // Satisfactory format
-  products?: RecipeProduct[];
-  Products?: any[]; // Satisfactory format
-  unlock?: RecipeUnlock[];
-}
-
-interface GameItem {
-  id: string;
-  name: string;
-  category?: string | string[];
-  icon?: string;
-  sellPrice?: number;
-  buyPrice?: number;
-}
-
-interface GameEntity {
-  id: string;
-  name: string;
-  category?: string | string[];
-  icon?: string;
-}
-
-interface GameEvent {
-  id: string;
-  name: string;
-}
+import type { GameDataTypes } from "../types/gameModels";
 
 export function RecipesPage() {
   const { gameId, category: urlStation } = useParams<{ gameId: string; category?: string }>();
   const navigate = useNavigate();
 
-  const { data: recipes, loading: loadingRecipes, error: errorRecipes } = useGameData<GameRecipe[]>(gameId, "recipes");
-  const { data: items } = useGameData<GameItem[]>(gameId, "items");
-  const { data: entities } = useGameData<GameEntity[]>(gameId, "entity");
-  const { data: events } = useGameData<GameEvent[]>(gameId, "events");
+  const { loading: loadingApi, error: errorApi, getRecipesList, raw } = useApi(gameId);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSubStation, setSelectedSubStation] = useState<string | null>(null);
 
-  const dataMap = useMemo(() => {
-    const map = new Map<string, { name: string; icon?: string; type: 'item' | 'entity' }>();
-    if (items) {
-      items.forEach(item => map.set(`item:${item.id}`, { name: item.name, icon: item.icon, type: 'item' }));
-    }
-    if (entities) {
-      entities.forEach(entity => map.set(`entity:${entity.id}`, { name: entity.name, icon: entity.icon, type: 'entity' }));
-    }
+  const itemsMap = useMemo(() => {
+    const map = new Map<string, any>();
+    if (raw?.items) raw.items.forEach(i => map.set(i.id, i));
     return map;
-  }, [items, entities]);
+  }, [raw?.items]);
+
+  const entitiesMap = useMemo(() => {
+    const map = new Map<string, any>();
+    if (raw?.entities) raw.entities.forEach(e => map.set(e.id, e));
+    return map;
+  }, [raw?.entities]);
+
+  const getSourceData = (type: GameDataTypes | undefined, id: string): any => {
+    if (type === 'entity') return entitiesMap.get(id);
+    return itemsMap.get(id);
+  };
 
   const eventsMap = useMemo(() => {
     const map = new Map<string, string>();
-    if (events) {
-      events.forEach(e => map.set(e.id, e.name));
+    if (raw?.events) {
+      raw.events.forEach(e => map.set(e.id, e.name));
     }
     return map;
-  }, [events]);
+  }, [raw?.events]);
 
-  const getSourceData = (type: 'item' | 'entity' | undefined, id: string) => {
-    const key = `${type || 'item'}:${id}`;
-    return dataMap.get(key);
-  };
-
-  const normalizedRecipes = useMemo(() => {
-    if (!recipes) return [];
-    return recipes.map(recipe => {
-      // Normalize stations
-      const stations = recipe.stations || recipe.ProducedIn || [];
-      
-      // Normalize ingredients
-      let ingredients: RecipeIngredient[] = [];
-      if (recipe.ingredients) {
-        ingredients = recipe.ingredients;
-      } else if (recipe.Ingredients) {
-        ingredients = recipe.Ingredients.map(i => ({
-          id: i.ClassName || i.id,
-          name: i.Name || i.name,
-          amount: i.Amount || i.amount
-        }));
-      }
-
-      // Normalize products
-      let products: RecipeProduct[] = [];
-      if (recipe.products) {
-        products = recipe.products;
-      } else if (recipe.Products) {
-        products = recipe.Products.map(p => ({
-          id: p.ClassName || p.id,
-          name: p.Name || p.name,
-          amount: p.Amount || p.amount
-        }));
-      }
-
-      const recipeProducts = products;
-      const fallbackName = recipe.name || (recipeProducts.length > 0 ? (recipeProducts[0].name || getSourceData('item', recipeProducts[0].id)?.name || recipeProducts[0].id) : recipe.id);
-
-      return {
-        ...recipe,
-        name: fallbackName,
-        stations,
-        ingredients,
-        products: recipeProducts
-      };
-    });
-  }, [recipes, getSourceData]);
+  const normalizedRecipes = useMemo(() => getRecipesList(), [getRecipesList]);
 
   const stationsList = useMemo(() => {
     const stations = new Set<string>();
     normalizedRecipes.forEach(recipe => {
-      if (recipe.stations[0]) stations.add(recipe.stations[0]);
+      if (recipe.normalizedStations[0]) stations.add(recipe.normalizedStations[0]);
     });
     return Array.from(stations).sort();
   }, [normalizedRecipes]);
 
   const subStations = useMemo(() => {
-    if (!normalizedRecipes) return [];
     const stations = new Set<string>();
     
     // Filter recipes that match the current primary station
     const relevantRecipes = normalizedRecipes.filter(recipe => {
-      const primary = recipe.stations[0];
+      const primary = recipe.normalizedStations[0];
       return !urlStation || urlStation === "all" || (primary && primary.toLowerCase() === urlStation.toLowerCase());
     });
 
     relevantRecipes.forEach(recipe => {
-      if (recipe.stations.length > 1) {
-        recipe.stations.slice(1).forEach(s => stations.add(s));
+      if (recipe.normalizedStations.length > 1) {
+        recipe.normalizedStations.slice(1).forEach(s => stations.add(s));
       }
     });
     return Array.from(stations).sort();
@@ -152,21 +76,21 @@ export function RecipesPage() {
 
   const filteredRecipes = useMemo(() => {
     return normalizedRecipes.filter(recipe => {
-      const matchesSearch = recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      const matchesSearch = recipe.normalizedName.toLowerCase().includes(searchTerm.toLowerCase()) || 
                             recipe.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            recipe.ingredients.some(i => i.id.toLowerCase().includes(searchTerm.toLowerCase()) || (i.name && i.name.toLowerCase().includes(searchTerm.toLowerCase()))) ||
-                            recipe.products.some(p => p.id.toLowerCase().includes(searchTerm.toLowerCase()) || (p.name && p.name.toLowerCase().includes(searchTerm.toLowerCase())));
+                            recipe.normalizedIngredients.some(i => i.id.toLowerCase().includes(searchTerm.toLowerCase()) || (i.name && i.name.toLowerCase().includes(searchTerm.toLowerCase()))) ||
+                            recipe.normalizedProducts.some(p => p.id.toLowerCase().includes(searchTerm.toLowerCase()) || (p.name && p.name.toLowerCase().includes(searchTerm.toLowerCase())));
       
-      const primaryStation = recipe.stations[0];
+      const primaryStation = recipe.normalizedStations[0];
       const matchesStation = !urlStation || (primaryStation && primaryStation.toLowerCase() === urlStation.toLowerCase());
       
-      const matchesSub = !selectedSubStation || (recipe.stations.length > 1 && recipe.stations.slice(1).some(s => s.toLowerCase() === selectedSubStation.toLowerCase()));
+      const matchesSub = !selectedSubStation || (recipe.normalizedStations.length > 1 && recipe.normalizedStations.slice(1).some(s => s.toLowerCase() === selectedSubStation.toLowerCase()));
 
       return matchesSearch && matchesStation && matchesSub;
     });
   }, [normalizedRecipes, searchTerm, urlStation, selectedSubStation]);
 
-  if (loadingRecipes) {
+  if (loadingApi) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
         <CircularProgress color="primary" />
@@ -174,10 +98,10 @@ export function RecipesPage() {
     );
   }
 
-  if (errorRecipes) {
+  if (errorApi) {
     return (
       <Box sx={{ p: 4, textAlign: 'center' }}>
-        <Typography color="error" variant="h6">Erro ao carregar receitas: {errorRecipes}</Typography>
+        <Typography color="error" variant="h6">Erro ao carregar receitas</Typography>
       </Box>
     );
   }
@@ -220,10 +144,10 @@ export function RecipesPage() {
           {filteredRecipes.map(recipe => (
             <Grid size={{ xs: 12, lg: 4 }} key={recipe.id}>
               <RecipeCard
-                name={recipe.name}
-                stations={recipe.stations}
-                ingredients={recipe.ingredients}
-                products={recipe.products}
+                name={recipe.normalizedName}
+                stations={recipe.normalizedStations}
+                ingredients={recipe.normalizedIngredients}
+                products={recipe.normalizedProducts}
                 unlock={recipe.unlock}
                 getSourceData={getSourceData}
                 eventsMap={eventsMap}

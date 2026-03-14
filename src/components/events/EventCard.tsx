@@ -17,19 +17,7 @@ import {
   AccessTime,
   Info
 } from "@mui/icons-material";
-
-export interface GameEvent {
-  id: string;
-  name: string;
-  type: "clima" | "season" | "mapa" | "event";
-  description: string;
-  icon: string;
-  banner?: string;
-  period: {
-    start?: string;
-    end?: string;
-  };
-}
+import type { GameEvent } from "../../types/gameModels";
 
 const typeMap = {
   clima: { label: "Clima", icon: <Cloud />, color: "#4fc3f7" },

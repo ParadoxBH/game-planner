@@ -13,90 +13,52 @@ import {
 } from "@mui/material";
 import { Storefront, AccessTime, Lock, Refresh } from "@mui/icons-material";
 import { useParams, useNavigate } from "react-router-dom";
-import { useGameData } from "../hooks/useGameData";
+import { useApi } from "../hooks/useApi";
 import { useMemo } from "react";
 import { StyledContainer } from "./common/StyledContainer";
 import { useTheme } from "@mui/material";
 import {
   ShopItemCard,
-  type ShopItem,
-  type ShopCondition,
-  type ShopGroup
 } from "./shops/ShopItemCard";
 import { ShopCard } from "./shops/ShopCard";
-
-interface GameShop {
-  id: string;
-  name?: string;
-  npcId: string;
-  resetTime?: string;
-  conditions?: ShopCondition[];
-  groups: ShopGroup[];
-}
-
-interface GameItem {
-  id: string;
-  name: string;
-  category?: string | string[];
-  icon?: string;
-  sellPrice?: number;
-  buyPrice?: number;
-}
-
-interface GameEntity {
-  id: string;
-  name: string;
-  category?: string | string[];
-  icon?: string;
-  buyPrice?: number;
-  sellPrice?: number;
-}
-
-interface GameEvent {
-  id: string;
-  name: string;
-}
-
+import type { ShopItem } from "../types/gameModels";
 
 export function ShopsPage() {
   const { gameId, category: urlShopId } = useParams<{ gameId: string; category?: string }>();
   const navigate = useNavigate();
 
-  const { data: shops, loading: loadingShops } = useGameData<GameShop[]>(
-    gameId,
-    "shops",
-  );
-  const { data: items } = useGameData<GameItem[]>(gameId, "items");
-  const { data: entities } = useGameData<GameEntity[]>(gameId, "entity");
-  const { data: events } = useGameData<GameEvent[]>(gameId, "events");
+  const { loading: loadingApi, getShopDetails, raw } = useApi(gameId);
 
   const itemsMap = useMemo(() => {
-    const map = new Map<string, GameItem>();
-    if (items) items.forEach((item) => map.set(item.id, item));
+    const map = new Map<string, any>();
+    if (raw?.items) raw.items.forEach((item) => map.set(item.id, item));
     return map;
-  }, [items]);
+  }, [raw?.items]);
 
   const entitiesMap = useMemo(() => {
-    const map = new Map<string, GameEntity>();
-    if (entities) entities.forEach((entity) => map.set(entity.id, entity));
+    const map = new Map<string, any>();
+    if (raw?.entities) raw.entities.forEach((entity) => map.set(entity.id, entity));
     return map;
-  }, [entities]);
+  }, [raw?.entities]);
 
   const eventsMap = useMemo(() => {
-    const map = new Map<string, GameEvent>();
-    if (events) events.forEach((event) => map.set(event.id, event));
+    const map = new Map<string, any>();
+    if (raw?.events) raw.events.forEach((event) => map.set(event.id, event));
     return map;
-  }, [events]);
+  }, [raw?.events]);
+
+  const shops = raw?.shops || [];
 
   const currentIndex = useMemo(() => {
     if (!shops || !urlShopId) return -1;
     return shops.findIndex((s) => s.id === urlShopId);
   }, [shops, urlShopId]);
 
-  const currentShop = shops?.[currentIndex];
-  const currentNpc = currentShop ? entitiesMap.get(currentShop.npcId) : null;
+  const shopDetails = useMemo(() => (urlShopId ? getShopDetails(urlShopId) : null), [getShopDetails, urlShopId]);
+  const currentShop = shopDetails?.shop;
+  const currentNpc = shopDetails?.npc;
 
-  if (loadingShops) {
+  if (loadingApi) {
     return (
       <Box
         sx={{
@@ -245,24 +207,8 @@ export function ShopsPage() {
                   {currentShop.name || currentNpc?.name || currentShop.npcId}
                 </Typography>
 
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  justifyContent="center"
-                  sx={{ mb: 2 }}
-                >
-                  {currentShop.resetTime && (
-                    <Chip
-                      size="small"
-                      icon={<AccessTime sx={{ fontSize: "1rem" }} />}
-                      label={currentShop.resetTime}
-                      sx={{ backgroundColor: "rgba(255, 255, 255, 0.05)" }}
-                    />
-                  )}
-                </Stack>
-
-                {currentShop.conditions &&
-                  currentShop.conditions.length > 0 && (
+                {currentShop.conditional &&
+                  currentShop.conditional.length > 0 && (
                     <Box
                       sx={{
                         mt: 2,
@@ -285,7 +231,7 @@ export function ShopsPage() {
                       >
                         <Lock sx={{ fontSize: "1rem" }} /> REQUISITOS
                       </Typography>
-                      {currentShop.conditions.map((cond, i) => {
+                      {currentShop.conditional.map((cond, i) => {
                         const eventName =
                           cond.type === "event"
                             ? eventsMap.get(cond.id)?.name

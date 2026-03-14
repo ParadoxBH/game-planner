@@ -10,13 +10,14 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useGameData } from "../hooks/useGameData";
+import { useApi } from "../hooks/useApi";
 import { StyledContainer } from "./common/StyledContainer";
-import { EventCard, type GameEvent } from "./events/EventCard";
+import { EventCard } from "./events/EventCard";
 
 export function EventsPage() {
   const { gameId } = useParams<{ gameId: string }>();
-  const { data: events, loading, error } = useGameData<GameEvent[]>(gameId, "events");
+  const { loading, error, raw } = useApi(gameId);
+  const events = raw?.events || [];
   const [tabValue, setTabValue] = useState(0);
 
   if (loading) {

@@ -5,11 +5,9 @@ import {
   CardContent, 
   Chip, 
   Stack,
-  Divider
 } from "@mui/material";
 import { 
   Construction,
-  Inventory,
   KeyboardDoubleArrowRight,
   Lock,
   Bolt,
@@ -17,33 +15,15 @@ import {
 } from "@mui/icons-material";
 import { ItemChip } from "../common/ItemChip";
 
-export interface RecipeIngredient {
-  type?: 'item' | 'entity' | 'category';
-  id: string;
-  name?: string;
-  amount: number;
-}
-
-export interface RecipeProduct {
-  type?: 'item' | 'entity';
-  id: string;
-  name?: string;
-  amount: number;
-}
-
-export interface RecipeUnlock {
-  type: string;
-  subject?: string;
-  value: string;
-}
+import type { GameDataTypes, RecipeItem, RecipeUnlock } from "../../types/gameModels";
 
 interface RecipeCardProps {
   name: string;
   stations: string[];
-  ingredients: RecipeIngredient[];
-  products: RecipeProduct[];
+  ingredients: RecipeItem[];
+  products: RecipeItem[];
   unlock?: RecipeUnlock[];
-  getSourceData: (type: 'item' | 'entity' | undefined, id: string) => { name: string; icon?: string; type: 'item' | 'entity' } | undefined;
+  getSourceData: (type: GameDataTypes | undefined, id: string) => { name: string; icon?: string; type: GameDataTypes } | undefined;
   eventsMap: Map<string, string>;
 }
 

@@ -5,55 +5,12 @@ import { BaseDrawer } from "./drawers/BaseDrawer";
 import { EntityDrawerContent } from "./drawers/EntityDrawerContent";
 import { ItemDrawerContent } from "./drawers/ItemDrawerContent";
 
-interface EntityDrop {
-  itemId: string;
-  chance: number;
-  quant: number;
-  maxQuant?: number;
-}
-
-interface GameEntity {
-  id: string;
-  name: string;
-  category: string | string[];
-  icon?: string;
-  requirements?: {
-    itemId: string;
-    quant: number;
-    maxQuant?: number;
-  }[];
-  drops?: EntityDrop[];
-}
-
-interface GameItem {
-  id: string;
-  name: string;
-  type?: string;
-  category?: string | string[];
-  description: string;
-  icon?: string;
-}
-
-interface Spawn {
-  id: string;
-  entityId: string;
-  type?: "position" | "range" | "geom";
-  mode?: "once" | "respawn";
-  position: [number, number];
-  mapId?: string;
-  respawnDelay?: number;
-}
-
-interface MapMetadata {
-  id: string;
-  name: string;
-  thumbnail?: string;
-}
+import type { Entity, Item, Spawn, MapMetadata } from "../types/gameModels";
 
 interface EntityDrawerProps {
   stack: NavigationItem[];
-  entities: GameEntity[];
-  items: GameItem[];
+  entities: Entity[];
+  items: Item[];
   spawns: Spawn[];
   maps: MapMetadata[];
   onSelectMap: (mapId: string) => void;

@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loadGamesList } from "../services/dataLoader";
 import { StyledContainer } from "./common/StyledContainer";
+import type { GameInfo } from "../types/gameModels";
 
 export function Home() {
   const [games, setGames] = useState<GameInfo[]>([]);

@@ -6,15 +6,11 @@ import {
 } from "@mui/material";
 import { Storefront, ChevronRight } from "@mui/icons-material";
 
+import type { Shop, Entity } from "../../types/gameModels";
+
 interface ShopCardProps {
-  shop: {
-    id: string;
-    name?: string;
-  };
-  npc?: {
-    name: string;
-    icon?: string;
-  };
+  shop: Shop;
+  npc?: Entity;
   onClick: () => void;
 }
 

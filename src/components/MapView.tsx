@@ -10,72 +10,14 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import { divIcon } from "leaflet";
-import { useGameData } from "../hooks/useGameData";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTheme } from "@mui/material/styles";
 import { SimplifiedEntity } from "./SimplifiedEntity";
 import { EntityDrawer } from "./EntityDrawer";
 import { OutputField } from "./common/OutputField";
 import { loadGamesList } from "../services/dataLoader";
-
-interface MapMetadata {
-  id: string;
-  name: string;
-  type: "single" | "layered" | "tile";
-  url?: string;
-  urlPattern?: string;
-  layers?: number;
-  bounds: [[number, number], [number, number]];
-  minZoom: number;
-  maxZoom: number;
-  tileMinZoom?: number;
-  tileMaxZoom?: number;
-  tileRange?: {
-    z: number;
-    min: [number, number];
-    max: [number, number];
-  };
-  thumbnail?: string;
-}
-
-interface GameInfo {
-  id: string;
-  name: string;
-  description: string;
-  maps: MapMetadata[];
-}
-
-interface Spawn {
-  id: string;
-  entityId: string;
-  type?: "position" | "range" | "geom";
-  mode?: "once" | "respawn";
-  position: [number, number];
-  mapId?: string;
-  respawnDelay?: number;
-}
-
-interface GameEntity {
-  id: string;
-  name: string;
-  category: string | string[];
-  icon?: string;
-  drops?: {
-    itemId: string;
-    chance: number;
-    quant: number;
-    maxQuant?: number;
-  }[];
-}
-
-interface GameItem {
-  id: string;
-  name: string;
-  type?: string;
-  category?: string | string[];
-  description: string;
-  icon?: string;
-}
+import { useApi } from "../hooks/useApi";
+import type { Entity, Spawn, GameInfo, MapMetadata } from "../types/gameModels";
 
 export interface NavigationItem {
   type: "entity" | "item";
@@ -364,22 +306,16 @@ export const MapView = () => {
     return gameInfo?.maps.find(m => m.id === selectedMapId);
   }, [gameInfo, selectedMapId]);
 
-  const {
-    data: spawns,
-    loading: loadingSpawns,
-    error: spawnError,
-  } = useGameData<Spawn[]>(gameId, "spawns");
+  const { loading: loadingApi, error: errorApi, raw } = useApi(gameId);
 
-  const {
-    data: entities,
-  } = useGameData<GameEntity[]>(gameId, "entity");
-
-  const {
-    data: items,
-  } = useGameData<GameItem[]>(gameId, "items");
+  const spawns = (raw?.spawns as Spawn[]) || [];
+  const entities = raw?.entities || [];
+  const items = raw?.items || [];
+  const spawnError = errorApi;
+  const loadingSpawns = loadingApi;
 
   const entityLookup = useMemo(() => {
-    const lookup: Record<string, GameEntity> = {};
+    const lookup: Record<string, Entity> = {};
     if (entities) {
       entities.forEach(e => {
         lookup[e.id] = e;

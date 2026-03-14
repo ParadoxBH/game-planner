@@ -14,34 +14,7 @@ import {
 } from "@mui/icons-material";
 import { ItemChip } from "../common/ItemChip";
 
-export interface ShopCondition {
-  type: string;
-  id: string;
-  description: string;
-}
-
-export interface ShopExchange {
-  id: string;
-  amount: number;
-  type?: 'item' | 'entity' | 'skill';
-}
-
-export interface ShopGroup {
-  name: string;
-  resetType?: "diario" | "semanal" | "unique";
-  items: ShopItem[];
-}
-
-export interface ShopItem {
-  id: string;
-  type?: 'item' | 'entity' | 'skill';
-  amount?: number;
-  price?: number;
-  currency?: string;
-  resetType?: "diario" | "semanal" | "unique";
-  exchange?: ShopExchange[];
-  conditions?: ShopCondition[];
-}
+import type { ShopCondition, ShopExchange, ShopItem } from "../../types/gameModels";
 
 interface ShopItemCardProps {
   shopItem: ShopItem;

@@ -15,31 +15,10 @@ import {
   Sell
 } from "@mui/icons-material";
 import { ItemChip } from "../common/ItemChip";
-
-export interface EntityDrop {
-  itemId: string;
-  chance: number;
-  quant: number;
-  maxQuant?: number;
-}
-
-export interface GameEntity {
-  id: string;
-  name: string;
-  category: string | string[];
-  icon?: string;
-  requirements?: {
-    itemId: string;
-    quant: number;
-    maxQuant?: number;
-  }[];
-  drops?: EntityDrop[];
-  buyPrice?: number;
-  sellPrice?: number;
-}
+import type { Entity } from "../../types/gameModels";
 
 interface EntityCardProps {
-  entity: GameEntity;
+  entity: Entity;
   showPrices?: boolean;
   onClick: () => void;
 }
@@ -88,7 +67,7 @@ export function EntityCard({ entity, showPrices, onClick }: EntityCardProps) {
         </Box>
         <Box>
           <Stack direction="row" spacing={0.5} sx={{ mb: 0.5, flexWrap: 'wrap' }}>
-            {(Array.isArray(entity.category) ? entity.category : [entity.category]).map(cat => (
+            {(Array.isArray(entity.category) ? entity.category : [entity.category || ""]).map(cat => (
               <Typography key={cat} variant="subtitle2" sx={{ color: 'primary.main', fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase' }}>
                 #{cat}
               </Typography>

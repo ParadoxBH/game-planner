@@ -1,21 +1,13 @@
 import { Box, Typography, Grid, Stack, CircularProgress } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
-import { useGameData } from "../hooks/useGameData";
 import { useState, useMemo } from "react";
 import { StyledContainer } from "./common/StyledContainer";
 import { EntityCard } from "./entities/EntityCard";
 import { PickSelector } from "./common/PickSelector";
 import { FilterList } from "@mui/icons-material";
 import { FormControlLabel, Switch } from "@mui/material";
-
-export interface GameEntity {
-  id: string;
-  name: string;
-  category: string | string[];
-  icon?: string;
-  buyPrice?: number;
-  sellPrice?: number;
-}
+import { useApi } from "../hooks/useApi";
+import type { Entity } from "../types/gameModels";
 
 export function EntityPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -23,19 +15,17 @@ export function EntityPage() {
     category?: string;
   }>();
   const navigate = useNavigate();
-  const {
-    data: entities,
-    loading,
-    error,
-  } = useGameData<GameEntity[]>(gameId, "entity");
+  
+  const { loading: loadingApi, error: errorApi, getEntityList } = useApi(gameId);
+  const entities = useMemo(() => getEntityList(), [getEntityList]);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
   const [showPrices, setShowPrices] = useState(false);
 
   const categories = useMemo(() => {
-    if (!entities) return [];
     const cats = new Set<string>();
-    entities.forEach((entity) => {
+    entities.forEach((entity: Entity) => {
       const catsArr = Array.isArray(entity.category)
         ? entity.category
         : [entity.category];
@@ -45,23 +35,22 @@ export function EntityPage() {
   }, [entities]);
 
   const subCategories = useMemo(() => {
-    if (!entities) return [];
     const cats = new Set<string>();
     
     // Filter entities that match the current primary category
-    const relevantEntities = entities.filter(entity => {
+    const relevantEntities = entities.filter((entity: Entity) => {
       const catsArr = Array.isArray(entity.category) ? entity.category : [entity.category];
       const primary = catsArr[0];
       return !urlCategory || urlCategory === "all" || (primary && primary.toLowerCase() === urlCategory.toLowerCase());
     });
 
-    relevantEntities.forEach((entity) => {
+    relevantEntities.forEach((entity: Entity) => {
       const catsArr = Array.isArray(entity.category)
         ? entity.category
         : [entity.category];
       // Collect all categories except the primary one (index 0)
       if (catsArr.length > 1) {
-        catsArr.slice(1).forEach(cat => {
+        catsArr.slice(1).forEach((cat: string | undefined) => {
           if (cat) cats.add(cat);
         });
       }
@@ -70,15 +59,14 @@ export function EntityPage() {
   }, [entities, urlCategory]);
 
   const filteredEntities = useMemo(() => {
-    if (!entities) return [];
-    return entities.filter((entity) => {
+    return entities.filter((entity: Entity) => {
       const matchesSearch =
         entity.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         entity.id.toLowerCase().includes(searchTerm.toLowerCase());
 
       const entityCats = Array.isArray(entity.category)
-        ? entity.category
-        : [entity.category];
+        ? (entity.category as string[])
+        : [entity.category as string || ""];
 
       const primaryCategory = entityCats[0];
       const matchesPrimary =
@@ -88,13 +76,13 @@ export function EntityPage() {
 
       const matchesSub =
         !selectedSubCategory ||
-        (entityCats.length > 1 && entityCats.slice(1).some(c => c.toLowerCase() === selectedSubCategory.toLowerCase()));
+        (entityCats.length > 1 && entityCats.slice(1).some(c => c && c.toLowerCase() === selectedSubCategory.toLowerCase()));
 
       return matchesSearch && matchesPrimary && matchesSub;
     });
   }, [entities, searchTerm, urlCategory, selectedSubCategory]);
 
-  if (loading) {
+  if (loadingApi) {
     return (
       <Box
         sx={{
@@ -110,11 +98,11 @@ export function EntityPage() {
     );
   }
 
-  if (error) {
+  if (errorApi) {
     return (
       <Box sx={{ p: 4, textAlign: "center" }}>
         <Typography color="error" variant="h6">
-          Erro ao carregar entidades: {error}
+          Erro ao carregar entidades
         </Typography>
       </Box>
     );

@@ -4,13 +4,10 @@ import { OutputField } from "./common/OutputField";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import InventoryIcon from "@mui/icons-material/Inventory";
 
+import type { Entity } from "../types/gameModels";
+
 interface SimplifiedEntityProps {
-  entity: {
-    id: string;
-    name: string;
-    category: string | string[];
-    icon?: string;
-  };
+  entity: Entity;
   position: [number, number];
   mode?: "once" | "respawn";
   respawnDelay?: number;

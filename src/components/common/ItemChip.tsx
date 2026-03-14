@@ -11,12 +11,13 @@ import {
   AutoFixHigh
 } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
+import type { GameDataTypes } from "../../types/gameModels";
 
 export interface ItemChipProps {
   id: string;
   name?: string;
   amount?: number;
-  type?: 'item' | 'entity' | 'category' | 'skill';
+  type?: GameDataTypes;
   icon?: string;
   isProduct?: boolean;
   size?: 'small' | 'medium' | 'large';
