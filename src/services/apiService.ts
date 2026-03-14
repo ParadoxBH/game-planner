@@ -118,19 +118,53 @@ export class ApiService {
 
     const recipe = this.normalizeRecipe(rawRecipe);
 
-    const ingredients = recipe.normalizedIngredients.map((ing) => ({
-      ...ing,
-      data: ing.type === "entity" 
-        ? this.data.entities.find((e) => e.id === ing.id)
-        : this.data.items.find((i) => i.id === ing.id),
-    }));
+    const ingredients = recipe.normalizedIngredients.map((ing) => {
+      const isCategory = ing.type === "category";
+      let dataOptions: (Item | Entity)[] | undefined = undefined;
 
-    const products = recipe.normalizedProducts.map((p) => ({
-      ...p,
-      data: p.type === "entity"
-        ? this.data.entities.find((e) => e.id === p.id)
-        : this.data.items.find((i) => i.id === p.id),
-    }));
+      if (isCategory) {
+        dataOptions = this.data.items.filter((item) => {
+          if (Array.isArray(item.category)) {
+            return item.category.includes(ing.id);
+          }
+          return item.category === ing.id;
+        });
+      }
+
+      return {
+        ...ing,
+        data: isCategory
+          ? undefined
+          : ing.type === "entity"
+          ? this.data.entities.find((e) => e.id === ing.id)
+          : this.data.items.find((i) => i.id === ing.id),
+        dataOptions,
+      };
+    });
+
+    const products = recipe.normalizedProducts.map((p) => {
+      const isCategory = p.type === "category";
+      let dataOptions: (Item | Entity)[] | undefined = undefined;
+
+      if (isCategory) {
+        dataOptions = this.data.items.filter((item) => {
+          if (Array.isArray(item.category)) {
+            return item.category.includes(p.id);
+          }
+          return item.category === p.id;
+        });
+      }
+
+      return {
+        ...p,
+        data: isCategory
+          ? undefined
+          : p.type === "entity"
+          ? this.data.entities.find((e) => e.id === p.id)
+          : this.data.items.find((i) => i.id === p.id),
+        dataOptions,
+      };
+    });
 
     return {
       recipe,

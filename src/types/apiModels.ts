@@ -48,6 +48,7 @@ export interface RecipeDetails {
     amount: number;
     type?: GameDataTypes;
     data?: Item | Entity;
+    dataOptions?: (Item | Entity)[];
   }[];
   products: {
     id: string;
@@ -55,6 +56,7 @@ export interface RecipeDetails {
     amount: number;
     type?: GameDataTypes;
     data?: Item | Entity;
+    dataOptions?: (Item | Entity)[];
   }[];
 }
 

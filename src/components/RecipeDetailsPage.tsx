@@ -18,7 +18,7 @@ import { useApi } from "../hooks/useApi";
 import { StyledContainer } from "./common/StyledContainer";
 import { ItemChip } from "./common/ItemChip";
 import { useMemo } from "react";
-import type { GameDataTypes } from "../types/gameModels";
+
 
 export function RecipeDetailsPage() {
   const { gameId, recipeId = "" } = useParams<{ gameId: string; recipeId: string }>();
@@ -27,17 +27,7 @@ export function RecipeDetailsPage() {
 
   const recipeDetails = useMemo(() => getRecipeDetails(recipeId), [getRecipeDetails, recipeId]);
 
-  const itemsMap = useMemo(() => {
-    const map = new Map<string, any>();
-    if (raw?.items) raw.items.forEach((i) => map.set(i.id, i));
-    return map;
-  }, [raw?.items]);
 
-  const entitiesMap = useMemo(() => {
-    const map = new Map<string, any>();
-    if (raw?.entities) raw.entities.forEach((e) => map.set(e.id, e));
-    return map;
-  }, [raw?.entities]);
 
   const eventsMap = useMemo(() => {
     const map = new Map<string, string>();
@@ -189,26 +179,54 @@ export function RecipeDetailsPage() {
                         borderRadius: 2, 
                         border: '1px solid rgba(255,255,255,0.05)',
                         display: 'flex',
-                        alignItems: 'center',
-                        gap: 2
+                        flexDirection: 'column',
+                        gap: 1
                       }}>
-                        <ItemChip id={ing.id} icon={ing.data?.icon} amount={ing.amount} />
-                        <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                            <Link 
-                                to={`/game/${gameId}/${ing.type === 'entity' ? 'entity' : 'items'}/view/${ing.id}`}
-                                style={{ textDecoration: 'none', color: 'inherit' }}
-                            >
-                                <Typography variant="body2" fontWeight={700} sx={{ 
-                                    lineHeight: 1.2,
-                                    '&:hover': { color: 'primary.main' }
-                                }}>
-                                    {ing.name || ing.data?.name || ing.id}
+                        <Stack direction="row" alignItems="center" gap={2}>
+                          <ItemChip id={ing.id} icon={ing.data?.icon} amount={ing.amount} type={ing.type} />
+                          <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+                              {ing.type !== 'category' ? (
+                                <Link 
+                                    to={`/game/${gameId}/${ing.type === 'entity' ? 'entity' : 'items'}/view/${ing.id}`}
+                                    style={{ textDecoration: 'none', color: 'inherit' }}
+                                >
+                                    <Typography variant="body2" fontWeight={700} sx={{ 
+                                        lineHeight: 1.2,
+                                        '&:hover': { color: 'primary.main' }
+                                    }}>
+                                        {ing.name || ing.data?.name || ing.id}
+                                    </Typography>
+                                </Link>
+                              ) : (
+                                <Typography variant="body2" fontWeight={700} sx={{ lineHeight: 1.2 }}>
+                                    Qualquer {ing.id}
                                 </Typography>
-                            </Link>
-                            <Typography variant="caption" color="text.secondary">
-                                Quantidade: {ing.amount}
+                              )}
+                              <Typography variant="caption" color="text.secondary">
+                                  Quantidade: {ing.amount}
+                              </Typography>
+                          </Box>
+                        </Stack>
+
+                        {ing.dataOptions && ing.dataOptions.length > 0 && (
+                          <Box sx={{ mt: 1, pt: 1, borderTop: '1px dashed rgba(255,255,255,0.1)' }}>
+                            <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', mb: 1, display: 'block' }}>
+                              OPÇÕES DISPONÍVEIS:
                             </Typography>
-                        </Box>
+                            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                              {ing.dataOptions.map((opt: any) => (
+                                <ItemChip 
+                                  key={opt.id} 
+                                  id={opt.id} 
+                                  icon={opt.icon} 
+                                  size="small" 
+                                  name={opt.name}
+                                  type={ing.type === 'category' ? 'item' : ing.type}
+                                />
+                              ))}
+                            </Stack>
+                          </Box>
+                        )}
                       </Box>
                     </Grid>
                   ))}
