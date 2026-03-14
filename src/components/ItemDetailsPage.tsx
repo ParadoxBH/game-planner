@@ -78,16 +78,16 @@ export function ItemDetailsPage() {
   }
 
   const { item, productionRecipes, usagesAsIngredient, dropsFrom, soldIn } = itemDetails;
+  const sizeItemCard = 300;
 
   return (
     <StyledContainer
       title={item.name}
       label={`Detalhes e origens do item ${item.id}`}
       actionsStart={
-        <Box sx={{ mb: 3 }}>
+        <Box>
           <Breadcrumbs
             separator={<NavigateNext fontSize="small" />}
-            sx={{ mb: 2 }}
           >
             <Link
               to={`/game/${gameId}`}
@@ -107,10 +107,10 @@ export function ItemDetailsPage() {
       }
     >
       <Stack direction={"row"} spacing={4} flex={1} overflow={"hidden"}>
-        <Stack spacing={2} overflow={"auto"}>
-          <Paper elevation={0} sx={{ p: 3, textAlign: "center", width: 500 }}>
-            <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-              <ItemChip id={item.id} icon={item.icon} size="large" />
+        <Stack spacing={2} sx={{overflowY: "auto", overflowX: "hidden", maxWidth: sizeItemCard, minWidth: sizeItemCard}}>
+          <Paper elevation={0} sx={{ p: 2, textAlign: "center" }}>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <ItemChip id={item.id} icon={item.icon} size="extraLarge" />
             </Box>
             <Typography variant="h5" fontWeight={800} color="primary.main">
               {item.name}
@@ -118,7 +118,7 @@ export function ItemDetailsPage() {
             <Typography
               variant="caption"
               color="text.secondary"
-              sx={{ display: "block", mb: 2 }}
+              sx={{ display: "block" }}
             >
               ID: {item.id}
             </Typography>
@@ -145,14 +145,13 @@ export function ItemDetailsPage() {
             </Stack>
           </Paper>
         </Stack>
-        <Stack spacing={2} overflow={"auto"}>
+        <Stack spacing={2} overflow={"auto"} flex={1}>
           {/* Produzido Em */}
-          <Paper elevation={0} sx={{ p: 3 }}>
+          <Paper elevation={0} sx={{ p: 2 }}>
             <Stack
               direction="row"
               spacing={1}
               alignItems="center"
-              sx={{ mb: 2 }}
             >
               <Construction color="primary" />
               <Typography variant="h6" fontWeight={700}>
@@ -183,12 +182,11 @@ export function ItemDetailsPage() {
           </Paper>
 
           {/* Utilizado Como Ingrediente */}
-          <Paper elevation={0} sx={{ p: 3 }}>
+          <Paper elevation={0} sx={{ p: 2 }}>
             <Stack
               direction="row"
               spacing={1}
               alignItems="center"
-              sx={{ mb: 2 }}
             >
               <Architecture color="primary" />
               <Typography variant="h6" fontWeight={700}>
@@ -223,13 +221,12 @@ export function ItemDetailsPage() {
             <Grid size={{ xs: 12, sm: 6 }}>
               <Paper
                 elevation={0}
-                sx={{ p: 3, height: "100%", minHeight: 300 }}
+                sx={{ p: 2, height: "100%" }}
               >
                 <Stack
                   direction="row"
                   spacing={1}
                   alignItems="center"
-                  sx={{ mb: 2 }}
                 >
                   <Bolt color="primary" />
                   <Typography variant="h6" fontWeight={700}>
@@ -292,13 +289,12 @@ export function ItemDetailsPage() {
             <Grid size={{ xs: 12, sm: 6 }}>
               <Paper
                 elevation={0}
-                sx={{ p: 3, height: "100%", minHeight: 300 }}
+                sx={{ p: 2, height: "100%" }}
               >
                 <Stack
                   direction="row"
                   spacing={1}
                   alignItems="center"
-                  sx={{ mb: 2 }}
                 >
                   <Storefront color="primary" />
                   <Typography variant="h6" fontWeight={700}>

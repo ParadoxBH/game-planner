@@ -20,9 +20,48 @@ export interface ItemChipProps {
   type?: GameDataTypes;
   icon?: string;
   isProduct?: boolean;
-  size?: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large' | 'extraLarge';
   disableLink?: boolean;
 }
+
+const SIZES = {
+  small: {
+    box: 32,
+    icon: 16,
+    badge: 16,
+    offset: -2,
+    p: 0.5,
+    px: 0.5,
+    fontSize: '0.65rem'
+  },
+  medium: {
+    box: 40,
+    icon: 20,
+    badge: 18,
+    offset: -4,
+    p: 0.5,
+    px: 0.5,
+    fontSize: '0.65rem'
+  },
+  large: {
+    box: 56,
+    icon: 28,
+    badge: 22,
+    offset: -6,
+    p: 0.75,
+    px: 1,
+    fontSize: '0.75rem'
+  },
+  extraLarge: {
+    box: 100,
+    icon: 50,
+    badge: 32,
+    offset: -10,
+    p: 1.5,
+    px: 2,
+    fontSize: '1.1rem'
+  }
+};
 
 /**
  * A standardized component to display game items/entities with an icon,
@@ -56,25 +95,22 @@ export function ItemChip({
     ? `${displayName} ${amount.toString()}x` 
     : displayName;
   
-  const boxSize = size === 'large' ? 56 : size === 'medium' ? 40 : 32;
-  const iconSize = size === 'large' ? 28 : size === 'medium' ? 20 : 16;
-  const badgeSize = size === 'large' ? 22 : size === 'medium' ? 18 : 16;
-  const badgeOffset = size === 'large' ? -6 : size === 'medium' ? -4 : -2;
+  const config = SIZES[size];
 
   const renderIcon = () => {
     if (type === 'category') {
-      return <Category sx={{ fontSize: iconSize, color: 'warning.main' }} />;
+      return <Category sx={{ fontSize: config.icon, color: 'warning.main' }} />;
     }
     if (iconSrc) {
       return <img src={iconSrc} alt={id} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />;
     }
     if (type === 'entity') {
-      return <Bolt sx={{ fontSize: iconSize, color: 'secondary.main' }} />;
+      return <Bolt sx={{ fontSize: config.icon, color: 'secondary.main' }} />;
     }
     if (type === 'skill') {
-      return <AutoFixHigh sx={{ fontSize: iconSize, color: 'warning.light' }} />;
+      return <AutoFixHigh sx={{ fontSize: config.icon, color: 'warning.light' }} />;
     }
-    return <Inventory sx={{ fontSize: iconSize, color: isProduct ? 'primary.main' : 'text.disabled' }} />;
+    return <Inventory sx={{ fontSize: config.icon, color: isProduct ? 'primary.main' : 'text.disabled' }} />;
   };
 
   const handleClick = (e: React.MouseEvent) => {
@@ -91,8 +127,8 @@ export function ItemChip({
         onClick={handleClick}
         sx={{ 
           position: 'relative', 
-          width: boxSize, 
-          height: boxSize,
+          width: config.box, 
+          height: config.box,
           cursor: (type === 'item' && !disableLink) ? 'pointer' : 'default'
         }}
       >
@@ -102,7 +138,7 @@ export function ItemChip({
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'center', 
-          p: size === 'large' ? 0.75 : 0.5,
+          p: config.p,
           backgroundColor: 'rgba(0,0,0,0.2)',
           borderColor: type === 'category' ? 'warning.dark' : 
                        type === 'entity' ? 'secondary.dark' : 
@@ -122,14 +158,14 @@ export function ItemChip({
         {amount !== undefined && (
           <Box sx={{ 
             position: 'absolute', 
-            bottom: badgeOffset, 
-            right: badgeOffset, 
+            bottom: config.offset, 
+            right: config.offset, 
             backgroundColor: isProduct ? 'primary.main' : 'background.paper',
             color: isProduct ? 'primary.contrastText' : 'text.primary',
             borderRadius: '10px',
-            px: size === 'large' ? 1 : 0.5,
-            minWidth: badgeSize,
-            height: badgeSize,
+            px: config.px,
+            minWidth: config.badge,
+            height: config.badge,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -140,7 +176,7 @@ export function ItemChip({
           }}>
             <Typography variant="caption" sx={{ 
               fontWeight: 800, 
-              fontSize: size === 'large' ? '0.75rem' : '0.65rem' 
+              fontSize: config.fontSize 
             }}>
               {formatAmount(amount)}
             </Typography>
