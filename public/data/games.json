@@ -45,7 +45,7 @@
             790.57
           ]
         ],
-        "minZoom": -2,
+        "minZoom": 2,
         "maxZoom": 4,
         "thumbnail": "/map/heartopia/map.png"
       }
@@ -77,8 +77,14 @@
         "tileMaxZoom": 4,
         "tileRange": {
           "z": 4,
-          "min": [1, 0],
-          "max": [10, 10]
+          "min": [
+            1,
+            0
+          ],
+          "max": [
+            10,
+            10
+          ]
         },
         "thumbnail": "/map/satisfactory/realisticLayer/thumb.png"
       }
