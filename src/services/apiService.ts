@@ -146,7 +146,11 @@ export class ApiService {
       : null;
 
     const normalizedName =
-      recipe.name || itemData?.name || firstProduct?.id || recipe.id;
+      recipe.name || 
+      itemData?.name || 
+      this.data.entities.find((e) => e.id === firstProduct?.id)?.name ||
+      firstProduct?.id || 
+      recipe.id;
 
     return {
       ...recipe,
