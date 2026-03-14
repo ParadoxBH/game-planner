@@ -5,7 +5,7 @@ import {
   Stack,
   CircularProgress
 } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useGameData } from "../hooks/useGameData";
 import { useState, useMemo } from "react";
 import { StyledContainer } from "./common/StyledContainer";
@@ -47,13 +47,15 @@ interface GameEvent {
 }
 
 export function RecipesPage() {
-  const { gameId } = useParams<{ gameId: string }>();
+  const { gameId, category: urlStation } = useParams<{ gameId: string; category?: string }>();
+  const navigate = useNavigate();
+
   const { data: recipes, loading: loadingRecipes, error: errorRecipes } = useGameData<GameRecipe[]>(gameId, "recipes");
   const { data: items } = useGameData<GameItem[]>(gameId, "items");
   const { data: entities } = useGameData<GameEntity[]>(gameId, "entity");
   const { data: events } = useGameData<GameEvent[]>(gameId, "events");
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedStation, setSelectedStation] = useState<string | null>(null);
+  const [selectedSubStation, setSelectedSubStation] = useState<string | null>(null);
 
   const dataMap = useMemo(() => {
     const map = new Map<string, { name: string; icon?: string; type: 'item' | 'entity' }>();
@@ -125,10 +127,28 @@ export function RecipesPage() {
   const stationsList = useMemo(() => {
     const stations = new Set<string>();
     normalizedRecipes.forEach(recipe => {
-      recipe.stations.forEach(s => stations.add(s));
+      if (recipe.stations[0]) stations.add(recipe.stations[0]);
     });
     return Array.from(stations).sort();
   }, [normalizedRecipes]);
+
+  const subStations = useMemo(() => {
+    if (!normalizedRecipes) return [];
+    const stations = new Set<string>();
+    
+    // Filter recipes that match the current primary station
+    const relevantRecipes = normalizedRecipes.filter(recipe => {
+      const primary = recipe.stations[0];
+      return !urlStation || urlStation === "all" || (primary && primary.toLowerCase() === urlStation.toLowerCase());
+    });
+
+    relevantRecipes.forEach(recipe => {
+      if (recipe.stations.length > 1) {
+        recipe.stations.slice(1).forEach(s => stations.add(s));
+      }
+    });
+    return Array.from(stations).sort();
+  }, [normalizedRecipes, urlStation]);
 
   const filteredRecipes = useMemo(() => {
     return normalizedRecipes.filter(recipe => {
@@ -137,10 +157,14 @@ export function RecipesPage() {
                             recipe.ingredients.some(i => i.id.toLowerCase().includes(searchTerm.toLowerCase()) || (i.name && i.name.toLowerCase().includes(searchTerm.toLowerCase()))) ||
                             recipe.products.some(p => p.id.toLowerCase().includes(searchTerm.toLowerCase()) || (p.name && p.name.toLowerCase().includes(searchTerm.toLowerCase())));
       
-      const matchesStation = !selectedStation || recipe.stations.includes(selectedStation);
-      return matchesSearch && matchesStation;
+      const primaryStation = recipe.stations[0];
+      const matchesStation = !urlStation || (primaryStation && primaryStation.toLowerCase() === urlStation.toLowerCase());
+      
+      const matchesSub = !selectedSubStation || (recipe.stations.length > 1 && recipe.stations.slice(1).some(s => s.toLowerCase() === selectedSubStation.toLowerCase()));
+
+      return matchesSearch && matchesStation && matchesSub;
     });
-  }, [normalizedRecipes, searchTerm, selectedStation]);
+  }, [normalizedRecipes, searchTerm, urlStation, selectedSubStation]);
 
   if (loadingRecipes) {
     return (
@@ -166,14 +190,29 @@ export function RecipesPage() {
       onChangeSearch={setSearchTerm}
       search={{ placeholder: "Pesquisar receitas, ingredientes..." }}
       actionsStart={
-        <PickSelector
-          label="Estação"
-          value={selectedStation}
-          options={stationsList}
-          onChange={setSelectedStation}
-          allLabel="Todas Estações"
-          icon={<Build sx={{ fontSize: 18 }} />}
-        />
+        <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
+          <PickSelector
+            label="Estação"
+            value={urlStation || null}
+            options={stationsList}
+            onChange={(st) => {
+              setSelectedSubStation(null);
+              navigate(`/game/${gameId}/recipes/list/${st || ""}`);
+            }}
+            allLabel="Todas Estações"
+            icon={<Build sx={{ fontSize: 18 }} />}
+          />
+          {subStations.length > 0 && (
+            <PickSelector
+              label="Sub-estação"
+              value={selectedSubStation}
+              options={subStations}
+              onChange={setSelectedSubStation}
+              allLabel="Todas"
+              icon={<Build sx={{ fontSize: 18 }} />}
+            />
+          )}
+        </Stack>
       }
     >
       {filteredRecipes.length > 0 ? (

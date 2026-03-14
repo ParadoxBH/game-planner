@@ -24,10 +24,10 @@ export function RoutesPage() {
           <Route path="map" element={<MapView />} />
 
           {/* Placeholders adicionais baseados nos novos botões da Header */}
-          <Route path="items" element={<ItemsPage />} />
-          <Route path="recipes" element={<RecipesPage />} />
-          <Route path="entity/:category?" element={<EntityPage />} />
-          <Route path="shops" element={<ShopsPage />} />
+          <Route path="items/list/:category?" element={<ItemsPage />} />
+          <Route path="recipes/list/:category?" element={<RecipesPage />} />
+          <Route path="entity/list/:category?" element={<EntityPage />} />
+          <Route path="shops/list/:category?" element={<ShopsPage />} />
           <Route path="events" element={<EventsPage />} />
           <Route path="codes" element={<CodesPage />} />
           <Route path="quests" element={<Typography p={4} variant="h4">Lista de Missões (Em Breve)</Typography>} />

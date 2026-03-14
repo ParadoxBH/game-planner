@@ -29,7 +29,7 @@ export function EntityPage() {
     error,
   } = useGameData<GameEntity[]>(gameId, "entity");
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
   const [showPrices, setShowPrices] = useState(false);
 
   const categories = useMemo(() => {
@@ -39,12 +39,35 @@ export function EntityPage() {
       const catsArr = Array.isArray(entity.category)
         ? entity.category
         : [entity.category];
-      catsArr.forEach((cat) => {
-        if (cat) cats.add(cat);
-      });
+      if (catsArr[0]) cats.add(catsArr[0]);
     });
     return Array.from(cats).sort();
   }, [entities]);
+
+  const subCategories = useMemo(() => {
+    if (!entities) return [];
+    const cats = new Set<string>();
+    
+    // Filter entities that match the current primary category
+    const relevantEntities = entities.filter(entity => {
+      const catsArr = Array.isArray(entity.category) ? entity.category : [entity.category];
+      const primary = catsArr[0];
+      return !urlCategory || urlCategory === "all" || (primary && primary.toLowerCase() === urlCategory.toLowerCase());
+    });
+
+    relevantEntities.forEach((entity) => {
+      const catsArr = Array.isArray(entity.category)
+        ? entity.category
+        : [entity.category];
+      // Collect all categories except the primary one (index 0)
+      if (catsArr.length > 1) {
+        catsArr.slice(1).forEach(cat => {
+          if (cat) cats.add(cat);
+        });
+      }
+    });
+    return Array.from(cats).sort();
+  }, [entities, urlCategory]);
 
   const filteredEntities = useMemo(() => {
     if (!entities) return [];
@@ -53,17 +76,23 @@ export function EntityPage() {
         entity.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         entity.id.toLowerCase().includes(searchTerm.toLowerCase());
 
-      const effectiveCategory = urlCategory || selectedCategory;
       const entityCats = Array.isArray(entity.category)
         ? entity.category
         : [entity.category];
-      const matchesCategory =
-        !effectiveCategory ||
-        effectiveCategory === "all" ||
-        entityCats.includes(effectiveCategory);
-      return matchesSearch && matchesCategory;
+
+      const primaryCategory = entityCats[0];
+      const matchesPrimary =
+        !urlCategory ||
+        urlCategory === "all" ||
+        (primaryCategory && primaryCategory.toLowerCase() === urlCategory.toLowerCase());
+
+      const matchesSub =
+        !selectedSubCategory ||
+        (entityCats.length > 1 && entityCats.slice(1).some(c => c.toLowerCase() === selectedSubCategory.toLowerCase()));
+
+      return matchesSearch && matchesPrimary && matchesSub;
     });
-  }, [entities, searchTerm, urlCategory, selectedCategory]);
+  }, [entities, searchTerm, urlCategory, selectedSubCategory]);
 
   if (loading) {
     return (
@@ -91,9 +120,6 @@ export function EntityPage() {
     );
   }
 
-  // Só mostra Chips se não houver categoria na URL
-  const showChips = !urlCategory;
-
   return (
     <StyledContainer
       title={`${urlCategory ? urlCategory.charAt(0).toUpperCase() + urlCategory.slice(1) : "Entidades"} de ${gameId}`}
@@ -109,13 +135,24 @@ export function EntityPage() {
           justifyContent={"space-between"}
           flex={1}
         >
-          <Stack direction={"row"} alignItems={"center"} spacing={1}>
-            {showChips && (
+          <Stack direction={"row"} alignItems={"center"} spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
+            <PickSelector
+              label="Categoria"
+              value={urlCategory || null}
+              options={categories}
+              onChange={(cat) => {
+                setSelectedSubCategory(null); // Reset sub-filter when primary changes
+                navigate(`/game/${gameId}/entity/list/${cat || ""}`);
+              }}
+              icon={<FilterList sx={{ fontSize: 18 }} />}
+            />
+            {subCategories.length > 0 && (
               <PickSelector
-                label="Categoria"
-                value={selectedCategory}
-                options={categories}
-                onChange={setSelectedCategory}
+                label="Sub-categoria"
+                value={selectedSubCategory}
+                options={subCategories}
+                onChange={setSelectedSubCategory}
+                allLabel="Todas"
                 icon={<FilterList sx={{ fontSize: 18 }} />}
               />
             )}

@@ -1,6 +1,15 @@
 import { Button, Typography, Stack, useTheme, Grid, Card, Box, CardContent, CardActionArea } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
-import { Map, Construction, Pets, Assignment } from "@mui/icons-material";
+import { 
+  Map, 
+  Construction, 
+  Pets, 
+  Assignment, 
+  Storefront, 
+  Restaurant, 
+  Event, 
+  ConfirmationNumber 
+} from "@mui/icons-material";
 import { StyledContainer } from "./common/StyledContainer";
 
 export function GameDashboard() {
@@ -13,8 +22,12 @@ export function GameDashboard() {
 
   const menuItems = [
     { title: "Mapa Interativo", icon: <Map sx={{ fontSize: 40 }} />, path: `/game/${gameId}/map`, color: theme.palette.primary.main },
-    { title: "Itens & Recursos", icon: <Construction sx={{ fontSize: 40 }} />, path: `/game/${gameId}/items`, color: "#4caf50" },
-    { title: "Entidades", icon: <Pets sx={{ fontSize: 40 }} />, path: `/game/${gameId}/entity`, color: "#ff9800" },
+    { title: "Itens & Recursos", icon: <Construction sx={{ fontSize: 40 }} />, path: `/game/${gameId}/items/list`, color: "#4caf50" },
+    { title: "Entidades", icon: <Pets sx={{ fontSize: 40 }} />, path: `/game/${gameId}/entity/list`, color: "#ff9800" },
+    { title: "Receitas", icon: <Restaurant sx={{ fontSize: 40 }} />, path: `/game/${gameId}/recipes/list`, color: "#f44336" },
+    { title: "Lojas", icon: <Storefront sx={{ fontSize: 40 }} />, path: `/game/${gameId}/shops/list`, color: "#9c27b0" },
+    { title: "Eventos", icon: <Event sx={{ fontSize: 40 }} />, path: `/game/${gameId}/events`, color: "#e91e63" },
+    { title: "Códigos", icon: <ConfirmationNumber sx={{ fontSize: 40 }} />, path: `/game/${gameId}/codes`, color: "#795548" },
     { title: "Missões", icon: <Assignment sx={{ fontSize: 40 }} />, path: `/game/${gameId}/quests`, color: "#2196f3" },
   ];
 

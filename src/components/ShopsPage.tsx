@@ -11,11 +11,12 @@ import {
   CardContent,
   CircularProgress,
 } from "@mui/material";
-import { Storefront, AccessTime, Lock, Refresh } from "@mui/icons-material";
-import { useParams } from "react-router-dom";
+import { Storefront, AccessTime, Lock, Refresh, ChevronRight } from "@mui/icons-material";
+import { useParams, useNavigate } from "react-router-dom";
 import { useGameData } from "../hooks/useGameData";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { StyledContainer } from "./common/StyledContainer";
+import { useTheme, CardActionArea } from "@mui/material";
 import {
   ShopItemCard,
   type ShopItem,
@@ -57,7 +58,9 @@ interface GameEvent {
 
 
 export function ShopsPage() {
-  const { gameId } = useParams<{ gameId: string }>();
+  const { gameId, category: urlShopId } = useParams<{ gameId: string; category?: string }>();
+  const navigate = useNavigate();
+
   const { data: shops, loading: loadingShops } = useGameData<GameShop[]>(
     gameId,
     "shops",
@@ -65,7 +68,6 @@ export function ShopsPage() {
   const { data: items } = useGameData<GameItem[]>(gameId, "items");
   const { data: entities } = useGameData<GameEntity[]>(gameId, "entity");
   const { data: events } = useGameData<GameEvent[]>(gameId, "events");
-  const [selectedShopIndex, setSelectedShopIndex] = useState(0);
 
   const itemsMap = useMemo(() => {
     const map = new Map<string, GameItem>();
@@ -85,7 +87,12 @@ export function ShopsPage() {
     return map;
   }, [events]);
 
-  const currentShop = shops?.[selectedShopIndex];
+  const currentIndex = useMemo(() => {
+    if (!shops || !urlShopId) return -1;
+    return shops.findIndex((s) => s.id === urlShopId);
+  }, [shops, urlShopId]);
+
+  const currentShop = shops?.[currentIndex];
   const currentNpc = currentShop ? entitiesMap.get(currentShop.npcId) : null;
 
   if (loadingShops) {
@@ -128,55 +135,133 @@ export function ShopsPage() {
     );
   }
 
+  const theme = useTheme();
+  const isOverview = currentIndex === -1;
+
   return (
     <StyledContainer
       title={`Lojas de ${gameId}`}
       label="Visite os NPCs locais para comprar suprimentos e trocar recursos."
-      sx={{ container: { overflowY: "hidden" } }}
+      sx={{ container: { overflowY: isOverview ? "auto" : "hidden" } }}
       actionsStart={
-        <Tabs
-          value={selectedShopIndex}
-          onChange={(_, newValue) => setSelectedShopIndex(newValue)}
-          variant="scrollable"
-          scrollButtons="auto"
-          sx={{
-            minHeight: 48,
-            "& .MuiTab-root": {
-              textTransform: "none",
-              fontWeight: 600,
-              fontSize: "0.9rem",
-              minWidth: 120,
+        !isOverview && (
+          <Tabs
+            value={currentIndex}
+            onChange={(_, newValue) => {
+              const shop = shops[newValue];
+              navigate(`/game/${gameId}/shops/list/${shop.id}`);
+            }}
+            variant="scrollable"
+            scrollButtons="auto"
+            sx={{
               minHeight: 48,
-              color: "text.secondary",
-              "&.Mui-selected": { color: "primary.main" },
-            },
-            "& .MuiTabs-indicator": { backgroundColor: "primary.main" },
-          }}
-        >
+              "& .MuiTab-root": {
+                textTransform: "none",
+                fontWeight: 600,
+                fontSize: "0.9rem",
+                minWidth: 120,
+                minHeight: 48,
+                color: "text.secondary",
+                "&.Mui-selected": { color: "primary.main" },
+              },
+              "& .MuiTabs-indicator": { backgroundColor: "primary.main" },
+            }}
+          >
+            {shops.map((shop) => {
+              const npc = entitiesMap.get(shop.npcId);
+              return (
+                <Tab
+                  key={shop.id}
+                  label={shop.name || npc?.name || shop.npcId}
+                  icon={
+                    npc?.icon ? (
+                      <Avatar
+                        src={npc.icon}
+                        sx={{ width: 24, height: 24, mr: 1 }}
+                      />
+                    ) : (
+                      <Storefront />
+                    )
+                  }
+                  iconPosition="start"
+                />
+              );
+            })}
+          </Tabs>
+        )
+      }
+    >
+      {isOverview ? (
+        <Grid container spacing={3}>
           {shops.map((shop) => {
             const npc = entitiesMap.get(shop.npcId);
             return (
-              <Tab
-                key={shop.id}
-                label={shop.name || npc?.name || shop.npcId}
-                icon={
-                  npc?.icon ? (
-                    <Avatar
-                      src={npc.icon}
-                      sx={{ width: 24, height: 24, mr: 1 }}
-                    />
-                  ) : (
-                    <Storefront />
-                  )
-                }
-                iconPosition="start"
-              />
+              <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={shop.id}>
+                <Card sx={{ 
+                  borderRadius: 2, 
+                  backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                  border: '1px solid rgba(255, 255, 255, 0.05)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  overflow: 'hidden',
+                  height: '100%',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                    transform: 'translateY(-6px)',
+                    borderColor: 'primary.main',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.4)'
+                  }
+                }}>
+                  <CardActionArea 
+                    onClick={() => navigate(`/game/${gameId}/shops/list/${shop.id}`)}
+                    sx={{ height: '100%', p: 3 }}
+                  >
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+                      <Box sx={{ 
+                        width: 100, 
+                        height: 100, 
+                        borderRadius: '50%', 
+                        mb: 2,
+                        backgroundColor: 'rgba(0,0,0,0.2)',
+                        border: '2px solid rgba(255, 255, 255, 0.05)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        overflow: 'hidden',
+                        position: 'relative'
+                      }}>
+                        {npc?.icon ? (
+                          <img src={npc.icon} alt={npc.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        ) : (
+                          <Storefront sx={{ fontSize: 50, color: 'text.disabled' }} />
+                        )}
+                      </Box>
+                      <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.5 }}>
+                        {shop.name || npc?.name || shop.id}
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 600, mb: 2 }}>
+                        NPC: {npc?.name || "Desconhecido"}
+                      </Typography>
+                      <Box sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 1, 
+                        color: 'primary.main',
+                        fontWeight: 700,
+                        fontSize: '0.8rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: 1
+                      }}>
+                        Ver Loja <ChevronRight sx={{ fontSize: 16 }} />
+                      </Box>
+                    </Box>
+                  </CardActionArea>
+                </Card>
+              </Grid>
             );
           })}
-        </Tabs>
-      }
-    >
-      {currentShop && (
+        </Grid>
+      ) : (
+        currentShop && (
         <Stack direction="row" spacing={4} flex={1} overflow={"hidden"}>
           {/* NPC Info & Reset */}
           <Stack spacing={2}>
@@ -325,6 +410,7 @@ export function ShopsPage() {
             ))}
           </Stack>
         </Stack>
+        )
       )}
     </StyledContainer>
   );

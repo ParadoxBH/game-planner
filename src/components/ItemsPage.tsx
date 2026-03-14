@@ -15,7 +15,7 @@ import {
   ShoppingCart,
   SwapHoriz
 } from "@mui/icons-material";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useGameData } from "../hooks/useGameData";
 import { useState, useMemo } from "react";
 import { StyledContainer } from "./common/StyledContainer";
@@ -34,10 +34,12 @@ interface GameItem {
 }
 
 export function ItemsPage() {
-  const { gameId } = useParams<{ gameId: string }>();
+  const { gameId, category: urlCategory } = useParams<{ gameId: string; category?: string }>();
+  const navigate = useNavigate();
+
   const { data: items, loading, error } = useGameData<GameItem[]>(gameId, "items");
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
   const [tradeStatus, setTradeStatus] = useState<string | null>(null);
   const [showPrices, setShowPrices] = useState(false);
 
@@ -46,14 +48,35 @@ export function ItemsPage() {
     const cats = new Set<string>();
     items.forEach(item => {
       const itemCats = item.category;
-      if (Array.isArray(itemCats)) {
-        itemCats.forEach(c => cats.add(c));
-      } else if (itemCats) {
+      if (Array.isArray(itemCats) && itemCats[0]) {
+        cats.add(itemCats[0]);
+      } else if (itemCats && typeof itemCats === 'string') {
         cats.add(itemCats);
       }
     });
     return Array.from(cats).sort();
   }, [items]);
+
+  const subCategories = useMemo(() => {
+    if (!items) return [];
+    const cats = new Set<string>();
+    
+    // Filter items that match current primary selection
+    const relevantItems = items.filter(item => {
+      const itemCats = item.category;
+      const catsArr = Array.isArray(itemCats) ? itemCats : (itemCats ? [itemCats] : []);
+      const primary = catsArr[0];
+      return !urlCategory || urlCategory === "all" || (primary && primary.toLowerCase() === urlCategory.toLowerCase());
+    });
+
+    relevantItems.forEach(item => {
+      const itemCats = item.category;
+      if (Array.isArray(itemCats) && itemCats.length > 1) {
+        itemCats.slice(1).forEach(c => cats.add(c));
+      }
+    });
+    return Array.from(cats).sort();
+  }, [items, urlCategory]);
 
   const filteredItems = useMemo(() => {
     if (!items) return [];
@@ -64,7 +87,10 @@ export function ItemsPage() {
       const itemCats = item.category;
       const categoriesList = Array.isArray(itemCats) ? itemCats : (itemCats ? [itemCats] : []);
       
-      const matchesCategory = !selectedCategory || categoriesList.includes(selectedCategory);
+      const primaryCategory = categoriesList[0];
+      const matchesPrimary = !urlCategory || urlCategory === "all" || (primaryCategory && primaryCategory.toLowerCase() === urlCategory.toLowerCase());
+      
+      const matchesSub = !selectedSubCategory || (categoriesList.length > 1 && categoriesList.slice(1).some(c => c.toLowerCase() === selectedSubCategory.toLowerCase()));
 
       let matchesTradeStatus = true;
       if (tradeStatus === "Compraveis") {
@@ -77,9 +103,9 @@ export function ItemsPage() {
         matchesTradeStatus = item.buyPrice !== undefined || item.sellPrice !== undefined;
       }
 
-      return matchesSearch && matchesCategory && matchesTradeStatus;
+      return matchesSearch && matchesPrimary && matchesSub && matchesTradeStatus;
     });
-  }, [items, searchTerm, selectedCategory, tradeStatus]);
+  }, [items, searchTerm, urlCategory, selectedSubCategory, tradeStatus]);
 
   if (loading) {
     return (
@@ -106,19 +132,33 @@ export function ItemsPage() {
       search={{ placeholder: "Pesquisar itens..." }}
       actionsStart={
         <>
-          <PickSelector
-            label="Categoria"
-            value={selectedCategory}
-            options={categories}
-            onChange={setSelectedCategory}
-          />
-          <PickSelector
-            label="Status"
-            value={tradeStatus}
-            options={["Compraveis", "Vendiveis", "Comercializados", "Não Comercializados"]}
-            onChange={setTradeStatus}
-            icon={<SwapHoriz sx={{ fontSize: 18 }} />}
-          />
+          <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
+            <PickSelector
+              label="Categoria"
+              value={urlCategory || null}
+              options={categories}
+              onChange={(cat) => {
+                setSelectedSubCategory(null);
+                navigate(`/game/${gameId}/items/list/${cat || ""}`);
+              }}
+            />
+            {subCategories.length > 0 && (
+              <PickSelector
+                label="Sub-categoria"
+                value={selectedSubCategory}
+                options={subCategories}
+                onChange={setSelectedSubCategory}
+                allLabel="Todas"
+              />
+            )}
+            <PickSelector
+              label="Status"
+              value={tradeStatus}
+              options={["Compraveis", "Vendiveis", "Comercializados", "Não Comercializados"]}
+              onChange={setTradeStatus}
+              icon={<SwapHoriz sx={{ fontSize: 18 }} />}
+            />
+          </Stack>
           <Box sx={{ flexGrow: 1 }} />
           <FormControlLabel
             control={
