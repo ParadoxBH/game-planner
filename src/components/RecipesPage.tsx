@@ -182,6 +182,12 @@ export function RecipesPage() {
         data={filteredRecipes}
         viewMode={viewMode}
         cardMinWidth={450}
+        listHeader={[
+          { label: "Receita / Produto", width: "30%" },
+          { label: "Ingredientes", width: "40%" },
+          { label: "Bancadas", width: "15%" },
+          { label: "Desbloqueio", align: "right" as const, width: "15%" },
+        ]}
         emptyMessage="Nenhuma receita encontrada com estes filtros."
         renderCard={(recipe: any) => (
           <RecipeCard
@@ -199,50 +205,62 @@ export function RecipesPage() {
           const mainProduct = recipe.normalizedProducts[0];
           const productData = mainProduct ? getSourceData(mainProduct.type, mainProduct.id) : null;
           
-          return (
+          return [
             <Box 
               onClick={() => navigate(`/game/${gameId}/recipes/view/${recipe.id}`)}
-              sx={{ 
-                p: 1.5, 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: 2, 
-                cursor: 'pointer',
-                justifyContent: 'space-between'
-              }}
+              sx={{ display: 'flex', alignItems: 'center', gap: 2, cursor: 'pointer' }}
             >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Box sx={{ width: 40, height: 40, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  {productData?.icon ? (
-                    <img src={productData.icon} alt={recipe.normalizedName} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
-                  ) : (
-                    <Science sx={{ fontSize: 20, color: 'rgba(255, 255, 255, 0.2)' }} />
-                  )}
-                </Box>
-                <Box>
-                  <Typography variant="body1" sx={{ fontWeight: 700 }}>{recipe.normalizedName}</Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>{recipe.id}</Typography>
-                </Box>
-              </Box>
-
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Stack direction="row" spacing={0.5}>
-                  {recipe.normalizedStations.filter(Boolean).map((station: string) => (
-                    <Chip key={station} label={station} size="small" sx={{ height: 20, fontSize: '0.6rem', backgroundColor: 'rgba(255,255,255,0.05)' }} />
-                  ))}
-                </Stack>
-                {recipe.unlock && recipe.unlock.length > 0 && (
-                  <Chip 
-                    label={recipe.unlock[0].value} 
-                    size="small" 
-                    color="primary" 
-                    variant="outlined" 
-                    sx={{ height: 20, fontSize: '0.6rem' }} 
-                  />
+              <Box sx={{ width: 32, height: 32, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
+                {productData?.icon ? (
+                  <img src={productData.icon} alt={recipe.normalizedName} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                ) : (
+                  <Science sx={{ fontSize: 16, color: 'rgba(255, 255, 255, 0.2)' }} />
                 )}
-              </Stack>
-            </Box>
-          );
+              </Box>
+              <Typography variant="body2" sx={{ fontWeight: 700 }}>{recipe.normalizedName}</Typography>
+            </Box>,
+
+            <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap', alignItems: 'center' }}>
+              {recipe.normalizedIngredients.map((ing: any, i: number) => {
+                const ingData = getSourceData(ing.type, ing.id);
+                return (
+                  <Tooltip key={i} title={`${ingData?.name || ing.id} x${ing.amount}`}>
+                    <Box sx={{ 
+                      width: 24, height: 24, 
+                      borderRadius: 0.5, 
+                      backgroundColor: 'rgba(255,255,255,0.03)',
+                      border: '1px solid rgba(255,255,255,0.05)',
+                      display: 'flex', justifyContent: 'center', alignItems: 'center',
+                      position: 'relative'
+                    }}>
+                      <img src={ingData?.icon} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                      {ing.amount > 1 && (
+                        <Typography sx={{ 
+                          position: 'absolute', bottom: -2, right: -2, 
+                          fontSize: '0.5rem', fontWeight: 900, color: 'white',
+                          textShadow: '0 0 2px black',
+                          backgroundColor: 'secondary.main',
+                          borderRadius: '50%',
+                          width: 12, height: 12,
+                          display: 'flex', justifyContent: 'center', alignItems: 'center'
+                        }}>{ing.amount}</Typography>
+                      )}
+                    </Box>
+                  </Tooltip>
+                );
+              })}
+            </Box>,
+
+            <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+              {recipe.normalizedStations.filter(Boolean).map((station: string) => (
+                <Chip key={station} label={station} size="small" sx={{ height: 18, fontSize: '0.6rem', backgroundColor: 'rgba(255,255,255,0.05)' }} />
+              ))}
+            </Box>,
+
+            <Typography variant="caption" sx={{ textAlign: 'right', display: 'block', color: 'text.secondary', fontWeight: 700 }}>
+              {recipe.unlock && recipe.unlock.length > 0 ? recipe.unlock[0].value : '-'}
+            </Typography>
+          ];
         }}
         renderIconItem={(recipe: any) => {
           const mainProduct = recipe.normalizedProducts[0];

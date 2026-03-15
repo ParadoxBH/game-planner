@@ -10,7 +10,7 @@ import {
   CardContent,
   CircularProgress,
 } from "@mui/material";
-import { Storefront, Lock, Refresh } from "@mui/icons-material";
+import { Storefront, Lock, Refresh, Inventory } from "@mui/icons-material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../hooks/useApi";
 import { useMemo } from "react";
@@ -167,6 +167,11 @@ export function ShopsPage() {
           data={shops}
           viewMode={viewMode}
           cardMinWidth={300}
+          listHeader={[
+            { label: "Loja / NPC", width: "60%" },
+            { label: "ID", width: "20%" },
+            { label: "Status", align: "right" as const, width: "20%" },
+          ]}
           emptyMessage="Nenhuma loja cadastrada para este jogo."
           renderCard={(shop) => (
             <ShopCard
@@ -177,43 +182,25 @@ export function ShopsPage() {
           )}
           renderListItem={(shop) => {
             const npc = entitiesMap.get(shop.npcId);
-            return (
-              <Box 
+            return [
+              <Box
                 onClick={() => navigate(`/game/${gameId}/shops/list/${shop.id}`)}
-                sx={{ 
-                  p: 1.5, 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: 2, 
-                  cursor: 'pointer',
-                  justifyContent: 'space-between'
-                }}
+                sx={{ display: 'flex', alignItems: 'center', gap: 2, cursor: 'pointer' }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Box sx={{ width: 40, height: 40, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    {npc?.icon ? (
-                      <img src={npc.icon} alt={shop.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
-                    ) : (
-                      <Storefront sx={{ fontSize: 20, color: 'rgba(255, 255, 255, 0.2)' }} />
-                    )}
-                  </Box>
-                  <Box>
-                    <Typography variant="body1" sx={{ fontWeight: 700 }}>{shop.name || npc?.name || shop.npcId}</Typography>
-                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>{shop.id}</Typography>
-                  </Box>
+                <Box sx={{ width: 32, height: 32, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
+                  {npc?.icon ? (
+                    <img src={npc.icon} alt={shop.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                  ) : (
+                    <Inventory sx={{ fontSize: 16, color: 'rgba(255, 255, 255, 0.2)' }} />
+                  )}
                 </Box>
-                {shop.conditional && shop.conditional.length > 0 && (
-                  <Chip 
-                    label="Requisitos" 
-                    size="small" 
-                    color="warning" 
-                    variant="outlined" 
-                    icon={<Lock sx={{ fontSize: '0.7rem' }} />}
-                    sx={{ height: 20, fontSize: '0.6rem' }} 
-                  />
-                )}
+                <Typography variant="body2" sx={{ fontWeight: 700 }}>{shop.name}</Typography>
+              </Box>,
+              <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: 'monospace' }}>{shop.id}</Typography>,
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Chip label="Ativa" size="small" color="success" variant="outlined" sx={{ height: 18, fontSize: '0.6rem' }} />
               </Box>
-            );
+            ];
           }}
           renderIconItem={(shop) => {
             const npc = entitiesMap.get(shop.npcId);
@@ -352,6 +339,11 @@ export function ShopsPage() {
                   data={group.items}
                   viewMode={itemsViewMode}
                   cardMinWidth={300}
+                  listHeader={[
+                    { label: "Item", width: "60%" },
+                    { label: "Preço", align: "right" as const, width: "20%" },
+                    { label: "Limite / Qtd", align: "right" as const, width: "20%" },
+                  ]}
                   renderCard={(shopItem: ShopItem) => (
                     <ShopItemCard
                       shopItem={shopItem}
@@ -368,41 +360,53 @@ export function ShopsPage() {
                     const baseEntity = entitiesMap.get(shopItem.id);
                     const currencyItem = itemsMap.get(shopItem.currency || "ouro");
                     const target = baseItem || baseEntity;
+                    const displayPrice = shopItem.price ?? (baseItem?.buyPrice || baseItem?.sellPrice);
                     
-                    return (
-                      <Box sx={{ p: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', gap: 2 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                          <Box sx={{ width: 40, height: 40, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <img src={target?.icon} alt={target?.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
-                          </Box>
-                          <Box>
-                            <Typography variant="body1" sx={{ fontWeight: 700 }}>{target?.name}</Typography>
-                            {shopItem.amount && shopItem.amount > 1 && (
-                              <Typography variant="caption" sx={{ color: 'primary.main', fontWeight: 700 }}>x{shopItem.amount}</Typography>
+                    return [
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Box sx={{ width: 32, height: 32, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
+                          <img src={target?.icon} alt={target?.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                        </Box>
+                        <Typography variant="body2" sx={{ fontWeight: 700 }}>{target?.name}</Typography>
+                      </Box>,
+
+                      <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                        {displayPrice !== undefined && (
+                          <Box sx={{ 
+                            px: 1, py: 0.25, 
+                            borderRadius: 1, 
+                            backgroundColor: 'rgba(255,255,255,0.03)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1
+                          }}>
+                            <Typography variant="body2" sx={{ fontWeight: 800, color: '#ffbb00', fontSize: '0.8rem' }}>
+                              {displayPrice.toLocaleString()}
+                            </Typography>
+                            {currencyItem?.icon && (
+                              <img src={currencyItem.icon} alt={currencyItem.name} style={{ width: 16, height: 16, objectFit: 'contain' }} />
                             )}
                           </Box>
-                        </Box>
-                        <Stack direction="row" spacing={2} alignItems="center">
-                          {shopItem.price !== undefined && (
-                            <Box sx={{ 
-                              px: 1.5, py: 0.5, 
-                              borderRadius: 1, 
-                              backgroundColor: 'rgba(255,255,255,0.03)',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 1
-                            }}>
-                              <Typography variant="body2" sx={{ fontWeight: 800, color: '#ffbb00' }}>
-                                {shopItem.price.toLocaleString()}
-                              </Typography>
-                              {currencyItem?.icon && (
-                                <img src={currencyItem.icon} alt={currencyItem.name} style={{ width: 20, height: 20, objectFit: 'contain' }} />
-                              )}
-                            </Box>
-                          )}
-                        </Stack>
+                        )}
+                      </Box>,
+
+                      <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 1 }}>
+                        {shopItem.amount && (
+                          <Chip 
+                            label={`x${shopItem.amount}`} 
+                            size="small" 
+                            variant="outlined"
+                            sx={{ 
+                              height: 18, 
+                              fontSize: '0.65rem', 
+                              fontWeight: 800,
+                              borderColor: 'rgba(255,255,255,0.1)',
+                              color: 'text.secondary'
+                            }} 
+                          />
+                        )}
                       </Box>
-                    );
+                    ];
                   }}
                   renderIconItem={(shopItem: ShopItem) => {
                     const baseItem = itemsMap.get(shopItem.id);

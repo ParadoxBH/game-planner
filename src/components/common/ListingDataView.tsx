@@ -1,11 +1,33 @@
-import { Box, Grid, Stack, Typography, useTheme, alpha } from "@mui/material";
+import { 
+  Box, 
+  Grid, 
+  Stack, 
+  Typography, 
+  useTheme, 
+  alpha,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableContainer,
+  darken
+} from "@mui/material";
 import { type ReactNode, useMemo } from "react";
 import { type ViewMode } from "./ViewModeSelector";
+
+export interface ListDataHeader {
+  label: string;
+  startIcon?: ReactNode;
+  align?: 'left' | 'center' | 'right';
+  width?: string | number;
+  hidden?: boolean;
+}
 
 interface DataViewProps<T> {
   data: T[];
   renderCard: (item: T) => ReactNode;
-  renderListItem?: (item: T) => ReactNode;
+  renderListItem?: (item: T) => ReactNode[];
   renderIconItem?: (item: T) => ReactNode;
   viewMode?: ViewMode;
   columns?: number | { xs?: number; sm?: number; md?: number; lg?: number; xl?: number };
@@ -13,6 +35,7 @@ interface DataViewProps<T> {
   emptyMessage?: string;
   storageKey?: string;
   gridProps?: any;
+  listHeader?: ListDataHeader[];
   actions?: ReactNode;
 }
 
@@ -26,6 +49,7 @@ export function ListingDataView<T>({
   renderIconItem, 
   emptyMessage = "Nenhum item encontrado.",
   gridProps = { spacing: 3 },
+  listHeader,
   actions
 }: DataViewProps<T>) {
   const theme = useTheme();
@@ -46,6 +70,8 @@ export function ListingDataView<T>({
     };
   }, [columns]);
 
+  const visibleHeaders = useMemo(() => listHeader?.filter(h => !h.hidden) || [], [listHeader]);
+
   if (data.length === 0) {
     return (
       <Stack sx={{ flex: 1, textAlign: 'center', py: 8, alignItems: "center", justifyContent: "center" }}>
@@ -57,7 +83,7 @@ export function ListingDataView<T>({
   }
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <>
       {actions && (
         <Box sx={{ mb: 2, display: 'flex', gap: 2, alignItems: 'center' }}>
           {actions}
@@ -89,22 +115,90 @@ export function ListingDataView<T>({
       )}
 
       {viewMode === "list" && (
-        <Stack spacing={1}>
-          {data.map((item, index) => (
-            <Box key={index} sx={{ 
-              width: '100%',
-              backgroundColor: alpha(theme.palette.background.paper, 0.05),
-              borderRadius: 1,
-              border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
-              '&:hover': {
-                backgroundColor: alpha(theme.palette.background.paper, 0.08),
-                borderColor: alpha(theme.palette.primary.main, 0.3),
-              }
-            }}>
-              {renderListItem ? renderListItem(item) : renderCard(item)}
-            </Box>
-          ))}
-        </Stack>
+        <TableContainer sx={{ 
+          backgroundColor: alpha(theme.palette.background.paper, 0.05),
+          borderRadius: 2,
+          border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+          overflow: 'auto',
+          display: "block",
+          flex: 1,
+        }}>
+          <Table size="small" stickyHeader>
+            {visibleHeaders.length > 0 && (
+              <TableHead>
+                <TableRow>
+                  {visibleHeaders.map((header, i) => (
+                    <TableCell 
+                      key={i} 
+                      align={header.align || 'left'}
+                      sx={{ 
+                        borderBottom: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+                        py: 1.5,
+                        width: header.width,
+                        backgroundColor: theme.palette.header
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: header.align === 'right' ? 'flex-end' : (header.align === 'center' ? 'center' : 'flex-start') }}>
+                        {header.startIcon && <Box sx={{ display: 'flex', color: 'primary.main', '& svg': { fontSize: 16 } }}>{header.startIcon}</Box>}
+                        <Typography 
+                          variant="caption" 
+                          sx={{ 
+                            fontWeight: 800, 
+                            color: 'primary.main', 
+                            textTransform: 'uppercase', 
+                            letterSpacing: 1,
+                            whiteSpace: 'nowrap'
+                          }}
+                        >
+                          {header.label}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+            )}
+            <TableBody>
+              {data.map((item, index) => {
+                const rawCells = renderListItem ? renderListItem(item) : [<>{renderCard(item)}</>];
+                // Se temos cabeçalho, filtramos as células que não devem aparecer
+                const cells = listHeader 
+                  ? rawCells.filter((_, i) => !listHeader[i]?.hidden)
+                  : rawCells;
+
+                return (
+                  <TableRow 
+                    key={index}
+                    sx={{ 
+                      '&:hover': { backgroundColor: alpha(theme.palette.background.paper, 0.08) },
+                      '&:last-child td': { borderBottom: 0 },
+                      transition: 'background-color 0.2s'
+                    }}
+                  >
+                    {cells.map((cell, cellIndex) => {
+                      const headerInfo = visibleHeaders[cellIndex];
+
+                      return (
+                        <TableCell 
+                          key={cellIndex}
+                          align={headerInfo?.align || 'left'}
+                          sx={{ 
+                            borderBottom: `1px solid ${alpha(theme.palette.divider, 0.05)}`,
+                            py: 1.5,
+                            px: 2,
+                            color: 'text.primary'
+                          }}
+                        >
+                          {cell}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
 
       {viewMode === "icons" && (
@@ -136,6 +230,6 @@ export function ListingDataView<T>({
           ))}
         </Box>
       )}
-    </Box>
+    </>
   );
 }

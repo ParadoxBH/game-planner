@@ -14,6 +14,7 @@ import {
 import { Link, useLocation } from 'react-router-dom';
 import { useNavigation } from "../hooks/useNavigation";
 import { HeaderNavDropdown } from "./common/HeaderNavDropdown";
+import { theme } from "../theme/theme";
 
 export function Header() {
   const location = useLocation();
@@ -26,7 +27,7 @@ export function Header() {
   const { menuItems } = useNavigation(gameId);
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#1a1a1a" }}>
+    <AppBar position="static" sx={{ backgroundColor: theme.palette.header }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Stack sx={{ flexGrow: 1 }} alignItems={"start"}>

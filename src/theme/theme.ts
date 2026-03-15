@@ -47,6 +47,7 @@ export const theme = createTheme({
       paper: "#0d0d0d",
     },
     divider: "rgba(255, 255, 255, 0.1)",
+    header: "#1a1a1a",
   },
   shape: {
     borderRadius: 8,
