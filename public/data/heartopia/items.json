@@ -1954,5 +1954,23 @@
       "vegetable"
     ],
     "icon": "/img/heartopia/agricultura/milho.png"
+  },
+  {
+    "id": "atrativo_abelha_inflavel",
+    "name": "Atrativo de Abelha Inflável",
+    "category": [
+      "tool"
+    ],
+    "icon": "/img/heartopia/ferramentas/atrativo_abelha_inflavel.png",
+    "buyPrice": 2000
+  },
+  {
+    "id": "fortificante_onisciente",
+    "name": "Fortificante Onisciente",
+    "category": [
+      "tool"
+    ],
+    "icon": "/img/heartopia/ferramentas/fortificante_onisciente.png",
+    "buyPrice": 4000
   }
 ]

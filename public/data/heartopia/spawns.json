@@ -44,7 +44,10 @@
     "entityId": "trufa_negra_coletavel",
     "mapId": "main",
     "mode": "respawn",
-    "position": [200, 630],
+    "position": [
+      200,
+      630
+    ],
     "respawnDelay": 15
   },
   {
@@ -52,7 +55,10 @@
     "entityId": "trufa_negra_coletavel",
     "mapId": "main",
     "mode": "respawn",
-    "position": [210, 660],
+    "position": [
+      210,
+      660
+    ],
     "respawnDelay": 15
   },
   {
@@ -60,7 +66,10 @@
     "entityId": "trufa_negra_coletavel",
     "mapId": "main",
     "mode": "respawn",
-    "position": [245, 650],
+    "position": [
+      245,
+      650
+    ],
     "respawnDelay": 15
   },
   {
@@ -68,7 +77,10 @@
     "entityId": "trufa_negra_coletavel",
     "mapId": "main",
     "mode": "respawn",
-    "position": [240, 675],
+    "position": [
+      240,
+      675
+    ],
     "respawnDelay": 15
   },
   {
@@ -76,7 +88,10 @@
     "entityId": "trufa_negra_coletavel",
     "mapId": "main",
     "mode": "respawn",
-    "position": [270, 680],
+    "position": [
+      270,
+      680
+    ],
     "respawnDelay": 15
   },
   {
@@ -84,7 +99,10 @@
     "entityId": "trufa_negra_coletavel",
     "mapId": "main",
     "mode": "respawn",
-    "position": [285, 700],
+    "position": [
+      285,
+      700
+    ],
     "respawnDelay": 15
   },
   {
@@ -92,7 +110,209 @@
     "entityId": "trufa_negra_coletavel",
     "mapId": "main",
     "mode": "respawn",
-    "position": [215, 725],
+    "position": [
+      215,
+      725
+    ],
     "respawnDelay": 15
+  },
+  {
+    "id": "blanc_npc",
+    "entityId": "blanc",
+    "type": "position",
+    "position": [
+      -65,
+      100
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "massimo_npc",
+    "entityId": "massimo",
+    "type": "position",
+    "position": [
+      85,
+      -10
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "ka_ching_npc",
+    "entityId": "ka_ching",
+    "type": "position",
+    "position": [
+      130,
+      -130
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "vanya_npc",
+    "entityId": "vanya",
+    "type": "position",
+    "position": [
+      68.08238802665919,
+      78.36216308593751
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "bailey_j_npc",
+    "entityId": "bailey_j",
+    "type": "position",
+    "position": [
+      0,
+      45
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "sr_joan_npc",
+    "entityId": "sr_joan",
+    "type": "position",
+    "position": [
+      3.5818442794265124,
+      32.42572265625
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "naniwa_npc",
+    "entityId": "naniwa",
+    "type": "position",
+    "position": [
+      8.591762935629886,
+      134.33513671875002
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "atara_npc",
+    "entityId": "atara",
+    "type": "position",
+    "position": [
+      -46.606291079709614,
+      -2.7021435546875003
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "colecionador_npc",
+    "entityId": "colecionador",
+    "type": "position",
+    "position": [
+      44.55125722044536,
+      -189.5360693359375
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "bob_npc",
+    "entityId": "bob",
+    "type": "position",
+    "position": [
+      46.88925764136494,
+      -0.3860205078125
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "bob_npc",
+    "entityId": "bob",
+    "type": "position",
+    "position": [
+      46.88925764136494,
+      -0.3860205078125
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "annie_npc",
+    "entityId": "annie",
+    "type": "position",
+    "position": [
+      -7.235077884682528,
+      5.0182666015625
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "albert_jr_npc",
+    "entityId": "albert_jr",
+    "type": "position",
+    "position": [
+      124.88238397039291,
+      184.517802734375
+    ],
+    "mapId": "main"
+  },{
+    "id": "andrew_npc",
+    "entityId": "andrew",
+    "type": "position",
+    "position": [
+      153.8555115701902,
+      138.195341796875
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "dorothee_npc",
+    "entityId": "dorothee",
+    "type": "position",
+    "position": [
+      46.40795541238464,
+      -20.845107421875003
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "eric_npc",
+    "entityId": "eric",
+    "type": "position",
+    "position": [
+      383.33477228834596,
+      26.24939453125
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "vernie_npc",
+    "entityId": "vernie",
+    "type": "position",
+    "position": [
+      -243.25740060326953,
+      -433.115009765625
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "will_npc",
+    "entityId": "will",
+    "type": "position",
+    "position": [
+      -486.6316724415665,
+      -135.87921875
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "patti_npc",
+    "entityId": "patti",
+    "type": "position",
+    "position": [
+      222.49174259239837,
+      482.525634765625
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "azure_npc",
+    "entityId": "azure",
+    "type": "position",
+    "position": [
+      46.885515458962566,
+      -36.671948242187504
+    ],
+    "mapId": "main"
   }
 ]

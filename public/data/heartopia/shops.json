@@ -442,5 +442,41 @@
       }
 
     ]
+  },
+  {
+    "id": "caca_insetos",
+    "npcId": "naniwa",
+    "name": "Loja de Bicho",
+    "groups": [
+      {
+        "name": "Ferramenta Especial",
+        "resetType": "semanal",
+        "items": [
+          { 
+            "id": "atrativo_abelha_inflavel",
+            "price": 1,
+            "amount": 100,
+            "currency": "estrela_desejavel",
+            "resetType": "semanal"
+          },
+          { 
+            "id": "atrativo_abelha_inflavel",
+            "amount": 10,
+            "resetType": "semanal"
+          },
+          { 
+            "id": "fortificante_onisciente",
+            "price": 2,
+            "currency": "estrela_desejavel",
+            "resetType": "semanal"
+          },
+          { 
+            "id": "fortificante_onisciente",
+            "resetType": "semanal"
+          }
+        ]
+      }
+
+    ]
   }
 ]
