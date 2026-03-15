@@ -166,13 +166,15 @@ export class ApiService {
       .map((r) => this.normalizeRecipe(r))
       .filter((r) => r.normalizedProducts.some((p) => p.id === entityId && p.type === "entity"));
 
-    const spawns = this.data.spawns.filter((s) => s.entityId === entityId);
+    const spawns = this.data.spawns.filter((s) => s.entityId.toLowerCase() === entityId.toLowerCase());
+    const shop = this.data.shops.find((s) => s.npcId?.toLowerCase() === entityId.toLowerCase());
 
     return {
       entity,
       drops,
       recipes,
       spawns,
+      shop,
     };
   }
 

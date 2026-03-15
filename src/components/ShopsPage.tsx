@@ -246,28 +246,62 @@ export function ShopsPage() {
                 border: "1px solid rgba(255, 255, 255, 0.05)",
               }}
             >
-              <Box
-                sx={{
-                  height: 200,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  background:
-                    "linear-gradient(135deg, rgba(255, 68, 0, 0.05), rgba(255, 136, 0, 0.05))",
-                  backgroundImage: `url(${currentNpc?.icon})`,
-                  backgroundPosition: "top center",
-                  backgroundSize: "cover",
-                }}
-              >
-                {!currentNpc?.icon && (
-                  <Storefront sx={{ fontSize: 80, color: "text.disabled" }} />
-                )}
-              </Box>
+                <Box
+                  onClick={() => currentNpc?.id && navigate(`/game/${gameId}/entity/view/${currentNpc.id}`)}
+                  sx={{
+                    height: 200,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    position: "relative",
+                    overflow: "hidden",
+                    "&:hover .view-npc-overlay": {
+                      opacity: 1,
+                    },
+                    background:
+                      "linear-gradient(135deg, rgba(255, 68, 0, 0.05), rgba(255, 136, 0, 0.05))",
+                    backgroundImage: `url(${currentNpc?.icon})`,
+                    backgroundPosition: "top center",
+                    backgroundSize: "cover",
+                  }}
+                >
+                  {!currentNpc?.icon && (
+                    <Storefront sx={{ fontSize: 80, color: "text.disabled" }} />
+                  )}
+                  <Box
+                    className="view-npc-overlay"
+                    sx={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      bgcolor: "rgba(0,0,0,0.4)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      opacity: 0,
+                      transition: "opacity 0.2s",
+                      backdropFilter: "blur(2px)",
+                    }}
+                  >
+                    <Typography variant="button" sx={{ color: "white", fontWeight: 700 }}>
+                      Ver Perfil
+                    </Typography>
+                  </Box>
+                </Box>
               <CardContent>
                 <Typography
                   variant="h5"
                   align="center"
-                  sx={{ fontWeight: 700, mb: 1 }}
+                  onClick={() => currentNpc?.id && navigate(`/game/${gameId}/entity/view/${currentNpc.id}`)}
+                  sx={{ 
+                    fontWeight: 700, 
+                    mb: 1, 
+                    cursor: 'pointer',
+                    '&:hover': { color: 'primary.main' }
+                  }}
                 >
                   {currentShop.name || currentNpc?.name || currentShop.npcId}
                 </Typography>

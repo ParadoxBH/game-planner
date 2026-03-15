@@ -33,6 +33,7 @@ export interface EntityDetails {
   }[];
   recipes: NormalizedRecipe[];
   spawns: any[];
+  shop?: Shop;
 }
 
 export interface ShopDetails {

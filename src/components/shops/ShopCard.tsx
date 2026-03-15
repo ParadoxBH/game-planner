@@ -6,6 +6,7 @@ import {
 } from "@mui/material";
 import { Storefront, ChevronRight } from "@mui/icons-material";
 
+import { useNavigate, useParams } from "react-router-dom";
 import type { Shop, Entity } from "../../types/gameModels";
 
 interface ShopCardProps {
@@ -15,6 +16,8 @@ interface ShopCardProps {
 }
 
 export const ShopCard = ({ shop, npc, onClick }: ShopCardProps) => {
+  const navigate = useNavigate();
+  const { gameId } = useParams<{ gameId: string }>();
   return (
     <Card sx={{ 
       borderRadius: 2, 
@@ -57,7 +60,19 @@ export const ShopCard = ({ shop, npc, onClick }: ShopCardProps) => {
           <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.5 }}>
             {shop.name || npc?.name || shop.id}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 600, mb: 2 }}>
+          <Typography 
+            variant="body2" 
+            onClick={(e) => {
+              e.stopPropagation();
+              if (npc?.id) navigate(`/game/${gameId}/entity/view/${npc.id}`);
+            }}
+            sx={{ 
+              color: 'text.secondary', 
+              fontWeight: 600, 
+              mb: 2,
+              '&:hover': { color: 'primary.main', cursor: 'pointer' }
+            }}
+          >
             NPC: {npc?.name || "Desconhecido"}
           </Typography>
           <Box sx={{ 

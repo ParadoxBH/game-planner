@@ -11,7 +11,7 @@ import { StyledContainer } from "./common/StyledContainer";
 import { EntityCard } from "./entities/EntityCard";
 import { PickSelector } from "./common/PickSelector";
 import { MultiPickSelector } from "./common/MultiPickSelector";
-import { FilterList, BugReport, ShoppingCart, Sell } from "@mui/icons-material";
+import { FilterList, BugReport, ShoppingCart, Sell, Storefront } from "@mui/icons-material";
 import { useApi } from "../hooks/useApi";
 import type { Entity } from "../types/gameModels";
 import { ListingDataView } from "./common/ListingDataView";
@@ -31,6 +31,7 @@ export function EntityPage() {
     loading: loadingApi,
     error: errorApi,
     getEntityList,
+    raw,
   } = useApi(gameId);
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useViewMode("entities");
@@ -110,6 +111,16 @@ export function EntityPage() {
     );
   }, [getEntityList, urlCategory, excludedSubCategories, searchTerm]);
 
+  const shopNPCIds = useMemo(() => {
+    const ids = new Set<string>();
+    if (raw?.shops) {
+      raw.shops.forEach((s: any) => {
+        if (s.npcId) ids.add(s.npcId.toLowerCase());
+      });
+    }
+    return ids;
+  }, [raw?.shops]);
+
   if (loadingApi) {
     return (
       <Box
@@ -149,6 +160,7 @@ export function EntityPage() {
     );
     setExcludedSubCategories([...otherExclusions, ...nowExcluded]);
   };
+
 
   return (
     <StyledContainer
@@ -218,6 +230,7 @@ export function EntityPage() {
           <EntityCard
             entity={entity}
             showPrices={showPrices}
+            hasShop={shopNPCIds.has(entity.id.toLowerCase())}
             onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
           />
         )}
@@ -259,8 +272,13 @@ export function EntityPage() {
                 />
               )}
             </Box>
-            <Typography variant="body2" sx={{ fontWeight: 700 }}>
+            <Typography variant="body2" sx={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
               {entity.name}
+              {shopNPCIds.has(entity.id.toLowerCase()) && (
+                <Tooltip title="NPC com Loja">
+                  <Storefront sx={{ fontSize: 14, color: 'primary.main' }} />
+                </Tooltip>
+              )}
             </Typography>
           </Box>,
             <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>

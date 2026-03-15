@@ -7,6 +7,7 @@ import {
   Stack,
   Divider,
   Breadcrumbs,
+  Tooltip,
 } from "@mui/material";
 import {
   NavigateNext,
@@ -15,6 +16,7 @@ import {
   EmojiEvents,
   List as ListIcon,
   Construction,
+  Storefront
 } from "@mui/icons-material";
 import { useApi } from "../hooks/useApi";
 import { StyledContainer } from "./common/StyledContainer";
@@ -23,6 +25,8 @@ import { RecipeCard } from "./recipes/RecipeCard";
 import { useMemo } from "react";
 import type { MapMetadata, Spawn, GameInfo, GameDataTypes } from "../types/gameModels";
 import { MiniMap } from "./common/MiniMap";
+import { DataCard } from "./common/DataCard";
+import { DataChip } from "./common/DataChip";
 
 export function EntityDetailsPage() {
   const { gameId, entityId = "" } = useParams<{ gameId: string; entityId: string }>();
@@ -122,16 +126,27 @@ export function EntityDetailsPage() {
         </Box>
       }
     >
-      <Stack direction={"row"} spacing={4} flex={1} overflow={"hidden"}>
-        <Stack spacing={2} sx={{overflowY: "auto", overflowX: "hidden", maxWidth: sizeEntityCard, minWidth: sizeEntityCard}}>
-          <Paper elevation={0} sx={{ p: 2, textAlign: "center" }}>
+      <Stack direction="row" spacing={4} flex={1} overflow="hidden">
+        <Stack 
+          spacing={2} 
+          sx={{
+            overflowY: "auto", 
+            overflowX: "hidden", 
+            width: sizeEntityCard,
+            minWidth: sizeEntityCard,
+            height: "100%",
+            pr: 1
+          }}
+        >
+          {/* Info Principal */}
+          <Paper elevation={0} sx={{ p: 2, textAlign: "center", borderRadius: 2 }}>
             <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
                 <Box sx={{ 
                     width: 120, 
                     height: 120, 
                     borderRadius: 2, 
                     backgroundColor: 'rgba(0,0,0,0.2)',
-                    border: 1,
+                    border: '1px solid',
                     borderColor: 'divider',
                     display: 'flex',
                     justifyContent: 'center',
@@ -139,60 +154,150 @@ export function EntityDetailsPage() {
                     overflow: 'hidden'
                 }}>
                     {entity.icon ? (
-                        <img src={entity.icon} alt={entity.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                        <img 
+                          src={entity.icon} 
+                          alt={entity.name} 
+                          style={{ width: '80%', height: '80%', objectFit: 'contain' }} 
+                        />
                     ) : (
-                        <EmojiEvents sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.2)' }} />
+                        <EmojiEvents sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.1)' }} />
                     )}
                 </Box>
             </Box>
-            <Typography variant="h5" fontWeight={800} color="primary.main">
-              {entity.name}
-            </Typography>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ display: "block" }}
+            <Typography 
+              variant="h5" 
+              fontWeight={800} 
+              color="primary.main"
+              sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                gap: 1.5,
+                lineHeight: 1.2
+              }}
             >
+              {entity.name}
+              {entityDetails.shop && (
+                <Tooltip title="Este NPC possui uma loja">
+                  <Box sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    backgroundColor: 'rgba(255, 68, 0, 0.15)', 
+                    p: 0.5, 
+                    borderRadius: 1,
+                    animation: 'pulse-glow 2s infinite ease-in-out',
+                    '@keyframes pulse-glow': {
+                      '0%': { boxShadow: '0 0 0 0 rgba(255, 68, 0, 0.4)' },
+                      '70%': { boxShadow: '0 0 0 6px rgba(255, 68, 0, 0)' },
+                      '100%': { boxShadow: '0 0 0 0 rgba(255, 68, 0, 0)' }
+                    }
+                  }}>
+                    <Storefront sx={{ fontSize: '1.1rem', color: 'primary.main' }} />
+                  </Box>
+                </Tooltip>
+              )}
+            </Typography>
+            <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 2 }}>
               ID: {entity.id}
             </Typography>
-            <Divider sx={{ my: 2 }} />
-            <Stack spacing={1} textAlign="left">
+            
+            <Divider sx={{ mb: 2 }} />
+            
+            <Stack spacing={1.5} textAlign="left">
               <Box>
-                <Typography variant="subtitle2" color="rgba(255,255,255,0.5)">
-                  CATEGORIA
+                <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>
+                  Categoria
                 </Typography>
-                <Typography variant="body2">
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
                   {Array.isArray(entity.category)
                     ? entity.category.join(", ")
                     : entity.category || "N/A"}
                 </Typography>
               </Box>
-              {/* Descriptions are often missing for entities but if added later: */}
+              
               {/* @ts-ignore */}
               {entity.description && (
                 <Box>
-                  <Typography variant="subtitle2" color="rgba(255,255,255,0.5)">
-                    DESCRIÇÃO
+                  <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>
+                    Descrição
                   </Typography>
-                  {/* @ts-ignore */}
-                  <Typography variant="body2">{entity.description}</Typography>
+                  <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.4 }}>
+                    {/* @ts-ignore */}
+                    {entity.description}
+                  </Typography>
                 </Box>
               )}
             </Stack>
           </Paper>
 
+          {/* Seção de Loja */}
+          {entityDetails.shop && (
+            <Paper elevation={0} sx={{ p: 2, borderRadius: 2 }}>
+              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+                <Storefront color="primary" sx={{ fontSize: 18 }} />
+                <Typography variant="subtitle2" fontWeight={800}>Possui Loja</Typography>
+              </Stack>
+              
+              <DataCard
+                onClick={() => navigate(`/game/${gameId}/shops/list/${entityDetails.shop?.id}`)}
+                sx={{
+                  justifyContent: "space-between",
+                  p: 1.5,
+                  "&:hover": {
+                    backgroundColor: "rgba(255, 68, 0, 0.1)",
+                  },
+                }}
+              >
+                <Stack direction="row" spacing={1.5} alignItems="center">
+                  <Box
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 1,
+                      bgcolor: "rgba(255, 68, 0, 0.1)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Storefront sx={{ fontSize: 20, color: "primary.main" }} />
+                  </Box>
+                  <Box>
+                    <Typography variant="body2" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+                      {entityDetails.shop.name || "Visitar Loja"}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      Produtos Disponíveis
+                    </Typography>
+                  </Box>
+                </Stack>
+                <DataChip label="Abrir" color="primary" />
+              </DataCard>
+            </Paper>
+          )}
+
           {/* Requisitos */}
           {entity.requirements && entity.requirements.length > 0 && (
-            <Paper elevation={0} sx={{ p: 2 }}>
-                <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
-                    <ListIcon color="primary" fontSize="small" />
-                    <Typography variant="subtitle2" fontWeight={700}>Requisitos</Typography>
+            <Paper elevation={0} sx={{ p: 2, borderRadius: 2 }}>
+                <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+                    <ListIcon color="primary" sx={{ fontSize: 18 }} />
+                    <Typography variant="subtitle2" fontWeight={800}>Requisitos</Typography>
                 </Stack>
                 <Stack spacing={1}>
                     {entity.requirements.map((req, idx) => (
-                        <Box key={idx} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Box 
+                          key={idx} 
+                          sx={{ 
+                            display: 'flex', 
+                            justifyContent: 'space-between', 
+                            alignItems: 'center',
+                            p: 1,
+                            borderRadius: 1,
+                            bgcolor: 'rgba(255,255,255,0.02)'
+                          }}
+                        >
                             <ItemChip id={req.itemId} size="small" />
-                            <Typography variant="caption" fontWeight={700}>x{req.quant}</Typography>
+                            <Typography variant="body2" fontWeight={800} color="primary.main">x{req.quant}</Typography>
                         </Box>
                     ))}
                 </Stack>

@@ -12,7 +12,8 @@ import {
   TravelExplore as RequirementsIcon,
   Inventory as DropsIcon,
   ShoppingCart,
-  Sell
+  Sell,
+  Storefront
 } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import { ItemChip } from "../common/ItemChip";
@@ -21,10 +22,11 @@ import type { Entity } from "../../types/gameModels";
 interface EntityCardProps {
   entity: Entity;
   showPrices?: boolean;
+  hasShop?: boolean;
   onClick: () => void;
 }
 
-export function EntityCard({ entity, showPrices, onClick }: EntityCardProps) {
+export function EntityCard({ entity, showPrices, hasShop, onClick }: EntityCardProps) {
   const navigate = useNavigate();
   const { gameId } = useParams<{ gameId: string }>();
 
@@ -77,8 +79,27 @@ export function EntityCard({ entity, showPrices, onClick }: EntityCardProps) {
               </Typography>
             ))}
           </Stack>
-          <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: 700, lineHeight: 1.2 }}>
+          <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: 700, lineHeight: 1.2, display: 'flex', alignItems: 'center', gap: 1 }}>
             {entity.name}
+            {hasShop && (
+              <Tooltip title="Este NPC possui uma loja">
+                <Box sx={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  backgroundColor: 'rgba(255, 68, 0, 0.15)', 
+                  p: 0.5, 
+                  borderRadius: 1,
+                  animation: 'pulse-glow 2s infinite ease-in-out',
+                  '@keyframes pulse-glow': {
+                    '0%': { boxShadow: '0 0 0 0 rgba(255, 68, 0, 0.4)' },
+                    '70%': { boxShadow: '0 0 0 6px rgba(255, 68, 0, 0)' },
+                    '100%': { boxShadow: '0 0 0 0 rgba(255, 68, 0, 0)' }
+                  }
+                }}>
+                  <Storefront sx={{ fontSize: '1rem', color: 'primary.main' }} />
+                </Box>
+              </Tooltip>
+            )}
           </Typography>
         </Box>
       </Box>
