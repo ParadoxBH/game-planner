@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { Construction } from "@mui/icons-material";
-import { StyledContainer } from "./common/StyledContainer";
+import { StyledContainer } from "../common/StyledContainer";
 
 interface CalculatorOption {
   id: string;
