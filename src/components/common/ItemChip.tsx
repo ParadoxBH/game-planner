@@ -161,7 +161,7 @@ export function ItemChip({
         }}>
           {renderIcon()}
         </Paper>
-        {amount !== undefined && (
+        {(amount !== undefined && amount != 0) && (
           <Box sx={{ 
             position: 'absolute', 
             bottom: config.offset, 
