@@ -10,17 +10,21 @@ export interface CraftNode {
   ingredients: CraftNode[];
   isBaseResource: boolean;
   buyPrice: number;
+  sellPrice: number;
   totalCost: number;
   shopName?: string;
+  categoryId?: string; // If resolved from a category
 }
 
 export interface TreeOptions {
   itemMap: Map<string, Item>;
   entityMap: Map<string, Entity>;
   recipeMapByProduct: Map<string, Recipe>;
+  allRecipesByProduct?: Map<string, Recipe[]>;
   shopMap?: Map<string, string>; // item/entity id -> shop id
   shopNames?: Map<string, string>; // shop id -> shop name
   categoryChoices?: Record<string, string>;
+  recipeChoices?: Record<string, string>; // itemId -> recipeId
 }
 
 export function getCraftingTree(
@@ -30,7 +34,7 @@ export function getCraftingTree(
   options: TreeOptions,
   visited: Set<string> = new Set()
 ): CraftNode {
-  const { itemMap, entityMap, recipeMapByProduct, categoryChoices } = options;
+  const { itemMap, entityMap, categoryChoices } = options;
 
   // Resolve category if choice exists
   let actualId = id;
@@ -42,14 +46,25 @@ export function getCraftingTree(
     actualType = "item";
     resolvedFromCategory = true;
   }
+  const categoryId = type === "category" ? id : undefined;
 
   const item = itemMap.get(actualId);
   const entity = entityMap.get(actualId);
-  const recipe = recipeMapByProduct.get(actualId);
+  
+  // Resolve recipe choice
+  let recipe = options.recipeMapByProduct.get(actualId);
+  if (options.recipeChoices?.[actualId]) {
+    const chosenRecipeId = options.recipeChoices[actualId];
+    const alts = options.allRecipesByProduct?.get(actualId);
+    if (alts) {
+        recipe = alts.find(r => r.id === chosenRecipeId) || recipe;
+    }
+  }
   
   const name = item?.name || entity?.name || (resolvedFromCategory ? `${id} (${actualId})` : id);
   const icon = item?.icon || entity?.icon;
   const buyPrice = item?.buyPrice ?? entity?.buyPrice ?? 0;
+  const sellPrice = item?.sellPrice ?? entity?.sellPrice ?? 0;
 
   const shopId = options.shopMap?.get(actualId);
   const shopName = shopId ? options.shopNames?.get(shopId) : undefined;
@@ -63,8 +78,10 @@ export function getCraftingTree(
     ingredients: [],
     isBaseResource: !recipe,
     buyPrice,
+    sellPrice,
     totalCost: buyPrice * amount,
     shopName,
+    categoryId,
   };
 
   if (!recipe || visited.has(actualId)) {

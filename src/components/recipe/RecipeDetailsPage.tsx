@@ -18,7 +18,7 @@ import { useApi } from "../../hooks/useApi";
 import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
 import { useMemo } from "react";
-import { CraftingTreeSection } from "./CraftingTreeSection";
+import { RecipeFlowSection } from "../flow/RecipeFlowSection";
 
 export function RecipeDetailsPage() {
   const { gameId, recipeId = "" } = useParams<{
@@ -370,7 +370,7 @@ export function RecipeDetailsPage() {
             </Paper>
           </Stack>
         </Stack>
-        <CraftingTreeSection
+        <RecipeFlowSection
           gameId={gameId || ""}
           itemId={recipe.itemId || (products.length > 0 ? products[0].id : "")}
           type="item"
