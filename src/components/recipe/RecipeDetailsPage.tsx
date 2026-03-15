@@ -14,9 +14,9 @@ import {
   Inventory,
   AutoFixHigh,
 } from "@mui/icons-material";
-import { useApi } from "../hooks/useApi";
-import { StyledContainer } from "./common/StyledContainer";
-import { ItemChip } from "./common/ItemChip";
+import { useApi } from "../../hooks/useApi";
+import { StyledContainer } from "../common/StyledContainer";
+import { ItemChip } from "../common/ItemChip";
 import { useMemo } from "react";
 
 

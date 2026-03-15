@@ -5,18 +5,18 @@ import {
   CircularProgress
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
-import { useApi } from "../hooks/useApi";
+import { useApi } from "../../hooks/useApi";
 import { useState, useMemo, useEffect } from "react";
-import { StyledContainer } from "./common/StyledContainer";
-import { RecipeCard } from "./recipes/RecipeCard";
-import { PickSelector } from "./common/PickSelector";
-import { MultiPickSelector } from "./common/MultiPickSelector";
+import { StyledContainer } from "../common/StyledContainer";
+import { RecipeCard } from "./RecipeCard";
+import { PickSelector } from "../common/PickSelector";
+import { MultiPickSelector } from "../common/MultiPickSelector";
 import { Build, Science } from "@mui/icons-material";
-import type { GameDataTypes } from "../types/gameModels";
-import { ListingDataView } from "./common/ListingDataView";
+import type { GameDataTypes } from "../../types/gameModels";
+import { ListingDataView } from "../common/ListingDataView";
 import { Tooltip, Chip } from "@mui/material";
-import { ViewModeSelector } from "./common/ViewModeSelector";
-import { useViewMode } from "../hooks/useViewMode";
+import { ViewModeSelector } from "../common/ViewModeSelector";
+import { useViewMode } from "../../hooks/useViewMode";
 
 export function RecipesPage() {
   const { gameId, category: urlStation } = useParams<{ gameId: string; category?: string }>();
