@@ -155,6 +155,9 @@ export const theme = createTheme({
       },
     },
     MuiTooltip: {
+      defaultProps: {
+        disableInteractive: true,
+      },
       styleOverrides: {
         tooltip: {
           backgroundColor: "#1a1a1a",
