@@ -7,10 +7,11 @@ import {
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../hooks/useApi";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { StyledContainer } from "./common/StyledContainer";
 import { RecipeCard } from "./recipes/RecipeCard";
 import { PickSelector } from "./common/PickSelector";
+import { MultiPickSelector } from "./common/MultiPickSelector";
 import { Build } from "@mui/icons-material";
 import type { GameDataTypes } from "../types/gameModels";
 
@@ -20,8 +21,10 @@ export function RecipesPage() {
 
   const { loading: loadingApi, error: errorApi, getRecipesList, raw } = useApi(gameId);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedSubStation, setSelectedSubStation] = useState<string | null>(null);
+  const [availableSubStations, setAvailableSubStations] = useState<string[]>([]);
+  const [excludedSubStations, setExcludedSubStations] = useState<string[]>([]);
 
+  // Maps for details
   const itemsMap = useMemo(() => {
     const map = new Map<string, any>();
     if (raw?.items) raw.items.forEach(i => map.set(i.id, i));
@@ -47,48 +50,66 @@ export function RecipesPage() {
     return map;
   }, [raw?.events]);
 
-  const normalizedRecipes = useMemo(() => getRecipesList(), [getRecipesList]);
+  // Initial list to derive filters
+  const allRecipes = useMemo(() => {
+    const results = getRecipesList();
+    return Array.isArray(results) ? results : results.data;
+  }, [getRecipesList]);
 
   const stationsList = useMemo(() => {
     const stations = new Set<string>();
-    normalizedRecipes.forEach(recipe => {
+    allRecipes.forEach(recipe => {
       if (recipe.normalizedStations[0]) stations.add(recipe.normalizedStations[0]);
     });
     return Array.from(stations).sort();
-  }, [normalizedRecipes]);
+  }, [allRecipes]);
 
-  const subStations = useMemo(() => {
-    const stations = new Set<string>();
+  // Update available sub-stations when primary station changes
+  useEffect(() => {
+    const subs = new Set<string>();
+    const currentPrimary = urlStation === "all" ? null : urlStation;
     
-    // Filter recipes that match the current primary station
-    const relevantRecipes = normalizedRecipes.filter(recipe => {
+    allRecipes.forEach(recipe => {
       const primary = recipe.normalizedStations[0];
-      return !urlStation || urlStation === "all" || (primary && primary.toLowerCase() === urlStation.toLowerCase());
-    });
-
-    relevantRecipes.forEach(recipe => {
-      if (recipe.normalizedStations.length > 1) {
-        recipe.normalizedStations.slice(1).forEach(s => stations.add(s));
+      if (!currentPrimary || (primary && primary.toLowerCase() === currentPrimary.toLowerCase())) {
+        if (recipe.normalizedStations.length > 1) {
+          recipe.normalizedStations.slice(1).forEach(s => subs.add(s));
+        }
       }
     });
-    return Array.from(stations).sort();
-  }, [normalizedRecipes, urlStation]);
+
+    const sortedSubs = Array.from(subs).sort();
+    setAvailableSubStations(sortedSubs);
+    // We NO LONGER auto-reset exclusions here
+  }, [allRecipes, urlStation]);
 
   const filteredRecipes = useMemo(() => {
-    return normalizedRecipes.filter(recipe => {
-      const matchesSearch = recipe.normalizedName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                            recipe.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            recipe.normalizedIngredients.some(i => i.id.toLowerCase().includes(searchTerm.toLowerCase()) || (i.name && i.name.toLowerCase().includes(searchTerm.toLowerCase()))) ||
-                            recipe.normalizedProducts.some(p => p.id.toLowerCase().includes(searchTerm.toLowerCase()) || (p.name && p.name.toLowerCase().includes(searchTerm.toLowerCase())));
-      
-      const primaryStation = recipe.normalizedStations[0];
-      const matchesStation = !urlStation || (primaryStation && primaryStation.toLowerCase() === urlStation.toLowerCase());
-      
-      const matchesSub = !selectedSubStation || (recipe.normalizedStations.length > 1 && recipe.normalizedStations.slice(1).some(s => s.toLowerCase() === selectedSubStation.toLowerCase()));
+    const filters: any = {};
+    
+    if (urlStation && urlStation !== "all") {
+      filters.normalizedStations = [urlStation];
+    }
 
-      return matchesSearch && matchesStation && matchesSub;
-    });
-  }, [normalizedRecipes, searchTerm, urlStation, selectedSubStation]);
+    // Add negation for excluded sub-stations
+    if (excludedSubStations.length > 0) {
+      if (!filters.normalizedStations) filters.normalizedStations = [];
+      excludedSubStations.forEach(s => filters.normalizedStations.push(`!${s}`));
+    }
+
+    const results = getRecipesList({ filters });
+    const list = Array.isArray(results) ? results : results.data;
+
+    // Apply search client-side for now as it's more complex (multi-field)
+    if (!searchTerm) return list;
+    
+    const lowerSearch = searchTerm.toLowerCase();
+    return list.filter(recipe => 
+      recipe.normalizedName.toLowerCase().includes(lowerSearch) || 
+      recipe.id.toLowerCase().includes(lowerSearch) ||
+      recipe.normalizedIngredients.some(i => i.id.toLowerCase().includes(lowerSearch) || (i.name && i.name.toLowerCase().includes(lowerSearch))) ||
+      recipe.normalizedProducts.some(p => p.id.toLowerCase().includes(lowerSearch) || (p.name && p.name.toLowerCase().includes(lowerSearch)))
+    );
+  }, [getRecipesList, urlStation, excludedSubStations, searchTerm]);
 
   if (loadingApi) {
     return (
@@ -106,6 +127,18 @@ export function RecipesPage() {
     );
   }
 
+  const selectedSubStations = availableSubStations.filter(s => !excludedSubStations.includes(s));
+
+  const handleSubStationsChange = (selected: string[]) => {
+    // Items in availableSubStations that are NOT in selected are now excluded
+    const nowExcluded = availableSubStations.filter(s => !selected.includes(s));
+    
+    // Merge with existing exclusions that were NOT in current availableSubStations
+    const otherExclusions = excludedSubStations.filter(s => !availableSubStations.includes(s));
+    
+    setExcludedSubStations([...otherExclusions, ...nowExcluded]);
+  };
+
   return (
     <StyledContainer
       title={`Receitas de ${gameId}`}
@@ -117,21 +150,20 @@ export function RecipesPage() {
         <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
           <PickSelector
             label="Estação"
-            value={urlStation || null}
+            value={urlStation === "all" ? null : urlStation || null}
             options={stationsList}
             onChange={(st) => {
-              setSelectedSubStation(null);
-              navigate(`/game/${gameId}/recipes/list/${st || ""}`);
+              navigate(`/game/${gameId}/recipes/list/${st || "all"}`);
             }}
             allLabel="Todas Estações"
             icon={<Build sx={{ fontSize: 18 }} />}
           />
-          {subStations.length > 0 && (
-            <PickSelector
+          {availableSubStations.length > 0 && (
+            <MultiPickSelector
               label="Sub-estação"
-              value={selectedSubStation}
-              options={subStations}
-              onChange={setSelectedSubStation}
+              selectedOptions={selectedSubStations}
+              options={availableSubStations}
+              onChange={handleSubStationsChange}
               allLabel="Todas"
               icon={<Build sx={{ fontSize: 18 }} />}
             />

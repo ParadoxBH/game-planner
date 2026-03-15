@@ -8,7 +8,9 @@ import {
   Chip, 
   Stack,
   CircularProgress,
-  Tooltip
+  Tooltip,
+  FormControlLabel, 
+  Switch 
 } from "@mui/material";
 import { 
   Inventory,
@@ -18,11 +20,11 @@ import {
 } from "@mui/icons-material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../hooks/useApi";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { StyledContainer } from "./common/StyledContainer";
-import { FormControlLabel, Switch } from "@mui/material";
 import { ItemChip } from "./common/ItemChip";
 import { PickSelector } from "./common/PickSelector";
+import { MultiPickSelector } from "./common/MultiPickSelector";
 
 export function ItemsPage() {
   const { gameId, category: urlCategory } = useParams<{ gameId: string; category?: string }>();
@@ -30,72 +32,82 @@ export function ItemsPage() {
 
   const { loading, error, getItemsList } = useApi(gameId);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
+  const [availableSubCategories, setAvailableSubCategories] = useState<string[]>([]);
+  const [excludedSubCategories, setExcludedSubCategories] = useState<string[]>([]);
   const [tradeStatus, setTradeStatus] = useState<string | null>(null);
   const [showPrices, setShowPrices] = useState(false);
 
-  const allItems = useMemo(() => getItemsList(), [getItemsList]);
+  const allItems = useMemo(() => {
+    const results = getItemsList();
+    return Array.isArray(results) ? results : results.data;
+  }, [getItemsList]);
 
   const categories = useMemo(() => {
     const cats = new Set<string>();
     allItems.forEach(item => {
       const itemCats = item.category;
-      if (Array.isArray(itemCats) && itemCats[0]) {
-        cats.add(itemCats[0]);
-      } else if (itemCats && typeof itemCats === 'string') {
-        cats.add(itemCats);
-      }
+      const catsArr = Array.isArray(itemCats) ? itemCats : (itemCats ? [itemCats] : []);
+      if (catsArr[0]) cats.add(catsArr[0]);
     });
     return Array.from(cats).sort();
   }, [allItems]);
 
-  const subCategories = useMemo(() => {
+  // Update available sub-categories when primary category changes
+  useEffect(() => {
     const cats = new Set<string>();
+    const currentPrimary = urlCategory === "all" ? null : urlCategory;
     
-    // Filter items that match current primary selection
-    const relevantItems = allItems.filter(item => {
+    allItems.forEach(item => {
       const itemCats = item.category;
       const catsArr = Array.isArray(itemCats) ? itemCats : (itemCats ? [itemCats] : []);
       const primary = catsArr[0];
-      return !urlCategory || urlCategory === "all" || (primary && primary.toLowerCase() === urlCategory.toLowerCase());
-    });
-
-    relevantItems.forEach(item => {
-      const itemCats = item.category;
-      if (Array.isArray(itemCats) && itemCats.length > 1) {
-        itemCats.slice(1).forEach(c => cats.add(c));
+      
+      if (!currentPrimary || (primary && primary.toLowerCase() === currentPrimary.toLowerCase())) {
+        if (catsArr.length > 1) {
+          catsArr.slice(1).forEach(c => cats.add(c));
+        }
       }
     });
-    return Array.from(cats).sort();
+
+    setAvailableSubCategories(Array.from(cats).sort());
   }, [allItems, urlCategory]);
 
   const filteredItems = useMemo(() => {
-    return allItems.filter(item => {
-      const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                            item.id.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const itemCats = item.category;
-      const categoriesList = Array.isArray(itemCats) ? itemCats : (itemCats ? [itemCats] : []);
-      
-      const primaryCategory = categoriesList[0];
-      const matchesPrimary = !urlCategory || urlCategory === "all" || (primaryCategory && primaryCategory.toLowerCase() === urlCategory.toLowerCase());
-      
-      const matchesSub = !selectedSubCategory || (categoriesList.length > 1 && categoriesList.slice(1).some(c => c.toLowerCase() === selectedSubCategory.toLowerCase()));
+    const filters: any = {};
+    
+    if (urlCategory && urlCategory !== "all") {
+      filters.category = [urlCategory];
+    }
 
-      let matchesTradeStatus = true;
-      if (tradeStatus === "Compraveis") {
-        matchesTradeStatus = item.buyPrice !== undefined;
-      } else if (tradeStatus === "Vendiveis") {
-        matchesTradeStatus = item.sellPrice !== undefined;
-      } else if (tradeStatus === "Não Comercializados") {
-        matchesTradeStatus = item.buyPrice === undefined && item.sellPrice === undefined;
-      } else if (tradeStatus === "Comercializados") {
-        matchesTradeStatus = item.buyPrice !== undefined || item.sellPrice !== undefined;
-      }
+    // Add negation for excluded sub-categories
+    if (excludedSubCategories.length > 0) {
+      if (!filters.category) filters.category = [];
+      excludedSubCategories.forEach(c => filters.category.push(`!${c}`));
+    }
 
-      return matchesSearch && matchesPrimary && matchesSub && matchesTradeStatus;
-    });
-  }, [allItems, searchTerm, urlCategory, selectedSubCategory, tradeStatus]);
+    const results = getItemsList({ filters });
+    let list = Array.isArray(results) ? results : results.data;
+
+    // Apply trade status filtering client-side
+    if (tradeStatus) {
+      list = list.filter(item => {
+        if (tradeStatus === "Compraveis") return item.buyPrice !== undefined;
+        if (tradeStatus === "Vendiveis") return item.sellPrice !== undefined;
+        if (tradeStatus === "Não Comercializados") return item.buyPrice === undefined && item.sellPrice === undefined;
+        if (tradeStatus === "Comercializados") return item.buyPrice !== undefined || item.sellPrice !== undefined;
+        return true;
+      });
+    }
+
+    // Apply search filter client-side
+    if (!searchTerm) return list;
+    
+    const lowerSearch = searchTerm.toLowerCase();
+    return list.filter(item => 
+      item.name.toLowerCase().includes(lowerSearch) || 
+      item.id.toLowerCase().includes(lowerSearch)
+    );
+  }, [getItemsList, urlCategory, excludedSubCategories, tradeStatus, searchTerm]);
 
   if (loading) {
     return (
@@ -113,6 +125,14 @@ export function ItemsPage() {
     );
   }
 
+  const selectedSubCategories = availableSubCategories.filter(c => !excludedSubCategories.includes(c));
+
+  const handleSubCategoriesChange = (selected: string[]) => {
+    const nowExcluded = availableSubCategories.filter(c => !selected.includes(c));
+    const otherExclusions = excludedSubCategories.filter(c => !availableSubCategories.includes(c));
+    setExcludedSubCategories([...otherExclusions, ...nowExcluded]);
+  };
+
   return (
     <StyledContainer
       title={`Itens de ${gameId}`}
@@ -125,19 +145,18 @@ export function ItemsPage() {
           <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
             <PickSelector
               label="Categoria"
-              value={urlCategory || null}
+              value={urlCategory === "all" ? null : urlCategory || null}
               options={categories}
               onChange={(cat) => {
-                setSelectedSubCategory(null);
-                navigate(`/game/${gameId}/items/list/${cat || ""}`);
+                navigate(`/game/${gameId}/items/list/${cat || "all"}`);
               }}
             />
-            {subCategories.length > 0 && (
-              <PickSelector
+            {availableSubCategories.length > 0 && (
+              <MultiPickSelector
                 label="Sub-categoria"
-                value={selectedSubCategory}
-                options={subCategories}
-                onChange={setSelectedSubCategory}
+                selectedOptions={selectedSubCategories}
+                options={availableSubCategories}
+                onChange={handleSubCategoriesChange}
                 allLabel="Todas"
               />
             )}

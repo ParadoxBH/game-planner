@@ -10,21 +10,96 @@ import type {
   RecipeDetails,
   ShopDetails,
   GameDataPayload,
+  SearchOptions,
+  PaginatedResponse,
 } from "../types/apiModels";
 
 export class ApiService {
   private data: GameDataPayload;
+  private cachedNormalizedRecipes: NormalizedRecipe[];
 
   constructor(data: GameDataPayload) {
     this.data = data;
+    this.cachedNormalizedRecipes = data.recipes.map(r => this.normalizeRecipe(r));
   }
 
-  public getItems(filter?: (item: Item) => boolean): Item[] {
-    return filter ? this.data.items.filter(filter) : this.data.items;
+  private applyAdvancedSearch<T>(list: T[], options?: SearchOptions): PaginatedResponse<T> | T[] {
+    if (!options) return list;
+
+    let filteredList = [...list];
+
+    if (options.filters) {
+      const filters = options.filters;
+      const processedFilters = Object.entries(filters)
+        .filter(([_, value]) => value !== undefined)
+        .map(([key, value]) => {
+          const values = Array.isArray(value) ? value : [value];
+          const rules = values.map(v => {
+            const str = String(v);
+            const negate = str.startsWith("!");
+            return { negate, target: negate ? str.substring(1) : str };
+          });
+          return { key, rules };
+        });
+
+      if (processedFilters.length > 0) {
+        filteredList = filteredList.filter((item: any) => {
+          return processedFilters.every(({ key, rules }) => {
+            const itemValue = item[key];
+            const isArray = Array.isArray(itemValue);
+            
+            return rules.every(({ negate, target }) => {
+              if (isArray) {
+                const matches = itemValue.some(v => String(v) === target);
+                return negate ? !matches : matches;
+              }
+              const matches = String(itemValue) === target;
+              return negate ? !matches : matches;
+            });
+          });
+        });
+      }
+    }
+
+    if (!options.pagination) {
+      return filteredList;
+    }
+
+    const { page = 1, perPage = 20 } = options.pagination;
+    const total = filteredList.length;
+    const lastPage = Math.ceil(total / perPage);
+    const offset = (page - 1) * perPage;
+    const paginatedData = filteredList.slice(offset, offset + perPage);
+
+    return {
+      data: paginatedData,
+      total,
+      page,
+      perPage,
+      lastPage,
+    };
   }
 
-  public getEntities(filter?: (entity: Entity) => boolean): Entity[] {
-    return filter ? this.data.entities.filter(filter) : this.data.entities;
+  public getItems(options?: SearchOptions | ((item: Item) => boolean)): Item[] | PaginatedResponse<Item> {
+    if (typeof options === "function") {
+      return this.data.items.filter(options);
+    }
+    return this.applyAdvancedSearch(this.data.items, options) as Item[] | PaginatedResponse<Item>;
+  }
+
+  public getEntities(options?: SearchOptions | ((entity: Entity) => boolean)): Entity[] | PaginatedResponse<Entity> {
+    if (typeof options === "function") {
+      return this.data.entities.filter(options);
+    }
+    return this.applyAdvancedSearch(this.data.entities, options) as Entity[] | PaginatedResponse<Entity>;
+  }
+
+  public getRecipes(options?: SearchOptions | ((recipe: NormalizedRecipe) => boolean)): NormalizedRecipe[] | PaginatedResponse<NormalizedRecipe> {
+    const normalized = this.cachedNormalizedRecipes;
+    if (typeof options === "function") {
+      return normalized.filter(options);
+    }
+    return this.applyAdvancedSearch(normalized, options) as NormalizedRecipe[] | PaginatedResponse<NormalizedRecipe>;
   }
 
   public getItemDetails(itemId: string): ItemDetails | null {

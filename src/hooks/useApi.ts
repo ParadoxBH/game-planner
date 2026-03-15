@@ -1,8 +1,8 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { loadGameData, loadGamesList } from "../services/dataLoader";
 import { ApiService } from "../services/apiService";
-import type { GameDataPayload, NormalizedRecipe } from "../types/apiModels";
-import type { Item, Entity, GameInfo } from "../types/gameModels";
+import type { GameDataPayload, NormalizedRecipe, SearchOptions, PaginatedResponse } from "../types/apiModels";
+import type { Item, Entity } from "../types/gameModels";
 
 export function useApi(gameId: string | undefined) {
   const [data, setData] = useState<GameDataPayload | null>(null);
@@ -50,39 +50,37 @@ export function useApi(gameId: string | undefined) {
     return new ApiService(data);
   }, [data]);
 
-  const getItemDetails = (itemId: string) => {
+  const getItemDetails = useCallback((itemId: string) => {
     return apiService ? apiService.getItemDetails(itemId) : null;
-  };
+  }, [apiService]);
 
-  const getEntityDetails = (entityId: string) => {
+  const getEntityDetails = useCallback((entityId: string) => {
     return apiService ? apiService.getEntityDetails(entityId) : null;
-  };
+  }, [apiService]);
 
-  const getItemsList = (filter?: (item: Item) => boolean) => {
-    return apiService ? apiService.getItems(filter) : [];
-  };
+  const getItemsList = useCallback((options?: SearchOptions | ((item: Item) => boolean)): Item[] | PaginatedResponse<Item> => {
+    return apiService ? apiService.getItems(options) : [];
+  }, [apiService]);
 
-  const getEntityList = (filter?: (entity: Entity) => boolean) => {
-    return apiService ? apiService.getEntities(filter) : [];
-  };
+  const getEntityList = useCallback((options?: SearchOptions | ((entity: Entity) => boolean)): Entity[] | PaginatedResponse<Entity> => {
+    return apiService ? apiService.getEntities(options) : [];
+  }, [apiService]);
 
-  const getShopDetails = (shopId: string) => {
+  const getShopDetails = useCallback((shopId: string) => {
     return apiService ? apiService.getShopDetails(shopId) : null;
-  };
+  }, [apiService]);
 
-  const getRecipeDetails = (recipeId: string) => {
+  const getRecipeDetails = useCallback((recipeId: string) => {
     return apiService ? apiService.getRecipeDetails(recipeId) : null;
-  };
+  }, [apiService]);
 
-  const getRecipesList = (filter?: (recipe: NormalizedRecipe) => boolean) => {
-    if (!apiService) return [];
-    const normalized = data?.recipes.map(r => apiService.normalizeRecipe(r)) || [];
-    return filter ? normalized.filter(filter) : normalized;
-  };
+  const getRecipesList = useCallback((options?: SearchOptions | ((recipe: NormalizedRecipe) => boolean)): NormalizedRecipe[] | PaginatedResponse<NormalizedRecipe> => {
+    return apiService ? apiService.getRecipes(options) : [];
+  }, [apiService]);
 
-  const getCodesList = () => {
+  const getCodesList = useCallback(() => {
     return data?.codes || [];
-  };
+  }, [data]);
 
   return {
     loading,

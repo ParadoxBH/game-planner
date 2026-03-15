@@ -1,11 +1,11 @@
-import { Box, Typography, Grid, Stack, CircularProgress } from "@mui/material";
+import { Box, Typography, Grid, Stack, CircularProgress, FormControlLabel, Switch } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { StyledContainer } from "./common/StyledContainer";
 import { EntityCard } from "./entities/EntityCard";
 import { PickSelector } from "./common/PickSelector";
+import { MultiPickSelector } from "./common/MultiPickSelector";
 import { FilterList } from "@mui/icons-material";
-import { FormControlLabel, Switch } from "@mui/material";
 import { useApi } from "../hooks/useApi";
 import type { Entity } from "../types/gameModels";
 
@@ -17,11 +17,15 @@ export function EntityPage() {
   const navigate = useNavigate();
   
   const { loading: loadingApi, error: errorApi, getEntityList } = useApi(gameId);
-  const entities = useMemo(() => getEntityList(), [getEntityList]);
-
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
+  const [availableSubCategories, setAvailableSubCategories] = useState<string[]>([]);
+  const [excludedSubCategories, setExcludedSubCategories] = useState<string[]>([]);
   const [showPrices, setShowPrices] = useState(false);
+
+  const entities = useMemo(() => {
+    const results = getEntityList();
+    return Array.isArray(results) ? results : results.data;
+  }, [getEntityList]);
 
   const categories = useMemo(() => {
     const cats = new Set<string>();
@@ -34,53 +38,51 @@ export function EntityPage() {
     return Array.from(cats).sort();
   }, [entities]);
 
-  const subCategories = useMemo(() => {
+  // Update available sub-categories when primary category changes
+  useEffect(() => {
     const cats = new Set<string>();
+    const currentPrimary = urlCategory === "all" ? null : urlCategory;
     
-    // Filter entities that match the current primary category
-    const relevantEntities = entities.filter((entity: Entity) => {
+    entities.forEach((entity: Entity) => {
       const catsArr = Array.isArray(entity.category) ? entity.category : [entity.category];
       const primary = catsArr[0];
-      return !urlCategory || urlCategory === "all" || (primary && primary.toLowerCase() === urlCategory.toLowerCase());
-    });
-
-    relevantEntities.forEach((entity: Entity) => {
-      const catsArr = Array.isArray(entity.category)
-        ? entity.category
-        : [entity.category];
-      // Collect all categories except the primary one (index 0)
-      if (catsArr.length > 1) {
-        catsArr.slice(1).forEach((cat: string | undefined) => {
-          if (cat) cats.add(cat);
-        });
+      if (!currentPrimary || (primary && primary.toLowerCase() === currentPrimary.toLowerCase())) {
+        if (catsArr.length > 1) {
+          catsArr.slice(1).forEach((cat: string | undefined) => {
+            if (cat) cats.add(cat);
+          });
+        }
       }
     });
-    return Array.from(cats).sort();
+
+    setAvailableSubCategories(Array.from(cats).sort());
   }, [entities, urlCategory]);
 
   const filteredEntities = useMemo(() => {
-    return entities.filter((entity: Entity) => {
-      const matchesSearch =
-        entity.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        entity.id.toLowerCase().includes(searchTerm.toLowerCase());
+    const filters: any = {};
+    
+    if (urlCategory && urlCategory !== "all") {
+      filters.category = [urlCategory];
+    }
 
-      const entityCats = Array.isArray(entity.category)
-        ? (entity.category as string[])
-        : [entity.category as string || ""];
+    // Add negation for excluded sub-categories
+    if (excludedSubCategories.length > 0) {
+      if (!filters.category) filters.category = [];
+      excludedSubCategories.forEach(c => filters.category.push(`!${c}`));
+    }
 
-      const primaryCategory = entityCats[0];
-      const matchesPrimary =
-        !urlCategory ||
-        urlCategory === "all" ||
-        (primaryCategory && primaryCategory.toLowerCase() === urlCategory.toLowerCase());
+    const results = getEntityList({ filters });
+    const list = Array.isArray(results) ? results : results.data;
 
-      const matchesSub =
-        !selectedSubCategory ||
-        (entityCats.length > 1 && entityCats.slice(1).some(c => c && c.toLowerCase() === selectedSubCategory.toLowerCase()));
-
-      return matchesSearch && matchesPrimary && matchesSub;
-    });
-  }, [entities, searchTerm, urlCategory, selectedSubCategory]);
+    // Apply search filter client-side
+    if (!searchTerm) return list;
+    
+    const lowerSearch = searchTerm.toLowerCase();
+    return list.filter((entity: Entity) => 
+      entity.name.toLowerCase().includes(lowerSearch) || 
+      entity.id.toLowerCase().includes(lowerSearch)
+    );
+  }, [getEntityList, urlCategory, excludedSubCategories, searchTerm]);
 
   if (loadingApi) {
     return (
@@ -108,9 +110,17 @@ export function EntityPage() {
     );
   }
 
+  const selectedSubCategories = availableSubCategories.filter(c => !excludedSubCategories.includes(c));
+
+  const handleSubCategoriesChange = (selected: string[]) => {
+    const nowExcluded = availableSubCategories.filter(c => !selected.includes(c));
+    const otherExclusions = excludedSubCategories.filter(c => !availableSubCategories.includes(c));
+    setExcludedSubCategories([...otherExclusions, ...nowExcluded]);
+  };
+
   return (
     <StyledContainer
-      title={`${urlCategory ? urlCategory.charAt(0).toUpperCase() + urlCategory.slice(1) : "Entidades"} de ${gameId}`}
+      title={`${urlCategory && urlCategory !== "all" ? urlCategory.charAt(0).toUpperCase() + urlCategory.slice(1) : "Entidades"} de ${gameId}`}
       label="Explore e descubra todas as entidades do jogo."
       searchValue={searchTerm}
       onChangeSearch={setSearchTerm}
@@ -126,20 +136,19 @@ export function EntityPage() {
           <Stack direction={"row"} alignItems={"center"} spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
             <PickSelector
               label="Categoria"
-              value={urlCategory || null}
+              value={urlCategory === "all" ? null : urlCategory || null}
               options={categories}
               onChange={(cat) => {
-                setSelectedSubCategory(null); // Reset sub-filter when primary changes
-                navigate(`/game/${gameId}/entity/list/${cat || ""}`);
+                navigate(`/game/${gameId}/entity/list/${cat || "all"}`);
               }}
               icon={<FilterList sx={{ fontSize: 18 }} />}
             />
-            {subCategories.length > 0 && (
-              <PickSelector
+            {availableSubCategories.length > 0 && (
+              <MultiPickSelector
                 label="Sub-categoria"
-                value={selectedSubCategory}
-                options={subCategories}
-                onChange={setSelectedSubCategory}
+                selectedOptions={selectedSubCategories}
+                options={availableSubCategories}
+                onChange={handleSubCategoriesChange}
                 allLabel="Todas"
                 icon={<FilterList sx={{ fontSize: 18 }} />}
               />

@@ -70,3 +70,23 @@ export interface GameDataPayload {
   codes: RedemptionCode[];
   gameInfo?: any;
 }
+
+export type FilterParams = Record<string, string | string[] | number | boolean | undefined>;
+
+export interface PaginationParams {
+  page?: number;
+  perPage?: number;
+}
+
+export interface SearchOptions {
+  filters?: FilterParams;
+  pagination?: PaginationParams;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  perPage: number;
+  lastPage: number;
+}
