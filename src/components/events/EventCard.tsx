@@ -17,6 +17,7 @@ import {
   AccessTime,
   Info
 } from "@mui/icons-material";
+import { useNavigate, useParams } from "react-router-dom";
 import type { GameEvent } from "../../types/gameModels";
 
 const typeMap = {
@@ -31,11 +32,16 @@ interface EventCardProps {
 }
 
 export function EventCard({ event }: EventCardProps) {
+  const { gameId } = useParams<{ gameId: string }>();
+  const navigate = useNavigate();
   const typeInfo = typeMap[event.type];
   
   return (
-    <Card sx={{ 
+    <Card 
+      onClick={() => navigate(`/game/${gameId}/events/view/${event.id}`)}
+      sx={{ 
       height: '100%',
+      cursor: 'pointer',
       borderRadius: 4,
       backgroundColor: 'rgba(255, 255, 255, 0.03)',
       border: '1px solid rgba(255, 255, 255, 0.05)',

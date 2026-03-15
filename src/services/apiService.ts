@@ -9,6 +9,7 @@ import type {
   EntityDetails,
   RecipeDetails,
   ShopDetails,
+  EventDetails,
   GameDataPayload,
   SearchOptions,
   PaginatedResponse,
@@ -245,6 +246,50 @@ export class ApiService {
       recipe,
       ingredients,
       products,
+    };
+  }
+
+  public getEventDetails(eventId: string): EventDetails | null {
+    const event = this.data.events.find((e) => e.id === eventId);
+    if (!event) return null;
+
+    // Items belonging to this event or category
+    const items = this.data.items.filter((item) => {
+      if (Array.isArray(item.category)) {
+        return item.category.includes(eventId);
+      }
+      return item.category === eventId;
+    });
+
+    // Recipes unlocked by this event or using stations belonging to this event
+    const normalizedRecipes = this.cachedNormalizedRecipes;
+    const recipes = normalizedRecipes.filter((r) => {
+      const isUnlockedByEvent = r.unlock?.some(
+        (u) => u.type === "event" && u.value === eventId
+      );
+      const isProducedInEventStation = r.normalizedStations.some((s) => {
+        const station = this.data.entities.find((e) => e.id === s);
+        if (Array.isArray(station?.category)) {
+          return station?.category.includes(eventId);
+        }
+        return station?.category === eventId;
+      });
+      return isUnlockedByEvent || isProducedInEventStation;
+    });
+
+    // Entities belonging to this event category
+    const entities = this.data.entities.filter((entity) => {
+      if (Array.isArray(entity.category)) {
+        return entity.category.includes(eventId);
+      }
+      return entity.category === eventId;
+    });
+
+    return {
+      event,
+      items,
+      recipes,
+      entities,
     };
   }
 

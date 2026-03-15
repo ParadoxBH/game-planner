@@ -82,6 +82,10 @@ export function useApi(gameId: string | undefined) {
     return data?.codes || [];
   }, [data]);
 
+  const getEventDetails = useCallback((eventId: string) => {
+    return apiService ? apiService.getEventDetails(eventId) : null;
+  }, [apiService]);
+
   return {
     loading,
     error,
@@ -89,6 +93,7 @@ export function useApi(gameId: string | undefined) {
     getEntityDetails,
     getShopDetails,
     getRecipeDetails,
+    getEventDetails,
     getItemsList,
     getEntityList,
     getRecipesList,

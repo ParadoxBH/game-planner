@@ -83,6 +83,13 @@ export interface SearchOptions {
   pagination?: PaginationParams;
 }
 
+export interface EventDetails {
+  event: GameEvent;
+  items: Item[];
+  recipes: NormalizedRecipe[];
+  entities: Entity[];
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   total: number;

@@ -9,6 +9,7 @@ import { EntityPage } from "./components/EntityPage";
 import { EntityDetailsPage } from "./components/EntityDetailsPage";
 import { ShopsPage } from "./components/ShopsPage";
 import { EventsPage } from "./components/EventsPage";
+import { EventDetailsPage } from "./components/EventDetailsPage";
 import { CodesPage } from "./components/CodesPage";
 import { CalculatorPage } from "./components/CalculatorPage";
 import { CraftingCalculator } from "./components/calculators/CraftingCalculator";
@@ -37,6 +38,7 @@ export function RoutesPage() {
           <Route path="entity/view/:entityId" element={<EntityDetailsPage />} />
           <Route path="shops/list/:category?" element={<ShopsPage />} />
           <Route path="events" element={<EventsPage />} />
+          <Route path="events/view/:eventId" element={<EventDetailsPage />} />
           <Route path="codes" element={<CodesPage />} />
           <Route path="calculator">
             <Route index element={<CalculatorPage />} />
