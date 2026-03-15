@@ -1,13 +1,18 @@
-import { Box, Typography, Grid, Stack, CircularProgress, FormControlLabel, Switch } from "@mui/material";
+import { Box, Typography, Stack, CircularProgress, FormControlLabel, Switch } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useMemo, useEffect } from "react";
 import { StyledContainer } from "./common/StyledContainer";
 import { EntityCard } from "./entities/EntityCard";
 import { PickSelector } from "./common/PickSelector";
 import { MultiPickSelector } from "./common/MultiPickSelector";
-import { FilterList } from "@mui/icons-material";
+import { FilterList, BugReport } from "@mui/icons-material";
 import { useApi } from "../hooks/useApi";
 import type { Entity } from "../types/gameModels";
+import { ListingDataView } from "./common/ListingDataView";
+import { ViewModeSelector } from "./common/ViewModeSelector";
+import { useViewMode } from "../hooks/useViewMode";
+import { ItemChip } from "./common/ItemChip";
+import { Chip, Tooltip } from "@mui/material";
 
 export function EntityPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -18,6 +23,7 @@ export function EntityPage() {
   
   const { loading: loadingApi, error: errorApi, getEntityList } = useApi(gameId);
   const [searchTerm, setSearchTerm] = useState("");
+  const [viewMode, setViewMode] = useViewMode("entities");
   const [availableSubCategories, setAvailableSubCategories] = useState<string[]>([]);
   const [excludedSubCategories, setExcludedSubCategories] = useState<string[]>([]);
   const [showPrices, setShowPrices] = useState(false);
@@ -177,37 +183,85 @@ export function EntityPage() {
           </Stack>
         </Stack>
       }
+      actionsEnd={
+        <ViewModeSelector mode={viewMode} onChange={setViewMode} />
+      }
     >
-      {/* Entities Grid */}
-      {filteredEntities.length > 0 ? (
-        <Grid container spacing={3} sx={{ pb: 4 }}>
-          {filteredEntities.map((entity) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={entity.id}>
-              <EntityCard
-                entity={entity}
-                showPrices={showPrices}
-                onClick={() =>
-                  navigate(`/game/${gameId}/entity/view/${entity.id}`)
-                }
-              />
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
-        <Stack
-          sx={{
-            flex: 1,
-            textAlign: "center",
-            py: 8,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Typography variant="h6" sx={{ color: "rgba(255, 255, 255, 0.3)" }}>
-            Nenhuma entidade encontrada neste filtro.
-          </Typography>
-        </Stack>
-      )}
+      <ListingDataView
+        data={filteredEntities}
+        viewMode={viewMode}
+        cardMinWidth={320}
+        emptyMessage="Nenhuma entidade encontrada neste filtro."
+        renderCard={(entity: any) => (
+          <EntityCard
+            entity={entity}
+            showPrices={showPrices}
+            onClick={() =>
+              navigate(`/game/${gameId}/entity/view/${entity.id}`)
+            }
+          />
+        )}
+        renderListItem={(entity: any) => (
+          <Box 
+            onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
+            sx={{ 
+              p: 1.5, 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 2, 
+              cursor: 'pointer',
+              justifyContent: 'space-between'
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Box sx={{ width: 40, height: 40, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                {entity.icon ? (
+                  <img src={entity.icon} alt={entity.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                ) : (
+                  <BugReport sx={{ fontSize: 20, color: 'rgba(255, 255, 255, 0.2)' }} />
+                )}
+              </Box>
+              <Box>
+                <Typography variant="body1" sx={{ fontWeight: 700 }}>{entity.name}</Typography>
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>{entity.id}</Typography>
+              </Box>
+            </Box>
+
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Stack direction="row" spacing={0.5}>
+                {(Array.isArray(entity.category) ? entity.category : [entity.category]).filter(Boolean).map((cat: string) => (
+                  <Chip key={cat} label={cat} size="small" sx={{ height: 20, fontSize: '0.6rem', backgroundColor: 'rgba(255,255,255,0.05)' }} />
+                ))}
+              </Stack>
+              
+              {showPrices && (entity.sellPrice !== undefined || entity.buyPrice !== undefined) && (
+                <Stack direction="row" spacing={1}>
+                  {entity.buyPrice !== undefined && (
+                    <ItemChip id="ouro" amount={entity.buyPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+                  )}
+                  {entity.sellPrice !== undefined && (
+                    <ItemChip id="ouro" amount={entity.sellPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+                  )}
+                </Stack>
+              )}
+            </Stack>
+          </Box>
+        )}
+        renderIconItem={(entity: any) => (
+          <Tooltip title={`${entity.name} (${entity.id})`}>
+            <Box 
+              onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
+              sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1 }}
+            >
+              {entity.icon ? (
+                <img src={entity.icon} alt={entity.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              ) : (
+                <BugReport sx={{ fontSize: 32, color: 'rgba(255, 255, 255, 0.2)' }} />
+              )}
+            </Box>
+          </Tooltip>
+        )}
+      />
     </StyledContainer>
   );
 }

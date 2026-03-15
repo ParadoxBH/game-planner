@@ -1,7 +1,6 @@
 import { 
   Box, 
   Typography, 
-  Grid, 
   Stack,
   CircularProgress
 } from "@mui/material";
@@ -12,8 +11,12 @@ import { StyledContainer } from "./common/StyledContainer";
 import { RecipeCard } from "./recipes/RecipeCard";
 import { PickSelector } from "./common/PickSelector";
 import { MultiPickSelector } from "./common/MultiPickSelector";
-import { Build } from "@mui/icons-material";
+import { Build, Science } from "@mui/icons-material";
 import type { GameDataTypes } from "../types/gameModels";
+import { ListingDataView } from "./common/ListingDataView";
+import { Tooltip, Chip } from "@mui/material";
+import { ViewModeSelector } from "./common/ViewModeSelector";
+import { useViewMode } from "../hooks/useViewMode";
 
 export function RecipesPage() {
   const { gameId, category: urlStation } = useParams<{ gameId: string; category?: string }>();
@@ -21,6 +24,7 @@ export function RecipesPage() {
 
   const { loading: loadingApi, error: errorApi, getRecipesList, raw } = useApi(gameId);
   const [searchTerm, setSearchTerm] = useState("");
+  const [viewMode, setViewMode] = useViewMode("recipes");
   const [availableSubStations, setAvailableSubStations] = useState<string[]>([]);
   const [excludedSubStations, setExcludedSubStations] = useState<string[]>([]);
 
@@ -152,7 +156,7 @@ export function RecipesPage() {
             label="Estação"
             value={urlStation === "all" ? null : urlStation || null}
             options={stationsList}
-            onChange={(st) => {
+            onChange={(st: string | null) => {
               navigate(`/game/${gameId}/recipes/list/${st || "all"}`);
             }}
             allLabel="Todas Estações"
@@ -170,31 +174,96 @@ export function RecipesPage() {
           )}
         </Stack>
       }
+      actionsEnd={
+        <ViewModeSelector mode={viewMode} onChange={setViewMode} />
+      }
     >
-      {filteredRecipes.length > 0 ? (
-        <Grid container spacing={3}>
-          {filteredRecipes.map(recipe => (
-            <Grid size={{ xs: 12, lg: 4 }} key={recipe.id}>
-              <RecipeCard
-                id={recipe.id}
-                name={recipe.normalizedName}
-                stations={recipe.normalizedStations}
-                ingredients={recipe.normalizedIngredients}
-                products={recipe.normalizedProducts}
-                unlock={recipe.unlock}
-                getSourceData={getSourceData}
-                eventsMap={eventsMap}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
-        <Stack sx={{ flex: 1, textAlign: 'center', py: 8, alignItems: "center", justifyContent: "center" }}>
-          <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.3)' }}>
-            Nenhuma receita encontrada com estes filtros.
-          </Typography>
-        </Stack>
-      )}
+      <ListingDataView
+        data={filteredRecipes}
+        viewMode={viewMode}
+        cardMinWidth={450}
+        emptyMessage="Nenhuma receita encontrada com estes filtros."
+        renderCard={(recipe: any) => (
+          <RecipeCard
+            id={recipe.id}
+            name={recipe.normalizedName}
+            stations={recipe.normalizedStations}
+            ingredients={recipe.normalizedIngredients}
+            products={recipe.normalizedProducts}
+            unlock={recipe.unlock}
+            getSourceData={getSourceData}
+            eventsMap={eventsMap}
+          />
+        )}
+        renderListItem={(recipe: any) => {
+          const mainProduct = recipe.normalizedProducts[0];
+          const productData = mainProduct ? getSourceData(mainProduct.type, mainProduct.id) : null;
+          
+          return (
+            <Box 
+              onClick={() => navigate(`/game/${gameId}/recipes/view/${recipe.id}`)}
+              sx={{ 
+                p: 1.5, 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 2, 
+                cursor: 'pointer',
+                justifyContent: 'space-between'
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box sx={{ width: 40, height: 40, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  {productData?.icon ? (
+                    <img src={productData.icon} alt={recipe.normalizedName} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                  ) : (
+                    <Science sx={{ fontSize: 20, color: 'rgba(255, 255, 255, 0.2)' }} />
+                  )}
+                </Box>
+                <Box>
+                  <Typography variant="body1" sx={{ fontWeight: 700 }}>{recipe.normalizedName}</Typography>
+                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>{recipe.id}</Typography>
+                </Box>
+              </Box>
+
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Stack direction="row" spacing={0.5}>
+                  {recipe.normalizedStations.filter(Boolean).map((station: string) => (
+                    <Chip key={station} label={station} size="small" sx={{ height: 20, fontSize: '0.6rem', backgroundColor: 'rgba(255,255,255,0.05)' }} />
+                  ))}
+                </Stack>
+                {recipe.unlock && recipe.unlock.length > 0 && (
+                  <Chip 
+                    label={recipe.unlock[0].value} 
+                    size="small" 
+                    color="primary" 
+                    variant="outlined" 
+                    sx={{ height: 20, fontSize: '0.6rem' }} 
+                  />
+                )}
+              </Stack>
+            </Box>
+          );
+        }}
+        renderIconItem={(recipe: any) => {
+          const mainProduct = recipe.normalizedProducts[0];
+          const productData = mainProduct ? getSourceData(mainProduct.type, mainProduct.id) : null;
+
+          return (
+            <Tooltip title={`${recipe.normalizedName} (${recipe.id})`}>
+              <Box 
+                onClick={() => navigate(`/game/${gameId}/recipes/view/${recipe.id}`)}
+                sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1 }}
+              >
+                {productData?.icon ? (
+                  <img src={productData.icon} alt={recipe.normalizedName} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                ) : (
+                  <Science sx={{ fontSize: 32, color: 'rgba(255, 255, 255, 0.2)' }} />
+                )}
+              </Box>
+            </Tooltip>
+          );
+        }}
+      />
     </StyledContainer>
   );
 }

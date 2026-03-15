@@ -1,7 +1,6 @@
 import {
   Box,
   Typography,
-  Grid,
   Chip,
   Stack,
   Tabs,
@@ -11,23 +10,26 @@ import {
   CardContent,
   CircularProgress,
 } from "@mui/material";
-import { Storefront, AccessTime, Lock, Refresh } from "@mui/icons-material";
+import { Storefront, Lock, Refresh } from "@mui/icons-material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../hooks/useApi";
 import { useMemo } from "react";
 import { StyledContainer } from "./common/StyledContainer";
-import { useTheme } from "@mui/material";
-import {
-  ShopItemCard,
-} from "./shops/ShopItemCard";
+import { ShopItemCard } from "./shops/ShopItemCard";
 import { ShopCard } from "./shops/ShopCard";
 import type { ShopItem } from "../types/gameModels";
+import { ListingDataView } from "./common/ListingDataView";
+import { Tooltip } from "@mui/material";
+import { ViewModeSelector } from "./common/ViewModeSelector";
+import { useViewMode } from "../hooks/useViewMode";
 
 export function ShopsPage() {
   const { gameId, category: urlShopId } = useParams<{ gameId: string; category?: string }>();
   const navigate = useNavigate();
 
   const { loading: loadingApi, getShopDetails, raw } = useApi(gameId);
+  const [viewMode, setViewMode] = useViewMode("shops");
+  const [itemsViewMode, setItemsViewMode] = useViewMode("shop_items");
 
   const itemsMap = useMemo(() => {
     const map = new Map<string, any>();
@@ -98,7 +100,6 @@ export function ShopsPage() {
     );
   }
 
-  const theme = useTheme();
   const isOverview = currentIndex === -1;
 
   return (
@@ -153,19 +154,85 @@ export function ShopsPage() {
           </Tabs>
         )
       }
+      actionsEnd={
+        isOverview ? (
+          <ViewModeSelector mode={viewMode} onChange={setViewMode} />
+        ) : (
+          <ViewModeSelector mode={itemsViewMode} onChange={setItemsViewMode} />
+        )
+      }
     >
       {isOverview ? (
-        <Grid container spacing={3}>
-          {shops.map((shop) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={shop.id}>
-              <ShopCard
-                shop={shop}
-                npc={entitiesMap.get(shop.npcId)}
+        <ListingDataView
+          data={shops}
+          viewMode={viewMode}
+          cardMinWidth={300}
+          emptyMessage="Nenhuma loja cadastrada para este jogo."
+          renderCard={(shop) => (
+            <ShopCard
+              shop={shop}
+              npc={entitiesMap.get(shop.npcId)}
+              onClick={() => navigate(`/game/${gameId}/shops/list/${shop.id}`)}
+            />
+          )}
+          renderListItem={(shop) => {
+            const npc = entitiesMap.get(shop.npcId);
+            return (
+              <Box 
                 onClick={() => navigate(`/game/${gameId}/shops/list/${shop.id}`)}
-              />
-            </Grid>
-          ))}
-        </Grid>
+                sx={{ 
+                  p: 1.5, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 2, 
+                  cursor: 'pointer',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Box sx={{ width: 40, height: 40, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    {npc?.icon ? (
+                      <img src={npc.icon} alt={shop.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                    ) : (
+                      <Storefront sx={{ fontSize: 20, color: 'rgba(255, 255, 255, 0.2)' }} />
+                    )}
+                  </Box>
+                  <Box>
+                    <Typography variant="body1" sx={{ fontWeight: 700 }}>{shop.name || npc?.name || shop.npcId}</Typography>
+                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>{shop.id}</Typography>
+                  </Box>
+                </Box>
+                {shop.conditional && shop.conditional.length > 0 && (
+                  <Chip 
+                    label="Requisitos" 
+                    size="small" 
+                    color="warning" 
+                    variant="outlined" 
+                    icon={<Lock sx={{ fontSize: '0.7rem' }} />}
+                    sx={{ height: 20, fontSize: '0.6rem' }} 
+                  />
+                )}
+              </Box>
+            );
+          }}
+          renderIconItem={(shop) => {
+            const npc = entitiesMap.get(shop.npcId);
+            return (
+              <Tooltip title={`${shop.name || npc?.name || shop.npcId} (${shop.id})`}>
+                <Box 
+                  onClick={() => navigate(`/game/${gameId}/shops/list/${shop.id}`)}
+                  sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1 }}
+                >
+                  {npc?.icon ? (
+                    <img src={npc.icon} alt={shop.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                  ) : (
+                    <Storefront sx={{ fontSize: 32, color: 'rgba(255, 255, 255, 0.2)' }} />
+                  )}
+                </Box>
+              </Tooltip>
+            );
+          }}
+        />
       ) : (
         currentShop && (
         <Stack direction="row" spacing={4} flex={1} overflow={"hidden"}>
@@ -281,21 +348,75 @@ export function ShopsPage() {
                   )}
                   <Box sx={{ flexGrow: 1, height: '1px', background: 'rgba(255, 255, 255, 0.05)' }} />
                 </Stack>
-                <Grid container spacing={2}>
-                  {group.items.map((shopItem: ShopItem, itemIdx: number) => (
-                    <Grid size={{ xs: 12, sm: 6, lg: 4 }} key={`group-item-${itemIdx}`}>
-                      <ShopItemCard
-                        shopItem={shopItem}
-                        baseItem={itemsMap.get(shopItem.id)}
-                        baseEntity={entitiesMap.get(shopItem.id)}
-                        currencyItem={itemsMap.get(shopItem.currency || "ouro")}
-                        eventsMap={eventsMap}
-                        itemsMap={itemsMap}
-                        entitiesMap={entitiesMap}
-                      />
-                    </Grid>
-                  ))}
-                </Grid>
+                <ListingDataView
+                  data={group.items}
+                  viewMode={itemsViewMode}
+                  cardMinWidth={300}
+                  renderCard={(shopItem: ShopItem) => (
+                    <ShopItemCard
+                      shopItem={shopItem}
+                      baseItem={itemsMap.get(shopItem.id)}
+                      baseEntity={entitiesMap.get(shopItem.id)}
+                      currencyItem={itemsMap.get(shopItem.currency || "ouro")}
+                      eventsMap={eventsMap}
+                      itemsMap={itemsMap}
+                      entitiesMap={entitiesMap}
+                    />
+                  )}
+                  renderListItem={(shopItem: ShopItem) => {
+                    const baseItem = itemsMap.get(shopItem.id);
+                    const baseEntity = entitiesMap.get(shopItem.id);
+                    const currencyItem = itemsMap.get(shopItem.currency || "ouro");
+                    const target = baseItem || baseEntity;
+                    
+                    return (
+                      <Box sx={{ p: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', gap: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                          <Box sx={{ width: 40, height: 40, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <img src={target?.icon} alt={target?.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                          </Box>
+                          <Box>
+                            <Typography variant="body1" sx={{ fontWeight: 700 }}>{target?.name}</Typography>
+                            {shopItem.amount && shopItem.amount > 1 && (
+                              <Typography variant="caption" sx={{ color: 'primary.main', fontWeight: 700 }}>x{shopItem.amount}</Typography>
+                            )}
+                          </Box>
+                        </Box>
+                        <Stack direction="row" spacing={2} alignItems="center">
+                          {shopItem.price !== undefined && (
+                            <Box sx={{ 
+                              px: 1.5, py: 0.5, 
+                              borderRadius: 1, 
+                              backgroundColor: 'rgba(255,255,255,0.03)',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 1
+                            }}>
+                              <Typography variant="body2" sx={{ fontWeight: 800, color: '#ffbb00' }}>
+                                {shopItem.price.toLocaleString()}
+                              </Typography>
+                              {currencyItem?.icon && (
+                                <img src={currencyItem.icon} alt={currencyItem.name} style={{ width: 20, height: 20, objectFit: 'contain' }} />
+                              )}
+                            </Box>
+                          )}
+                        </Stack>
+                      </Box>
+                    );
+                  }}
+                  renderIconItem={(shopItem: ShopItem) => {
+                    const baseItem = itemsMap.get(shopItem.id);
+                    const baseEntity = entitiesMap.get(shopItem.id);
+                    const target = baseItem || baseEntity;
+                    return (
+                      <Tooltip title={`${target?.name} - ${shopItem.price} ${shopItem.currency || 'ouro'}`}>
+                        <Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1 }}>
+                          <img src={target?.icon} alt={target?.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                        </Box>
+                      </Tooltip>
+                    );
+                  }}
+                />
               </Box>
             ))}
           </Stack>

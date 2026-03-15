@@ -1,7 +1,6 @@
 import { 
   Box, 
   Typography, 
-  Grid, 
   Card, 
   CardContent, 
   CardActionArea,
@@ -25,6 +24,9 @@ import { StyledContainer } from "./common/StyledContainer";
 import { ItemChip } from "./common/ItemChip";
 import { PickSelector } from "./common/PickSelector";
 import { MultiPickSelector } from "./common/MultiPickSelector";
+import { ListingDataView } from "./common/ListingDataView";
+import { ViewModeSelector } from "./common/ViewModeSelector";
+import { useViewMode } from "../hooks/useViewMode";
 
 export function ItemsPage() {
   const { gameId, category: urlCategory } = useParams<{ gameId: string; category?: string }>();
@@ -36,6 +38,7 @@ export function ItemsPage() {
   const [excludedSubCategories, setExcludedSubCategories] = useState<string[]>([]);
   const [tradeStatus, setTradeStatus] = useState<string | null>(null);
   const [showPrices, setShowPrices] = useState(false);
+  const [viewMode, setViewMode] = useViewMode("items");
 
   const allItems = useMemo(() => {
     const results = getItemsList();
@@ -187,129 +190,185 @@ export function ItemsPage() {
           />
         </>
       }
+      actionsEnd={
+        <ViewModeSelector mode={viewMode} onChange={setViewMode} />
+      }
     >
-      {/* Items Grid */}
-      {filteredItems.length > 0 ? (
-        <Grid container spacing={3}>
-          {filteredItems.map(item => (
-            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={item.id}>
-              <Card sx={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.02)', 
-                backdropFilter: 'blur(16px)',
-                borderRadius: 1,
-                border: 1,
-                borderColor: 'divider',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                '&:hover': {
-                  transform: 'translateY(-6px)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                  borderColor: 'rgba(255, 255, 255, 0.15)',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.4)'
-                }
-              }}>
-                <CardActionArea 
-                  onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
-                  sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}
-                >
-                  <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Box sx={{ 
-                      width: 64, 
-                      height: 64, 
-                      borderRadius: 1, 
-                      backgroundColor: 'rgba(0,0,0,0.2)',
-                      border: 1,
-                      borderColor: 'divider',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      overflow: 'hidden',
-                      flexShrink: 0
-                    }}>
-                      {item.icon ? (
-                        <img src={item.icon} alt={item.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
-                      ) : (
-                        <Inventory sx={{ fontSize: 32, color: 'rgba(255, 255, 255, 0.2)' }} />
-                      )}
-                    </Box>
-                    <Box>
-                      <Stack direction="row" spacing={0.5} sx={{ mb: 0.5, flexWrap: 'wrap' }}>
-                        {(Array.isArray(item.category) ? item.category : [item.category]).filter(Boolean).map(cat => (
-                          <Typography key={cat} variant="subtitle2" sx={{ color: 'primary.main', fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase' }}>
-                            #{cat}
-                          </Typography>
-                        ))}
-                      </Stack>
-                      <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: 700, lineHeight: 1.2 }}>
-                        {item.name}
+      <ListingDataView
+        data={filteredItems}
+        viewMode={viewMode}
+        cardMinWidth={280}
+        emptyMessage="Nenhum item encontrado com estes filtros."
+        renderCard={(item: any) => (
+          <Card sx={{ 
+            backgroundColor: 'rgba(255, 255, 255, 0.02)', 
+            backdropFilter: 'blur(16px)',
+            borderRadius: 1,
+            border: 1,
+            borderColor: 'divider',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            '&:hover': {
+              transform: 'translateY(-6px)',
+              backgroundColor: 'rgba(255, 255, 255, 0.04)',
+              borderColor: 'rgba(255, 255, 255, 0.15)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.4)'
+            }
+          }}>
+            <CardActionArea 
+              onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
+              sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}
+            >
+              <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box sx={{ 
+                  width: 64, 
+                  height: 64, 
+                  borderRadius: 1, 
+                  backgroundColor: 'rgba(0,0,0,0.2)',
+                  border: 1,
+                  borderColor: 'divider',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  overflow: 'hidden',
+                  flexShrink: 0
+                }}>
+                  {item.icon ? (
+                    <img src={item.icon} alt={item.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                  ) : (
+                    <Inventory sx={{ fontSize: 32, color: 'rgba(255, 255, 255, 0.2)' }} />
+                  )}
+                </Box>
+                <Box>
+                  <Stack direction="row" spacing={0.5} sx={{ mb: 0.5, flexWrap: 'wrap' }}>
+                    {(Array.isArray(item.category) ? item.category : [item.category]).filter(Boolean).map((cat: string) => (
+                      <Typography key={cat} variant="subtitle2" sx={{ color: 'primary.main', fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase' }}>
+                        #{cat}
                       </Typography>
-                    </Box>
-                  </Box>
-                  <CardContent sx={{ pt: 0, flexGrow: 1 }}>
-                    <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.5)', mb: 2, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                      {item.description || "Nenhuma descrição disponível para este item."}
-                    </Typography>
-                    <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
-                      <Tooltip title="ID do Item">
-                        <Chip 
-                          size="small" 
-                          label={item.id} 
-                          sx={{ 
-                            backgroundColor: 'rgba(255, 255, 255, 0.03)', 
-                            color: 'text.disabled', 
-                            fontSize: '0.6rem',
-                            fontFamily: 'monospace',
-                            borderRadius: 0.5
-                          }} 
-                        />
-                      </Tooltip>
+                    ))}
+                  </Stack>
+                  <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: 700, lineHeight: 1.2 }}>
+                    {item.name}
+                  </Typography>
+                </Box>
+              </Box>
+              <CardContent sx={{ pt: 0, flexGrow: 1 }}>
+                <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.5)', mb: 2, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                  {item.description || "Nenhuma descrição disponível para este item."}
+                </Typography>
+                <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
+                  <Tooltip title="ID do Item">
+                    <Chip 
+                      size="small" 
+                      label={item.id} 
+                      sx={{ 
+                        backgroundColor: 'rgba(255, 255, 255, 0.03)', 
+                        color: 'text.disabled', 
+                        fontSize: '0.6rem',
+                        fontFamily: 'monospace',
+                        borderRadius: 0.5
+                      }} 
+                    />
+                  </Tooltip>
 
-                      {showPrices && (item.sellPrice !== undefined || item.buyPrice !== undefined) && (
-                        <Stack direction="row" spacing={0.5}>
-                          {item.buyPrice !== undefined && (
-                            <Tooltip title="Preço de Compra">
-                              <Stack direction="row" spacing={0.5} alignItems="center" sx={{ 
-                                backgroundColor: 'rgba(76, 175, 80, 0.05)', 
-                                px: 0.5, 
-                                borderRadius: 0.5,
-                                border: '1px solid rgba(76, 175, 80, 0.1)'
-                              }}>
-                                <ShoppingCart sx={{ fontSize: 12, color: 'success.main' }} />
-                                <ItemChip id="ouro" amount={item.buyPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
-                              </Stack>
-                            </Tooltip>
-                          )}
-                          {item.sellPrice !== undefined && (
-                            <Tooltip title="Preço de Venda">
-                              <Stack direction="row" spacing={0.5} alignItems="center" sx={{ 
-                                backgroundColor: 'rgba(255, 152, 0, 0.05)', 
-                                px: 0.5, 
-                                borderRadius: 0.5,
-                                border: '1px solid rgba(255, 152, 0, 0.1)'
-                              }}>
-                                <Sell sx={{ fontSize: 12, color: 'warning.main' }} />
-                                <ItemChip id="ouro" amount={item.sellPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
-                              </Stack>
-                            </Tooltip>
-                          )}
-                        </Stack>
+                  {showPrices && (item.sellPrice !== undefined || item.buyPrice !== undefined) && (
+                    <Stack direction="row" spacing={0.5}>
+                      {item.buyPrice !== undefined && (
+                        <Tooltip title="Preço de Compra">
+                          <Stack direction="row" spacing={0.5} alignItems="center" sx={{ 
+                            backgroundColor: 'rgba(76, 175, 80, 0.05)', 
+                            px: 0.5, 
+                            borderRadius: 0.5,
+                            border: '1px solid rgba(76, 175, 80, 0.1)'
+                          }}>
+                            <ShoppingCart sx={{ fontSize: 12, color: 'success.main' }} />
+                            <ItemChip id="ouro" amount={item.buyPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+                          </Stack>
+                        </Tooltip>
+                      )}
+                      {item.sellPrice !== undefined && (
+                        <Tooltip title="Preço de Venda">
+                          <Stack direction="row" spacing={0.5} alignItems="center" sx={{ 
+                            backgroundColor: 'rgba(255, 152, 0, 0.05)', 
+                            px: 0.5, 
+                            borderRadius: 0.5,
+                            border: '1px solid rgba(255, 152, 0, 0.1)'
+                          }}>
+                            <Sell sx={{ fontSize: 12, color: 'warning.main' }} />
+                            <ItemChip id="ouro" amount={item.sellPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+                          </Stack>
+                        </Tooltip>
                       )}
                     </Stack>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
-        <Stack sx={{ flex: 1,textAlign: 'center', py: 8, alignItems: "center", justifyContent: "center" }}>
-          <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.3)' }}>
-            Nenhum item encontrado com estes filtros.
-          </Typography>
-        </Stack>
-      )}
+                  )}
+                </Stack>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        )}
+        renderListItem={(item: any) => (
+          <Box 
+            onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
+            sx={{ 
+              p: 1.5, 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 2, 
+              cursor: 'pointer',
+              justifyContent: 'space-between'
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Box sx={{ width: 40, height: 40, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                {item.icon ? (
+                  <img src={item.icon} alt={item.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                ) : (
+                  <Inventory sx={{ fontSize: 20, color: 'rgba(255, 255, 255, 0.2)' }} />
+                )}
+              </Box>
+              <Box>
+                <Typography variant="body1" sx={{ fontWeight: 700 }}>{item.name}</Typography>
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>{item.id}</Typography>
+              </Box>
+            </Box>
+
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Stack direction="row" spacing={0.5}>
+                {(Array.isArray(item.category) ? item.category : [item.category]).filter(Boolean).map((cat: string) => (
+                  <Chip key={cat} label={cat} size="small" sx={{ height: 20, fontSize: '0.6rem', backgroundColor: 'rgba(255,255,255,0.05)' }} />
+                ))}
+              </Stack>
+              
+              {showPrices && (item.sellPrice !== undefined || item.buyPrice !== undefined) && (
+                <Stack direction="row" spacing={1}>
+                  {item.buyPrice !== undefined && (
+                    <ItemChip id="ouro" amount={item.buyPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+                  )}
+                  {item.sellPrice !== undefined && (
+                    <ItemChip id="ouro" amount={item.sellPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+                  )}
+                </Stack>
+              )}
+            </Stack>
+          </Box>
+        )}
+        renderIconItem={(item: any) => (
+          <Tooltip title={`${item.name} (${item.id})`}>
+            <Box 
+              onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
+              sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1 }}
+            >
+              {item.icon ? (
+                <img src={item.icon} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              ) : (
+                <Inventory sx={{ fontSize: 32, color: 'rgba(255, 255, 255, 0.2)' }} />
+              )}
+            </Box>
+          </Tooltip>
+        )}
+      />
     </StyledContainer>
   );
 }

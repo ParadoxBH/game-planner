@@ -20,6 +20,7 @@ interface StyledContainerProps {
     placeholder?: string;
   };
   actionsStart?: ReactNode;
+  actionsEnd?: ReactNode;
   children?: ReactNode;
   sx?: {
     root?: SxProps<Theme>;
@@ -34,6 +35,7 @@ export function StyledContainer({
   searchValue,
   onChangeSearch,
   actionsStart,
+  actionsEnd,
   children,
   sx,
 }: StyledContainerProps) {
@@ -85,7 +87,9 @@ export function StyledContainer({
           )}
         </Stack>
 
-        {actionsStart && <Stack
+        {(actionsStart || actionsEnd) && 
+        <Stack direction="row" justifyContent={"space-between"} alignItems={"stretch"}>
+        <Stack
           direction="row"
           spacing={1}
           sx={{
@@ -99,6 +103,22 @@ export function StyledContainer({
           }}
         >
           {actionsStart}
+        </Stack>
+        {actionsEnd && <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            overflowX: "auto",
+            pb: 1,
+            "&::-webkit-scrollbar": { height: "4px" },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+              borderRadius: "4px",
+            },
+          }}
+        >
+          {actionsEnd}
+        </Stack>}
         </Stack>}
         <Stack sx={{ overflowY: "auto", flex: 1, ...sx?.container }}>{children}</Stack>
       </Stack>
