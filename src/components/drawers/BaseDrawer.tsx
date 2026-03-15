@@ -9,11 +9,13 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import type { ReactNode } from "react";
 
 interface BaseDrawerProps {
   title: string;
   onClose: () => void;
+  onViewDetails?: () => void;
   onPop?: () => void;
   showBackButton?: boolean;
   children: ReactNode;
@@ -23,6 +25,7 @@ interface BaseDrawerProps {
 export const BaseDrawer = ({
   title,
   onClose,
+  onViewDetails,
   onPop,
   showBackButton,
   children,
@@ -72,13 +75,26 @@ export const BaseDrawer = ({
             {title}
           </Typography>
         </Stack>
-        <IconButton
-          onClick={onClose}
-          size="small"
-          sx={{ color: "text.secondary" }}
-        >
-          <CloseIcon />
-        </IconButton>
+        <Stack direction="row" spacing={1} alignItems="center">
+          {onViewDetails && (
+            <Tooltip title="Ver Detalhes">
+              <IconButton
+                onClick={onViewDetails}
+                size="small"
+                sx={{ color: "primary.main" }}
+              >
+                <OpenInNewIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          )}
+          <IconButton
+            onClick={onClose}
+            size="small"
+            sx={{ color: "text.secondary" }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Stack>
       </Box>
 
       <Divider />

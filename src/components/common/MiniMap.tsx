@@ -28,13 +28,16 @@ const SetBounds = ({ markers, bounds }: { markers: any[], bounds: [[number, numb
 
   useEffect(() => {
     if (markers.length > 0) {
-      const leafletMarkers = markers.map(m => L.latLng(m.position));
-      const group = L.featureGroup(leafletMarkers.map(p => L.marker(p)));
-      const markerBounds = group.getBounds();
+      const latlngs = markers.map(m => L.latLng(m.position));
+      const markerBounds = L.latLngBounds(latlngs);
       
       if (markerBounds.isValid()) {
-        // Pad the bounds slightly so markers aren't on the edge
-        map.fitBounds(markerBounds.pad(0.5), { animate: false });
+        // Se houver apenas um ponto, padroniza o zoom
+        if (markers.length === 1) {
+          map.setView(latlngs[0], Math.max(map.getZoom(), 2), { animate: false });
+        } else {
+          map.fitBounds(markerBounds.pad(0.5), { animate: false });
+        }
       }
     } else {
       map.fitBounds(bounds as any, { animate: false });
@@ -98,6 +101,23 @@ export const MiniMap = ({ meta, markers, onClick, height = 200 }: MiniMapProps) 
       }}
       onClick={onClick}
     >
+      <style>
+        {`
+          @keyframes pulse-marker {
+            0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(255, 68, 0, 0.7); }
+            70% { transform: scale(1.2); opacity: 0.8; box-shadow: 0 0 0 10px rgba(255, 68, 0, 0); }
+            100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(255, 68, 0, 0); }
+          }
+          .mini-marker-inner {
+            width: 12px;
+            height: 12px;
+            border: 2px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(0,0,0,0.5);
+            animation: pulse-marker 2s infinite;
+          }
+        `}
+      </style>
       <MapContainer
         crs={crs}
         bounds={meta.bounds as any}
@@ -140,10 +160,10 @@ export const MiniMap = ({ meta, markers, onClick, height = 200 }: MiniMapProps) 
                 key={m.id} 
                 position={m.position}
                 icon={L.divIcon({
-                    html: `<div style="width: 10px; height: 10px; background: ${m.color || '#ff4400'}; border: 1.5px solid white; border-radius: 50%; box-shadow: 0 0 5px rgba(255,68,0,0.8);"></div>`,
+                    html: `<div class="mini-marker-inner" style="background: ${m.color || '#ff4400'};"></div>`,
                     className: 'mini-marker',
-                    iconSize: [10, 10],
-                    iconAnchor: [5, 5]
+                    iconSize: [12, 12],
+                    iconAnchor: [6, 6]
                 })}
             />
         ))}

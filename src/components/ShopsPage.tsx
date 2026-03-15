@@ -10,7 +10,7 @@ import {
   CardContent,
   CircularProgress,
 } from "@mui/material";
-import { Storefront, Lock, Refresh, Inventory } from "@mui/icons-material";
+import { Storefront, Lock, Refresh, Inventory, Map as MapIcon } from "@mui/icons-material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../hooks/useApi";
 import { useMemo } from "react";
@@ -22,6 +22,7 @@ import { ListingDataView } from "./common/ListingDataView";
 import { Tooltip } from "@mui/material";
 import { ViewModeSelector } from "./common/ViewModeSelector";
 import { useViewMode } from "../hooks/useViewMode";
+import { MiniMap } from "./common/MiniMap";
 
 export function ShopsPage() {
   const { gameId, category: urlShopId } = useParams<{ gameId: string; category?: string }>();
@@ -59,6 +60,16 @@ export function ShopsPage() {
   const shopDetails = useMemo(() => (urlShopId ? getShopDetails(urlShopId) : null), [getShopDetails, urlShopId]);
   const currentShop = shopDetails?.shop;
   const currentNpc = shopDetails?.npc;
+
+  const npcLocation = useMemo(() => {
+    if (!currentNpc || !raw?.spawns) return null;
+    return raw.spawns.find((s: any) => s.entityId === currentNpc.id);
+  }, [currentNpc, raw?.spawns]);
+
+  const mapMetadata = useMemo(() => {
+    if (!npcLocation || !raw?.gameInfo?.maps) return null;
+    return raw.gameInfo.maps.find((m: any) => m.id === npcLocation.mapId) || raw.gameInfo.maps[0];
+  }, [npcLocation, raw?.gameInfo?.maps]);
 
   if (loadingApi) {
     return (
@@ -224,10 +235,10 @@ export function ShopsPage() {
         currentShop && (
         <Stack direction="row" spacing={4} flex={1} overflow={"hidden"}>
           {/* NPC Info & Reset */}
-          <Stack spacing={2}>
+          <Stack spacing={2} sx={{ width: "300px", flexShrink: 0 }}>
             <Card
               sx={{
-                width: "300px",
+                width: "100%",
                 borderRadius: 2,
                 overflow: "hidden",
                 background: "rgba(255, 255, 255, 0.02)",
@@ -310,6 +321,38 @@ export function ShopsPage() {
                   )}
               </CardContent>
             </Card>
+
+            {/* Map Location Card */}
+            {mapMetadata && npcLocation && (
+              <Card
+                sx={{
+                  width: "100%",
+                  borderRadius: 2,
+                  overflow: "hidden",
+                  background: "rgba(255, 255, 255, 0.02)",
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid rgba(255, 255, 255, 0.05)",
+                }}
+              >
+                <Box sx={{ p: 1.5, pb: 0, display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <MapIcon sx={{ fontSize: '1rem', color: 'primary.main' }} />
+                  <Typography variant="overline" sx={{ fontWeight: 800, color: 'text.secondary' }}>
+                    Localização {mapMetadata.name && `- ${mapMetadata.name}`}
+                  </Typography>
+                </Box>
+                <Box sx={{ p: 1.5, height: 200 }}>
+                  <MiniMap 
+                    meta={mapMetadata} 
+                    markers={[{ 
+                      id: 'npc-location', 
+                      position: npcLocation.position,
+                      color: '#ff4400'
+                    }]}
+                    height="100%"
+                  />
+                </Box>
+              </Card>
+            )}
           </Stack>
 
           {/* Groups and Items List */}
@@ -412,10 +455,61 @@ export function ShopsPage() {
                     const baseItem = itemsMap.get(shopItem.id);
                     const baseEntity = entitiesMap.get(shopItem.id);
                     const target = baseItem || baseEntity;
+                    const currencyItem = itemsMap.get(shopItem.currency || "ouro");
+                    const displayPrice = shopItem.price ?? (baseItem?.buyPrice || baseItem?.sellPrice);
+                    
                     return (
-                      <Tooltip title={`${target?.name} - ${shopItem.price} ${shopItem.currency || 'ouro'}`}>
-                        <Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1 }}>
+                      <Tooltip title={`${target?.name} - ${displayPrice} ${currencyItem?.name || 'ouro'}`}>
+                        <Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1, position: 'relative' }}>
                           <img src={target?.icon} alt={target?.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                          
+                          {/* Top-Right: Purchase Limit / Quantity */}
+                          {shopItem.amount && (
+                            <Box sx={{ 
+                              position: 'absolute', 
+                              top: 2, 
+                              right: 2, 
+                              backgroundColor: 'rgba(0,0,0,0.6)', 
+                              backdropFilter: 'blur(2px)',
+                              borderRadius: '4px',
+                              px: 0.5,
+                              py: 0.1,
+                              border: '1px solid rgba(255,255,255,0.1)',
+                              zIndex: 1
+                            }}>
+                              <Typography sx={{ fontSize: '0.6rem', fontWeight: 900, color: '#fff' }}>
+                                x{shopItem.amount}
+                              </Typography>
+                            </Box>
+                          )}
+
+                          {/* Bottom-Center: Price */}
+                          {displayPrice !== undefined && (
+                            <Box sx={{ 
+                              position: 'absolute', 
+                              bottom: 0, 
+                              left: '50%', 
+                              transform: 'translateX(-50%)',
+                              backgroundColor: 'rgba(0,0,0,0.7)', 
+                              backdropFilter: 'blur(4px)',
+                              borderRadius: '10px',
+                              px: 1,
+                              py: 0.2,
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 0.5,
+                              whiteSpace: 'nowrap',
+                              border: '1px solid rgba(255,255,255,0.1)',
+                              zIndex: 1
+                            }}>
+                              <Typography sx={{ fontSize: '0.65rem', fontWeight: 800, color: '#ffbb00' }}>
+                                {displayPrice >= 1000 ? `${(displayPrice / 1000).toFixed(1)}k` : displayPrice}
+                              </Typography>
+                              {currencyItem?.icon && (
+                                <img src={currencyItem.icon} alt={currencyItem.name} style={{ width: 10, height: 10, objectFit: 'contain' }} />
+                              )}
+                            </Box>
+                          )}
                         </Box>
                       </Tooltip>
                     );

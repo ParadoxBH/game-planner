@@ -1,4 +1,4 @@
-import { Box, Typography, Paper, Stack, Collapse } from "@mui/material";
+import { Box, Typography, Paper, Stack, Collapse, Snackbar, Alert } from "@mui/material";
 import { CRS, type LatLngBoundsExpression, Transformation } from "leaflet";
 import { useParams } from "react-router-dom";
 import {
@@ -26,12 +26,18 @@ export interface NavigationItem {
 
 interface CursorTrackerProps {
   onMouseMove: (coords: [number, number]) => void;
+  onShiftClick: (coords: [number, number]) => void;
 }
 
-const CursorTracker = ({ onMouseMove }: CursorTrackerProps) => {
+const CursorTracker = ({ onMouseMove, onShiftClick }: CursorTrackerProps) => {
   useMapEvents({
     mousemove(e) {
       onMouseMove([e.latlng.lat, e.latlng.lng]);
+    },
+    click(e) {
+      if (e.originalEvent.shiftKey) {
+        onShiftClick([e.latlng.lat, e.latlng.lng]);
+      }
     },
   });
   return null;
@@ -264,7 +270,25 @@ export const MapView = () => {
   const [selectedMapId, setSelectedMapId] = useState<string>("");
   const [loadingGame, setLoadingGame] = useState(true);
   const [navigationStack, setNavigationStack] = useState<NavigationItem[]>([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const mapRef = useRef<any>(null);
+
+  const handleShiftClick = (latlng: [number, number]) => {
+    const spawnObj = {
+      id: `spawn_${Date.now()}`,
+      entityId: "TODO_ENTITY_ID",
+      type: "position",
+      position: latlng,
+      mapId: selectedMapId
+    };
+    
+    const json = JSON.stringify(spawnObj, null, 2);
+    navigator.clipboard.writeText(json).then(() => {
+      setSnackbarMessage("JSON de Spawn copiado para a área de transferência!");
+      setSnackbarOpen(true);
+    });
+  };
 
   const drawerOpen = navigationStack.length > 0;
 
@@ -378,7 +402,7 @@ export const MapView = () => {
         minZoom={selectedMap.minZoom}
         style={{ height: "100%", width: "100%" }}
       >
-        <CursorTracker onMouseMove={setCursorCoords} />
+        <CursorTracker onMouseMove={setCursorCoords} onShiftClick={handleShiftClick} />
         
         {selectedMap.type === "layered" && selectedMap.urlPattern && (
           Array.from({ length: selectedMap.layers || 1 }, (_, i) => i).map((l) => (
@@ -501,6 +525,7 @@ export const MapView = () => {
           entities={entities || []}
           items={items || []}
           spawns={spawns || []}
+          shops={raw?.shops || []}
           maps={gameInfo.maps}
           onSelectMap={setSelectedMapId}
           onPush={handlePush}
@@ -508,6 +533,17 @@ export const MapView = () => {
           onClose={handleCloseDrawer} 
         />
       )}
+
+      <Snackbar 
+        open={snackbarOpen} 
+        autoHideDuration={3000} 
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert severity="info" variant="filled" sx={{ width: '100%', borderRadius: 2 }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

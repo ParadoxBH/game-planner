@@ -2,12 +2,13 @@ import { Box, Typography, Stack } from "@mui/material";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import MapIcon from "@mui/icons-material/Map";
+import StorefrontIcon from "@mui/icons-material/Storefront";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
 import type { Theme } from "@mui/material/styles";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { useApi } from "../../hooks/useApi";
-import type { Entity, Item } from "../../types/gameModels";
+import type { Entity, Item, Shop } from "../../types/gameModels";
 
 interface MapOccurrence {
   id: string;
@@ -22,6 +23,7 @@ interface EntityDrawerContentProps {
   items: Item[];
   theme: Theme & { designTokens: any };
   mapOccurrences: MapOccurrence[];
+  shop?: Shop;
   onPush: (item: { type: "entity" | "item"; id: string }) => void;
   onSelectMap: (mapId: string) => void;
 }
@@ -32,9 +34,13 @@ export const EntityDrawerContent = ({
   items,
   theme,
   mapOccurrences,
+  shop,
   onPush,
   onSelectMap,
 }: EntityDrawerContentProps) => {
+  const { gameId } = useParams();
+  const navigate = useNavigate();
+
   return (
     <Stack spacing={theme.designTokens.spacing.sectionGap}>
       <Stack direction="row" spacing={2} alignItems="center">
@@ -95,6 +101,46 @@ export const EntityDrawerContent = ({
           </Typography>
         </Stack>
       </Stack>
+
+      {shop && (
+        <Box>
+          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+            <StorefrontIcon sx={{ color: "primary.main", fontSize: 20 }} />
+            <Typography variant="subtitle2">Possui Loja</Typography>
+          </Stack>
+          <DataCard
+            onClick={() => navigate(`/game/${gameId}/shops/list/${shop.id}`)}
+            sx={{
+              justifyContent: "space-between",
+              "&:hover": {
+                backgroundColor: "rgba(255, 68, 0, 0.05)",
+                borderColor: "primary.main",
+              },
+            }}
+          >
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              <Box
+                sx={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 1,
+                  bgcolor: "rgba(255, 255, 255, 0.05)",
+                  overflow: "hidden",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <StorefrontIcon sx={{ fontSize: 18, color: "primary.main" }} />
+              </Box>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                {shop.name || "Visitar Loja"}
+              </Typography>
+            </Stack>
+            <DataChip label="Abrir" size="small" color="primary" />
+          </DataCard>
+        </Box>
+      )}
 
       {currentEntity?.requirements && currentEntity.requirements.length > 0 && (
         <Box>
