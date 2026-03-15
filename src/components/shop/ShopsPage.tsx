@@ -12,17 +12,17 @@ import {
 } from "@mui/material";
 import { Storefront, Lock, Refresh, Inventory, Map as MapIcon } from "@mui/icons-material";
 import { useParams, useNavigate } from "react-router-dom";
-import { useApi } from "../hooks/useApi";
+import { useApi } from "../../hooks/useApi";
 import { useMemo } from "react";
-import { StyledContainer } from "./common/StyledContainer";
-import { ShopItemCard } from "./shops/ShopItemCard";
-import { ShopCard } from "./shops/ShopCard";
-import type { ShopItem } from "../types/gameModels";
-import { ListingDataView } from "./common/ListingDataView";
+import { StyledContainer } from "../common/StyledContainer";
+import { ShopItemCard } from "./ShopItemCard";
+import { ShopCard } from "./ShopCard";
+import type { ShopItem } from "../../types/gameModels";
+import { ListingDataView } from "../common/ListingDataView";
 import { Tooltip } from "@mui/material";
-import { ViewModeSelector } from "./common/ViewModeSelector";
-import { useViewMode } from "../hooks/useViewMode";
-import { MiniMap } from "./common/MiniMap";
+import { ViewModeSelector } from "../common/ViewModeSelector";
+import { useViewMode } from "../../hooks/useViewMode";
+import { MiniMap } from "../common/MiniMap";
 
 export function ShopsPage() {
   const { gameId, category: urlShopId } = useParams<{ gameId: string; category?: string }>();

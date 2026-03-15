@@ -12,8 +12,8 @@ import {
 import { divIcon } from "leaflet";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTheme } from "@mui/material/styles";
-import { SimplifiedEntity } from "./SimplifiedEntity";
-import { EntityDrawer } from "./EntityDrawer";
+import { SimplifiedEntity } from "./entity/SimplifiedEntity";
+import { EntityDrawer } from "./entity/EntityDrawer";
 import { OutputField } from "./common/OutputField";
 import { loadGamesList } from "../services/dataLoader";
 import { useApi } from "../hooks/useApi";

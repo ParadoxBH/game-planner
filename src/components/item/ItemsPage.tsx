@@ -13,15 +13,15 @@ import {
 } from "@mui/material";
 import { Inventory, Sell, ShoppingCart, SwapHoriz } from "@mui/icons-material";
 import { useParams, useNavigate } from "react-router-dom";
-import { useApi } from "../hooks/useApi";
+import { useApi } from "../../hooks/useApi";
 import { useState, useMemo, useEffect } from "react";
-import { StyledContainer } from "./common/StyledContainer";
-import { ItemChip } from "./common/ItemChip";
-import { PickSelector } from "./common/PickSelector";
-import { MultiPickSelector } from "./common/MultiPickSelector";
-import { ListingDataView } from "./common/ListingDataView";
-import { ViewModeSelector } from "./common/ViewModeSelector";
-import { useViewMode } from "../hooks/useViewMode";
+import { StyledContainer } from "../common/StyledContainer";
+import { ItemChip } from "../common/ItemChip";
+import { PickSelector } from "../common/PickSelector";
+import { MultiPickSelector } from "../common/MultiPickSelector";
+import { ListingDataView } from "../common/ListingDataView";
+import { ViewModeSelector } from "../common/ViewModeSelector";
+import { useViewMode } from "../../hooks/useViewMode";
 
 export function ItemsPage() {
   const { gameId, category: urlCategory } = useParams<{

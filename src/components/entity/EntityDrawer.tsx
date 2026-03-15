@@ -1,12 +1,12 @@
 import { useTheme } from "@mui/material";
 import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import type { NavigationItem } from "./MapView";
-import { BaseDrawer } from "./drawers/BaseDrawer";
-import { EntityDrawerContent } from "./drawers/EntityDrawerContent";
-import { ItemDrawerContent } from "./drawers/ItemDrawerContent";
+import type { NavigationItem } from "../MapView";
+import { BaseDrawer } from "../BaseDrawer";
+import { EntityDrawerContent } from "./EntityDrawerContent";
+import { ItemDrawerContent } from "../item/ItemDrawerContent";
 
-import type { Entity, Item, Spawn, MapMetadata, Shop } from "../types/gameModels";
+import type { Entity, Item, Spawn, MapMetadata, Shop } from "../../types/gameModels";
 
 interface EntityDrawerProps {
   stack: NavigationItem[];

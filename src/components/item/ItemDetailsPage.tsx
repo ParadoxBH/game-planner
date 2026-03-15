@@ -15,15 +15,15 @@ import {
   Construction,
   Architecture,
 } from "@mui/icons-material";
-import { useApi } from "../hooks/useApi";
-import { StyledContainer } from "./common/StyledContainer";
-import { ItemChip } from "./common/ItemChip";
+import { useApi } from "../../hooks/useApi";
+import { StyledContainer } from "../common/StyledContainer";
+import { ItemChip } from "../common/ItemChip";
 import {
   RecipeCard,
-} from "./recipes/RecipeCard";
-import { ItemShopCard } from "./shops/ItemShopCard";
+} from "../recipe/RecipeCard";
+import { ItemShopCard } from "../shop/ItemShopCard";
 import { useMemo } from "react";
-import type { GameDataTypes } from "../types/gameModels";
+import type { GameDataTypes } from "../../types/gameModels";
 
 export function ItemDetailsPage() {
   const { gameId, itemId = "" } = useParams<{ gameId: string; itemId: string }>();

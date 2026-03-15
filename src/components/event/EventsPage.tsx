@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useApi } from "../hooks/useApi";
-import { StyledContainer } from "./common/StyledContainer";
-import { EventCard } from "./events/EventCard";
+import { useApi } from "../../hooks/useApi";
+import { StyledContainer } from "../common/StyledContainer";
+import { EventCard } from "./EventCard";
 
 export function EventsPage() {
   const { gameId } = useParams<{ gameId: string }>();

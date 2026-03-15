@@ -17,13 +17,13 @@ import {
   Inventory,
   Category,
 } from "@mui/icons-material";
-import { useApi } from "../hooks/useApi";
-import { StyledContainer } from "./common/StyledContainer";
-import { ItemChip } from "./common/ItemChip";
-import { RecipeCard } from "./recipes/RecipeCard";
-import { EntityCard } from "./entities/EntityCard";
+import { useApi } from "../../hooks/useApi";
+import { StyledContainer } from "../common/StyledContainer";
+import { ItemChip } from "../common/ItemChip";
+import { RecipeCard } from "../recipe/RecipeCard";
+import { EntityCard } from "../entity/EntityCard";
 import { useMemo } from "react";
-import type { GameDataTypes } from "../types/gameModels";
+import type { GameDataTypes } from "../../types/gameModels";
 
 const typeMap = {
   clima: { label: "Clima", color: "#4fc3f7" },

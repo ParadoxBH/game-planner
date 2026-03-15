@@ -1,10 +1,10 @@
 import { Box, Typography, Button, Stack, Divider, useTheme } from "@mui/material";
-import { DataCard } from "./common/DataCard";
-import { OutputField } from "./common/OutputField";
+import { DataCard } from "../common/DataCard";
+import { OutputField } from "../common/OutputField";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import InventoryIcon from "@mui/icons-material/Inventory";
 
-import type { Entity } from "../types/gameModels";
+import type { Entity } from "../../types/gameModels";
 
 interface SimplifiedEntityProps {
   entity: Entity;

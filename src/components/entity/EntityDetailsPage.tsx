@@ -18,15 +18,15 @@ import {
   Construction,
   Storefront
 } from "@mui/icons-material";
-import { useApi } from "../hooks/useApi";
-import { StyledContainer } from "./common/StyledContainer";
-import { ItemChip } from "./common/ItemChip";
-import { RecipeCard } from "./recipes/RecipeCard";
+import { useApi } from "../../hooks/useApi";
+import { StyledContainer } from "../common/StyledContainer";
+import { ItemChip } from "../common/ItemChip";
+import { RecipeCard } from "../recipe/RecipeCard";
 import { useMemo } from "react";
-import type { MapMetadata, Spawn, GameInfo, GameDataTypes } from "../types/gameModels";
-import { MiniMap } from "./common/MiniMap";
-import { DataCard } from "./common/DataCard";
-import { DataChip } from "./common/DataChip";
+import type { MapMetadata, Spawn, GameInfo, GameDataTypes } from "../../types/gameModels";
+import { MiniMap } from "../common/MiniMap";
+import { DataCard } from "../common/DataCard";
+import { DataChip } from "../common/DataChip";
 
 export function EntityDetailsPage() {
   const { gameId, entityId = "" } = useParams<{ gameId: string; entityId: string }>();
