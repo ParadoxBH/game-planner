@@ -31,6 +31,13 @@ export function CalculatorPage() {
       icon: <Construction sx={{ fontSize: 40, color: "primary.main" }} />,
       path: `/game/${gameId}/calculator/crafting`
     },
+    {
+      id: "profitability",
+      title: "Calculadora de Rentabilidade",
+      description: "Lista todos os crafts do jogo, mostrando o custo base de produção, preço de venda e o lucro estimado.",
+      icon: <Construction sx={{ fontSize: 40, color: "primary.main" }} />,
+      path: `/game/${gameId}/calculator/profitability`
+    },
     // Aqui podem ser adicionadas novas calculadoras no futuro
   ];
 

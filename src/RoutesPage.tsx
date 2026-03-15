@@ -13,6 +13,7 @@ import { EventDetailsPage } from "./components/event/EventDetailsPage";
 import { CodesPage } from "./components/CodesPage";
 import { CalculatorPage } from "./components/calculator/CalculatorPage";
 import { CraftingCalculator } from "./components/calculator/CraftingCalculator";
+import { ProfitabilityCalculator } from "./components/calculator/ProfitabilityCalculator";
 import { ItemDetailsPage } from "./components/item/ItemDetailsPage";
 import { RecipeDetailsPage } from "./components/recipe/RecipeDetailsPage";
 import { Typography } from "@mui/material";
@@ -43,6 +44,7 @@ export function RoutesPage() {
           <Route path="calculator">
             <Route index element={<CalculatorPage />} />
             <Route path="crafting" element={<CraftingCalculator />} />
+            <Route path="profitability" element={<ProfitabilityCalculator />} />
           </Route>
           <Route path="quests" element={<Typography p={4} variant="h4">Lista de Missões (Em Breve)</Typography>} />
         </Route>
