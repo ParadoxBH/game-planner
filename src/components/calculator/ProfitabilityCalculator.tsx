@@ -1,7 +1,6 @@
 import { useState, useMemo } from "react";
 import {
   Typography,
-  Paper,
   Stack,
   Box,
   Table,
@@ -13,7 +12,6 @@ import {
   TableSortLabel,
   TextField,
   InputAdornment,
-  Divider,
   Tooltip,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
@@ -21,12 +19,13 @@ import { useParams } from "react-router-dom";
 import { useGameData } from "../../hooks/useGameData";
 import { ItemChip } from "../common/ItemChip";
 import { StyledContainer } from "../common/StyledContainer";
-import {
-  type Item,
-  type Entity,
-  type Recipe,
-  type RecipeItem,
-  type Shop,
+import { getCraftingTotals } from "../../utils/craftingTree";
+import type { TreeOptions, CraftingTotals } from "../../utils/craftingTree";
+import type {
+  Item,
+  Entity,
+  Recipe,
+  Shop,
 } from "../../types/gameModels";
 
 type Order = "asc" | "desc";
@@ -92,84 +91,18 @@ export function ProfitabilityCalculator() {
   }, [recipes]);
 
   const calculateBaseCostAndSteps = useMemo(() => {
-    const cache = new Map<
-      string,
-      {
-        cost: number;
-        recipeIds: Set<string>;
-        shopIds: Set<string>;
-        nonPurchasable: Map<string, number>;
-      }
-    >();
-
-    const getRecipeData = (
-      id: string,
-      type: string = "item",
-    ): {
-      cost: number;
-      recipeIds: Set<string>;
-      shopIds: Set<string>;
-      nonPurchasable: Map<string, number>;
-    } => {
-      const cacheKey = `${type}-${id}`;
-      if (cache.has(cacheKey)) return cache.get(cacheKey)!;
-
-      const item = itemMap.get(id);
-      const entity = entityMap.get(id);
-      const recipe = recipeMapByProduct.get(id);
-      const shopId = itemToShopIdMap.get(id);
-
-      // If no recipe, it's a base resource
-      if (!recipe) {
-        const buyPrice = item?.buyPrice ?? entity?.buyPrice ?? 0;
-        const nonPurchasable = new Map<string, number>();
-        if (buyPrice === 0) nonPurchasable.set(id, 1);
-
-        const shopIds = new Set<string>();
-        if (shopId) shopIds.add(shopId);
-
-        return { cost: buyPrice, recipeIds: new Set<string>(), shopIds, nonPurchasable };
-      }
-
-      // Calculate from recipe
-      let totalCost = 0;
-      const combinedRecipeIds = new Set<string>();
-      const combinedShopIds = new Set<string>();
-      const combinedNonPurchasable = new Map<string, number>();
-
-      combinedRecipeIds.add(recipe.id);
-
-      const ingredients: RecipeItem[] = recipe.ingredients || [];
-      ingredients.forEach((ing) => {
-        const ingData = getRecipeData(ing.id, ing.type || "item");
-
-        // We need to account for recipe output amount
-        let productAmount = recipe.amount || 1;
-        const product = recipe.products?.find((p) => p.id === id);
-        if (product) productAmount = product.amount;
-
-        const batchesNeeded = ing.amount / productAmount;
-        totalCost += ingData.cost * batchesNeeded;
-
-        ingData.recipeIds.forEach((rid) => combinedRecipeIds.add(rid));
-        ingData.shopIds.forEach((sid) => combinedShopIds.add(sid));
-        ingData.nonPurchasable.forEach((amount, npId) => {
-          const current = combinedNonPurchasable.get(npId) || 0;
-          combinedNonPurchasable.set(npId, current + amount * batchesNeeded);
-        });
-      });
-
-      const result = {
-        cost: totalCost,
-        recipeIds: combinedRecipeIds,
-        shopIds: combinedShopIds,
-        nonPurchasable: combinedNonPurchasable,
-      };
-      cache.set(cacheKey, result);
-      return result;
+    const options: TreeOptions = {
+        itemMap,
+        entityMap,
+        recipeMapByProduct,
+        shopMap: itemToShopIdMap
     };
 
-    return getRecipeData;
+    const cache = new Map<string, CraftingTotals>();
+
+    return (id: string, type: string = "item") => {
+        return getCraftingTotals(id, 1, type, options, cache);
+    };
   }, [itemMap, entityMap, recipeMapByProduct, itemToShopIdMap]);
 
   const profitData = useMemo(() => {
@@ -190,18 +123,18 @@ export function ProfitabilityCalculator() {
         const item = itemMap.get(id);
         if (!item) return;
 
-        const { cost, recipeIds, shopIds, nonPurchasable } = calculateBaseCostAndSteps(id);
+        const { totalCost, recipeIds, shopIds, baseResources } = calculateBaseCostAndSteps(id);
         const sellPrice = item.sellPrice || 0;
 
         data.push({
           id,
           name: item.name,
           icon: item.icon,
-          baseCost: cost,
+          baseCost: totalCost,
           sellPrice,
-          profit: sellPrice - cost,
+          profit: sellPrice - totalCost,
           steps: recipeIds.size + shopIds.size,
-          nonPurchasable: Array.from(nonPurchasable.entries()).map(
+          nonPurchasable: Array.from(baseResources.entries()).map(
             ([npId, amount]) => ({ id: npId, amount }),
           ),
           station: recipe.stations?.[0] || recipe.ProducedIn?.[0],

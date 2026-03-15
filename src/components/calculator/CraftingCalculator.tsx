@@ -28,11 +28,12 @@ import { ItemChip } from "../common/ItemChip";
 import { HelpOutline, Add, Delete, ClearAll } from "@mui/icons-material";
 import { StyledContainer } from "../common/StyledContainer";
 import { GameDataSelector } from "../common/GameDataSelector";
-import {
-  type Item,
-  type Entity,
-  type Recipe,
-  type RecipeItem,
+import { getCraftingTotals } from "../../utils/craftingTree";
+import type { TreeOptions, CraftingTotals } from "../../utils/craftingTree";
+import type {
+  Item,
+  Entity,
+  Recipe,
 } from "../../types/gameModels";
 
 interface SelectedItem {
@@ -93,52 +94,35 @@ export function CraftingCalculator() {
 
     const totals = new Map<string, number>();
     const unresolved = new Set<string>();
+    
+    const options: TreeOptions = {
+      itemMap,
+      entityMap,
+      recipeMapByProduct: recipeMap,
+      categoryChoices
+    };
 
-    function calculate(id: string, amount: number, type: string = "item") {
-      if (type === "category") {
-        const currentTotal = totals.get(`category:${id}`) || 0;
-        totals.set(`category:${id}`, currentTotal + amount);
-
-        const choice = categoryChoices[id];
-        if (choice) {
-          // If a choice exists, we treat it as an item for further decomposition
-          calculate(choice, amount, "item");
-        } else {
-          // No choice yet, mark as unresolved
-          unresolved.add(id);
-        }
-        return;
-      }
-
-      const recipe = recipeMap.get(id);
-
-      if (!recipe) {
-        const current = totals.get(id) || 0;
-        totals.set(id, current + amount);
-        return;
-      }
-
-      // Find the specific product amount in the recipe
-      let recipeAmount = recipe.amount || 1;
-      const product = recipe.products?.find((p) => p.id === id);
-      if (product) {
-        recipeAmount = product.amount;
-      }
-
-      const batches = Math.ceil(amount / recipeAmount);
-
-      const ingredients: RecipeItem[] = recipe.ingredients || [];
-      ingredients.forEach((ing) => {
-        calculate(ing.id, ing.amount * batches, (ing.type as any) || "item");
-      });
-    }
+    const cache = new Map<string, CraftingTotals>();
 
     selectedList.forEach((item) => {
-      calculate(item.id, item.amount, item.type);
+      // Check for unresolved categories first
+      if (item.type === "category" && !categoryChoices[item.id]) {
+        unresolved.add(item.id);
+        const currentTotal = totals.get(`category:${item.id}`) || 0;
+        totals.set(`category:${item.id}`, currentTotal + item.amount);
+        return;
+      }
+
+      const itemTotals = getCraftingTotals(item.id, item.amount, item.type, options, cache);
+      
+      itemTotals.baseResources.forEach((amt, id) => {
+        const current = totals.get(id) || 0;
+        totals.set(id, current + amt);
+      });
     });
 
     return { totalResourcesMap: totals, unresolvedCategories: unresolved };
-  }, [selectedList, recipeMap, categoryChoices]);
+  }, [selectedList, itemMap, entityMap, recipeMap, categoryChoices]);
 
   const resourcesList = Array.from(totalResourcesMap.entries()).map(
     ([id, amount]) => {
