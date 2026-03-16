@@ -45,35 +45,62 @@ export function HeaderNavDropdown({
   const isActive = location.pathname.startsWith(rootPath);
 
   return (
-    <Box>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        my: 2,
+        mx: 1,
+        borderBottom: isActive ? "2px solid #ff4400" : "2px solid transparent",
+        transition: "all 0.2s",
+        "&:hover": {
+          backgroundColor: "rgba(255, 255, 255, 0.05)",
+        },
+      }}
+    >
       <Button
-        id={`${label}-nav-button`}
-        aria-controls={open ? `${label}-nav-menu` : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
+        component={Link}
+        to={rootPath}
         startIcon={icon}
-        endIcon={<KeyboardArrowDown sx={{ 
-          transition: 'transform 0.3s', 
-          transform: open ? 'rotate(180deg)' : 'none',
-          fontSize: '1rem'
-        }} />}
-        sx={{ 
-          my: 2, 
-          color: isActive ? "primary.main" : "white", 
-          display: "flex", 
-          mx: 1,
-          textTransform: 'none',
-          transition: 'all 0.2s',
-          borderBottom: isActive ? '2px solid #ff4400' : '2px solid transparent',
+        sx={{
+          color: isActive ? "primary.main" : "white",
+          textTransform: "none",
           borderRadius: 0,
-          '&:hover': {
-            color: 'primary.main',
-            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+          px: 1,
+          minWidth: "auto",
+          "&:hover": {
+            color: "primary.main",
+            backgroundColor: "transparent",
           },
         }}
       >
         {label}
+      </Button>
+      <Button
+        id={`${label}-nav-button`}
+        aria-controls={open ? `${label}-nav-menu` : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        onClick={handleClick}
+        size="small"
+        sx={{
+          color: isActive ? "primary.main" : "white",
+          borderRadius: 0,
+          minWidth: "auto",
+          px: 0.5,
+          "&:hover": {
+            color: "primary.main",
+            backgroundColor: "transparent",
+          },
+        }}
+      >
+        <KeyboardArrowDown
+          sx={{
+            transition: "transform 0.3s",
+            transform: open ? "rotate(180deg)" : "none",
+            fontSize: "1rem",
+          }}
+        />
       </Button>
       <Menu
         id={`${label}-nav-menu`}
