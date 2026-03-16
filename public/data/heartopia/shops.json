@@ -444,6 +444,30 @@
     ]
   },
   {
+    "id": "pet_shop",
+    "npcId": "sra_joan",
+    "name": "Loja de Pet",
+    "groups": [
+      {
+        "name": "Alimento",
+        "items": [
+          {"id": "racao_gato"},
+          {"id": "racao_cao"},
+          {"id": "alimento_universal_animais"}
+        ]
+      },
+      {
+        "name": "Ferramenta Especial",
+        "items": [
+          {"id": "peixinho_seco_ativo", "currency": "estrela_desejavel", "price": 1},
+          {"id": "peixinho_seco_ativo"},
+          {"id": "racao_cao_ativo", "currency": "estrela_desejavel", "price": 1},
+          {"id": "racao_cao_ativo"}
+        ]
+      }
+    ]
+  },
+  {
     "id": "caca_insetos",
     "npcId": "naniwa",
     "name": "Loja de Bicho",

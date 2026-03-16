@@ -285,6 +285,16 @@
         "icon": "/img/heartopia/agricultura/semente_gloria_manha_branca.png",
         "buyPrice": 90
     },
+    {
+        "id": "semente_gloria_manha_laranja",
+        "name": "Semente de Glória-da-manhã Laranja",
+        "category": [
+            "seed",
+            "flower",
+            "gloria_manha"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_gloria_manha_laranja.png"
+    },
 
 
 

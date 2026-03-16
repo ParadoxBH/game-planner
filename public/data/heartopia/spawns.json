@@ -167,8 +167,8 @@
     "mapId": "main"
   },
   {
-    "id": "sr_joan_npc",
-    "entityId": "sr_joan",
+    "id": "sra_joan_npc",
+    "entityId": "sra_joan",
     "type": "position",
     "position": [
       3.5818442794265124,
@@ -312,6 +312,26 @@
     "position": [
       46.885515458962566,
       -36.671948242187504
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "workbench_city",
+    "entityId": "mesa_artesao",
+    "type": "position",
+    "position": [
+      94.68962779821611,
+      -28.9515380859375
+    ],
+    "mapId": "main"
+  },
+  {
+    "id": "cooker_city",
+    "entityId": "fogao_clean",
+    "type": "position",
+    "position": [
+      91.21340079135436,
+      -19.301025390625
     ],
     "mapId": "main"
   }

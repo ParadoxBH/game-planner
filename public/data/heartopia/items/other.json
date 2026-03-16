@@ -1,2 +1,14 @@
 [
+  {
+    "id": "brinquedo_pet",
+    "name": "Brinquedo para Pet",
+    "category": ["tool", "pet"],
+    "icon": "/img/heartopia/ferramentas/brinquedo_pet.png"
+  },
+  {
+    "id": "guarda_sol_cafe_livre",
+    "name": "Guada Sol de Café Livre",
+    "category": ["social"],
+    "icon": "/img/heartopia/ferramentas/guarda_sol_cafe_livre.png"
+  }
 ]

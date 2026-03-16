@@ -294,10 +294,19 @@
     "icon": "/img/heartopia/npc/vanya.png"
   },
   {
-    "id": "sr_joan",
+    "id": "sra_joan",
     "name": "Sr. Joan",
     "category": "npc",
-    "icon": "/img/heartopia/npc/sr_joan.png"
+    "icon": "/img/heartopia/npc/sra_joan.png"
+  },
+  {
+    "id": "fogao_clean",
+    "name": "Fogão Clean",
+    "category": [
+      "station",
+      "cooking"
+    ],
+    "icon": "/img/heartopia/eletrodomestico/fogao_clean.png"
   },
   {
     "id": "fogao_pinguim",

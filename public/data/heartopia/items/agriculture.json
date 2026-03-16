@@ -121,7 +121,7 @@
     "id": "papoula_vermelha",
     "name": "Papoula Vermelha",
     "category": [
-      "seed",
+      "agriculture",
       "flower",
       "papoula"
     ],
@@ -131,7 +131,7 @@
     "id": "papoula_amarela",
     "name": "Papoula Amarela",
     "category": [
-      "seed",
+      "agriculture",
       "flower",
       "papoula"
     ],
@@ -141,7 +141,7 @@
     "id": "papoula_branca",
     "name": "Papoula Branca",
     "category": [
-      "seed",
+      "agriculture",
       "flower",
       "papoula"
     ],
