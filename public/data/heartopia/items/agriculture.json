@@ -45,13 +45,15 @@
     "id": "morango",
     "name": "Morango",
     "category": ["agriculture", "vegetable"],
-    "icon": "/img/heartopia/agricultura/morango.png"
+    "icon": "/img/heartopia/agricultura/morango.png",
+    "sellPrice": 375
   },
   {
     "id": "milho",
     "name": "Milho",
     "category": ["agriculture", "vegetable"],
-    "icon": "/img/heartopia/agricultura/milho.png"
+    "icon": "/img/heartopia/agricultura/milho.png",
+    "sellPrice": 515
   },
 
 
@@ -86,6 +88,17 @@
     "sellPrice": 100
   },
   {
+    "id": "margarida_rosa",
+    "name": "Margarida Rosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "margarida"
+    ],
+    "icon": "/img/heartopia/agricultura/margarida_rosa.png",
+    "sellPrice": 100
+  },
+  {
     "id": "amor_perfeito_vermelho",
     "name": "Amor-perfeito Vermelho",
     "category": [
@@ -115,7 +128,41 @@
       "flower",
       "anturio"
     ],
-    "icon": "/img/heartopia/agricultura/anturio_vermelho.png"
+    "icon": "/img/heartopia/agricultura/anturio_vermelho.png",
+    "sellPrice": 185
+  },
+  {
+    "id": "anturio_vermelho",
+    "name": "Antúrio Vermelho",
+    "category": [
+      "agriculture",
+      "flower",
+      "anturio"
+    ],
+    "icon": "/img/heartopia/agricultura/anturio_vermelho.png",
+    "sellPrice": 185
+  },
+  {
+    "id": "anturio_amarelo",
+    "name": "Antúrio Amarelo",
+    "category": [
+      "agriculture",
+      "flower",
+      "anturio"
+    ],
+    "icon": "/img/heartopia/agricultura/anturio_amarelo.png",
+    "sellPrice": 185
+  },
+  {
+    "id": "anturio_branco",
+    "name": "Antúrio Branco",
+    "category": [
+      "agriculture",
+      "flower",
+      "anturio"
+    ],
+    "icon": "/img/heartopia/agricultura/anturio_branco.png",
+    "sellPrice": 185
   },
   {
     "id": "papoula_vermelha",
@@ -155,7 +202,8 @@
       "flower",
       "copo_leite"
     ],
-    "icon": "/img/heartopia/agricultura/copo_leite_vermelha.png"
+    "icon": "/img/heartopia/agricultura/copo_leite_vermelha.png",
+    "sellPrice": 250
   },
   {
     "id": "copo_leite_amarela",
@@ -165,7 +213,8 @@
       "flower",
       "copo_leite"
     ],
-    "icon": "/img/heartopia/agricultura/copo_leite_amarela.png"
+    "icon": "/img/heartopia/agricultura/copo_leite_amarela.png",
+    "sellPrice": 250
   },
   {
     "id": "copo_leite_branca",
@@ -175,7 +224,8 @@
       "flower",
       "copo_leite"
     ],
-    "icon": "/img/heartopia/agricultura/copo_leite_branca.png"
+    "icon": "/img/heartopia/agricultura/copo_leite_branca.png",
+    "sellPrice": 250
   },
   {
     "id": "gloria_manha_vermelha",
@@ -185,7 +235,8 @@
       "flower",
       "gloria_manha"
     ],
-    "icon": "/img/heartopia/agricultura/gloria_manha_vermelha.png"
+    "icon": "/img/heartopia/agricultura/gloria_manha_vermelha.png",
+    "sellPrice": 250
   },
   {
     "id": "gloria_manha_amarela",
@@ -195,7 +246,8 @@
       "flower",
       "gloria_manha"
     ],
-    "icon": "/img/heartopia/agricultura/gloria_manha_amarela.png"
+    "icon": "/img/heartopia/agricultura/gloria_manha_amarela.png",
+    "sellPrice": 250
   },
   {
     "id": "gloria_manha_branca",
@@ -205,7 +257,8 @@
       "flower",
       "gloria_manha"
     ],
-    "icon": "/img/heartopia/agricultura/gloria_manha_branca.png"
+    "icon": "/img/heartopia/agricultura/gloria_manha_branca.png",
+    "sellPrice": 250
   },
 
 
