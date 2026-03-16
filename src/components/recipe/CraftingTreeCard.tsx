@@ -188,29 +188,20 @@ export function CraftingTreeCard({
   }, [itemId, amount, type, options]);
 
   return (
-    <>
-      <Stack spacing={1}>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Typography variant="h6" fontWeight={700}>
-            Árvore de Produção
-          </Typography>
-        </Stack>
-        <Box
-          sx={{
-            p: 1,
-            backgroundColor: "rgba(255,255,255,0.02)",
-            borderRadius: 1,
-            border: "1px solid rgba(255,255,255,0.05)",
-          }}
-        >
-          <TreeNode
-            node={tree}
-            onSelectCategory={onSelectCategory}
-            originalId={itemId}
-            originalType={type}
-          />
-        </Box>
-      </Stack>
-    </>
+    <Box
+      sx={{
+        p: 1,
+        backgroundColor: "rgba(255,255,255,0.02)",
+        borderRadius: 1,
+        border: "1px solid rgba(255,255,255,0.05)",
+      }}
+    >
+      <TreeNode
+        node={tree}
+        onSelectCategory={onSelectCategory}
+        originalId={itemId}
+        originalType={type}
+      />
+    </Box>
   );
 }
