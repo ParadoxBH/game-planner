@@ -177,7 +177,13 @@ export function useNavigation(gameId: string | null) {
       label: "Calculadora", 
       icon: <Calculate />, 
       path: `/game/${gameId}/calculator`, 
-      color: "#00bcd4" // Cyan
+      color: "#00bcd4", // Cyan
+      isDropdown: true,
+      options: [
+        { label: "Crafting", path: `/game/${gameId}/calculator/crafting` },
+        { label: "Rentabilidade", path: `/game/${gameId}/calculator/profitability` },
+        { label: "Lucro por Tempo", path: `/game/${gameId}/calculator/profit-per-time` },
+      ]
     },
   ], [gameId, theme, dynamicEntityCategories, dynamicItemCategories, dynamicRecipeStations, dynamicShops]);
 

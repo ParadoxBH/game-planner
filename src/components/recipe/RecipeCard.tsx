@@ -15,6 +15,7 @@ import {
 } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import { ItemChip } from "../common/ItemChip";
+import { TimeChip } from "../common/TimeChip";
 
 import type { GameDataTypes, RecipeItem, RecipeUnlock } from "../../types/gameModels";
 
@@ -27,6 +28,7 @@ interface RecipeCardProps {
   unlock?: RecipeUnlock[];
   getSourceData: (type: GameDataTypes | undefined, id: string) => { name: string; icon?: string; type: GameDataTypes } | undefined;
   eventsMap: Map<string, string>;
+  craftTime?: number;
 }
 
 
@@ -39,7 +41,8 @@ export function RecipeCard({
   products,
   unlock,
   getSourceData,
-  eventsMap
+  eventsMap,
+  craftTime
 }: RecipeCardProps) {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
@@ -81,6 +84,9 @@ export function RecipeCard({
                     sx={{ backgroundColor: 'rgba(255,255,255,0.05)', fontSize: '0.65rem', height: 20 }} 
                   />
                 ))}
+                {craftTime && craftTime > 0 && (
+                  <TimeChip seconds={craftTime} />
+                )}
               </Stack>
             </Stack>
             <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: 700, lineHeight: 1.2 }}>

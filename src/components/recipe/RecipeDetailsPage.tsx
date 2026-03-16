@@ -17,6 +17,7 @@ import {
 import { useApi } from "../../hooks/useApi";
 import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
+import { TimeChip } from "../common/TimeChip";
 import { useMemo } from "react";
 import { RecipeFlowSection } from "../flow/RecipeFlowSection";
 
@@ -165,6 +166,19 @@ export function RecipeDetailsPage() {
                   )}
                 </Stack>
               </Box>
+              
+              {recipe.craftTime && recipe.craftTime > 0 && (
+                <Box textAlign="left" sx={{ width: "100%" }}>
+                  <Typography
+                    variant="subtitle2"
+                    color="rgba(255,255,255,0.5)"
+                    gutterBottom
+                  >
+                    TEMPO DE PRODUÇÃO
+                  </Typography>
+                  <TimeChip seconds={recipe.craftTime} size="medium" />
+                </Box>
+              )}
 
               {recipe.unlock && recipe.unlock.length > 0 && (
                 <Box textAlign="left" sx={{ width: "100%" }}>

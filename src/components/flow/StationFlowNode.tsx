@@ -3,6 +3,7 @@ import { Box, Typography, Paper, Stack, Divider, Tooltip } from "@mui/material";
 import { type CraftNode } from "../../utils/craftingTree";
 import { Construction, SwapHoriz, HelpOutline } from "@mui/icons-material";
 import { ItemChip } from "../common/ItemChip";
+import { TimeChip } from "../common/TimeChip";
 
 export interface StationNodeData {
   stationName: string;
@@ -161,6 +162,11 @@ export function StationFlowNode({ data }: NodeProps & { data: StationNodeData })
                     <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
                       x{recipe.amount}
                     </Typography>
+                    {recipe.recipe?.craftTime && recipe.recipe.craftTime > 0 && (
+                      <Box sx={{ mt: 0.5 }}>
+                        <TimeChip seconds={recipe.recipe.craftTime} size="small" />
+                      </Box>
+                    )}
                   </Box>
                   {(recipe.hasAlternatives || recipe.type === "category" || recipe.categoryId) && (
                     <SwapHoriz sx={{ fontSize: 16, color: (recipe.categoryId || recipe.type === "category") ? "orange" : "primary.main" }} />

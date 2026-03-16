@@ -38,6 +38,13 @@ export function CalculatorPage() {
       icon: <Construction sx={{ fontSize: 40, color: "primary.main" }} />,
       path: `/game/${gameId}/calculator/profitability`
     },
+    {
+      id: "profit-per-time",
+      title: "Lucro por Tempo",
+      description: "Analise quais itens rendem mais lucro por tempo, ideal para plantações e geradores automáticos.",
+      icon: <Construction sx={{ fontSize: 40, color: "primary.main" }} />,
+      path: `/game/${gameId}/calculator/profit-per-time`
+    },
     // Aqui podem ser adicionadas novas calculadoras no futuro
   ];
 

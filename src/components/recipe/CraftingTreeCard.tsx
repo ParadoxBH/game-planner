@@ -18,6 +18,7 @@ import {
 import { getCraftingTree } from "../../utils/craftingTree";
 import type { CraftNode, TreeOptions } from "../../utils/craftingTree";
 import { ItemChip } from "../common/ItemChip";
+import { TimeChip } from "../common/TimeChip";
 
 interface CraftingTreeCardProps {
   itemId: string;
@@ -131,12 +132,17 @@ const TreeNode = ({
         )}
 
         {node.recipe?.stations && node.recipe.stations.length > 0 && (
-          <Typography
-            variant="caption"
-            sx={{ opacity: 0.5, fontStyle: "italic" }}
-          >
-            ({node.recipe.stations[0]})
-          </Typography>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Typography
+              variant="caption"
+              sx={{ opacity: 0.5, fontStyle: "italic" }}
+            >
+              ({node.recipe.stations[0]})
+            </Typography>
+            {node.recipe.craftTime && node.recipe.craftTime > 0 && (
+              <TimeChip seconds={node.recipe.craftTime} size="small" />
+            )}
+          </Stack>
         )}
       </Stack>
 

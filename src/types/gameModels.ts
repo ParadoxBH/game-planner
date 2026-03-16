@@ -57,6 +57,7 @@ export interface Recipe {
   stations?: string[];
   ProducedIn?: string[]; // Raw data support
   unlock?: RecipeUnlock[];
+  craftTime?: number; // Time in seconds
 }
 
 export interface ShopCondition {

@@ -15,6 +15,7 @@ import { Build, Science } from "@mui/icons-material";
 import type { GameDataTypes } from "../../types/gameModels";
 import { ListingDataView } from "../common/ListingDataView";
 import { Tooltip, Chip } from "@mui/material";
+import { TimeChip } from "../common/TimeChip";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { useViewMode } from "../../hooks/useViewMode";
 
@@ -184,7 +185,7 @@ export function RecipesPage() {
         cardMinWidth={450}
         listHeader={[
           { label: "Receita / Produto", width: "30%" },
-          { label: "Ingredientes", width: "40%" },
+          { label: "Tempo / Ingredientes", width: "40%" },
           { label: "Bancadas", width: "15%" },
           { label: "Desbloqueio", align: "right" as const, width: "15%" },
         ]}
@@ -199,6 +200,7 @@ export function RecipesPage() {
             unlock={recipe.unlock}
             getSourceData={getSourceData}
             eventsMap={eventsMap}
+            craftTime={recipe.craftTime}
           />
         )}
         renderListItem={(recipe: any) => {
@@ -220,7 +222,10 @@ export function RecipesPage() {
               <Typography variant="body2" sx={{ fontWeight: 700 }}>{recipe.normalizedName}</Typography>
             </Box>,
 
-            <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
+              {recipe.craftTime && recipe.craftTime > 0 && (
+                <TimeChip seconds={recipe.craftTime} />
+              )}
               {recipe.normalizedIngredients.map((ing: any, i: number) => {
                 const ingData = getSourceData(ing.type, ing.id);
                 return (

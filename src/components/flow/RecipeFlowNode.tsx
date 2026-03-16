@@ -3,6 +3,7 @@ import { Box, Typography, Paper, Stack, Divider } from "@mui/material";
 import { type CraftNode } from "../../utils/craftingTree";
 import { Construction } from "@mui/icons-material";
 import { ItemChip } from "../common/ItemChip";
+import { TimeChip } from "../common/TimeChip";
 
 export function RecipeFlowNode({ data }: NodeProps & { data: { node: CraftNode } }) {
   const { node } = data;
@@ -81,9 +82,14 @@ export function RecipeFlowNode({ data }: NodeProps & { data: { node: CraftNode }
       
       {node.recipe?.stations && node.recipe.stations.length > 0 && (
         <Box sx={{ p: 1, backgroundColor: "rgba(0,0,0,0.2)", borderTop: "1px solid rgba(255, 255, 255, 0.05)" }}>
-           <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
-            STATION: {node.recipe.stations.join(", ")}
-          </Typography>
+           <Stack direction="row" justifyContent="space-between" alignItems="center">
+             <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
+              STATION: {node.recipe.stations.join(", ")}
+            </Typography>
+            {node.recipe.craftTime && node.recipe.craftTime > 0 && (
+              <TimeChip seconds={node.recipe.craftTime} />
+            )}
+           </Stack>
         </Box>
       )}
     </Paper>
