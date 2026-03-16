@@ -1,0 +1,19 @@
+[
+  {
+    "id": "racao_passaro",
+    "name": "Ração de Pássaro",
+    "category": ["feed", "bird"],
+    "description": "Ração utilizada para atrair passaro em poleiros",
+    "icon": "/img/heartopia/ferramentas/racao_passaro.png",
+    "sellPrice": 100
+  },
+  {
+    "id": "isca",
+    "name": "Isca",
+    "category": ["feed", "fish"],
+    "description": "Isca de Peixe",
+    "icon": "/img/heartopia/ferramentas/isca.png",
+    "sellPrice": 50,
+    "buyPrice": 200
+  }
+]

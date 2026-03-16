@@ -1,0 +1,357 @@
+[
+    {
+        "id": "semente_tomate",
+        "name": "Semente de Tomate",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_tomate.png",
+        "buyPrice": 10,
+        "sellPrice": 5
+    },
+    {
+        "id": "semente_batata",
+        "name": "Semente de Batata",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_batata.png",
+        "buyPrice": 30,
+        "sellPrice": 15
+    },
+    {
+        "id": "semente_trigo",
+        "name": "Semente de Trigo",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_trigo.png",
+        "buyPrice": 95,
+        "sellPrice": 47
+    },
+    {
+        "id": "semente_alface_americano",
+        "name": "Semente de Alface Americano",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_alface_americana.png",
+        "buyPrice": 145,
+        "sellPrice": 72
+    },
+    {
+        "id": "semente_abacaxi",
+        "name": "Semente de Abacaxi",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "description": "Sementes para plantar Abacaxi.",
+        "icon": "/img/heartopia/agricultura/semente_abacaxi.png",
+        "buyPrice": 15
+    },
+    {
+        "id": "semente_cenoura",
+        "name": "Semente de Cenoura",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "description": "Sementes para plantar Cenoura.",
+        "icon": "/img/heartopia/agricultura/semente_cenoura.png",
+        "buyPrice": 50,
+        "sellPrice": 25
+    },
+    {
+        "id": "semente_morango",
+        "name": "Semente de Morango",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_morango.png",
+        "buyPrice": 125
+    },
+    {
+        "id": "semente_milho",
+        "name": "Semente Milho",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_milho.png",
+        "buyPrice": 170
+    },
+
+
+
+
+
+
+
+
+
+
+    
+    {
+        "id": "semente_margarida_vermelha",
+        "name": "Semente de Margarida Vermelha",
+        "category": [
+            "seed",
+            "flower",
+            "margarida"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_margarida_vermelha.png",
+        "buyPrice": 30,
+        "sellPrice": 15
+    },
+    {
+        "id": "semente_margarida_rosa",
+        "name": "Semente de Margarida Rosa",
+        "category": [
+            "seed",
+            "flower",
+            "margarida"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_margarida_rosa.png",
+        "sellPrice": 25
+    },
+    {
+        "id": "semente_margarida_branca",
+        "name": "Semente de Margarida Branca",
+        "category": [
+            "seed",
+            "flower",
+            "margarida"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_margarida_branca.png",
+        "buyPrice": 30
+    },
+    {
+        "id": "semente_amor_perfeito_vermelho",
+        "name": "Semente de Amor-perfeito Vermelho",
+        "category": [
+            "seed",
+            "flower",
+            "amor_perfeito"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_amor_perfeito_vermelho.png",
+        "buyPrice": 30
+    },
+    {
+        "id": "semente_amor_perfeito_amarelo",
+        "name": "Semente de Amor-perfeito Amarelo",
+        "category": [
+            "seed",
+            "flower",
+            "amor_perfeito"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_amor_perfeito_amarelo.png",
+        "buyPrice": 30
+    },
+    {
+        "id": "semente_anturio_vermelho",
+        "name": "Semente de Antúrio Vermelho",
+        "category": [
+            "seed",
+            "flower",
+            "anturio"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_anturio_vermelho.png",
+        "buyPrice": 60
+    },
+    {
+        "id": "semente_anturio_amarelo",
+        "name": "Semente de Antúrio Amarelo",
+        "category": [
+            "seed",
+            "flower",
+            "anturio"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_anturio_amarela.png",
+        "buyPrice": 60
+    },
+    {
+        "id": "semente_anturio_branco",
+        "name": "Semente de Antúrio Branco",
+        "category": [
+            "seed",
+            "flower",
+            "anturio"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_anturio_branco.png",
+        "buyPrice": 60
+    },
+    {
+        "id": "semente_papoula_vermelha",
+        "name": "Semente de Papoula Vermelha",
+        "category": [
+            "seed",
+            "flower",
+            "papoula"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_papoula_vermelha.png",
+        "buyPrice": 60
+    },
+    {
+        "id": "semente_papoula_amarela",
+        "name": "Semente de Papoula Amarela",
+        "category": [
+            "seed",
+            "flower",
+            "papoula"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_papoula_amarela.png",
+        "buyPrice": 60
+    },
+    {
+        "id": "semente_papoula_branca",
+        "name": "Semente de Papoula Branca",
+        "category": [
+            "seed",
+            "flower",
+            "papoula"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_papoula_branca.png",
+        "buyPrice": 60
+    },
+    {
+        "id": "semente_copo_leite_vermelha",
+        "name": "Semente de Copo-de-leite Vermelha",
+        "category": [
+            "seed",
+            "flower",
+            "copo_leite"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_copo_leite_vermelha.png",
+        "buyPrice": 90
+    },
+    {
+        "id": "semente_copo_leite_amarela",
+        "name": "Semente de Copo-de-leite Amarela",
+        "category": [
+            "seed",
+            "flower",
+            "copo_leite"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_copo_leite_amarela.png",
+        "buyPrice": 90
+    },
+    {
+        "id": "semente_copo_leite_branca",
+        "name": "Semente de Copo-de-leite Branca",
+        "category": [
+            "seed",
+            "flower",
+            "copo_leite"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_copo_leite_branca.png",
+        "buyPrice": 90
+    },
+    {
+        "id": "semente_gloria_manha_vermelha",
+        "name": "Semente de Glória-da-manhã Vermelha",
+        "category": [
+            "seed",
+            "flower",
+            "gloria_manha"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_gloria_manha_vermelha.png",
+        "buyPrice": 90
+    },
+    {
+        "id": "semente_gloria_manha_amarela",
+        "name": "Semente de Glória-da-manhã Amarela",
+        "category": [
+            "seed",
+            "flower",
+            "gloria_manha"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_gloria_manha_amarela.png",
+        "buyPrice": 90
+    },
+    {
+        "id": "semente_gloria_manha_branca",
+        "name": "Semente de Glória-da-manhã Abranca",
+        "category": [
+            "seed",
+            "flower",
+            "gloria_manha"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_gloria_manha_branca.png",
+        "buyPrice": 90
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {
+        "id": "semente_nabo",
+        "name": "Semente de Nabo",
+        "category": [
+            "seed",
+            "vegetable",
+            "gala_moda_neve"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_nabo.png",
+        "buyPrice": 10
+    },
+    {
+        "id": "semente_papoula_himalaia_vermelha",
+        "name": "Semente de Papoula-Himalaia Vermelha",
+        "category": [
+            "seed",
+            "flower",
+            "papoula_himalaia",
+            "gala_moda_neve"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_papoula_himalaia_vermelha.png",
+        "buyPrice": 30,
+        "sellPrice": 15
+    },
+    {
+        "id": "semente_papoula_himalaia_amarela",
+        "name": "Semente de Papoula-Himalaia Amarela",
+        "category": [
+            "seed",
+            "flower",
+            "papoula_himalaia",
+            "gala_moda_neve"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_papoula_himalaia_amarela.png",
+        "buyPrice": 30,
+        "sellPrice": 15
+    },
+    {
+        "id": "semente_papoula_himalaia_branca",
+        "name": "Semente de Papoula-Himalaia Branca",
+        "category": [
+            "seed",
+            "flower",
+            "papoula_himalaia",
+            "gala_moda_neve"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_papoula_himalaia_branca.png",
+        "buyPrice": 30,
+        "sellPrice": 15
+    }
+]

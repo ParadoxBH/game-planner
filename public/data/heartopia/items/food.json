@@ -1,0 +1,316 @@
+[
+  {
+    "id": "salada_rural",
+    "name": "Salada Rural",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/salada_rural.png",
+    "sellPrice": 90
+  },
+  {
+    "id": "salada_especial_chef",
+    "name": "Salada Especial do Chef",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/salada_rural.png"
+  },
+  {
+    "id": "geleia_mista",
+    "name": "Geleia Mista",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/geleia_mista.png"
+  },
+  {
+    "id": "geleia_framboesa",
+    "name": "Geleia de Framboesa",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/geleia_framboesa.png",
+    "sellPrice": 26
+  },
+  {
+    "id": "geleia_mirtilo",
+    "name": "Geleia de Mirtilo",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/geleia_mirtilo.png"
+  },
+  {
+    "id": "geleia_maca",
+    "name": "Geleia de Maçã",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/geleia_maca.png"
+  },
+  {
+    "id": "geleia_tangerina",
+    "name": "Geleia de Tangerina",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/geleia_tangerina.png"
+  },
+  {
+    "id": "isca_peixe_fritas",
+    "name": "Isca de Peixe com Fritas",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/isca_peixe_fritas.png"
+  },
+  {
+    "id": "alimento_estranho",
+    "name": "Alimento Estranho",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/alimento_estranho.png"
+  },
+  {
+    "id": "bolo_queijo",
+    "name": "Bolo de Queijo",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/bolo_queijo.png"
+  },
+  {
+    "id": "torta_cogumelos",
+    "name": "Torta de Cogumelos",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/torta_cogumelos.png"
+  },
+  {
+    "id": "cogumelo_assado",
+    "name": "Cogumelo Assado",
+    "category": [
+      "food",
+      "cogumelo_assado"
+    ],
+    "icon": "/img/heartopia/comidas/cogumelo_assado.png"
+  },
+  {
+    "id": "cogumelo_ostra_assado",
+    "name": "Cogumelo Ostra Assado",
+    "category": [
+      "food",
+      "cogumelo_assado"
+    ],
+    "icon": "/img/heartopia/comidas/cogumelo_ostra_assado.png"
+  },
+  {
+    "id": "shiitake_assado",
+    "name": "Shiitake Assado",
+    "category": [
+      "food",
+      "cogumelo_assado"
+    ],
+    "icon": "/img/heartopia/comidas/shiitake_assado.png"
+  },
+  {
+    "id": "champignon_assado",
+    "name": "Champignon Assado",
+    "category": [
+      "food",
+      "cogumelo_assado"
+    ],
+    "icon": "/img/heartopia/comidas/champignon_assado.png"
+  },
+  {
+    "id": "porcino_assado",
+    "name": "Porcino Assado",
+    "category": [
+      "food",
+      "cogumelo_assado"
+    ],
+    "icon": "/img/heartopia/comidas/porcino_assado.png"
+  },
+  {
+    "id": "ovo_cozido_termal",
+    "name": "Ovo Cozido Termal",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/ovo_cozido_termal.png",
+    "sellPrice": 130
+  },
+  {
+    "id": "cafe",
+    "name": "Café",
+    "category": ["food", "cafe"],
+    "icon": "/img/heartopia/comidas/cafe.png",
+    "sellPrice": 290
+  },
+  {
+    "id": "latte",
+    "name": "Latte",
+    "category": ["food", "cafe"],
+    "icon": "/img/heartopia/comidas/latte.png",
+    "sellPrice": 300
+  },
+  {
+    "id": "bagel_peixe_defumado",
+    "name": "Bagel de Peixe Defumado",
+    "category": ["food"],
+    "icon": "/img/heartopia/comidas/bagel_peixe_defumado.png"
+  },
+  {
+    "id": "arroz_marisco",
+    "name": "Arroz de Marisco",
+    "category": ["food"],
+    "icon": "/img/heartopia/comidas/arroz_marisco.png",
+    "sellPrice": 490
+  },
+  {
+    "id": "ensopado_rustico",
+    "name": "Ensopado Rústico",
+    "category": ["food"],
+    "icon": "/img/heartopia/comidas/ensopado_rustico.png"
+  },
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  {
+    "id": "macarrao_trufa_negra_creme",
+    "name": "Macarrão com Trufa Negra e Creme",
+    "category": ["food"],
+    "icon": "/img/heartopia/comidas/macarrao_trufa_negra_creme.png"
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+  {
+    "id": "cafe_gelado",
+    "name": "Café Gelado",
+    "category": [
+      "food",
+      "cafe_gelado",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/comidas/cafe_gelado.png",
+    "sellPrice": 280
+  },
+  {
+    "id": "latte_gelado",
+    "name": "Latte Gelado",
+    "category": [
+      "food",
+      "cafe_gelado"
+    ],
+    "icon": "/img/heartopia/comidas/latte_gelado.png",
+    "sellPrice": 280
+  },
+  {
+    "id": "carne_pure_nabo",
+    "name": "Carne com Purê de Nabo",
+    "category": [
+      "food",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/comidas/carne_pure_nabo.png"
+  },
+  {
+    "id": "caldo_cremoso_nabo",
+    "name": "Caldo Cremoso de Nabo",
+    "category": [
+      "food",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/comidas/caldo_cremoso_nabo.png",
+    "sellPrice": 340
+  },
+  {
+    "id": "panqueca_acucar_po",
+    "name": "Panqueca com Açúcar de Pó",
+    "category": [
+      "food",
+      "panqueca_acucar_po",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/comidas/panqueca_acucar_po.png"
+  },
+  {
+    "id": "panqueca_acucar_po_mirtilo",
+    "name": "Panqueca com Açúcar e Mirtilo",
+    "category": [
+      "food",
+      "panqueca_acucar_po",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/comidas/panqueca_acucar_po_mirtilo.png"
+  },
+  {
+    "id": "panqueca_acucar_po_framboesa",
+    "name": "Panqueca com Açúcar e Framboesa",
+    "category": [
+      "food",
+      "panqueca_acucar_po",
+      "gala_moda_neve"
+    ],
+    "description": "Panquecas com framboesas e açúcar.",
+    "icon": "/img/heartopia/comidas/panqueca_acucar_po_framboesa.png",
+    "sellPrice": 350
+  },
+  {
+    "id": "panqueca_acucar_po_maca",
+    "name": "Panqueca com Açúcar e Maçã",
+    "category": [
+      "food",
+      "panqueca_acucar_po",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/comidas/panqueca_acucar_po_maca.png",
+    "sellPrice": 360
+  },
+  {
+    "id": "panqueca_acucar_po_tangerina",
+    "name": "Panqueca com Açúcar e Tangerina",
+    "category": [
+      "food",
+      "panqueca_acucar_po",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/comidas/panqueca_acucar_po_tangerina.png",
+    "sellPrice": 360
+  },
+
+  {
+    "id": "banquete_aurora",
+    "name": "Banquete Aurora",
+    "category": [
+      "food",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/comidas/banquete_aurora.png",
+    "sellPrice": 1630
+  }
+]

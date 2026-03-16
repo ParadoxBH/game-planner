@@ -1,0 +1,23 @@
+[
+  {
+    "id": "po_cultivo_arco_iris",
+    "name": "Pó de Cultivo Arco-íris",
+    "category": ["powerup", "agriculture", "flower"],
+    "icon": "/img/heartopia/ferramentas/po_cultivo_arco_iris.png",
+    "buyPrice": 3000
+  },
+  {
+    "id": "atrativo_abelha_inflavel",
+    "name": "Atrativo de Abelha Inflável",
+    "category": ["powerup", "bugnet"],
+    "icon": "/img/heartopia/ferramentas/atrativo_abelha_inflavel.png",
+    "buyPrice": 2000
+  },
+  {
+    "id": "fortificante_onisciente",
+    "name": "Fortificante Onisciente",
+    "category": ["powerup", "bugnet"],
+    "icon": "/img/heartopia/ferramentas/fortificante_onisciente.png",
+    "buyPrice": 4000
+  }
+]
