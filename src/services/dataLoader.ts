@@ -1,17 +1,35 @@
 export async function loadGameData<T>(
   gameId: string,
   dataset: string
-): Promise<T> {
+): Promise<T[]> {
+  const baseUrl = `/data/${gameId}/${dataset}`;
+  const manifestUrl = `${baseUrl}/manifest.json`;
+
   try {
-    const response = await fetch(`/data/${gameId}/${dataset}.json`);
-    if (!response.ok) {
-      throw new Error(`Failed to load ${dataset} for ${gameId}`);
+    // Tenta carregar o manifest primeiro
+    const manifestResponse = await fetch(manifestUrl);
+    if (manifestResponse.ok) {
+      const files: string[] = await manifestResponse.json();
+      const promises = files.map(async (file) => {
+        const response = await fetch(`${baseUrl}/${file}`);
+        if (!response.ok) throw new Error(`Falha ao carregar ${file}`);
+        return response.json();
+      });
+
+      const results = await Promise.all(promises);
+      return results.flat() as T[];
     }
-    return (await response.json()) as T;
   } catch (error) {
-    console.error(`Error loading data for ${gameId}/${dataset}:`, error);
-    throw error;
+    console.warn(`Manifest não encontrado para ${dataset} em ${gameId}, tentando arquivo único.`);
+    // Continue to fallback if manifest loading fails (e.g., 404 or network error)
   }
+
+  // Fallback: carregar arquivo único
+  const response = await fetch(`${baseUrl}.json`);
+  if (!response.ok) {
+    throw new Error(`Falha ao carregar dados de ${dataset}`);
+  }
+  return (await response.json()) as T[]; // Cast to T[] as per new return type
 }
 
 export async function loadGamesList(): Promise<any[]> {

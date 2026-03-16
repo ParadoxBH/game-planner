@@ -244,8 +244,14 @@ export function ItemsPage() {
         viewMode={viewMode}
         cardMinWidth={280}
         listHeader={[
-          { label: "Item", width: "70%" },
-          { label: "Preços", align: "right" as const, width: "30%", hidden: !showPrices },
+          { label: "Item", width: "60%" },
+          { label: "Categorias", width: "30%" },
+          {
+            label: "Preços",
+            align: "right" as const,
+            width: "10%",
+            hidden: !showPrices,
+          },
         ]}
         emptyMessage="Nenhum item encontrado com estes filtros."
         renderCard={(item: any) => (
@@ -485,12 +491,26 @@ export function ItemsPage() {
               {item.name}
             </Typography>
           </Box>,
-
+          <Stack direction={"row"} spacing={1}>
+            {item.category.map((category: string) => (
+              <Chip key={`${item.name}_category_${category}`} label={category} />
+            ))}
+          </Stack>,
           <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
             {item.buyPrice !== undefined && (
               <Tooltip title="Compra">
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, backgroundColor: 'rgba(76, 175, 80, 0.1)', px: 1, borderRadius: 1, border: '1px solid rgba(76, 175, 80, 0.2)' }}>
-                  <ShoppingCart sx={{ fontSize: 12, color: 'success.main' }} />
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 0.5,
+                    backgroundColor: "rgba(76, 175, 80, 0.1)",
+                    px: 1,
+                    borderRadius: 1,
+                    border: "1px solid rgba(76, 175, 80, 0.2)",
+                  }}
+                >
+                  <ShoppingCart sx={{ fontSize: 12, color: "success.main" }} />
                   <ItemChip
                     id="ouro"
                     amount={item.buyPrice}
@@ -502,8 +522,18 @@ export function ItemsPage() {
             )}
             {item.sellPrice !== undefined && (
               <Tooltip title="Venda">
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, backgroundColor: 'rgba(255, 152, 0, 0.1)', px: 1, borderRadius: 1, border: '1px solid rgba(255, 152, 0, 0.2)' }}>
-                  <Sell sx={{ fontSize: 12, color: 'warning.main' }} />
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 0.5,
+                    backgroundColor: "rgba(255, 152, 0, 0.1)",
+                    px: 1,
+                    borderRadius: 1,
+                    border: "1px solid rgba(255, 152, 0, 0.2)",
+                  }}
+                >
+                  <Sell sx={{ fontSize: 12, color: "warning.main" }} />
                   <ItemChip
                     id="ouro"
                     amount={item.sellPrice}
@@ -513,7 +543,7 @@ export function ItemsPage() {
                 </Box>
               </Tooltip>
             )}
-          </Box>
+          </Box>,
         ]}
         renderIconItem={(item: any) => (
           <Tooltip title={`${item.name} (${item.id})`}>
