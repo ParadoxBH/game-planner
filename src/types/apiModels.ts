@@ -19,6 +19,9 @@ export interface ItemDetails {
       price?: number;
       currency?: string;
       amount?: number;
+      size?: 'small' | 'medium' | 'large' | 'extraLarge';
+      disableLink?: boolean;
+      isBest?: boolean;
     };
   }[];
 }

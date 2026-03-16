@@ -8,7 +8,8 @@ import {
   Inventory,
   Bolt,
   Category,
-  AutoFixHigh
+  AutoFixHigh,
+  Star as StarIcon
 } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import type { GameDataTypes } from "../../types/gameModels";
@@ -22,6 +23,7 @@ export interface ItemChipProps {
   isProduct?: boolean;
   size?: 'small' | 'medium' | 'large' | 'extraLarge';
   disableLink?: boolean;
+  isBest?: boolean;
 }
 
 const SIZES = {
@@ -75,7 +77,8 @@ export function ItemChip({
   icon: iconSrc,
   isProduct = false,
   size = 'large',
-  disableLink = false
+  disableLink = false,
+  isBest = false
 }: ItemChipProps) {
   const navigate = useNavigate();
   const { gameId } = useParams<{ gameId: string }>();
@@ -161,6 +164,23 @@ export function ItemChip({
         }}>
           {renderIcon()}
         </Paper>
+        {isBest && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: -8,
+              left: -8,
+              zIndex: 3,
+              display: 'flex',
+              filter: 'drop-shadow(0 0 2px rgba(0,0,0,0.5))'
+            }}
+          >
+            <StarIcon sx={{ 
+              color: '#FFD700', // Gold
+              fontSize: Math.max(18, config.icon * 0.9)
+            }} />
+          </Box>
+        )}
         {(amount !== undefined && amount != 0) && (
           <Box sx={{ 
             position: 'absolute', 

@@ -310,6 +310,7 @@ export function RecipeDetailsPage() {
                                   icon={opt.icon}
                                   size="small"
                                   name={opt.name}
+                                  isBest={opt.id === ing.bestOptionId}
                                   type={
                                     ing.type === "category" ? "item" : ing.type
                                   }

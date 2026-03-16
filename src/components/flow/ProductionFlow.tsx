@@ -128,8 +128,9 @@ export function ProductionFlow({ tree, allRecipesByProduct, onSelectCategory, on
         });
 
         return { nodeId, handleId };
-      } else if (currentNode.shopName) {
-        const nodeId = getOrAddShopNode(currentNode.shopName, currentNode, level);
+      } else if (currentNode.shopName || currentNode.buyPrice > 0) {
+        const shopName = currentNode.shopName || "Compra Direta";
+        const nodeId = getOrAddShopNode(shopName, currentNode, level);
         return { nodeId };
       } else {
         // Fallback for base resources/others
@@ -146,11 +147,10 @@ export function ProductionFlow({ tree, allRecipesByProduct, onSelectCategory, on
     if (shopNodesMap.size > 0) {
         let totalCost = 0;
         let minX = 0;
-        
         shopNodesMap.forEach(node => {
             const data = node.data as unknown as ShopNodeData;
             data.items.forEach(item => {
-                totalCost += item.price * item.amount;
+                totalCost += (item.price || 0) * item.amount;
             });
             if (node.position.x < minX) minX = node.position.x;
         });
@@ -198,7 +198,7 @@ export function ProductionFlow({ tree, allRecipesByProduct, onSelectCategory, on
             }
         }
 
-        if (node.shopName && node.buyPrice) {
+        if ((node.shopName || node.buyPrice > 0) && node.buyPrice) {
             totalBuyCost += node.buyPrice * node.amount;
         }
 

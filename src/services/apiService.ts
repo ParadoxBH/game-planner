@@ -14,6 +14,8 @@ import type {
   SearchOptions,
   PaginatedResponse,
 } from "../types/apiModels";
+import { getCraftingTotals } from "../utils/craftingTree";
+import type { TreeOptions } from "../utils/craftingTree";
 
 export class ApiService {
   private data: GameDataPayload;
@@ -196,9 +198,38 @@ export class ApiService {
 
     const recipe = this.normalizeRecipe(rawRecipe);
 
+    // Setup options for cost calculation
+    const itemToShopIdMap = new Map<string, string>();
+    this.data.shops.forEach((shop) => {
+      shop.groups.forEach((group) => {
+        group.items.forEach((shopItem) => {
+          itemToShopIdMap.set(shopItem.id, shop.id);
+        });
+      });
+    });
+
+    const recipeMapByProduct = new Map<string, Recipe>();
+    this.data.recipes.forEach((r) => {
+      if (r.itemId) recipeMapByProduct.set(r.itemId, r);
+      r.products?.forEach((p) => recipeMapByProduct.set(p.id, r));
+    });
+
+    const itemMap = new Map<string, Item>();
+    this.data.items.forEach((i) => itemMap.set(i.id, i));
+    const entityMap = new Map<string, Entity>();
+    this.data.entities.forEach((e) => entityMap.set(e.id, e));
+
+    const options: TreeOptions = {
+      itemMap,
+      entityMap,
+      recipeMapByProduct,
+      shopMap: itemToShopIdMap,
+    };
+
     const ingredients = recipe.normalizedIngredients.map((ing) => {
       const isCategory = ing.type === "category";
       let dataOptions: (Item | Entity)[] | undefined = undefined;
+      let bestOptionId: string | undefined = undefined;
 
       if (isCategory) {
         dataOptions = this.data.items.filter((item) => {
@@ -207,6 +238,21 @@ export class ApiService {
           }
           return item.category === ing.id;
         });
+
+        // Find best option using calculator logic
+        if (dataOptions.length > 0) {
+          let minCost = Infinity;
+          dataOptions.forEach((opt) => {
+            const totals = getCraftingTotals(opt.id, 1, "item", options);
+            console.log(`[ApiService] Cost for ${opt.id}: ${totals.totalCost}`);
+            // If an item has a price/cost, it might be better to show it than items with 0 (unknown)
+            if (totals.totalCost < minCost) {
+              minCost = totals.totalCost;
+              bestOptionId = opt.id;
+            }
+          });
+          console.log(`[ApiService] Best option for ${ing.id}: ${bestOptionId} (Min cost: ${minCost})`);
+        }
       }
 
       return {
@@ -217,6 +263,7 @@ export class ApiService {
           ? this.data.entities.find((e) => e.id === ing.id)
           : this.data.items.find((i) => i.id === ing.id),
         dataOptions,
+        bestOptionId,
       };
     });
 
