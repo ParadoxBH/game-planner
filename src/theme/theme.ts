@@ -166,5 +166,38 @@ export const theme = createTheme({
         },
       },
     },
+    MuiTabs: {
+      styleOverrides: {
+        root: {
+          minHeight: 40,
+        },
+        indicator: {
+          height: 3,
+          borderRadius: "3px 3px 0 0",
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          minHeight: 40,
+          minWidth: 0,
+          padding: "6px 16px",
+          textTransform: "none",
+          fontWeight: 700,
+          fontSize: "0.875rem",
+          outline: "none",
+          "&:focus": {
+            outline: "none",
+          },
+          "&.Mui-focusVisible": {
+            backgroundColor: "rgba(255, 255, 255, 0.05)",
+          },
+          "&.Mui-selected": {
+            color: "#ff4400",
+          },
+        },
+      },
+    },
   },
 });
