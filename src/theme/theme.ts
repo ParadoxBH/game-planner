@@ -17,6 +17,12 @@ declare module "@mui/material/styles" {
       };
     };
   }
+  interface Palette {
+    header: string;
+  }
+  interface PaletteOptions {
+    header?: string;
+  }
   interface ThemeOptions {
     designTokens?: {
       spacing?: {
@@ -88,6 +94,7 @@ export const theme = createTheme({
       styleOverrides: {
         body: {
           backgroundColor: "#0b0b0b",
+          overflow: "hidden",
           scrollbarWidth: "thin",
           "&::-webkit-scrollbar": {
             width: "6px",

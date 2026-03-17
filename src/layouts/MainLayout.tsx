@@ -4,7 +4,7 @@ import { Box, Stack } from "@mui/material";
 
 export function MainLayout() {
   return (
-    <Stack sx={{ position: "absolute", left: 0, top: 0, right: 0, bottom: 0 }}>
+    <Stack sx={{ position: "absolute", left: 0, top: 0, right: 0, bottom: 0, overflow: "hidden" }}>
       {/* O Header aparecerá em todas as rotas filhas */}
       <Header />
       <Box display={"flex"} flex={1} sx={{ overflowY: "auto" }}>
