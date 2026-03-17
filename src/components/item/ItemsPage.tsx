@@ -18,10 +18,11 @@ import { useState, useMemo, useEffect } from "react";
 import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
 import { PickSelector } from "../common/PickSelector";
-import { MultiPickSelector } from "../common/MultiPickSelector";
 import { ListingDataView } from "../common/ListingDataView";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { useViewMode } from "../../hooks/useViewMode";
+import { TriplePickSelector } from "../common/TriplePickSelector";
+import type { TripleState } from "../common/TriplePickSelector";
 
 export function ItemsPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -35,9 +36,9 @@ export function ItemsPage() {
   const [availableSubCategories, setAvailableSubCategories] = useState<
     string[]
   >([]);
-  const [excludedSubCategories, setExcludedSubCategories] = useState<string[]>(
-    [],
-  );
+  const [subCategoryStates, setSubCategoryStates] = useState<
+    Record<string, TripleState>
+  >({});
   const [tradeStatus, setTradeStatus] = useState<string | null>(null);
   const [showPrices, setShowPrices] = useState(false);
   const [viewMode, setViewMode] = useViewMode("items");
@@ -86,6 +87,19 @@ export function ItemsPage() {
     });
 
     setAvailableSubCategories(Array.from(cats).sort());
+
+    // Clean up states for categories that are no longer available
+    setSubCategoryStates(prev => {
+      const next = { ...prev };
+      let changed = false;
+      Object.keys(next).forEach(cat => {
+        if (!cats.has(cat)) {
+          delete next[cat];
+          changed = true;
+        }
+      });
+      return changed ? next : prev;
+    });
   }, [allItems, urlCategory]);
 
   const filteredItems = useMemo(() => {
@@ -95,11 +109,12 @@ export function ItemsPage() {
       filters.category = [urlCategory];
     }
 
-    // Add negation for excluded sub-categories
-    if (excludedSubCategories.length > 0) {
+    // Add inclusion/negation for sub-category states
+    Object.entries(subCategoryStates).forEach(([cat, state]) => {
+      if (state === "indifferent") return;
       if (!filters.category) filters.category = [];
-      excludedSubCategories.forEach((c) => filters.category.push(`!${c}`));
-    }
+      filters.category.push(state === "exclude" ? `!${cat}` : cat);
+    });
 
     const results = getItemsList({ filters });
     let list = Array.isArray(results) ? results : results.data;
@@ -129,7 +144,7 @@ export function ItemsPage() {
   }, [
     getItemsList,
     urlCategory,
-    excludedSubCategories,
+    subCategoryStates,
     tradeStatus,
     searchTerm,
   ]);
@@ -160,18 +175,11 @@ export function ItemsPage() {
     );
   }
 
-  const selectedSubCategories = availableSubCategories.filter(
-    (c) => !excludedSubCategories.includes(c),
-  );
-
-  const handleSubCategoriesChange = (selected: string[]) => {
-    const nowExcluded = availableSubCategories.filter(
-      (c) => !selected.includes(c),
-    );
-    const otherExclusions = excludedSubCategories.filter(
-      (c) => !availableSubCategories.includes(c),
-    );
-    setExcludedSubCategories([...otherExclusions, ...nowExcluded]);
+  const handleSubCategoryStateChange = (option: string, newState: TripleState) => {
+    setSubCategoryStates(prev => ({
+      ...prev,
+      [option]: newState
+    }));
   };
 
   return (
@@ -192,12 +200,11 @@ export function ItemsPage() {
             }}
           />
           {availableSubCategories.length > 0 && (
-            <MultiPickSelector
+            <TriplePickSelector
               label="Sub-categoria"
-              selectedOptions={selectedSubCategories}
+              states={subCategoryStates}
               options={availableSubCategories}
-              onChange={handleSubCategoriesChange}
-              allLabel="Todas"
+              onChange={handleSubCategoryStateChange}
             />
           )}
           <PickSelector

@@ -10,7 +10,8 @@ import { useState, useMemo, useEffect } from "react";
 import { StyledContainer } from "../common/StyledContainer";
 import { RecipeCard } from "./RecipeCard";
 import { PickSelector } from "../common/PickSelector";
-import { MultiPickSelector } from "../common/MultiPickSelector";
+import { TriplePickSelector } from "../common/TriplePickSelector";
+import type { TripleState } from "../common/TriplePickSelector";
 import { Build, Science } from "@mui/icons-material";
 import type { GameDataTypes } from "../../types/gameModels";
 import { ListingDataView } from "../common/ListingDataView";
@@ -27,7 +28,7 @@ export function RecipesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useViewMode("recipes");
   const [availableSubStations, setAvailableSubStations] = useState<string[]>([]);
-  const [excludedSubStations, setExcludedSubStations] = useState<string[]>([]);
+  const [subStationStates, setSubStationStates] = useState<Record<string, TripleState>>({});
 
   // Maps for details
   const itemsMap = useMemo(() => {
@@ -85,7 +86,19 @@ export function RecipesPage() {
 
     const sortedSubs = Array.from(subs).sort();
     setAvailableSubStations(sortedSubs);
-    // We NO LONGER auto-reset exclusions here
+
+    // Clean up states for stations that are no longer available
+    setSubStationStates(prev => {
+      const next = { ...prev };
+      let changed = false;
+      Object.keys(next).forEach(st => {
+        if (!subs.has(st)) {
+          delete next[st];
+          changed = true;
+        }
+      });
+      return changed ? next : prev;
+    });
   }, [allRecipes, urlStation]);
 
   const filteredRecipes = useMemo(() => {
@@ -95,11 +108,12 @@ export function RecipesPage() {
       filters.normalizedStations = [urlStation];
     }
 
-    // Add negation for excluded sub-stations
-    if (excludedSubStations.length > 0) {
+    // Add inclusion/negation for sub-station states
+    Object.entries(subStationStates).forEach(([st, state]) => {
+      if (state === "indifferent") return;
       if (!filters.normalizedStations) filters.normalizedStations = [];
-      excludedSubStations.forEach(s => filters.normalizedStations.push(`!${s}`));
-    }
+      filters.normalizedStations.push(state === "exclude" ? `!${st}` : st);
+    });
 
     const results = getRecipesList({ filters });
     const list = Array.isArray(results) ? results : results.data;
@@ -114,7 +128,7 @@ export function RecipesPage() {
       recipe.normalizedIngredients.some(i => i.id.toLowerCase().includes(lowerSearch) || (i.name && i.name.toLowerCase().includes(lowerSearch))) ||
       recipe.normalizedProducts.some(p => p.id.toLowerCase().includes(lowerSearch) || (p.name && p.name.toLowerCase().includes(lowerSearch)))
     );
-  }, [getRecipesList, urlStation, excludedSubStations, searchTerm]);
+  }, [getRecipesList, urlStation, subStationStates, searchTerm]);
 
   if (loadingApi) {
     return (
@@ -132,16 +146,11 @@ export function RecipesPage() {
     );
   }
 
-  const selectedSubStations = availableSubStations.filter(s => !excludedSubStations.includes(s));
-
-  const handleSubStationsChange = (selected: string[]) => {
-    // Items in availableSubStations that are NOT in selected are now excluded
-    const nowExcluded = availableSubStations.filter(s => !selected.includes(s));
-    
-    // Merge with existing exclusions that were NOT in current availableSubStations
-    const otherExclusions = excludedSubStations.filter(s => !availableSubStations.includes(s));
-    
-    setExcludedSubStations([...otherExclusions, ...nowExcluded]);
+  const handleSubStationStateChange = (option: string, newState: TripleState) => {
+    setSubStationStates(prev => ({
+      ...prev,
+      [option]: newState
+    }));
   };
 
   return (
@@ -164,12 +173,11 @@ export function RecipesPage() {
             icon={<Build sx={{ fontSize: 18 }} />}
           />
           {availableSubStations.length > 0 && (
-            <MultiPickSelector
+            <TriplePickSelector
               label="Sub-estação"
-              selectedOptions={selectedSubStations}
+              states={subStationStates}
               options={availableSubStations}
-              onChange={handleSubStationsChange}
-              allLabel="Todas"
+              onChange={handleSubStationStateChange}
               icon={<Build sx={{ fontSize: 18 }} />}
             />
           )}

@@ -10,7 +10,8 @@ import { useState, useMemo, useEffect } from "react";
 import { StyledContainer } from "../common/StyledContainer";
 import { EntityCard } from "./EntityCard";
 import { PickSelector } from "../common/PickSelector";
-import { MultiPickSelector } from "../common/MultiPickSelector";
+import { TriplePickSelector } from "../common/TriplePickSelector";
+import type { TripleState } from "../common/TriplePickSelector";
 import { FilterList, BugReport, ShoppingCart, Sell, Storefront } from "@mui/icons-material";
 import { useApi } from "../../hooks/useApi";
 import type { Entity } from "../../types/gameModels";
@@ -38,9 +39,7 @@ export function EntityPage() {
   const [availableSubCategories, setAvailableSubCategories] = useState<
     string[]
   >([]);
-  const [excludedSubCategories, setExcludedSubCategories] = useState<string[]>(
-    [],
-  );
+  const [subCategoryStates, setSubCategoryStates] = useState<Record<string, TripleState>>({});
   const [showPrices, setShowPrices] = useState(false);
 
   const entities = useMemo(() => {
@@ -82,6 +81,19 @@ export function EntityPage() {
     });
 
     setAvailableSubCategories(Array.from(cats).sort());
+
+    // Clean up states for categories that are no longer available
+    setSubCategoryStates(prev => {
+      const next = { ...prev };
+      let changed = false;
+      Object.keys(next).forEach(cat => {
+        if (!cats.has(cat)) {
+          delete next[cat];
+          changed = true;
+        }
+      });
+      return changed ? next : prev;
+    });
   }, [entities, urlCategory]);
 
   const filteredEntities = useMemo(() => {
@@ -91,11 +103,12 @@ export function EntityPage() {
       filters.category = [urlCategory];
     }
 
-    // Add negation for excluded sub-categories
-    if (excludedSubCategories.length > 0) {
+    // Add inclusion/negation for sub-category states
+    Object.entries(subCategoryStates).forEach(([cat, state]) => {
+      if (state === "indifferent") return;
       if (!filters.category) filters.category = [];
-      excludedSubCategories.forEach((c) => filters.category.push(`!${c}`));
-    }
+      filters.category.push(state === "exclude" ? `!${cat}` : cat);
+    });
 
     const results = getEntityList({ filters });
     const list = Array.isArray(results) ? results : results.data;
@@ -109,7 +122,7 @@ export function EntityPage() {
         entity.name.toLowerCase().includes(lowerSearch) ||
         entity.id.toLowerCase().includes(lowerSearch),
     );
-  }, [getEntityList, urlCategory, excludedSubCategories, searchTerm]);
+  }, [getEntityList, urlCategory, subCategoryStates, searchTerm]);
 
   const shopNPCIds = useMemo(() => {
     const ids = new Set<string>();
@@ -147,18 +160,11 @@ export function EntityPage() {
     );
   }
 
-  const selectedSubCategories = availableSubCategories.filter(
-    (c) => !excludedSubCategories.includes(c),
-  );
-
-  const handleSubCategoriesChange = (selected: string[]) => {
-    const nowExcluded = availableSubCategories.filter(
-      (c) => !selected.includes(c),
-    );
-    const otherExclusions = excludedSubCategories.filter(
-      (c) => !availableSubCategories.includes(c),
-    );
-    setExcludedSubCategories([...otherExclusions, ...nowExcluded]);
+  const handleSubCategoryStateChange = (option: string, newState: TripleState) => {
+    setSubCategoryStates(prev => ({
+      ...prev,
+      [option]: newState
+    }));
   };
 
 
@@ -181,12 +187,11 @@ export function EntityPage() {
             icon={<FilterList sx={{ fontSize: 18 }} />}
           />
           {availableSubCategories.length > 0 && (
-            <MultiPickSelector
+            <TriplePickSelector
               label="Sub-categoria"
-              selectedOptions={selectedSubCategories}
+              states={subCategoryStates}
               options={availableSubCategories}
-              onChange={handleSubCategoriesChange}
-              allLabel="Todas"
+              onChange={handleSubCategoryStateChange}
               icon={<FilterList sx={{ fontSize: 18 }} />}
             />
           )}
