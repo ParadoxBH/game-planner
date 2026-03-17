@@ -149,7 +149,7 @@ export function getCraftingTotals(
   }
 
   const { itemMap, entityMap, recipeMapByProduct, shopMap } = options;
-  const recipe = (type === "item" || type === "entity") ? recipeMapByProduct.get(id) : undefined;
+  const recipe = (type === "item" || type === "entity" || type === "category") ? recipeMapByProduct.get(id) : undefined;
 
   if (!recipe || visited.has(id)) {
     const item = itemMap.get(id);

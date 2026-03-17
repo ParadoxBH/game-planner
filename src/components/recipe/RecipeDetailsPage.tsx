@@ -74,6 +74,11 @@ export function RecipeDetailsPage() {
       }
       r.products?.forEach((p: { id: string; amount: number; type?: string }) => {
         if (p.type === "category") {
+          // Map the category ID itself
+          recipeMapByProduct.set(p.id, r);
+          const catAlts = allRecipesByProduct.get(p.id) || [];
+          allRecipesByProduct.set(p.id, [...catAlts, r]);
+
           // If product is a category, this recipe can produce any item/entity in that category
           raw.items?.forEach((item: Item) => {
             const categories = Array.isArray(item.category) ? item.category : [item.category];
@@ -128,11 +133,12 @@ export function RecipeDetailsPage() {
   );
 
   const tree = useMemo(() => {
-    const itemId =
-      recipeDetails?.recipe.itemId ||
-      (recipeDetails?.products.length ? recipeDetails.products[0].id : "");
+    const product = recipeDetails?.products[0];
+    const itemId = recipeDetails?.recipe.itemId || product?.id || "";
+    const type = product?.type || "item";
+
     if (!itemId) return null;
-    return getCraftingTree(itemId, 1, "item", treeOptions);
+    return getCraftingTree(itemId, 1, type, treeOptions);
   }, [recipeDetails, treeOptions]);
 
   if (loading) {

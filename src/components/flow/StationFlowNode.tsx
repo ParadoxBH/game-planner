@@ -48,7 +48,7 @@ export function StationFlowNode({ data }: NodeProps & { data: StationNodeData })
               </Typography>
               <Stack spacing={0.5}>
                 {recipe.ingredients.map((ing, idx) => {
-                  const isCategory = ing.id.startsWith("category:");
+                  const isCategory = ing.type === "category" || ing.categoryId !== undefined;
                   return (
                     <Box 
                       key={idx} 
@@ -64,11 +64,11 @@ export function StationFlowNode({ data }: NodeProps & { data: StationNodeData })
                           backgroundColor: "rgba(25, 118, 210, 0.08)",
                         } : {}
                       }}
-                      onClick={isCategory ? () => data.onSelectCategory?.(ing.id) : undefined}
+                      onClick={isCategory ? () => data.onSelectCategory?.(ing.categoryId || ing.id) : undefined}
                     >
                       <Tooltip title={isCategory ? "Clique para escolher o item desta categoria" : ""}>
                         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                          <ItemChip id={ing.id} icon={ing.icon} size="small" amount={ing.amount} disableLink />
+                          <ItemChip id={ing.id} icon={ing.icon} size="small" amount={ing.amount} type={ing.type as any} disableLink />
                           <Typography variant="caption" noWrap sx={{ maxWidth: 80, fontSize: "0.7rem", color: isCategory ? "primary.main" : "inherit", fontWeight: isCategory ? 600 : 400 }}>
                             {ing.name}
                           </Typography>

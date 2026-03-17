@@ -229,7 +229,8 @@ export function ProductionFlow({ tree, allRecipesByProduct, onSelectCategory, on
             itemIcon: tree.icon,
             sellPrice,
             totalBuyCost,
-            leftovers
+            leftovers,
+            itemType: tree.type
         }
     } as Node);
 
