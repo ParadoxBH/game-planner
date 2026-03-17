@@ -10,5 +10,14 @@
     "name": "Guada Sol de Café Livre",
     "category": ["social"],
     "icon": "/img/heartopia/ferramentas/guarda_sol_cafe_livre.png"
+  },
+  {
+    "id": "bola_neve",
+    "name": "Bola de Neve",
+    "category": [
+      "resource",
+      "escultura_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/bola_neve.png"
   }
 ]

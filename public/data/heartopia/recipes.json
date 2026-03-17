@@ -794,5 +794,19 @@
       { "type": "item", "id": "alface_americano", "amount": 1 }
     ],
     "products": [{ "type": "item", "id": "ensopado_rustico", "amount": 1 }]
+  },
+  {
+    "id": "recipe_neve_esculpida",
+    "stations": ["bancada_bola_neve"],
+    "ingredients": [
+      { "type": "item", "id": "bola_neve", "amount": 1 }
+    ],
+    "products": [{ "type": "category", "id": "neve_esculpida", "amount": 1 }]
+  },
+  {
+    "id": "recipe_bola_neve",
+    "stations": ["maquina_neve"],
+    "products": [{ "type": "item", "id": "bola_neve", "amount": 1 }],
+    "craftTime": 3600
   }
 ]

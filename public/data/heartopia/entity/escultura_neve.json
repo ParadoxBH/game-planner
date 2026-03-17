@@ -1,0 +1,155 @@
+[
+  {
+    "id": "bancada_bola_neve",
+    "name": "Bancada de Bola de Neve",
+    "category": [
+      "station",
+      "bancada_bola_neve",
+      "escultura_neve",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/bancada_bola_neve.png",
+    "buyPrice": 5000
+  },
+  {
+    "id": "maquina_neve",
+    "name": "Maquina de Neve",
+    "category": [
+      "generator",
+      "maquina_neve",
+      "escultura_neve",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/maquina_neve.png"
+  },
+  {
+    "id": "algo_neve",
+    "name": "Algo de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/algo_neve.png"
+  },
+  {
+    "id": "abelha_naniwa_neve",
+    "name": "Abelha Naniwa de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t1.png"
+  },
+  {
+    "id": "alce_tata_neve",
+    "name": "Alce Tata de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/alce_tata_neve_t1.png"
+  },
+  {
+    "id": "bloco_iglu",
+    "name": "Bloco de Iglu",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/bloco_iglu_t1.png"
+  },
+  {
+    "id": "bloco_neve_geometrico",
+    "name": "Bloco de Neve Geometrico",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t1.png"
+  },
+  {
+    "id": "casquinha_neve",
+    "name": "Casquinha de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/casquinha_neve_t1.png"
+  },
+  {
+    "id": "castor_body_neve",
+    "name": "Castor Boby de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t1.png"
+  },
+  {
+    "id": "cedro_sorridente",
+    "name": "Cedro Sorridente",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t1.png"
+  },
+  {
+    "id": "chef_momo_neve",
+    "name": "Chef Momo de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/chef_momo_neve_t1.png"
+  },
+  {
+    "id": "cisne_dory_neve",
+    "name": "Cisne Dory de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t1.png"
+  },
+  {
+    "id": "coala_bebel_neve",
+    "name": "Coala Bebel de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/coala_bebel_neve_t1.png"
+  },
+  {
+    "id": "coelha_nie_neve",
+    "name": "Coelha Nie de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t1.png"
+  },
+  {
+    "id": "ovelha_jojo_neve",
+    "name": "Ovelha Jojo de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t1.png"
+  }
+]

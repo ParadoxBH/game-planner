@@ -319,17 +319,6 @@
     "icon": "/img/heartopia/eletrodomestico/fogao_pinguim.png"
   },
   {
-    "id": "bancada_bola_neve",
-    "name": "Bancada de Bola de Neve",
-    "category": [
-      "station",
-      "escultura_neve",
-      "gala_moda_neve"
-    ],
-    "icon": "/img/heartopia/ferramentas/bancada_bola_neve.png",
-    "buyPrice": 5000
-  },
-  {
     "id": "caixa_planta",
     "name": "Caixa de Planta",
     "category": [
