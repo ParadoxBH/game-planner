@@ -166,7 +166,16 @@ export class ApiService {
 
     const recipes = this.data.recipes
       .map((r) => this.normalizeRecipe(r))
-      .filter((r) => r.normalizedProducts.some((p) => p.id === entityId && p.type === "entity"));
+      .filter((r) => {
+        return r.normalizedProducts.some((p) => {
+          if (p.id === entityId) return true;
+          if (p.type === "category") {
+            const categories = Array.isArray(entity.category) ? entity.category : [entity.category];
+            return categories.includes(p.id);
+          }
+          return false;
+        });
+      });
 
     const spawns = this.data.spawns.filter((s) => s.entityId.toLowerCase() === entityId.toLowerCase());
     const shop = this.data.shops.find((s) => s.npcId?.toLowerCase() === entityId.toLowerCase());
@@ -232,12 +241,25 @@ export class ApiService {
       let bestOptionId: string | undefined = undefined;
 
       if (isCategory) {
-        dataOptions = this.data.items.filter((item) => {
-          if (Array.isArray(item.category)) {
-            return item.category.includes(ing.id);
-          }
-          return item.category === ing.id;
-        });
+        const itemOptions = this.data.items
+          .filter((item) => {
+            if (Array.isArray(item.category)) {
+              return item.category.includes(ing.id);
+            }
+            return item.category === ing.id;
+          })
+          .map((i) => ({ ...i, type: "item" as const }));
+
+        const entityOptions = this.data.entities
+          .filter((e) => {
+            if (Array.isArray(e.category)) {
+              return e.category.includes(ing.id);
+            }
+            return e.category === ing.id;
+          })
+          .map((e) => ({ ...e, type: "entity" as const }));
+
+        dataOptions = [...itemOptions, ...entityOptions];
 
         // Find best option using calculator logic
         if (dataOptions.length > 0) {
@@ -272,12 +294,25 @@ export class ApiService {
       let dataOptions: (Item | Entity)[] | undefined = undefined;
 
       if (isCategory) {
-        dataOptions = this.data.items.filter((item) => {
-          if (Array.isArray(item.category)) {
-            return item.category.includes(p.id);
-          }
-          return item.category === p.id;
-        });
+        const itemOptions = this.data.items
+          .filter((item) => {
+            if (Array.isArray(item.category)) {
+              return item.category.includes(p.id);
+            }
+            return item.category === p.id;
+          })
+          .map((i) => ({ ...i, type: "item" as const }));
+
+        const entityOptions = this.data.entities
+          .filter((e) => {
+            if (Array.isArray(e.category)) {
+              return e.category.includes(p.id);
+            }
+            return e.category === p.id;
+          })
+          .map((e) => ({ ...e, type: "entity" as const }));
+
+        dataOptions = [...itemOptions, ...entityOptions];
       }
 
       return {

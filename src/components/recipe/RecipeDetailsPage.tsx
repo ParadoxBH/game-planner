@@ -66,15 +66,36 @@ export function RecipeDetailsPage() {
     const recipeMapByProduct = new Map<string, Recipe>();
     const allRecipesByProduct = new Map<string, Recipe[]>();
     raw?.recipes?.forEach((r: Recipe) => {
+      // Direct product match
       if (r.itemId) {
         recipeMapByProduct.set(r.itemId, r);
         const current = allRecipesByProduct.get(r.itemId) || [];
         allRecipesByProduct.set(r.itemId, [...current, r]);
       }
-      r.products?.forEach((p: { id: string; amount: number }) => {
-        recipeMapByProduct.set(p.id, r);
-        const current = allRecipesByProduct.get(p.id) || [];
-        allRecipesByProduct.set(p.id, [...current, r]);
+      r.products?.forEach((p: { id: string; amount: number; type?: string }) => {
+        if (p.type === "category") {
+          // If product is a category, this recipe can produce any item/entity in that category
+          raw.items?.forEach((item: Item) => {
+            const categories = Array.isArray(item.category) ? item.category : [item.category];
+            if (categories.includes(p.id)) {
+              const current = allRecipesByProduct.get(item.id) || [];
+              allRecipesByProduct.set(item.id, [...current, r]);
+              if (!recipeMapByProduct.has(item.id)) recipeMapByProduct.set(item.id, r);
+            }
+          });
+          raw.entities?.forEach((ent: Entity) => {
+            const categories = Array.isArray(ent.category) ? ent.category : [ent.category];
+            if (categories.includes(p.id)) {
+              const current = allRecipesByProduct.get(ent.id) || [];
+              allRecipesByProduct.set(ent.id, [...current, r]);
+              if (!recipeMapByProduct.has(ent.id)) recipeMapByProduct.set(ent.id, r);
+            }
+          });
+        } else {
+          recipeMapByProduct.set(p.id, r);
+          const current = allRecipesByProduct.get(p.id) || [];
+          allRecipesByProduct.set(p.id, [...current, r]);
+        }
       });
     });
 
@@ -351,7 +372,7 @@ export function RecipeDetailsPage() {
                                 id={choiceId || ing.id}
                                 icon={selectedItem?.icon || ing.data?.icon}
                                 amount={ing.amount}
-                                type={choiceId ? "item" : ing.type}
+                                type={choiceId ? (treeOptions.entityMap.has(choiceId) ? "entity" : "item") : ing.type}
                               />
                               <Box sx={{ flexGrow: 1, minWidth: 0 }}>
                                 {ing.type !== "category" ? (
@@ -439,7 +460,7 @@ export function RecipeDetailsPage() {
                                       isBest={opt.id === ing.bestOptionId}
                                       type={
                                         ing.type === "category"
-                                          ? "item"
+                                          ? opt.type || "item"
                                           : ing.type
                                       }
                                     />
@@ -482,6 +503,7 @@ export function RecipeDetailsPage() {
                             id={p.id}
                             icon={p.data?.icon}
                             amount={p.amount}
+                            type={p.type}
                           />
                           <Box sx={{ flexGrow: 1, minWidth: 0 }}>
                             <Link
@@ -510,6 +532,51 @@ export function RecipeDetailsPage() {
                             </Typography>
                           </Box>
                         </Box>
+
+                        {p.dataOptions && p.dataOptions.length > 0 && (
+                          <Box
+                            sx={{
+                              mt: 1,
+                              p: 1,
+                              pt: 1,
+                              borderTop: "1px dashed rgba(255,255,255,0.1)",
+                              backgroundColor: "rgba(255,255,255,0.01)",
+                              borderRadius: "0 0 8px 8px"
+                            }}
+                          >
+                            <Typography
+                              variant="caption"
+                              sx={{
+                                color: "rgba(255,255,255,0.5)",
+                                mb: 1,
+                                display: "block",
+                              }}
+                            >
+                              PODE PRODUZIR QUALQUER UM DESTES:
+                            </Typography>
+                            <Stack
+                              direction="row"
+                              spacing={1}
+                              flexWrap="wrap"
+                              useFlexGap
+                            >
+                              {p.dataOptions.map((opt: any) => (
+                                <ItemChip
+                                  key={opt.id}
+                                  id={opt.id}
+                                  icon={opt.icon}
+                                  size="small"
+                                  name={opt.name}
+                                  type={
+                                    p.type === "category"
+                                      ? opt.type || "item"
+                                      : p.type
+                                  }
+                                />
+                              ))}
+                            </Stack>
+                          </Box>
+                        )}
                       </Grid>
                     ))}
                   </Grid>
@@ -640,6 +707,7 @@ export function RecipeDetailsPage() {
                           id={ing.id}
                           amount={ing.amount}
                           size="small"
+                          type={ing.type}
                           disableLink
                         />
                       ))}
