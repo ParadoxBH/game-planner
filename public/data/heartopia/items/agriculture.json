@@ -96,7 +96,7 @@
       "margarida"
     ],
     "icon": "/img/heartopia/agricultura/margarida_rosa.png",
-    "sellPrice": 100
+    "sellPrice": 150
   },
   {
     "id": "amor_perfeito_vermelho",
@@ -259,74 +259,5 @@
     ],
     "icon": "/img/heartopia/agricultura/gloria_manha_branca.png",
     "sellPrice": 250
-  },
-
-
-
-
-
-
-
-
-  
-  {
-    "id": "nabo",
-    "name": "Nabo",
-    "category": [
-      "agriculture",
-      "vegetable",
-      "gala_moda_neve"
-    ],
-    "description": "Um vegetal crocante e nutritivo.",
-    "icon": "/img/heartopia/agricultura/nabo.png",
-    "sellPrice": 30
-  },
-  {
-    "id": "papoula_himalaia_vermelha",
-    "name": "Papoula-Himalaia Vermelha",
-    "category": [
-      "agriculture",
-      "flower",
-      "papoula_himalaia",
-      "gala_moda_neve"
-    ],
-    "icon": "/img/heartopia/agricultura/papoula_himalaia_vermelha.png",
-    "sellPrice": 125
-  },
-  {
-    "id": "papoula_himalaia_amarela",
-    "name": "Papoula-Himalaia Amarela",
-    "category": [
-      "agriculture",
-      "flower",
-      "papoula_himalaia",
-      "gala_moda_neve"
-    ],
-    "icon": "/img/heartopia/agricultura/papoula_himalaia_amarela.png",
-    "sellPrice": 125
-  },
-  {
-    "id": "papoula_himalaia_branca",
-    "name": "Papoula-Himalaia Branca",
-    "category": [
-      "agriculture",
-      "flower",
-      "papoula_himalaia",
-      "gala_moda_neve"
-    ],
-    "icon": "/img/heartopia/agricultura/papoula_himalaia_branca.png",
-    "sellPrice": 125
-  },
-  {
-    "id": "papoula_himalaia_rosa",
-    "name": "Papoula-Himalaia Rosa",
-    "category": [
-      "agriculture",
-      "flower",
-      "papoula_himalaia",
-      "gala_moda_neve"
-    ],
-    "icon": "/img/heartopia/agricultura/papoula_himalaia_rosa.png",
-    "sellPrice": 190
   }
 ]

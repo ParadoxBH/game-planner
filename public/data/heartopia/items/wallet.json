@@ -48,12 +48,6 @@
     "icon": "/img/heartopia/stats/amorita.png"
   },
   {
-    "id": "creditos_gala_moda",
-    "name": "Créditos de Gala de Moda",
-    "category": ["wallet", "gala_moda", "gala_moda_neve"],
-    "icon": "/img/heartopia/stats/creditos_gala_moda.png"
-  },
-  {
     "id": "cristal_luar",
     "name": "Cristal do Luar",
     "category": ["wallet", "coin"],

@@ -40,7 +40,8 @@
       "neve_esculpida",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t1.png"
+    "icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t1.png",
+    "sellPrice": 225
   },
   {
     "id": "alce_tata_neve",
@@ -70,7 +71,8 @@
       "neve_esculpida",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t1.png"
+    "icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t1.png",
+    "sellPrice": "155"
   },
   {
     "id": "casquinha_neve",
@@ -90,7 +92,8 @@
       "neve_esculpida",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t1.png"
+    "icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t1.png",
+    "sellPrice": 165
   },
   {
     "id": "cedro_sorridente",
@@ -100,7 +103,8 @@
       "neve_esculpida",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t1.png"
+    "icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t1.png",
+    "sellPrice": "155"
   },
   {
     "id": "chef_momo_neve",
@@ -120,7 +124,8 @@
       "neve_esculpida",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t1.png"
+    "icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t1.png",
+    "sellPrice": 190
   },
   {
     "id": "coala_bebel_neve",
@@ -140,7 +145,8 @@
       "neve_esculpida",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t1.png"
+    "icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t1.png",
+    "sellPrice": 225
   },
   {
     "id": "ovelha_jojo_neve",
@@ -150,6 +156,7 @@
       "neve_esculpida",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t1.png"
+    "icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t1.png",
+    "sellPrice": 225
   }
 ]

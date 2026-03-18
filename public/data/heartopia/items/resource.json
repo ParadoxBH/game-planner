@@ -81,7 +81,8 @@
       "resource",
       "meteor"
     ],
-    "icon": "/img/heartopia/recursos/meteoro_cinza.png"
+    "icon": "/img/heartopia/recursos/meteoro_cinza.png",
+    "sellPrice": 150
   },
   {
     "id": "meteoro_laranja",
@@ -90,7 +91,8 @@
       "resource",
       "meteor"
     ],
-    "icon": "/img/heartopia/recursos/meteoro_laranja.png"
+    "icon": "/img/heartopia/recursos/meteoro_laranja.png",
+    "sellPrice": 150
   },
   {
     "id": "meteoro_ciano",
@@ -109,7 +111,8 @@
       "resource",
       "meteor"
     ],
-    "icon": "/img/heartopia/recursos/meteoro_verde.png"
+    "icon": "/img/heartopia/recursos/meteoro_verde.png",
+    "sellPrice": 150
   },
   {
     "id": "meteoro_roxo",
@@ -118,7 +121,8 @@
       "resource",
       "meteor"
     ],
-    "icon": "/img/heartopia/recursos/meteoro_roxo.png"
+    "icon": "/img/heartopia/recursos/meteoro_roxo.png",
+    "sellPrice": 150
   },
   {
     "id": "maca",
@@ -549,17 +553,5 @@
     "sellPrice": 50,
     "buyPrice": 100,
     "icon": "/img/heartopia/culinaria/ovo_pasteurizado.png"
-  },
-  {
-    "id": "acucar_po",
-    "name": "Açúcar em Pó",
-    "category": [
-      "resource",
-      "ingredient",
-      "gala_moda_neve"
-    ],
-    "icon": "/img/heartopia/culinaria/acucar_po.png",
-    "sellPrice": 25,
-    "buyPrice": 50
   }
 ]
