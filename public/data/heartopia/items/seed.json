@@ -86,6 +86,16 @@
         "icon": "/img/heartopia/agricultura/semente_milho.png",
         "buyPrice": 170
     },
+    {
+        "id": "semente_uva",
+        "name": "Semente Uva",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_uva.png",
+        "buyPrice": 160
+    },
 
 
 
@@ -253,6 +263,28 @@
         "buyPrice": 90
     },
     {
+        "id": "semente_copo_leite_laranja",
+        "name": "Semente de Copo-de-leite Laranja",
+        "category": [
+            "seed",
+            "flower",
+            "copo_leite"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_copo_leite_laranja.png",
+        "sellPrice": 70
+    },
+    {
+        "id": "semente_copo_leite_rosa",
+        "name": "Semente de Copo-de-leite Rosa",
+        "category": [
+            "seed",
+            "flower",
+            "copo_leite"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_copo_leite_rosa.png",
+        "sellPrice": 70
+    },
+    {
         "id": "semente_gloria_manha_vermelha",
         "name": "Semente de Glória-da-manhã Vermelha",
         "category": [
@@ -293,6 +325,40 @@
             "flower",
             "gloria_manha"
         ],
-        "icon": "/img/heartopia/agricultura/semente_gloria_manha_laranja.png"
+        "icon": "/img/heartopia/agricultura/semente_gloria_manha_laranja.png",
+        "sellPrice": 70
+    },
+    {
+        "id": "semente_cravo_vermelha",
+        "name": "Semente de Cravo Vermelha",
+        "category": [
+            "seed",
+            "flower",
+            "cravo"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_cravo_vermelha.png",
+        "buyPrice": 120
+    },
+    {
+        "id": "semente_cravo_amarela",
+        "name": "Semente de Cravo Amarela",
+        "category": [
+            "seed",
+            "flower",
+            "cravo"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_cravo_amarela.png",
+        "buyPrice": 120
+    },
+    {
+        "id": "semente_cravo_branco",
+        "name": "Semente de Cravo Abranco",
+        "category": [
+            "seed",
+            "flower",
+            "cravo"
+        ],
+        "icon": "/img/heartopia/agricultura/semente_cravo_branca.png",
+        "buyPrice": 120
     }
 ]

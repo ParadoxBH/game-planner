@@ -132,17 +132,6 @@
     "sellPrice": 185
   },
   {
-    "id": "anturio_vermelho",
-    "name": "Antúrio Vermelho",
-    "category": [
-      "agriculture",
-      "flower",
-      "anturio"
-    ],
-    "icon": "/img/heartopia/agricultura/anturio_vermelho.png",
-    "sellPrice": 185
-  },
-  {
     "id": "anturio_amarelo",
     "name": "Antúrio Amarelo",
     "category": [

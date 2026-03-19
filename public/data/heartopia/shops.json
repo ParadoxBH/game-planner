@@ -55,26 +55,26 @@
         "items": [
           {
             "id": "caixa_planta",
-            "amount": 8,
+            "amount": 10,
             "type": "entity",
             "resetType": "unique"
           },
           {
             "id": "caixa_planta",
-            "amount": 8,
+            "amount": 10,
             "type": "entity",
             "resetType": "unique"
           },
           {
             "id": "caixa_planta",
-            "amount": 8,
+            "amount": 10,
             "price": 500,
             "type": "entity",
             "resetType": "unique"
           },
           {
             "id": "caixa_planta",
-            "amount": 8,
+            "amount": 10,
             "price": 1700,
             "type": "entity",
             "resetType": "unique"
@@ -107,6 +107,9 @@
           },
           {
             "id": "semente_milho"
+          },
+          {
+            "id": "semente_uva"
           }
         ]
       },
@@ -160,6 +163,15 @@
           },
           {
             "id": "semente_gloria_manha_branca"
+          },
+          {
+            "id": "semente_cravo_vermelha"
+          },
+          {
+            "id": "semente_cravo_amarela"
+          },
+          {
+            "id": "semente_cravo_branca"
           }
         ]
       },
@@ -496,6 +508,32 @@
           },
           { 
             "id": "fortificante_onisciente",
+            "resetType": "semanal"
+          }
+        ]
+      }
+
+    ]
+  },
+  {
+    "id": "loja_aves",
+    "npcId": "bailey_j",
+    "name": "Loja de Bicho",
+    "groups": [
+      {
+        "name": "Ferramenta Especial",
+        "resetType": "semanal",
+        "items": [
+          { 
+            "id": "apito_automatico",
+            "price": 1,
+            "amount": 100,
+            "currency": "estrela_desejavel",
+            "resetType": "semanal"
+          },
+          { 
+            "id": "apito_automatico",
+            "amount": 10,
             "resetType": "semanal"
           }
         ]
