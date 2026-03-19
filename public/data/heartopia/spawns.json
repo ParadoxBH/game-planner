@@ -4,50 +4,50 @@
     "entityId": "arbusto_mirtilo",
     "mapId": "main",
     "mode": "respawn",
-    "position": [
-      -31,
-      -285
-    ]
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-285 -31)"
+    }
   },
   {
     "id": "berry_2",
     "entityId": "arbusto_mirtilo",
     "mapId": "main",
     "mode": "respawn",
-    "position": [
-      -8,
-      -277
-    ]
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-277 -8)"
+    }
   },
   {
     "id": "berry_3",
     "entityId": "arbusto_mirtilo",
     "mapId": "main",
     "mode": "respawn",
-    "position": [
-      33,
-      -275
-    ]
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-275 33)"
+    }
   },
   {
     "id": "berry_4",
     "entityId": "arbusto_mirtilo",
     "mapId": "main",
     "mode": "respawn",
-    "position": [
-      53,
-      -289
-    ]
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-289 53)"
+    }
   },
   {
     "id": "truffle_1",
     "entityId": "trufa_negra_coletavel",
     "mapId": "main",
     "mode": "respawn",
-    "position": [
-      200,
-      630
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(630 200)"
+    },
     "respawnDelay": 15
   },
   {
@@ -55,10 +55,10 @@
     "entityId": "trufa_negra_coletavel",
     "mapId": "main",
     "mode": "respawn",
-    "position": [
-      210,
-      660
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(660 210)"
+    },
     "respawnDelay": 15
   },
   {
@@ -66,10 +66,10 @@
     "entityId": "trufa_negra_coletavel",
     "mapId": "main",
     "mode": "respawn",
-    "position": [
-      245,
-      650
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(650 245)"
+    },
     "respawnDelay": 15
   },
   {
@@ -77,10 +77,10 @@
     "entityId": "trufa_negra_coletavel",
     "mapId": "main",
     "mode": "respawn",
-    "position": [
-      240,
-      675
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(675 240)"
+    },
     "respawnDelay": 15
   },
   {
@@ -88,10 +88,10 @@
     "entityId": "trufa_negra_coletavel",
     "mapId": "main",
     "mode": "respawn",
-    "position": [
-      270,
-      680
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(680 270)"
+    },
     "respawnDelay": 15
   },
   {
@@ -99,10 +99,10 @@
     "entityId": "trufa_negra_coletavel",
     "mapId": "main",
     "mode": "respawn",
-    "position": [
-      285,
-      700
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(700 285)"
+    },
     "respawnDelay": 15
   },
   {
@@ -110,229 +110,208 @@
     "entityId": "trufa_negra_coletavel",
     "mapId": "main",
     "mode": "respawn",
-    "position": [
-      215,
-      725
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(725 215)"
+    },
     "respawnDelay": 15
   },
   {
     "id": "blanc_npc",
     "entityId": "blanc",
-    "type": "position",
-    "position": [
-      -65,
-      100
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(100 -65)"
+    },
     "mapId": "main"
   },
   {
     "id": "massimo_npc",
     "entityId": "massimo",
-    "type": "position",
-    "position": [
-      85,
-      -10
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-10 85)"
+    },
     "mapId": "main"
   },
   {
     "id": "ka_ching_npc",
     "entityId": "ka_ching",
-    "type": "position",
-    "position": [
-      130,
-      -130
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-130 130)"
+    },
     "mapId": "main"
   },
   {
     "id": "vanya_npc",
     "entityId": "vanya",
-    "type": "position",
-    "position": [
-      68.08238802665919,
-      78.36216308593751
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(78.36216308593751 68.08238802665919)"
+    },
     "mapId": "main"
   },
   {
     "id": "bailey_j_npc",
     "entityId": "bailey_j",
-    "type": "position",
-    "position": [
-      0,
-      45
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(45 0)"
+    },
     "mapId": "main"
   },
   {
     "id": "sra_joan_npc",
     "entityId": "sra_joan",
-    "type": "position",
-    "position": [
-      3.5818442794265124,
-      32.42572265625
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(32.42572265625 3.5818442794265124)"
+    },
     "mapId": "main"
   },
   {
     "id": "naniwa_npc",
     "entityId": "naniwa",
-    "type": "position",
-    "position": [
-      8.591762935629886,
-      134.33513671875002
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(134.33513671875002 8.591762935629886)"
+    },
     "mapId": "main"
   },
   {
     "id": "atara_npc",
     "entityId": "atara",
-    "type": "position",
-    "position": [
-      -46.606291079709614,
-      -2.7021435546875003
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-2.7021435546875003 -46.606291079709614)"
+    },
     "mapId": "main"
   },
   {
     "id": "colecionador_npc",
     "entityId": "colecionador",
-    "type": "position",
-    "position": [
-      44.55125722044536,
-      -189.5360693359375
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-189.5360693359375 44.55125722044536)"
+    },
     "mapId": "main"
   },
   {
     "id": "bob_npc",
     "entityId": "bob",
-    "type": "position",
-    "position": [
-      46.88925764136494,
-      -0.3860205078125
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-0.3860205078125 46.88925764136494)"
+    },
     "mapId": "main"
   },
   {
     "id": "bob_npc",
     "entityId": "bob",
-    "type": "position",
-    "position": [
-      46.88925764136494,
-      -0.3860205078125
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-0.3860205078125 46.88925764136494)"
+    },
     "mapId": "main"
   },
   {
     "id": "annie_npc",
     "entityId": "annie",
-    "type": "position",
-    "position": [
-      -7.235077884682528,
-      5.0182666015625
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(5.0182666015625 -7.235077884682528)"
+    },
     "mapId": "main"
   },
   {
     "id": "albert_jr_npc",
     "entityId": "albert_jr",
-    "type": "position",
-    "position": [
-      124.88238397039291,
-      184.517802734375
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(184.517802734375 124.88238397039291)"
+    },
     "mapId": "main"
-  },{
+  },
+  {
     "id": "andrew_npc",
     "entityId": "andrew",
-    "type": "position",
-    "position": [
-      153.8555115701902,
-      138.195341796875
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(138.195341796875 153.8555115701902)"
+    },
     "mapId": "main"
   },
   {
     "id": "dorothee_npc",
     "entityId": "dorothee",
-    "type": "position",
-    "position": [
-      46.40795541238464,
-      -20.845107421875003
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-20.845107421875003 46.40795541238464)"
+    },
     "mapId": "main"
   },
   {
     "id": "eric_npc",
     "entityId": "eric",
-    "type": "position",
-    "position": [
-      383.33477228834596,
-      26.24939453125
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(26.24939453125 383.33477228834596)"
+    },
     "mapId": "main"
   },
   {
     "id": "vernie_npc",
     "entityId": "vernie",
-    "type": "position",
-    "position": [
-      -243.25740060326953,
-      -433.115009765625
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-433.115009765625 -243.25740060326953)"
+    },
     "mapId": "main"
   },
   {
     "id": "will_npc",
     "entityId": "will",
-    "type": "position",
-    "position": [
-      -486.6316724415665,
-      -135.87921875
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-135.87921875 -486.6316724415665)"
+    },
     "mapId": "main"
   },
   {
     "id": "patti_npc",
     "entityId": "patti",
-    "type": "position",
-    "position": [
-      222.49174259239837,
-      482.525634765625
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(482.525634765625 222.49174259239837)"
+    },
     "mapId": "main"
   },
   {
     "id": "azure_npc",
     "entityId": "azure",
-    "type": "position",
-    "position": [
-      46.885515458962566,
-      -36.671948242187504
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-36.671948242187504 46.885515458962566)"
+    },
     "mapId": "main"
   },
   {
     "id": "workbench_city",
     "entityId": "mesa_artesao",
-    "type": "position",
-    "position": [
-      94.68962779821611,
-      -28.9515380859375
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-28.9515380859375 94.68962779821611)"
+    },
     "mapId": "main"
   },
   {
     "id": "cooker_city",
     "entityId": "fogao_clean",
-    "type": "position",
-    "position": [
-      91.21340079135436,
-      -19.301025390625
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-19.301025390625 91.21340079135436)"
+    },
     "mapId": "main"
   }
 ]

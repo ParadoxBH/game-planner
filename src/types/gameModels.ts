@@ -143,7 +143,10 @@ export interface Spawn {
   entityId: string;
   type?: "position" | "range" | "geom";
   mode?: "once" | "respawn";
-  position: [number, number];
+  geom: {
+    type: string;
+    coordinates: string;
+  };
   mapId?: string;
   respawnDelay?: number;
 }

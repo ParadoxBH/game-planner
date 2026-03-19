@@ -2,261 +2,235 @@
   {
     "id": "spawn_power_slug_1",
     "entityId": "power_slug_l1",
-    "position": [
-      -394.7977734375,
-      2760.4221875,
-      -25.10846923828125
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2760.4221875 -394.7977734375 -25.10846923828125)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_2",
     "entityId": "power_slug_l1",
-    "position": [
-      -545.4335546875,
-      2708.301875,
-      -14.5172412109375
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2708.301875 -545.4335546875 -14.5172412109375)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_3",
     "entityId": "power_slug_l1",
-    "position": [
-      -649.5864453125,
-      2682.14,
-      -30.1697998046875
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2682.14 -649.5864453125 -30.1697998046875)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_4",
     "entityId": "power_slug_l1",
-    "position": [
-      -568.2571875,
-      2349.85296875,
-      -26.47916259765625
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2349.85296875 -568.2571875 -26.47916259765625)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_5",
     "entityId": "power_slug_l1",
-    "position": [
-      -181.831796875,
-      2636.3865625,
-      19.880001220703125
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2636.3865625 -181.831796875 19.880001220703125)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_6",
     "entityId": "power_slug_l1",
-    "position": [
-      -180.939140625,
-      2721.9840625,
-      -58.1116748046875
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2721.9840625 -180.939140625 -58.1116748046875)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_7",
     "entityId": "power_slug_l1",
-    "position": [
-      -446.4491015625,
-      2291.395,
-      2.7798199462890625
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2291.395 -446.4491015625 2.7798199462890625)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_8",
     "entityId": "power_slug_l1",
-    "position": [
-      -129.0809375,
-      2919.338125,
-      -17.79264892578125
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2919.338125 -129.0809375 -17.79264892578125)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_9",
     "entityId": "power_slug_l1",
-    "position": [
-      -918.20109375,
-      2498.22171875,
-      -31.81374267578125
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2498.22171875 -918.20109375 -31.81374267578125)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_10",
     "entityId": "power_slug_l1",
-    "position": [
-      -702.97375,
-      2923.3921875,
-      -63.315673828125
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2923.3921875 -702.97375 -63.315673828125)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_11",
     "entityId": "power_slug_l1",
-    "position": [
-      -547.6641015625,
-      2834.6459375,
-      -14.266380615234375
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2834.6459375 -547.6641015625 -14.266380615234375)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_12",
     "entityId": "power_slug_l1",
-    "position": [
-      -782.440703125,
-      2707.55125,
-      -39.66489501953125
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2707.55125 -782.440703125 -39.66489501953125)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_13",
     "entityId": "power_slug_l1",
-    "position": [
-      -151.4116796875,
-      2188.78703125,
-      2.3274456787109375
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2188.78703125 -151.4116796875 2.3274456787109375)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_14",
     "entityId": "power_slug_l1",
-    "position": [
-      100.529375,
-      2761.7996875,
-      -56.5783203125
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2761.7996875 100.529375 -56.5783203125)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_15",
     "entityId": "power_slug_l1",
-    "position": [
-      -119.483671875,
-      3026.73125,
-      -18.811641845703125
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (3026.73125 -119.483671875 -18.811641845703125)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_16",
     "entityId": "power_slug_l1",
-    "position": [
-      -43.6559765625,
-      2902.5425,
-      23.58487548828125
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2902.5425 -43.6559765625 23.58487548828125)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_17",
     "entityId": "power_slug_l1",
-    "position": [
-      66.325,
-      2926.4425,
-      11.60996337890625
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2926.4425 66.325 11.60996337890625)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_18",
     "entityId": "power_slug_l1",
-    "position": [
-      -870.52046875,
-      2768.7528125,
-      -30.49356201171875
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2768.7528125 -870.52046875 -30.49356201171875)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_19",
     "entityId": "power_slug_l1",
-    "position": [
-      -538.0579296875,
-      3000.8434375,
-      -67.2262353515625
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (3000.8434375 -538.0579296875 -67.2262353515625)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_20",
     "entityId": "power_slug_l2",
-    "position": [
-      -557.053828125,
-      2503.03546875,
-      -19.64357177734375
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2503.03546875 -557.053828125 -19.64357177734375)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_21",
     "entityId": "power_slug_l2",
-    "position": [
-      -121.9498828125,
-      2832.5125,
-      33.48228515625
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2832.5125 -121.9498828125 33.48228515625)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_22",
     "entityId": "power_slug_l2",
-    "position": [
-      -711.788671875,
-      2825.7296875,
-      -36.90357666015625
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2825.7296875 -711.788671875 -36.90357666015625)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_23",
     "entityId": "power_slug_l2",
-    "position": [
-      -912.861953125,
-      2713.1028125,
-      -65.0002587890625
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2713.1028125 -912.861953125 -65.0002587890625)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_24",
     "entityId": "power_slug_l2",
-    "position": [
-      -318.63052734375,
-      3041.96125,
-      -14.713424072265625
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (3041.96125 -318.63052734375 -14.713424072265625)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_25",
     "entityId": "power_slug_l2",
-    "position": [
-      -59.442109375,
-      2660.0828125,
-      6.7699810791015625
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2660.0828125 -59.442109375 6.7699810791015625)"
+    },
     "mode": "once"
   },
   {
     "id": "spawn_power_slug_26",
     "entityId": "power_slug_l3",
-    "position": [
-      -190.091015625,
-      2726.9615625,
-      105.351015625
-    ],
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (2726.9615625 -190.091015625 105.351015625)"
+    },
     "mode": "once"
   }
 ]

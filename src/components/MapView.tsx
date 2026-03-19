@@ -8,6 +8,9 @@ import {
   ImageOverlay,
   TileLayer,
   useMapEvents,
+  Polygon,
+  Polyline,
+  CircleMarker,
 } from "react-leaflet";
 import { divIcon } from "leaflet";
 import { useState, useEffect, useMemo, useRef } from "react";
@@ -18,6 +21,8 @@ import { OutputField } from "./common/OutputField";
 import { loadGamesList } from "../services/dataLoader";
 import { useApi } from "../hooks/useApi";
 import type { Entity, Spawn, GameInfo, MapMetadata } from "../types/gameModels";
+import { parseWKTPoint, formatWKTPoint, formatWKTPolygon } from "../utils/wkt";
+import { MapToolbox } from "./MapToolbox";
 
 export interface NavigationItem {
   type: "entity" | "item";
@@ -26,17 +31,27 @@ export interface NavigationItem {
 
 interface CursorTrackerProps {
   onMouseMove: (coords: [number, number]) => void;
-  onShiftClick: (coords: [number, number]) => void;
 }
 
-const CursorTracker = ({ onMouseMove, onShiftClick }: CursorTrackerProps) => {
+const CursorTracker = ({ onMouseMove }: CursorTrackerProps) => {
   useMapEvents({
     mousemove(e) {
       onMouseMove([e.latlng.lat, e.latlng.lng]);
     },
+  });
+  return null;
+};
+
+interface MapEventsHandlerProps {
+  onClick: (coords: [number, number]) => void;
+}
+
+const MapEventsHandler = ({ onClick }: MapEventsHandlerProps) => {
+  useMapEvents({
     click(e) {
-      if (e.originalEvent.shiftKey) {
-        onShiftClick([e.latlng.lat, e.latlng.lng]);
+      // Only trigger if shift is NOT pressed (to avoid conflict with spawn copy)
+      if (!e.originalEvent.shiftKey) {
+        onClick([e.latlng.lat, e.latlng.lng]);
       }
     },
   });
@@ -272,22 +287,70 @@ export const MapView = () => {
   const [navigationStack, setNavigationStack] = useState<NavigationItem[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [activeTool, setActiveTool] = useState<'point' | 'polygon' | null>(null);
+  const [currentPoints, setCurrentPoints] = useState<[number, number][]>([]);
   const mapRef = useRef<any>(null);
 
-  const handleShiftClick = (latlng: [number, number]) => {
+  const handleMapClick = (latlng: [number, number]) => {
+    if (activeTool === 'polygon') {
+      setCurrentPoints(prev => [...prev, latlng]);
+    } else if (activeTool === 'point') {
+      handlePointClick(latlng);
+    }
+  };
+
+  const handlePointClick = (latlng: [number, number]) => {
     const spawnObj = {
       id: `spawn_${Date.now()}`,
       entityId: "TODO_ENTITY_ID",
-      type: "position",
-      position: latlng,
+      geom: {
+        type: "Point",
+        coordinates: formatWKTPoint([latlng[1], latlng[0]]) // format as POINT(X Y)
+      },
       mapId: selectedMapId
     };
     
     const json = JSON.stringify(spawnObj, null, 2);
     navigator.clipboard.writeText(json).then(() => {
-      setSnackbarMessage("JSON de Spawn copiado para a área de transferência!");
+      setSnackbarMessage("JSON de Ponto copiado para a área de transferência!");
       setSnackbarOpen(true);
     });
+  };
+
+  const handleConfirmDrawing = () => {
+    if (currentPoints.length < 3) return;
+
+    // Convert coordinates: Leaflet [Lat, Lng] (Y X) to WKT (X Y)
+    const wktPoints: [number, number][] = currentPoints.map(p => [p[1], p[0]]);
+    const wkt = formatWKTPolygon(wktPoints);
+
+    const spawnObj = {
+      id: `zone_${Date.now()}`,
+      entityId: "TODO_ENTITY_ID",
+      geom: {
+        type: "Polygon",
+        coordinates: wkt
+      },
+      mapId: selectedMapId
+    };
+
+    const json = JSON.stringify(spawnObj, null, 2);
+    
+    navigator.clipboard.writeText(json).then(() => {
+      setSnackbarMessage("JSON de Zona (Polígono) copiado para a área de transferência!");
+      setSnackbarOpen(true);
+      setActiveTool(null);
+      setCurrentPoints([]);
+    });
+  };
+
+  const handleClearDrawing = () => {
+    setCurrentPoints([]);
+  };
+
+  const handleCancelDrawing = () => {
+    setActiveTool(null);
+    setCurrentPoints([]);
   };
 
   const drawerOpen = navigationStack.length > 0;
@@ -400,9 +463,58 @@ export const MapView = () => {
         zoom={selectedMap.minZoom}
         maxZoom={selectedMap.maxZoom}
         minZoom={selectedMap.minZoom}
-        style={{ height: "100%", width: "100%" }}
+        style={{ 
+          height: "100%", 
+          width: "100%",
+          cursor: activeTool ? 'crosshair' : 'grab'
+        }}
       >
-        <CursorTracker onMouseMove={setCursorCoords} onShiftClick={handleShiftClick} />
+        <CursorTracker 
+          onMouseMove={setCursorCoords} 
+        />
+        
+        <MapEventsHandler onClick={handleMapClick} />
+
+        {/* Círculo no cursor para feedback visual */}
+        {activeTool && (
+          <CircleMarker 
+            center={cursorCoords} 
+            radius={activeTool === 'point' ? 6 : 4} 
+            pathOptions={{ 
+              color: 'white', 
+              fillColor: activeTool === 'point' ? theme.palette.success.main : theme.palette.primary.main, 
+              fillOpacity: 1,
+              weight: 2
+            }} 
+            interactive={false}
+          />
+        )}
+
+        {activeTool === 'polygon' && currentPoints.length > 0 && (
+          <>
+            <Polygon 
+              positions={currentPoints} 
+              pathOptions={{ 
+                color: theme.palette.primary.main, 
+                fillColor: theme.palette.primary.main,
+                fillOpacity: 0.1,
+                weight: 2,
+                dashArray: '5, 5'
+              }} 
+            />
+            {/* Linha elástica (rubber-band) do último ponto ao cursor */}
+            <Polyline 
+              positions={[currentPoints[currentPoints.length - 1], cursorCoords]}
+              pathOptions={{
+                color: theme.palette.primary.main,
+                weight: 2,
+                dashArray: '5, 5',
+                opacity: 0.8
+              }}
+              interactive={false}
+            />
+          </>
+        )}
         
         {selectedMap.type === "layered" && selectedMap.urlPattern && (
           Array.from({ length: selectedMap.layers || 1 }, (_, i) => i).map((l) => (
@@ -457,10 +569,15 @@ export const MapView = () => {
           spawns
             .filter((spawn: any) => !spawn.mapId || spawn.mapId === selectedMapId)
             .map((spawn) => {
+              const coords = parseWKTPoint(spawn.geom.coordinates);
+              // WKT is POINT(X Y [Z]) -> [X, Y, Z]
+              // Leaflet needs [Lat, Lng] -> [Y, X]
+              const leafletPos: [number, number] = [coords[1], coords[0]];
+              
               return (
                   <Marker 
                     key={spawn.id} 
-                    position={gameId === 'satisfactory' ? [spawn.position[0], spawn.position[1]] : spawn.position}
+                    position={leafletPos}
                     icon={divIcon({
                       html: `
                         <div style="
@@ -496,7 +613,7 @@ export const MapView = () => {
                               icon: items?.find(i => i.id === spawn.entityId)?.icon 
                             };
                       })()} 
-                      position={spawn.position as [number, number]}
+                      position={leafletPos}
                       mode={spawn.mode}
                       respawnDelay={spawn.respawnDelay}
                       onExpand={() => {
@@ -533,6 +650,15 @@ export const MapView = () => {
           onClose={handleCloseDrawer} 
         />
       )}
+
+      <MapToolbox 
+        activeTool={activeTool}
+        hasPoints={currentPoints.length > 0}
+        onSelectTool={setActiveTool}
+        onConfirm={handleConfirmDrawing}
+        onClear={handleClearDrawing}
+        onCancel={handleCancelDrawing}
+      />
 
       <Snackbar 
         open={snackbarOpen} 
