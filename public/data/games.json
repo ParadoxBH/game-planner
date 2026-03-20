@@ -2,92 +2,21 @@
   {
     "id": "apogea",
     "name": "Apogea",
-    "description": "Exploração e sobrevivência em um mundo focado em coleta de recursos.",
-    "maps": [
-      {
-        "id": "minimap",
-        "name": "Minimap Principal",
-        "type": "layered",
-        "urlPattern": "https://paszqa.github.io/quickapogean/Map/Levels/combined_y{layer}_minimap.png",
-        "layers": 16,
-        "bounds": [
-          [
-            0,
-            0
-          ],
-          [
-            1000,
-            1000
-          ]
-        ],
-        "minZoom": -2,
-        "maxZoom": 2
-      }
-    ]
+    "description": "Apogea é um jogo de RPG online massivo de fantasia medieval."
   },
   {
     "id": "heartopia",
     "name": "Heartopia",
-    "description": "Um RPG aconchegante focado em construção, crafting e amizades.",
-    "maps": [
-      {
-        "id": "main",
-        "name": "Mapa Global",
-        "type": "single",
-        "url": "/map/heartopia/map.png",
-        "bounds": [
-          [
-            -790.57,
-            -790.57
-          ],
-          [
-            790.57,
-            790.57
-          ]
-        ],
-        "minZoom": 2,
-        "maxZoom": 4,
-        "thumbnail": "/map/heartopia/map.png"
-      }
-    ]
+    "description": "Um simulador de vida feito para quem busca criatividade, liberdade e tranquilidade. Construa a casa dos seus sonhos, descubra hobbies variados e fortaleça laços especiais com amigos em uma vila vibrante repleta de infinitas possibilidades."
   },
   {
     "id": "satisfactory",
     "name": "Satisfactory",
-    "description": "Um simulador de construção de fábricas em primeira pessoa em um planeta alienígena.",
-    "maps": [
-      {
-        "id": "massage-2-abb-b-realistic",
-        "name": "Mapa Realista",
-        "type": "tile",
-        "url": "/map/satisfactory/realisticLayer/{z}/{x}/{y}.png",
-        "bounds": [
-          [
-            -2700,
-            -2700
-          ],
-          [
-            2700,
-            2700
-          ]
-        ],
-        "minZoom": 3,
-        "maxZoom": 10,
-        "tileMinZoom": 4,
-        "tileMaxZoom": 4,
-        "tileRange": {
-          "z": 4,
-          "min": [
-            1,
-            0
-          ],
-          "max": [
-            10,
-            10
-          ]
-        },
-        "thumbnail": "/map/satisfactory/realisticLayer/thumb.png"
-      }
-    ]
+    "description": "Satisfactory é um jogo de construção de fábricas em primeira pessoa num mundo aberto, com traços de exploração e combate. Jogue sozinho ou com amigos, explore um planeta alienígena, crie fábricas de vários andares e entre no paraíso das correias transportadoras!"
+  },
+  {
+    "id": "valheim",
+    "name": "Valheim",
+    "description": "Um brutal jogo de exploração e sobrevivência para 1 a 10 jogadores, ambientado em um purgatório gerado de forma procedural, inspirado na cultura viking. Batalhe, construa e conquiste glória em uma saga digna da benção de Odin!"
   }
 ]

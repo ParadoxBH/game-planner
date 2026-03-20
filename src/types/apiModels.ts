@@ -28,6 +28,14 @@ export interface ItemDetails {
 
 export interface EntityDetails {
   entity: Entity;
+  parent?: Entity;
+  children?: Entity[];
+  potentialSpawns?: {
+    entity: Entity | Item;
+    chance?: number;
+    quantity?: string;
+    conditions?: any;
+  }[];
   drops: {
     item?: Item;
     chance: number;

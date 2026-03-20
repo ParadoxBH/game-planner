@@ -1,0 +1,23 @@
+[
+  {
+    "id": "massage-2-abb-b-realistic",
+    "name": "Mapa Realista",
+    "type": "tile",
+    "url": "/map/satisfactory/realisticLayer/{z}/{x}/{y}.png",
+    "bounds": [
+      [-2700, -2700],
+      [2700, 2700]
+    ],
+    "minZoom": 3,
+    "maxZoom": 10,
+    "tileMinZoom": 4,
+    "tileMaxZoom": 4,
+    "tileRange": {
+      "z": 4,
+      "min": [1, 0],
+      "max": [10, 10]
+    },
+    "thumbnail": "/map/satisfactory/realisticLayer/thumb.png",
+    "availableViews": ["map", "dashboard"]
+  }
+]

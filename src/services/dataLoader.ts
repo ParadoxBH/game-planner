@@ -44,3 +44,17 @@ export async function loadGamesList(): Promise<any[]> {
     throw error;
   }
 }
+
+export async function loadGameMaps(gameId: string): Promise<any[]> {
+  try {
+    const response = await fetch(`/data/${gameId}/maps.json`);
+    if (!response.ok) {
+      console.warn(`No maps.json found for ${gameId}, returning empty maps list.`);
+      return [];
+    }
+    return await response.json();
+  } catch (error) {
+    console.warn(`Error loading maps for ${gameId}:`, error);
+    return [];
+  }
+}

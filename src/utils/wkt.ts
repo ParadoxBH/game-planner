@@ -63,3 +63,23 @@ export function formatWKTPolygon(points: [number, number][]): string {
   const coordsStr = closedPoints.map(p => p.join(" ")).join(", ");
   return `POLYGON((${coordsStr}))`;
 }
+
+/**
+ * Parses a WKT Polygon string into an array of coordinate arrays.
+ * @param wkt WKT string (e.g., "POLYGON((x1 y1, x2 y2, ...))")
+ * @returns Array of coordinate arrays [[x1, y1], [x2, y2], ...]
+ */
+export function parseWKTPolygon(wkt: string): [number, number][] {
+  if (!wkt || wkt === "POLYGON EMPTY") return [];
+
+  const match = wkt.match(/POLYGON\s*\(\s*\(\s*([^)]+)\s*\)\s*\)/i);
+  if (!match) return [];
+
+  const coordsStr = match[1].trim();
+  const pairs = coordsStr.split(/\s*,\s*/);
+  
+  return pairs.map(p => {
+    const coords = p.trim().split(/\s+/).map(Number);
+    return [coords[0], coords[1]] as [number, number];
+  });
+}

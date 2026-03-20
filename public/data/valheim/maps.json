@@ -1,0 +1,16 @@
+[
+  {
+    "id": "world",
+    "name": "Mundo Procedural",
+    "type": "procedural",
+    "defaultView": "dashboard",
+    "availableViews": ["map", "dashboard"],
+    "bounds": [
+      [-10000, -10000],
+      [10000, 10000]
+    ],
+    "minZoom": -2,
+    "maxZoom": 2,
+    "thumbnail": "https://placehold.co/600x400/222/fff?text=Procedural+World"
+  }
+]

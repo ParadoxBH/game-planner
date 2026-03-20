@@ -3,6 +3,7 @@ import { MapView } from "./components/MapView";
 import { Home } from "./components/Home";
 import { MainLayout } from "./layouts/MainLayout";
 import { GameDashboard } from "./components/GameDashboard";
+import { MapSelectorPage } from "./components/MapSelectorPage";
 import { ItemsPage } from "./components/item/ItemsPage";
 import { RecipesPage } from "./components/recipe/RecipesPage";
 import { EntityPage } from "./components/entity/EntityPage";
@@ -29,7 +30,11 @@ export function RoutesPage() {
         {/* Rotas de um jogo específico */}
         <Route path="/game/:gameId">
           <Route index element={<GameDashboard />} />
-          <Route path="map" element={<MapView />} />
+          <Route path="map">
+            <Route index element={<MapSelectorPage />} />
+            <Route path=":mapId" element={<MapView />} />
+            <Route path=":mapId/:view" element={<MapView />} />
+          </Route>
 
           {/* Placeholders adicionais baseados nos novos botões da Header */}
           <Route path="items/list/:category?" element={<ItemsPage />} />

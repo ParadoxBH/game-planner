@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { loadGameData, loadGamesList } from "../services/dataLoader";
+import { loadGameData, loadGamesList, loadGameMaps } from "../services/dataLoader";
 import { ApiService } from "../services/apiService";
 import type { GameDataPayload, NormalizedRecipe, SearchOptions, PaginatedResponse } from "../types/apiModels";
 import type { Item, Entity } from "../types/gameModels";
@@ -23,12 +23,17 @@ export function useApi(gameId: string | undefined) {
 
     Promise.all([
       ...(datasets.map((ds) => loadGameData<any>(gameId, ds)) as Promise<any>[]),
-      loadGamesList()
+      loadGamesList(),
+      loadGameMaps(gameId)
     ])
       .then((results) => {
-        const [items, recipes, entities, shops, events, spawns, codes, games] = results as any[];
+        const [items, recipes, entities, shops, events, spawns, codes, games, maps] = results as any[];
         if (isMounted) {
           const gameInfo = games.find((g: any) => g.id === gameId);
+          if (gameInfo) {
+            // Se o gameInfo no games.json ainda tiver mapas, eles serão sobrescritos pelos do maps.json
+            gameInfo.maps = maps.length > 0 ? maps : (gameInfo.maps || []);
+          }
           setData({ items, recipes, entities, shops, events, spawns, codes, gameInfo });
           setLoading(false);
         }

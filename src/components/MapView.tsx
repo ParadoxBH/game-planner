@@ -1,6 +1,6 @@
-import { Box, Typography, Paper, Stack, Collapse, Snackbar, Alert } from "@mui/material";
+import { Box, Typography, Paper, Stack, Collapse, Snackbar, Alert, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { CRS, type LatLngBoundsExpression, Transformation } from "leaflet";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   MapContainer,
   Marker,
@@ -23,6 +23,9 @@ import { useApi } from "../hooks/useApi";
 import type { Entity, Spawn, GameInfo, MapMetadata } from "../types/gameModels";
 import { parseWKTPoint, formatWKTPoint, formatWKTPolygon } from "../utils/wkt";
 import { MapToolbox } from "./MapToolbox";
+import { MapDashboard } from "./MapDashboard";
+import MapIcon from "@mui/icons-material/Map";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
 export interface NavigationItem {
   type: "entity" | "item";
@@ -49,7 +52,6 @@ interface MapEventsHandlerProps {
 const MapEventsHandler = ({ onClick }: MapEventsHandlerProps) => {
   useMapEvents({
     click(e) {
-      // Only trigger if shift is NOT pressed (to avoid conflict with spawn copy)
       if (!e.originalEvent.shiftKey) {
         onClick([e.latlng.lat, e.latlng.lng]);
       }
@@ -102,21 +104,13 @@ const MapInfoOverlay = ({
       <Stack m={2.5} spacing={2}>
         <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
           <Stack alignItems={"start"}>
-            <Typography
-              variant="subtitle2"
-              sx={{ color: "designTokens.colors.fieldLabel", fontSize: "0.65rem" }}
-            >
+            <Typography variant="subtitle2" sx={{ color: "designTokens.colors.fieldLabel", fontSize: "0.65rem" }}>
               Explorando
             </Typography>
-            <Typography
-              variant="h6"
-              sx={{ letterSpacing: "-0.5px" }}
-            >
+            <Typography variant="h6" sx={{ letterSpacing: "-0.5px" }}>
               {currentMap?.name || gameName}
             </Typography>
           </Stack>
-
-          {/* Google-style Map Selector Button/Preview */}
           <Box
             onClick={() => setExpanded(!expanded)}
             sx={{
@@ -133,156 +127,69 @@ const MapInfoOverlay = ({
               boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
             }}
           >
-            <img 
-              src={currentMap?.thumbnail || "https://placehold.co/100x100/333/fff?text=Map"} 
-              alt="Map Preview"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-            <Stack
-              sx={{
-                position: "absolute",
-                bottom: 0,
-                width: "100%",
-                bgcolor: "rgba(0,0,0,0.6)",
-                textAlign: "center",
-              }}
-            >
-              <Typography variant="caption" sx={{ fontSize: "9px", fontWeight: 800 }}>
-                MAPAS
-              </Typography>
+            <img src={currentMap?.thumbnail || "https://placehold.co/100x100/333/fff?text=Map"} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <Stack sx={{ position: "absolute", bottom: 0, width: "100%", bgcolor: "rgba(0,0,0,0.6)", textAlign: "center" }}>
+              <Typography variant="caption" sx={{ fontSize: "9px", fontWeight: 800 }}>MAPAS</Typography>
             </Stack>
           </Box>
         </Stack>
-
         <Collapse in={expanded}>
           <Stack spacing={1} sx={{ mt: 1, mb: 1 }}>
-            <Typography
-              variant="subtitle2"
-              sx={{
-                color: "designTokens.colors.fieldLabel",
-                mb: 1,
-                display: "block",
-                fontSize: "0.65rem",
-              }}
-            >
-              SELECIONAR MAPA
-            </Typography>
+            <Typography variant="subtitle2" sx={{ color: "designTokens.colors.fieldLabel", mb: 1, display: "block", fontSize: "0.65rem" }}>SELECIONAR MAPA</Typography>
             <Stack direction="row" spacing={1} sx={{ overflowX: "auto", pb: 1 }}>
               {maps.map((map) => (
                 <Box
                   key={map.id}
-                  onClick={() => {
-                    onSelectMap(map.id);
-                    setExpanded(false);
-                  }}
+                  onClick={() => { onSelectMap(map.id); setExpanded(false); }}
                   sx={{
-                    minWidth: 80,
-                    height: 80,
-                    borderRadius: 1,
+                    minWidth: 80, height: 80, borderRadius: 1,
                     border: selectedMapId === map.id ? 2 : 1,
-                    borderColor:
-                      selectedMapId === map.id ? "primary.main" : "divider",
-                    overflow: "hidden",
-                    cursor: "pointer",
-                    position: "relative",
-                    opacity: selectedMapId === map.id ? 1 : 0.7,
-                    transition: "all 0.2s",
+                    borderColor: selectedMapId === map.id ? "primary.main" : "divider",
+                    overflow: "hidden", cursor: "pointer", position: "relative",
+                    opacity: selectedMapId === map.id ? 1 : 0.7, transition: "all 0.2s",
                     "&:hover": { opacity: 1, borderColor: "rgba(255,255,255,0.5)" },
                   }}
                 >
-                  <img
-                    src={
-                      map.thumbnail ||
-                      "https://placehold.co/100x100/333/fff?text=Map"
-                    }
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  />
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      position: "absolute",
-                      bottom: 0,
-                      width: "100%",
-                      bgcolor: "rgba(0,0,0,0.7)",
-                      fontSize: "10px",
-                      textAlign: "center",
-                      p: 0.5,
-                    }}
-                  >
-                    {map.name}
-                  </Typography>
+                  <img src={map.thumbnail || "https://placehold.co/100x100/333/fff?text=Map"} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  <Typography variant="caption" sx={{ position: "absolute", bottom: 0, width: "100%", bgcolor: "rgba(0,0,0,0.7)", fontSize: "10px", textAlign: "center", p: 0.5 }}>{map.name}</Typography>
                 </Box>
               ))}
             </Stack>
           </Stack>
         </Collapse>
-
         <Stack direction={"row"} spacing={1.5}>
-          <OutputField 
-            label="Região" 
-            values={[region]} 
-            flex={1} 
-          />
-          <OutputField 
-            label="Coordenadas" 
-            values={[`X: ${coords[1].toFixed(1)}`, `Y: ${coords[0].toFixed(1)}`]} 
-            flex={1.5} 
-          />
+          <OutputField label="Região" values={[region]} flex={1} />
+          <OutputField label="Coordenadas" values={[`X: ${coords[1].toFixed(1)}`, `Y: ${coords[0].toFixed(1)}`]} flex={1.5} />
         </Stack>
       </Stack>
     </Paper>
   );
 };
 
-/**
- * Creates a custom CRS for Leaflet based on the provided bounds.
- * This ensures that the map's coordinate system matches the "meters" or "units"
- * defined in the bounds, instead of fixed pixel coordinates.
- */
 const createCustomCRS = (bounds: [[number, number], [number, number]], tileRange?: MapMetadata['tileRange']) => {
   const [min, max] = bounds;
   const width = Math.abs(max[1] - min[1]);
   const height = Math.abs(max[0] - min[0]);
-  
   if (tileRange) {
     const scale = 256 / Math.pow(2, tileRange.z);
-    const pixelMinX = tileRange.min[0] * scale;
-    const pixelMaxX = tileRange.max[0] * scale;
-    const pixelMinY = tileRange.min[1] * scale;
-    const pixelMaxY = tileRange.max[1] * scale;
-
-    const scaleX = (pixelMaxX - pixelMinX) / width;
-    const offsetX = pixelMinX - min[1] * scaleX;
-
-    const scaleY = (pixelMinY - pixelMaxY) / height;
-    const offsetY = pixelMinY - max[0] * scaleY;
-
-    return Object.assign({}, CRS.Simple, {
-      transformation: new Transformation(scaleX, offsetX, scaleY, offsetY)
-    });
+    const scaleX = (tileRange.max[0] * scale - tileRange.min[0] * scale) / width;
+    const offsetX = tileRange.min[0] * scale - min[1] * scaleX;
+    const scaleY = (tileRange.min[1] * scale - tileRange.max[1] * scale) / height;
+    const offsetY = tileRange.min[1] * scale - max[0] * scaleY;
+    return Object.assign({}, CRS.Simple, { transformation: new Transformation(scaleX, offsetX, scaleY, offsetY) });
   }
-
   const scaleX = 256 / width;
   const scaleY = -256 / height;
-  
-  const transformation = new Transformation(
-    scaleX, 
-    -min[1] * scaleX, 
-    scaleY, 
-    -max[0] * scaleY
-  );
-
-  return Object.assign({}, CRS.Simple, {
-    transformation: transformation,
-  });
+  return Object.assign({}, CRS.Simple, { transformation: new Transformation(scaleX, -min[1] * scaleX, scaleY, -max[0] * scaleY) });
 };
 
 export const MapView = () => {
-  const theme = useTheme();
-  const { gameId } = useParams();
+  const theme = useTheme() as any;
+  const { gameId, mapId: urlMapId, view: urlView } = useParams();
+  const navigate = useNavigate();
+
   const [cursorCoords, setCursorCoords] = useState<[number, number]>([0, 0]);
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
-  const [selectedMapId, setSelectedMapId] = useState<string>("");
   const [loadingGame, setLoadingGame] = useState(true);
   const [navigationStack, setNavigationStack] = useState<NavigationItem[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -291,136 +198,53 @@ export const MapView = () => {
   const [currentPoints, setCurrentPoints] = useState<[number, number][]>([]);
   const mapRef = useRef<any>(null);
 
-  const handleMapClick = (latlng: [number, number]) => {
-    if (activeTool === 'polygon') {
-      setCurrentPoints(prev => [...prev, latlng]);
-    } else if (activeTool === 'point') {
-      handlePointClick(latlng);
-    }
-  };
+  const selectedMapId = urlMapId || "";
+  const viewMode = (urlView as "map" | "dashboard") || "map";
 
-  const handlePointClick = (latlng: [number, number]) => {
-    const spawnObj = {
-      id: `spawn_${Date.now()}`,
-      entityId: "TODO_ENTITY_ID",
-      geom: {
-        type: "Point",
-        coordinates: formatWKTPoint([latlng[1], latlng[0]]) // format as POINT(X Y)
-      },
-      mapId: selectedMapId
-    };
-    
-    const json = JSON.stringify(spawnObj, null, 2);
-    navigator.clipboard.writeText(json).then(() => {
-      setSnackbarMessage("JSON de Ponto copiado para a área de transferência!");
-      setSnackbarOpen(true);
-    });
-  };
+  const selectedMap = useMemo(() => gameInfo?.maps?.find(m => m.id === selectedMapId), [gameInfo, selectedMapId]);
 
-  const handleConfirmDrawing = () => {
-    if (currentPoints.length < 3) return;
-
-    // Convert coordinates: Leaflet [Lat, Lng] (Y X) to WKT (X Y)
-    const wktPoints: [number, number][] = currentPoints.map(p => [p[1], p[0]]);
-    const wkt = formatWKTPolygon(wktPoints);
-
-    const spawnObj = {
-      id: `zone_${Date.now()}`,
-      entityId: "TODO_ENTITY_ID",
-      geom: {
-        type: "Polygon",
-        coordinates: wkt
-      },
-      mapId: selectedMapId
-    };
-
-    const json = JSON.stringify(spawnObj, null, 2);
-    
-    navigator.clipboard.writeText(json).then(() => {
-      setSnackbarMessage("JSON de Zona (Polígono) copiado para a área de transferência!");
-      setSnackbarOpen(true);
-      setActiveTool(null);
-      setCurrentPoints([]);
-    });
-  };
-
-  const handleClearDrawing = () => {
-    setCurrentPoints([]);
-  };
-
-  const handleCancelDrawing = () => {
-    setActiveTool(null);
-    setCurrentPoints([]);
-  };
-
-  const drawerOpen = navigationStack.length > 0;
-
-  const handlePush = (item: NavigationItem) => {
-    setNavigationStack(prev => [...prev, item]);
-  };
-
-  const handlePop = () => {
-    setNavigationStack(prev => prev.slice(0, -1));
-  };
-
-  const handleCloseDrawer = () => {
-    setNavigationStack([]);
-  };
-
-  // Garantir que o mapa redimensione quando o drawer abrir/fechar
-  useEffect(() => {
-    if (mapRef.current) {
-      setTimeout(() => {
-        mapRef.current.invalidateSize();
-      }, 300); // Aguarda a animação do drawer
-    }
-  }, [drawerOpen]);
+  const { loading: loadingApi, error: errorApi, raw } = useApi(gameId);
 
   useEffect(() => {
     loadGamesList().then(games => {
       const game = games.find(g => g.id === gameId);
       if (game) {
         setGameInfo(game);
-        if (game.maps && game.maps.length > 0) {
-          setSelectedMapId(game.maps[0].id);
-        }
       }
       setLoadingGame(false);
     });
   }, [gameId]);
 
-  const selectedMap = useMemo(() => {
-    return gameInfo?.maps.find(m => m.id === selectedMapId);
-  }, [gameInfo, selectedMapId]);
+  // Sincronizar gameInfo com dados completos (incluindo mapas do maps.json)
+  useEffect(() => {
+    if (raw?.gameInfo) {
+      setGameInfo(raw.gameInfo);
+      
+      // Se não houver mapId na URL, redireciona para o primeiro mapa (ou para a página de seleção se preferir)
+      if (!urlMapId && raw.gameInfo.maps?.length > 0) {
+        navigate(`/game/${gameId}/map/${raw.gameInfo.maps[0].id}`, { replace: true });
+      }
+    }
+  }, [raw, gameId, urlMapId, navigate]);
 
-  const { loading: loadingApi, error: errorApi, raw } = useApi(gameId);
+  const setViewMode = (mode: "map" | "dashboard") => {
+    navigate(`/game/${gameId}/map/${selectedMapId}/${mode}`);
+  };
+
+  const setSelectedMapId = (id: string) => {
+    navigate(`/game/${gameId}/map/${id}/${viewMode}`);
+  };
 
   const spawns = (raw?.spawns as Spawn[]) || [];
   const entities = raw?.entities || [];
   const items = raw?.items || [];
-  const spawnError = errorApi;
-  const loadingSpawns = loadingApi;
-
   const entityLookup = useMemo(() => {
     const lookup: Record<string, Entity> = {};
-    if (entities) {
-      entities.forEach(e => {
-        lookup[e.id] = e;
-      });
-    }
+    entities.forEach(e => { lookup[e.id] = e; });
     return lookup;
   }, [entities]);
 
-  const customCRS = useMemo(() => {
-    if (selectedMap) {
-      return createCustomCRS(
-        selectedMap.bounds as [[number, number], [number, number]],
-        selectedMap.tileRange
-      );
-    }
-    return CRS.Simple;
-  }, [selectedMap]);
-
+  const customCRS = useMemo(() => selectedMap ? createCustomCRS(selectedMap.bounds as [[number, number], [number, number]], selectedMap.tileRange) : CRS.Simple, [selectedMap]);
   const mapCenter = useMemo(() => {
     if (selectedMap) {
       const [min, max] = selectedMap.bounds;
@@ -429,247 +253,62 @@ export const MapView = () => {
     return [0, 0] as [number, number];
   }, [selectedMap]);
 
-  if (loadingGame)
-    return (
-      <Stack sx={{ p: 4 }}>
-        <Typography>Carregando mapa...</Typography>
-      </Stack>
-    );
-  if (!gameInfo || !selectedMap)
-    return (
-      <Stack sx={{ p: 4 }}>
-        <Typography>Jogo ou mapa não encontrado.</Typography>
-      </Stack>
-    );
+  if (loadingGame) return <Stack sx={{ p: 4 }}><Typography>Carregando mapa...</Typography></Stack>;
+  if (!gameInfo) return <Stack sx={{ p: 4 }}><Typography>Jogo não encontrado.</Typography></Stack>;
+  if (!selectedMap) return <Stack sx={{ p: 4 }}><Typography>Mapa não encontrado.</Typography></Stack>;
+
+  const handlePush = (item: NavigationItem) => setNavigationStack(prev => [...prev, item]);
+  const handleMapClick = (latlng: [number, number]) => {
+    if (activeTool === 'polygon') setCurrentPoints(prev => [...prev, latlng]);
+    else if (activeTool === 'point') {
+      const spawnObj = { id: `spawn_${Date.now()}`, entityId: "TODO", geom: { type: "Point", coordinates: formatWKTPoint([latlng[1], latlng[0]]) }, mapId: selectedMapId };
+      navigator.clipboard.writeText(JSON.stringify(spawnObj, null, 2)).then(() => { setSnackbarMessage("Ponto copiado!"); setSnackbarOpen(true); });
+    }
+  };
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        height: "100%",
-        backgroundColor: "#0b0b0b",
-        position: "relative",
-        display: "flex", // Adicionado para layout lado a lado
-        overflow: "hidden",
-      }}
-    >
+    <Box sx={{ width: "100%", height: "100%", backgroundColor: "#0b0b0b", position: "relative", overflow: "hidden" }}>
       <Box sx={{ flexGrow: 1, position: "relative", height: "100%" }}>
-        <MapContainer
-          key={`${gameId}-${selectedMapId}`} // Force re-mount on map change
-          ref={mapRef}
-          crs={customCRS}
-          bounds={selectedMap.bounds as LatLngBoundsExpression}
-          center={mapCenter}
-        zoom={selectedMap.minZoom}
-        maxZoom={selectedMap.maxZoom}
-        minZoom={selectedMap.minZoom}
-        style={{ 
-          height: "100%", 
-          width: "100%",
-          cursor: activeTool ? 'crosshair' : 'grab'
-        }}
-      >
-        <CursorTracker 
-          onMouseMove={setCursorCoords} 
-        />
-        
-        <MapEventsHandler onClick={handleMapClick} />
+        <Box sx={{ position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)", zIndex: 1100, bgcolor: "designTokens.colors.glassBg", backdropFilter: "blur(12px)", borderRadius: 2, p: 0.5, border: 1, borderColor: "divider" }}>
+          <ToggleButtonGroup value={viewMode} exclusive onChange={(_, v) => v && setViewMode(v)} size="small">
+            <ToggleButton value="map" sx={{ px: 2 }}><MapIcon sx={{ mr: 1, fontSize: 18 }} /> MAPA</ToggleButton>
+            <ToggleButton value="dashboard" sx={{ px: 2 }}><DashboardIcon sx={{ mr: 1, fontSize: 18 }} /> DASHBOARD</ToggleButton>
+          </ToggleButtonGroup>
+        </Box>
 
-        {/* Círculo no cursor para feedback visual */}
-        {activeTool && (
-          <CircleMarker 
-            center={cursorCoords} 
-            radius={activeTool === 'point' ? 6 : 4} 
-            pathOptions={{ 
-              color: 'white', 
-              fillColor: activeTool === 'point' ? theme.palette.success.main : theme.palette.primary.main, 
-              fillOpacity: 1,
-              weight: 2
-            }} 
-            interactive={false}
-          />
-        )}
-
-        {activeTool === 'polygon' && currentPoints.length > 0 && (
-          <>
-            <Polygon 
-              positions={currentPoints} 
-              pathOptions={{ 
-                color: theme.palette.primary.main, 
-                fillColor: theme.palette.primary.main,
-                fillOpacity: 0.1,
-                weight: 2,
-                dashArray: '5, 5'
-              }} 
-            />
-            {/* Linha elástica (rubber-band) do último ponto ao cursor */}
-            <Polyline 
-              positions={[currentPoints[currentPoints.length - 1], cursorCoords]}
-              pathOptions={{
-                color: theme.palette.primary.main,
-                weight: 2,
-                dashArray: '5, 5',
-                opacity: 0.8
-              }}
-              interactive={false}
-            />
-          </>
-        )}
-        
-        {selectedMap.type === "layered" && selectedMap.urlPattern && (
-          Array.from({ length: selectedMap.layers || 1 }, (_, i) => i).map((l) => (
-            <ImageOverlay
-              key={`layer_${l}`}
-              zIndex={l}
-              url={selectedMap.urlPattern!.replace("{layer}", l.toString())}
-              bounds={selectedMap.bounds as LatLngBoundsExpression}
-            />
-          ))
-        )}
-
-        {selectedMap.type === "single" && selectedMap.url && (
-          <ImageOverlay
-            url={selectedMap.url}
-            bounds={selectedMap.bounds as LatLngBoundsExpression}
-          />
-        )}
-        
-        {selectedMap.type === "tile" && selectedMap.url && (
-          <TileLayer
-            url={selectedMap.url}
-            minZoom={selectedMap.minZoom}
-            maxZoom={selectedMap.maxZoom}
-            minNativeZoom={selectedMap.tileMinZoom ?? 4}
-            maxNativeZoom={selectedMap.tileMaxZoom ?? 4}
-            noWrap={true}
-          />
-        )}
-
-        {spawnError && (
-          <Stack
-            sx={{
-              position: "absolute",
-              top: 10,
-              left: 10,
-              bgcolor: "error.main",
-              color: "white",
-              p: 1,
-              zIndex: 1000,
-              borderRadius: 1,
-            }}
-          >
-            <Typography variant="caption">
-              Erro ao carregar spawns: {spawnError}
-            </Typography>
-          </Stack>
-        )}
-
-        {!loadingSpawns &&
-          spawns &&
-          spawns
-            .filter((spawn: any) => !spawn.mapId || spawn.mapId === selectedMapId)
-            .map((spawn) => {
-              const coords = parseWKTPoint(spawn.geom.coordinates);
-              // WKT is POINT(X Y [Z]) -> [X, Y, Z]
-              // Leaflet needs [Lat, Lng] -> [Y, X]
-              const leafletPos: [number, number] = [coords[1], coords[0]];
-              
+        {viewMode === "map" ? (
+          <MapContainer key={`${gameId}-${selectedMapId}`} ref={mapRef} crs={customCRS} bounds={selectedMap.bounds as LatLngBoundsExpression} center={mapCenter} zoom={selectedMap.minZoom} maxZoom={selectedMap.maxZoom} style={{ height: "100%", width: "100%", cursor: activeTool ? 'crosshair' : 'grab' }}>
+            <CursorTracker onMouseMove={setCursorCoords} />
+            <MapEventsHandler onClick={handleMapClick} />
+            {activeTool && <CircleMarker center={cursorCoords} radius={activeTool === 'point' ? 6 : 4} pathOptions={{ color: 'white', fillColor: activeTool === 'point' ? theme.palette.success.main : theme.palette.primary.main, fillOpacity: 1, weight: 2 }} interactive={false} />}
+            {activeTool === 'polygon' && currentPoints.length > 0 && (
+              <>
+                <Polygon positions={currentPoints} pathOptions={{ color: theme.palette.primary.main, fillColor: theme.palette.primary.main, fillOpacity: 0.1, weight: 2, dashArray: '5, 5' }} />
+                <Polyline positions={[currentPoints[currentPoints.length - 1], cursorCoords]} pathOptions={{ color: theme.palette.primary.main, weight: 2, dashArray: '5, 5', opacity: 0.8 }} interactive={false} />
+              </>
+            )}
+            {selectedMap.type === "layered" && selectedMap.urlPattern && Array.from({ length: selectedMap.layers || 1 }, (_, i) => i).map(l => <ImageOverlay key={l} zIndex={l} url={selectedMap.urlPattern!.replace("{layer}", l.toString())} bounds={selectedMap.bounds as LatLngBoundsExpression} />)}
+            {selectedMap.type === "single" && selectedMap.url && <ImageOverlay url={selectedMap.url} bounds={selectedMap.bounds as LatLngBoundsExpression} />}
+            {selectedMap.type === "tile" && selectedMap.url && <TileLayer url={selectedMap.url} minZoom={selectedMap.minZoom} maxZoom={selectedMap.maxZoom} minNativeZoom={selectedMap.tileMinZoom ?? 4} maxNativeZoom={selectedMap.tileMaxZoom ?? 4} noWrap={true} />}
+            {!loadingApi && spawns.filter(s => !s.mapId || s.mapId === selectedMapId).map(spawn => {
+              const cp = parseWKTPoint(spawn.geom.coordinates);
+              const pos: [number, number] = [cp[1], cp[0]];
               return (
-                  <Marker 
-                    key={spawn.id} 
-                    position={leafletPos}
-                    icon={divIcon({
-                      html: `
-                        <div style="
-                          width: 32px;
-                          height: 32px;
-                          border: 2px solid ${theme.palette.primary.main};
-                          border-radius: ${theme.shape.borderRadius}px;
-                          background: ${theme.designTokens.colors.glassBg};
-                          display: flex;
-                          align-items: center;
-                          justify-content: center;
-                          overflow: hidden;
-                          box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-                          transform: translate(-16px, -16px);
-                        ">
-                          <img src="${entityLookup[spawn.entityId]?.icon || items?.find(i => i.id === spawn.entityId)?.icon || '/img/placeholder.png'}" 
-                               style="width: 85%; height: 85%; object-fit: contain;" />
-                        </div>
-                      `,
-                      className: 'custom-entity-icon',
-                    })}
-                  >
-                  <Popup>
-                    <SimplifiedEntity 
-                      entity={(() => {
-                        const entity = entityLookup[spawn.entityId];
-                        return entity 
-                          ? entity 
-                          : { 
-                              id: spawn.entityId, 
-                              name: spawn.entityId, 
-                              category: spawn.type || 'resource', 
-                              icon: items?.find(i => i.id === spawn.entityId)?.icon 
-                            };
-                      })()} 
-                      position={leafletPos}
-                      mode={spawn.mode}
-                      respawnDelay={spawn.respawnDelay}
-                      onExpand={() => {
-                        handlePush({ type: "entity", id: spawn.entityId });
-                      }}
-                    />
-                  </Popup>
+                <Marker key={spawn.id} position={pos} icon={divIcon({ html: `<div style="width: 32px; height: 32px; border: 2px solid ${theme.palette.primary.main}; border-radius: ${theme.shape.borderRadius}px; background: ${theme.designTokens.colors.glassBg}; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.5); transform: translate(-16px, -16px);"><img src="${entityLookup[spawn.entityId]?.icon || items.find(i => i.id === spawn.entityId)?.icon || '/img/placeholder.png'}" style="width: 85%; height: 85%; object-fit: contain;" /></div>`, className: 'custom-entity-icon' })}>
+                  <Popup><SimplifiedEntity entity={entityLookup[spawn.entityId] || { id: spawn.entityId, name: spawn.entityId, category: spawn.type || 'resource', icon: items.find(i => i.id === spawn.entityId)?.icon }} position={pos} mode={spawn.mode} respawnDelay={spawn.respawnDelay} onExpand={() => handlePush({ type: "entity", id: spawn.entityId })} /></Popup>
                 </Marker>
               );
             })}
-        </MapContainer>
-
-        <MapInfoOverlay 
-          gameName={gameInfo.name} 
-          coords={cursorCoords} 
-          maps={gameInfo.maps}
-          selectedMapId={selectedMapId}
-          onSelectMap={setSelectedMapId}
-        />
+          </MapContainer>
+        ) : (
+          <MapDashboard gameId={gameId!} selectedMapId={selectedMapId} onSelectEntity={id => handlePush({ type: "entity", id })} onSwitchToMap={() => setViewMode("map")} />
+        )}
+        {viewMode === "map" && <MapInfoOverlay gameName={gameInfo.name} coords={cursorCoords} maps={gameInfo.maps} selectedMapId={selectedMapId} onSelectMap={setSelectedMapId} />}
       </Box>
 
-      {/* Side Drawer */}
-      {drawerOpen && (
-        <EntityDrawer 
-          stack={navigationStack}
-          entities={entities || []}
-          items={items || []}
-          spawns={spawns || []}
-          shops={raw?.shops || []}
-          maps={gameInfo.maps}
-          onSelectMap={setSelectedMapId}
-          onPush={handlePush}
-          onPop={handlePop}
-          onClose={handleCloseDrawer} 
-        />
-      )}
-
-      <MapToolbox 
-        activeTool={activeTool}
-        hasPoints={currentPoints.length > 0}
-        onSelectTool={setActiveTool}
-        onConfirm={handleConfirmDrawing}
-        onClear={handleClearDrawing}
-        onCancel={handleCancelDrawing}
-      />
-
-      <Snackbar 
-        open={snackbarOpen} 
-        autoHideDuration={3000} 
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert severity="info" variant="filled" sx={{ width: '100%', borderRadius: 2 }}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+      {navigationStack.length > 0 && <EntityDrawer stack={navigationStack} entities={entities} items={items} spawns={spawns} shops={raw?.shops || []} maps={gameInfo.maps} onSelectMap={setSelectedMapId} onPush={handlePush} onPop={() => setNavigationStack(s => s.slice(0, -1))} onClose={() => setNavigationStack([])} />}
+      {viewMode === "map" && <MapToolbox activeTool={activeTool} hasPoints={currentPoints.length > 0} onSelectTool={setActiveTool} onConfirm={() => { navigator.clipboard.writeText(JSON.stringify({ id: `zone_${Date.now()}`, geom: { type: "Polygon", coordinates: formatWKTPolygon(currentPoints.map(p => [p[1], p[0]])) }, mapId: selectedMapId }, null, 2)); setSnackbarMessage("Zona copiada!"); setSnackbarOpen(true); setActiveTool(null); setCurrentPoints([]); }} onClear={() => setCurrentPoints([])} onCancel={() => { setActiveTool(null); setCurrentPoints([]); }} />}
+      <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={() => setSnackbarOpen(false)} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}><Alert severity="info" variant="filled" sx={{ width: '100%', borderRadius: 2 }}>{snackbarMessage}</Alert></Snackbar>
     </Box>
   );
 };

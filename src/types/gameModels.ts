@@ -19,9 +19,21 @@ export interface Entity {
   id: string;
   name: string;
   category?: string | string[];
+  description?: string;
   icon?: string;
   buyPrice?: number;
   sellPrice?: number;
+  parentId?: string; // Para hierarquia (ex: Cripta dentro de Pântano)
+  potentialSpawns?: {
+    entityId: string;
+    chance?: number;
+    quantity?: string;
+    conditions?: string;
+  }[];
+  geom?: {
+    type: string;
+    coordinates: string;
+  };
   requirements?: {
     itemId: string;
     quant: number;
@@ -113,7 +125,10 @@ export interface GameEvent {
 export interface MapMetadata {
   id: string;
   name: string;
-  type: "single" | "layered" | "tile";
+  type: "single" | "layered" | "tile" | "procedural";
+  defaultView?: "map" | "dashboard";
+  availableViews?: ("map" | "dashboard")[];
+  gridSize?: number;
   url?: string;
   urlPattern?: string;
   layers?: number;
@@ -128,6 +143,7 @@ export interface MapMetadata {
     max: [number, number];
   };
   thumbnail?: string;
+  description?: string;
 }
 
 export interface GameInfo {
@@ -141,8 +157,12 @@ export interface GameInfo {
 export interface Spawn {
   id: string;
   entityId: string;
-  type?: "position" | "range" | "geom";
+  type?: "position" | "range" | "geom" | "rule";
+  locationId?: string; // ID da Região/Mapa onde spawna
   mode?: "once" | "respawn";
+  conditions?: Record<string, any>;
+  chance?: number;
+  quantity?: string;
   geom: {
     type: string;
     coordinates: string;

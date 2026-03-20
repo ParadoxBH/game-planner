@@ -16,6 +16,8 @@ import type {
 } from "../types/apiModels";
 import { getCraftingTotals } from "../utils/craftingTree";
 import type { TreeOptions } from "../utils/craftingTree";
+import { isPointInPolygon } from "../utils/spatial";
+import { parseWKTPoint, parseWKTPolygon } from "../utils/wkt";
 
 export class ApiService {
   private data: GameDataPayload;
@@ -157,6 +159,47 @@ export class ApiService {
     const entity = this.data.entities.find((e) => e.id === entityId);
     if (!entity) return null;
 
+    // Hierarchy
+    const parent = entity.parentId ? this.data.entities.find(e => e.id === entity.parentId) : undefined;
+    const children = this.data.entities.filter(e => e.parentId === entityId);
+
+    // Potential Spawns (Explicit Rules)
+    const explicitSpawns = this.data.spawns
+      .filter(s => s.locationId === entityId || (s.type === "rule" && s.locationId === entityId))
+      .map(s => ({
+        entity: this.data.entities.find(e => e.id === s.entityId) || this.data.items.find(i => i.id === s.entityId),
+        chance: s.chance,
+        quantity: s.quantity,
+        conditions: s.conditions
+      }))
+      .filter(s => s.entity) as EntityDetails["potentialSpawns"];
+
+    // Spatial Spawns (Point-in-Polygon Detection)
+    let spatialSpawns: EntityDetails["potentialSpawns"] = [];
+    if (entity.geom?.type === "Polygon") {
+      const polygonCoords = parseWKTPolygon(entity.geom.coordinates);
+      if (polygonCoords.length > 0) {
+        const pointsInside = this.data.spawns.filter(s => {
+          if (!s.geom || s.geom.type !== "Point") return false;
+          const pointCoords = parseWKTPoint(s.geom.coordinates);
+          // WKT is [X, Y]
+          return isPointInPolygon([pointCoords[0], pointCoords[1]], polygonCoords);
+        });
+
+        spatialSpawns = pointsInside.map(s => ({
+          entity: this.data.entities.find(e => e.id === s.entityId) || this.data.items.find(i => i.id === s.entityId),
+          chance: s.chance,
+          quantity: s.quantity,
+          conditions: s.conditions
+        })).filter(s => s.entity) as EntityDetails["potentialSpawns"];
+      }
+    }
+
+    // Merge potential spawns
+    const potentialSpawns = [...(explicitSpawns || []), ...(spatialSpawns || [])];
+    // Remove duplicates
+    const uniquePotentialSpawns = potentialSpawns.filter((v, i, a) => a.findIndex(t => t.entity.id === v.entity.id) === i);
+
     const drops = (entity.drops || []).map((d) => ({
       item: this.data.items.find((i) => i.id === d.itemId),
       chance: d.chance,
@@ -182,6 +225,9 @@ export class ApiService {
 
     return {
       entity,
+      parent,
+      children,
+      potentialSpawns: uniquePotentialSpawns,
       drops,
       recipes,
       spawns,
@@ -389,6 +435,7 @@ export class ApiService {
         id: i.ClassName || i.id,
         name: i.Name || i.name,
         amount: i.Amount || i.amount || 1,
+        type: i.type || (this.data.entities.some(e => e.id === (i.ClassName || i.id)) ? "entity" : "item")
       }));
     }
 
@@ -403,6 +450,7 @@ export class ApiService {
         id: p.ClassName || p.id,
         name: p.Name || p.name,
         amount: p.Amount || p.amount || 1,
+        type: p.type || (this.data.entities.some(e => e.id === (p.ClassName || p.id)) ? "entity" : "item")
       }));
     }
 
