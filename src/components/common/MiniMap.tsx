@@ -155,19 +155,22 @@ export const MiniMap = ({ meta, markers, onClick, height = 200 }: MiniMapProps) 
                 noWrap={true}
             />
         )}
-        {markers.map((m) => (
-            <Marker 
-                key={m.id} 
-                position={m.position}
-                icon={L.divIcon({
-                    html: `<div class="mini-marker-inner" style="background: ${m.color || '#ff4400'};"></div>`,
-                    className: 'mini-marker',
-                    iconSize: [12, 12],
-                    iconAnchor: [6, 6]
-                })}
-            />
-        ))}
-        <SetBounds markers={markers} bounds={meta.bounds as any} />
+        {markers.filter(m => m.position && m.position.length === 2).map((m) => {
+            if (isNaN(m.position[0]) || isNaN(m.position[1])) return null;
+            return (
+              <Marker 
+                  key={m.id} 
+                  position={m.position}
+                  icon={L.divIcon({
+                      html: `<div class="mini-marker-inner" style="background: ${m.color || '#ff4400'};"></div>`,
+                      className: 'mini-marker',
+                      iconSize: [12, 12],
+                      iconAnchor: [6, 6]
+                  })}
+              />
+            );
+        })}
+        <SetBounds markers={markers.filter(m => m.position && m.position.length === 2 && !isNaN(m.position[0]) && !isNaN(m.position[1]))} bounds={meta.bounds as any} />
       </MapContainer>
     </Box>
   );

@@ -27,6 +27,7 @@ import type { MapMetadata, Spawn, GameInfo, GameDataTypes } from "../../types/ga
 import { MiniMap } from "../common/MiniMap";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
+import { parseWKTPoint } from "../../utils/wkt";
 
 export function EntityDetailsPage() {
   const { gameId, entityId = "" } = useParams<{ gameId: string; entityId: string }>();
@@ -447,12 +448,22 @@ export function EntityDetailsPage() {
                           {meta ? (
                             <MiniMap 
                                 meta={meta}
-                                markers={mapSpawns.map(s => ({
-                                    id: s.id,
-                                    position: gameId === 'satisfactory' ? [s.position[0], s.position[1]] : s.position as [number, number],
-                                    color: '#ff4400'
-                                }))}
-                                onClick={() => navigate(`/game/${gameId}/map?entity=${entity.id}&mapId=${mapId}`)}
+                                markers={mapSpawns.map(s => {
+                                    let pos: [number, number] = [0, 0];
+                                    if (s.position) {
+                                      pos = gameId === 'satisfactory' ? [s.position[0], s.position[1]] : s.position as [number, number];
+                                    } else if (s.geom?.type === 'Point' && s.geom.coordinates) {
+                                      const wktCoords = parseWKTPoint(s.geom.coordinates);
+                                      // WKT is [X, Y], Leaflet wants [Y, X] for Lat/Lng
+                                      pos = [wktCoords[1], wktCoords[0]];
+                                    }
+                                    return {
+                                        id: s.id,
+                                        position: pos,
+                                        color: '#ff4400'
+                                    };
+                                })}
+                                onClick={() => navigate(`/game/${gameId}/map/${mapId}`)}
                                 height={200}
                             />
                           ) : (
