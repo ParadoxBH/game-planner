@@ -166,7 +166,7 @@
       },
       {
         "type": "category",
-        "id": "fruta",
+        "id": "ingredient_geleia",
         "amount": 1
       }
     ],
@@ -433,9 +433,23 @@
   },
   {
     "id": "recipe_plantar_nabo",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_nabo", "amount": 1 }],
-    "products": [{ "type": "item", "id": "nabo", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_nabo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "nabo",
+        "amount": 1
+      }
+    ],
     "unlock": [
       {
         "type": "event",
@@ -445,51 +459,149 @@
   },
   {
     "id": "recipe_plantar_tomate",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_tomate", "amount": 1 }],
-    "products": [{ "type": "item", "id": "tomate", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_tomate",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "tomate",
+        "amount": 1
+      }
+    ],
     "craftTime": 900
   },
   {
     "id": "recipe_plantar_batata",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_batata", "amount": 1 }],
-    "products": [{ "type": "item", "id": "batata", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_batata",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "batata",
+        "amount": 1
+      }
+    ],
     "craftTime": 3600
   },
   {
     "id": "recipe_plantar_trigo",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_trigo", "amount": 1 }],
-    "products": [{ "type": "item", "id": "trigo", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_trigo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "trigo",
+        "amount": 1
+      }
+    ],
     "craftTime": 14400
   },
   {
     "id": "recipe_plantar_alface_americana",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_alface_americano", "amount": 1 }],
-    "products": [{ "type": "item", "id": "alface_americano", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_alface_americano",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "alface_americano",
+        "amount": 1
+      }
+    ],
     "craftTime": 28800
   },
   {
     "id": "recipe_plantar_abacaxi",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_abacaxi", "amount": 1 }],
-    "products": [{ "type": "item", "id": "abacaxi", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_abacaxi",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "abacaxi",
+        "amount": 1
+      }
+    ],
     "craftTime": 1800
   },
   {
     "id": "recipe_plantar_cenoura",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_cenoura", "amount": 1 }],
-    "products": [{ "type": "item", "id": "cenoura", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_cenoura",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cenoura",
+        "amount": 1
+      }
+    ],
     "craftTime": 7200
   },
   {
     "id": "recipe_plantar_papoula_himalaia_vermelha",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_papoula_himalaia_vermelha", "amount": 1 }],
-    "products": [{ "type": "item", "id": "papoula_himalaia_vermelha", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_papoula_himalaia_vermelha",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "papoula_himalaia_vermelha",
+        "amount": 1
+      }
+    ],
     "unlock": [
       {
         "type": "event",
@@ -499,9 +611,23 @@
   },
   {
     "id": "recipe_plantar_papoula_himalaia_amarela",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_papoula_himalaia_amarela", "amount": 1 }],
-    "products": [{ "type": "item", "id": "papoula_himalaia_amarela", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_papoula_himalaia_amarela",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "papoula_himalaia_amarela",
+        "amount": 1
+      }
+    ],
     "unlock": [
       {
         "type": "event",
@@ -511,9 +637,23 @@
   },
   {
     "id": "recipe_plantar_papoula_himalaia_branca",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_papoula_himalaia_branca", "amount": 1 }],
-    "products": [{ "type": "item", "id": "papoula_himalaia_branca", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_papoula_himalaia_branca",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "papoula_himalaia_branca",
+        "amount": 1
+      }
+    ],
     "unlock": [
       {
         "type": "event",
@@ -523,290 +663,878 @@
   },
   {
     "id": "recipe_plantar_margarida_vermelha",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_margarida_vermelha", "amount": 1 }],
-    "products": [{ "type": "item", "id": "margarida_vermelha", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_margarida_vermelha",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "margarida_vermelha",
+        "amount": 1
+      }
+    ],
     "craftTime": 64800
   },
   {
     "id": "recipe_plantar_margarida_branca",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_margarida_branca", "amount": 1 }],
-    "products": [{ "type": "item", "id": "margarida_branca", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_margarida_branca",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "margarida_branca",
+        "amount": 1
+      }
+    ],
     "craftTime": 64800
   },
   {
     "id": "recipe_plantar_margarida_rosa",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_margarida_rosa", "amount": 1 }],
-    "products": [{ "type": "item", "id": "margarida_rosa", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_margarida_rosa",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "margarida_rosa",
+        "amount": 1
+      }
+    ],
     "craftTime": 64800
   },
   {
     "id": "recipe_plantar_amor_perfeito_vermelho",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_amor_perfeito_vermelho", "amount": 1 }],
-    "products": [{ "type": "item", "id": "amor_perfeito_vermelho", "amount": 1 }]
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_amor_perfeito_vermelho",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "amor_perfeito_vermelho",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_plantar_amor_perfeito_amarelo",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_amor_perfeito_amarelo", "amount": 1 }],
-    "products": [{ "type": "item", "id": "amor_perfeito_amarelo", "amount": 1 }]
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_amor_perfeito_amarelo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "amor_perfeito_amarelo",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_plantar_papoula_vermelha",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_papoula_vermelha", "amount": 1 }],
-    "products": [{ "type": "item", "id": "papoula_himalaia_vermelha", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_papoula_vermelha",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "papoula_himalaia_vermelha",
+        "amount": 1
+      }
+    ],
     "craftTime": 86400
   },
   {
     "id": "recipe_plantar_papoula_amarela",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_papoula_amarela", "amount": 1 }],
-    "products": [{ "type": "item", "id": "papoula_himalaia_amarela", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_papoula_amarela",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "papoula_himalaia_amarela",
+        "amount": 1
+      }
+    ],
     "craftTime": 86400
   },
   {
     "id": "recipe_plantar_papoula_branca",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_papoula_branca", "amount": 1 }],
-    "products": [{ "type": "item", "id": "papoula_himalaia_branca", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_papoula_branca",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "papoula_himalaia_branca",
+        "amount": 1
+      }
+    ],
     "craftTime": 86400
   },
   {
     "id": "recipe_plantar_anturio_vermelho",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_anturio_vermelho", "amount": 1 }],
-    "products": [{ "type": "item", "id": "anturio_vermelho", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_anturio_vermelho",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "anturio_vermelho",
+        "amount": 1
+      }
+    ],
     "craftTime": 86400
   },
   {
     "id": "recipe_plantar_anturio_amarelo",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_anturio_amarelo", "amount": 1 }],
-    "products": [{ "type": "item", "id": "anturio_amarelo", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_anturio_amarelo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "anturio_amarelo",
+        "amount": 1
+      }
+    ],
     "craftTime": 86400
   },
   {
     "id": "recipe_plantar_anturio_branco",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_anturio_branco", "amount": 1 }],
-    "products": [{ "type": "item", "id": "anturio_branco", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_anturio_branco",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "anturio_branco",
+        "amount": 1
+      }
+    ],
     "craftTime": 86400
-  }
-
-  ,
+  },
   {
     "id": "recipe_plantar_copo_leite_vermelha",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_copo_leite_vermelha", "amount": 1 }],
-    "products": [{ "type": "item", "id": "copo_leite_vermelha", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_copo_leite_vermelha",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "copo_leite_vermelha",
+        "amount": 1
+      }
+    ],
     "craftTime": 108000
   },
   {
     "id": "recipe_plantar_copo_leite_amarela",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_copo_leite_amarela", "amount": 1 }],
-    "products": [{ "type": "item", "id": "copo_leite_amarela", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_copo_leite_amarela",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "copo_leite_amarela",
+        "amount": 1
+      }
+    ],
     "craftTime": 108000
   },
   {
     "id": "recipe_plantar_copo_leite_branca",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_copo_leite_branca", "amount": 1 }],
-    "products": [{ "type": "item", "id": "copo_leite_branca", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_copo_leite_branca",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "copo_leite_branca",
+        "amount": 1
+      }
+    ],
     "craftTime": 108000
   },
   {
     "id": "recipe_plantar_gloria_manha_branca",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_gloria_manha_branca", "amount": 1 }],
-    "products": [{ "type": "item", "id": "gloria_manha_branca", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_gloria_manha_branca",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "gloria_manha_branca",
+        "amount": 1
+      }
+    ],
     "craftTime": 108000
   },
   {
     "id": "recipe_plantar_gloria_manha_amarela",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_gloria_manha_amarela", "amount": 1 }],
-    "products": [{ "type": "item", "id": "gloria_manha_amarela", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_gloria_manha_amarela",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "gloria_manha_amarela",
+        "amount": 1
+      }
+    ],
     "craftTime": 108000
   },
   {
     "id": "recipe_plantar_gloria_manha_laranja",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_gloria_manha_laranja", "amount": 1 }],
-    "products": [{ "type": "item", "id": "gloria_manha_laranja", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_gloria_manha_laranja",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "gloria_manha_laranja",
+        "amount": 1
+      }
+    ],
     "craftTime": 108000
   },
   {
     "id": "recipe_plantar_milho",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_milho", "amount": 1 }],
-    "products": [{ "type": "item", "id": "milho", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_milho",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "milho",
+        "amount": 1
+      }
+    ],
     "craftTime": 43200
   },
   {
     "id": "recipe_plantar_morango",
-    "stations": ["caixa_planta"],
-    "ingredients": [{ "type": "item", "id": "semente_morango", "amount": 1 }],
-    "products": [{ "type": "item", "id": "morango", "amount": 1 }],
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_morango",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "morango",
+        "amount": 1
+      }
+    ],
     "craftTime": 21600
   },
   {
     "id": "recipe_salada_rural",
-    "stations": ["cooking"],
-    "ingredients": [{ "type": "category", "id": "vegetable", "amount": 2 }],
-    "products": [{ "type": "item", "id": "salada_rural", "amount": 1 }]
+    "stations": [
+      "cooking"
+    ],
+    "ingredients": [
+      {
+        "type": "category",
+        "id": "vegetable",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "salada_rural",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_geleia_mista",
-    "stations": ["cooking"],
-    "ingredients": [{ "type": "category", "id": "ingredient_geleia", "amount": 4 }],
-    "products": [{ "type": "item", "id": "geleia_mista", "amount": 1 }]
+    "stations": [
+      "cooking"
+    ],
+    "ingredients": [
+      {
+        "type": "category",
+        "id": "ingredient_geleia",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "geleia_mista",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_geleia_framboesa",
-    "stations": ["cooking"],
-    "ingredients": [{ "type": "item", "id": "framboesa", "amount": 4 }],
-    "products": [{ "type": "item", "id": "geleia_framboesa", "amount": 1 }]
+    "stations": [
+      "cooking"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "framboesa",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "geleia_framboesa",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_geleia_mirtilo",
-    "stations": ["cooking"],
-    "ingredients": [{ "type": "item", "id": "mirtilo", "amount": 4 }],
-    "products": [{ "type": "item", "id": "geleia_mirtilo", "amount": 1 }]
+    "stations": [
+      "cooking"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "mirtilo",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "geleia_mirtilo",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_geleia_maca",
-    "stations": ["cooking"],
-    "ingredients": [{ "type": "item", "id": "maca", "amount": 4 }],
-    "products": [{ "type": "item", "id": "geleia_maca", "amount": 1 }]
+    "stations": [
+      "cooking"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "maca",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "geleia_maca",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_geleia_tangerina",
-    "stations": ["cooking"],
-    "ingredients": [{ "type": "item", "id": "tangerina", "amount": 4 }],
-    "products": [{ "type": "item", "id": "geleia_tangerina", "amount": 1 }]
+    "stations": [
+      "cooking"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "tangerina",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "geleia_tangerina",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_bolo_queijo",
-    "stations": ["cooking"],
-    "ingredients": [
-      { "type": "item", "id": "queijo", "amount": 1 },
-      { "type": "item", "id": "leite", "amount": 1 },
-      { "type": "item", "id": "trigo", "amount": 1 }
+    "stations": [
+      "cooking"
     ],
-    "products": [{ "type": "item", "id": "bolo_queijo", "amount": 1 }]
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "queijo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "trigo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "bolo_queijo",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_torta_cogumelo",
-    "stations": ["cooking"],
-    "ingredients": [
-      { "type": "category", "id": "mushroom", "amount": 2 },
-      { "type": "item", "id": "trigo", "amount": 1 },
-      { "type": "item", "id": "ovo", "amount": 1 }
+    "stations": [
+      "cooking"
     ],
-    "products": [{ "type": "item", "id": "torta_cogumelos", "amount": 1 }]
+    "ingredients": [
+      {
+        "type": "category",
+        "id": "mushroom",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "trigo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "ovo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "torta_cogumelos",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_cogumelo_assado",
-    "stations": ["cooking"],
-    "ingredients": [{ "type": "category", "id": "mushroom", "amount": 4 }],
-    "products": [{ "type": "item", "id": "cogumelo_assado", "amount": 1 }]
+    "stations": [
+      "cooking"
+    ],
+    "ingredients": [
+      {
+        "type": "category",
+        "id": "mushroom",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cogumelo_assado",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_cogumelo_ostra_assado",
-    "stations": ["cooking"],
-    "ingredients": [{ "type": "item", "id": "cogumelo_ostra", "amount": 4 }],
-    "products": [{ "type": "item", "id": "cogumelo_ostra_assado", "amount": 1 }]
+    "stations": [
+      "cooking"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "cogumelo_ostra",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cogumelo_ostra_assado",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_shiitake_assado",
-    "stations": ["cooking"],
-    "ingredients": [{ "type": "item", "id": "shiitake", "amount": 4 }],
-    "products": [{ "type": "item", "id": "shiitake_assado", "amount": 1 }]
+    "stations": [
+      "cooking"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "shiitake",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "shiitake_assado",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_champignon_assado",
-    "stations": ["cooking"],
-    "ingredients": [{ "type": "item", "id": "champignon", "amount": 4 }],
-    "products": [{ "type": "item", "id": "champignon_assado", "amount": 1 }]
+    "stations": [
+      "cooking"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "champignon",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "champignon_assado",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_porcino_assado",
-    "stations": ["cooking"],
-    "ingredients": [{ "type": "item", "id": "porcino", "amount": 4 }],
-    "products": [{ "type": "item", "id": "porcino_assado", "amount": 1 }]
+    "stations": [
+      "cooking"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "porcino",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "porcino_assado",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_ovo_cozido_terminal",
-    "stations": ["cooking"],
-    "ingredients": [{ "type": "item", "id": "ovo_pasteurizado", "amount": 1 }],
-    "products": [{ "type": "item", "id": "ovo_cozido_termal", "amount": 1 }]
+    "stations": [
+      "cooking"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "ovo_pasteurizado",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "ovo_cozido_termal",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_cafe",
-    "stations": ["cooking"],
-    "ingredients": [
-      { "type": "item", "id": "graos_cafe", "amount": 2 },
-      { "type": "category", "id": "ingredient_cafe", "amount": 2 }
+    "stations": [
+      "cooking"
     ],
-    "products": [{ "type": "item", "id": "cafe", "amount": 1 }]
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "graos_cafe",
+        "amount": 2
+      },
+      {
+        "type": "category",
+        "id": "ingredient_cafe",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cafe",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_latte",
-    "stations": ["cooking"],
-    "ingredients": [
-      { "type": "item", "id": "graos_cafe", "amount": 2 },
-      { "type": "item", "id": "leite", "amount": 2 }
+    "stations": [
+      "cooking"
     ],
-    "products": [{ "type": "item", "id": "latte", "amount": 1 }]
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "graos_cafe",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "latte",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_bagel_peixe_defumado",
-    "stations": ["cooking"],
-    "ingredients": [
-      { "type": "category", "id": "fish", "amount": 1 },
-      { "type": "item", "id": "queijo", "amount": 1 },
-      { "type": "category", "id": "vegetable", "amount": 1 },
-      { "type": "item", "id": "trigo", "amount": 1 }
+    "stations": [
+      "cooking"
     ],
-    "products": [{ "type": "item", "id": "bagel_peixe_defumado", "amount": 1 }]
+    "ingredients": [
+      {
+        "type": "category",
+        "id": "fish",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "queijo",
+        "amount": 1
+      },
+      {
+        "type": "category",
+        "id": "vegetable",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "trigo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "bagel_peixe_defumado",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_arroz_marisco",
-    "stations": ["cooking"],
-    "ingredients": [
-      { "type": "category", "id": "seafood", "amount": 2 },
-      { "type": "item", "id": "trigo", "amount": 1 },
-      { "type": "item", "id": "tomate", "amount": 1 }
+    "stations": [
+      "cooking"
     ],
-    "products": [{ "type": "item", "id": "arroz_marisco", "amount": 1 }]
+    "ingredients": [
+      {
+        "type": "category",
+        "id": "seafood",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "trigo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "tomate",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "arroz_marisco",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_ensopado_rustico",
-    "stations": ["cooking"],
-    "ingredients": [
-      { "type": "item", "id": "tomate", "amount": 1 },
-      { "type": "item", "id": "batata", "amount": 1 },
-      { "type": "item", "id": "alface_americano", "amount": 1 }
+    "stations": [
+      "cooking"
     ],
-    "products": [{ "type": "item", "id": "ensopado_rustico", "amount": 1 }]
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "tomate",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "batata",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "alface_americano",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "ensopado_rustico",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_neve_esculpida",
-    "stations": ["bancada_bola_neve"],
-    "ingredients": [
-      { "type": "item", "id": "bola_neve", "amount": 1 }
+    "stations": [
+      "bancada_bola_neve"
     ],
-    "products": [{ "type": "category", "id": "neve_esculpida", "amount": 1 }]
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "bola_neve",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "category",
+        "id": "neve_esculpida",
+        "amount": 1
+      }
+    ]
   },
   {
     "id": "recipe_bola_neve",
-    "stations": ["maquina_neve"],
-    "products": [{ "type": "item", "id": "bola_neve", "amount": 1 }],
+    "stations": [
+      "maquina_neve"
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "bola_neve",
+        "amount": 1
+      }
+    ],
     "craftTime": 3600
   }
 ]
