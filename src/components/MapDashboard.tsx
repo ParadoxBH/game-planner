@@ -14,6 +14,7 @@ import {
   Badge,
 } from "@mui/material";
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import type { Entity, Item, Spawn, Shop } from "../types/gameModels";
 import { useApi } from "../hooks/useApi";
 import MapIcon from "@mui/icons-material/Map";
@@ -38,6 +39,7 @@ export const MapDashboard = ({
   onSelectEntity,
   onSwitchToMap,
 }: MapDashboardProps) => {
+  const navigate = useNavigate();
   const { raw: data } = useApi(gameId);
 
   const entities = (data?.entities || []) as Entity[];
@@ -458,10 +460,28 @@ export const MapDashboard = ({
                 {catItems.map((entity) => {
                   const count = entityCounts[entity.id];
                   const isShop = catName.includes("Loja");
+                  
+                  const handleNavigate = (e: React.MouseEvent) => {
+                    e.stopPropagation();
+                    if (isShop) {
+                      navigate(`/game/${gameId}/shops/list/${entity.id}`);
+                    } else if (entity.category === "npc" || (Array.isArray(entity.category) && entity.category.includes("npc"))) {
+                      navigate(`/game/${gameId}/entity/view/${entity.id}`);
+                    } else {
+                      // Tenta decidir se é entidade comum ou item
+                      const isCommonEntity = entities.some(ent => ent.id === entity.id);
+                      if (isCommonEntity) {
+                        navigate(`/game/${gameId}/entity/view/${entity.id}`);
+                      } else {
+                        navigate(`/game/${gameId}/item/view/${entity.id}`);
+                      }
+                    }
+                  };
+
                   return (
                     <Grid item xs={12} sm={6} md={4} lg={3} key={entity.id}>
                       <Card
-                        onClick={() => onSelectEntity(entity.id)}
+                        onClick={handleNavigate}
                         sx={{
                           cursor: "pointer",
                           bgcolor: "rgba(255,255,255,0.02)",
