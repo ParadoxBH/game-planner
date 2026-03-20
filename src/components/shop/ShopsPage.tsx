@@ -23,6 +23,7 @@ import { Tooltip } from "@mui/material";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { useViewMode } from "../../hooks/useViewMode";
 import { MiniMap } from "../common/MiniMap";
+import { parseWKTPoint } from "../../utils/wkt";
 
 export function ShopsPage() {
   const { gameId, category: urlShopId } = useParams<{ gameId: string; category?: string }>();
@@ -379,7 +380,15 @@ export function ShopsPage() {
                     meta={mapMetadata} 
                     markers={[{ 
                       id: 'npc-location', 
-                      position: npcLocation.position,
+                      position: (() => {
+                        if (npcLocation.position) {
+                          return gameId === 'satisfactory' ? [npcLocation.position[0], npcLocation.position[1]] : npcLocation.position as [number, number];
+                        } else if (npcLocation.geom?.type === 'Point' && npcLocation.geom.coordinates) {
+                          const wktCoords = parseWKTPoint(npcLocation.geom.coordinates);
+                          return [wktCoords[1], wktCoords[0]];
+                        }
+                        return [0, 0];
+                      })(),
                       color: '#ff4400'
                     }]}
                     height="100%"
