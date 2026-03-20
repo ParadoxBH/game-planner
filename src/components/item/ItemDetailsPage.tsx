@@ -14,6 +14,7 @@ import {
   Bolt,
   Construction,
   Architecture,
+  Paid,
 } from "@mui/icons-material";
 import { useApi } from "../../hooks/useApi";
 import { StyledContainer } from "../common/StyledContainer";
@@ -140,6 +141,31 @@ export function ItemDetailsPage() {
                     DESCRIÇÃO
                   </Typography>
                   <Typography variant="body2">{item.description}</Typography>
+                </Box>
+              )}
+              
+              {(item.buyPrice !== undefined || item.sellPrice !== undefined) && (
+                <Box sx={{ mt: 1, p: 1.5, bgcolor: 'rgba(255,255,255,0.03)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <Stack spacing={1}>
+                    {item.buyPrice !== undefined && (
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700 }}>PREÇO COMPRA</Typography>
+                        <Stack direction="row" spacing={0.5} alignItems="center">
+                          <Typography variant="body2" sx={{ fontWeight: 800, color: '#ffbb00' }}>{item.buyPrice.toLocaleString()}</Typography>
+                          {itemsMap.get('ouro')?.icon && <img src={itemsMap.get('ouro').icon} style={{ width: 14, height: 14 }} />}
+                        </Stack>
+                      </Box>
+                    )}
+                    {item.sellPrice !== undefined && (
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700 }}>VALOR VENDA</Typography>
+                        <Stack direction="row" spacing={0.5} alignItems="center">
+                          <Typography variant="body2" sx={{ fontWeight: 800, color: '#ffbb00' }}>{item.sellPrice.toLocaleString()}</Typography>
+                          {itemsMap.get('ouro')?.icon && <img src={itemsMap.get('ouro').icon} style={{ width: 14, height: 14 }} />}
+                        </Stack>
+                      </Box>
+                    )}
+                  </Stack>
                 </Box>
               )}
             </Stack>
