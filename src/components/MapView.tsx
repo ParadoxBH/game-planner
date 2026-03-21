@@ -20,8 +20,8 @@ import { EntityDrawer } from "./entity/EntityDrawer";
 import { OutputField } from "./common/OutputField";
 import { loadGamesList } from "../services/dataLoader";
 import { useApi } from "../hooks/useApi";
-import type { Entity, Spawn, GameInfo, MapMetadata } from "../types/gameModels";
-import { parseWKTPoint, formatWKTPoint, formatWKTPolygon } from "../utils/wkt";
+import type { Entity, ReferencePoints, GameInfo, MapMetadata } from "../types/gameModels";
+import { parseWKTPoint, parseWKTPolygon, formatWKTPoint, formatWKTPolygon } from "../utils/wkt";
 import { MapToolbox } from "./MapToolbox";
 import { MapDashboard } from "./MapDashboard";
 import MapIcon from "@mui/icons-material/Map";
@@ -203,7 +203,7 @@ export const MapView = () => {
 
   const selectedMap = useMemo(() => gameInfo?.maps?.find(m => m.id === selectedMapId), [gameInfo, selectedMapId]);
 
-  const { loading: loadingApi, error: errorApi, raw } = useApi(gameId);
+  const { loading: loadingApi, raw } = useApi(gameId);
 
   useEffect(() => {
     loadGamesList().then(games => {
@@ -234,8 +234,7 @@ export const MapView = () => {
   const setSelectedMapId = (id: string) => {
     navigate(`/game/${gameId}/map/${id}/${viewMode}`);
   };
-
-  const spawns = (raw?.spawns as Spawn[]) || [];
+  const referencePoints = (raw?.referencePoints as ReferencePoints[]) || [];
   const entities = raw?.entities || [];
   const items = raw?.items || [];
   const entityLookup = useMemo(() => {
@@ -261,8 +260,8 @@ export const MapView = () => {
   const handleMapClick = (latlng: [number, number]) => {
     if (activeTool === 'polygon') setCurrentPoints(prev => [...prev, latlng]);
     else if (activeTool === 'point') {
-      const spawnObj = { id: `spawn_${Date.now()}`, entityId: "TODO", geom: { type: "Point", coordinates: formatWKTPoint([latlng[1], latlng[0]]) }, mapId: selectedMapId };
-      navigator.clipboard.writeText(JSON.stringify(spawnObj, null, 2)).then(() => { setSnackbarMessage("Ponto copiado!"); setSnackbarOpen(true); });
+      const obj = { id: `point_${Date.now()}`, type: "poi", entityId: "TODO", geom: { type: "Point", coordinates: formatWKTPoint([latlng[1], latlng[0]]) }, mapId: selectedMapId };
+      navigator.clipboard.writeText(JSON.stringify(obj, null, 2)).then(() => { setSnackbarMessage("Ponto copiado!"); setSnackbarOpen(true); });
     }
   };
 
@@ -290,12 +289,49 @@ export const MapView = () => {
             {selectedMap.type === "layered" && selectedMap.urlPattern && Array.from({ length: selectedMap.layers || 1 }, (_, i) => i).map(l => <ImageOverlay key={l} zIndex={l} url={selectedMap.urlPattern!.replace("{layer}", l.toString())} bounds={selectedMap.bounds as LatLngBoundsExpression} />)}
             {selectedMap.type === "single" && selectedMap.url && <ImageOverlay url={selectedMap.url} bounds={selectedMap.bounds as LatLngBoundsExpression} />}
             {selectedMap.type === "tile" && selectedMap.url && <TileLayer url={selectedMap.url} minZoom={selectedMap.minZoom} maxZoom={selectedMap.maxZoom} minNativeZoom={selectedMap.tileMinZoom ?? 4} maxNativeZoom={selectedMap.tileMaxZoom ?? 4} noWrap={true} />}
-            {!loadingApi && spawns.filter(s => !s.mapId || s.mapId === selectedMapId).map(spawn => {
-              const cp = parseWKTPoint(spawn.geom.coordinates);
+            {!loadingApi && referencePoints.filter(s => !s.mapId || s.mapId === selectedMapId).map(point => {
+              if (point.geom.type === "Polygon") {
+                const coords = parseWKTPolygon(point.geom.coordinates);
+                return (
+                  <Polygon 
+                    key={point.id} 
+                    positions={coords.map(c => [c[1], c[0]])} 
+                    pathOptions={{ 
+                      color: point.type === "biome" ? theme.palette.success.main : theme.palette.primary.main, 
+                      fillOpacity: 0.1, 
+                      weight: 2 
+                    }}
+                  >
+                    <Popup>
+                      <Typography variant="subtitle2">{point.name || point.id}</Typography>
+                      {point.description && <Typography variant="caption">{point.description}</Typography>}
+                    </Popup>
+                  </Polygon>
+                );
+              }
+
+              const cp = parseWKTPoint(point.geom.coordinates);
               const pos: [number, number] = [cp[1], cp[0]];
+              const entity = entityLookup[point.entityId] || items.find(i => i.id === point.entityId);
+              
               return (
-                <Marker key={spawn.id} position={pos} icon={divIcon({ html: `<div style="width: 32px; height: 32px; border: 2px solid ${theme.palette.primary.main}; border-radius: ${theme.shape.borderRadius}px; background: ${theme.designTokens.colors.glassBg}; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.5); transform: translate(-16px, -16px);"><img src="${entityLookup[spawn.entityId]?.icon || items.find(i => i.id === spawn.entityId)?.icon || '/img/placeholder.png'}" style="width: 85%; height: 85%; object-fit: contain;" /></div>`, className: 'custom-entity-icon' })}>
-                  <Popup><SimplifiedEntity entity={entityLookup[spawn.entityId] || { id: spawn.entityId, name: spawn.entityId, category: spawn.type || 'resource', icon: items.find(i => i.id === spawn.entityId)?.icon }} position={pos} mode={spawn.mode} respawnDelay={spawn.respawnDelay} onExpand={() => handlePush({ type: "entity", id: spawn.entityId })} /></Popup>
+                <Marker 
+                  key={point.id} 
+                  position={pos} 
+                  icon={divIcon({ 
+                    html: `<div style="width: 32px; height: 32px; border: 2px solid ${point.type === 'poi' ? theme.palette.secondary.main : theme.palette.primary.main}; border-radius: ${theme.shape.borderRadius}px; background: ${theme.designTokens.colors.glassBg}; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.5); transform: translate(-16px, -16px);"><img src="${point.icon || entity?.icon || '/img/placeholder.png'}" style="width: 85%; height: 85%; object-fit: contain;" /></div>`, 
+                    className: 'custom-entity-icon' 
+                  })}
+                >
+                  <Popup>
+                    <SimplifiedEntity 
+                      entity={entity || { id: point.entityId, name: point.name || point.entityId, category: point.type || 'resource', icon: point.icon }} 
+                      position={pos} 
+                      mode={point.mode} 
+                      respawnDelay={point.respawnDelay} 
+                      onExpand={() => handlePush({ type: "entity", id: point.entityId })} 
+                    />
+                  </Popup>
                 </Marker>
               );
             })}
@@ -306,7 +342,7 @@ export const MapView = () => {
         {viewMode === "map" && <MapInfoOverlay gameName={gameInfo.name} coords={cursorCoords} maps={gameInfo.maps} selectedMapId={selectedMapId} onSelectMap={setSelectedMapId} />}
       </Box>
 
-      {navigationStack.length > 0 && <EntityDrawer stack={navigationStack} entities={entities} items={items} spawns={spawns} shops={raw?.shops || []} maps={gameInfo.maps} onSelectMap={setSelectedMapId} onPush={handlePush} onPop={() => setNavigationStack(s => s.slice(0, -1))} onClose={() => setNavigationStack([])} />}
+      {navigationStack.length > 0 && <EntityDrawer stack={navigationStack} entities={entities} items={items} referencePoints={referencePoints} shops={raw?.shops || []} maps={gameInfo.maps} onSelectMap={setSelectedMapId} onPush={handlePush} onPop={() => setNavigationStack(s => s.slice(0, -1))} onClose={() => setNavigationStack([])} />}
       {viewMode === "map" && <MapToolbox activeTool={activeTool} hasPoints={currentPoints.length > 0} onSelectTool={setActiveTool} onConfirm={() => { navigator.clipboard.writeText(JSON.stringify({ id: `zone_${Date.now()}`, geom: { type: "Polygon", coordinates: formatWKTPolygon(currentPoints.map(p => [p[1], p[0]])) }, mapId: selectedMapId }, null, 2)); setSnackbarMessage("Zona copiada!"); setSnackbarOpen(true); setActiveTool(null); setCurrentPoints([]); }} onClear={() => setCurrentPoints([])} onCancel={() => { setActiveTool(null); setCurrentPoints([]); }} />}
       <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={() => setSnackbarOpen(false)} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}><Alert severity="info" variant="filled" sx={{ width: '100%', borderRadius: 2 }}>{snackbarMessage}</Alert></Snackbar>
     </Box>

@@ -23,7 +23,7 @@ import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
 import { RecipeCard } from "../recipe/RecipeCard";
 import { useMemo } from "react";
-import type { MapMetadata, Spawn, GameInfo, GameDataTypes } from "../../types/gameModels";
+import type { MapMetadata, ReferencePoints, GameInfo, GameDataTypes } from "../../types/gameModels";
 import { MiniMap } from "../common/MiniMap";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
@@ -39,16 +39,16 @@ export function EntityDetailsPage() {
 
   const gameInfo = raw?.gameInfo as GameInfo | undefined;
 
-  const groupedSpawns = useMemo(() => {
-    if (!entityDetails?.spawns) return new Map<string, Spawn[]>();
-    const map = new Map<string, Spawn[]>();
-    entityDetails.spawns.forEach((s: any) => {
+  const groupedReferencePoints = useMemo(() => {
+    if (!entityDetails?.referencePoints) return new Map<string, ReferencePoints[]>();
+    const map = new Map<string, ReferencePoints[]>();
+    entityDetails.referencePoints.forEach((s: any) => {
       const mapId = s.mapId || "Mundo Aberto";
       if (!map.has(mapId)) map.set(mapId, []);
       map.get(mapId)!.push(s);
     });
     return map;
-  }, [entityDetails?.spawns]);
+  }, [entityDetails?.referencePoints]);
 
   const getMapMetadata = (mapId: string): MapMetadata | undefined => {
     return gameInfo?.maps?.find(m => m.id === mapId);
@@ -404,9 +404,9 @@ export function EntityDetailsPage() {
                 Localizações
               </Typography>
             </Stack>
-            {groupedSpawns.size > 0 ? (
+            {groupedReferencePoints.size > 0 ? (
               <Grid container spacing={3}>
-                {Array.from(groupedSpawns.entries()).map(([mapId, mapSpawns]) => {
+                {Array.from(groupedReferencePoints.entries()).map(([mapId, mapPoints]) => {
                   const meta = getMapMetadata(mapId);
 
                   return (
@@ -427,7 +427,7 @@ export function EntityDetailsPage() {
                                     {meta?.name || mapId}
                                 </Typography>
                                 <Typography variant="caption" color="text.secondary">
-                                    {mapSpawns.length} Ocorrência(s)
+                                    {mapPoints.length} Ocorrência(s)
                                 </Typography>
                             </Box>
                             <MapIcon sx={{ opacity: 0.3 }} />
@@ -448,11 +448,9 @@ export function EntityDetailsPage() {
                           {meta ? (
                             <MiniMap 
                                 meta={meta}
-                                markers={mapSpawns.map(s => {
+                                markers={mapPoints.map(s => {
                                     let pos: [number, number] = [0, 0];
-                                    if (s.position) {
-                                      pos = gameId === 'satisfactory' ? [s.position[0], s.position[1]] : s.position as [number, number];
-                                    } else if (s.geom?.type === 'Point' && s.geom.coordinates) {
+                                    if (s.geom?.type === 'Point' && s.geom.coordinates) {
                                       const wktCoords = parseWKTPoint(s.geom.coordinates);
                                       // WKT is [X, Y], Leaflet wants [Y, X] for Lat/Lng
                                       pos = [wktCoords[1], wktCoords[0]];

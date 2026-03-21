@@ -42,7 +42,7 @@ export interface Entity {
   drops?: EntityDrop[];
 }
 
-export type GameDataTypes = "entity" | "item" | "recipe" | "spawn" | "event" | "skill" | "category";
+export type GameDataTypes = "entity" | "item" | "recipe" | "reference_point" | "event" | "skill" | "category";
 
 export interface RecipeItem {
   id: string;
@@ -154,11 +154,15 @@ export interface GameInfo {
   maps: MapMetadata[];
 }
 
-export interface Spawn {
+export interface ReferencePoints {
   id: string;
+  type: "spawn" | "poi" | "location" | "biome" | "rule";
   entityId: string;
-  type?: "position" | "range" | "geom" | "rule";
-  locationId?: string; // ID da Região/Mapa onde spawna
+  name?: string;
+  description?: string;
+  icon?: string;
+  locationId?: string; // ID da Região/Mapa onde spawna (legado ou para regras)
+  parentId?: string; // Para hierarquia (ex: POI dentro de Biome)
   mode?: "once" | "respawn";
   conditions?: Record<string, any>;
   chance?: number;
@@ -169,6 +173,7 @@ export interface Spawn {
   };
   mapId?: string;
   respawnDelay?: number;
+  data?: Record<string, any>;
 }
 
 export interface RedemptionCode {

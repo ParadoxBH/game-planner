@@ -15,14 +15,12 @@ import {
 } from "@mui/material";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Entity, Item, Spawn, Shop } from "../types/gameModels";
+import type { Entity, Item, ReferencePoints, Shop } from "../types/gameModels";
 import { useApi } from "../hooks/useApi";
 import MapIcon from "@mui/icons-material/Map";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import GroupsIcon from "@mui/icons-material/Groups";
 import ExploreIcon from "@mui/icons-material/Explore";
-import AccountTreeIcon from "@mui/icons-material/AccountTree";
-import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import InventoryIcon from "@mui/icons-material/Inventory";
 
@@ -43,7 +41,7 @@ export const MapDashboard = ({
   const { raw: data } = useApi(gameId);
 
   const entities = (data?.entities || []) as Entity[];
-  const spawns = (data?.spawns || []) as Spawn[];
+  const referencePoints = (data?.referencePoints || []) as ReferencePoints[];
   const shops = (data?.shops || []) as Shop[];
   const itemLookup = useMemo(() => {
     const lookup: Record<string, Item> = {};
@@ -51,37 +49,34 @@ export const MapDashboard = ({
     return lookup;
   }, [data]);
 
-  // Filtro de Spawns deste mapa
-  const mapSpawns = useMemo(() => {
-    return spawns.filter((s) => !s.mapId || s.mapId === selectedMapId);
-  }, [spawns, selectedMapId]);
+  // Filtro de Pontos deste mapa
+  const mapPoints = useMemo(() => {
+    return referencePoints.filter((s) => !s.mapId || s.mapId === selectedMapId);
+  }, [referencePoints, selectedMapId]);
 
   // Contagem de Ocorrências por Entidade
   const entityCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    mapSpawns.forEach((s) => {
+    mapPoints.forEach((s) => {
       counts[s.entityId] = (counts[s.entityId] || 0) + 1;
     });
     return counts;
-  }, [mapSpawns]);
+  }, [mapPoints]);
 
   // Regiões (Biomas, POIs, Zonas)
   const regions = useMemo(() => {
-    return entities.filter((e) => {
-      const cats = Array.isArray(e.category) ? e.category : [e.category || ""];
-      return cats.some((c) =>
-        ["location", "biome", "poi", "zone", "region"].includes(
-          c.toLowerCase(),
-        ),
+    return referencePoints.filter((p) => {
+      return ["location", "biome", "poi", "zone", "region"].includes(
+        p.type?.toLowerCase() || "",
       );
     });
-  }, [entities]);
+  }, [referencePoints]);
 
   // Entidades presentes no mapa (através de spawns)
   const mapEntities = useMemo(() => {
-    const entityIds = new Set(mapSpawns.map((s) => s.entityId));
+    const entityIds = new Set(mapPoints.map((s) => s.entityId));
     return entities.filter((e) => entityIds.has(e.id));
-  }, [entities, mapSpawns]);
+  }, [entities, mapPoints]);
 
   // Lojas presentes no mapa (baseado nos NPCs que têm spawn no mapa)
   const mapShops = useMemo(() => {
@@ -141,7 +136,7 @@ export const MapDashboard = ({
   // Estatísticas Rápidas
   const stats = useMemo(
     () => ({
-      totalSpawns: mapSpawns.length,
+      totalSpawns: mapPoints.length,
       uniqueEntities: mapEntities.length,
       npcs: mapEntities.filter((e) => {
         const cats = Array.isArray(e.category)
@@ -152,7 +147,7 @@ export const MapDashboard = ({
       shops: mapShops.length,
       regions: regions.length,
     }),
-    [mapSpawns, mapEntities, mapShops, regions],
+    [mapPoints, mapEntities, mapShops, regions],
   );
 
   const hasRegions = regions.length > 0;
@@ -243,7 +238,7 @@ export const MapDashboard = ({
             color: "#ffc107",
           },
         ].map((stat, i) => (
-          <Grid item xs={6} md={3} key={i}>
+          <Grid size={{ xs: 6, md: 3 }} key={i}>
             <Paper
               sx={{
                 p: 2.5,
@@ -289,7 +284,7 @@ export const MapDashboard = ({
           {regions
             .filter((r) => !r.parentId)
             .map((region) => (
-              <Grid item xs={12} md={6} lg={4} key={region.id}>
+              <Grid size={{ xs: 12, md: 6, lg: 4 }} key={region.id}>
                 <Card
                   sx={{
                     height: "100%",
@@ -328,7 +323,7 @@ export const MapDashboard = ({
                         </Typography>
                         <Chip
                           label={String(
-                            region.category || "Região",
+                            region.type || "Região",
                           ).toUpperCase()}
                           size="small"
                           color="primary"
@@ -347,8 +342,8 @@ export const MapDashboard = ({
                       {region.description || "Sem descrição disponível."}
                     </Typography>
                     <Stack spacing={2}>
-                      {region.potentialSpawns &&
-                        region.potentialSpawns.length > 0 && (
+                      {region.data?.potentialSpawns &&
+                        region.data.potentialSpawns.length > 0 && (
                           <Box>
                             <Stack
                               direction="row"
@@ -367,7 +362,7 @@ export const MapDashboard = ({
                                 variant="caption"
                                 sx={{ opacity: 0.5 }}
                               >
-                                {region.potentialSpawns.length} itens
+                                {region.data.potentialSpawns.length} itens
                               </Typography>
                             </Stack>
                             <Stack
@@ -376,7 +371,7 @@ export const MapDashboard = ({
                               flexWrap="wrap"
                               useFlexGap
                             >
-                              {region.potentialSpawns.slice(0, 10).map((ps) => (
+                              {region.data.potentialSpawns.slice(0, 10).map((ps: any) => (
                                 <Tooltip
                                   key={ps.entityId}
                                   title={`${entities.find((e) => e.id === ps.entityId)?.name || ps.entityId}`}
@@ -479,7 +474,7 @@ export const MapDashboard = ({
                   };
 
                   return (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={entity.id}>
+                    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={entity.id}>
                       <Card
                         onClick={handleNavigate}
                         sx={{

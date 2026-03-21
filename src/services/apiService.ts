@@ -2,6 +2,7 @@ import type {
   Item,
   Recipe,
   Entity,
+  ReferencePoints,
 } from "../types/gameModels";
 import type {
   NormalizedRecipe,
@@ -164,7 +165,7 @@ export class ApiService {
     const children = this.data.entities.filter(e => e.parentId === entityId);
 
     // Potential Spawns (Explicit Rules)
-    const explicitSpawns = this.data.spawns
+    const explicitSpawns = this.data.referencePoints
       .filter(s => s.locationId === entityId || (s.type === "rule" && s.locationId === entityId))
       .map(s => ({
         entity: this.data.entities.find(e => e.id === s.entityId) || this.data.items.find(i => i.id === s.entityId),
@@ -179,7 +180,7 @@ export class ApiService {
     if (entity.geom?.type === "Polygon") {
       const polygonCoords = parseWKTPolygon(entity.geom.coordinates);
       if (polygonCoords.length > 0) {
-        const pointsInside = this.data.spawns.filter(s => {
+        const pointsInside = this.data.referencePoints.filter(s => {
           if (!s.geom || s.geom.type !== "Point") return false;
           const pointCoords = parseWKTPoint(s.geom.coordinates);
           // WKT is [X, Y]
@@ -220,7 +221,7 @@ export class ApiService {
         });
       });
 
-    const spawns = this.data.spawns.filter((s) => s.entityId.toLowerCase() === entityId.toLowerCase());
+    const referencePoints = this.data.referencePoints.filter((s) => s.entityId?.toLowerCase() === entityId.toLowerCase());
     const shop = this.data.shops.find((s) => s.npcId?.toLowerCase() === entityId.toLowerCase());
 
     return {
@@ -230,7 +231,7 @@ export class ApiService {
       potentialSpawns: uniquePotentialSpawns,
       drops,
       recipes,
-      spawns,
+      referencePoints,
       shop,
     };
   }

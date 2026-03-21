@@ -6,13 +6,13 @@ import { BaseDrawer } from "../BaseDrawer";
 import { EntityDrawerContent } from "./EntityDrawerContent";
 import { ItemDrawerContent } from "../item/ItemDrawerContent";
 
-import type { Entity, Item, Spawn, MapMetadata, Shop } from "../../types/gameModels";
+import type { Entity, Item, ReferencePoints, MapMetadata, Shop } from "../../types/gameModels";
 
 interface EntityDrawerProps {
   stack: NavigationItem[];
   entities: Entity[];
   items: Item[];
-  spawns: Spawn[];
+  referencePoints: ReferencePoints[];
   shops: Shop[];
   maps: MapMetadata[];
   onSelectMap: (mapId: string) => void;
@@ -25,7 +25,7 @@ export const EntityDrawer = ({
   stack,
   entities,
   items,
-  spawns,
+  referencePoints,
   shops,
   maps,
   onSelectMap,
@@ -71,10 +71,10 @@ export const EntityDrawer = ({
   const mapOccurrences = useMemo(() => {
     if (currentItem?.type !== "entity") return [];
 
-    const relevantSpawns = spawns.filter((s) => s.entityId === currentItem.id);
+    const relevantPoints = referencePoints.filter((s) => s.entityId === currentItem.id);
     const counts: Record<string, number> = {};
 
-    relevantSpawns.forEach((s) => {
+    relevantPoints.forEach((s) => {
       const mapId = s.mapId || (maps.length > 0 ? maps[0].id : "default");
       counts[mapId] = (counts[mapId] || 0) + 1;
     });
@@ -91,7 +91,7 @@ export const EntityDrawer = ({
         };
       })
       .sort((a, b) => b.count - a.count);
-  }, [currentItem, spawns, maps]);
+  }, [currentItem, referencePoints, maps]);
 
   if (!currentItem) return null;
 
