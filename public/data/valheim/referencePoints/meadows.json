@@ -1,28 +1,5 @@
 [
-  {
-    "id": "biome_meadows",
-    "type": "biome",
-    "entityId": "biome_meadows",
-    "name": "Meadows",
-    "description": "O bioma inicial calmo com grama e árvores esparsas.",
-    "icon": "https://placehold.co/100/333/fff?text=Meadows",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(0 0)"
-    }
-  },
-  {
-    "id": "biome_black_forest",
-    "type": "biome",
-    "entityId": "biome_black_forest",
-    "name": "Black Forest",
-    "description": "Uma floresta densa e escura, lar de Greydwarfs e depósitos de Cobre/Estanho.",
-    "icon": "https://placehold.co/100/333/fff?text=Forest",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(100 100)"
-    }
-  },
+    
   {
     "id": "poi_burial_chambers",
     "type": "poi",

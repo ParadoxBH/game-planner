@@ -4,7 +4,7 @@
     "name": "Mundo Procedural",
     "type": "procedural",
     "defaultView": "dashboard",
-    "availableViews": ["map", "dashboard"],
+    "availableViews": ["dashboard"],
     "bounds": [
       [-10000, -10000],
       [10000, 10000]
