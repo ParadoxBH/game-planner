@@ -48,6 +48,10 @@ export function useNavigation(gameId: string | null) {
   const { data: items } = useGameData<any[]>(gameId || "", "items");
   const { data: recipes } = useGameData<any[]>(gameId || "", "recipes");
   const { data: shops } = useGameData<any[]>(gameId || "", "shops");
+  const { data: events } = useGameData<any[]>(gameId || "", "events");
+  const { data: codes } = useGameData<any[]>(gameId || "", "codes");
+  const { data: maps } = useGameData<any[]>(gameId || "", "maps");
+  const { data: quests } = useGameData<any[]>(gameId || "", "quests");
 
   const dynamicEntityCategories = useMemo(() => {
     if (!entities) return [];
@@ -107,7 +111,7 @@ export function useNavigation(gameId: string | null) {
     });
   }, [shops, entities, gameId]);
 
-  const menuItems: NavigationItem[] = useMemo(() => [
+  const allMenuItems: NavigationItem[] = useMemo(() => [
     { 
       id: "map",
       label: "Mapa", 
@@ -186,6 +190,20 @@ export function useNavigation(gameId: string | null) {
       ]
     },
   ], [gameId, theme, dynamicEntityCategories, dynamicItemCategories, dynamicRecipeStations, dynamicShops]);
+
+  const menuItems = useMemo(() => {
+    return allMenuItems.filter(item => {
+      if (item.id === "map") return maps && maps.length > 0;
+      if (item.id === "entities") return entities && entities.length > 0;
+      if (item.id === "items") return items && items.length > 0;
+      if (item.id === "recipes") return recipes && recipes.length > 0;
+      if (item.id === "shops") return shops && shops.length > 0;
+      if (item.id === "events") return events && events.length > 0;
+      if (item.id === "codes") return codes && codes.length > 0;
+      if (item.id === "quests") return quests && quests.length > 0;
+      return true;
+    });
+  }, [allMenuItems, maps, entities, items, recipes, shops, events, codes]);
 
   return { menuItems };
 }

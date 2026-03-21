@@ -22,7 +22,12 @@ export function useApi(gameId: string | undefined) {
     const datasets = ["items", "recipes", "entity", "shops", "events", "referencePoints", "codes"];
 
     Promise.all([
-      ...(datasets.map((ds) => loadGameData<any>(gameId, ds)) as Promise<any>[]),
+      ...(datasets.map((ds) => 
+        loadGameData<any>(gameId, ds).catch((err) => {
+          console.warn(`Dataset ${ds} not found for ${gameId}, using empty list.`, err);
+          return [];
+        })
+      ) as Promise<any>[]),
       loadGamesList(),
       loadGameMaps(gameId)
     ])
