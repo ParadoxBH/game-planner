@@ -1,4 +1,4 @@
-import { Box, Typography, Stack } from "@mui/material";
+import { Box, Typography, Stack, useTheme } from "@mui/material";
 import { DataCard } from "./DataCard";
 
 interface OutputFieldProps {
@@ -12,6 +12,9 @@ interface OutputFieldProps {
  * Perfect for coordinates, regions, and technical IDs.
  */
 export const OutputField = ({ label, values, flex }: OutputFieldProps) => {
+  const theme = useTheme();
+  const { spacing: dtSpacing, borderRadius: dtRadius } = theme.designTokens;
+
   return (
     <Box sx={{ flex }}>
       <Typography
@@ -19,23 +22,24 @@ export const OutputField = ({ label, values, flex }: OutputFieldProps) => {
         sx={{ 
           color: "designTokens.colors.fieldLabel", 
           fontSize: "0.65rem", 
-          mb: 0.5,
+          mb: dtSpacing.fieldGap,
           fontWeight: 700,
           textTransform: "none"
         }}
       >
         {label}
       </Typography>
-      <Stack direction="row" spacing={0.5}>
+      <Stack direction="row" spacing={dtSpacing.itemGap}>
         {values.map((v, i) => (
           <DataCard
             key={i}
             flex={1}
             sx={{
-              p: 0.75,
+              p: 0.75, // Mantendo compacto para valores técnicos
               textAlign: "center",
               justifyContent: "center",
-              minHeight: "28px"
+              minHeight: "28px",
+              borderRadius: dtRadius
             }}
           >
             <Typography

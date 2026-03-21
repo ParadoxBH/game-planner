@@ -95,7 +95,8 @@ export function ListingDataView<T>({
           <Box sx={{ 
             display: 'grid', 
             gridTemplateColumns: `repeat(auto-fill, minmax(${typeof cardMinWidth === 'number' ? `${cardMinWidth}px` : cardMinWidth}, 1fr))`, 
-            gap: theme.spacing(gridProps.spacing || 3) 
+            gap: theme.spacing(1),
+            borderRadius: 1,
           }}>
             {data.map((item, index) => (
               <Box key={index}>

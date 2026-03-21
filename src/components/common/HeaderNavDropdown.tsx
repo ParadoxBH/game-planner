@@ -49,13 +49,12 @@ export function HeaderNavDropdown({
       sx={{
         display: "flex",
         alignItems: "center",
-        my: 2,
-        mx: 1,
         borderBottom: isActive ? "2px solid #ff4400" : "2px solid transparent",
         transition: "all 0.2s",
         "&:hover": {
           backgroundColor: "rgba(255, 255, 255, 0.05)",
         },
+        px: 0.5,
       }}
     >
       <Button
@@ -66,7 +65,6 @@ export function HeaderNavDropdown({
           color: isActive ? "primary.main" : "white",
           textTransform: "none",
           borderRadius: 0,
-          px: 1,
           minWidth: "auto",
           "&:hover": {
             color: "primary.main",
@@ -87,7 +85,6 @@ export function HeaderNavDropdown({
           color: isActive ? "primary.main" : "white",
           borderRadius: 0,
           minWidth: "auto",
-          px: 0.5,
           "&:hover": {
             color: "primary.main",
             backgroundColor: "transparent",
@@ -112,7 +109,6 @@ export function HeaderNavDropdown({
         }}
         PaperProps={{
           sx: {
-            mt: 0.5,
             backgroundColor: 'rgba(20, 20, 20, 0.95)',
             backdropFilter: 'blur(16px)',
             borderRadius: 1,
@@ -123,9 +119,6 @@ export function HeaderNavDropdown({
             '& .MuiMenuItem-root': {
               fontSize: '0.9rem',
               fontWeight: 500,
-              py: 1,
-              px: 2,
-              mx: 0.5,
               borderRadius: 0.5,
               transition: 'all 0.2s',
               color: 'text.secondary',

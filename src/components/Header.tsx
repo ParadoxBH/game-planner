@@ -27,7 +27,7 @@ export function Header() {
   const { menuItems } = useNavigation(gameId);
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: theme.palette.header }}>
+    <AppBar position="static" sx={{ backgroundColor: theme.palette.header, borderRadius: 0 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Stack sx={{ flexGrow: 1 }} alignItems={"start"}>
@@ -61,7 +61,7 @@ export function Header() {
 
           {/* Somente exibe abas extras se estiver dentro de um jogo */}
           {gameId && (
-            <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: 'center' }}>
+            <Stack direction={"row"} sx={{ alignItems: 'center' }}>
               {menuItems.map((item) => {
                 if (item.isDropdown && item.options) {
                   return (
@@ -84,10 +84,8 @@ export function Header() {
                     to={item.path}
                     startIcon={item.icon}
                     sx={{ 
-                      my: 2, 
-                      color: isActive ? "primary.main" : "white", 
+                      color: isActive ? "primary.main" : "white",
                       display: "flex", 
-                      mx: 1,
                       textTransform: 'none',
                       transition: 'all 0.2s',
                       borderBottom: isActive ? '2px solid #ff4400' : '2px solid transparent',
@@ -102,7 +100,7 @@ export function Header() {
                   </Button>
                 );
               })}
-            </Box>
+            </Stack>
           )}
         </Toolbar>
       </Container>

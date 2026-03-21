@@ -16,12 +16,12 @@ export function GameDashboard() {
       title={`Dashboard: ${gameId ? capitalize(gameId) : ''}`}
       label="Acesse as ferramentas e dados do seu jogo."
     >
-      <Grid container spacing={3}>
+      <Grid container spacing={1}>
         {menuItems.map((item) => (
           <Grid size={{ xs: 12, sm: 6, md: 3 }} key={item.id}>
             <Card sx={{ 
               height: '100%',
-              borderRadius: 2, 
+              borderRadius: 1, 
               backgroundColor: 'rgba(255, 255, 255, 0.02)',
               border: '1px solid rgba(255, 255, 255, 0.05)',
               transition: 'all 0.2s',

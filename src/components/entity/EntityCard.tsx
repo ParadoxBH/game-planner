@@ -34,7 +34,7 @@ export function EntityCard({ entity, showPrices, hasShop, onClick }: EntityCardP
     <Card sx={{ 
       backgroundColor: 'rgba(255, 255, 255, 0.02)', 
       backdropFilter: 'blur(16px)',
-      borderRadius: 2,
+      borderRadius: 1,
       border: 1,
       borderColor: 'divider',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',

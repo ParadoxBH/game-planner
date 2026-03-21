@@ -7,7 +7,9 @@ declare module "@mui/material/styles" {
       spacing: {
         fieldGap: number;        // Espaço entre label e valor
         sectionGap: number;      // Espaço entre seções (blocos)
-        itemGap: number;         // Espaço entre itens de uma lista
+        itemGap: number;         // Espaço entre itens de uma lista (mesmo contexto)
+        contentGap: number;      // Espaço entre blocos de conteúdo diferente
+        cardPadding: number;     // Preenchimento interno de cards
       };
       colors: {
         fieldLabel: string;
@@ -15,6 +17,7 @@ declare module "@mui/material/styles" {
         glassBg: string;
         glassBorder: string;
       };
+      borderRadius: number;
     };
   }
   interface Palette {
@@ -29,6 +32,8 @@ declare module "@mui/material/styles" {
         fieldGap?: number;
         sectionGap?: number;
         itemGap?: number;
+        contentGap?: number;
+        cardPadding?: number;
       };
       colors?: {
         fieldLabel?: string;
@@ -36,6 +41,7 @@ declare module "@mui/material/styles" {
         glassBg?: string;
         glassBorder?: string;
       };
+      borderRadius?: number;
     };
   }
 }
@@ -80,7 +86,9 @@ export const theme = createTheme({
     spacing: {
       fieldGap: 0.5,     // Equivale a theme.spacing(0.5)
       sectionGap: 3,     // Equivale a theme.spacing(3)
-      itemGap: 1.5,      // Equivale a theme.spacing(1.5)
+      itemGap: 1,        // Equivale a theme.spacing(1) - mesmo contexto
+      contentGap: 2,     // Equivale a theme.spacing(2) - blocos diferentes
+      cardPadding: 3,    // Equivale a theme.spacing(3)
     },
     colors: {
       fieldLabel: "rgba(255, 255, 255, 0.5)",
@@ -88,6 +96,7 @@ export const theme = createTheme({
       glassBg: "rgba(11, 11, 11, 0.8)",
       glassBorder: "rgba(255, 255, 255, 0.1)",
     },
+    borderRadius: 1,
   },
   components: {
     MuiCssBaseline: {
@@ -136,6 +145,7 @@ export const theme = createTheme({
           backgroundImage: "none",
           backgroundColor: "#0d0d0d",
           border: "1px solid rgba(255, 255, 255, 0.1)",
+          borderRadius: 8, // Mantendo 8px como padrão para RADIUS 1 (theme.spacing(1))
         },
       },
     },
@@ -144,7 +154,7 @@ export const theme = createTheme({
         root: {
           textTransform: "none",
           fontWeight: 700,
-          borderRadius: 8,
+          borderRadius: 8, // RADIUS 1
         },
         containedPrimary: {
           boxShadow: "none",

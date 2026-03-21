@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material";
 import type { ReactNode } from "react";
 
@@ -15,6 +15,8 @@ interface DataCardProps {
  * Unifies the look of boxed information across the project.
  */
 export const DataCard = ({ children, onClick, flex, sx = {}, hoverable }: DataCardProps) => {
+  const theme = useTheme();
+  const { spacing: dtSpacing, borderRadius: dtRadius } = theme.designTokens;
   const isClickable = Boolean(onClick) || hoverable;
 
   return (
@@ -23,8 +25,8 @@ export const DataCard = ({ children, onClick, flex, sx = {}, hoverable }: DataCa
       sx={{
         flex,
         bgcolor: "rgba(255,255,255,0.03)",
-        p: 1.5,
-        borderRadius: 1,
+        p: dtSpacing.cardPadding,
+        borderRadius: dtRadius,
         border: 1,
         borderColor: "divider",
         transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",

@@ -1,32 +1,31 @@
 import {
-  Box,
   Typography,
-  Card,
-  CardContent,
   Grid,
   Stack,
   Button,
-  Chip,
   Avatar,
   Tooltip,
   Divider,
-  Paper,
-  Badge,
+  Box,
 } from "@mui/material";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Entity, Item, ReferencePoints, Shop, MapMetadata } from "../types/gameModels";
 import { useApi } from "../hooks/useApi";
+import { useTheme } from "@mui/material/styles";
 import MapIcon from "@mui/icons-material/Map";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import GroupsIcon from "@mui/icons-material/Groups";
 import ExploreIcon from "@mui/icons-material/Explore";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import InventoryIcon from "@mui/icons-material/Inventory";
+import { StyledContainer } from "./common/StyledContainer";
+import { DataCard } from "./common/DataCard";
+import { DataChip } from "./common/DataChip";
 
 interface MapDashboardProps {
   gameId: string;
   selectedMapId: string;
+  availableViews?: string[];
   onSelectEntity: (entityId: string) => void;
   onSwitchToMap: () => void;
 }
@@ -34,11 +33,15 @@ interface MapDashboardProps {
 export const MapDashboard = ({
   gameId,
   selectedMapId,
+  availableViews = ["map", "dashboard"],
   onSelectEntity,
   onSwitchToMap,
 }: MapDashboardProps) => {
   const navigate = useNavigate();
+  const theme = useTheme();
   const { raw: data } = useApi(gameId);
+
+  const { spacing: dtSpacing, borderRadius: dtRadius } = theme.designTokens;
 
   const entities = (data?.entities || []) as Entity[];
   const referencePoints = (data?.referencePoints || []) as ReferencePoints[];
@@ -49,6 +52,8 @@ export const MapDashboard = ({
     data?.items?.forEach((i: Item) => (lookup[i.id] = i));
     return lookup;
   }, [data]);
+
+  const currentMap = useMemo(() => maps.find(m => m.id === selectedMapId), [maps, selectedMapId]);
 
   // Filtro de Pontos deste mapa
   const mapPoints = useMemo(() => {
@@ -99,9 +104,7 @@ export const MapDashboard = ({
   const globalCategories = useMemo(() => {
     const categories: Record<string, Entity[]> = {};
 
-    // Adicionar Lojas como uma categoria se existirem
     if (mapShops.length > 0) {
-      // Criamos entidades virtuais para as lojas para reaproveitar o layout de grid
       categories["Lojas & Comércio"] = mapShops.map(
         (s) =>
           ({
@@ -134,7 +137,6 @@ export const MapDashboard = ({
     return categories;
   }, [mapEntities, mapShops, entities]);
 
-  // Estatísticas Rápidas
   const stats = useMemo(
     () => ({
       totalSpawns: mapPoints.length,
@@ -154,401 +156,367 @@ export const MapDashboard = ({
   const hasRegions = regions.length > 0;
 
   return (
-    <Box
-      sx={{
-        p: 4,
-        pt: 8,
-        height: "100%",
-        overflowY: "auto",
-        color: "text.primary",
-        bgcolor: "#0b0b0b",
-      }}
-    >
-      {/* Cabeçalho Adaptativo */}
-      <Stack
-        direction={{ xs: "column", md: "row" }}
-        justifyContent="space-between"
-        alignItems="flex-start"
-        sx={{ mb: 6 }}
-        spacing={3}
-      >
-        <Box>
-          <Typography
-            variant="h3"
-            fontWeight={900}
-            gutterBottom
-            sx={{ letterSpacing: "-1.5px" }}
-          >
-            {maps?.find((m: any) => m.id === selectedMapId)
-              ?.name || "Dashboard"}
-          </Typography>
-          <Typography
-            variant="h6"
-            color="text.secondary"
-            sx={{ fontWeight: 400, maxWidth: 600 }}
-          >
-            {hasRegions
-              ? "Exploração detalhada por zonas geográficas e biomas."
-              : "Visão analítica completa de todos os recursos, NPCs e lojas mapeadas."}
-          </Typography>
-        </Box>
+    <StyledContainer
+      title={currentMap?.name || "Dashboard"}
+      label={hasRegions
+        ? "Exploração detalhada por zonas geográficas e biomas."
+        : "Visão analítica completa de todos os recursos, NPCs e lojas mapeadas."}
+      actionsEnd={availableViews.includes("map") && (
         <Button
           variant="contained"
           startIcon={<MapIcon />}
           onClick={onSwitchToMap}
-          size="large"
+          size="small"
           sx={{
-            borderRadius: 3,
-            px: 4,
-            py: 2,
+            borderRadius: 2,
+            px: 3,
             textTransform: "none",
-            fontWeight: 800,
-            fontSize: "1.1rem",
-            boxShadow: "0 8px 32px rgba(255, 68, 0, 0.3)",
+            fontWeight: 700,
           }}
         >
-          Voltar ao Mapa Geográfico
+          Visualizar no Mapa
         </Button>
-      </Stack>
-
-      {/* Cards de Estatísticas */}
-      <Grid container spacing={2} sx={{ mb: 6 }}>
-        {[
-          {
-            label: "Ocorrências",
-            value: stats.totalSpawns,
-            icon: <ExploreIcon />,
-            color: "#ff4400",
-          },
-          {
-            label: "Tipos Ouro",
-            value: stats.uniqueEntities,
-            icon: <MapIcon />,
-            color: "#4caf50",
-          },
-          {
-            label: "Habitantes",
-            value: stats.npcs,
-            icon: <GroupsIcon />,
-            color: "#2196f3",
-          },
-          {
-            label: "Lojas",
-            value: stats.shops,
-            icon: <StorefrontIcon />,
-            color: "#ffc107",
-          },
-        ].map((stat, i) => (
-          <Grid size={{ xs: 6, md: 3 }} key={i}>
-            <Paper
-              sx={{
-                p: 2.5,
-                bgcolor: "rgba(255,255,255,0.02)",
-                border: 1,
-                borderColor: "divider",
-                borderRadius: 3,
-              }}
-            >
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Avatar
-                  sx={{
-                    bgcolor: `${stat.color}15`,
-                    color: stat.color,
-                    width: 48,
-                    height: 48,
-                  }}
-                >
-                  {stat.icon}
-                </Avatar>
-                <Box>
-                  <Typography variant="h5" fontWeight={900}>
-                    {stat.value}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    sx={{ opacity: 0.6, fontWeight: 700 }}
-                  >
-                    {stat.label.toUpperCase()}
-                  </Typography>
-                </Box>
-              </Stack>
-            </Paper>
-          </Grid>
-        ))}
-      </Grid>
-
-      <Divider sx={{ mb: 6 }} />
-
-      {/* Conteúdo Adaptativo */}
-      {hasRegions ? (
-        <Grid container spacing={3}>
-          {regions
-            .filter((r) => !r.parentId)
-            .map((region) => (
-              <Grid size={{ xs: 12, md: 6, lg: 4 }} key={region.id}>
-                <Card
-                  sx={{
-                    height: "100%",
-                    bgcolor: "designTokens.colors.glassBg",
-                    backdropFilter: "blur(16px)",
-                    border: 1,
-                    borderColor: "divider",
-                    borderRadius: 4,
-                    transition: "all 0.3s",
-                    "&:hover": {
-                      transform: "translateY(-8px)",
-                      borderColor: "primary.main",
-                    },
-                  }}
-                >
-                  <CardContent sx={{ p: 3 }}>
-                    <Stack
-                      direction="row"
-                      spacing={2}
-                      alignItems="center"
-                      sx={{ mb: 3 }}
-                    >
-                      <Avatar
-                        src={region.icon}
-                        variant="rounded"
-                        sx={{
-                          width: 56,
-                          height: 56,
-                          border: 1,
-                          borderColor: "divider",
-                        }}
-                      />
-                      <Box>
-                        <Typography variant="h6" fontWeight={800}>
-                          {region.name}
-                        </Typography>
-                        <Chip
-                          label={String(
-                            region.type || "Região",
-                          ).toUpperCase()}
-                          size="small"
-                          color="primary"
-                          sx={{
-                            fontSize: "0.6rem",
-                            height: 18,
-                            fontWeight: 900,
-                          }}
-                        />
-                      </Box>
-                    </Stack>
-                    <Typography
-                      variant="body2"
-                      sx={{ mb: 4, opacity: 0.7, minHeight: 48 }}
-                    >
-                      {region.description || "Sem descrição disponível."}
-                    </Typography>
-                    <Stack spacing={2}>
-                      {region.data?.potentialSpawns &&
-                        region.data.potentialSpawns.length > 0 && (
-                          <Box>
-                            <Stack
-                              direction="row"
-                              justifyContent="space-between"
-                              alignItems="center"
-                              sx={{ mb: 1.5 }}
-                            >
-                              <Typography
-                                variant="caption"
-                                fontWeight={900}
-                                sx={{ color: "designTokens.colors.fieldLabel" }}
-                              >
-                                CONTEÚDO DA ÁREA
-                              </Typography>
-                              <Typography
-                                variant="caption"
-                                sx={{ opacity: 0.5 }}
-                              >
-                                {region.data.potentialSpawns.length} itens
-                              </Typography>
-                            </Stack>
-                            <Stack
-                              direction="row"
-                              spacing={1}
-                              flexWrap="wrap"
-                              useFlexGap
-                            >
-                              {region.data.potentialSpawns.slice(0, 10).map((ps: any) => (
-                                <Tooltip
-                                  key={ps.entityId}
-                                  title={`${entities.find((e) => e.id === ps.entityId)?.name || ps.entityId}`}
-                                  arrow
-                                >
-                                  <Avatar
-                                    src={
-                                      entities.find((e) => e.id === ps.entityId)
-                                        ?.icon || itemLookup[ps.entityId]?.icon
-                                    }
-                                    sx={{
-                                      width: 32,
-                                      height: 32,
-                                      cursor: "pointer",
-                                      border: 1,
-                                      borderColor: "divider",
-                                      "&:hover": {
-                                        borderColor: "primary.main",
-                                      },
-                                    }}
-                                    onClick={() => onSelectEntity(ps.entityId)}
-                                  />
-                                </Tooltip>
-                              ))}
-                            </Stack>
-                          </Box>
-                        )}
-                      <Button
-                        fullWidth
-                        variant="outlined"
-                        endIcon={<ChevronRightIcon />}
-                        onClick={() => onSelectEntity(region.id)}
-                        sx={{ mt: 2 }}
-                      >
-                        Ver Detalhes
-                      </Button>
-                    </Stack>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-        </Grid>
-      ) : (
-        <Stack spacing={8}>
-          {Object.entries(globalCategories).map(([catName, catItems]) => (
-            <Box key={catName}>
-              <Stack
-                direction="row"
-                spacing={2}
-                alignItems="center"
-                sx={{ mb: 4 }}
-                justifyContent={"space-between"}
-              >
-                <Stack
-                  direction="row"
-                  spacing={2}
-                  alignItems="center"
-                  sx={{ mb: 4 }}
-                >
+      )}
+    >
+      <Box overflow={"auto"} flex={1} >
+        {/* Cards de Estatísticas */}
+        <Grid container spacing={dtSpacing.itemGap}>
+          {[
+            {
+              label: "Ocorrências",
+              value: stats.totalSpawns,
+              icon: <ExploreIcon />,
+              color: "primary.main",
+            },
+            {
+              label: "Entidades",
+              value: stats.uniqueEntities,
+              icon: <MapIcon />,
+              color: "success.main",
+            },
+            {
+              label: "Habitantes",
+              value: stats.npcs,
+              icon: <GroupsIcon />,
+              color: "info.main",
+            },
+            {
+              label: "Lojas",
+              value: stats.shops,
+              icon: <StorefrontIcon />,
+              color: "warning.main",
+            },
+          ].map((stat, i) => (
+            <Grid size={{ xs: 6, md: 3 }} key={i}>
+              <DataCard sx={{ p: dtSpacing.cardPadding, borderRadius: dtRadius }}>
+                <Stack direction="row" spacing={dtSpacing.itemGap} alignItems="center">
                   <Avatar
-                    sx={{ bgcolor: "primary.main", width: 32, height: 32 }}
+                    sx={{
+                      bgcolor: "rgba(255,255,255,0.03)",
+                      color: stat.color,
+                      width: 40,
+                      height: 40,
+                      border: 1,
+                      borderColor: "divider",
+                    }}
                   >
-                    {catName.includes("Loja") ? (
-                      <StorefrontIcon sx={{ fontSize: 18 }} />
-                    ) : (
-                      <InventoryIcon sx={{ fontSize: 18 }} />
-                    )}
+                    {stat.icon}
                   </Avatar>
-                  <Typography variant="h5" fontWeight={800}>
-                    {catName}
-                  </Typography>
+                  <Stack>
+                    <Typography variant="h6" fontWeight={900} sx={{ lineHeight: 1 }}>
+                      {stat.value}
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      sx={{ opacity: 0.5, fontWeight: 700, fontSize: "0.6rem" }}
+                    >
+                      {stat.label}
+                    </Typography>
+                  </Stack>
                 </Stack>
-                <Chip
-                  label={`${catItems.length} tipos`}
-                  variant="outlined"
-                  size="small"
-                  sx={{ fontWeight: 800 }}
-                />
-              </Stack>
-              <Grid container spacing={2}>
-                {catItems.map((entity) => {
-                  const count = entityCounts[entity.id];
-                  const isShop = catName.includes("Loja");
-                  
-                  const handleNavigate = (e: React.MouseEvent) => {
-                    e.stopPropagation();
-                    if (isShop) {
-                      navigate(`/game/${gameId}/shops/list/${entity.id}`);
-                    } else if (entity.category === "npc" || (Array.isArray(entity.category) && entity.category.includes("npc"))) {
-                      navigate(`/game/${gameId}/entity/view/${entity.id}`);
-                    } else {
-                      // Tenta decidir se é entidade comum ou item
-                      const isCommonEntity = entities.some(ent => ent.id === entity.id);
-                      if (isCommonEntity) {
-                        navigate(`/game/${gameId}/entity/view/${entity.id}`);
-                      } else {
-                        navigate(`/game/${gameId}/item/view/${entity.id}`);
-                      }
-                    }
-                  };
+              </DataCard>
+            </Grid>
+          ))}
+        </Grid>
 
-                  return (
-                    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={entity.id}>
-                      <Card
-                        onClick={handleNavigate}
-                        sx={{
-                          cursor: "pointer",
-                          bgcolor: "rgba(255,255,255,0.02)",
-                          border: 1,
-                          borderColor: "divider",
-                          transition: "all 0.2s",
-                          "&:hover": {
-                            bgcolor: "rgba(255,255,255,0.05)",
-                            borderColor: "primary.main",
-                            transform: "translateY(-4px)",
-                          },
-                        }}
+        <Divider />
+        <Stack flex={1} sx={{overflowY: "auto"}}>
+          {/* Conteúdo Adaptativo */}
+          {hasRegions ? (
+            <Grid container spacing={dtSpacing.itemGap}>
+              {regions
+                .filter((r) => !r.parentId)
+                .map((region) => (
+                  <Grid size={{ xs: 12, md: 6, lg: 4 }} key={region.id}>
+                    {(() => {
+                      const bgImage = region.thumb || region.icon;
+                      const hasIcon = Boolean(region.icon);
+                      
+                      return (
+                        <DataCard
+                          hoverable
+                          onClick={() => onSelectEntity(region.id)}
+                          sx={{
+                            height: "100%",
+                            p: 0,
+                            overflow: "hidden",
+                            flexDirection: "column",
+                            alignItems: "stretch",
+                            position: "relative",
+                            borderRadius: dtRadius,
+                            ...(bgImage && {
+                              backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url(${bgImage})`,
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                              border: 1,
+                              borderColor: "divider",
+                            })
+                          }}
+                        >
+                          <Stack spacing={dtSpacing.contentGap} sx={{ p: dtSpacing.cardPadding, position: "relative", zIndex: 1, height: "100%", justifyContent: "flex-end" }}>
+                            <Stack spacing={1.5}>
+                              <Stack
+                                direction="row"
+                                spacing={2}
+                                alignItems="center"
+                              >
+                                {hasIcon && (
+                                  <Avatar
+                                    src={region.icon}
+                                    variant="rounded"
+                                    sx={{
+                                      width: 48,
+                                      height: 48,
+                                      border: 1,
+                                      borderColor: "rgba(255,255,255,0.1)",
+                                      bgcolor: "rgba(0,0,0,0.3)",
+                                    }}
+                                  />
+                                )}
+                                <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"} flex={1}>
+                                  <Typography 
+                                    variant="h6" 
+                                    fontWeight={900} 
+                                    sx={{ 
+                                      letterSpacing: "-0.5px",
+                                      textShadow: bgImage ? "0 2px 4px rgba(0,0,0,0.5)" : "none"
+                                    }}
+                                  >
+                                    {region.name}
+                                  </Typography>
+                                  <DataChip
+                                    label={region.type || "Região"}
+                                    sx={{ 
+                                      alignSelf: "flex-start",
+                                      bgcolor: bgImage ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.1)",
+                                      backdropFilter: "blur(4px)"
+                                    }}
+                                  />
+                                </Stack>
+                              </Stack>
+                              
+                              <Typography
+                                variant="body2"
+                                sx={{ 
+                                  opacity: 0.9, 
+                                  minHeight: 40, 
+                                  lineHeight: 1.5,
+                                  textShadow: bgImage ? "0 1px 2px rgba(0,0,0,0.5)" : "none",
+                                  fontSize: "0.85rem"
+                                }}
+                              >
+                                {region.description || "Sem descrição disponível."}
+                              </Typography>
+
+                              {region.data?.potentialSpawns && region.data.potentialSpawns.length > 0 && (
+                                <Stack spacing={1}>
+                                  <Typography
+                                    variant="caption"
+                                    fontWeight={800}
+                                    sx={{ 
+                                      color: bgImage ? "rgba(255,255,255,0.6)" : "designTokens.colors.fieldLabel", 
+                                      fontSize: "0.6rem" 
+                                    }}
+                                  >
+                                    Exploração disponível
+                                  </Typography>
+                                  <Stack
+                                    direction="row"
+                                    spacing={0.5}
+                                    flexWrap="wrap"
+                                    useFlexGap
+                                  >
+                                    {region.data.potentialSpawns.slice(0, 10).map((ps: any) => (
+                                      <Tooltip
+                                        key={ps.entityId}
+                                        title={entities.find((e) => e.id === ps.entityId)?.name || ps.entityId}
+                                        arrow
+                                      >
+                                        <Avatar
+                                          src={entities.find((e) => e.id === ps.entityId)?.icon || itemLookup[ps.entityId]?.icon}
+                                          sx={{
+                                            width: 26,
+                                            height: 26,
+                                            border: 1,
+                                            borderColor: "rgba(255,255,255,0.1)",
+                                            bgcolor: "rgba(0,0,0,0.3)",
+                                            "&:hover": { 
+                                              borderColor: "primary.main",
+                                              transform: "scale(1.1)"
+                                            },
+                                            transition: "all 0.2s"
+                                          }}
+                                          onClick={(e) => { e.stopPropagation(); onSelectEntity(ps.entityId); }}
+                                        />
+                                      </Tooltip>
+                                    ))}
+                                    {region.data.potentialSpawns.length > 10 && (
+                                      <DataChip 
+                                        label={`+${region.data.potentialSpawns.length - 10}`} 
+                                        sx={{ height: 26, bgcolor: "rgba(0,0,0,0.4)" }}
+                                      />
+                                    )}
+                                  </Stack>
+                                </Stack>
+                              )}
+                            </Stack>
+                          </Stack>
+                        </DataCard>
+                      );
+                    })()}
+                  </Grid>
+                ))}
+            </Grid>
+          ) : (
+            <Stack spacing={dtSpacing.sectionGap}>
+              {Object.entries(globalCategories).map(([catName, catItems]) => (
+                <Stack key={catName} spacing={dtSpacing.contentGap}>
+                  <Stack
+                    direction="row"
+                    spacing={1.5}
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <Stack direction="row" spacing={1.5} alignItems="center">
+                      <Avatar
+                        sx={{ bgcolor: "rgba(255,255,255,0.03)", width: 32, height: 32, border: 1, borderColor: "divider", color: "primary.main" }}
                       >
-                        <CardContent sx={{ p: 2 }}>
-                          <Stack
-                            direction="row"
-                            spacing={1.5}
-                            alignItems="center"
+                        {catName.includes("Loja") ? (
+                          <StorefrontIcon sx={{ fontSize: 18 }} />
+                        ) : (
+                          <InventoryIcon sx={{ fontSize: 18 }} />
+                        )}
+                      </Avatar>
+                      <Typography variant="h6" fontWeight={800}>
+                        {catName}
+                      </Typography>
+                    </Stack>
+                    <DataChip
+                      label={`${catItems.length} tipos`}
+                    />
+                  </Stack>
+                  <Grid container spacing={dtSpacing.itemGap}>
+                    {catItems.map((entity) => {
+                      const count = entityCounts[entity.id];
+                      const isShop = catName.includes("Loja");
+                      
+                      const handleNavigate = (e?: React.MouseEvent) => {
+                        if (e) e.stopPropagation();
+                        if (isShop) {
+                          navigate(`/game/${gameId}/shops/list/${entity.id}`);
+                        } else if (entity.category === "npc" || (Array.isArray(entity.category) && entity.category.includes("npc"))) {
+                          navigate(`/game/${gameId}/entity/view/${entity.id}`);
+                        } else {
+                          const isCommonEntity = entities.some(ent => ent.id === entity.id);
+                          if (isCommonEntity) {
+                            navigate(`/game/${gameId}/entity/view/${entity.id}`);
+                          } else {
+                            navigate(`/game/${gameId}/item/view/${entity.id}`);
+                          }
+                        }
+                      };
+
+                      return (
+                        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={entity.id}>
+                          <DataCard
+                            hoverable
+                            onClick={() => handleNavigate()}
+                            sx={{ p: dtSpacing.cardPadding, overflow: "hidden", borderRadius: dtRadius }}
                           >
-                            <Badge
-                              badgeContent={count > 1 ? `x${count}` : null}
-                              color="primary"
+                            {/* Background Icon Effect */}
+                            <Stack
                               sx={{
-                                "& .MuiBadge-badge": {
-                                  fontWeight: 900,
-                                  fontSize: "0.6rem",
-                                },
+                                position: "absolute",
+                                right: -10,
+                                bottom: -10,
+                                width: 80,
+                                height: 80,
+                                opacity: 0.04,
+                                filter: "grayscale(1) brightness(1.5)",
+                                zIndex: 0,
+                                pointerEvents: "none",
+                                backgroundImage: `url(${entity.icon})`,
+                                backgroundSize: "contain",
+                                backgroundRepeat: "no-repeat",
                               }}
+                            />
+
+                            <Stack
+                              direction="row"
+                              spacing={1.5}
+                              alignItems="center"
+                              sx={{ zIndex: 1, width: "100%" }}
                             >
                               <Avatar
                                 src={entity.icon}
                                 variant="rounded"
                                 sx={{
-                                  width: 44,
-                                  height: 44,
-                                  bgcolor: "rgba(255,255,255,0.05)",
+                                  width: 40,
+                                  height: 40,
+                                  bgcolor: "rgba(255,255,255,0.03)",
                                   border: 1,
                                   borderColor: "divider",
                                 }}
                               />
-                            </Badge>
-                            <Box sx={{ minWidth: 0 }}>
-                              <Typography
-                                variant="subtitle2"
-                                noWrap
-                                fontWeight={700}
-                              >
-                                {entity.name}
-                              </Typography>
-                              <Typography
-                                variant="caption"
-                                sx={{ opacity: 0.5, display: "block" }}
-                              >
-                                {isShop
-                                  ? "Aberto agora"
-                                  : Array.isArray(entity.category)
-                                    ? entity.category[0]
-                                    : entity.category}
-                              </Typography>
-                            </Box>
-                          </Stack>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            </Box>
-          ))}
+                              <Stack sx={{ minWidth: 0, flex: 1 }}>
+                                <Typography
+                                  variant="subtitle2"
+                                  noWrap
+                                  fontWeight={700}
+                                  sx={{ lineHeight: 1.2 }}
+                                >
+                                  {entity.name}
+                                </Typography>
+                                <Stack direction="row" spacing={1} alignItems="center">
+                                  <Typography
+                                    variant="caption"
+                                    sx={{ opacity: 0.5, fontWeight: 500 }}
+                                  >
+                                    {isShop
+                                      ? "Disponível"
+                                      : Array.isArray(entity.category)
+                                        ? entity.category[0]
+                                        : entity.category}
+                                  </Typography>
+                                  {count > 1 && (
+                                    <Typography variant="caption" sx={{ color: "primary.main", fontWeight: 800 }}>
+                                      x{count}
+                                    </Typography>
+                                  )}
+                                </Stack>
+                              </Stack>
+                            </Stack>
+                          </DataCard>
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                </Stack>
+              ))}
+            </Stack>
+          )}
         </Stack>
-      )}
-    </Box>
+      </Box>
+    </StyledContainer>
   );
 };

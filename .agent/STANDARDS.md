@@ -11,9 +11,12 @@ This document defines architectural and design standards to ensure consistency.
   - Values/Captions: `body2` or `caption`.
 - **Spacing (Design Tokens)**:
   - `sectionGap`: Large spacing between major blocks (3 units).
-  - `itemGap`: Spacing between items in a list (1.5 units).
+  - `contentGap`: Spacing between cards of different contexts (2 units).
+  - `itemGap`: Spacing between items in a grid or same context (1 unit).
   - `fieldGap`: Small spacing between a label and its value (0.5 units).
+  - `cardPadding`: Internal padding for cards (3 units).
 - **Glassmorphism**: `backdropFilter: "blur(16px)"`, `backgroundColor: "rgba(11, 11, 11, 0.8)"`.
+- **Border Radius**: Always use level 1 (`borderRadius: 1`).
 - **Borders**: Standardized via MUI `Divider` and `Paper` overrides. Use `border: 1` and `borderColor: "divider"`.
 
 ## 🛠️ Styling Rules

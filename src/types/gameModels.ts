@@ -161,6 +161,7 @@ export interface ReferencePoints {
   name?: string;
   description?: string;
   icon?: string;
+  thumb?: string;
   locationId?: string; // ID da Região/Mapa onde spawna (legado ou para regras)
   parentId?: string; // Para hierarquia (ex: POI dentro de Biome)
   mode?: "once" | "respawn";

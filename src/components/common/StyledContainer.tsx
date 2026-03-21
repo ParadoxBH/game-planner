@@ -5,6 +5,7 @@ import {
   TextField,
   Stack,
   InputAdornment,
+  useTheme,
   type SxProps,
   type Theme,
 } from "@mui/material";
@@ -40,19 +41,22 @@ export function StyledContainer({
   children,
   sx,
 }: StyledContainerProps) {
+  const theme = useTheme();
+  const { spacing: dtSpacing, borderRadius: dtRadius } = theme.designTokens;
+
   return (
     <Container
       maxWidth="xl"
-      sx={{ py: 2, flex: 1, overflowY: "hidden", ...sx?.root }}
+      sx={{ py: dtSpacing.contentGap || 2, flex: 1, overflowY: "hidden", height: "100%", ...sx?.root }}
     >
-      <Stack spacing={1} sx={{ flex: 1, height: "100%", overflowY: "hidden" }}>
-        <Stack sx={sx?.header} spacing={1}>
+      <Stack spacing={dtSpacing.itemGap} sx={{ flex: 1, height: "100%", overflowY: "hidden" }}>
+        <Stack sx={sx?.header} spacing={dtSpacing.itemGap}>
           {/* Header Section */}
           <Stack
             direction={{ xs: "column", md: "row" }}
             justifyContent="space-between"
             alignItems={{ xs: "flex-start", md: "center" }}
-            spacing={2}
+            spacing={dtSpacing.contentGap}
           >
             <Stack alignItems={"start"}>
               <Typography variant="h4" sx={{ color: "text.primary" }}>
@@ -79,7 +83,7 @@ export function StyledContainer({
                     ),
                     sx: {
                       backgroundColor: "rgba(255, 255, 255, 0.03)",
-                      borderRadius: 1,
+                      borderRadius: dtRadius,
                       "& fieldset": { borderColor: "divider" },
                       "&:hover fieldset": {
                         borderColor: "rgba(255, 255, 255, 0.2)",
@@ -97,13 +101,13 @@ export function StyledContainer({
               direction="row"
               justifyContent={"space-between"}
               alignItems={"stretch"}
+              sx={{ pb: 1 }}
             >
               <Stack
                 direction="row"
-                spacing={1}
+                spacing={dtSpacing.itemGap}
                 sx={{
                   overflowX: "auto",
-                  pb: 1,
                   "&::-webkit-scrollbar": { height: "4px" },
                   "&::-webkit-scrollbar-thumb": {
                     backgroundColor: "rgba(255, 255, 255, 0.1)",
@@ -116,10 +120,9 @@ export function StyledContainer({
               {actionsEnd && (
                 <Stack
                   direction="row"
-                  spacing={1}
+                  spacing={dtSpacing.itemGap}
                   sx={{
                     overflowX: "auto",
-                    pb: 1,
                     "&::-webkit-scrollbar": { height: "4px" },
                     "&::-webkit-scrollbar-thumb": {
                       backgroundColor: "rgba(255, 255, 255, 0.1)",

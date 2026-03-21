@@ -199,10 +199,13 @@ export const MapView = () => {
   const mapRef = useRef<any>(null);
 
   const selectedMapId = urlMapId || "";
-  const viewMode = (urlView as "map" | "dashboard") || "map";
 
   const { loading: loadingApi, raw } = useApi(gameId);
   const selectedMap = useMemo(() => raw?.maps?.find(m => m.id === selectedMapId), [raw?.maps, selectedMapId]);
+
+  const availableViews = useMemo(() => selectedMap?.availableViews || ["map", "dashboard"], [selectedMap]);
+  const defaultView = selectedMap?.defaultView || availableViews[0] || "map";
+  const viewMode = (urlView as "map" | "dashboard") || defaultView;
 
   useEffect(() => {
     loadGamesList().then(games => {
@@ -223,10 +226,19 @@ export const MapView = () => {
       
       // Se não houver mapId na URL, redireciona para o primeiro mapa
       if (!urlMapId && raw.maps?.length > 0) {
-        navigate(`/game/${gameId}/map/${raw.maps[0].id}`, { replace: true });
+        const firstMap = raw.maps[0];
+        const initialView = firstMap.defaultView || (firstMap.availableViews?.[0]) || "map";
+        navigate(`/game/${gameId}/map/${firstMap.id}/${initialView}`, { replace: true });
       }
     }
   }, [raw, gameId, urlMapId, navigate]);
+
+  // Redirecionar se a view atual não estiver disponível para o mapa selecionado
+  useEffect(() => {
+    if (selectedMap && !availableViews.includes(viewMode)) {
+      navigate(`/game/${gameId}/map/${selectedMapId}/${defaultView}`, { replace: true });
+    }
+  }, [selectedMap, viewMode, availableViews, gameId, selectedMapId, defaultView, navigate]);
 
   const setViewMode = (mode: "map" | "dashboard") => {
     navigate(`/game/${gameId}/map/${selectedMapId}/${mode}`);
@@ -269,12 +281,18 @@ export const MapView = () => {
   return (
     <Box sx={{ width: "100%", height: "100%", backgroundColor: "#0b0b0b", position: "relative", overflow: "hidden" }}>
       <Box sx={{ flexGrow: 1, position: "relative", height: "100%" }}>
-        <Box sx={{ position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)", zIndex: 1100, bgcolor: "designTokens.colors.glassBg", backdropFilter: "blur(12px)", borderRadius: 2, p: 0.5, border: 1, borderColor: "divider" }}>
-          <ToggleButtonGroup value={viewMode} exclusive onChange={(_, v) => v && setViewMode(v)} size="small">
-            <ToggleButton value="map" sx={{ px: 2 }}><MapIcon sx={{ mr: 1, fontSize: 18 }} /> MAPA</ToggleButton>
-            <ToggleButton value="dashboard" sx={{ px: 2 }}><DashboardIcon sx={{ mr: 1, fontSize: 18 }} /> DASHBOARD</ToggleButton>
-          </ToggleButtonGroup>
-        </Box>
+        {availableViews.length > 1 && (
+          <Box sx={{ position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)", zIndex: 1100, bgcolor: "designTokens.colors.glassBg", backdropFilter: "blur(12px)", borderRadius: 2, p: 0.5, border: 1, borderColor: "divider" }}>
+            <ToggleButtonGroup value={viewMode} exclusive onChange={(_, v) => v && setViewMode(v)} size="small">
+              {availableViews.includes("map") && (
+                <ToggleButton value="map" sx={{ px: 2 }}><MapIcon sx={{ mr: 1, fontSize: 18 }} /> MAPA</ToggleButton>
+              )}
+              {availableViews.includes("dashboard") && (
+                <ToggleButton value="dashboard" sx={{ px: 2 }}><DashboardIcon sx={{ mr: 1, fontSize: 18 }} /> DASHBOARD</ToggleButton>
+              )}
+            </ToggleButtonGroup>
+          </Box>
+        )}
 
         {viewMode === "map" ? (
           <MapContainer key={`${gameId}-${selectedMapId}`} ref={mapRef} crs={customCRS} bounds={selectedMap.bounds as LatLngBoundsExpression} center={mapCenter} zoom={selectedMap.minZoom} maxZoom={selectedMap.maxZoom} style={{ height: "100%", width: "100%", cursor: activeTool ? 'crosshair' : 'grab' }}>
@@ -338,7 +356,7 @@ export const MapView = () => {
             })}
           </MapContainer>
         ) : (
-          <MapDashboard gameId={gameId!} selectedMapId={selectedMapId} onSelectEntity={id => handlePush({ type: "entity", id })} onSwitchToMap={() => setViewMode("map")} />
+          <MapDashboard gameId={gameId!} selectedMapId={selectedMapId} availableViews={availableViews} onSelectEntity={id => handlePush({ type: "entity", id })} onSwitchToMap={() => setViewMode("map")} />
         )}
         {viewMode === "map" && <MapInfoOverlay gameName={gameInfo?.name || ""} coords={cursorCoords} maps={raw?.maps || []} selectedMapId={selectedMapId} onSelectMap={setSelectedMapId} />}
       </Box>
