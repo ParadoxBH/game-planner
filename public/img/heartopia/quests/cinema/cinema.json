@@ -1,0 +1,60 @@
+[
+    {
+        "id": "introducao_celebracao",
+        "ativador": [{
+            "descricao": "Receber telefonema de {atara} no inicio da celebração",
+            "references": [
+                {
+                    "id": "atara",
+                    "type": "entity",
+                    "value": "atara"
+                }
+            ]
+        }],
+        "lore": [
+            {
+                "descricao": "Atara estará avisando que a responsabilidade da Embaixadora da Celebração será passada para de {azure} e irá pedir",
+                "references": [
+                    {
+                        "id": "azure",
+                        "type": "entity",
+                        "value": "azure"
+                    }
+                ]
+            }
+        ],
+        "objetivo": [
+            {
+                "descricao": "Obtenha qualquer item coletável de hobby da Celebração da Luz e Sombra Onirica",
+                "objetivoType": "coleta",
+                "valueType": "categoria",
+                "value": "gala_moda_cinema",
+                "quant": 1
+            },
+            {
+                "descricao": "Venda qualquer item da celebração para {azure} em {shop}",
+                "descricaoReferences": [
+                    {
+                        "id": "azure",
+                        "type": "entity",
+                        "value": "azure"
+                    },
+                    {
+                        "id": "shop",
+                        "type": "shop",
+                        "value": "shop_gala_moda_cinema"
+                    }
+                ],
+                "objetivoType": "sell_shop",
+                "value": "shop_gala_moda_cinema",
+                "shop": [
+                    {
+                        "type": "category",
+                        "value": "gala_moda_cinema",
+                        "quant": 1
+                    }
+                ]
+            }
+        ]
+    }
+]
