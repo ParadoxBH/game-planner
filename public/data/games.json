@@ -2,7 +2,8 @@
   {
     "id": "apogea",
     "name": "Apogea",
-    "description": "Apogea é um jogo de RPG online massivo de fantasia medieval."
+    "description": "Apogea é um jogo de RPG online massivo de fantasia medieval.",
+    "disabled": true
   },
   {
     "id": "heartopia",
@@ -12,7 +13,8 @@
   {
     "id": "satisfactory",
     "name": "Satisfactory",
-    "description": "Satisfactory é um jogo de construção de fábricas em primeira pessoa num mundo aberto, com traços de exploração e combate. Jogue sozinho ou com amigos, explore um planeta alienígena, crie fábricas de vários andares e entre no paraíso das correias transportadoras!"
+    "description": "Satisfactory é um jogo de construção de fábricas em primeira pessoa num mundo aberto, com traços de exploração e combate. Jogue sozinho ou com amigos, explore um planeta alienígena, crie fábricas de vários andares e entre no paraíso das correias transportadoras!",
+    "disabled": true
   },
   {
     "id": "valheim",
