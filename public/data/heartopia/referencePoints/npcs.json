@@ -1,124 +1,8 @@
 [
   {
-    "id": "berry_1",
-    "entityId": "arbusto_mirtilo",
-    "mapId": "main",
-    "mode": "respawn",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(-285 -31)"
-    }
-  },
-  {
-    "id": "berry_2",
-    "entityId": "arbusto_mirtilo",
-    "mapId": "main",
-    "mode": "respawn",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(-277 -8)"
-    }
-  },
-  {
-    "id": "berry_3",
-    "entityId": "arbusto_mirtilo",
-    "mapId": "main",
-    "mode": "respawn",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(-275 33)"
-    }
-  },
-  {
-    "id": "berry_4",
-    "entityId": "arbusto_mirtilo",
-    "mapId": "main",
-    "mode": "respawn",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(-289 53)"
-    }
-  },
-  {
-    "id": "truffle_1",
-    "entityId": "trufa_negra_coletavel",
-    "mapId": "main",
-    "mode": "respawn",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(630 200)"
-    },
-    "respawnDelay": 15
-  },
-  {
-    "id": "truffle_2",
-    "entityId": "trufa_negra_coletavel",
-    "mapId": "main",
-    "mode": "respawn",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(660 210)"
-    },
-    "respawnDelay": 15
-  },
-  {
-    "id": "truffle_3",
-    "entityId": "trufa_negra_coletavel",
-    "mapId": "main",
-    "mode": "respawn",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(650 245)"
-    },
-    "respawnDelay": 15
-  },
-  {
-    "id": "truffle_4",
-    "entityId": "trufa_negra_coletavel",
-    "mapId": "main",
-    "mode": "respawn",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(675 240)"
-    },
-    "respawnDelay": 15
-  },
-  {
-    "id": "truffle_5",
-    "entityId": "trufa_negra_coletavel",
-    "mapId": "main",
-    "mode": "respawn",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(680 270)"
-    },
-    "respawnDelay": 15
-  },
-  {
-    "id": "truffle_6",
-    "entityId": "trufa_negra_coletavel",
-    "mapId": "main",
-    "mode": "respawn",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(700 285)"
-    },
-    "respawnDelay": 15
-  },
-  {
-    "id": "truffle_7",
-    "entityId": "trufa_negra_coletavel",
-    "mapId": "main",
-    "mode": "respawn",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(725 215)"
-    },
-    "respawnDelay": 15
-  },
-  {
     "id": "blanc_npc",
     "entityId": "blanc",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(100 -65)"
@@ -128,6 +12,7 @@
   {
     "id": "massimo_npc",
     "entityId": "massimo",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(-10 85)"
@@ -137,6 +22,7 @@
   {
     "id": "ka_ching_npc",
     "entityId": "ka_ching",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(-130 130)"
@@ -146,6 +32,7 @@
   {
     "id": "vanya_npc",
     "entityId": "vanya",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(78.36216308593751 68.08238802665919)"
@@ -155,6 +42,7 @@
   {
     "id": "bailey_j_npc",
     "entityId": "bailey_j",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(45 0)"
@@ -164,6 +52,7 @@
   {
     "id": "sra_joan_npc",
     "entityId": "sra_joan",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(32.42572265625 3.5818442794265124)"
@@ -173,6 +62,7 @@
   {
     "id": "naniwa_npc",
     "entityId": "naniwa",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(134.33513671875002 8.591762935629886)"
@@ -182,6 +72,7 @@
   {
     "id": "atara_npc",
     "entityId": "atara",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(-2.7021435546875003 -46.606291079709614)"
@@ -191,6 +82,7 @@
   {
     "id": "colecionador_npc",
     "entityId": "colecionador",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(-189.5360693359375 44.55125722044536)"
@@ -200,15 +92,7 @@
   {
     "id": "bob_npc",
     "entityId": "bob",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(-0.3860205078125 46.88925764136494)"
-    },
-    "mapId": "main"
-  },
-  {
-    "id": "bob_npc",
-    "entityId": "bob",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(-0.3860205078125 46.88925764136494)"
@@ -218,6 +102,7 @@
   {
     "id": "annie_npc",
     "entityId": "annie",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(5.0182666015625 -7.235077884682528)"
@@ -227,6 +112,7 @@
   {
     "id": "albert_jr_npc",
     "entityId": "albert_jr",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(184.517802734375 124.88238397039291)"
@@ -236,6 +122,7 @@
   {
     "id": "andrew_npc",
     "entityId": "andrew",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(138.195341796875 153.8555115701902)"
@@ -245,6 +132,7 @@
   {
     "id": "dorothee_npc",
     "entityId": "dorothee",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(-20.845107421875003 46.40795541238464)"
@@ -254,6 +142,7 @@
   {
     "id": "eric_npc",
     "entityId": "eric",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(26.24939453125 383.33477228834596)"
@@ -263,6 +152,7 @@
   {
     "id": "vernie_npc",
     "entityId": "vernie",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(-433.115009765625 -243.25740060326953)"
@@ -272,6 +162,7 @@
   {
     "id": "will_npc",
     "entityId": "will",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(-135.87921875 -486.6316724415665)"
@@ -281,6 +172,7 @@
   {
     "id": "patti_npc",
     "entityId": "patti",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(482.525634765625 222.49174259239837)"
@@ -290,27 +182,10 @@
   {
     "id": "azure_npc",
     "entityId": "azure",
+    "type": "spawn",
     "geom": {
       "type": "Point",
       "coordinates": "POINT(-36.671948242187504 46.885515458962566)"
-    },
-    "mapId": "main"
-  },
-  {
-    "id": "workbench_city",
-    "entityId": "mesa_artesao",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(-28.9515380859375 94.68962779821611)"
-    },
-    "mapId": "main"
-  },
-  {
-    "id": "cooker_city",
-    "entityId": "fogao_clean",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(-19.301025390625 91.21340079135436)"
     },
     "mapId": "main"
   }
