@@ -27,14 +27,20 @@ export function useApi(gameId: string | undefined) {
       loadGameMaps(gameId)
     ])
       .then((results) => {
-        const [items, recipes, entities, shops, events, referencePoints, codes, games, maps] = results as any[];
+        const [items, recipes, entities, shops, events, referencePoints, codes, games, maps = []] = results as any[];
         if (isMounted) {
           const gameInfo = games.find((g: any) => g.id === gameId);
-          if (gameInfo) {
-            // Se o gameInfo no games.json ainda tiver mapas, eles serão sobrescritos pelos do maps.json
-            gameInfo.maps = maps.length > 0 ? maps : (gameInfo.maps || []);
-          }
-          setData({ items, recipes, entities, shops, events, referencePoints, codes, gameInfo });
+          setData({ 
+            items, 
+            recipes, 
+            entities, 
+            shops, 
+            events, 
+            referencePoints, 
+            codes, 
+            gameInfo,
+            maps 
+          });
           setLoading(false);
         }
       })

@@ -1,3 +1,5 @@
+import type { GameInfo } from "../types/gameModels";
+
 export async function loadGameData<T>(
   gameId: string,
   dataset: string
@@ -32,13 +34,14 @@ export async function loadGameData<T>(
   return (await response.json()) as T[]; // Cast to T[] as per new return type
 }
 
-export async function loadGamesList(): Promise<any[]> {
+export async function loadGamesList(): Promise<GameInfo[]> {
   try {
     const response = await fetch(`/data/games.json`);
     if (!response.ok) {
       throw new Error(`Failed to load games list`);
     }
-    return await response.json();
+    const games: GameInfo[] = await response.json();
+    return games.filter(j => !j.disabled);
   } catch (error) {
     console.error(`Error loading games list:`, error);
     throw error;

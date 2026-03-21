@@ -80,7 +80,8 @@ export interface GameDataPayload {
   events: GameEvent[];
   referencePoints: ReferencePoints[];
   codes: RedemptionCode[];
-  gameInfo?: any;
+  gameInfo?: GameInfo;
+  maps: MapMetadata[];
 }
 
 export type FilterParams = Record<string, string | string[] | number | boolean | undefined>;

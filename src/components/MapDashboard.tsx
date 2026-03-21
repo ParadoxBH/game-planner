@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Entity, Item, ReferencePoints, Shop } from "../types/gameModels";
+import type { Entity, Item, ReferencePoints, Shop, MapMetadata } from "../types/gameModels";
 import { useApi } from "../hooks/useApi";
 import MapIcon from "@mui/icons-material/Map";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -43,6 +43,7 @@ export const MapDashboard = ({
   const entities = (data?.entities || []) as Entity[];
   const referencePoints = (data?.referencePoints || []) as ReferencePoints[];
   const shops = (data?.shops || []) as Shop[];
+  const maps = (data?.maps || []) as MapMetadata[];
   const itemLookup = useMemo(() => {
     const lookup: Record<string, Item> = {};
     data?.items?.forEach((i: Item) => (lookup[i.id] = i));
@@ -178,7 +179,7 @@ export const MapDashboard = ({
             gutterBottom
             sx={{ letterSpacing: "-1.5px" }}
           >
-            {data?.gameInfo?.maps?.find((m: any) => m.id === selectedMapId)
+            {maps?.find((m: any) => m.id === selectedMapId)
               ?.name || "Dashboard"}
           </Typography>
           <Typography

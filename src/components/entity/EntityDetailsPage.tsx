@@ -23,7 +23,7 @@ import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
 import { RecipeCard } from "../recipe/RecipeCard";
 import { useMemo } from "react";
-import type { MapMetadata, ReferencePoints, GameInfo, GameDataTypes } from "../../types/gameModels";
+import type { MapMetadata, ReferencePoints, GameDataTypes } from "../../types/gameModels";
 import { MiniMap } from "../common/MiniMap";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
@@ -37,7 +37,6 @@ export function EntityDetailsPage() {
 
   const entityDetails = useMemo(() => getEntityDetails(entityId), [getEntityDetails, entityId]);
 
-  const gameInfo = raw?.gameInfo as GameInfo | undefined;
 
   const groupedReferencePoints = useMemo(() => {
     if (!entityDetails?.referencePoints) return new Map<string, ReferencePoints[]>();
@@ -51,7 +50,7 @@ export function EntityDetailsPage() {
   }, [entityDetails?.referencePoints]);
 
   const getMapMetadata = (mapId: string): MapMetadata | undefined => {
-    return gameInfo?.maps?.find(m => m.id === mapId);
+    return raw?.maps?.find(m => m.id === mapId);
   };
 
   const eventsMap = useMemo(() => {

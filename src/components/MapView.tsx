@@ -201,9 +201,8 @@ export const MapView = () => {
   const selectedMapId = urlMapId || "";
   const viewMode = (urlView as "map" | "dashboard") || "map";
 
-  const selectedMap = useMemo(() => gameInfo?.maps?.find(m => m.id === selectedMapId), [gameInfo, selectedMapId]);
-
   const { loading: loadingApi, raw } = useApi(gameId);
+  const selectedMap = useMemo(() => raw?.maps?.find(m => m.id === selectedMapId), [raw?.maps, selectedMapId]);
 
   useEffect(() => {
     loadGamesList().then(games => {
@@ -217,12 +216,14 @@ export const MapView = () => {
 
   // Sincronizar gameInfo com dados completos (incluindo mapas do maps.json)
   useEffect(() => {
-    if (raw?.gameInfo) {
-      setGameInfo(raw.gameInfo);
+    if (raw) {
+      if (raw.gameInfo) {
+        setGameInfo(raw.gameInfo);
+      }
       
-      // Se não houver mapId na URL, redireciona para o primeiro mapa (ou para a página de seleção se preferir)
-      if (!urlMapId && raw.gameInfo.maps?.length > 0) {
-        navigate(`/game/${gameId}/map/${raw.gameInfo.maps[0].id}`, { replace: true });
+      // Se não houver mapId na URL, redireciona para o primeiro mapa
+      if (!urlMapId && raw.maps?.length > 0) {
+        navigate(`/game/${gameId}/map/${raw.maps[0].id}`, { replace: true });
       }
     }
   }, [raw, gameId, urlMapId, navigate]);
@@ -339,10 +340,10 @@ export const MapView = () => {
         ) : (
           <MapDashboard gameId={gameId!} selectedMapId={selectedMapId} onSelectEntity={id => handlePush({ type: "entity", id })} onSwitchToMap={() => setViewMode("map")} />
         )}
-        {viewMode === "map" && <MapInfoOverlay gameName={gameInfo.name} coords={cursorCoords} maps={gameInfo.maps} selectedMapId={selectedMapId} onSelectMap={setSelectedMapId} />}
+        {viewMode === "map" && <MapInfoOverlay gameName={gameInfo?.name || ""} coords={cursorCoords} maps={raw?.maps || []} selectedMapId={selectedMapId} onSelectMap={setSelectedMapId} />}
       </Box>
 
-      {navigationStack.length > 0 && <EntityDrawer stack={navigationStack} entities={entities} items={items} referencePoints={referencePoints} shops={raw?.shops || []} maps={gameInfo.maps} onSelectMap={setSelectedMapId} onPush={handlePush} onPop={() => setNavigationStack(s => s.slice(0, -1))} onClose={() => setNavigationStack([])} />}
+      {navigationStack.length > 0 && <EntityDrawer stack={navigationStack} entities={entities} items={items} referencePoints={referencePoints} shops={raw?.shops || []} maps={raw?.maps || []} onSelectMap={setSelectedMapId} onPush={handlePush} onPop={() => setNavigationStack(s => s.slice(0, -1))} onClose={() => setNavigationStack([])} />}
       {viewMode === "map" && <MapToolbox activeTool={activeTool} hasPoints={currentPoints.length > 0} onSelectTool={setActiveTool} onConfirm={() => { navigator.clipboard.writeText(JSON.stringify({ id: `zone_${Date.now()}`, geom: { type: "Polygon", coordinates: formatWKTPolygon(currentPoints.map(p => [p[1], p[0]])) }, mapId: selectedMapId }, null, 2)); setSnackbarMessage("Zona copiada!"); setSnackbarOpen(true); setActiveTool(null); setCurrentPoints([]); }} onClear={() => setCurrentPoints([])} onCancel={() => { setActiveTool(null); setCurrentPoints([]); }} />}
       <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={() => setSnackbarOpen(false)} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}><Alert severity="info" variant="filled" sx={{ width: '100%', borderRadius: 2 }}>{snackbarMessage}</Alert></Snackbar>
     </Box>

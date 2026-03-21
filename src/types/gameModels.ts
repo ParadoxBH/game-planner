@@ -151,7 +151,7 @@ export interface GameInfo {
   name: string;
   description: string;
   thumbnail?: string;
-  maps: MapMetadata[];
+  disabled?: boolean;
 }
 
 export interface ReferencePoints {
