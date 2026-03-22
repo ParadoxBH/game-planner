@@ -14,25 +14,30 @@ import {
   Bolt,
   Construction,
   Architecture,
-  Paid,
+  Bookmarks,
 } from "@mui/icons-material";
 import { useApi } from "../../hooks/useApi";
 import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
-import {
-  RecipeCard,
-} from "../recipe/RecipeCard";
+import { RecipeCard } from "../recipe/RecipeCard";
 import { ItemShopCard } from "../shop/ItemShopCard";
+import { ItemFlowSection } from "./ItemFlowSection";
 import { useMemo } from "react";
 import type { GameDataTypes } from "../../types/gameModels";
 
 export function ItemDetailsPage() {
-  const { gameId, itemId = "" } = useParams<{ gameId: string; itemId: string }>();
+  const { gameId, itemId = "" } = useParams<{
+    gameId: string;
+    itemId: string;
+  }>();
   const navigate = useNavigate();
 
   const { loading, getItemDetails, raw } = useApi(gameId);
 
-  const itemDetails = useMemo(() => getItemDetails(itemId), [getItemDetails, itemId]);
+  const itemDetails = useMemo(
+    () => getItemDetails(itemId),
+    [getItemDetails, itemId],
+  );
 
   const eventsMap = useMemo(() => {
     const map = new Map<string, string>();
@@ -78,7 +83,8 @@ export function ItemDetailsPage() {
     );
   }
 
-  const { item, productionRecipes, usagesAsIngredient, dropsFrom, soldIn } = itemDetails;
+  const { item, productionRecipes, usagesAsIngredient, dropsFrom, soldIn } =
+    itemDetails;
   const sizeItemCard = 300;
 
   return (
@@ -87,9 +93,7 @@ export function ItemDetailsPage() {
       label={`Detalhes e origens do item ${item.id}`}
       actionsStart={
         <Box>
-          <Breadcrumbs
-            separator={<NavigateNext fontSize="small" />}
-          >
+          <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
             <Link
               to={`/game/${gameId}`}
               style={{ color: "inherit", textDecoration: "none" }}
@@ -108,7 +112,15 @@ export function ItemDetailsPage() {
       }
     >
       <Stack direction={"row"} spacing={4} flex={1} overflow={"hidden"}>
-        <Stack spacing={2} sx={{overflowY: "auto", overflowX: "hidden", maxWidth: sizeItemCard, minWidth: sizeItemCard}}>
+        <Stack
+          spacing={2}
+          sx={{
+            overflowY: "auto",
+            overflowX: "hidden",
+            maxWidth: sizeItemCard,
+            minWidth: sizeItemCard,
+          }}
+        >
           <Paper elevation={0} sx={{ p: 2, textAlign: "center" }}>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <ItemChip id={item.id} icon={item.icon} size="extraLarge" />
@@ -143,25 +155,84 @@ export function ItemDetailsPage() {
                   <Typography variant="body2">{item.description}</Typography>
                 </Box>
               )}
-              
-              {(item.buyPrice !== undefined || item.sellPrice !== undefined) && (
-                <Box sx={{ mt: 1, p: 1.5, bgcolor: 'rgba(255,255,255,0.03)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.05)' }}>
+
+              {(item.buyPrice !== undefined ||
+                item.sellPrice !== undefined) && (
+                <Box
+                  sx={{
+                    mt: 1,
+                    p: 1.5,
+                    bgcolor: "rgba(255,255,255,0.03)",
+                    borderRadius: 2,
+                    border: "1px solid rgba(255,255,255,0.05)",
+                  }}
+                >
                   <Stack spacing={1}>
                     {item.buyPrice !== undefined && (
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700 }}>PREÇO COMPRA</Typography>
-                        <Stack direction="row" spacing={0.5} alignItems="center">
-                          <Typography variant="body2" sx={{ fontWeight: 800, color: '#ffbb00' }}>{item.buyPrice.toLocaleString()}</Typography>
-                          {itemsMap.get('ouro')?.icon && <img src={itemsMap.get('ouro').icon} style={{ width: 14, height: 14 }} />}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Typography
+                          variant="caption"
+                          sx={{ color: "text.secondary", fontWeight: 700 }}
+                        >
+                          PREÇO COMPRA
+                        </Typography>
+                        <Stack
+                          direction="row"
+                          spacing={0.5}
+                          alignItems="center"
+                        >
+                          <Typography
+                            variant="body2"
+                            sx={{ fontWeight: 800, color: "#ffbb00" }}
+                          >
+                            {item.buyPrice.toLocaleString()}
+                          </Typography>
+                          {itemsMap.get("ouro")?.icon && (
+                            <img
+                              src={itemsMap.get("ouro").icon}
+                              style={{ width: 14, height: 14 }}
+                            />
+                          )}
                         </Stack>
                       </Box>
                     )}
                     {item.sellPrice !== undefined && (
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700 }}>VALOR VENDA</Typography>
-                        <Stack direction="row" spacing={0.5} alignItems="center">
-                          <Typography variant="body2" sx={{ fontWeight: 800, color: '#ffbb00' }}>{item.sellPrice.toLocaleString()}</Typography>
-                          {itemsMap.get('ouro')?.icon && <img src={itemsMap.get('ouro').icon} style={{ width: 14, height: 14 }} />}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Typography
+                          variant="caption"
+                          sx={{ color: "text.secondary", fontWeight: 700 }}
+                        >
+                          VALOR VENDA
+                        </Typography>
+                        <Stack
+                          direction="row"
+                          spacing={0.5}
+                          alignItems="center"
+                        >
+                          <Typography
+                            variant="body2"
+                            sx={{ fontWeight: 800, color: "#ffbb00" }}
+                          >
+                            {item.sellPrice.toLocaleString()}
+                          </Typography>
+                          {itemsMap.get("ouro")?.icon && (
+                            <img
+                              src={itemsMap.get("ouro").icon}
+                              style={{ width: 14, height: 14 }}
+                            />
+                          )}
                         </Stack>
                       </Box>
                     )}
@@ -174,11 +245,7 @@ export function ItemDetailsPage() {
         <Stack spacing={2} overflow={"auto"} flex={1}>
           {/* Produzido Em */}
           <Paper elevation={0} sx={{ p: 2 }}>
-            <Stack
-              direction="row"
-              spacing={1}
-              alignItems="center"
-            >
+            <Stack direction="row" spacing={1} alignItems="center">
               <Construction color="primary" />
               <Typography variant="h6" fontWeight={700}>
                 Produção (Receitas)
@@ -210,11 +277,7 @@ export function ItemDetailsPage() {
 
           {/* Utilizado Como Ingrediente */}
           <Paper elevation={0} sx={{ p: 2 }}>
-            <Stack
-              direction="row"
-              spacing={1}
-              alignItems="center"
-            >
+            <Stack direction="row" spacing={1} alignItems="center">
               <Architecture color="primary" />
               <Typography variant="h6" fontWeight={700}>
                 Utilizado em
@@ -247,15 +310,8 @@ export function ItemDetailsPage() {
           {/* Fontes: Drops e Lojas */}
           <Grid container spacing={3}>
             <Grid size={{ xs: 12, sm: 6 }}>
-              <Paper
-                elevation={0}
-                sx={{ p: 2, height: "100%" }}
-              >
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  alignItems="center"
-                >
+              <Paper elevation={0} sx={{ p: 2, height: "100%" }}>
+                <Stack direction="row" spacing={1} alignItems="center">
                   <Bolt color="primary" />
                   <Typography variant="h6" fontWeight={700}>
                     Drops
@@ -315,15 +371,8 @@ export function ItemDetailsPage() {
               </Paper>
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
-              <Paper
-                elevation={0}
-                sx={{ p: 2, height: "100%" }}
-              >
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  alignItems="center"
-                >
+              <Paper elevation={0} sx={{ p: 2, height: "100%" }}>
+                <Stack direction="row" spacing={1} alignItems="center">
                   <Storefront color="primary" />
                   <Typography variant="h6" fontWeight={700}>
                     Vendido em
@@ -344,8 +393,10 @@ export function ItemDetailsPage() {
                           entitiesMap={entitiesMap}
                           eventsMap={
                             new Map(
-                              raw?.events?.map((e) => [e.id, { name: e.name }]) ||
-                                [],
+                              raw?.events?.map((e) => [
+                                e.id,
+                                { name: e.name },
+                              ]) || [],
                             )
                           }
                           onClick={() =>
@@ -363,6 +414,37 @@ export function ItemDetailsPage() {
               </Paper>
             </Grid>
           </Grid>
+          {/* Visual Flow Section */}
+          <Paper
+            elevation={0}
+            sx={{
+              p: 2,
+              height: 400,
+              minHeight: 400,
+              position: "relative",
+              overflow: "hidden",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Bookmarks color="primary" />
+              <Typography variant="h6" fontWeight={700}>
+                Visão Geral
+              </Typography>
+            </Stack>
+            <ItemFlowSection
+              item={item}
+              productionRecipes={productionRecipes}
+              usagesAsIngredient={usagesAsIngredient}
+              dropsFrom={dropsFrom}
+              soldIn={soldIn}
+              itemsMap={itemsMap}
+              entitiesMap={entitiesMap}
+              eventsMap={eventsMap}
+              getSourceData={getSourceData}
+            />
+          </Paper>
         </Stack>
       </Stack>
     </StyledContainer>
