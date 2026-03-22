@@ -1,0 +1,170 @@
+[
+  {
+    "id": "item_bow_ashlandsblood",
+    "name": "Blood Fang",
+    "category": [
+      "Bow"
+    ],
+    "description": "Arrows loosed from this bow will tear into flesh with unmatched ferocity.",
+    "icon": "/img/valheim/itens/Bow/BowAshlandsBlood.webp",
+    "metaData": {
+      "entityId": "BowAshlandsBlood"
+    }
+  },
+  {
+    "id": "item_bow_ashlandsstorm",
+    "name": "Storm Fang",
+    "category": [
+      "Bow"
+    ],
+    "description": "Let your arrows fly as swift as the lightning strikes.",
+    "icon": "/img/valheim/itens/Bow/BowAshlandsStorm.webp",
+    "metaData": {
+      "entityId": "BowAshlandsStorm"
+    }
+  },
+  {
+    "id": "item_bow_huntsman",
+    "name": "Huntsman Bow",
+    "category": [
+      "Bow"
+    ],
+    "description": "Finely worked and strung. A huntsman's joy.",
+    "icon": "/img/valheim/itens/Bow/BowHuntsman.webp",
+    "metaData": {
+      "entityId": "BowHuntsman"
+    }
+  },
+  {
+    "id": "item_bow_snipesnap",
+    "name": "Spinesnap",
+    "category": [
+      "Bow"
+    ],
+    "description": "Using this bow is backbreaking work but so worth it.",
+    "icon": "/img/valheim/itens/Bow/BowSpineSnap.webp",
+    "metaData": {
+      "entityId": "BowSpineSnap"
+    }
+  },
+  {
+    "id": "item_crossbow_arbalest",
+    "name": "Arbalest",
+    "category": [
+      "Bow"
+    ],
+    "description": "A slow but powerful weapon.",
+    "icon": "/img/valheim/itens/Bow/CrossbowArbalest.webp",
+    "metaData": {
+      "entityId": "CrossbowArbalest"
+    }
+  },
+  {
+    "id": "item_crossbow_ripper_nature",
+    "name": "Root Ripper",
+    "category": [
+      "Bow"
+    ],
+    "description": "If the bolt doesn't pin your foe in place, the roots surging up from the ground surely will.",
+    "icon": "/img/valheim/itens/Bow/CrossbowRipperNature.webp",
+    "metaData": {
+      "entityId": "CrossbowRipperNature"
+    }
+  },
+  {
+    "id": "item_bow",
+    "name": "Crude Bow",
+    "category": [
+      "Bow"
+    ],
+    "description": "A crude but functional bow.",
+    "icon": "/img/valheim/itens/Bow/Bow.webp",
+    "metaData": {
+      "entityId": "Bow"
+    }
+  },
+  {
+    "id": "item_bow_ashlands",
+    "name": "Ash Fang",
+    "category": [
+      "Bow"
+    ],
+    "description": "Risen again from the ashes, this bow holds unyielding strength.",
+    "icon": "/img/valheim/itens/Bow/BowAshlands.webp",
+    "metaData": {
+      "entityId": "BowAshlands"
+    }
+  },
+  {
+    "id": "item_bow_draugrfang",
+    "name": "Draugr Fang",
+    "category": [
+      "Bow"
+    ],
+    "description": "Dark wood strung with glistening sinew. A vicious thing.",
+    "icon": "/img/valheim/itens/Bow/BowDraugrFang.webp",
+    "metaData": {
+      "entityId": "BowDraugrFang"
+    }
+  },
+  {
+    "id": "item_bow_finewood",
+    "name": "Finewood Bow",
+    "category": [
+      "Bow"
+    ],
+    "description": "A simple bow of strong and supple wood.",
+    "icon": "/img/valheim/itens/Bow/BowFineWood.webp",
+    "metaData": {
+      "entityId": "BowFineWood"
+    }
+  },
+  {
+    "id": "item_bow_ashlandsroot",
+    "name": "Root Fang",
+    "category": [
+      "Bow"
+    ],
+    "description": "Like the twisting branch was made to seek the sun, this bow was made to seek the slaughter.",
+    "icon": "/img/valheim/itens/Bow/BowAshlandsRoot.webp",
+    "metaData": {
+      "entityId": "BowAshlandsRoot"
+    }
+  },
+  {
+    "id": "item_crossbow_ripper",
+    "name": "Ripper",
+    "category": [
+      "Bow"
+    ],
+    "description": "Rips your foes apart, simple as that.",
+    "icon": "/img/valheim/itens/Bow/CrossbowRipper.webp",
+    "metaData": {
+      "entityId": "CrossbowRipper"
+    }
+  },
+  {
+    "id": "item_crossbow_ripper_blood",
+    "name": "Wound Ripper",
+    "category": [
+      "Bow"
+    ],
+    "description": "Ready to rend your enemies to pieces.",
+    "icon": "/img/valheim/itens/Bow/CrossbowRipperBlood.webp",
+    "metaData": {
+      "entityId": "CrossbowRipperBlood"
+    }
+  },
+  {
+    "id": "item_crossbow_ripper_lightning",
+    "name": "Storm Ripper",
+    "category": [
+      "Bow"
+    ],
+    "description": "The bolts will tear through your enemies like a particularly nasty gale.",
+    "icon": "/img/valheim/itens/Bow/CrossbowRipperLightning.webp",
+    "metaData": {
+      "entityId": "CrossbowRipperLightning"
+    }
+  }
+]

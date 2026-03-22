@@ -1,0 +1,434 @@
+[
+  {
+    "id": "item_chest_dress10",
+    "name": "Simple Undyed Dress",
+    "category": [
+      "Chest"
+    ],
+    "description": "A simple dress for everyday wear.",
+    "icon": "/img/valheim/itens/Chest/ArmorDress10.webp",
+    "metaData": {
+      "entityId": "ArmorDress10"
+    }
+  },
+  {
+    "id": "item_chest_dress7",
+    "name": "Plain Yellow Dress",
+    "category": [
+      "Chest"
+    ],
+    "description": "A plain yellow dress, worn over a green underdress.",
+    "icon": "/img/valheim/itens/Chest/ArmorDress7.webp",
+    "metaData": {
+      "entityId": "ArmorDress7"
+    }
+  },
+  {
+    "id": "item_chest_trollleather",
+    "name": "Troll Leather Tunic",
+    "category": [
+      "Chest"
+    ],
+    "description": "Trolls are hard to skin but their leather is tough and warm.",
+    "icon": "/img/valheim/itens/Chest/ArmorTrollLeatherChest.webp",
+    "metaData": {
+      "entityId": "ArmorTrollLeatherChest"
+    }
+  },
+  {
+    "id": "item_chest_tunic10",
+    "name": "Simple Undyed Tunic",
+    "category": [
+      "Chest"
+    ],
+    "description": "A simple tunic for everyday wear.",
+    "icon": "/img/valheim/itens/Chest/ArmorTunic10.webp",
+    "metaData": {
+      "entityId": "ArmorTunic10"
+    }
+  },
+  {
+    "id": "item_chest_tunic2",
+    "name": "Blue Tunic with Cape",
+    "category": [
+      "Chest"
+    ],
+    "description": "A blue tunic, worn with a fashionable cape made from fine brown wool.",
+    "icon": "/img/valheim/itens/Chest/ArmorTunic2.webp",
+    "metaData": {
+      "entityId": "ArmorTunic2"
+    }
+  },
+  {
+    "id": "item_chest_tunic3",
+    "name": "Blue Tunic with Beads",
+    "category": [
+      "Chest"
+    ],
+    "description": "A blue tunic worn with beads and silver jewelry. Sure to attract attention from other vikings.",
+    "icon": "/img/valheim/itens/Chest/ArmorTunic3.webp",
+    "metaData": {
+      "entityId": "ArmorTunic3"
+    }
+  },
+  {
+    "id": "item_chest_flametal",
+    "name": "Flametal Breastplate",
+    "category": [
+      "Chest"
+    ],
+    "description": "This fusion of mysterious flametal and charred bones serves as a protective layer more resilient than anything you could ever find in Midgard.",
+    "icon": "/img/valheim/itens/Chest/ArmorFlametalChest.webp",
+    "metaData": {
+      "entityId": "ArmorFlametalChest"
+    }
+  },
+  {
+    "id": "item_chest_harvester2",
+    "name": "Harvest Dress",
+    "category": [
+      "Chest"
+    ],
+    "description": "When working the fields, it's important to dress accordingly. This long dress keeps your knees covered while you work.",
+    "icon": "/img/valheim/itens/Chest/ArmorHarvester2.webp",
+    "metaData": {
+      "entityId": "ArmorHarvester2"
+    }
+  },
+  {
+    "id": "item_chest_mage_ashlands",
+    "name": "Robes of Embla",
+    "category": [
+      "Chest"
+    ],
+    "description": "Imbued with the power of the first sorceress, these robes will grant a boon to any who seeks to wield the ancient art of magic.",
+    "icon": "/img/valheim/itens/Chest/ArmorMageChest_Ashlands.webp",
+    "metaData": {
+      "entityId": "ArmorMageChest_Ashlands"
+    }
+  },
+  {
+    "id": "item_chest_rags",
+    "name": "Rag Tunic",
+    "category": [
+      "Chest"
+    ],
+    "description": "Better than nothing.",
+    "icon": "/img/valheim/itens/Chest/ArmorRagsChest.webp",
+    "metaData": {
+      "entityId": "ArmorRagsChest"
+    }
+  },
+  {
+    "id": "item_chest_root",
+    "name": "Root Harnesk",
+    "category": [
+      "Chest"
+    ],
+    "description": "Finely wrought and strong enough to turn even the sharpest blades.",
+    "icon": "/img/valheim/itens/Chest/ArmorRootChest.webp",
+    "metaData": {
+      "entityId": "ArmorRootChest"
+    }
+  },
+  {
+    "id": "item_chest_tunic4",
+    "name": "Plain Red Tunic",
+    "category": [
+      "Chest"
+    ],
+    "description": "A plain red tunic, brightly dyed.",
+    "icon": "/img/valheim/itens/Chest/ArmorTunic4.webp",
+    "metaData": {
+      "entityId": "ArmorTunic4"
+    }
+  },
+  {
+    "id": "item_chest_carapace",
+    "name": "Carapace Breastplate",
+    "category": [
+      "Chest"
+    ],
+    "description": "A breastplate crafted from the burnished carapace of a giant insect.",
+    "icon": "/img/valheim/itens/Chest/ArmorCarapaceChest.webp",
+    "metaData": {
+      "entityId": "ArmorCarapaceChest"
+    }
+  },
+  {
+    "id": "item_chest_dress1",
+    "name": "Plain Brown Dress",
+    "category": [
+      "Chest"
+    ],
+    "description": "A plain brown dress, worn over a blue underdress.",
+    "icon": "/img/valheim/itens/Chest/ArmorDress1.webp",
+    "metaData": {
+      "entityId": "ArmorDress1"
+    }
+  },
+  {
+    "id": "item_chest_dress2",
+    "name": "Brown Dress with Shawl",
+    "category": [
+      "Chest"
+    ],
+    "description": "A brown dress, with a matching shawl around the shoulders. Warm and stylish!",
+    "icon": "/img/valheim/itens/Chest/ArmorDress2.webp",
+    "metaData": {
+      "entityId": "ArmorDress2"
+    }
+  },
+  {
+    "id": "item_chest_dress3",
+    "name": "Brown Dress with Beads",
+    "category": [
+      "Chest"
+    ],
+    "description": "A fancy brown dress, with beads and silver fibula brooches. Excellent for a feast!",
+    "icon": "/img/valheim/itens/Chest/ArmorDress3.webp",
+    "metaData": {
+      "entityId": "ArmorDress3"
+    }
+  },
+  {
+    "id": "item_chest_dress4",
+    "name": "Plain Blue Dress",
+    "category": [
+      "Chest"
+    ],
+    "description": "A plain blue dress, worn over a red underdress.",
+    "icon": "/img/valheim/itens/Chest/ArmorDress4.webp",
+    "metaData": {
+      "entityId": "ArmorDress4"
+    }
+  },
+  {
+    "id": "item_chest_dress6",
+    "name": "Blue Dress with Beads",
+    "category": [
+      "Chest"
+    ],
+    "description": "A fancy blue dress, with beads and bronze fibula brooches. Excellent for a feast!",
+    "icon": "/img/valheim/itens/Chest/ArmorDress6.webp",
+    "metaData": {
+      "entityId": "ArmorDress6"
+    }
+  },
+  {
+    "id": "item_chest_dress8",
+    "name": "Yellow Dress with Shawl",
+    "category": [
+      "Chest"
+    ],
+    "description": "A yellow dress, with a purple shawl around the shoulders. Warm and stylish!",
+    "icon": "/img/valheim/itens/Chest/ArmorDress8.webp",
+    "metaData": {
+      "entityId": "ArmorDress8"
+    }
+  },
+  {
+    "id": "item_chest_dress9",
+    "name": "Yellow Dress with Beads",
+    "category": [
+      "Chest"
+    ],
+    "description": "A fancy yellow dress, with beads and silver fibula brooches. Excellent for a feast!",
+    "icon": "/img/valheim/itens/Chest/ArmorDress9.webp",
+    "metaData": {
+      "entityId": "ArmorDress9"
+    }
+  },
+  {
+    "id": "item_chest_fenris",
+    "name": "Fenris Coat",
+    "category": [
+      "Chest"
+    ],
+    "description": "The beast could draw deep breaths, so that its howl could be heard far across the land.",
+    "icon": "/img/valheim/itens/Chest/ArmorFenringChest.webp",
+    "metaData": {
+      "entityId": "ArmorFenringChest"
+    }
+  },
+  {
+    "id": "item_chest_harvester1",
+    "name": "Harvest Tunic",
+    "category": [
+      "Chest"
+    ],
+    "description": "When working the fields, it's important to dress accordingly. A shorter tunic lets in a cool breeze.",
+    "icon": "/img/valheim/itens/Chest/ArmorHarvester1.webp",
+    "metaData": {
+      "entityId": "ArmorHarvester1"
+    }
+  },
+  {
+    "id": "item_chest_pcuirass",
+    "name": "Padded Cuirass",
+    "category": [
+      "Chest"
+    ],
+    "description": "Finely wrought and strong enough to turn even the sharpest blades.",
+    "icon": "/img/valheim/itens/Chest/ArmorPaddedCuirass.webp",
+    "metaData": {
+      "entityId": "ArmorPaddedCuirass"
+    }
+  },
+  {
+    "id": "item_chest_tunic1",
+    "name": "Plain Blue Tunic",
+    "category": [
+      "Chest"
+    ],
+    "description": "A plain blue tunic, brightly dyed.",
+    "icon": "/img/valheim/itens/Chest/ArmorTunic1.webp",
+    "metaData": {
+      "entityId": "ArmorTunic1"
+    }
+  },
+  {
+    "id": "item_chest_tunic7",
+    "name": "Plain Yellow Tunic",
+    "category": [
+      "Chest"
+    ],
+    "description": "A plain yellow tunic, brightly dyed.",
+    "icon": "/img/valheim/itens/Chest/ArmorTunic7.webp",
+    "metaData": {
+      "entityId": "ArmorTunic7"
+    }
+  },
+  {
+    "id": "item_chest_tunic8",
+    "name": "Yellow Tunic with Cape",
+    "category": [
+      "Chest"
+    ],
+    "description": "A yellow tunic, worn with a fashionable cape made from fine purple wool.",
+    "icon": "/img/valheim/itens/Chest/ArmorTunic8.webp",
+    "metaData": {
+      "entityId": "ArmorTunic8"
+    }
+  },
+  {
+    "id": "item_chest_medium_ashlands",
+    "name": "Breastplate of Ask",
+    "category": [
+      "Chest"
+    ],
+    "description": "The first man in Midgard knew how to guard his most vital organs, perhaps with a breastplate just like this one.",
+    "icon": "/img/valheim/itens/Chest/ArmorAshlandsMediumChest.webp",
+    "metaData": {
+      "entityId": "ArmorAshlandsMediumChest"
+    }
+  },
+  {
+    "id": "item_chest_bronze",
+    "name": "Bronze Plate Tunic",
+    "category": [
+      "Chest"
+    ],
+    "description": "A breastplate of hammered bronze.",
+    "icon": "/img/valheim/itens/Chest/ArmorBronzeChest.webp",
+    "metaData": {
+      "entityId": "ArmorBronzeChest"
+    }
+  },
+  {
+    "id": "item_chest_dress5",
+    "name": "Blue Dress with Shawl",
+    "category": [
+      "Chest"
+    ],
+    "description": "A blue dress, with a green shawl around the shoulders. Warm and stylish!",
+    "icon": "/img/valheim/itens/Chest/ArmorDress5.webp",
+    "metaData": {
+      "entityId": "ArmorDress5"
+    }
+  },
+  {
+    "id": "item_chest_iron",
+    "name": "Iron Scale Mail",
+    "category": [
+      "Chest"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Chest/ArmorIronChest.webp",
+    "metaData": {
+      "entityId": "ArmorIronChest"
+    }
+  },
+  {
+    "id": "item_chest_leather",
+    "name": "Leather Tunic",
+    "category": [
+      "Chest"
+    ],
+    "description": "A tunic made from animal hide.",
+    "icon": "/img/valheim/itens/Chest/ArmorLeatherChest.webp",
+    "metaData": {
+      "entityId": "ArmorLeatherChest"
+    }
+  },
+  {
+    "id": "item_chest_mage",
+    "name": "Eitr-weave Robe",
+    "category": [
+      "Chest"
+    ],
+    "description": "These artfully layered robes have spells and charms sewn into every seam and fold.",
+    "icon": "/img/valheim/itens/Chest/ArmorMageChest.webp",
+    "metaData": {
+      "entityId": "ArmorMageChest"
+    }
+  },
+  {
+    "id": "item_chest_tunic5",
+    "name": "Red Tunic with Cape",
+    "category": [
+      "Chest"
+    ],
+    "description": "A red tunic, worn with a fashionable cape made from fine green wool.",
+    "icon": "/img/valheim/itens/Chest/ArmorTunic5.webp",
+    "metaData": {
+      "entityId": "ArmorTunic5"
+    }
+  },
+  {
+    "id": "item_chest_tunic6",
+    "name": "Red Tunic with Beads",
+    "category": [
+      "Chest"
+    ],
+    "description": "A red tunic worn with beads and bronze jewelry. Sure to attract attention from other vikings.",
+    "icon": "/img/valheim/itens/Chest/ArmorTunic6.webp",
+    "metaData": {
+      "entityId": "ArmorTunic6"
+    }
+  },
+  {
+    "id": "item_chest_tunic9",
+    "name": "Yellow Tunic with Beads",
+    "category": [
+      "Chest"
+    ],
+    "description": "A yellow tunic worn with beads and silver jewelry. Sure to attract attention from other vikings.",
+    "icon": "/img/valheim/itens/Chest/ArmorTunic9.webp",
+    "metaData": {
+      "entityId": "ArmorTunic9"
+    }
+  },
+  {
+    "id": "item_chest_wolf",
+    "name": "Wolf Hide Chestpiece",
+    "category": [
+      "Chest"
+    ],
+    "description": "A wolfskin jerkin, warm and wild-looking. It protects against the cold.",
+    "icon": "/img/valheim/itens/Chest/ArmorWolfChest.webp",
+    "metaData": {
+      "entityId": "ArmorWolfChest"
+    }
+  }
+]

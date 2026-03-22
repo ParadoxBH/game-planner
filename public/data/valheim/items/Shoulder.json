@@ -1,0 +1,110 @@
+[
+  {
+    "id": "item_cape_trollhide",
+    "name": "Troll Hide Cape",
+    "category": [
+      "Shoulder"
+    ],
+    "description": "Trollskin is tough and supple.",
+    "icon": "/img/valheim/itens/Shoulder/CapeTrollHide.webp",
+    "metaData": {
+      "entityId": "CapeTrollHide"
+    }
+  },
+  {
+    "id": "item_cape_deerhide",
+    "name": "Deer Hide Cape",
+    "category": [
+      "Shoulder"
+    ],
+    "description": "Rustic chic.",
+    "icon": "/img/valheim/itens/Shoulder/CapeDeerHide.webp",
+    "metaData": {
+      "entityId": "CapeDeerHide"
+    }
+  },
+  {
+    "id": "item_cape_asksvin",
+    "name": "Asksvin Cloak",
+    "category": [
+      "Shoulder"
+    ],
+    "description": "This thick cape catches the wind, not unlike the sail of a ship.",
+    "icon": "/img/valheim/itens/Shoulder/CapeAsksvin.webp",
+    "metaData": {
+      "entityId": "CapeAsksvin"
+    }
+  },
+  {
+    "id": "item_cape_linen",
+    "name": "Linen Cape",
+    "category": [
+      "Shoulder"
+    ],
+    "description": "A simple traveler's cape.",
+    "icon": "/img/valheim/itens/Shoulder/CapeLinen.webp",
+    "metaData": {
+      "entityId": "CapeLinen"
+    }
+  },
+  {
+    "id": "item_cape_ash",
+    "name": "Ashen Cape",
+    "category": [
+      "Shoulder"
+    ],
+    "description": "Thin metal threads are woven into this cape to create an intricate pattern, like a destiny woven by the Norns themselves.",
+    "icon": "/img/valheim/itens/Shoulder/CapeAsh.webp",
+    "metaData": {
+      "entityId": "CapeAsh"
+    }
+  },
+  {
+    "id": "item_cape_feather",
+    "name": "Feather Cape",
+    "category": [
+      "Shoulder"
+    ],
+    "description": "Donning this cape makes you feel lighter, almost as if you could fly!",
+    "icon": "/img/valheim/itens/Shoulder/CapeFeather.webp",
+    "metaData": {
+      "entityId": "CapeFeather"
+    }
+  },
+  {
+    "id": "item_cape_lox",
+    "name": "Lox Cape",
+    "category": [
+      "Shoulder"
+    ],
+    "description": "A pelt from one of the great beasts, thick and warm.",
+    "icon": "/img/valheim/itens/Shoulder/CapeLox.webp",
+    "metaData": {
+      "entityId": "CapeLox"
+    }
+  },
+  {
+    "id": "item_cape_odin",
+    "name": "Cape of Odin",
+    "category": [
+      "Shoulder"
+    ],
+    "description": "Odin's finest warriors deserve the finest cloth.",
+    "icon": "/img/valheim/itens/Shoulder/CapeOdin.webp",
+    "metaData": {
+      "entityId": "CapeOdin"
+    }
+  },
+  {
+    "id": "item_cape_wolf",
+    "name": "Wolf Fur Cape",
+    "category": [
+      "Shoulder"
+    ],
+    "description": "Wolves are natural survivors. This one was just unlucky. Now its pelt will warm you in the snow.",
+    "icon": "/img/valheim/itens/Shoulder/CapeWolf.webp",
+    "metaData": {
+      "entityId": "CapeWolf"
+    }
+  }
+]

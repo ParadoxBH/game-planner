@@ -1,0 +1,1166 @@
+[
+  {
+    "id": "item_barleywine",
+    "name": "Fire Resistance Barley Wine",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Fortifies you against fire.",
+    "icon": "/img/valheim/itens/Consumable/BarleyWine.webp",
+    "metaData": {
+      "entityId": "BarleyWine"
+    }
+  },
+  {
+    "id": "item_carrotsoup",
+    "name": "Carrot Soup",
+    "category": [
+      "Consumable"
+    ],
+    "description": "A warm tasty soup made of mostly carrots.",
+    "icon": "/img/valheim/itens/Consumable/CarrotSoup.webp",
+    "metaData": {
+      "entityId": "CarrotSoup"
+    }
+  },
+  {
+    "id": "item_chicken_meat_cooked",
+    "name": "Cooked Chicken Meat",
+    "category": [
+      "Consumable"
+    ],
+    "description": "It tastes like chicken.",
+    "icon": "/img/valheim/itens/Consumable/CookedChickenMeat.webp",
+    "metaData": {
+      "entityId": "CookedChickenMeat"
+    }
+  },
+  {
+    "id": "item_cloudberries",
+    "name": "Cloudberries",
+    "category": [
+      "Consumable"
+    ],
+    "description": "The gold of the forest.",
+    "icon": "/img/valheim/itens/Consumable/Cloudberry.webp",
+    "metaData": {
+      "entityId": "Cloudberry"
+    }
+  },
+  {
+    "id": "item_asksvin_meat_cooked",
+    "name": "Cooked Asksvin Tail",
+    "category": [
+      "Consumable"
+    ],
+    "description": "This meat has a potent and mature flavour, but is very tasty when grilled right.",
+    "icon": "/img/valheim/itens/Consumable/CookedAsksvinMeat.webp",
+    "metaData": {
+      "entityId": "CookedAsksvinMeat"
+    }
+  },
+  {
+    "id": "item_bug_meat_cooked",
+    "name": "Cooked Seeker Meat",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Succulent white meat. A true delicacy.",
+    "icon": "/img/valheim/itens/Consumable/CookedBugMeat.webp",
+    "metaData": {
+      "entityId": "CookedBugMeat"
+    }
+  },
+  {
+    "id": "item_egg_cooked",
+    "name": "Cooked Egg",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Sunny side up!",
+    "icon": "/img/valheim/itens/Consumable/CookedEgg.webp",
+    "metaData": {
+      "entityId": "CookedEgg"
+    }
+  },
+  {
+    "id": "item_loxmeat_cooked",
+    "name": "Cooked Lox Meat",
+    "category": [
+      "Consumable"
+    ],
+    "description": "A great hunk of tender meat, food fit for Valhalla!",
+    "icon": "/img/valheim/itens/Consumable/CookedLoxMeat.webp",
+    "metaData": {
+      "entityId": "CookedLoxMeat"
+    }
+  },
+  {
+    "id": "item_boar_meat_cooked",
+    "name": "Cooked Boar Meat",
+    "category": [
+      "Consumable"
+    ],
+    "description": "An earthly taste.",
+    "icon": "/img/valheim/itens/Consumable/CookedMeat.webp",
+    "metaData": {
+      "entityId": "CookedMeat"
+    }
+  },
+  {
+    "id": "item_deerstew",
+    "name": "Deer Stew",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Fall-apart tender.",
+    "icon": "/img/valheim/itens/Consumable/DeerStew.webp",
+    "metaData": {
+      "entityId": "DeerStew"
+    }
+  },
+  {
+    "id": "item_feastblackforest",
+    "name": "Black Forest Buffet Platter",
+    "category": [
+      "Consumable"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Consumable/FeastBlackforest.webp",
+    "metaData": {
+      "entityId": "FeastBlackforest"
+    }
+  },
+  {
+    "id": "item_feastplains",
+    "name": "Plains Pie Picnic",
+    "category": [
+      "Consumable"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Consumable/FeastPlains.webp",
+    "metaData": {
+      "entityId": "FeastPlains"
+    }
+  },
+  {
+    "id": "item_feastswamps",
+    "name": "Swamp Dweller's Delight",
+    "category": [
+      "Consumable"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Consumable/FeastSwamps.webp",
+    "metaData": {
+      "entityId": "FeastSwamps"
+    }
+  },
+  {
+    "id": "item_feastashlands",
+    "name": "Ashlands Gourmet Bowl",
+    "category": [
+      "Consumable"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Consumable/FeastAshlands.webp",
+    "metaData": {
+      "entityId": "FeastAshlands"
+    }
+  },
+  {
+    "id": "item_fish_cooked",
+    "name": "Cooked Fish",
+    "category": [
+      "Consumable"
+    ],
+    "description": "A tasty side of smoked fish.",
+    "icon": "/img/valheim/itens/Consumable/FishCooked.webp",
+    "metaData": {
+      "entityId": "FishCooked"
+    }
+  },
+  {
+    "id": "item_bloodpudding",
+    "name": "Blood Pudding",
+    "category": [
+      "Consumable"
+    ],
+    "description": "It's bloody tasty.",
+    "icon": "/img/valheim/itens/Consumable/BloodPudding.webp",
+    "metaData": {
+      "entityId": "BloodPudding"
+    }
+  },
+  {
+    "id": "item_boarjerky",
+    "name": "Boar Jerky",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Lean and salty.",
+    "icon": "/img/valheim/itens/Consumable/BoarJerky.webp",
+    "metaData": {
+      "entityId": "BoarJerky"
+    }
+  },
+  {
+    "id": "item_bread",
+    "name": "Bread",
+    "category": [
+      "Consumable"
+    ],
+    "description": "A tasty loaf of bread.",
+    "icon": "/img/valheim/itens/Consumable/Bread.webp",
+    "metaData": {
+      "entityId": "Bread"
+    }
+  },
+  {
+    "id": "item_carrot",
+    "name": "Carrot",
+    "category": [
+      "Consumable"
+    ],
+    "description": "An orange treat.",
+    "icon": "/img/valheim/itens/Consumable/Carrot.webp",
+    "metaData": {
+      "entityId": "Carrot"
+    }
+  },
+  {
+    "id": "item_blacksoup",
+    "name": "Black Soup",
+    "category": [
+      "Consumable"
+    ],
+    "description": "A perfect balance of sweetness and acidity.",
+    "icon": "/img/valheim/itens/Consumable/BlackSoup.webp",
+    "metaData": {
+      "entityId": "BlackSoup"
+    }
+  },
+  {
+    "id": "item_blueberries",
+    "name": "Blueberries",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Tiny but tasty.",
+    "icon": "/img/valheim/itens/Consumable/Blueberries.webp",
+    "metaData": {
+      "entityId": "Blueberries"
+    }
+  },
+  {
+    "id": "item_hare_meat_cooked",
+    "name": "Cooked Hare Meat",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Stringy but flavorful.",
+    "icon": "/img/valheim/itens/Consumable/CookedHareMeat.webp",
+    "metaData": {
+      "entityId": "CookedHareMeat"
+    }
+  },
+  {
+    "id": "item_volture_meat_cooked",
+    "name": "Cooked Volture Meat",
+    "category": [
+      "Consumable"
+    ],
+    "description": "A chewy and somewhat dry meat. Some seasoning would probably make it taste better, but it'll fill your stomach regardless.",
+    "icon": "/img/valheim/itens/Consumable/CookedVoltureMeat.webp",
+    "metaData": {
+      "entityId": "CookedVoltureMeat"
+    }
+  },
+  {
+    "id": "item_wolf_meat_cooked",
+    "name": "Cooked Wolf Meat",
+    "category": [
+      "Consumable"
+    ],
+    "description": "A wild taste.",
+    "icon": "/img/valheim/itens/Consumable/CookedWolfMeat.webp",
+    "metaData": {
+      "entityId": "CookedWolfMeat"
+    }
+  },
+  {
+    "id": "item_eyescream",
+    "name": "Eyescream",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Crispy cool and creamy.",
+    "icon": "/img/valheim/itens/Consumable/Eyescream.webp",
+    "metaData": {
+      "entityId": "Eyescream"
+    }
+  },
+  {
+    "id": "item_feastmistlands",
+    "name": "Mushrooms Galore  la Mistlands",
+    "category": [
+      "Consumable"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Consumable/FeastMistlands.webp",
+    "metaData": {
+      "entityId": "FeastMistlands"
+    }
+  },
+  {
+    "id": "item_feastmountains",
+    "name": "Hearty Mountain Logger's Stew",
+    "category": [
+      "Consumable"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Consumable/FeastMountains.webp",
+    "metaData": {
+      "entityId": "FeastMountains"
+    }
+  },
+  {
+    "id": "item_feastoceans",
+    "name": "Sailor's Bounty",
+    "category": [
+      "Consumable"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Consumable/FeastOceans.webp",
+    "metaData": {
+      "entityId": "FeastOceans"
+    }
+  },
+  {
+    "id": "item_fierysvinstew",
+    "name": "Fiery Svinstew",
+    "category": [
+      "Consumable"
+    ],
+    "description": "This musty stew is a necessity on every adventurer's menu.",
+    "icon": "/img/valheim/itens/Consumable/FierySvinstew.webp",
+    "metaData": {
+      "entityId": "FierySvinstew"
+    }
+  },
+  {
+    "id": "item_fishandbread",
+    "name": "Fish 'n' Bread",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Bounty from both land and sea.",
+    "icon": "/img/valheim/itens/Consumable/FishAndBread.webp",
+    "metaData": {
+      "entityId": "FishAndBread"
+    }
+  },
+  {
+    "id": "item_fishwraps",
+    "name": "Fish Wraps",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Bread and fish, what more to wish?",
+    "icon": "/img/valheim/itens/Consumable/FishWraps.webp",
+    "metaData": {
+      "entityId": "FishWraps"
+    }
+  },
+  {
+    "id": "item_bonemawmeat_cooked",
+    "name": "Cooked Bonemaw Meat",
+    "category": [
+      "Consumable"
+    ],
+    "description": "The boiling sea did nothing to this meat, but grilling it over the fire has given it a delightful crisp.",
+    "icon": "/img/valheim/itens/Consumable/CookedBoneMawSerpentMeat.webp",
+    "metaData": {
+      "entityId": "CookedBoneMawSerpentMeat"
+    }
+  },
+  {
+    "id": "item_deer_meat_cooked",
+    "name": "Cooked Deer Meat",
+    "category": [
+      "Consumable"
+    ],
+    "description": "All that running paid off.",
+    "icon": "/img/valheim/itens/Consumable/CookedDeerMeat.webp",
+    "metaData": {
+      "entityId": "CookedDeerMeat"
+    }
+  },
+  {
+    "id": "item_feastmeadows",
+    "name": "Whole Roasted Meadow Boar",
+    "category": [
+      "Consumable"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Consumable/FeastMeadows.webp",
+    "metaData": {
+      "entityId": "FeastMeadows"
+    }
+  },
+  {
+    "id": "item_fiddleheadfern",
+    "name": "Fiddlehead",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Veggies with a twist!",
+    "icon": "/img/valheim/itens/Consumable/Fiddleheadfern.webp",
+    "metaData": {
+      "entityId": "Fiddleheadfern"
+    }
+  },
+  {
+    "id": "item_honey",
+    "name": "Honey",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Sweet and tasty.",
+    "icon": "/img/valheim/itens/Consumable/Honey.webp",
+    "metaData": {
+      "entityId": "Honey"
+    }
+  },
+  {
+    "id": "item_honeyglazedchicken",
+    "name": "Honey Glazed Chicken",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Grilled to perfection. Makes both eyes and mouths water.",
+    "icon": "/img/valheim/itens/Consumable/HoneyGlazedChicken.webp",
+    "metaData": {
+      "entityId": "HoneyGlazedChicken"
+    }
+  },
+  {
+    "id": "item_mead_bugrepellent",
+    "name": "Anti-Sting Concoction",
+    "category": [
+      "Consumable"
+    ],
+    "description": "The perfect drink for a day in the Plains.",
+    "icon": "/img/valheim/itens/Consumable/MeadBugRepellent.webp",
+    "metaData": {
+      "entityId": "MeadBugRepellent"
+    }
+  },
+  {
+    "id": "item_mead_eitr_minor",
+    "name": "Minor Eitr Mead",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Restores eitr.",
+    "icon": "/img/valheim/itens/Consumable/MeadEitrMinor.webp",
+    "metaData": {
+      "entityId": "MeadEitrMinor"
+    }
+  },
+  {
+    "id": "item_mead_lightfoot",
+    "name": "Lightfoot Mead",
+    "category": [
+      "Consumable"
+    ],
+    "description": "This bottle is full, yet it feels like it weighs almost nothing at all.",
+    "icon": "/img/valheim/itens/Consumable/MeadLightfoot.webp",
+    "metaData": {
+      "entityId": "MeadLightfoot"
+    }
+  },
+  {
+    "id": "item_mead_swimmer",
+    "name": "Draught of Vananidir",
+    "category": [
+      "Consumable"
+    ],
+    "description": "You feel invigorated just by holding this, as the ocean beckons you to come for a swim.",
+    "icon": "/img/valheim/itens/Consumable/MeadSwimmer.webp",
+    "metaData": {
+      "entityId": "MeadSwimmer"
+    }
+  },
+  {
+    "id": "item_mushroomcommon",
+    "name": "Mushroom",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Bounty of the forest.",
+    "icon": "/img/valheim/itens/Consumable/Mushroom.webp",
+    "metaData": {
+      "entityId": "Mushroom"
+    }
+  },
+  {
+    "id": "item_mushroom_bzerker",
+    "name": "Toadstool",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Some say you can eat everything you find in the forest. That is not the case with this mushroom.",
+    "icon": "/img/valheim/itens/Consumable/MushroomBzerker.webp",
+    "metaData": {
+      "entityId": "MushroomBzerker"
+    }
+  },
+  {
+    "id": "item_jotunpuffs",
+    "name": "Jotun Puffs",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Swollen with magic, these golden orbs bubble from the ground where the Jotun fell.",
+    "icon": "/img/valheim/itens/Consumable/MushroomJotunPuffs.webp",
+    "metaData": {
+      "entityId": "MushroomJotunPuffs"
+    }
+  },
+  {
+    "id": "item_necktailgrilled",
+    "name": "Grilled Neck Tail",
+    "category": [
+      "Consumable"
+    ],
+    "description": "This savoury, charcoal-grilled meat has a slight aroma of seaweed and grass.",
+    "icon": "/img/valheim/itens/Consumable/NeckTailGrilled.webp",
+    "metaData": {
+      "entityId": "NeckTailGrilled"
+    }
+  },
+  {
+    "id": "item_onionsoup",
+    "name": "Onion Soup",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Deliciously rich.",
+    "icon": "/img/valheim/itens/Consumable/OnionSoup.webp",
+    "metaData": {
+      "entityId": "OnionSoup"
+    }
+  },
+  {
+    "id": "item_loxpie",
+    "name": "Lox Meat Pie",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Break the crust to release a cloud of fragrant steam. Delicious!",
+    "icon": "/img/valheim/itens/Consumable/LoxPie.webp",
+    "metaData": {
+      "entityId": "LoxPie"
+    }
+  },
+  {
+    "id": "item_marinatedgreens",
+    "name": "Marinated Greens",
+    "category": [
+      "Consumable"
+    ],
+    "description": "It's spicy, it's chewy, it's sweet This mad dish tickles your tongue as well as your mind.",
+    "icon": "/img/valheim/itens/Consumable/MarinatedGreens.webp",
+    "metaData": {
+      "entityId": "MarinatedGreens"
+    }
+  },
+  {
+    "id": "item_mashedmeat",
+    "name": "Mashed Meat",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Leftover meat can actually be pretty tasty if you just mash it right!",
+    "icon": "/img/valheim/itens/Consumable/MashedMeat.webp",
+    "metaData": {
+      "entityId": "MashedMeat"
+    }
+  },
+  {
+    "id": "item_mead_frostres",
+    "name": "Frost Resistance Mead",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Protects against the cold.",
+    "icon": "/img/valheim/itens/Consumable/MeadFrostResist.webp",
+    "metaData": {
+      "entityId": "MeadFrostResist"
+    }
+  },
+  {
+    "id": "item_mead_stamina_minor",
+    "name": "Minor Stamina Mead",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Restores stamina.",
+    "icon": "/img/valheim/itens/Consumable/MeadStaminaMinor.webp",
+    "metaData": {
+      "entityId": "MeadStaminaMinor"
+    }
+  },
+  {
+    "id": "item_meatplatter",
+    "name": "Meat Platter",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Battle fuel.",
+    "icon": "/img/valheim/itens/Consumable/MeatPlatter.webp",
+    "metaData": {
+      "entityId": "MeatPlatter"
+    }
+  },
+  {
+    "id": "item_mushroomblue",
+    "name": "Blue Mushroom",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Glows with a soft blue hue.",
+    "icon": "/img/valheim/itens/Consumable/MushroomBlue.webp",
+    "metaData": {
+      "entityId": "MushroomBlue"
+    }
+  },
+  {
+    "id": "item_smokepuff",
+    "name": "Smoke Puff",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Hopefully it tastes better after cooking.",
+    "icon": "/img/valheim/itens/Consumable/MushroomSmokePuff.webp",
+    "metaData": {
+      "entityId": "MushroomSmokePuff"
+    }
+  },
+  {
+    "id": "item_onion",
+    "name": "Onion",
+    "category": [
+      "Consumable"
+    ],
+    "description": "A crunchy and spicy taste.",
+    "icon": "/img/valheim/itens/Consumable/Onion.webp",
+    "metaData": {
+      "entityId": "Onion"
+    }
+  },
+  {
+    "id": "item_pukeberries",
+    "name": "Bukeperries",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Allows the consumer to quickly evacuate any misplaced meal and start anew.",
+    "icon": "/img/valheim/itens/Consumable/Pukeberries.webp",
+    "metaData": {
+      "entityId": "Pukeberries"
+    }
+  },
+  {
+    "id": "item_scorchingmedley",
+    "name": "Scorching Medley",
+    "category": [
+      "Consumable"
+    ],
+    "description": "A varied diet is important, so why not try this vegetarian option?",
+    "icon": "/img/valheim/itens/Consumable/ScorchingMedley.webp",
+    "metaData": {
+      "entityId": "ScorchingMedley"
+    }
+  },
+  {
+    "id": "item_shocklatesmoothie",
+    "name": "Muckshake",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Wakes you up!",
+    "icon": "/img/valheim/itens/Consumable/ShocklateSmoothie.webp",
+    "metaData": {
+      "entityId": "ShocklateSmoothie"
+    }
+  },
+  {
+    "id": "item_raspberries",
+    "name": "Raspberries",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Sweet and delicious.",
+    "icon": "/img/valheim/itens/Consumable/Raspberry.webp",
+    "metaData": {
+      "entityId": "Raspberry"
+    }
+  },
+  {
+    "id": "item_roastedcrustpie",
+    "name": "Roasted Crust Pie",
+    "category": [
+      "Consumable"
+    ],
+    "description": "This dessert keeps you going all day long.",
+    "icon": "/img/valheim/itens/Consumable/RoastedCrustPie.webp",
+    "metaData": {
+      "entityId": "RoastedCrustPie"
+    }
+  },
+  {
+    "id": "item_royaljelly",
+    "name": "Royal Jelly",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Jelly fit for kings and queens.",
+    "icon": "/img/valheim/itens/Consumable/RoyalJelly.webp",
+    "metaData": {
+      "entityId": "RoyalJelly"
+    }
+  },
+  {
+    "id": "item_salad",
+    "name": "Salad",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Fresh, crisp leaves.",
+    "icon": "/img/valheim/itens/Consumable/Salad.webp",
+    "metaData": {
+      "entityId": "Salad"
+    }
+  },
+  {
+    "id": "item_seekeraspic",
+    "name": "Seeker Aspic",
+    "category": [
+      "Consumable"
+    ],
+    "description": "A quivering jelly with a taste like gentle electricity.",
+    "icon": "/img/valheim/itens/Consumable/SeekerAspic.webp",
+    "metaData": {
+      "entityId": "SeekerAspic"
+    }
+  },
+  {
+    "id": "item_serpentmeatcooked",
+    "name": "Cooked Serpent Meat",
+    "category": [
+      "Consumable"
+    ],
+    "description": "A cooked slice of sea serpent. Smells good.",
+    "icon": "/img/valheim/itens/Consumable/SerpentMeatCooked.webp",
+    "metaData": {
+      "entityId": "SerpentMeatCooked"
+    }
+  },
+  {
+    "id": "item_magicallystuffedmushroom",
+    "name": "Stuffed Mushroom",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Bursting with magical flavour.",
+    "icon": "/img/valheim/itens/Consumable/MagicallyStuffedShroom.webp",
+    "metaData": {
+      "entityId": "MagicallyStuffedShroom"
+    }
+  },
+  {
+    "id": "item_mead_eitr_lingering",
+    "name": "Lingering Eitr Mead",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Increases eitr regeneration.",
+    "icon": "/img/valheim/itens/Consumable/MeadEitrLingering.webp",
+    "metaData": {
+      "entityId": "MeadEitrLingering"
+    }
+  },
+  {
+    "id": "item_mead_hasty",
+    "name": "Tonic of Ratatosk",
+    "category": [
+      "Consumable"
+    ],
+    "description": "The squirrel must be quick on its feet as it runs up and down the trunk of the world tree. Although it no longer visits Valheim, there are still those who remember it...",
+    "icon": "/img/valheim/itens/Consumable/MeadHasty.webp",
+    "metaData": {
+      "entityId": "MeadHasty"
+    }
+  },
+  {
+    "id": "item_mead_hp_medium",
+    "name": "Medium Healing Mead",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Restores health.",
+    "icon": "/img/valheim/itens/Consumable/MeadHealthMedium.webp",
+    "metaData": {
+      "entityId": "MeadHealthMedium"
+    }
+  },
+  {
+    "id": "item_mead_hp_minor",
+    "name": "Minor Healing Mead",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Restores health.",
+    "icon": "/img/valheim/itens/Consumable/MeadHealthMinor.webp",
+    "metaData": {
+      "entityId": "MeadHealthMinor"
+    }
+  },
+  {
+    "id": "item_mead_stamina_lingering",
+    "name": "Lingering Stamina Mead",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Increases stamina regeneration.",
+    "icon": "/img/valheim/itens/Consumable/MeadStaminaLingering.webp",
+    "metaData": {
+      "entityId": "MeadStaminaLingering"
+    }
+  },
+  {
+    "id": "item_mead_strength",
+    "name": "Mead of Troll Endurance",
+    "category": [
+      "Consumable"
+    ],
+    "description": "What creature can carry more than a troll? Why, a viking with this drink of course!",
+    "icon": "/img/valheim/itens/Consumable/MeadStrength.webp",
+    "metaData": {
+      "entityId": "MeadStrength"
+    }
+  },
+  {
+    "id": "item_mead_tasty",
+    "name": "Tasty Mead",
+    "category": [
+      "Consumable"
+    ],
+    "description": "The nectar of the Gods, divine mead.",
+    "icon": "/img/valheim/itens/Consumable/MeadTasty.webp",
+    "metaData": {
+      "entityId": "MeadTasty"
+    }
+  },
+  {
+    "id": "item_mead_trollpheromones",
+    "name": "Love Potion",
+    "category": [
+      "Consumable"
+    ],
+    "description": "An intense musk permeates the air around this bottle.",
+    "icon": "/img/valheim/itens/Consumable/MeadTrollPheromones.webp",
+    "metaData": {
+      "entityId": "MeadTrollPheromones"
+    }
+  },
+  {
+    "id": "item_mincemeatsauce",
+    "name": "Minced Meat Sauce",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Chunks of goodness in a thick gravy.",
+    "icon": "/img/valheim/itens/Consumable/MinceMeatSauce.webp",
+    "metaData": {
+      "entityId": "MinceMeatSauce"
+    }
+  },
+  {
+    "id": "item_mistharesupreme",
+    "name": "Misthare Supreme",
+    "category": [
+      "Consumable"
+    ],
+    "description": "One of life's Great Pleasures.",
+    "icon": "/img/valheim/itens/Consumable/MisthareSupreme.webp",
+    "metaData": {
+      "entityId": "MisthareSupreme"
+    }
+  },
+  {
+    "id": "item_sausages",
+    "name": "Sausages",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Links of savory, smoked meat.",
+    "icon": "/img/valheim/itens/Consumable/Sausages.webp",
+    "metaData": {
+      "entityId": "Sausages"
+    }
+  },
+  {
+    "id": "item_serpentstew",
+    "name": "Serpent Stew",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Smells of honey and serpent...",
+    "icon": "/img/valheim/itens/Consumable/SerpentStew.webp",
+    "metaData": {
+      "entityId": "SerpentStew"
+    }
+  },
+  {
+    "id": "item_wolfjerky",
+    "name": "Wolf Jerky",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Chewy and full of flavor.",
+    "icon": "/img/valheim/itens/Consumable/WolfJerky.webp",
+    "metaData": {
+      "entityId": "WolfJerky"
+    }
+  },
+  {
+    "id": "item_mead_bzerker",
+    "name": "Berserkir Mead",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Something poisonous stirs within, brewed to the point where its potential can finally be harnessed. But be careful to let the beast out...",
+    "icon": "/img/valheim/itens/Consumable/MeadBzerker.webp",
+    "metaData": {
+      "entityId": "MeadBzerker"
+    }
+  },
+  {
+    "id": "item_mead_hp_lingering",
+    "name": "Lingering Healing Mead",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Increases health regeneration.",
+    "icon": "/img/valheim/itens/Consumable/MeadHealthLingering.webp",
+    "metaData": {
+      "entityId": "MeadHealthLingering"
+    }
+  },
+  {
+    "id": "item_mead_hp_major",
+    "name": "Major Healing Mead",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Restores health.",
+    "icon": "/img/valheim/itens/Consumable/MeadHealthMajor.webp",
+    "metaData": {
+      "entityId": "MeadHealthMajor"
+    }
+  },
+  {
+    "id": "item_mead_poisonres",
+    "name": "Poison Resistance Mead",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Fortifies you against poison.",
+    "icon": "/img/valheim/itens/Consumable/MeadPoisonResist.webp",
+    "metaData": {
+      "entityId": "MeadPoisonResist"
+    }
+  },
+  {
+    "id": "item_mead_stamina_medium",
+    "name": "Medium Stamina Mead",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Restores stamina.",
+    "icon": "/img/valheim/itens/Consumable/MeadStaminaMedium.webp",
+    "metaData": {
+      "entityId": "MeadStaminaMedium"
+    }
+  },
+  {
+    "id": "item_mead_tamer",
+    "name": "Brew of Animal Whispers",
+    "category": [
+      "Consumable"
+    ],
+    "description": "It smells like a pigsty. Likely the taste won't be much better.",
+    "icon": "/img/valheim/itens/Consumable/MeadTamer.webp",
+    "metaData": {
+      "entityId": "MeadTamer"
+    }
+  },
+  {
+    "id": "item_magecap",
+    "name": "Magecap",
+    "category": [
+      "Consumable"
+    ],
+    "description": "The delicate blue magecaps crackle like nerve-endings with sorcerous vitality.",
+    "icon": "/img/valheim/itens/Consumable/MushroomMagecap.webp",
+    "metaData": {
+      "entityId": "MushroomMagecap"
+    }
+  },
+  {
+    "id": "item_mushroomomelette",
+    "name": "Mushroom Omelette",
+    "category": [
+      "Consumable"
+    ],
+    "description": "A delicious omelette with an earthy aftertaste.",
+    "icon": "/img/valheim/itens/Consumable/MushroomOmelette.webp",
+    "metaData": {
+      "entityId": "MushroomOmelette"
+    }
+  },
+  {
+    "id": "item_mushroomyellow",
+    "name": "Yellow Mushroom",
+    "category": [
+      "Consumable"
+    ],
+    "description": "An energetic glowing mushroom.",
+    "icon": "/img/valheim/itens/Consumable/MushroomYellow.webp",
+    "metaData": {
+      "entityId": "MushroomYellow"
+    }
+  },
+  {
+    "id": "item_piquantpie",
+    "name": "Piquant Pie",
+    "category": [
+      "Consumable"
+    ],
+    "description": "It takes some time and effort to make this pie, but the taste is well worth it.",
+    "icon": "/img/valheim/itens/Consumable/PiquantPie.webp",
+    "metaData": {
+      "entityId": "PiquantPie"
+    }
+  },
+  {
+    "id": "item_queensjam",
+    "name": "Queen's Jam",
+    "category": [
+      "Consumable"
+    ],
+    "description": "That classic tasty blend of raspberries and blueberries.",
+    "icon": "/img/valheim/itens/Consumable/QueensJam.webp",
+    "metaData": {
+      "entityId": "QueensJam"
+    }
+  },
+  {
+    "id": "item_meat_rotten",
+    "name": "Rotten Meat",
+    "category": [
+      "Consumable"
+    ],
+    "description": "There are maggots crawling in the meat. It smells awful.",
+    "icon": "/img/valheim/itens/Consumable/RottenMeat.webp",
+    "metaData": {
+      "entityId": "RottenMeat"
+    }
+  },
+  {
+    "id": "item_spicymarmalade",
+    "name": "Spicy Marmalade",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Sugary honey perfectly balanced with tangy fronds and tart berries.",
+    "icon": "/img/valheim/itens/Consumable/SpicyMarmalade.webp",
+    "metaData": {
+      "entityId": "SpicyMarmalade"
+    }
+  },
+  {
+    "id": "item_vineberry",
+    "name": "Vineberry Cluster",
+    "category": [
+      "Consumable"
+    ],
+    "description": "These juicy berries are both sour and sweet.",
+    "icon": "/img/valheim/itens/Consumable/Vineberry.webp",
+    "metaData": {
+      "entityId": "Vineberry"
+    }
+  },
+  {
+    "id": "item_wolf_skewer",
+    "name": "Wolf Skewer",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Dripping with taste.",
+    "icon": "/img/valheim/itens/Consumable/WolfMeatSkewer.webp",
+    "metaData": {
+      "entityId": "WolfMeatSkewer"
+    }
+  },
+  {
+    "id": "item_sizzlingberrybroth",
+    "name": "Sizzling Berry Broth",
+    "category": [
+      "Consumable"
+    ],
+    "description": "This soup settles in your stomach with an almost tingly sensation.",
+    "icon": "/img/valheim/itens/Consumable/SizzlingBerryBroth.webp",
+    "metaData": {
+      "entityId": "SizzlingBerryBroth"
+    }
+  },
+  {
+    "id": "item_sparklingshroomshake",
+    "name": "Sparkling Shroomshake",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Perhaps it's not the best flavour to start the day with, but it will give you the boost you need.",
+    "icon": "/img/valheim/itens/Consumable/SparklingShroomshake.webp",
+    "metaData": {
+      "entityId": "SparklingShroomshake"
+    }
+  },
+  {
+    "id": "item_turnipstew",
+    "name": "Turnip Stew",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Nutritious and restorative.",
+    "icon": "/img/valheim/itens/Consumable/TurnipStew.webp",
+    "metaData": {
+      "entityId": "TurnipStew"
+    }
+  },
+  {
+    "id": "item_yggdrasilporridge",
+    "name": "Yggdrasil Porridge",
+    "category": [
+      "Consumable"
+    ],
+    "description": "Made with sap from the great tree. Even a mouthful imparts a warm glow to your whole body.",
+    "icon": "/img/valheim/itens/Consumable/YggdrasilPorridge.webp",
+    "metaData": {
+      "entityId": "YggdrasilPorridge"
+    }
+  }
+]

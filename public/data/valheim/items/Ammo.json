@@ -1,0 +1,314 @@
+[
+  {
+    "id": "item_arrow_obsidian",
+    "name": "Obsidian Arrow",
+    "category": [
+      "Ammo"
+    ],
+    "description": "A sliver of darkness.",
+    "icon": "/img/valheim/itens/Ammo/ArrowObsidian.webp",
+    "metaData": {
+      "entityId": "ArrowObsidian"
+    }
+  },
+  {
+    "id": "item_arrow_poison",
+    "name": "Poison Arrow",
+    "category": [
+      "Ammo"
+    ],
+    "description": "A bitter sting from afar.",
+    "icon": "/img/valheim/itens/Ammo/ArrowPoison.webp",
+    "metaData": {
+      "entityId": "ArrowPoison"
+    }
+  },
+  {
+    "id": "item_arrow_wood",
+    "name": "Wood Arrow",
+    "category": [
+      "Ammo"
+    ],
+    "description": "An arrow of sharpened wood.",
+    "icon": "/img/valheim/itens/Ammo/ArrowWood.webp",
+    "metaData": {
+      "entityId": "ArrowWood"
+    }
+  },
+  {
+    "id": "item_arrow_flint",
+    "name": "Flinthead Arrow",
+    "category": [
+      "Ammo"
+    ],
+    "description": "A hide-breaker with a head of flint.",
+    "icon": "/img/valheim/itens/Ammo/ArrowFlint.webp",
+    "metaData": {
+      "entityId": "ArrowFlint"
+    }
+  },
+  {
+    "id": "item_arrow_iron",
+    "name": "Ironhead Arrow",
+    "category": [
+      "Ammo"
+    ],
+    "description": "Capped with iron and flighted with dark feathers.",
+    "icon": "/img/valheim/itens/Ammo/ArrowIron.webp",
+    "metaData": {
+      "entityId": "ArrowIron"
+    }
+  },
+  {
+    "id": "item_bolt_bone",
+    "name": "Bone Bolt",
+    "category": [
+      "Ammo"
+    ],
+    "description": "A crude bolt of yellowed bone.",
+    "icon": "/img/valheim/itens/Ammo/BoltBone.webp",
+    "metaData": {
+      "entityId": "BoltBone"
+    }
+  },
+  {
+    "id": "item_bolt_charred",
+    "name": "Charred Bolt",
+    "category": [
+      "Ammo"
+    ],
+    "description": "A sturdy bone from a forearm, shaped into a deadly bolt.",
+    "icon": "/img/valheim/itens/Ammo/BoltCharred.webp",
+    "metaData": {
+      "entityId": "BoltCharred"
+    }
+  },
+  {
+    "id": "item_fishingbait",
+    "name": "Fishing Bait",
+    "category": [
+      "Ammo"
+    ],
+    "description": "Common dvergr fishing bait. Fishing rod sold separately.",
+    "icon": "/img/valheim/itens/Ammo/FishingBait.webp",
+    "metaData": {
+      "entityId": "FishingBait"
+    }
+  },
+  {
+    "id": "item_fishingbait_mistlands",
+    "name": "Misty Fishing Bait",
+    "category": [
+      "Ammo"
+    ],
+    "description": "A bait to guide the fish to you through shrouded waters.",
+    "icon": "/img/valheim/itens/Ammo/FishingBaitMistlands.webp",
+    "metaData": {
+      "entityId": "FishingBaitMistlands"
+    }
+  },
+  {
+    "id": "item_arrow_bronze",
+    "name": "Bronzehead Arrow",
+    "category": [
+      "Ammo"
+    ],
+    "description": "Sharper than flint. A sleek messenger of death.",
+    "icon": "/img/valheim/itens/Ammo/ArrowBronze.webp",
+    "metaData": {
+      "entityId": "ArrowBronze"
+    }
+  },
+  {
+    "id": "item_arrow_charred",
+    "name": "Charred Arrow",
+    "category": [
+      "Ammo"
+    ],
+    "description": "This arrow has been whittled into shape from a charred femur, and it's as hard as any metal.",
+    "icon": "/img/valheim/itens/Ammo/ArrowCharred.webp",
+    "metaData": {
+      "entityId": "ArrowCharred"
+    }
+  },
+  {
+    "id": "item_arrow_frost",
+    "name": "Frost Arrow",
+    "category": [
+      "Ammo"
+    ],
+    "description": "A shard of piercing ice.",
+    "icon": "/img/valheim/itens/Ammo/ArrowFrost.webp",
+    "metaData": {
+      "entityId": "ArrowFrost"
+    }
+  },
+  {
+    "id": "item_bolt_carapace",
+    "name": "Carapace Bolt",
+    "category": [
+      "Ammo"
+    ],
+    "description": "A heavy and solid bolt.",
+    "icon": "/img/valheim/itens/Ammo/BoltCarapace.webp",
+    "metaData": {
+      "entityId": "BoltCarapace"
+    }
+  },
+  {
+    "id": "item_bolt_iron",
+    "name": "Iron Bolt",
+    "category": [
+      "Ammo"
+    ],
+    "description": "A sturdy iron missile.",
+    "icon": "/img/valheim/itens/Ammo/BoltIron.webp",
+    "metaData": {
+      "entityId": "BoltIron"
+    }
+  },
+  {
+    "id": "item_arrow_carapace",
+    "name": "Carapace Arrow",
+    "category": [
+      "Ammo"
+    ],
+    "description": "Heavy and pointy, this one's gonna hurt.",
+    "icon": "/img/valheim/itens/Ammo/ArrowCarapace.webp",
+    "metaData": {
+      "entityId": "ArrowCarapace"
+    }
+  },
+  {
+    "id": "item_arrow_fire",
+    "name": "Fire Arrow",
+    "category": [
+      "Ammo"
+    ],
+    "description": "This arrow burns whatever it pierces.",
+    "icon": "/img/valheim/itens/Ammo/ArrowFire.webp",
+    "metaData": {
+      "entityId": "ArrowFire"
+    }
+  },
+  {
+    "id": "item_arrow_needle",
+    "name": "Needle Arrow",
+    "category": [
+      "Ammo"
+    ],
+    "description": "The final stitch.",
+    "icon": "/img/valheim/itens/Ammo/ArrowNeedle.webp",
+    "metaData": {
+      "entityId": "ArrowNeedle"
+    }
+  },
+  {
+    "id": "item_arrow_silver",
+    "name": "Silver Arrow",
+    "category": [
+      "Ammo"
+    ],
+    "description": "A needle to calm restless spirits.",
+    "icon": "/img/valheim/itens/Ammo/ArrowSilver.webp",
+    "metaData": {
+      "entityId": "ArrowSilver"
+    }
+  },
+  {
+    "id": "item_bolt_blackmetal",
+    "name": "Black Metal Bolt",
+    "category": [
+      "Ammo"
+    ],
+    "description": "A sleek bolt of dark metal.",
+    "icon": "/img/valheim/itens/Ammo/BoltBlackmetal.webp",
+    "metaData": {
+      "entityId": "BoltBlackmetal"
+    }
+  },
+  {
+    "id": "item_fishingbait_ashlands",
+    "name": "Hot Fishing Bait",
+    "category": [
+      "Ammo"
+    ],
+    "description": "Some fish already like it where the waters are warm, and this bait brings the temperature close to boiling.",
+    "icon": "/img/valheim/itens/Ammo/FishingBaitAshlands.webp",
+    "metaData": {
+      "entityId": "FishingBaitAshlands"
+    }
+  },
+  {
+    "id": "item_fishingbait_cave",
+    "name": "Cold Fishing Bait",
+    "category": [
+      "Ammo"
+    ],
+    "description": "This bait doesn't look like much, but it's a treat to fish that live where it's cold and dark.",
+    "icon": "/img/valheim/itens/Ammo/FishingBaitCave.webp",
+    "metaData": {
+      "entityId": "FishingBaitCave"
+    }
+  },
+  {
+    "id": "item_fishingbait_plains",
+    "name": "Stingy Fishing Bait",
+    "category": [
+      "Ammo"
+    ],
+    "description": "You're not immune to deathsquito bites, and the fish here aren't immune to this snack!",
+    "icon": "/img/valheim/itens/Ammo/FishingBaitPlains.webp",
+    "metaData": {
+      "entityId": "FishingBaitPlains"
+    }
+  },
+  {
+    "id": "item_fishingbait_swamp",
+    "name": "Sticky Fishing Bait",
+    "category": [
+      "Ammo"
+    ],
+    "description": "It might smell foul, but the fish drawn to this bait are used to so much worse.",
+    "icon": "/img/valheim/itens/Ammo/FishingBaitSwamp.webp",
+    "metaData": {
+      "entityId": "FishingBaitSwamp"
+    }
+  },
+  {
+    "id": "item_fishingbait_deepnorth",
+    "name": "Frosty Fishing Bait",
+    "category": [
+      "Ammo"
+    ],
+    "description": "It's not very nutritious, so the only fish that'll take this bait are the ones that are used to just eating ice.",
+    "icon": "/img/valheim/itens/Ammo/FishingBaitDeepNorth.webp",
+    "metaData": {
+      "entityId": "FishingBaitDeepNorth"
+    }
+  },
+  {
+    "id": "item_fishingbait_forest",
+    "name": "Mossy Fishing Bait",
+    "category": [
+      "Ammo"
+    ],
+    "description": "Dead trolls in the forest often attract a fish or two, speed up the process with this bait!",
+    "icon": "/img/valheim/itens/Ammo/FishingBaitForest.webp",
+    "metaData": {
+      "entityId": "FishingBaitForest"
+    }
+  },
+  {
+    "id": "item_fishingbait_ocean",
+    "name": "Heavy Fishing Bait",
+    "category": [
+      "Ammo"
+    ],
+    "description": "This bait sinks deep, deep enough to lure the fish swimming along the very bottom of the sea.",
+    "icon": "/img/valheim/itens/Ammo/FishingBaitOcean.webp",
+    "metaData": {
+      "entityId": "FishingBaitOcean"
+    }
+  }
+]

@@ -1,0 +1,1046 @@
+[
+  {
+    "id": "customization_beard20",
+    "name": "Spiky",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard20.webp",
+    "metaData": {
+      "entityId": "Beard20"
+    }
+  },
+  {
+    "id": "customization_beard08",
+    "name": "Thick 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard8.webp",
+    "metaData": {
+      "entityId": "Beard8"
+    }
+  },
+  {
+    "id": "customization_beard14",
+    "name": "Braided 5",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard14.webp",
+    "metaData": {
+      "entityId": "Beard14"
+    }
+  },
+  {
+    "id": "customization_beard15",
+    "name": "Short 4",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard15.webp",
+    "metaData": {
+      "entityId": "Beard15"
+    }
+  },
+  {
+    "id": "customization_beard17",
+    "name": "Neat",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard17.webp",
+    "metaData": {
+      "entityId": "Beard17"
+    }
+  },
+  {
+    "id": "customization_beard18",
+    "name": "Royal 3",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard18.webp",
+    "metaData": {
+      "entityId": "Beard18"
+    }
+  },
+  {
+    "id": "customization_beard02",
+    "name": "Long 2",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard2.webp",
+    "metaData": {
+      "entityId": "Beard2"
+    }
+  },
+  {
+    "id": "customization_beard05",
+    "name": "Braided 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard5.webp",
+    "metaData": {
+      "entityId": "Beard5"
+    }
+  },
+  {
+    "id": "customization_beard09",
+    "name": "Braided 3",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard9.webp",
+    "metaData": {
+      "entityId": "Beard9"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair11_2.webp",
+    "metaData": {
+      "entityId": "Hair11_2"
+    }
+  },
+  {
+    "id": "customization_hair12",
+    "name": "Braided 3",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair12.webp",
+    "metaData": {
+      "entityId": "Hair12"
+    }
+  },
+  {
+    "id": "customization_hair01",
+    "name": "Ponytail 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair1.webp",
+    "metaData": {
+      "entityId": "Hair1"
+    }
+  },
+  {
+    "id": "customization_hair10",
+    "name": "Side Swept 2",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair10.webp",
+    "metaData": {
+      "entityId": "Hair10"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair10_2.webp",
+    "metaData": {
+      "entityId": "Hair10_2"
+    }
+  },
+  {
+    "id": "customization_hair13",
+    "name": "Braided 4",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair13.webp",
+    "metaData": {
+      "entityId": "Hair13"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair13_2.webp",
+    "metaData": {
+      "entityId": "Hair13_2"
+    }
+  },
+  {
+    "id": "customization_hair14",
+    "name": "Side Swept 3",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair14.webp",
+    "metaData": {
+      "entityId": "Hair14"
+    }
+  },
+  {
+    "id": "customization_hair15",
+    "name": "Pulled Back Curls",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair15.webp",
+    "metaData": {
+      "entityId": "Hair15"
+    }
+  },
+  {
+    "id": "customization_beard16",
+    "name": "Stonedweller",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard16.webp",
+    "metaData": {
+      "entityId": "Beard16"
+    }
+  },
+  {
+    "id": "customization_beard19",
+    "name": "Bushy",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard19.webp",
+    "metaData": {
+      "entityId": "Beard19"
+    }
+  },
+  {
+    "id": "customization_beard21",
+    "name": "Short 5",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard21.webp",
+    "metaData": {
+      "entityId": "Beard21"
+    }
+  },
+  {
+    "id": "customization_beard03",
+    "name": "Short 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard3.webp",
+    "metaData": {
+      "entityId": "Beard3"
+    }
+  },
+  {
+    "id": "customization_beard06",
+    "name": "Braided 2",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard6.webp",
+    "metaData": {
+      "entityId": "Beard6"
+    }
+  },
+  {
+    "id": "customization_beard07",
+    "name": "Short 3",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard7.webp",
+    "metaData": {
+      "entityId": "Beard7"
+    }
+  },
+  {
+    "id": "customization_beard01",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard1.webp",
+    "metaData": {
+      "entityId": "Beard1"
+    }
+  },
+  {
+    "id": "customization_beard10",
+    "name": "Braided 4",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard10.webp",
+    "metaData": {
+      "entityId": "Beard10"
+    }
+  },
+  {
+    "id": "customization_beard11",
+    "name": "Thick 2",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard11.webp",
+    "metaData": {
+      "entityId": "Beard11"
+    }
+  },
+  {
+    "id": "customization_beard12",
+    "name": "Royal 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard12.webp",
+    "metaData": {
+      "entityId": "Beard12"
+    }
+  },
+  {
+    "id": "customization_beard13",
+    "name": "Royal 2",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard13.webp",
+    "metaData": {
+      "entityId": "Beard13"
+    }
+  },
+  {
+    "id": "customization_beard04",
+    "name": "Short 2",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Beard4.webp",
+    "metaData": {
+      "entityId": "Beard4"
+    }
+  },
+  {
+    "id": "customization_hair11",
+    "name": "Braided 2",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair11.webp",
+    "metaData": {
+      "entityId": "Hair11"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair12_2.webp",
+    "metaData": {
+      "entityId": "Hair12_2"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair14_2.webp",
+    "metaData": {
+      "entityId": "Hair14_2"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair11_3.webp",
+    "metaData": {
+      "entityId": "Hair11_3"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair13_3.webp",
+    "metaData": {
+      "entityId": "Hair13_3"
+    }
+  },
+  {
+    "id": "customization_hair19",
+    "name": "Curls 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair19.webp",
+    "metaData": {
+      "entityId": "Hair19"
+    }
+  },
+  {
+    "id": "customization_hair20",
+    "name": "Curls 2",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair20.webp",
+    "metaData": {
+      "entityId": "Hair20"
+    }
+  },
+  {
+    "id": "customization_hair21",
+    "name": "Twin Buns",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair21.webp",
+    "metaData": {
+      "entityId": "Hair21"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair24_2.webp",
+    "metaData": {
+      "entityId": "Hair24_2"
+    }
+  },
+  {
+    "id": "customization_hair25",
+    "name": "Single Bun 2",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair25.webp",
+    "metaData": {
+      "entityId": "Hair25"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair29_2.webp",
+    "metaData": {
+      "entityId": "Hair29_2"
+    }
+  },
+  {
+    "id": "customization_hair03",
+    "name": "Braided 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair3.webp",
+    "metaData": {
+      "entityId": "Hair3"
+    }
+  },
+  {
+    "id": "customization_hair30",
+    "name": "Loose 3",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair30.webp",
+    "metaData": {
+      "entityId": "Hair30"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair30_2.webp",
+    "metaData": {
+      "entityId": "Hair30_2"
+    }
+  },
+  {
+    "id": "customization_hair31",
+    "name": "Gathered Locs",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair31.webp",
+    "metaData": {
+      "entityId": "Hair31"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair31_2.webp",
+    "metaData": {
+      "entityId": "Hair31_2"
+    }
+  },
+  {
+    "id": "customization_hair04",
+    "name": "Ponytail 3",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair4.webp",
+    "metaData": {
+      "entityId": "Hair4"
+    }
+  },
+  {
+    "id": "customization_hair03",
+    "name": "Braided 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair4_3.webp",
+    "metaData": {
+      "entityId": "Hair4_3"
+    }
+  },
+  {
+    "id": "customization_hair05",
+    "name": "Short 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair5.webp",
+    "metaData": {
+      "entityId": "Hair5"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair7_2.webp",
+    "metaData": {
+      "entityId": "Hair7_2"
+    }
+  },
+  {
+    "id": "customization_hair08",
+    "name": "Short 2",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair8.webp",
+    "metaData": {
+      "entityId": "Hair8"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair8_2.webp",
+    "metaData": {
+      "entityId": "Hair8_2"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair16_2.webp",
+    "metaData": {
+      "entityId": "Hair16_2"
+    }
+  },
+  {
+    "id": "customization_hair18",
+    "name": "Royal Braids",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair18.webp",
+    "metaData": {
+      "entityId": "Hair18"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair21_2.webp",
+    "metaData": {
+      "entityId": "Hair21_2"
+    }
+  },
+  {
+    "id": "customization_hair22",
+    "name": "Single Bun",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair22.webp",
+    "metaData": {
+      "entityId": "Hair22"
+    }
+  },
+  {
+    "id": "customization_hair23",
+    "name": "Short Curls",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair23.webp",
+    "metaData": {
+      "entityId": "Hair23"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair24_3.webp",
+    "metaData": {
+      "entityId": "Hair24_3"
+    }
+  },
+  {
+    "id": "customization_hair27",
+    "name": "Braids of Strength",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair27.webp",
+    "metaData": {
+      "entityId": "Hair27"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair27_3.webp",
+    "metaData": {
+      "entityId": "Hair27_3"
+    }
+  },
+  {
+    "id": "customization_hair03",
+    "name": "Braided 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair3_3.webp",
+    "metaData": {
+      "entityId": "Hair3_3"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair6_3.webp",
+    "metaData": {
+      "entityId": "Hair6_3"
+    }
+  },
+  {
+    "id": "customization_hair09",
+    "name": "Side Swept 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair9.webp",
+    "metaData": {
+      "entityId": "Hair9"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair9_2.webp",
+    "metaData": {
+      "entityId": "Hair9_2"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair15_2.webp",
+    "metaData": {
+      "entityId": "Hair15_2"
+    }
+  },
+  {
+    "id": "customization_hair16",
+    "name": "Gathered Braids",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair16.webp",
+    "metaData": {
+      "entityId": "Hair16"
+    }
+  },
+  {
+    "id": "customization_hair26",
+    "name": "Short Locs",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair26.webp",
+    "metaData": {
+      "entityId": "Hair26"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair28_3.webp",
+    "metaData": {
+      "entityId": "Hair28_3"
+    }
+  },
+  {
+    "id": "customization_hair29",
+    "name": "Loose 2",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair29.webp",
+    "metaData": {
+      "entityId": "Hair29"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair30_3.webp",
+    "metaData": {
+      "entityId": "Hair30_3"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair6.webp",
+    "metaData": {
+      "entityId": "Hair6"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair15_3.webp",
+    "metaData": {
+      "entityId": "Hair15_3"
+    }
+  },
+  {
+    "id": "customization_hair17",
+    "name": "Neat Braids",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair17.webp",
+    "metaData": {
+      "entityId": "Hair17"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair17_2.webp",
+    "metaData": {
+      "entityId": "Hair17_2"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair18_2.webp",
+    "metaData": {
+      "entityId": "Hair18_2"
+    }
+  },
+  {
+    "id": "customization_hair02",
+    "name": "Ponytail 2",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair2.webp",
+    "metaData": {
+      "entityId": "Hair2"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair22_2.webp",
+    "metaData": {
+      "entityId": "Hair22_2"
+    }
+  },
+  {
+    "id": "customization_hair24",
+    "name": "Shaved and Braided",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair24.webp",
+    "metaData": {
+      "entityId": "Hair24"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair27_2.webp",
+    "metaData": {
+      "entityId": "Hair27_2"
+    }
+  },
+  {
+    "id": "customization_hair28",
+    "name": "Merchant's Braid",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair28.webp",
+    "metaData": {
+      "entityId": "Hair28"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair28_2.webp",
+    "metaData": {
+      "entityId": "Hair28_2"
+    }
+  },
+  {
+    "id": "customization_hair03",
+    "name": "Braided 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair3_2.webp",
+    "metaData": {
+      "entityId": "Hair3_2"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair31_3.webp",
+    "metaData": {
+      "entityId": "Hair31_3"
+    }
+  },
+  {
+    "id": "customization_hair03",
+    "name": "Braided 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair4_2.webp",
+    "metaData": {
+      "entityId": "Hair4_2"
+    }
+  },
+  {
+    "id": "customization_hair03",
+    "name": "Braided 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair5_2.webp",
+    "metaData": {
+      "entityId": "Hair5_2"
+    }
+  },
+  {
+    "id": "customization_hair06",
+    "name": "Long 1",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair6_2.webp",
+    "metaData": {
+      "entityId": "Hair6_2"
+    }
+  },
+  {
+    "id": "customization_hair07",
+    "name": "Ponytail 4",
+    "category": [
+      "Customization"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/Customization/Hair7.webp",
+    "metaData": {
+      "entityId": "Hair7"
+    }
+  }
+]

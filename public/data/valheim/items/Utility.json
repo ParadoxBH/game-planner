@@ -1,0 +1,50 @@
+[
+  {
+    "id": "item_crossbow_arbalest",
+    "name": "Arbalest",
+    "category": [
+      "Utility"
+    ],
+    "description": "A slow but powerful weapon.",
+    "icon": "/img/valheim/itens/Utility/DvergerArbalest.webp",
+    "metaData": {
+      "entityId": "DvergerArbalest"
+    }
+  },
+  {
+    "id": "item_beltstrength",
+    "name": "Megingjord",
+    "category": [
+      "Utility"
+    ],
+    "description": "Gives the wearer superhuman strength.",
+    "icon": "/img/valheim/itens/Utility/BeltStrength.webp",
+    "metaData": {
+      "entityId": "BeltStrength"
+    }
+  },
+  {
+    "id": "item_demister",
+    "name": "Wisplight",
+    "category": [
+      "Utility"
+    ],
+    "description": "A bound wisp to guide you through the thickest of mists.",
+    "icon": "/img/valheim/itens/Utility/Demister.webp",
+    "metaData": {
+      "entityId": "Demister"
+    }
+  },
+  {
+    "id": "item_wishbone",
+    "name": "Wishbone",
+    "category": [
+      "Utility"
+    ],
+    "description": "This ancient bone remembers the location of many forgotten things.",
+    "icon": "/img/valheim/itens/Utility/Wishbone.webp",
+    "metaData": {
+      "entityId": "Wishbone"
+    }
+  }
+]

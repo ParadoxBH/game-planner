@@ -1,0 +1,362 @@
+[
+  {
+    "id": "item_helmet_carapace",
+    "name": "Carapace Helmet",
+    "category": [
+      "Helmet"
+    ],
+    "description": "People might say you look like a giant ant. But they will only say it once.",
+    "icon": "/img/valheim/itens/Helmet/HelmetCarapace.webp",
+    "metaData": {
+      "entityId": "HelmetCarapace"
+    }
+  },
+  {
+    "id": "item_helmet_fishinghat",
+    "name": "Fishing Hat",
+    "category": [
+      "Helmet"
+    ],
+    "description": "This catchy hat may only be reeled in by the most seasoned adventurers.",
+    "icon": "/img/valheim/itens/Helmet/HelmetFishingHat.webp",
+    "metaData": {
+      "entityId": "HelmetFishingHat"
+    }
+  },
+  {
+    "id": "item_helmet_hat3",
+    "name": "Brown Fur Cap",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A warm fur cap, made from the finest leather.",
+    "icon": "/img/valheim/itens/Helmet/HelmetHat3.webp",
+    "metaData": {
+      "entityId": "HelmetHat3"
+    }
+  },
+  {
+    "id": "item_helmet_odin",
+    "name": "Hood of Odin",
+    "category": [
+      "Helmet"
+    ],
+    "description": "Odin's finest warriors deserve the finest cloth.",
+    "icon": "/img/valheim/itens/Helmet/HelmetOdin.webp",
+    "metaData": {
+      "entityId": "HelmetOdin"
+    }
+  },
+  {
+    "id": "item_helmet_medium_ashlands",
+    "name": "Hood of Ask",
+    "category": [
+      "Helmet"
+    ],
+    "description": "As the first man of Midgard, Ask knew it was important to not draw too much attention to himself.",
+    "icon": "/img/valheim/itens/Helmet/HelmetAshlandsMediumHood.webp",
+    "metaData": {
+      "entityId": "HelmetAshlandsMediumHood"
+    }
+  },
+  {
+    "id": "item_helmet_drake",
+    "name": "Drake Helmet",
+    "category": [
+      "Helmet"
+    ],
+    "description": "An elaborate and finely-crafted helm.",
+    "icon": "/img/valheim/itens/Helmet/HelmetDrake.webp",
+    "metaData": {
+      "entityId": "HelmetDrake"
+    }
+  },
+  {
+    "id": "item_helmet_dverger",
+    "name": "Dverger Circlet",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A portable perpetual lightsource for the dungeon explorer.",
+    "icon": "/img/valheim/itens/Helmet/HelmetDverger.webp",
+    "metaData": {
+      "entityId": "HelmetDverger"
+    }
+  },
+  {
+    "id": "item_helmet_fenris",
+    "name": "Fenris Hood",
+    "category": [
+      "Helmet"
+    ],
+    "description": "The eyes of the beast were wise and knowing, so that it could measure the strength of a warrior in one glance.",
+    "icon": "/img/valheim/itens/Helmet/HelmetFenring.webp",
+    "metaData": {
+      "entityId": "HelmetFenring"
+    }
+  },
+  {
+    "id": "item_helmet_flametal",
+    "name": "Flametal Helmet",
+    "category": [
+      "Helmet"
+    ],
+    "description": "While you're wearing this helmet, your enemies will think twice before trying to bite your head off.",
+    "icon": "/img/valheim/itens/Helmet/HelmetFlametal.webp",
+    "metaData": {
+      "entityId": "HelmetFlametal"
+    }
+  },
+  {
+    "id": "item_helmet_hat10",
+    "name": "Simple Purple Cap",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A simple yet fashionable purple cap.",
+    "icon": "/img/valheim/itens/Helmet/HelmetHat10.webp",
+    "metaData": {
+      "entityId": "HelmetHat10"
+    }
+  },
+  {
+    "id": "item_helmet_hat2",
+    "name": "Green Twisted Headscarf",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A fancy green headscarf.",
+    "icon": "/img/valheim/itens/Helmet/HelmetHat2.webp",
+    "metaData": {
+      "entityId": "HelmetHat2"
+    }
+  },
+  {
+    "id": "item_helmet_hat5",
+    "name": "Simple Red Cap",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A simple yet fashionable red cap.",
+    "icon": "/img/valheim/itens/Helmet/HelmetHat5.webp",
+    "metaData": {
+      "entityId": "HelmetHat5"
+    }
+  },
+  {
+    "id": "item_helmet_hat6",
+    "name": "Yellow Tied Headscarf",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A practical yellow headscarf.",
+    "icon": "/img/valheim/itens/Helmet/HelmetHat6.webp",
+    "metaData": {
+      "entityId": "HelmetHat6"
+    }
+  },
+  {
+    "id": "item_helmet_hat7",
+    "name": "Red Twisted Headscarf",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A fancy red headscarf.",
+    "icon": "/img/valheim/itens/Helmet/HelmetHat7.webp",
+    "metaData": {
+      "entityId": "HelmetHat7"
+    }
+  },
+  {
+    "id": "item_helmet_mage",
+    "name": "Eitr-weave Hood",
+    "category": [
+      "Helmet"
+    ],
+    "description": "Sorcery shows itself in the eyes, so most mages wear cowls to disguise their occult pursuits.",
+    "icon": "/img/valheim/itens/Helmet/HelmetMage.webp",
+    "metaData": {
+      "entityId": "HelmetMage"
+    }
+  },
+  {
+    "id": "item_helmet_mage_ashlands",
+    "name": "Hood of Embla",
+    "category": [
+      "Helmet"
+    ],
+    "description": "Even the first sorceress valued the mystique of covering one's face. It is rumoured that honouring her this way will make your spells even more powerful.",
+    "icon": "/img/valheim/itens/Helmet/HelmetMage_Ashlands.webp",
+    "metaData": {
+      "entityId": "HelmetMage_Ashlands"
+    }
+  },
+  {
+    "id": "item_helmet_padded",
+    "name": "Padded Helmet",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A snug fit, finely made.",
+    "icon": "/img/valheim/itens/Helmet/HelmetPadded.webp",
+    "metaData": {
+      "entityId": "HelmetPadded"
+    }
+  },
+  {
+    "id": "item_helmet_strawhat",
+    "name": "Straw Hat",
+    "category": [
+      "Helmet"
+    ],
+    "description": "The perfect way to avoid sunstroke.",
+    "icon": "/img/valheim/itens/Helmet/HelmetStrawHat.webp",
+    "metaData": {
+      "entityId": "HelmetStrawHat"
+    }
+  },
+  {
+    "id": "item_helmet_bronze",
+    "name": "Bronze Helmet",
+    "category": [
+      "Helmet"
+    ],
+    "description": "This will help to keep your brains inside your skull.",
+    "icon": "/img/valheim/itens/Helmet/HelmetBronze.webp",
+    "metaData": {
+      "entityId": "HelmetBronze"
+    }
+  },
+  {
+    "id": "item_helmet_hat1",
+    "name": "Blue Tied Headscarf",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A blue practical headscarf.",
+    "icon": "/img/valheim/itens/Helmet/HelmetHat1.webp",
+    "metaData": {
+      "entityId": "HelmetHat1"
+    }
+  },
+  {
+    "id": "item_helmet_hat8",
+    "name": "Grey Fur Cap",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A warm fur cap, made from the finest wool.",
+    "icon": "/img/valheim/itens/Helmet/HelmetHat8.webp",
+    "metaData": {
+      "entityId": "HelmetHat8"
+    }
+  },
+  {
+    "id": "item_helmet_hat9",
+    "name": "Extravagant Orange Cap",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A warm cap for special occasions.",
+    "icon": "/img/valheim/itens/Helmet/HelmetHat9.webp",
+    "metaData": {
+      "entityId": "HelmetHat9"
+    }
+  },
+  {
+    "id": "item_helmet_witchhat",
+    "name": "Pointy Hat",
+    "category": [
+      "Helmet"
+    ],
+    "description": "This hat is sure to add a bit of magical flair to any outfit.",
+    "icon": "/img/valheim/itens/Helmet/HelmetPointyHat.webp",
+    "metaData": {
+      "entityId": "HelmetPointyHat"
+    }
+  },
+  {
+    "id": "item_helmet_trollleather",
+    "name": "Troll Leather Hood",
+    "category": [
+      "Helmet"
+    ],
+    "description": "Trollskin is hard to work but makes exceptional armor.",
+    "icon": "/img/valheim/itens/Helmet/HelmetTrollLeather.webp",
+    "metaData": {
+      "entityId": "HelmetTrollLeather"
+    }
+  },
+  {
+    "id": "item_helmet_yule",
+    "name": "Yule Hat",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A red cap in the style of house gnomes.",
+    "icon": "/img/valheim/itens/Helmet/HelmetYule.webp",
+    "metaData": {
+      "entityId": "HelmetYule"
+    }
+  },
+  {
+    "id": "item_helmet_hat4",
+    "name": "Extravagant Green Cap",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A warm cap for special occasions.",
+    "icon": "/img/valheim/itens/Helmet/HelmetHat4.webp",
+    "metaData": {
+      "entityId": "HelmetHat4"
+    }
+  },
+  {
+    "id": "item_helmet_iron",
+    "name": "Iron Helmet",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A helm of polished iron, fit for a hero.",
+    "icon": "/img/valheim/itens/Helmet/HelmetIron.webp",
+    "metaData": {
+      "entityId": "HelmetIron"
+    }
+  },
+  {
+    "id": "item_helmet_leather",
+    "name": "Leather Helmet",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A hood of toughened leather.",
+    "icon": "/img/valheim/itens/Helmet/HelmetLeather.webp",
+    "metaData": {
+      "entityId": "HelmetLeather"
+    }
+  },
+  {
+    "id": "item_helmet_midsummercrown",
+    "name": "Midsummer Crown",
+    "category": [
+      "Helmet"
+    ],
+    "description": "Celebrate summer with a crown woven from flowers.",
+    "icon": "/img/valheim/itens/Helmet/HelmetMidsummerCrown.webp",
+    "metaData": {
+      "entityId": "HelmetMidsummerCrown"
+    }
+  },
+  {
+    "id": "item_helmet_root",
+    "name": "Root Mask",
+    "category": [
+      "Helmet"
+    ],
+    "description": "Your head fits perfectly inside this knot of roots and bark.",
+    "icon": "/img/valheim/itens/Helmet/HelmetRoot.webp",
+    "metaData": {
+      "entityId": "HelmetRoot"
+    }
+  }
+]

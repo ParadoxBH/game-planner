@@ -1,0 +1,218 @@
+[
+  {
+    "id": "item_barrelrings",
+    "name": "Barrel Hoops",
+    "category": [
+      "Misc"
+    ],
+    "description": "These metal rings are perfectly round, suitable for holding a barrel together. Just add wood!",
+    "icon": "/img/valheim/itens/Misc/BarrelRings.webp",
+    "metaData": {
+      "entityId": "BarrelRings"
+    }
+  },
+  {
+    "id": "item_chicken_egg",
+    "name": "Egg",
+    "category": [
+      "Misc"
+    ],
+    "description": "Keep it warm to see what comes out.. but what came first, really?",
+    "icon": "/img/valheim/itens/Misc/ChickenEgg.webp",
+    "metaData": {
+      "entityId": "ChickenEgg"
+    }
+  },
+  {
+    "id": "item_barberkit",
+    "name": "Barber Kit",
+    "category": [
+      "Misc"
+    ],
+    "description": "A kit fit for the finest of barbers.",
+    "icon": "/img/valheim/itens/Misc/BarberKit.webp",
+    "metaData": {
+      "entityId": "BarberKit"
+    }
+  },
+  {
+    "id": "item_chest_hildir2",
+    "name": "Hildir's Silver Chest",
+    "category": [
+      "Misc"
+    ],
+    "description": "Property of Hildir, please return if found.",
+    "icon": "/img/valheim/itens/Misc/chest_hildir2.webp",
+    "metaData": {
+      "entityId": "chest_hildir2"
+    }
+  },
+  {
+    "id": "item_dvergrkey",
+    "name": "Sealbreaker",
+    "category": [
+      "Misc"
+    ],
+    "description": "An object used to break a Dverger seal.",
+    "icon": "/img/valheim/itens/Misc/DvergrKey.webp",
+    "metaData": {
+      "entityId": "DvergrKey"
+    }
+  },
+  {
+    "id": "item_goblintotem",
+    "name": "Fuling Totem",
+    "category": [
+      "Misc"
+    ],
+    "description": "Channels the ancient power of Yagluth.",
+    "icon": "/img/valheim/itens/Misc/GoblinTotem.webp",
+    "metaData": {
+      "entityId": "GoblinTotem"
+    }
+  },
+  {
+    "id": "item_asksvin_egg",
+    "name": "Asksvin Egg",
+    "category": [
+      "Misc"
+    ],
+    "description": "Hard as rock, yet you can sense the presence of something inside. This should be kept warm.",
+    "icon": "/img/valheim/itens/Misc/AsksvinEgg.webp",
+    "metaData": {
+      "entityId": "AsksvinEgg"
+    }
+  },
+  {
+    "id": "item_bell",
+    "name": "Bell",
+    "category": [
+      "Misc"
+    ],
+    "description": "For whom does the bell toll?",
+    "icon": "/img/valheim/itens/Misc/Bell.webp",
+    "metaData": {
+      "entityId": "Bell"
+    }
+  },
+  {
+    "id": "item_chest_hildir1",
+    "name": "Hildir's Brass Chest",
+    "category": [
+      "Misc"
+    ],
+    "description": "Property of Hildir, please return if found.",
+    "icon": "/img/valheim/itens/Misc/chest_hildir1.webp",
+    "metaData": {
+      "entityId": "chest_hildir1"
+    }
+  },
+  {
+    "id": "item_chest_hildir3",
+    "name": "Hildir's Bronze Chest",
+    "category": [
+      "Misc"
+    ],
+    "description": "Property of Hildir, please return if found.",
+    "icon": "/img/valheim/itens/Misc/chest_hildir3.webp",
+    "metaData": {
+      "entityId": "chest_hildir3"
+    }
+  },
+  {
+    "id": "item_cryptkey",
+    "name": "Swamp Key",
+    "category": [
+      "Misc"
+    ],
+    "description": "Partly covered in caked mud, it smells foetid.",
+    "icon": "/img/valheim/itens/Misc/CryptKey.webp",
+    "metaData": {
+      "entityId": "CryptKey"
+    }
+  },
+  {
+    "id": "item_dragonegg",
+    "name": "Dragon Egg",
+    "category": [
+      "Misc"
+    ],
+    "description": "Far heavier than it looks, with a faint humming sound from within.",
+    "icon": "/img/valheim/itens/Misc/DragonEgg.webp",
+    "metaData": {
+      "entityId": "DragonEgg"
+    }
+  },
+  {
+    "id": "item_hildirkey3",
+    "name": "Hildir's Bronze Key",
+    "category": [
+      "Misc"
+    ],
+    "description": "It seems to be missing its owner...",
+    "icon": "/img/valheim/itens/Misc/HildirKey_plainsfortress.webp",
+    "metaData": {
+      "entityId": "HildirKey_plainsfortress"
+    }
+  },
+  {
+    "id": "item_hildirkey2",
+    "name": "Hildir's Silver Key",
+    "category": [
+      "Misc"
+    ],
+    "description": "It seems to be missing its owner...",
+    "icon": "/img/valheim/itens/Misc/HildirKey_mountaincave.webp",
+    "metaData": {
+      "entityId": "HildirKey_mountaincave"
+    }
+  },
+  {
+    "id": "item_saddleasksvin",
+    "name": "Asksvin Saddle",
+    "category": [
+      "Misc"
+    ],
+    "description": "The back of an asksvin is rather lumpy, so you'll need a saddle if you want to ride one.",
+    "icon": "/img/valheim/itens/Misc/SaddleAsksvin.webp",
+    "metaData": {
+      "entityId": "SaddleAsksvin"
+    }
+  },
+  {
+    "id": "item_saddlelox",
+    "name": "Lox Saddle",
+    "category": [
+      "Misc"
+    ],
+    "description": "Use on a lox to be able to ride it.",
+    "icon": "/img/valheim/itens/Misc/SaddleLox.webp",
+    "metaData": {
+      "entityId": "SaddleLox"
+    }
+  },
+  {
+    "id": "item_scythehandle",
+    "name": "Scythe Handle",
+    "category": [
+      "Misc"
+    ],
+    "description": "A sturdy base for a tool.",
+    "icon": "/img/valheim/itens/Misc/ScytheHandle.webp",
+    "metaData": {
+      "entityId": "ScytheHandle"
+    }
+  },
+  {
+    "id": "item_hildirkey1",
+    "name": "Hildir's Brass Key",
+    "category": [
+      "Misc"
+    ],
+    "description": "It seems to be missing its owner...",
+    "icon": "/img/valheim/itens/Misc/HildirKey_forestcrypt.webp",
+    "metaData": {
+      "entityId": "HildirKey_forestcrypt"
+    }
+  }
+]
