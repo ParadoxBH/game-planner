@@ -1,113 +1,5 @@
 [
     {
-        "id": "semente_tomate",
-        "name": "Semente de Tomate",
-        "category": [
-            "seed",
-            "vegetable"
-        ],
-        "icon": "/img/heartopia/agricultura/semente_tomate.png",
-        "buyPrice": 10,
-        "sellPrice": 5
-    },
-    {
-        "id": "semente_batata",
-        "name": "Semente de Batata",
-        "category": [
-            "seed",
-            "vegetable"
-        ],
-        "icon": "/img/heartopia/agricultura/semente_batata.png",
-        "buyPrice": 30,
-        "sellPrice": 15
-    },
-    {
-        "id": "semente_trigo",
-        "name": "Semente de Trigo",
-        "category": [
-            "seed",
-            "vegetable"
-        ],
-        "icon": "/img/heartopia/agricultura/semente_trigo.png",
-        "buyPrice": 95,
-        "sellPrice": 47
-    },
-    {
-        "id": "semente_alface_americano",
-        "name": "Semente de Alface Americano",
-        "category": [
-            "seed",
-            "vegetable"
-        ],
-        "icon": "/img/heartopia/agricultura/semente_alface_americana.png",
-        "buyPrice": 145,
-        "sellPrice": 72
-    },
-    {
-        "id": "semente_abacaxi",
-        "name": "Semente de Abacaxi",
-        "category": [
-            "seed",
-            "vegetable"
-        ],
-        "description": "Sementes para plantar Abacaxi.",
-        "icon": "/img/heartopia/agricultura/semente_abacaxi.png",
-        "buyPrice": 15
-    },
-    {
-        "id": "semente_cenoura",
-        "name": "Semente de Cenoura",
-        "category": [
-            "seed",
-            "vegetable"
-        ],
-        "description": "Sementes para plantar Cenoura.",
-        "icon": "/img/heartopia/agricultura/semente_cenoura.png",
-        "buyPrice": 50,
-        "sellPrice": 25
-    },
-    {
-        "id": "semente_morango",
-        "name": "Semente de Morango",
-        "category": [
-            "seed",
-            "vegetable"
-        ],
-        "icon": "/img/heartopia/agricultura/semente_morango.png",
-        "buyPrice": 125
-    },
-    {
-        "id": "semente_milho",
-        "name": "Semente Milho",
-        "category": [
-            "seed",
-            "vegetable"
-        ],
-        "icon": "/img/heartopia/agricultura/semente_milho.png",
-        "buyPrice": 170
-    },
-    {
-        "id": "semente_uva",
-        "name": "Semente Uva",
-        "category": [
-            "seed",
-            "vegetable"
-        ],
-        "icon": "/img/heartopia/agricultura/semente_uva.png",
-        "buyPrice": 160
-    },
-
-
-
-
-
-
-
-
-
-
-    
-    {
         "id": "semente_margarida_vermelha",
         "name": "Semente de Margarida Vermelha",
         "category": [
@@ -115,7 +7,7 @@
             "flower",
             "margarida"
         ],
-        "icon": "/img/heartopia/agricultura/semente_margarida_vermelha.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_margarida_vermelha.png",
         "buyPrice": 30,
         "sellPrice": 15
     },
@@ -127,7 +19,7 @@
             "flower",
             "margarida"
         ],
-        "icon": "/img/heartopia/agricultura/semente_margarida_rosa.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_margarida_rosa.png",
         "sellPrice": 25
     },
     {
@@ -138,7 +30,7 @@
             "flower",
             "margarida"
         ],
-        "icon": "/img/heartopia/agricultura/semente_margarida_branca.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_margarida_branca.png",
         "buyPrice": 30
     },
     {
@@ -149,7 +41,7 @@
             "flower",
             "amor_perfeito"
         ],
-        "icon": "/img/heartopia/agricultura/semente_amor_perfeito_vermelho.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_amor_perfeito_vermelho.png",
         "buyPrice": 30
     },
     {
@@ -160,7 +52,7 @@
             "flower",
             "amor_perfeito"
         ],
-        "icon": "/img/heartopia/agricultura/semente_amor_perfeito_amarelo.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_amor_perfeito_amarelo.png",
         "buyPrice": 30
     },
     {
@@ -171,7 +63,7 @@
             "flower",
             "anturio"
         ],
-        "icon": "/img/heartopia/agricultura/semente_anturio_vermelho.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_anturio_vermelho.png",
         "buyPrice": 60
     },
     {
@@ -182,7 +74,7 @@
             "flower",
             "anturio"
         ],
-        "icon": "/img/heartopia/agricultura/semente_anturio_amarela.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_anturio_amarela.png",
         "buyPrice": 60
     },
     {
@@ -193,7 +85,7 @@
             "flower",
             "anturio"
         ],
-        "icon": "/img/heartopia/agricultura/semente_anturio_branco.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_anturio_branco.png",
         "buyPrice": 60
     },
     {
@@ -204,7 +96,7 @@
             "flower",
             "papoula"
         ],
-        "icon": "/img/heartopia/agricultura/semente_papoula_vermelha.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_papoula_vermelha.png",
         "buyPrice": 60
     },
     {
@@ -215,7 +107,7 @@
             "flower",
             "papoula"
         ],
-        "icon": "/img/heartopia/agricultura/semente_papoula_amarela.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_papoula_amarela.png",
         "buyPrice": 60
     },
     {
@@ -226,7 +118,7 @@
             "flower",
             "papoula"
         ],
-        "icon": "/img/heartopia/agricultura/semente_papoula_branca.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_papoula_branca.png",
         "buyPrice": 60
     },
     {
@@ -237,7 +129,7 @@
             "flower",
             "copo_leite"
         ],
-        "icon": "/img/heartopia/agricultura/semente_copo_leite_vermelha.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_copo_leite_vermelha.png",
         "buyPrice": 90
     },
     {
@@ -248,7 +140,7 @@
             "flower",
             "copo_leite"
         ],
-        "icon": "/img/heartopia/agricultura/semente_copo_leite_amarela.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_copo_leite_amarela.png",
         "buyPrice": 90
     },
     {
@@ -259,7 +151,7 @@
             "flower",
             "copo_leite"
         ],
-        "icon": "/img/heartopia/agricultura/semente_copo_leite_branca.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_copo_leite_branca.png",
         "buyPrice": 90
     },
     {
@@ -270,7 +162,7 @@
             "flower",
             "copo_leite"
         ],
-        "icon": "/img/heartopia/agricultura/semente_copo_leite_laranja.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_copo_leite_laranja.png",
         "sellPrice": 70
     },
     {
@@ -281,7 +173,7 @@
             "flower",
             "copo_leite"
         ],
-        "icon": "/img/heartopia/agricultura/semente_copo_leite_rosa.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_copo_leite_rosa.png",
         "sellPrice": 70
     },
     {
@@ -292,7 +184,7 @@
             "flower",
             "gloria_manha"
         ],
-        "icon": "/img/heartopia/agricultura/semente_gloria_manha_vermelha.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_gloria_manha_vermelha.png",
         "buyPrice": 90
     },
     {
@@ -303,7 +195,7 @@
             "flower",
             "gloria_manha"
         ],
-        "icon": "/img/heartopia/agricultura/semente_gloria_manha_amarela.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_gloria_manha_amarela.png",
         "buyPrice": 90
     },
     {
@@ -314,7 +206,7 @@
             "flower",
             "gloria_manha"
         ],
-        "icon": "/img/heartopia/agricultura/semente_gloria_manha_branca.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_gloria_manha_branca.png",
         "buyPrice": 90
     },
     {
@@ -325,7 +217,7 @@
             "flower",
             "gloria_manha"
         ],
-        "icon": "/img/heartopia/agricultura/semente_gloria_manha_laranja.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_gloria_manha_laranja.png",
         "sellPrice": 70
     },
     {
@@ -336,7 +228,7 @@
             "flower",
             "cravo"
         ],
-        "icon": "/img/heartopia/agricultura/semente_cravo_vermelha.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_cravo_vermelha.png",
         "buyPrice": 120
     },
     {
@@ -347,7 +239,7 @@
             "flower",
             "cravo"
         ],
-        "icon": "/img/heartopia/agricultura/semente_cravo_amarela.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_cravo_amarela.png",
         "buyPrice": 120
     },
     {
@@ -358,7 +250,7 @@
             "flower",
             "cravo"
         ],
-        "icon": "/img/heartopia/agricultura/semente_cravo_branca.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_cravo_branca.png",
         "buyPrice": 120
     }
 ]

@@ -1,0 +1,731 @@
+[
+    {
+    "id": "margarida_vermelha",
+    "name": "Margarida Vermelha",
+    "category": [
+      "agriculture",
+      "flower",
+      "margarida"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/margarida_vermelha.png",
+    "sellPrice": 100,
+    "level": 1
+  },
+  {
+    "id": "margarida_branca",
+    "name": "Margarida Branca",
+    "category": [
+      "agriculture",
+      "flower",
+      "margarida"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/margarida_branca.png",
+    "sellPrice": 100,
+    "level": 1
+  },
+  {
+    "id": "margarida_rosa",
+    "name": "Margarida Rosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "margarida"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/margarida_rosa.png",
+    "sellPrice": 150,
+    "level": 2
+  },
+  {
+    "id": "margarida_pessego",
+    "name": "Margarida Pessego",
+    "category": [
+      "agriculture",
+      "flower",
+      "margarida"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/margarida_pessego.png",
+    "level": 3,
+    "sellPrice": 200
+  },
+  {
+    "id": "margarida_verde",
+    "name": "Margarida Verde",
+    "category": [
+      "agriculture",
+      "flower",
+      "margarida"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/margarida_verde.png",
+    "level": 4,
+    "sellPrice": 250
+  },
+  {
+    "id": "margarida_luminosa",
+    "name": "Margarida Luminosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "margarida"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/margarida_luminosa.png",
+    "level": 5,
+    "sellPrice": 400
+  },
+
+
+
+
+
+
+
+
+
+
+  {
+    "id": "amor_perfeito_vermelho",
+    "name": "Amor-perfeito Vermelho",
+    "category": [
+      "agriculture",
+      "flower",
+      "amor_perfeito"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/amor_perfeito_vermelho.png",
+    "sellPrice": 100,
+    "level": 1
+  },
+  {
+    "id": "amor_perfeito_amarelo",
+    "name": "Amor-perfeito Amarelo",
+    "category": [
+      "agriculture",
+      "flower",
+      "amor_perfeito"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/amor_perfeito_amarelo.png",
+    "sellPrice": 100,
+    "level": 1
+  },
+  {
+    "id": "amor_perfeito_laranja",
+    "name": "Amor-perfeito Laranja",
+    "category": [
+      "agriculture",
+      "flower",
+      "amor_perfeito"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/amor_perfeito_laranja.png",
+    "level": 2,
+    "sellPrice": 150
+  },
+  {
+    "id": "amor_perfeito_preto",
+    "name": "Amor-perfeito Preto",
+    "category": [
+      "agriculture",
+      "flower",
+      "amor_perfeito"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/amor_perfeito_preto.png",
+    "level": 3,
+    "sellPrice": 200
+  },
+  {
+    "id": "amor_perfeito_roxo",
+    "name": "Amor-perfeito Roxo",
+    "category": [
+      "agriculture",
+      "flower",
+      "amor_perfeito"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/amor_perfeito_roxo.png",
+    "level": 4,
+    "sellPrice": 250
+  },
+  {
+    "id": "amor_perfeito_arrebol",
+    "name": "Amor-perfeito Arrebol",
+    "category": [
+      "agriculture",
+      "flower",
+      "amor_perfeito"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/amor_perfeito_arrebol.png",
+    "level": 5,
+    "sellPrice": 400
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {
+    "id": "anturio_vermelho",
+    "name": "Antúrio Vermelho",
+    "category": [
+      "agriculture",
+      "flower",
+      "anturio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/anturio_vermelho.png",
+    "sellPrice": 185,
+    "level": 1
+  },
+  {
+    "id": "anturio_amarelo",
+    "name": "Antúrio Amarelo",
+    "category": [
+      "agriculture",
+      "flower",
+      "anturio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/anturio_amarelo.png",
+    "sellPrice": 185,
+    "level": 1
+  },
+  {
+    "id": "anturio_branco",
+    "name": "Antúrio Branco",
+    "category": [
+      "agriculture",
+      "flower",
+      "anturio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/anturio_branco.png",
+    "sellPrice": 185,
+    "level": 1
+  },
+  {
+    "id": "anturio_laranja",
+    "name": "Antúrio Laranja",
+    "category": [
+      "agriculture",
+      "flower",
+      "anturio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/anturio_laranja.png",
+    "level": 2,
+    "sellPrice": 280
+  },
+  {
+    "id": "anturio_rosa",
+    "name": "Antúrio Rosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "anturio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/anturio_rosa.png",
+    "level": 2,
+    "sellPrice": 280
+  },
+  {
+    "id": "anturio_pessego",
+    "name": "Antúrio Pessego",
+    "category": [
+      "agriculture",
+      "flower",
+      "anturio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/anturio_pessego.png",
+    "level": 3,
+    "sellPrice": 370
+  },
+  {
+    "id": "anturio_verde",
+    "name": "Antúrio Verde",
+    "category": [
+      "agriculture",
+      "flower",
+      "anturio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/anturio_verde.png",
+    "level": 4,
+    "sellPrice": 465
+  },
+  {
+    "id": "anturio_luminoso",
+    "name": "Antúrio Luminoso",
+    "category": [
+      "agriculture",
+      "flower",
+      "anturio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/anturio_luminoso.png",
+    "level": 5,
+    "sellPrice": 740
+  },
+
+
+
+
+
+
+
+
+
+
+
+  {
+    "id": "papoula_vermelha",
+    "name": "Papoula Vermelha",
+    "category": [
+      "agriculture",
+      "flower",
+      "papoula"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/papoula_vermelha.png",
+    "level": 1,
+    "sellPrice": 185
+  },
+  {
+    "id": "papoula_amarela",
+    "name": "Papoula Amarela",
+    "category": [
+      "agriculture",
+      "flower",
+      "papoula"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/papoula_amarela.png",
+    "level": 1,
+    "sellPrice": 185
+  },
+  {
+    "id": "papoula_branca",
+    "name": "Papoula Branca",
+    "category": [
+      "agriculture",
+      "flower",
+      "papoula"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/papoula_branca.png",
+    "level": 1,
+    "sellPrice": 185
+  },
+  {
+    "id": "papoula_laranja",
+    "name": "Papoula Laranja",
+    "category": [
+      "agriculture",
+      "flower",
+      "papoula"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/papoula_laranja.png",
+    "level": 2,
+    "sellPrice": 280
+  },
+  {
+    "id": "papoula_rosa",
+    "name": "Papoula Rosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "papoula"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/papoula_rosa.png",
+    "level": 2,
+    "sellPrice": 280
+  },
+  {
+    "id": "papoula_preta",
+    "name": "Papoula Preta",
+    "category": [
+      "agriculture",
+      "flower",
+      "papoula"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/papoula_preta.png",
+    "level": 3,
+    "sellPrice": 370
+  },
+  {
+    "id": "papoula_roxa",
+    "name": "Papoula Roxa",
+    "category": [
+      "agriculture",
+      "flower",
+      "papoula"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/papoula_roxa.png",
+    "level": 4,
+    "sellPrice": 465
+  },
+  {
+    "id": "papoula_arrebol",
+    "name": "Papoula Arrebol",
+    "category": [
+      "agriculture",
+      "flower",
+      "papoula"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/papoula_arrebol.png",
+    "level": 5,
+    "sellPrice": 740
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {
+    "id": "copo_leite_vermelha",
+    "name": "Copo-de-leite Vermelha",
+    "category": [
+      "agriculture",
+      "flower",
+      "copo_leite"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/copo_leite_vermelha.png",
+    "sellPrice": 250,
+    "level": 1
+  },
+  {
+    "id": "copo_leite_amarela",
+    "name": "Copo-de-leite Amarela",
+    "category": [
+      "agriculture",
+      "flower",
+      "copo_leite"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/copo_leite_amarela.png",
+    "sellPrice": 250,
+    "level": 1
+  },
+  {
+    "id": "copo_leite_branca",
+    "name": "Copo-de-leite Branca",
+    "category": [
+      "agriculture",
+      "flower",
+      "copo_leite"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/copo_leite_branca.png",
+    "sellPrice": 250,
+    "level": 1
+  },
+  {
+    "id": "copo_leite_laranja",
+    "name": "Copo-de-leite Laranja",
+    "category": [
+      "agriculture",
+      "flower",
+      "copo_leite"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/copo_leite_laranja.png",
+    "level": 2,
+    "sellPrice": 375
+  },
+  {
+    "id": "copo_leite_rosa",
+    "name": "Copo-de-leite Rosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "copo_leite"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/copo_leite_rosa.png",
+    "level": 2,
+    "sellPrice": 375
+  },
+  {
+    "id": "copo_leite_preto",
+    "name": "Copo-de-leite Preto",
+    "category": [
+      "agriculture",
+      "flower",
+      "copo_leite"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/copo_leite_preto.png",
+    "level": 3,
+    "sellPrice": 500
+  },
+  {
+    "id": "copo_leite_pessego",
+    "name": "Copo-de-leite Pessego",
+    "category": [
+      "agriculture",
+      "flower",
+      "copo_leite"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/copo_leite_pessego.png",
+    "level": 3,
+    "sellPrice": 500
+  },
+  {
+    "id": "copo_leite_roxo",
+    "name": "Copo-de-leite Roxo",
+    "category": [
+      "agriculture",
+      "flower",
+      "copo_leite"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/copo_leite_roxo.png",
+    "level": 4,
+    "sellPrice": 625
+  },
+  {
+    "id": "copo_leite_arrebol",
+    "name": "Copo-de-leite Arrebol",
+    "category": [
+      "agriculture",
+      "flower",
+      "copo_leite"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/copo_leite_arrebol.png",
+    "level": 5,
+    "sellPrice": 1000
+  },
+
+
+
+
+
+
+
+
+
+  {
+    "id": "gloria_manha_vermelha",
+    "name": "Glória-da-manhã Vermelha",
+    "category": [
+      "agriculture",
+      "flower",
+      "gloria_manha"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/gloria_manha_vermelha.png",
+    "sellPrice": 250,
+    "level": 1
+  },
+  {
+    "id": "gloria_manha_amarela",
+    "name": "Glória-da-manhã Amarela",
+    "category": [
+      "agriculture",
+      "flower",
+      "gloria_manha"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/gloria_manha_amarela.png",
+    "sellPrice": 250,
+    "level": 1
+  },
+  {
+    "id": "gloria_manha_branca",
+    "name": "Glória-da-manhã Branca",
+    "category": [
+      "agriculture",
+      "flower",
+      "gloria_manha"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/gloria_manha_branca.png",
+    "sellPrice": 250,
+    "level": 1
+  },
+  {
+    "id": "gloria_manha_laranja",
+    "name": "Glória-da-manhã Laranja",
+    "category": [
+      "agriculture",
+      "flower",
+      "gloria_manha"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/gloria_manha_laranja.png",
+    "level": 2,
+    "sellPrice": 375
+  },
+  {
+    "id": "gloria_manha_rosa",
+    "name": "Glória-da-manhã Rosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "gloria_manha"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/gloria_manha_rosa.png",
+    "level": 2,
+    "sellPrice": 375
+  },
+  {
+    "id": "gloria_manha_preta",
+    "name": "Glória-da-manhã Preta",
+    "category": [
+      "agriculture",
+      "flower",
+      "gloria_manha"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/gloria_manha_preta.png",
+    "level": 3,
+    "sellPrice": 500
+  },
+  {
+    "id": "gloria_manha_rosa",
+    "name": "Glória-da-manhã Rosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "gloria_manha"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/gloria_manha_rosa.png",
+    "level": 3,
+    "sellPrice": 500
+  },
+  {
+    "id": "gloria_manha_roxa",
+    "name": "Glória-da-manhã Roxa",
+    "category": [
+      "agriculture",
+      "flower",
+      "gloria_manha"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/gloria_manha_roxa.png",
+    "level": 4,
+    "sellPrice": 625
+  },
+  {
+    "id": "gloria_manha_luminosa",
+    "name": "Glória-da-manhã Luminosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "gloria_manha"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/gloria_manha_luminosa.png",
+    "level": 5,
+    "sellPrice": 1000
+  },
+
+
+
+
+
+  {
+    "id": "cravo_vermelho",
+    "name": "Cravo Vermelho",
+    "category": [
+      "agriculture",
+      "flower",
+      "cravo"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/cravo_vermelho.png",
+    "level": 1,
+    "sellPrice": 305
+  },
+  {
+    "id": "cravo_amarelo",
+    "name": "Cravo Amarelo",
+    "category": [
+      "agriculture",
+      "flower",
+      "cravo"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/cravo_amarelo.png",
+    "level": 1,
+    "sellPrice": 305
+  },
+  {
+    "id": "cravo_branco",
+    "name": "Cravo Branco",
+    "category": [
+      "agriculture",
+      "flower",
+      "cravo"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/cravo_branco.png",
+    "level": 1,
+    "sellPrice": 305
+  },
+  {
+    "id": "cravo_laranja",
+    "name": "Cravo Laranja",
+    "category": [
+      "agriculture",
+      "flower",
+      "cravo"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/cravo_laranja.png",
+    "level": 2,
+    "sellPrice": 460
+  },
+  {
+    "id": "cravo_rosa",
+    "name": "Cravo Rosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "cravo"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/cravo_rosa.png",
+    "level": 2,
+    "sellPrice": 460
+  },
+  {
+    "id": "cravo_preto",
+    "name": "Cravo Preto",
+    "category": [
+      "agriculture",
+      "flower",
+      "cravo"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/cravo_preto.png",
+    "level": 3,
+    "sellPrice": 610
+  },
+  {
+    "id": "cravo_pessego",
+    "name": "Cravo Pessego",
+    "category": [
+      "agriculture",
+      "flower",
+      "cravo"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/cravo_pessego.png",
+    "level": 3,
+    "sellPrice": 610
+  },
+  {
+    "id": "cravo_verde",
+    "name": "Cravo Verde",
+    "category": [
+      "agriculture",
+      "flower",
+      "cravo"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/cravo_verde.png",
+    "level": 4,
+    "sellPrice": 765
+  },
+  {
+    "id": "cravo_luminoso",
+    "name": "Cravo Luminoso",
+    "category": [
+      "agriculture",
+      "flower",
+      "cravo"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/cravo_luminoso.png",
+    "level": 5,
+    "sellPrice": 1220
+  }
+]

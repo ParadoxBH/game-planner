@@ -7,7 +7,7 @@
       "gala_moda_neve"
     ],
     "description": "Um vegetal crocante e nutritivo.",
-    "icon": "/img/heartopia/agricultura/nabo.png",
+    "icon": "/img/heartopia/agricultura/vegetais/nabo.png",
     "sellPrice": 30
   },
   {
@@ -19,8 +19,9 @@
       "papoula_himalaia",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/agricultura/papoula_himalaia_vermelha.png",
-    "sellPrice": 125
+    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_vermelha.png",
+    "sellPrice": 125,
+    "level": 1
   },
   {
     "id": "papoula_himalaia_amarela",
@@ -31,8 +32,9 @@
       "papoula_himalaia",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/agricultura/papoula_himalaia_amarela.png",
-    "sellPrice": 125
+    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_amarela.png",
+    "sellPrice": 125,
+    "level": 1
   },
   {
     "id": "papoula_himalaia_branca",
@@ -43,8 +45,9 @@
       "papoula_himalaia",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/agricultura/papoula_himalaia_branca.png",
-    "sellPrice": 125
+    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_branca.png",
+    "sellPrice": 125,
+    "level": 1
   },
   {
     "id": "papoula_himalaia_rosa",
@@ -55,8 +58,87 @@
       "papoula_himalaia",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/agricultura/papoula_himalaia_rosa.png",
-    "sellPrice": 190
+    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_rosa.png",
+    "sellPrice": 190,
+    "level": 2
+  },
+  {
+    "id": "papoula_himalaia_laranja",
+    "name": "Papoula-Himalaia Laranja",
+    "category": [
+      "agriculture",
+      "flower",
+      "papoula_himalaia",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_laranja.png",
+    "sellPrice": 190,
+    "level": 2
+  },
+  {
+    "id": "papoula_himalaia_preta",
+    "name": "Papoula-Himalaia Preta",
+    "category": [
+      "agriculture",
+      "flower",
+      "papoula_himalaia",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_preta.png",
+    "level": 3,
+    "sellPrice": 250
+  },
+  {
+    "id": "papoula_himalaia_pessego",
+    "name": "Papoula-Himalaia Pessego",
+    "category": [
+      "agriculture",
+      "flower",
+      "papoula_himalaia",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_pessego.png",
+    "level": 3,
+    "sellPrice": 250
+  },
+  {
+    "id": "papoula_himalaia_verde",
+    "name": "Papoula-Himalaia Verde",
+    "category": [
+      "agriculture",
+      "flower",
+      "papoula_himalaia",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_verde.png",
+    "level": 4,
+    "sellPrice": 315
+  },
+  {
+    "id": "papoula_himalaia_azul",
+    "name": "Papoula-Himalaia Azul",
+    "category": [
+      "agriculture",
+      "flower",
+      "papoula_himalaia",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_azul.png",
+    "level": 4,
+    "sellPrice": 315
+  },
+  {
+    "id": "papoula_himalaia_luminosa",
+    "name": "Papoula-Himalaia Luminosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "papoula_himalaia",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_luminosa.png",
+    "level": 5,
+    "sellPrice": 500
   },
 
 
@@ -211,7 +293,7 @@
             "vegetable",
             "gala_moda_neve"
         ],
-        "icon": "/img/heartopia/agricultura/semente_nabo.png",
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_nabo.png",
         "buyPrice": 10
     },
     {
@@ -223,7 +305,7 @@
             "papoula_himalaia",
             "gala_moda_neve"
         ],
-        "icon": "/img/heartopia/agricultura/semente_papoula_himalaia_vermelha.png",
+        "icon": "/img/heartopia/agricultura/flores/semente_papoula_himalaia_vermelha.png",
         "buyPrice": 30,
         "sellPrice": 15
     },
@@ -236,7 +318,7 @@
             "papoula_himalaia",
             "gala_moda_neve"
         ],
-        "icon": "/img/heartopia/agricultura/semente_papoula_himalaia_amarela.png",
+        "icon": "/img/heartopia/agricultura/flores/semente_papoula_himalaia_amarela.png",
         "buyPrice": 30,
         "sellPrice": 15
     },
@@ -249,7 +331,7 @@
             "papoula_himalaia",
             "gala_moda_neve"
         ],
-        "icon": "/img/heartopia/agricultura/semente_papoula_himalaia_branca.png",
+        "icon": "/img/heartopia/agricultura/flores/semente_papoula_himalaia_branca.png",
         "buyPrice": 30,
         "sellPrice": 15
     },
