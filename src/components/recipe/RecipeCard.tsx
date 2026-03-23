@@ -26,7 +26,7 @@ interface RecipeCardProps {
   ingredients: RecipeItem[];
   products: RecipeItem[];
   unlock?: RecipeUnlock[];
-  getSourceData: (type: GameDataTypes | undefined, id: string) => { name: string; icon?: string; type: GameDataTypes } | undefined;
+  getSourceData: (type: GameDataTypes | undefined, id: string) => { name: string; icon?: string; type: GameDataTypes; level?: number } | undefined;
   eventsMap: Map<string, string>;
   craftTime?: number;
 }
@@ -107,6 +107,7 @@ export function RecipeCard({
                     name={source?.name}
                     icon={source?.icon}
                     amount={ing.amount} 
+                    level={source?.level}
                     type={ing.type} 
                   />
                 );
@@ -128,6 +129,7 @@ export function RecipeCard({
                     name={source?.name}
                     icon={source?.icon}
                     amount={prod.amount} 
+                    level={source?.level}
                     type={prod.type} 
                     isProduct 
                   />

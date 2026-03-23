@@ -6,6 +6,7 @@ export interface Item {
   description?: string;
   buyPrice?: number;
   sellPrice?: number;
+  level?: number;
 }
 
 export interface EntityDrop {

@@ -18,6 +18,7 @@ export interface ItemChipProps {
   id: string;
   name?: string;
   amount?: number;
+  level?: number;
   type?: GameDataTypes;
   icon?: string;
   isProduct?: boolean;
@@ -78,7 +79,8 @@ export function ItemChip({
   isProduct = false,
   size = 'large',
   disableLink = false,
-  isBest = false
+  isBest = false,
+  level
 }: ItemChipProps) {
   const navigate = useNavigate();
   const { gameId } = useParams<{ gameId: string }>();
@@ -94,8 +96,8 @@ export function ItemChip({
   };
 
   const displayName = type === 'category' ? `Qualquer ${id}` : (name || id);
-  const tooltipTitle = amount !== undefined
-    ? `${displayName} ${amount.toString()}x` 
+  const tooltipTitle = (amount !== undefined || level !== undefined)
+    ? `${displayName}${level !== undefined ? ` (Lvl ${level})` : ''}${amount !== undefined ? ` ${amount.toString()}x` : ''}` 
     : displayName;
   
   const config = SIZES[size];
@@ -168,8 +170,8 @@ export function ItemChip({
           <Box
             sx={{
               position: 'absolute',
-              top: -8,
-              left: -8,
+              top: level !== undefined && level > 0 ? -12 : -8,
+              left: level !== undefined && level > 0 ? -12 : -8,
               zIndex: 3,
               display: 'flex',
               filter: 'drop-shadow(0 0 2px rgba(0,0,0,0.5))'
@@ -205,6 +207,33 @@ export function ItemChip({
               fontSize: config.fontSize 
             }}>
               {formatAmount(amount)}
+            </Typography>
+          </Box>
+        )}
+        {(level !== undefined && level > 0) && (
+          <Box sx={{ 
+            position: 'absolute', 
+            top: config.offset, 
+            left: config.offset, 
+            backgroundColor: 'warning.main',
+            color: 'warning.contrastText',
+            borderRadius: '10px',
+            px: config.px,
+            minWidth: config.badge,
+            height: config.badge,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '2px solid',
+            borderColor: '#121212', // Match background
+            boxShadow: 4,
+            zIndex: level !== undefined && level > 0 ? 4 : 1 // Above star if needed
+          }}>
+            <Typography variant="caption" sx={{ 
+              fontWeight: 800, 
+              fontSize: config.fontSize 
+            }}>
+              {level}
             </Typography>
           </Box>
         )}

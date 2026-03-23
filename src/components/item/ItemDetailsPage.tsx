@@ -123,7 +123,7 @@ export function ItemDetailsPage() {
         >
           <Paper elevation={0} sx={{ p: 2, textAlign: "center" }}>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
-              <ItemChip id={item.id} icon={item.icon} size="extraLarge" />
+              <ItemChip id={item.id} icon={item.icon} size="extraLarge" level={item.level} />
             </Box>
             <Typography variant="h5" fontWeight={800} color="primary.main">
               {item.name}

@@ -28,8 +28,8 @@ interface ItemShopCardProps {
     icon?: string;
   };
   currencyItem?: { name: string; icon?: string };
-  itemsMap: Map<string, { name: string; icon?: string; buyPrice?: number; sellPrice?: number }>;
-  entitiesMap: Map<string, { name: string; icon?: string; buyPrice?: number; sellPrice?: number }>;
+  itemsMap: Map<string, { name: string; icon?: string; buyPrice?: number; sellPrice?: number; level?: number }>;
+  entitiesMap: Map<string, { name: string; icon?: string; buyPrice?: number; sellPrice?: number; level?: number }>;
   eventsMap: Map<string, { name: string }>;
   onClick: () => void;
 }
@@ -118,6 +118,7 @@ export function ItemShopCard({
                         name={exData?.name}
                         icon={exData?.icon}
                         amount={ex.amount}
+                        level={exData?.level}
                         size="small"
                         type={ex.type || 'item'}
                       />

@@ -76,7 +76,7 @@ const ItemNode = ({ data }: NodeProps & { data: any }) => (
       <Handle type="source" position={Position.Right} style={{ background: "#90caf9", width: 10, height: 10, right: -6 }} />
       
       <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-        <ItemChip id={data.item.id} icon={data.item.icon} size="extraLarge" />
+        <ItemChip id={data.item.id} icon={data.item.icon} size="extraLarge" level={data.item.level} />
       </Box>
       <Typography variant="h6" fontWeight={800} color="primary.light" noWrap>
         {data.item.name}

@@ -290,7 +290,7 @@ export function ItemsPage() {
                 alignItems: "stretch",
               }}
             >
-              <Box sx={{ p: 2, display: "flex", alignItems: "center", gap: 2 }}>
+              <Box sx={{ p: 2, display: "flex", position: "relative", alignItems: "center", gap: 2 }}>
                 <Box
                   sx={{
                     width: 64,
@@ -320,6 +320,30 @@ export function ItemsPage() {
                     <Inventory
                       sx={{ fontSize: 32, color: "rgba(255, 255, 255, 0.2)" }}
                     />
+                  )}
+                  {item.level !== undefined && item.level > 0 && (
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: 2,
+                        left: 2,
+                        backgroundColor: "warning.main",
+                        color: "warning.contrastText",
+                        borderRadius: "4px",
+                        px: 0.5,
+                        minWidth: 16,
+                        height: 16,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "0.65rem",
+                        fontWeight: 800,
+                        boxShadow: 2,
+                        zIndex: 1,
+                      }}
+                    >
+                      {item.level}
+                    </Box>
                   )}
                 </Box>
                 <Box>
@@ -461,6 +485,7 @@ export function ItemsPage() {
             onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
             sx={{
               display: "flex",
+              position: "relative",
               alignItems: "center",
               gap: 2,
               cursor: "pointer",
@@ -492,6 +517,30 @@ export function ItemsPage() {
                 <Inventory
                   sx={{ fontSize: 16, color: "rgba(255, 255, 255, 0.2)" }}
                 />
+              )}
+              {item.level !== undefined && item.level > 0 && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: -4,
+                    left: -4,
+                    backgroundColor: "warning.main",
+                    color: "warning.contrastText",
+                    borderRadius: "4px",
+                    px: 0.5,
+                    minWidth: 12,
+                    height: 12,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "0.55rem",
+                    fontWeight: 800,
+                    boxShadow: 1,
+                    zIndex: 1,
+                  }}
+                >
+                  {item.level}
+                </Box>
               )}
             </Box>
             <Typography variant="body2" sx={{ fontWeight: 700 }}>
@@ -553,10 +602,11 @@ export function ItemsPage() {
           </Box>,
         ]}
         renderIconItem={(item: any) => (
-          <Tooltip title={`${item.name} (${item.id})`}>
+          <Tooltip title={item.name}>
             <Box
               onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
               sx={{
+                position: "relative",
                 width: "100%",
                 height: "100%",
                 display: "flex",
@@ -579,6 +629,30 @@ export function ItemsPage() {
                 <Inventory
                   sx={{ fontSize: 32, color: "rgba(255, 255, 255, 0.2)" }}
                 />
+              )}
+              {item.level !== undefined && item.level > 0 && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 4,
+                    left: 4,
+                    backgroundColor: "warning.main",
+                    color: "warning.contrastText",
+                    borderRadius: "4px",
+                    px: 0.5,
+                    minWidth: 16,
+                    height: 16,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "0.65rem",
+                    fontWeight: 800,
+                    boxShadow: 2,
+                    zIndex: 1,
+                  }}
+                >
+                  {item.level}
+                </Box>
               )}
             </Box>
           </Tooltip>
