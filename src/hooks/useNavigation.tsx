@@ -10,7 +10,8 @@ import {
   Calculate,
   Grass,
   People,
-  Foundation
+  Foundation,
+  AutoAwesomeMosaic,
 } from "@mui/icons-material";
 import { useGameData } from "./useGameData";
 import { useTheme } from "@mui/material";
@@ -136,6 +137,13 @@ export function useNavigation(gameId: string | null) {
       color: "#4caf50",
       isDropdown: true,
       options: dynamicItemCategories
+    },
+    { 
+      id: "conjuntos",
+      label: "Conjuntos", 
+      icon: <AutoAwesomeMosaic />, 
+      path: `/game/${gameId}/conjuntos`, 
+      color: "#ffca28"
     },
     { 
       id: "recipes",

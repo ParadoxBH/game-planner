@@ -63,14 +63,14 @@ export function ShopsPage() {
   const currentNpc = shopDetails?.npc;
 
   const npcLocation = useMemo(() => {
-    if (!currentNpc || !raw?.spawns) return null;
-    return raw.spawns.find((s: any) => s.entityId === currentNpc.id);
-  }, [currentNpc, raw?.spawns]);
+    if (!currentNpc || !raw?.referencePoints) return null;
+    return raw.referencePoints.find((s: any) => s.entityId === currentNpc.id);
+  }, [currentNpc, raw?.referencePoints]);
 
   const mapMetadata = useMemo(() => {
-    if (!npcLocation || !raw?.gameInfo?.maps) return null;
-    return raw.gameInfo.maps.find((m: any) => m.id === npcLocation.mapId) || raw.gameInfo.maps[0];
-  }, [npcLocation, raw?.gameInfo?.maps]);
+    if (!npcLocation || !raw?.maps) return null;
+    return raw.maps.find((m: any) => m.id === npcLocation.mapId) || raw.maps[0];
+  }, [npcLocation, raw?.maps]);
 
   if (loadingApi) {
     return (
@@ -178,18 +178,20 @@ export function ShopsPage() {
         <ListingDataView
           data={shops}
           viewMode={viewMode}
-          cardMinWidth={300}
+          variant="compact"
+          cardMinWidth={200}
           listHeader={[
             { label: "Loja / NPC", width: "60%" },
             { label: "ID", width: "20%" },
             { label: "Status", align: "right" as const, width: "20%" },
           ]}
           emptyMessage="Nenhuma loja cadastrada para este jogo."
-          renderCard={(shop) => (
+          renderCard={(shop, variant) => (
             <ShopCard
               shop={shop}
               npc={entitiesMap.get(shop.npcId)}
               onClick={() => navigate(`/game/${gameId}/shops/list/${shop.id}`)}
+              variant={variant}
             />
           )}
           renderListItem={(shop) => {
@@ -381,10 +383,9 @@ export function ShopsPage() {
                     markers={[{ 
                       id: 'npc-location', 
                       position: (() => {
-                        if (npcLocation.position) {
-                          return gameId === 'satisfactory' ? [npcLocation.position[0], npcLocation.position[1]] : npcLocation.position as [number, number];
-                        } else if (npcLocation.geom?.type === 'Point' && npcLocation.geom.coordinates) {
+                        if (npcLocation.geom?.type === 'Point' && npcLocation.geom.coordinates) {
                           const wktCoords = parseWKTPoint(npcLocation.geom.coordinates);
+                          // GeoJSON is [lng, lat], Leaflet wants [lat, lng]
                           return [wktCoords[1], wktCoords[0]];
                         }
                         return [0, 0];
@@ -424,13 +425,14 @@ export function ShopsPage() {
                 <ListingDataView
                   data={group.items}
                   viewMode={itemsViewMode}
-                  cardMinWidth={300}
+                  variant="compact"
+                  cardMinWidth={200}
                   listHeader={[
                     { label: "Item", width: "60%" },
                     { label: "Preço", align: "right" as const, width: "20%" },
                     { label: "Limite / Qtd", align: "right" as const, width: "20%" },
                   ]}
-                  renderCard={(shopItem: ShopItem) => (
+                  renderCard={(shopItem: ShopItem, variant) => (
                     <ShopItemCard
                       shopItem={shopItem}
                       baseItem={itemsMap.get(shopItem.id)}
@@ -439,6 +441,7 @@ export function ShopsPage() {
                       eventsMap={eventsMap}
                       itemsMap={itemsMap}
                       entitiesMap={entitiesMap}
+                      variant={variant}
                     />
                   )}
                   renderListItem={(shopItem: ShopItem) => {

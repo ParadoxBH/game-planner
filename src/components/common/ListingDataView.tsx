@@ -26,7 +26,7 @@ export interface ListDataHeader {
 
 interface DataViewProps<T> {
   data: T[];
-  renderCard: (item: T) => ReactNode;
+  renderCard: (item: T, variant: "default" | "compact") => ReactNode;
   renderListItem?: (item: T) => ReactNode[];
   renderIconItem?: (item: T) => ReactNode;
   viewMode?: ViewMode;
@@ -37,6 +37,7 @@ interface DataViewProps<T> {
   gridProps?: any;
   listHeader?: ListDataHeader[];
   actions?: ReactNode;
+  variant?: 'default' | 'compact';
 }
 
 export function ListingDataView<T>({ 
@@ -48,17 +49,18 @@ export function ListingDataView<T>({
   renderListItem, 
   renderIconItem, 
   emptyMessage = "Nenhum item encontrado.",
-  gridProps = { spacing: 3 },
+  gridProps = { spacing: 2 },
   listHeader,
-  actions
+  actions,
+  variant = "default"
 }: DataViewProps<T>) {
   const theme = useTheme();
 
   // Calcula os tamanhos do grid com base nas colunas desejadas (padrão: 1, 2, 3, 4)
   const gridSizes = useMemo(() => {
-    const defaultCols = { xs: 1, sm: 2, md: 3, lg: 4, xl: 6 };
+    const defaultCols = { xs: 2, sm: 3, md: 4, lg: 6, xl: 8 };
     const cols = typeof columns === 'number' 
-      ? { xs: 1, sm: Math.max(1, Math.floor(columns/2)), md: columns, lg: columns, xl: columns }
+      ? { xs: 2, sm: Math.max(2, Math.floor(columns/2)), md: columns, lg: columns, xl: columns }
       : { ...defaultCols, ...columns };
 
     return {
@@ -100,7 +102,7 @@ export function ListingDataView<T>({
           }}>
             {data.map((item, index) => (
               <Box key={index}>
-                {renderCard(item)}
+                {renderCard(item, variant)}
               </Box>
             ))}
           </Box>
@@ -108,7 +110,7 @@ export function ListingDataView<T>({
           <Grid container {...gridProps}>
             {data.map((item, index) => (
               <Grid key={index} size={gridSizes}>
-                {renderCard(item)}
+                {renderCard(item, variant)}
               </Grid>
             ))}
           </Grid>

@@ -187,3 +187,12 @@ export interface RedemptionCode {
   addedAt: string;
   expiresAt: string;
 }
+
+export interface Conjunto {
+  id: string;
+  name: string;
+  category: string;
+  description?: string;
+  icon?: string;
+  items: string[]; // Array of Item IDs
+}

@@ -19,7 +19,7 @@ export function useApi(gameId: string | undefined) {
     setLoading(true);
     setError(null);
 
-    const datasets = ["items", "recipes", "entity", "shops", "events", "referencePoints", "codes"];
+    const datasets = ["items", "recipes", "entity", "shops", "events", "referencePoints", "codes", "conjuntos"];
 
     Promise.all([
       ...(datasets.map((ds) => 
@@ -32,7 +32,7 @@ export function useApi(gameId: string | undefined) {
       loadGameMaps(gameId)
     ])
       .then((results) => {
-        const [items, recipes, entities, shops, events, referencePoints, codes, games, maps = []] = results as any[];
+        const [items, recipes, entities, shops, events, referencePoints, codes, conjuntos, games, maps = []] = results as any[];
         if (isMounted) {
           const gameInfo = games.find((g: any) => g.id === gameId);
           setData({ 
@@ -43,6 +43,7 @@ export function useApi(gameId: string | undefined) {
             events, 
             referencePoints, 
             codes, 
+            conjuntos,
             gameInfo,
             maps 
           });
@@ -102,6 +103,10 @@ export function useApi(gameId: string | undefined) {
     return apiService ? apiService.getEventDetails(eventId) : null;
   }, [apiService]);
 
+  const getConjuntosList = useCallback((options?: SearchOptions) => {
+    return apiService ? apiService.getConjuntos(options) : [];
+  }, [apiService]);
+
   return {
     loading,
     error,
@@ -114,6 +119,7 @@ export function useApi(gameId: string | undefined) {
     getEntityList,
     getRecipesList,
     getCodesList,
+    getConjuntosList,
     // Original data for fallback if needed
     raw: data,
   };

@@ -11,7 +11,8 @@ import {
   KeyboardDoubleArrowRight,
   Lock,
   Bolt,
-  Assignment
+  Assignment,
+  Science
 } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import { ItemChip } from "../common/ItemChip";
@@ -29,6 +30,7 @@ interface RecipeCardProps {
   getSourceData: (type: GameDataTypes | undefined, id: string) => { name: string; icon?: string; type: GameDataTypes; level?: number } | undefined;
   eventsMap: Map<string, string>;
   craftTime?: number;
+  variant?: "default" | "compact";
 }
 
 
@@ -42,7 +44,8 @@ export function RecipeCard({
   unlock,
   getSourceData,
   eventsMap,
-  craftTime
+  craftTime,
+  variant = "default"
 }: RecipeCardProps) {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
@@ -64,121 +67,217 @@ export function RecipeCard({
       '&:hover': {
         backgroundColor: 'rgba(255, 255, 255, 0.04)',
         borderColor: 'rgba(255, 255, 255, 0.15)',
+        transform: variant === "compact" ? "translateY(-6px)" : "none",
+        boxShadow: variant === "compact" ? "0 8px 32px rgba(0,0,0,0.4)" : "none",
       }
     }}>
-      <CardContent sx={{ p: '16px !important' }}>
-        <Stack spacing={2.5}>
-          {/* Header: Name and Stations */}
-          <Stack alignItems="stretch" textAlign={"start"}>
-            <Stack direction="row" alignItems={"center"} justifyContent="space-between">
-              <Typography variant="subtitle2" sx={{ color: 'text.secondary', fontWeight: 500, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: 1 }}>
-                Receita
-              </Typography>
-              <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }}>
-                {stations.map(s => (
-                  <Chip 
-                    key={s} 
-                    label={s} 
-                    size="small" 
-                    icon={<Construction sx={{ fontSize: '0.8rem !important' }} />} 
-                    sx={{ backgroundColor: 'rgba(255,255,255,0.05)', fontSize: '0.65rem', height: 20 }} 
-                  />
-                ))}
-                {craftTime && craftTime > 0 && (
-                  <TimeChip seconds={craftTime} />
-                )}
+      {variant === "compact" ? (
+         <Box
+          sx={{
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 1.5,
+            textAlign: "center",
+          }}
+        >
+          <Box
+            sx={{
+              width: 80,
+              height: 80,
+              borderRadius: 1,
+              backgroundColor: "rgba(0,0,0,0.2)",
+              border: 1,
+              borderColor: "divider",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              overflow: "hidden",
+              position: "relative",
+            }}
+          >
+            {(() => {
+              const mainProduct = products[0];
+              const productData = mainProduct ? getSourceData(mainProduct.type, mainProduct.id) : null;
+              
+              return productData?.icon ? (
+                <img
+                  src={productData.icon}
+                  alt={name}
+                  style={{
+                    width: "80%",
+                    height: "80%",
+                    objectFit: "contain",
+                  }}
+                />
+              ) : (
+                <Science sx={{ fontSize: 32, color: "rgba(255, 255, 255, 0.2)" }} />
+              );
+            })()}
+            {(() => {
+                const mainProduct = products[0];
+                const productData = mainProduct ? getSourceData(mainProduct.type, mainProduct.id) : null;
+                if (productData?.level && productData.level > 0) {
+                     return (
+                        <Box
+                        sx={{
+                            position: "absolute",
+                            top: 4,
+                            left: 4,
+                            backgroundColor: "warning.main",
+                            color: "warning.contrastText",
+                            borderRadius: "4px",
+                            px: 0.5,
+                            minWidth: 16,
+                            height: 16,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "0.65rem",
+                            fontWeight: 800,
+                            boxShadow: 2,
+                            zIndex: 1,
+                        }}
+                        >
+                        {productData.level}
+                        </Box>
+                    );
+                }
+                return null;
+            })()}
+          </Box>
+          <Typography
+            variant="subtitle2"
+            sx={{
+              color: "text.primary",
+              fontWeight: 700,
+              lineHeight: 1.2,
+              height: "2.4em",
+              overflow: "hidden",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+            }}
+          >
+            {name}
+          </Typography>
+        </Box>
+      ) : (
+        <CardContent sx={{ p: '16px !important' }}>
+          <Stack spacing={2.5}>
+            {/* Header: Name and Stations */}
+            <Stack alignItems="stretch" textAlign={"start"}>
+              <Stack direction="row" alignItems={"center"} justifyContent="space-between">
+                <Typography variant="subtitle2" sx={{ color: 'text.secondary', fontWeight: 500, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: 1 }}>
+                  Receita
+                </Typography>
+                <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }}>
+                  {stations.map(s => (
+                    <Chip 
+                      key={s} 
+                      label={s} 
+                      size="small" 
+                      icon={<Construction sx={{ fontSize: '0.8rem !important' }} />} 
+                      sx={{ backgroundColor: 'rgba(255,255,255,0.05)', fontSize: '0.65rem', height: 20 }} 
+                    />
+                  ))}
+                  {craftTime && craftTime > 0 && (
+                    <TimeChip seconds={craftTime} />
+                  )}
+                </Stack>
               </Stack>
+              <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: 700, lineHeight: 1.2 }}>
+                {name}
+              </Typography>
             </Stack>
-            <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: 700, lineHeight: 1.2 }}>
-              {name}
-            </Typography>
-          </Stack>
 
-          {/* Crafting Flow */}
-          <Stack direction="row" spacing={3} alignItems="center" justifyContent={"space-between"} sx={{ flexWrap: 'wrap', rowGap: 2 }}>
-            {/* Ingredients */}
-            <Stack direction="row" spacing={1.5} sx={{ display: 'flex', alignItems: 'center' }}>
-              {ingredients.map((ing, idx) => {
-                const source = getSourceData(ing.type as any, ing.id);
-                return (
-                  <ItemChip 
-                    key={idx} 
-                    id={ing.id}
-                    name={source?.name}
-                    icon={source?.icon}
-                    amount={ing.amount} 
-                    level={source?.level}
-                    type={ing.type} 
-                  />
-                );
-              })}
-            </Stack>
-            
-            <Box sx={{ display: 'flex', alignItems: 'center', opacity: 0.3 }}>
-              <KeyboardDoubleArrowRight sx={{ fontSize: 24 }} />
-            </Box>
-
-            {/* Products */}
-            <Stack direction="row" spacing={1.5} sx={{ display: 'flex', alignItems: 'center' }}>
-              {products.map((prod, idx) => {
-                const source = getSourceData(prod.type, prod.id);
-                return (
-                  <ItemChip 
-                    key={idx} 
-                    id={prod.id}
-                    name={source?.name}
-                    icon={source?.icon}
-                    amount={prod.amount} 
-                    level={source?.level}
-                    type={prod.type} 
-                    isProduct 
-                  />
-                );
-              })}
-            </Stack>
-          </Stack>
-
-          {/* Unlock Requirements */}
-          {unlock && unlock.length > 0 && (
-            <Box sx={{ 
-              p: 1.5, 
-              borderRadius: 1, 
-              backgroundColor: 'rgba(255, 187, 0, 0.05)', 
-              border: '1px dashed rgba(255, 187, 0, 0.2)',
-            }}>
-              <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
-                {unlock.map((req, idx) => {
-                  let Icon = Lock;
-                  let color = "#ffbb00";
-                  let label = req.type;
-
-                  if (req.type === 'level') {
-                    Icon = Bolt;
-                    label = "Nível";
-                  } else if (req.type === 'quest') {
-                    Icon = Assignment;
-                    label = "Missão";
-                  } else if (req.type === 'upgrade') {
-                    Icon = Construction;
-                    label = "Upgrade";
-                  } else if (req.type === 'event') {
-                    label = "Evento";
-                  }
-
-                  const displayValue = req.type === 'event' ? (eventsMap.get(req.value) || req.value) : req.value;
-
+            {/* Crafting Flow */}
+            <Stack direction="row" spacing={3} alignItems="center" justifyContent={"space-between"} sx={{ flexWrap: 'wrap', rowGap: 2 }}>
+              {/* Ingredients */}
+              <Stack direction="row" spacing={1.5} sx={{ display: 'flex', alignItems: 'center' }}>
+                {ingredients.map((ing, idx) => {
+                  const source = getSourceData(ing.type as any, ing.id);
                   return (
-                    <Typography key={idx} variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, fontSize: '0.75rem', color: 'text.secondary' }}>
-                      <Icon sx={{ fontSize: '0.9rem', color }} /> 
-                      <Box component="span" sx={{ color: 'text.primary', fontWeight: 600 }}>{label}:</Box> {displayValue}
-                    </Typography>
+                    <ItemChip 
+                      key={idx} 
+                      id={ing.id}
+                      name={source?.name}
+                      icon={source?.icon}
+                      amount={ing.amount} 
+                      level={source?.level}
+                      type={ing.type} 
+                    />
                   );
                 })}
               </Stack>
-            </Box>
-          )}
-        </Stack>
-      </CardContent>
+              
+              <Box sx={{ display: 'flex', alignItems: 'center', opacity: 0.3 }}>
+                <KeyboardDoubleArrowRight sx={{ fontSize: 24 }} />
+              </Box>
+
+              {/* Products */}
+              <Stack direction="row" spacing={1.5} sx={{ display: 'flex', alignItems: 'center' }}>
+                {products.map((prod, idx) => {
+                  const source = getSourceData(prod.type, prod.id);
+                  return (
+                    <ItemChip 
+                      key={idx} 
+                      id={prod.id}
+                      name={source?.name}
+                      icon={source?.icon}
+                      amount={prod.amount} 
+                      level={source?.level}
+                      type={prod.type} 
+                      isProduct 
+                    />
+                  );
+                })}
+              </Stack>
+            </Stack>
+
+            {/* Unlock Requirements */}
+            {unlock && unlock.length > 0 && (
+              <Box sx={{ 
+                p: 1.5, 
+                borderRadius: 1, 
+                backgroundColor: 'rgba(255, 187, 0, 0.05)', 
+                border: '1px dashed rgba(255, 187, 0, 0.2)',
+              }}>
+                <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
+                  {unlock.map((req, idx) => {
+                    let Icon = Lock;
+                    let color = "#ffbb00";
+                    let label = req.type;
+
+                    if (req.type === 'level') {
+                      Icon = Bolt;
+                      label = "Nível";
+                    } else if (req.type === 'quest') {
+                      Icon = Assignment;
+                      label = "Missão";
+                    } else if (req.type === 'upgrade') {
+                      Icon = Construction;
+                      label = "Upgrade";
+                    } else if (req.type === 'event') {
+                      label = "Evento";
+                    }
+
+                    const displayValue = req.type === 'event' ? (eventsMap.get(req.value) || req.value) : req.value;
+
+                    return (
+                      <Typography key={idx} variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, fontSize: '0.75rem', color: 'text.secondary' }}>
+                        <Icon sx={{ fontSize: '0.9rem', color }} /> 
+                        <Box component="span" sx={{ color: 'text.primary', fontWeight: 600 }}>{label}:</Box> {displayValue}
+                      </Typography>
+                    );
+                  })}
+                </Stack>
+              </Box>
+            )}
+          </Stack>
+        </CardContent>
+      )}
     </Card>
   );
 }

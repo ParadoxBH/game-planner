@@ -19,6 +19,7 @@ import { ProfitPerTimeCalculator } from "./components/calculator/ProfitPerTimeCa
 import { ItemDetailsPage } from "./components/item/ItemDetailsPage";
 import { RecipeDetailsPage } from "./components/recipe/RecipeDetailsPage";
 import { Typography } from "@mui/material";
+import { ConjuntosPage } from "./components/item/ConjuntosPage";
 
 export function RoutesPage() {
   return (
@@ -41,6 +42,7 @@ export function RoutesPage() {
           <Route path="items/view/:itemId" element={<ItemDetailsPage />} />
           <Route path="recipes/list/:category?" element={<RecipesPage />} />
           <Route path="recipes/view/:recipeId" element={<RecipeDetailsPage />} />
+          <Route path="conjuntos/:category?" element={<ConjuntosPage />} />
           <Route path="entity/list/:category?" element={<EntityPage />} />
           <Route path="entity/view/:entityId" element={<EntityDetailsPage />} />
           <Route path="shops/list/:category?" element={<ShopsPage />} />

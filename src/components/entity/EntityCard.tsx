@@ -24,9 +24,10 @@ interface EntityCardProps {
   showPrices?: boolean;
   hasShop?: boolean;
   onClick: () => void;
+  variant?: "default" | "compact";
 }
 
-export function EntityCard({ entity, showPrices, hasShop, onClick }: EntityCardProps) {
+export function EntityCard({ entity, showPrices, hasShop, onClick, variant = "default" }: EntityCardProps) {
   const navigate = useNavigate();
   const { gameId } = useParams<{ gameId: string }>();
 
@@ -51,129 +52,204 @@ export function EntityCard({ entity, showPrices, hasShop, onClick }: EntityCardP
     }}
     onClick={onClick}
     >
-      <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Box sx={{ 
-          width: 64, 
-          height: 64, 
-          borderRadius: 1.5, 
-          backgroundColor: 'rgba(0,0,0,0.2)',
-          border: 1,
-          borderColor: 'divider',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          overflow: 'hidden',
-          flexShrink: 0
-        }}>
-          {entity.icon ? (
-            <img src={entity.icon} alt={entity.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
-          ) : (
-            <CategoryIcon sx={{ fontSize: 32, color: 'rgba(255, 255, 255, 0.2)' }} />
-          )}
-        </Box>
-        <Box>
-          <Stack direction="row" spacing={0.5} sx={{ mb: 0.5, flexWrap: 'wrap' }}>
-            {(Array.isArray(entity.category) ? entity.category : [entity.category || ""]).map(cat => (
-              <Typography key={cat} variant="subtitle2" sx={{ color: 'primary.main', fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase' }}>
-                #{cat}
-              </Typography>
-            ))}
-          </Stack>
-          <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: 700, lineHeight: 1.2, display: 'flex', alignItems: 'center', gap: 1 }}>
-            {entity.name}
-            {hasShop && (
-              <Tooltip title="Este NPC possui uma loja">
-                <Box sx={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  backgroundColor: 'rgba(255, 68, 0, 0.15)', 
-                  p: 0.5, 
-                  borderRadius: 1,
-                  animation: 'pulse-glow 2s infinite ease-in-out',
-                  '@keyframes pulse-glow': {
-                    '0%': { boxShadow: '0 0 0 0 rgba(255, 68, 0, 0.4)' },
-                    '70%': { boxShadow: '0 0 0 6px rgba(255, 68, 0, 0)' },
-                    '100%': { boxShadow: '0 0 0 0 rgba(255, 68, 0, 0)' }
-                  }
-                }}>
-                  <Storefront sx={{ fontSize: '1rem', color: 'primary.main' }} />
-                </Box>
-              </Tooltip>
+      {variant === "compact" ? (
+        <Box
+          sx={{
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 1.5,
+            textAlign: "center",
+          }}
+        >
+          <Box
+            sx={{
+              width: 80,
+              height: 80,
+              borderRadius: 1,
+              backgroundColor: "rgba(0,0,0,0.2)",
+              border: 1,
+              borderColor: "divider",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              overflow: "hidden",
+              position: "relative",
+            }}
+          >
+            {entity.icon ? (
+              <img
+                src={entity.icon}
+                alt={entity.name}
+                style={{
+                  width: "80%",
+                  height: "80%",
+                  objectFit: "contain",
+                }}
+              />
+            ) : (
+              <CategoryIcon sx={{ fontSize: 32, color: "rgba(255, 255, 255, 0.2)" }} />
             )}
+            {hasShop && (
+               <Box sx={{ 
+                position: 'absolute',
+                top: 4,
+                right: 4,
+                display: 'flex', 
+                alignItems: 'center', 
+                backgroundColor: 'rgba(255, 68, 0, 0.3)', 
+                p: 0.5, 
+                borderRadius: 1,
+                zIndex: 1
+              }}>
+                <Storefront sx={{ fontSize: '0.8rem', color: 'white' }} />
+              </Box>
+            )}
+          </Box>
+          <Typography
+            variant="subtitle2"
+            sx={{
+              color: "text.primary",
+              fontWeight: 700,
+              lineHeight: 1.2,
+              height: "2.4em",
+              overflow: "hidden",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+            }}
+          >
+            {entity.name}
           </Typography>
         </Box>
-      </Box>
-      <CardContent sx={{ pt: 0, flexGrow: 1 }}>
-        <Stack spacing={1} sx={{ mb: 2 }}>
-          {entity.requirements && entity.requirements.length > 0 && (
-            <Stack direction="row" spacing={1} alignItems="center">
-              <RequirementsIcon sx={{ fontSize: 14, color: 'text.secondary' }} />
-              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                {entity.requirements.length} Requisitos
+      ) : (
+        <>
+          <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ 
+              width: 64, 
+              height: 64, 
+              borderRadius: 1.5, 
+              backgroundColor: 'rgba(0,0,0,0.2)',
+              border: 1,
+              borderColor: 'divider',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              overflow: 'hidden',
+              flexShrink: 0
+            }}>
+              {entity.icon ? (
+                <img src={entity.icon} alt={entity.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+              ) : (
+                <CategoryIcon sx={{ fontSize: 32, color: 'rgba(255, 255, 255, 0.2)' }} />
+              )}
+            </Box>
+            <Box>
+              <Stack direction="row" spacing={0.5} sx={{ mb: 0.5, flexWrap: 'wrap' }}>
+                {(Array.isArray(entity.category) ? entity.category : [entity.category || ""]).map(cat => (
+                  <Typography key={cat} variant="subtitle2" sx={{ color: 'primary.main', fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase' }}>
+                    #{cat}
+                  </Typography>
+                ))}
+              </Stack>
+              <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: 700, lineHeight: 1.2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                {entity.name}
+                {hasShop && (
+                  <Tooltip title="Este NPC possui uma loja">
+                    <Box sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      backgroundColor: 'rgba(255, 68, 0, 0.15)', 
+                      p: 0.5, 
+                      borderRadius: 1,
+                      animation: 'pulse-glow 2s infinite ease-in-out',
+                      '@keyframes pulse-glow': {
+                        '0%': { boxShadow: '0 0 0 0 rgba(255, 68, 0, 0.4)' },
+                        '70%': { boxShadow: '0 0 0 6px rgba(255, 68, 0, 0)' },
+                        '100%': { boxShadow: '0 0 0 0 rgba(255, 68, 0, 0)' }
+                      }
+                    }}>
+                      <Storefront sx={{ fontSize: '1rem', color: 'primary.main' }} />
+                    </Box>
+                  </Tooltip>
+                )}
               </Typography>
-            </Stack>
-          )}
-          {entity.drops && entity.drops.length > 0 && (
-            <Stack direction="row" spacing={1} alignItems="center">
-              <DropsIcon sx={{ fontSize: 14, color: 'text.secondary' }} />
-              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                {entity.drops.length} Drops
-              </Typography>
-            </Stack>
-          )}
-        </Stack>
-        
-        {showPrices && (entity.sellPrice !== undefined || entity.buyPrice !== undefined) && (
-          <Stack direction="row" spacing={0.5} sx={{ mb: 2 }}>
-            {entity.buyPrice !== undefined && (
-              <Tooltip title="Preço de Compra">
-                <Stack direction="row" spacing={0.5} alignItems="center" sx={{ 
-                  backgroundColor: 'rgba(76, 175, 80, 0.05)', 
-                  px: 0.5, 
-                  borderRadius: 0.5,
-                  border: '1px solid rgba(76, 175, 80, 0.1)'
-                }}>
-                  <ShoppingCart sx={{ fontSize: 12, color: 'success.main' }} />
-                  <ItemChip id="ouro" amount={entity.buyPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+            </Box>
+          </Box>
+          <CardContent sx={{ pt: 0, flexGrow: 1 }}>
+            <Stack spacing={1} sx={{ mb: 2 }}>
+              {entity.requirements && entity.requirements.length > 0 && (
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <RequirementsIcon sx={{ fontSize: 14, color: 'text.secondary' }} />
+                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                    {entity.requirements.length} Requisitos
+                  </Typography>
                 </Stack>
-              </Tooltip>
-            )}
-            {entity.sellPrice !== undefined && (
-              <Tooltip title="Preço de Venda">
-                <Stack direction="row" spacing={0.5} alignItems="center" sx={{ 
-                  backgroundColor: 'rgba(255, 152, 0, 0.05)', 
-                  px: 0.5, 
-                  borderRadius: 0.5,
-                  border: '1px solid rgba(255, 152, 0, 0.1)'
-                }}>
-                  <Sell sx={{ fontSize: 12, color: 'warning.main' }} />
-                  <ItemChip id="ouro" amount={entity.sellPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+              )}
+              {entity.drops && entity.drops.length > 0 && (
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <DropsIcon sx={{ fontSize: 14, color: 'text.secondary' }} />
+                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                    {entity.drops.length} Drops
+                  </Typography>
                 </Stack>
-              </Tooltip>
+              )}
+            </Stack>
+            
+            {showPrices && (entity.sellPrice !== undefined || entity.buyPrice !== undefined) && (
+              <Stack direction="row" spacing={0.5} sx={{ mb: 2 }}>
+                {entity.buyPrice !== undefined && (
+                  <Tooltip title="Preço de Compra">
+                    <Stack direction="row" spacing={0.5} alignItems="center" sx={{ 
+                      backgroundColor: 'rgba(76, 175, 80, 0.05)', 
+                      px: 0.5, 
+                      borderRadius: 0.5,
+                      border: '1px solid rgba(76, 175, 80, 0.1)'
+                    }}>
+                      <ShoppingCart sx={{ fontSize: 12, color: 'success.main' }} />
+                      <ItemChip id="ouro" amount={entity.buyPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+                    </Stack>
+                  </Tooltip>
+                )}
+                {entity.sellPrice !== undefined && (
+                  <Tooltip title="Preço de Venda">
+                    <Stack direction="row" spacing={0.5} alignItems="center" sx={{ 
+                      backgroundColor: 'rgba(255, 152, 0, 0.05)', 
+                      px: 0.5, 
+                      borderRadius: 0.5,
+                      border: '1px solid rgba(255, 152, 0, 0.1)'
+                    }}>
+                      <Sell sx={{ fontSize: 12, color: 'warning.main' }} />
+                      <ItemChip id="ouro" amount={entity.sellPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+                    </Stack>
+                  </Tooltip>
+                )}
+              </Stack>
             )}
-          </Stack>
-        )}
 
-        <Box sx={{ mt: 'auto' }}>
-          <Tooltip title="ID da Entidade">
-            <Chip
-              size="small"
-              label={entity.id}
-              onClick={() =>
-                  navigate(`/game/${gameId}/entity/view/${entity.id}`)
-                }
-              sx={{
-                backgroundColor: 'rgba(255, 255, 255, 0.03)',
-                color: 'text.disabled',
-                fontSize: '0.6rem',
-                fontFamily: 'monospace',
-                borderRadius: 0.5,
-                height: 20
-              }} 
-            />
-          </Tooltip>
-        </Box>
-      </CardContent>
+            <Box sx={{ mt: 'auto' }}>
+              <Tooltip title="ID da Entidade">
+                <Chip
+                  size="small"
+                  label={entity.id}
+                  onClick={() =>
+                      navigate(`/game/${gameId}/entity/view/${entity.id}`)
+                    }
+                  sx={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                    color: 'text.disabled',
+                    fontSize: '0.6rem',
+                    fontFamily: 'monospace',
+                    borderRadius: 0.5,
+                    height: 20
+                  }} 
+                />
+              </Tooltip>
+            </Box>
+          </CardContent>
+        </>
+      )}
     </Card>
   );
 }

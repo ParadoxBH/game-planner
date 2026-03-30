@@ -225,18 +225,20 @@ export function EntityPage() {
       <ListingDataView
         data={filteredEntities}
         viewMode={viewMode}
-        cardMinWidth={320}
+        variant="compact"
+        cardMinWidth={200}
         listHeader={[
           { label: "Entidade", width: "70%" },
           { label: "Preços", align: "right" as const, width: "30%", hidden: !showPrices },
         ]}
         emptyMessage="Nenhuma entidade encontrada neste filtro."
-        renderCard={(entity: any) => (
+        renderCard={(entity: any, variant) => (
           <EntityCard
             entity={entity}
             showPrices={showPrices}
             hasShop={shopNPCIds.has(entity.id.toLowerCase())}
             onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
+            variant={variant}
           />
         )}
         renderListItem={(entity: any) => [

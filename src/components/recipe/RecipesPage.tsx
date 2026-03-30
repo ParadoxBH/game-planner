@@ -190,7 +190,8 @@ export function RecipesPage() {
       <ListingDataView
         data={filteredRecipes}
         viewMode={viewMode}
-        cardMinWidth={450}
+        variant="compact"
+        cardMinWidth={200}
         listHeader={[
           { label: "Receita / Produto", width: "30%" },
           { label: "Tempo / Ingredientes", width: "40%" },
@@ -198,7 +199,7 @@ export function RecipesPage() {
           { label: "Desbloqueio", align: "right" as const, width: "15%" },
         ]}
         emptyMessage="Nenhuma receita encontrada com estes filtros."
-        renderCard={(recipe: any) => (
+        renderCard={(recipe: any, variant) => (
           <RecipeCard
             id={recipe.id}
             name={recipe.normalizedName}
@@ -209,6 +210,7 @@ export function RecipesPage() {
             getSourceData={getSourceData}
             eventsMap={eventsMap}
             craftTime={recipe.craftTime}
+            variant={variant}
           />
         )}
         renderListItem={(recipe: any) => {

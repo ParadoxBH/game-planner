@@ -3,6 +3,7 @@ import type {
   Recipe,
   Entity,
   ReferencePoints,
+  Conjunto,
 } from "../types/gameModels";
 import type {
   NormalizedRecipe,
@@ -106,6 +107,10 @@ export class ApiService {
       return normalized.filter(options);
     }
     return this.applyAdvancedSearch(normalized, options) as NormalizedRecipe[] | PaginatedResponse<NormalizedRecipe>;
+  }
+
+  public getConjuntos(options?: SearchOptions): Conjunto[] | PaginatedResponse<Conjunto> {
+    return this.applyAdvancedSearch(this.data.conjuntos || [], options) as Conjunto[] | PaginatedResponse<Conjunto>;
   }
 
   public getItemDetails(itemId: string): ItemDetails | null {

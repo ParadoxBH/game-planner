@@ -1,4 +1,4 @@
-import type { Item, Recipe, Entity, Shop, GameEvent, RedemptionCode, GameDataTypes, ReferencePoints, MapMetadata, GameInfo } from "./gameModels";
+import type { Item, Recipe, Entity, Shop, GameEvent, RedemptionCode, GameDataTypes, ReferencePoints, MapMetadata, GameInfo, Conjunto } from "./gameModels";
 
 export interface NormalizedRecipe extends Recipe {
   normalizedName: string;
@@ -80,6 +80,7 @@ export interface GameDataPayload {
   events: GameEvent[];
   referencePoints: ReferencePoints[];
   codes: RedemptionCode[];
+  conjuntos: Conjunto[];
   gameInfo?: GameInfo;
   maps: MapMetadata[];
 }
