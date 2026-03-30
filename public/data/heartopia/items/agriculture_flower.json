@@ -1,5 +1,5 @@
 [
-    {
+  {
     "id": "margarida_vermelha",
     "name": "Margarida Vermelha",
     "category": [
@@ -71,16 +71,6 @@
     "level": 5,
     "sellPrice": 400
   },
-
-
-
-
-
-
-
-
-
-
   {
     "id": "amor_perfeito_vermelho",
     "name": "Amor-perfeito Vermelho",
@@ -153,22 +143,6 @@
     "level": 5,
     "sellPrice": 400
   },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   {
     "id": "anturio_vermelho",
     "name": "Antúrio Vermelho",
@@ -265,17 +239,6 @@
     "level": 5,
     "sellPrice": 740
   },
-
-
-
-
-
-
-
-
-
-
-
   {
     "id": "papoula_vermelha",
     "name": "Papoula Vermelha",
@@ -372,24 +335,6 @@
     "level": 5,
     "sellPrice": 740
   },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   {
     "id": "copo_leite_vermelha",
     "name": "Copo-de-leite Vermelha",
@@ -498,15 +443,6 @@
     "level": 5,
     "sellPrice": 1000
   },
-
-
-
-
-
-
-
-
-
   {
     "id": "gloria_manha_vermelha",
     "name": "Glória-da-manhã Vermelha",
@@ -580,14 +516,14 @@
     "sellPrice": 500
   },
   {
-    "id": "gloria_manha_rosa",
-    "name": "Glória-da-manhã Rosa",
+    "id": "gloria_manha_pessego",
+    "name": "Glória-da-manhã Pêssego",
     "category": [
       "agriculture",
       "flower",
       "gloria_manha"
     ],
-    "icon": "/img/heartopia/agricultura/flores/gloria_manha_rosa.png",
+    "icon": "/img/heartopia/agricultura/flores/gloria_manha_pessego.png",
     "level": 3,
     "sellPrice": 500
   },
@@ -615,11 +551,6 @@
     "level": 5,
     "sellPrice": 1000
   },
-
-
-
-
-
   {
     "id": "cravo_vermelho",
     "name": "Cravo Vermelho",

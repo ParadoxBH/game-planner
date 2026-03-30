@@ -1,4 +1,5 @@
-[{
+[
+  {
     "id": "nabo",
     "name": "Nabo",
     "category": [
@@ -7,7 +8,7 @@
       "gala_moda_neve"
     ],
     "description": "Um vegetal crocante e nutritivo.",
-    "icon": "/img/heartopia/agricultura/vegetais/nabo.png",
+    "icon": "/img/heartopia/events/gala_neve/vegetables/nabo.png",
     "sellPrice": 30
   },
   {
@@ -19,7 +20,7 @@
       "papoula_himalaia",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_vermelha.png",
+    "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_vermelha.png",
     "sellPrice": 125,
     "level": 1
   },
@@ -32,7 +33,7 @@
       "papoula_himalaia",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_amarela.png",
+    "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_amarela.png",
     "sellPrice": 125,
     "level": 1
   },
@@ -45,7 +46,7 @@
       "papoula_himalaia",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_branca.png",
+    "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_branca.png",
     "sellPrice": 125,
     "level": 1
   },
@@ -58,7 +59,7 @@
       "papoula_himalaia",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_rosa.png",
+    "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_rosa.png",
     "sellPrice": 190,
     "level": 2
   },
@@ -71,7 +72,7 @@
       "papoula_himalaia",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_laranja.png",
+    "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_laranja.png",
     "sellPrice": 190,
     "level": 2
   },
@@ -84,7 +85,7 @@
       "papoula_himalaia",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_preta.png",
+    "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_preta.png",
     "level": 3,
     "sellPrice": 250
   },
@@ -97,7 +98,7 @@
       "papoula_himalaia",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_pessego.png",
+    "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_pessego.png",
     "level": 3,
     "sellPrice": 250
   },
@@ -110,7 +111,7 @@
       "papoula_himalaia",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_verde.png",
+    "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_verde.png",
     "level": 4,
     "sellPrice": 315
   },
@@ -123,7 +124,7 @@
       "papoula_himalaia",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_azul.png",
+    "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_azul.png",
     "level": 4,
     "sellPrice": 315
   },
@@ -136,39 +137,10 @@
       "papoula_himalaia",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/agricultura/flores/papoula_himalaia_luminosa.png",
+    "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_luminosa.png",
     "level": 5,
     "sellPrice": 500
   },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
   {
     "id": "cafe_gelado",
     "name": "Café Gelado",
@@ -177,7 +149,7 @@
       "cafe_gelado",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/comidas/cafe_gelado.png",
+    "icon": "/img/heartopia/events/gala_neve/foods/cafe_gelado.png",
     "sellPrice": 280
   },
   {
@@ -188,7 +160,7 @@
       "cafe_gelado",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/comidas/latte_gelado.png",
+    "icon": "/img/heartopia/events/gala_neve/foods/latte_gelado.png",
     "sellPrice": 280
   },
   {
@@ -198,7 +170,7 @@
       "food",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/comidas/carne_pure_nabo.png",
+    "icon": "/img/heartopia/events/gala_neve/foods/carne_pure_nabo.png",
     "sellPrice": 630
   },
   {
@@ -208,7 +180,7 @@
       "food",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/comidas/caldo_cremoso_nabo.png",
+    "icon": "/img/heartopia/events/gala_neve/foods/caldo_cremoso_nabo.png",
     "sellPrice": 340
   },
   {
@@ -219,7 +191,7 @@
       "panqueca_acucar_po",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/comidas/panqueca_acucar_po.png",
+    "icon": "/img/heartopia/events/gala_neve/foods/panqueca_acucar_po.png",
     "sellPrice": 330
   },
   {
@@ -230,7 +202,7 @@
       "panqueca_acucar_po",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/comidas/panqueca_acucar_po_mirtilo.png",
+    "icon": "/img/heartopia/events/gala_neve/foods/panqueca_acucar_po_mirtilo.png",
     "sellPrice": 330
   },
   {
@@ -242,7 +214,7 @@
       "gala_moda_neve"
     ],
     "description": "Panquecas com framboesas e açúcar.",
-    "icon": "/img/heartopia/comidas/panqueca_acucar_po_framboesa.png",
+    "icon": "/img/heartopia/events/gala_neve/foods/panqueca_acucar_po_framboesa.png",
     "sellPrice": 350
   },
   {
@@ -253,7 +225,7 @@
       "panqueca_acucar_po",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/comidas/panqueca_acucar_po_maca.png",
+    "icon": "/img/heartopia/events/gala_neve/foods/panqueca_acucar_po_maca.png",
     "sellPrice": 360
   },
   {
@@ -264,10 +236,9 @@
       "panqueca_acucar_po",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/comidas/panqueca_acucar_po_tangerina.png",
+    "icon": "/img/heartopia/events/gala_neve/foods/panqueca_acucar_po_tangerina.png",
     "sellPrice": 360
   },
-
   {
     "id": "banquete_aurora",
     "name": "Banquete Aurora",
@@ -275,82 +246,69 @@
       "food",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/comidas/banquete_aurora.png",
+    "icon": "/img/heartopia/events/gala_neve/foods/banquete_aurora.png",
     "sellPrice": 1630
   },
-
-
-
-
-
-
-
   {
-        "id": "semente_nabo",
-        "name": "Semente de Nabo",
-        "category": [
-            "seed",
-            "vegetable",
-            "gala_moda_neve"
-        ],
-        "icon": "/img/heartopia/agricultura/sementes_flores/semente_nabo.png",
-        "buyPrice": 10
-    },
-    {
-        "id": "semente_papoula_himalaia_vermelha",
-        "name": "Semente de Papoula-Himalaia Vermelha",
-        "category": [
-            "seed",
-            "flower",
-            "papoula_himalaia",
-            "gala_moda_neve"
-        ],
-        "icon": "/img/heartopia/agricultura/flores/semente_papoula_himalaia_vermelha.png",
-        "buyPrice": 30,
-        "sellPrice": 15
-    },
-    {
-        "id": "semente_papoula_himalaia_amarela",
-        "name": "Semente de Papoula-Himalaia Amarela",
-        "category": [
-            "seed",
-            "flower",
-            "papoula_himalaia",
-            "gala_moda_neve"
-        ],
-        "icon": "/img/heartopia/agricultura/flores/semente_papoula_himalaia_amarela.png",
-        "buyPrice": 30,
-        "sellPrice": 15
-    },
-    {
-        "id": "semente_papoula_himalaia_branca",
-        "name": "Semente de Papoula-Himalaia Branca",
-        "category": [
-            "seed",
-            "flower",
-            "papoula_himalaia",
-            "gala_moda_neve"
-        ],
-        "icon": "/img/heartopia/agricultura/flores/semente_papoula_himalaia_branca.png",
-        "buyPrice": 30,
-        "sellPrice": 15
-    },
-
-
-
-
-
-
-    
+    "id": "semente_nabo",
+    "name": "Semente de Nabo",
+    "category": [
+      "seed",
+      "vegetable",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/events/gala_neve/vegetables/semente_nabo.png",
+    "buyPrice": 10
+  },
+  {
+    "id": "semente_papoula_himalaia_vermelha",
+    "name": "Semente de Papoula-Himalaia Vermelha",
+    "category": [
+      "seed",
+      "flower",
+      "papoula_himalaia",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/events/gala_neve/flowers/semente_papoula_himalaia_vermelha.png",
+    "buyPrice": 30,
+    "sellPrice": 15
+  },
+  {
+    "id": "semente_papoula_himalaia_amarela",
+    "name": "Semente de Papoula-Himalaia Amarela",
+    "category": [
+      "seed",
+      "flower",
+      "papoula_himalaia",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/events/gala_neve/flowers/semente_papoula_himalaia_amarela.png",
+    "buyPrice": 30,
+    "sellPrice": 15
+  },
+  {
+    "id": "semente_papoula_himalaia_branca",
+    "name": "Semente de Papoula-Himalaia Branca",
+    "category": [
+      "seed",
+      "flower",
+      "papoula_himalaia",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/events/gala_neve/flowers/semente_papoula_himalaia_branca.png",
+    "buyPrice": 30,
+    "sellPrice": 15
+  },
   {
     "id": "creditos_gala_moda",
     "name": "Créditos de Gala de Moda",
-    "category": ["wallet", "gala_moda", "gala_moda_neve"],
-    "icon": "/img/heartopia/stats/creditos_gala_moda.png"
+    "category": [
+      "wallet",
+      "gala_moda",
+      "gala_moda_neve"
+    ],
+    "icon": "/img/heartopia/events/gala_neve/itens/creditos_gala_moda.png"
   },
-
-
-  
   {
     "id": "acucar_po",
     "name": "Açúcar em Pó",
@@ -359,7 +317,7 @@
       "ingredient",
       "gala_moda_neve"
     ],
-    "icon": "/img/heartopia/culinaria/acucar_po.png",
+    "icon": "/img/heartopia/events/gala_neve/itens/acucar_po.png",
     "sellPrice": 25,
     "buyPrice": 50
   }
