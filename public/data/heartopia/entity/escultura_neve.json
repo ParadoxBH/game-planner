@@ -43,10 +43,22 @@
     "sellPrice": 225,
     "nivel": 1,
     "variants": [
-      {"icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t2.png", "nivel": 2 },
-      {"icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t3.png", "nivel": 3 },
-      {"icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t4.png", "nivel": 4 },
-      {"icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t5.png", "nivel": 5 }
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t2.png",
+        "nivel": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t3.png",
+        "nivel": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t4.png",
+        "nivel": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t5.png",
+        "nivel": 5
+      }
     ]
   },
   {
@@ -59,10 +71,22 @@
     "icon": "/img/heartopia/skill/escultura_neve/alce_tata_neve_t1.png",
     "nivel": 1,
     "variants": [
-      {"icon": "/img/heartopia/skill/escultura_neve/alce_tata_neve_t2.png", "nivel": 2 },
-      {"icon": "/img/heartopia/skill/escultura_neve/alce_tata_neve_t3.png", "nivel": 3 },
-      {"icon": "/img/heartopia/skill/escultura_neve/alce_tata_neve_t4.png", "nivel": 4 },
-      {"icon": "/img/heartopia/skill/escultura_neve/alce_tata_neve_t5.png", "nivel": 5 }
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/alce_tata_neve_t2.png",
+        "nivel": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/alce_tata_neve_t3.png",
+        "nivel": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/alce_tata_neve_t4.png",
+        "nivel": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/alce_tata_neve_t5.png",
+        "nivel": 5
+      }
     ]
   },
   {
@@ -75,10 +99,22 @@
     "icon": "/img/heartopia/skill/escultura_neve/bloco_iglu_t1.png",
     "nivel": 1,
     "variants": [
-      {"icon": "/img/heartopia/skill/escultura_neve/bloco_iglu_t2.png", "nivel": 2 },
-      {"icon": "/img/heartopia/skill/escultura_neve/bloco_iglu_t3.png", "nivel": 3 },
-      {"icon": "/img/heartopia/skill/escultura_neve/bloco_iglu_t4.png", "nivel": 4 },
-      {"icon": "/img/heartopia/skill/escultura_neve/bloco_iglu_t5.png", "nivel": 5 }
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_iglu_t2.png",
+        "nivel": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_iglu_t3.png",
+        "nivel": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_iglu_t4.png",
+        "nivel": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_iglu_t5.png",
+        "nivel": 5
+      }
     ]
   },
   {
@@ -92,10 +128,22 @@
     "sellPrice": 155,
     "nivel": 1,
     "variants": [
-      {"icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t2.png", "nivel": 2 },
-      {"icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t3.png", "nivel": 3 },
-      {"icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t4.png", "nivel": 4 },
-      {"icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t5.png", "nivel": 5 }
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t2.png",
+        "nivel": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t3.png",
+        "nivel": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t4.png",
+        "nivel": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t5.png",
+        "nivel": 5
+      }
     ]
   },
   {
@@ -108,10 +156,22 @@
     "icon": "/img/heartopia/skill/escultura_neve/casquinha_neve_t1.png",
     "nivel": 1,
     "variants": [
-      {"icon": "/img/heartopia/skill/escultura_neve/casquinha_neve_t2.png", "nivel": 2 },
-      {"icon": "/img/heartopia/skill/escultura_neve/casquinha_neve_t3.png", "nivel": 3 },
-      {"icon": "/img/heartopia/skill/escultura_neve/casquinha_neve_t4.png", "nivel": 4 },
-      {"icon": "/img/heartopia/skill/escultura_neve/casquinha_neve_t5.png", "nivel": 5 }
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/casquinha_neve_t2.png",
+        "nivel": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/casquinha_neve_t3.png",
+        "nivel": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/casquinha_neve_t4.png",
+        "nivel": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/casquinha_neve_t5.png",
+        "nivel": 5
+      }
     ]
   },
   {
@@ -125,10 +185,22 @@
     "sellPrice": 165,
     "nivel": 1,
     "variants": [
-      {"icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t2.png", "nivel": 2 },
-      {"icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t3.png", "nivel": 3 },
-      {"icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t4.png", "nivel": 4 },
-      {"icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t5.png", "nivel": 5 }
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t2.png",
+        "nivel": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t3.png",
+        "nivel": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t4.png",
+        "nivel": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t5.png",
+        "nivel": 5
+      }
     ]
   },
   {
@@ -142,10 +214,22 @@
     "sellPrice": 155,
     "nivel": 1,
     "variants": [
-      {"icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t2.png", "nivel": 2 },
-      {"icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t3.png", "nivel": 3 },
-      {"icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t4.png", "nivel": 4 },
-      {"icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t5.png", "nivel": 5 }
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t2.png",
+        "nivel": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t3.png",
+        "nivel": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t4.png",
+        "nivel": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t5.png",
+        "nivel": 5
+      }
     ]
   },
   {
@@ -158,10 +242,22 @@
     "icon": "/img/heartopia/skill/escultura_neve/chef_momo_neve_t1.png",
     "nivel": 1,
     "variants": [
-      {"icon": "/img/heartopia/skill/escultura_neve/chef_momo_neve_t2.png", "nivel": 2 },
-      {"icon": "/img/heartopia/skill/escultura_neve/chef_momo_neve_t3.png", "nivel": 3 },
-      {"icon": "/img/heartopia/skill/escultura_neve/chef_momo_neve_t4.png", "nivel": 4 },
-      {"icon": "/img/heartopia/skill/escultura_neve/chef_momo_neve_t5.png", "nivel": 5 }
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/chef_momo_neve_t2.png",
+        "nivel": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/chef_momo_neve_t3.png",
+        "nivel": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/chef_momo_neve_t4.png",
+        "nivel": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/chef_momo_neve_t5.png",
+        "nivel": 5
+      }
     ]
   },
   {
@@ -175,10 +271,22 @@
     "sellPrice": 190,
     "nivel": 1,
     "variants": [
-      {"icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t2.png", "nivel": 2 },
-      {"icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t3.png", "nivel": 3 },
-      {"icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t4.png", "nivel": 4 },
-      {"icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t5.png", "nivel": 5 }
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t2.png",
+        "nivel": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t3.png",
+        "nivel": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t4.png",
+        "nivel": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t5.png",
+        "nivel": 5
+      }
     ]
   },
   {
@@ -191,10 +299,22 @@
     "icon": "/img/heartopia/skill/escultura_neve/coala_bebel_neve_t1.png",
     "nivel": 1,
     "variants": [
-      {"icon": "/img/heartopia/skill/escultura_neve/coala_bebel_neve_t2.png", "nivel": 2 },
-      {"icon": "/img/heartopia/skill/escultura_neve/coala_bebel_neve_t3.png", "nivel": 3 },
-      {"icon": "/img/heartopia/skill/escultura_neve/coala_bebel_neve_t4.png", "nivel": 4 },
-      {"icon": "/img/heartopia/skill/escultura_neve/coala_bebel_neve_t5.png", "nivel": 5 }
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coala_bebel_neve_t2.png",
+        "nivel": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coala_bebel_neve_t3.png",
+        "nivel": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coala_bebel_neve_t4.png",
+        "nivel": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coala_bebel_neve_t5.png",
+        "nivel": 5
+      }
     ]
   },
   {
@@ -208,10 +328,22 @@
     "sellPrice": 225,
     "nivel": 1,
     "variants": [
-      {"icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t2.png", "nivel": 2 },
-      {"icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t3.png", "nivel": 3 },
-      {"icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t4.png", "nivel": 4 },
-      {"icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t5.png", "nivel": 5 }
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t2.png",
+        "nivel": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t3.png",
+        "nivel": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t4.png",
+        "nivel": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t5.png",
+        "nivel": 5
+      }
     ]
   },
   {
@@ -225,14 +357,54 @@
     "sellPrice": 225,
     "nivel": 1,
     "variants": [
-      {"icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t2.png", "nivel": 2 },
-      {"icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t3.png", "nivel": 3 },
-      {"icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t4.png", "nivel": 4 },
-      {"icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t5.png", "nivel": 5 }
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t2.png",
+        "nivel": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t3.png",
+        "nivel": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t4.png",
+        "nivel": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t5.png",
+        "nivel": 5
+      }
     ]
   },
   {
-    "id": "ursinho_nini",
+    "id": "tigrinho_bubu_neve",
+    "name": "Tigrinho Bubu de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/tigrinho_bubu_neve_t1.png",
+    "nivel": 1,
+    "variants": [
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/tigrinho_bubu_neve_t2.png",
+        "nivel": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/tigrinho_bubu_neve_t3.png",
+        "nivel": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/tigrinho_bubu_neve_t4.png",
+        "nivel": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/tigrinho_bubu_neve_t5.png",
+        "nivel": 5
+      }
+    ]
+  },
+  {
+    "id": "ursinho_nini_neve",
     "name": "Ursinho Nini de Neve",
     "category": [
       "escultura_neve",
@@ -241,10 +413,22 @@
     "icon": "/img/heartopia/skill/escultura_neve/ursinho_nini_t1.png",
     "nivel": 1,
     "variants": [
-      {"icon": "/img/heartopia/skill/escultura_neve/ursinho_nini_t2.png", "nivel": 2 },
-      {"icon": "/img/heartopia/skill/escultura_neve/ursinho_nini_t3.png", "nivel": 3 },
-      {"icon": "/img/heartopia/skill/escultura_neve/ursinho_nini_t4.png", "nivel": 4 },
-      {"icon": "/img/heartopia/skill/escultura_neve/ursinho_nini_t5.png", "nivel": 5 }
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ursinho_nini_t2.png",
+        "nivel": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ursinho_nini_t3.png",
+        "nivel": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ursinho_nini_t4.png",
+        "nivel": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ursinho_nini_t5.png",
+        "nivel": 5
+      }
     ]
   }
 ]

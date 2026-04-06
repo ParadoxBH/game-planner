@@ -141,8 +141,7 @@
         "id": "set_rosa",
         "name": "Rosa",
         "category": "flowers",
-        "items": [
-        ]
+        "items": []
     },
     {
         "id": "set_papoula_himalaia",
@@ -158,7 +157,7 @@
             "papoula_himalaia_pessego",
             "papoula_himalaia_verde",
             "papoula_himalaia_azul",
-            "papoula_himalaia_luminoso"
+            "papoula_himalaia_luminosa"
         ]
     },
     {
