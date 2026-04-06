@@ -102,5 +102,80 @@
             "cravo_verde",
             "cravo_luminoso"
         ]
+    },
+    {
+        "id": "set_tulipa",
+        "name": "Tulipas",
+        "category": "flowers",
+        "items": [
+            "tulipa_vermelha",
+            "tulipa_amarela",
+            "tulipa_branca",
+            "tulipa_laranja",
+            "tulipa_rosa",
+            "tulipa_preta",
+            "tulipa_pessego",
+            "tulipa_roxa",
+            "tulipa_azul",
+            "tulipa_arrebol"
+        ]
+    },
+    {
+        "id": "set_lirio",
+        "name": "Lírios",
+        "category": "flowers",
+        "items": [
+            "lirio_vermelho",
+            "lirio_amarelo",
+            "lirio_branco",
+            "lirio_laranja",
+            "lirio_rosa",
+            "lirio_preto",
+            "lirio_pessego",
+            "lirio_roxa",
+            "lirio_verde",
+            "lirio_arrebol"
+        ]
+    },
+    {
+        "id": "set_rosa",
+        "name": "Rosa",
+        "category": "flowers",
+        "items": [
+        ]
+    },
+    {
+        "id": "set_papoula_himalaia",
+        "name": "Papoula do Himalaia (Gala Neve)",
+        "category": "flowers",
+        "items": [
+            "papoula_himalaia_vermelha",
+            "papoula_himalaia_amarela",
+            "papoula_himalaia_branca",
+            "papoula_himalaia_rosa",
+            "papoula_himalaia_laranja",
+            "papoula_himalaia_preta",
+            "papoula_himalaia_pessego",
+            "papoula_himalaia_verde",
+            "papoula_himalaia_azul",
+            "papoula_himalaia_luminoso"
+        ]
+    },
+    {
+        "id": "set_dente_leao",
+        "name": "Dente-de-leão (Gala Cinema)",
+        "category": "flowers",
+        "items": [
+            "dente_leao_vermelho",
+            "dente_leao_amarelo",
+            "dente_leao_branco",
+            "dente_leao_laranja",
+            "dente_leao_rosa",
+            "dente_leao_preto",
+            "dente_leao_pessego",
+            "dente_leao_roxo",
+            "dente_leao_azul",
+            "dente_leao_luminoso"
+        ]
     }
 ]
