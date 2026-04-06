@@ -1,0 +1,23 @@
+﻿[
+    {
+        "id": "set_escultura_neve",
+        "name": "Escultura de Neve",
+        "category": "escultura_neve",
+        "entitys": [
+            "algo_neve",
+            "abelha_naniwa_neve",
+            "alce_tata_neve",
+            "bloco_iglu",
+            "bloco_neve_geometrico",
+            "casquinha_neve",
+            "castor_body_neve",
+            "cedro_sorridente",
+            "chef_momo_neve",
+            "cisne_dory_neve",
+            "coala_bebel_neve",
+            "coelha_nie_neve",
+            "ovelha_jojo_neve",
+            "ursinho_nini"
+        ]
+    }
+]
