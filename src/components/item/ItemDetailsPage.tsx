@@ -15,11 +15,13 @@ import {
   Construction,
   Architecture,
   Bookmarks,
+  AutoAwesomeMosaic,
 } from "@mui/icons-material";
 import { useApi } from "../../hooks/useApi";
 import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
 import { RecipeCard } from "../recipe/RecipeCard";
+import { DataCard } from "../common/DataCard";
 import { ItemCard } from "./ItemCard";
 import { ItemShopCard } from "../shop/ItemShopCard";
 import { ItemFlowSection } from "./ItemFlowSection";
@@ -59,6 +61,11 @@ export function ItemDetailsPage() {
     if (raw?.entities) raw.entities.forEach((e) => map.set(e.id, e));
     return map;
   }, [raw?.entities]);
+
+  const itemConjuntos = useMemo(() => {
+    if (!raw?.conjuntos) return [];
+    return raw.conjuntos.filter(c => c.items?.includes(itemId));
+  }, [raw?.conjuntos, itemId]);
 
   const getSourceData = (type: GameDataTypes | undefined, id: string): any => {
     if (type === "entity") return entitiesMap.get(id);
@@ -240,7 +247,39 @@ export function ItemDetailsPage() {
                   </Stack>
                 </Box>
               )}
-            </Stack>
+              {/* Conjuntos */}
+          {itemConjuntos.length > 0 && (
+            <Paper elevation={0} sx={{ p: 2, borderRadius: 2 }}>
+              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+                <AutoAwesomeMosaic color="primary" sx={{ fontSize: 18 }} />
+                <Typography variant="subtitle2" fontWeight={800}>Parte de Conjuntos</Typography>
+              </Stack>
+              <Stack spacing={1}>
+                {itemConjuntos.map((conjunto) => (
+                  <DataCard
+                    key={conjunto.id}
+                    onClick={() => navigate(`/game/${gameId}/conjuntos/${conjunto.category}`)}
+                    sx={{
+                      p: 1.5,
+                      "&:hover": {
+                        backgroundColor: "rgba(255, 68, 0, 0.1)",
+                      },
+                    }}
+                  >
+                    <Box>
+                      <Typography variant="body2" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+                        {conjunto.name}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {conjunto.category}
+                      </Typography>
+                    </Box>
+                  </DataCard>
+                ))}
+              </Stack>
+            </Paper>
+          )}
+        </Stack>
           </Paper>
         </Stack>
         <Stack spacing={2} overflow={"auto"} flex={1}>
