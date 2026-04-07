@@ -156,26 +156,12 @@
         ]
     },
     {
-        "id": "set_papoula_himalaia",
-        "name": "Papoula do Himalaia (Gala Neve)",
-        "category": "flowers",
-        "items": [
-            "papoula_himalaia_vermelha",
-            "papoula_himalaia_amarela",
-            "papoula_himalaia_branca",
-            "papoula_himalaia_rosa",
-            "papoula_himalaia_laranja",
-            "papoula_himalaia_preta",
-            "papoula_himalaia_pessego",
-            "papoula_himalaia_verde",
-            "papoula_himalaia_azul",
-            "papoula_himalaia_luminosa"
-        ]
-    },
-    {
         "id": "set_dente_leao",
-        "name": "Dente-de-leão (Gala Cinema)",
+        "name": "Dente-de-leão",
         "category": "flowers",
+        "event": [
+            "gala_cinema"
+        ],
         "items": [
             "dente_leao_vermelho",
             "dente_leao_amarelo",

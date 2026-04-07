@@ -1,8 +1,31 @@
 [
     {
+        "id": "set_papoula_himalaia",
+        "name": "Papoula do Himalaia",
+        "category": "flowers",
+        "event": [
+            "gala_neve"
+        ],
+        "items": [
+            "papoula_himalaia_vermelha",
+            "papoula_himalaia_amarela",
+            "papoula_himalaia_branca",
+            "papoula_himalaia_rosa",
+            "papoula_himalaia_laranja",
+            "papoula_himalaia_preta",
+            "papoula_himalaia_pessego",
+            "papoula_himalaia_verde",
+            "papoula_himalaia_azul",
+            "papoula_himalaia_luminosa"
+        ]
+    },
+    {
         "id": "set_gala_neve_itens",
         "name": "Vegetais e Ingredientes",
-        "category": "gala_neve",
+        "category": "itens",
+        "event": [
+            "gala_neve"
+        ],
         "items": [
             "nabo",
             "acucar_po"
@@ -11,7 +34,10 @@
     {
         "id": "set_gala_neve_seeds",
         "name": "Sementes",
-        "category": "gala_neve",
+        "category": "seeds",
+        "event": [
+            "gala_neve"
+        ],
         "items": [
             "semente_nabo",
             "semente_papoula_himalaia_vermelha",
@@ -22,7 +48,10 @@
     {
         "id": "set_gala_neve_flores",
         "name": "Flores",
-        "category": "gala_neve",
+        "category": "flowers",
+        "event": [
+            "gala_neve"
+        ],
         "items": [
             "papoula_himalaia_vermelha",
             "papoula_himalaia_amarela",
@@ -39,7 +68,10 @@
     {
         "id": "set_gala_neve_cooking",
         "name": "Receitas",
-        "category": "gala_neve",
+        "category": "recipes",
+        "event": [
+            "gala_neve"
+        ],
         "items": [
             "cafe_gelado",
             "latte_gelado",
@@ -56,7 +88,10 @@
     {
         "id": "set_gala_neve_other",
         "name": "Outros",
-        "category": "gala_neve",
+        "category": "others",
+        "event": [
+            "gala_neve"
+        ],
         "items": [
             "creditos_gala_moda"
         ]
