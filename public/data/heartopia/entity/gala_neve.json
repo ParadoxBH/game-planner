@@ -1,0 +1,12 @@
+﻿[
+  {
+    "id": "fogao_pinguim",
+    "name": "Fogão Pinguim",
+    "category": [
+      "station",
+      "cooking"
+    ],
+    "event": ["gala_neve"],
+    "icon": "/img/heartopia/eletrodomestico/fogao_pinguim.png"
+  }
+]

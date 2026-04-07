@@ -309,16 +309,6 @@
     "icon": "/img/heartopia/eletrodomestico/fogao_clean.png"
   },
   {
-    "id": "fogao_pinguim",
-    "name": "Fogão Pinguim",
-    "category": [
-      "station",
-      "cooking",
-      "gala_moda_neve"
-    ],
-    "icon": "/img/heartopia/eletrodomestico/fogao_pinguim.png"
-  },
-  {
     "id": "caixa_planta",
     "name": "Caixa de Planta",
     "category": [

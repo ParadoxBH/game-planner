@@ -1,0 +1,528 @@
+﻿[
+    
+  {
+    "id": "recipe_cafe_gelado",
+    "stations": [
+      "cooking"
+    ],
+    "event": ["gala_neve"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "acucar_po",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "graos_cafe",
+        "amount": 3
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cafe_gelado",
+        "amount": 1
+      }
+    ],
+    "unlock": [
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
+    ]
+  },
+  {
+    "id": "recipe_latte_gelado",
+    "stations": [
+      "cooking"
+    ],
+    "event": ["gala_neve"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "acucar_po",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "graos_cafe",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "latte_gelado",
+        "amount": 1
+      }
+    ],
+    "unlock": [
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
+    ]
+  },
+  {
+    "id": "recipe_carne_pure_nabo",
+    "stations": [
+      "cooking"
+    ],
+    "event": ["gala_neve"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "carne",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "manteiga",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "nabo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "carne_pure_nabo",
+        "amount": 1
+      }
+    ],
+    "unlock": [
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
+    ]
+  },
+  {
+    "id": "recipe_caldo_cremoso_nabo",
+    "stations": [
+      "cooking"
+    ],
+    "event": ["gala_neve"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "manteiga",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "nabo",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "caldo_cremoso_nabo",
+        "amount": 1
+      }
+    ],
+    "unlock": [
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
+    ]
+  },
+  {
+    "id": "recipe_panqueca_acucar_po_classica",
+    "stations": [
+      "cooking"
+    ],
+    "event": ["gala_neve"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "ovo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "acucar_po",
+        "amount": 1
+      },
+      {
+        "type": "category",
+        "id": "ingredient_geleia",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "panqueca_acucar_po",
+        "amount": 1
+      }
+    ],
+    "unlock": [
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
+    ]
+  },
+  {
+    "id": "recipe_panqueca_acucar_po_mirtilo",
+    "stations": [
+      "cooking"
+    ],
+    "event": ["gala_neve"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "ovo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "acucar_po",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "mirtilo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "panqueca_acucar_po_mirtilo",
+        "amount": 1
+      }
+    ],
+    "unlock": [
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
+    ]
+  },
+  {
+    "id": "recipe_panqueca_acucar_po_framboesa",
+    "stations": [
+      "cooking"
+    ],
+    "event": ["gala_neve"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "ovo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "acucar_po",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "framboesa",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "panqueca_acucar_po_framboesa",
+        "amount": 1
+      }
+    ],
+    "unlock": [
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
+    ]
+  },
+  {
+    "id": "recipe_panqueca_acucar_po_maca",
+    "stations": [
+      "cooking"
+    ],
+    "event": ["gala_neve"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "ovo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "acucar_po",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "maca",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "panqueca_acucar_po_maca",
+        "amount": 1
+      }
+    ],
+    "unlock": [
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
+    ]
+  },
+  {
+    "id": "recipe_panqueca_acucar_po_tangerina",
+    "stations": [
+      "cooking"
+    ],
+    "event": ["gala_neve"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "ovo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "acucar_po",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "tangerina",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "panqueca_acucar_po_tangerina",
+        "amount": 1
+      }
+    ],
+    "unlock": [
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
+    ]
+  },
+  {
+    "id": "recipe_banquete_aurora",
+    "stations": [
+      "cooking"
+    ],
+    "event": ["gala_neve"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "carne_pure_nabo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "caldo_cremoso_nabo",
+        "amount": 1
+      },
+      {
+        "type": "category",
+        "id": "cafe_gelado",
+        "amount": 1
+      },
+      {
+        "type": "category",
+        "id": "panqueca_acucar_po",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "banquete_aurora",
+        "amount": 1
+      }
+    ],
+    "unlock": [
+      {
+        "type": "event",
+        "value": "gala_moda_neve"
+      }
+    ]
+  },
+  {
+    "id": "recipe_fabricar_fogao_pinguim",
+    "stations": [
+      "mesa_artesao"
+    ],
+    "event": ["gala_neve"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "pedra",
+        "amount": 8
+      },
+      {
+        "type": "item",
+        "id": "madeira_qualidade",
+        "amount": 12
+      },
+      {
+        "type": "item",
+        "id": "kit_materiais_pinguim",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "entity",
+        "id": "fogao_pinguim",
+        "amount": 1
+      }
+    ],
+    "unlock": [
+      {
+        "type": "quest",
+        "subject": "Massimo",
+        "value": "As aventuras da Princesa Stella"
+      }
+    ]
+  },
+  {
+    "id": "recipe_plantar_nabo",
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_nabo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "nabo",
+        "amount": 1
+      }
+    ],
+    "event": [
+        "gala_neve"
+    ]
+  },
+  {
+    "id": "recipe_plantar_papoula_himalaia_vermelha",
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_papoula_himalaia_vermelha",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "papoula_himalaia_vermelha",
+        "amount": 1
+      }
+    ],
+    "event": [
+        "gala_neve"
+    ]
+  },
+  {
+    "id": "recipe_plantar_papoula_himalaia_amarela",
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_papoula_himalaia_amarela",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "papoula_himalaia_amarela",
+        "amount": 1
+      }
+    ],
+    "event": [
+        "gala_neve"
+    ]
+  },
+  {
+    "id": "recipe_plantar_papoula_himalaia_branca",
+    "stations": [
+      "caixa_planta"
+    ],
+    "event": [
+        "gala_neve"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_papoula_himalaia_branca",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "papoula_himalaia_branca",
+        "amount": 1
+      }
+    ]
+  }
+]
