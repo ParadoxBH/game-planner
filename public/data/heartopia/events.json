@@ -1,11 +1,11 @@
 [
   {
-    "id": "gala_moda_neve",
+    "id": "gala_neve",
     "name": "Gala da Neve",
     "type": "season",
     "description": "Esta atualização sazonal traz atividades temáticas, como patinação, coleta de balões, novas receitas e missões diárias para colecionar itens, incluindo ovos escondidos.",
     "icon": "/img/heartopia/events/gala_neve/icon.png",
-    "banner": "/img/heartopia/events/gala_neve/banner.png",
+    "banner": "/img/heartopia/events/gala_neve/banner.webp",
     "period": {
       "start": "24/01/2026",
       "end": "14/03/2026"

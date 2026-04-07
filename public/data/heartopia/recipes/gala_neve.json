@@ -3,7 +3,7 @@
   {
     "id": "recipe_cafe_gelado",
     "stations": [
-      "cooking"
+      "cooking_pinguim"
     ],
     "event": ["gala_neve"],
     "ingredients": [
@@ -28,14 +28,14 @@
     "unlock": [
       {
         "type": "event",
-        "value": "gala_moda_neve"
+        "value": "gala_neve"
       }
     ]
   },
   {
     "id": "recipe_latte_gelado",
     "stations": [
-      "cooking"
+      "cooking_pinguim"
     ],
     "event": ["gala_neve"],
     "ingredients": [
@@ -65,14 +65,14 @@
     "unlock": [
       {
         "type": "event",
-        "value": "gala_moda_neve"
+        "value": "gala_neve"
       }
     ]
   },
   {
     "id": "recipe_carne_pure_nabo",
     "stations": [
-      "cooking"
+      "cooking_pinguim"
     ],
     "event": ["gala_neve"],
     "ingredients": [
@@ -102,14 +102,14 @@
     "unlock": [
       {
         "type": "event",
-        "value": "gala_moda_neve"
+        "value": "gala_neve"
       }
     ]
   },
   {
     "id": "recipe_caldo_cremoso_nabo",
     "stations": [
-      "cooking"
+      "cooking_pinguim"
     ],
     "event": ["gala_neve"],
     "ingredients": [
@@ -139,14 +139,14 @@
     "unlock": [
       {
         "type": "event",
-        "value": "gala_moda_neve"
+        "value": "gala_neve"
       }
     ]
   },
   {
     "id": "recipe_panqueca_acucar_po_classica",
     "stations": [
-      "cooking"
+      "cooking_pinguim"
     ],
     "event": ["gala_neve"],
     "ingredients": [
@@ -181,14 +181,14 @@
     "unlock": [
       {
         "type": "event",
-        "value": "gala_moda_neve"
+        "value": "gala_neve"
       }
     ]
   },
   {
     "id": "recipe_panqueca_acucar_po_mirtilo",
     "stations": [
-      "cooking"
+      "cooking_pinguim"
     ],
     "event": ["gala_neve"],
     "ingredients": [
@@ -223,14 +223,14 @@
     "unlock": [
       {
         "type": "event",
-        "value": "gala_moda_neve"
+        "value": "gala_neve"
       }
     ]
   },
   {
     "id": "recipe_panqueca_acucar_po_framboesa",
     "stations": [
-      "cooking"
+      "cooking_pinguim"
     ],
     "event": ["gala_neve"],
     "ingredients": [
@@ -265,14 +265,14 @@
     "unlock": [
       {
         "type": "event",
-        "value": "gala_moda_neve"
+        "value": "gala_neve"
       }
     ]
   },
   {
     "id": "recipe_panqueca_acucar_po_maca",
     "stations": [
-      "cooking"
+      "cooking_pinguim"
     ],
     "event": ["gala_neve"],
     "ingredients": [
@@ -307,14 +307,14 @@
     "unlock": [
       {
         "type": "event",
-        "value": "gala_moda_neve"
+        "value": "gala_neve"
       }
     ]
   },
   {
     "id": "recipe_panqueca_acucar_po_tangerina",
     "stations": [
-      "cooking"
+      "cooking_pinguim"
     ],
     "event": ["gala_neve"],
     "ingredients": [
@@ -349,14 +349,14 @@
     "unlock": [
       {
         "type": "event",
-        "value": "gala_moda_neve"
+        "value": "gala_neve"
       }
     ]
   },
   {
     "id": "recipe_banquete_aurora",
     "stations": [
-      "cooking"
+      "cooking_pinguim"
     ],
     "event": ["gala_neve"],
     "ingredients": [
@@ -391,7 +391,7 @@
     "unlock": [
       {
         "type": "event",
-        "value": "gala_moda_neve"
+        "value": "gala_neve"
       }
     ]
   },
@@ -421,7 +421,7 @@
     "products": [
       {
         "type": "entity",
-        "id": "fogao_pinguim",
+        "id": "cooking_pinguim",
         "amount": 1
       }
     ],

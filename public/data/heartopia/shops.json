@@ -13,7 +13,7 @@
             "conditions": [
               {
                 "type": "event",
-                "id": "gala_moda_neve",
+                "id": "gala_neve",
                 "description": ""
               }
             ]
@@ -23,7 +23,7 @@
             "conditions": [
               {
                 "type": "event",
-                "id": "gala_moda_neve",
+                "id": "gala_neve",
                 "description": ""
               }
             ]
@@ -33,7 +33,7 @@
             "conditions": [
               {
                 "type": "event",
-                "id": "gala_moda_neve",
+                "id": "gala_neve",
                 "description": ""
               }
             ]
@@ -43,7 +43,7 @@
             "conditions": [
               {
                 "type": "event",
-                "id": "gala_moda_neve",
+                "id": "gala_neve",
                 "description": ""
               }
             ]
@@ -229,7 +229,7 @@
             "conditions": [
               {
                 "type": "event",
-                "id": "gala_moda_neve",
+                "id": "gala_neve",
                 "description": ""
               }
             ]
