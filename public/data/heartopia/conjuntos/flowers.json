@@ -141,7 +141,19 @@
         "id": "set_rosa",
         "name": "Rosa",
         "category": "flowers",
-        "items": []
+        "items": [
+            "rosa_vermelha",
+            "rosa_amarela",
+            "rosa_branca",
+            "rosa_laranja",
+            "rosa_rosa",
+            "rosa_preta",
+            "rosa_pessego",
+            "rosa_roxa",
+            "rosa_azul",
+            "rosa_arrebol",
+            "rosa_luminosa"
+        ]
     },
     {
         "id": "set_papoula_himalaia",
