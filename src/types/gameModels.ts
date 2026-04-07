@@ -194,5 +194,6 @@ export interface Conjunto {
   category: string;
   description?: string;
   icon?: string;
-  items: string[]; // Array of Item IDs
+  items?: string[]; // Array of Item IDs
+  entitys?: string[]; // Array of Entity IDs
 }
