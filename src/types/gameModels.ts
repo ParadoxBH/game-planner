@@ -7,6 +7,7 @@ export interface Item {
   buyPrice?: number;
   sellPrice?: number;
   level?: number;
+  variants?: Partial<Item>[];
 }
 
 export interface EntityDrop {
@@ -19,6 +20,7 @@ export interface EntityDrop {
 export interface Entity {
   id: string;
   name: string;
+  level?: number;
   category?: string | string[];
   description?: string;
   icon?: string;
@@ -41,6 +43,7 @@ export interface Entity {
     maxQuant?: number;
   }[];
   drops?: EntityDrop[];
+  variants?: Partial<Entity>[];
 }
 
 export type GameDataTypes = "entity" | "item" | "recipe" | "reference_point" | "event" | "skill" | "category";

@@ -20,6 +20,7 @@ import { useApi } from "../../hooks/useApi";
 import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
 import { RecipeCard } from "../recipe/RecipeCard";
+import { ItemCard } from "./ItemCard";
 import { ItemShopCard } from "../shop/ItemShopCard";
 import { ItemFlowSection } from "./ItemFlowSection";
 import { useMemo } from "react";
@@ -243,6 +244,34 @@ export function ItemDetailsPage() {
           </Paper>
         </Stack>
         <Stack spacing={2} overflow={"auto"} flex={1}>
+          {/* Variações */}
+          {item.variants && item.variants.length > 0 && (
+            <Paper elevation={0} sx={{ p: 2 }}>
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                sx={{ mb: 2 }}
+              >
+                <Bookmarks color="primary" />
+                <Typography variant="h6" fontWeight={700}>
+                  Variações
+                </Typography>
+              </Stack>
+              <Grid container spacing={1}>
+                {[item, ...item.variants.map(v => ({ ...item, ...v }))].map((v, idx) => (
+                  <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={idx}>
+                    <ItemCard 
+                      item={v as any} 
+                      gameId={gameId || ""} 
+                      variant="compact" 
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </Paper>
+          )}
+
           {/* Produzido Em */}
           <Paper elevation={0} sx={{ p: 2 }}>
             <Stack direction="row" spacing={1} alignItems="center">

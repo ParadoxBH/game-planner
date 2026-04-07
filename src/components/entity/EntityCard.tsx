@@ -92,7 +92,7 @@ export function EntityCard({ entity, showPrices, hasShop, onClick, variant = "de
               <CategoryIcon sx={{ fontSize: 32, color: "rgba(255, 255, 255, 0.2)" }} />
             )}
             {hasShop && (
-               <Box sx={{ 
+              <Box sx={{ 
                 position: 'absolute',
                 top: 4,
                 right: 4,
@@ -104,6 +104,30 @@ export function EntityCard({ entity, showPrices, hasShop, onClick, variant = "de
                 zIndex: 1
               }}>
                 <Storefront sx={{ fontSize: '0.8rem', color: 'white' }} />
+              </Box>
+            )}
+            {entity.level !== undefined && entity.level > 0 && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 4,
+                  left: 4,
+                  backgroundColor: "warning.main",
+                  color: "warning.contrastText",
+                  borderRadius: "4px",
+                  px: 0.5,
+                  minWidth: 16,
+                  height: 16,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "0.65rem",
+                  fontWeight: 800,
+                  boxShadow: 2,
+                  zIndex: 1,
+                }}
+              >
+                {entity.level}
               </Box>
             )}
           </Box>
@@ -143,6 +167,30 @@ export function EntityCard({ entity, showPrices, hasShop, onClick, variant = "de
                 <img src={entity.icon} alt={entity.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
               ) : (
                 <CategoryIcon sx={{ fontSize: 32, color: 'rgba(255, 255, 255, 0.2)' }} />
+              )}
+              {entity.level !== undefined && entity.level > 0 && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 2,
+                    left: 2,
+                    backgroundColor: "warning.main",
+                    color: "warning.contrastText",
+                    borderRadius: "4px",
+                    px: 0.5,
+                    minWidth: 16,
+                    height: 16,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "0.65rem",
+                    fontWeight: 800,
+                    boxShadow: 2,
+                    zIndex: 1,
+                  }}
+                >
+                  {entity.level}
+                </Box>
               )}
             </Box>
             <Box>

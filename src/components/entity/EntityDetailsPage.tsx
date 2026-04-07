@@ -16,12 +16,14 @@ import {
   EmojiEvents,
   List as ListIcon,
   Construction,
-  Storefront
+  Storefront,
+  Bookmarks,
 } from "@mui/icons-material";
 import { useApi } from "../../hooks/useApi";
 import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
 import { RecipeCard } from "../recipe/RecipeCard";
+import { EntityCard } from "./EntityCard";
 import { useMemo } from "react";
 import type { MapMetadata, ReferencePoints, GameDataTypes } from "../../types/gameModels";
 import { MiniMap } from "../common/MiniMap";
@@ -383,6 +385,34 @@ export function EntityDetailsPage() {
                       unlock={recipe.unlock}
                       getSourceData={getSourceData}
                       eventsMap={eventsMap}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </Paper>
+          )}
+
+          {/* Variações */}
+          {entity.variants && entity.variants.length > 0 && (
+            <Paper elevation={0} sx={{ p: 2 }}>
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                sx={{ mb: 2 }}
+              >
+                <Bookmarks color="primary" />
+                <Typography variant="h6" fontWeight={700}>
+                  Variações
+                </Typography>
+              </Stack>
+              <Grid container spacing={1}>
+                {[entity, ...entity.variants.map(v => ({ ...entity, ...v }))].map((v, idx) => (
+                  <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={idx}>
+                    <EntityCard 
+                      entity={{...entity, ...v}} 
+                      variant="compact" 
+                      onClick={() => {}} 
                     />
                   </Grid>
                 ))}
