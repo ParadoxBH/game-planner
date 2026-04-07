@@ -389,36 +389,28 @@ export class ApiService {
     const event = this.data.events.find((e) => e.id === eventId);
     if (!event) return null;
 
-    // Items belonging to this event or category
+    // Items belonging to this event
     const items = this.data.items.filter((item) => {
-      if (Array.isArray(item.category)) {
-        return item.category.includes(eventId);
-      }
-      return item.category === eventId;
+      return item.event?.includes(eventId);
     });
 
-    // Recipes unlocked by this event or using stations belonging to this event
+    // Recipes unlocked by this event, using stations belonging to this event, or directly marked as event
     const normalizedRecipes = this.cachedNormalizedRecipes;
     const recipes = normalizedRecipes.filter((r) => {
+      const isDirectEvent = r.event?.includes(eventId);
       const isUnlockedByEvent = r.unlock?.some(
         (u) => u.type === "event" && u.value === eventId
       );
       const isProducedInEventStation = r.normalizedStations.some((s) => {
         const station = this.data.entities.find((e) => e.id === s);
-        if (Array.isArray(station?.category)) {
-          return station?.category.includes(eventId);
-        }
-        return station?.category === eventId;
+        return station?.event?.includes(eventId);
       });
-      return isUnlockedByEvent || isProducedInEventStation;
+      return isDirectEvent || isUnlockedByEvent || isProducedInEventStation;
     });
 
-    // Entities belonging to this event category
+    // Entities belonging to this event
     const entities = this.data.entities.filter((entity) => {
-      if (Array.isArray(entity.category)) {
-        return entity.category.includes(eventId);
-      }
-      return entity.category === eventId;
+      return entity.event?.includes(eventId);
     });
 
     return {
@@ -441,6 +433,7 @@ export class ApiService {
         id: i.ClassName || i.id,
         name: i.Name || i.name,
         amount: i.Amount || i.amount || 1,
+        event: i.event,
         type: i.type || (this.data.entities.some(e => e.id === (i.ClassName || i.id)) ? "entity" : "item")
       }));
     }
@@ -456,6 +449,7 @@ export class ApiService {
         id: p.ClassName || p.id,
         name: p.Name || p.name,
         amount: p.Amount || p.amount || 1,
+        event: p.event,
         type: p.type || (this.data.entities.some(e => e.id === (p.ClassName || p.id)) ? "entity" : "item")
       }));
     }

@@ -8,6 +8,7 @@ export interface Item {
   sellPrice?: number;
   level?: number;
   variants?: Partial<Item>[];
+  event?: string[];
 }
 
 export interface EntityDrop {
@@ -44,6 +45,7 @@ export interface Entity {
   }[];
   drops?: EntityDrop[];
   variants?: Partial<Entity>[];
+  event?: string[];
 }
 
 export type GameDataTypes = "entity" | "item" | "recipe" | "reference_point" | "event" | "skill" | "category";
@@ -74,6 +76,7 @@ export interface Recipe {
   ProducedIn?: string[]; // Raw data support
   unlock?: RecipeUnlock[];
   craftTime?: number; // Time in seconds
+  event?: string[];
 }
 
 export interface ShopCondition {
