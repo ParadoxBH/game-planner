@@ -16,6 +16,7 @@ import {
   Star,
   Inventory,
   Category,
+  AutoAwesomeMosaic,
 } from "@mui/icons-material";
 import { useApi } from "../../hooks/useApi";
 import { StyledContainer } from "../common/StyledContainer";
@@ -90,7 +91,7 @@ export function EventDetailsPage() {
     );
   }
 
-  const { event, items, recipes, entities } = eventDetails;
+  const { event, items, recipes, entities, conjuntos } = eventDetails;
   const typeInfo = typeMap[event.type] || { label: event.type, color: "#999" };
 
   return (
@@ -230,12 +231,14 @@ export function EventDetailsPage() {
                 direction="row"
                 spacing={1}
                 alignItems="center"
-                sx={{ mb: 3 }}
+                sx={{ mb: 3 }}justifyContent={"space-between"}
               >
+                <Stack direction={"row"} spacing={1} alignItems="center">
                 <Inventory color="primary" />
                 <Typography variant="h5" fontWeight={700}>
                   Itens do Evento
                 </Typography>
+                </Stack>
                 <Chip label={items.length} size="small" sx={{ ml: "auto" }} />
               </Stack>
               <Stack overflow={"auto"} maxHeight={500}>
@@ -319,12 +322,14 @@ export function EventDetailsPage() {
                 direction="row"
                 spacing={1}
                 alignItems="center"
-                sx={{ mb: 3 }}
+                sx={{ mb: 3 }}justifyContent={"space-between"}
               >
+                <Stack direction={"row"} spacing={1} alignItems="center">
                 <Category color="primary" />
                 <Typography variant="h5" fontWeight={700}>
                   Entidades e Estações
                 </Typography>
+                </Stack>
                 <Chip
                   label={entities.length}
                   size="small"
@@ -354,6 +359,79 @@ export function EventDetailsPage() {
             </Paper>
           </Grid>
 
+          {/* Conjuntos */}
+          {conjuntos.length > 0 && (
+            <Grid size={{ xs: 12 }}>
+              <Paper sx={{ p: 3, backgroundColor: "rgba(255,255,255,0.02)" }}>
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  alignItems="center"
+                  sx={{ mb: 3 }}
+                   justifyContent={"space-between"}
+                >
+                  <Stack direction={"row"} spacing={1} alignItems="center">
+                  <AutoAwesomeMosaic color="primary" />
+                  <Typography variant="h5" fontWeight={700}>
+                    Conjuntos do Evento
+                  </Typography>
+                  </Stack>
+                  <Chip
+                    label={conjuntos.length}
+                    size="small"
+                    sx={{ ml: "auto" }}
+                  />
+                </Stack>
+                <Grid container spacing={2}>
+                  {conjuntos.map((conjunto) => (
+                    <Grid size={{ xs: 12, md: 6, xl: 4 }} key={conjunto.id}>
+                      <Paper
+                        sx={{
+                          p: 2,
+                          backgroundColor: "rgba(255,255,255,0.03)",
+                          border: "1px solid rgba(255,255,255,0.05)",
+                          borderRadius: 2,
+                          cursor: "pointer",
+                          transition: "all 0.2s",
+                          "&:hover": {
+                            borderColor: "primary.main",
+                            backgroundColor: "rgba(255,255,255,0.05)",
+                            transform: "translateY(-2px)",
+                          },
+                        }}
+                        onClick={() =>
+                          navigate(
+                            `/game/${gameId}/conjuntos/${conjunto.category || ""}`,
+                          )
+                        }
+                      >
+                        <Stack direction="row" spacing={2} alignItems="center">
+                          <Avatar
+                            src={conjunto.icon}
+                            variant="rounded"
+                            sx={{ width: 48, height: 48 }}
+                          >
+                            <AutoAwesomeMosaic />
+                          </Avatar>
+                          <Box>
+                            <Typography variant="subtitle1" fontWeight={700}>
+                              {conjunto.name}
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                              {(conjunto.items?.length || 0) +
+                                (conjunto.entitys?.length || 0)}{" "}
+                              itens colecionáveis
+                            </Typography>
+                          </Box>
+                        </Stack>
+                      </Paper>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Paper>
+            </Grid>
+          )}
+
           {/* Recipes */}
           <Grid size={{ xs: 12 }}>
             <Paper sx={{ p: 3, backgroundColor: "rgba(255,255,255,0.02)" }}>
@@ -362,11 +440,14 @@ export function EventDetailsPage() {
                 spacing={1}
                 alignItems="center"
                 sx={{ mb: 3 }}
+                justifyContent={"space-between"}
               >
+                <Stack direction={"row"} spacing={1} alignItems="center">
                 <Star color="primary" />
                 <Typography variant="h5" fontWeight={700}>
                   Receitas de Temporada
                 </Typography>
+                </Stack>
                 <Chip label={recipes.length} size="small" sx={{ ml: "auto" }} />
               </Stack>
               <Stack overflow="auto" maxHeight={500}>

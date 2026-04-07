@@ -8,14 +8,17 @@ import { BrowserRouter } from "react-router-dom";
 import { RoutesPage } from "./RoutesPage";
 
 import { theme } from "./theme/theme";
+import { EventFilterProvider } from "./context/EventFilterContext";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline /> {/* Reseta o CSS padrão do navegador */}
-      <BrowserRouter>
-          <RoutesPage />
-      </BrowserRouter>
+      <EventFilterProvider>
+        <BrowserRouter>
+            <RoutesPage />
+        </BrowserRouter>
+      </EventFilterProvider>
     </ThemeProvider>
   );
 }

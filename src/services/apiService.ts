@@ -68,6 +68,19 @@ export class ApiService {
       }
     }
 
+    // Global Event Filter
+    if (options.activeEventIds !== undefined) {
+      const activeEventIds = options.activeEventIds;
+      filteredList = filteredList.filter((item: any) => {
+        // Se o item não tem eventos associados, sempre exibe
+        if (!item.event || !Array.isArray(item.event) || item.event.length === 0) {
+          return true;
+        }
+        // Se o item tem eventos, só exibe se pelo menos um estiver ativo
+        return item.event.some((id: string) => activeEventIds.includes(id));
+      });
+    }
+
     if (!options.pagination) {
       return filteredList;
     }
@@ -413,11 +426,17 @@ export class ApiService {
       return entity.event?.includes(eventId);
     });
 
+    // Conjuntos belonging to this event
+    const conjuntos = (this.data.conjuntos || []).filter((c) => {
+      return c.event?.includes(eventId);
+    });
+
     return {
       event,
       items,
       recipes,
       entities,
+      conjuntos,
     };
   }
 

@@ -95,6 +95,7 @@ export interface PaginationParams {
 export interface SearchOptions {
   filters?: FilterParams;
   pagination?: PaginationParams;
+  activeEventIds?: string[];
 }
 
 export interface EventDetails {
@@ -102,6 +103,7 @@ export interface EventDetails {
   items: Item[];
   recipes: NormalizedRecipe[];
   entities: Entity[];
+  conjuntos: Conjunto[];
 }
 
 export interface PaginatedResponse<T> {

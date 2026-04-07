@@ -3,7 +3,6 @@ import {
   Toolbar,
   Typography,
   Button,
-  Box,
   Container,
   Stack,
   Breadcrumbs
@@ -14,6 +13,7 @@ import {
 import { Link, useLocation } from 'react-router-dom';
 import { useNavigation } from "../hooks/useNavigation";
 import { HeaderNavDropdown } from "./common/HeaderNavDropdown";
+import { GlobalEventFilter } from "./common/GlobalEventFilter";
 import { theme } from "../theme/theme";
 
 export function Header() {
@@ -100,6 +100,7 @@ export function Header() {
                   </Button>
                 );
               })}
+              <GlobalEventFilter />
             </Stack>
           )}
         </Toolbar>

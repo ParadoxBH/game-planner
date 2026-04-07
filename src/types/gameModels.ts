@@ -202,4 +202,5 @@ export interface Conjunto {
   icon?: string;
   items?: string[]; // Array of Item IDs
   entitys?: string[]; // Array of Entity IDs
+  event?: string[];
 }

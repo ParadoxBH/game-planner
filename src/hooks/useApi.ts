@@ -4,7 +4,10 @@ import { ApiService } from "../services/apiService";
 import type { GameDataPayload, NormalizedRecipe, SearchOptions, PaginatedResponse } from "../types/apiModels";
 import type { Item, Entity } from "../types/gameModels";
 
+import { useEventFilter } from "../context/EventFilterContext";
+
 export function useApi(gameId: string | undefined) {
+  const { activeEventIds } = useEventFilter();
   const [data, setData] = useState<GameDataPayload | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -76,12 +79,20 @@ export function useApi(gameId: string | undefined) {
   }, [apiService]);
 
   const getItemsList = useCallback((options?: SearchOptions | ((item: Item) => boolean)): Item[] | PaginatedResponse<Item> => {
-    return apiService ? apiService.getItems(options) : [];
-  }, [apiService]);
+    if (!apiService) return [];
+    if (typeof options === "function") {
+      return apiService.getItems(options);
+    }
+    return apiService.getItems({ ...options, activeEventIds });
+  }, [apiService, activeEventIds]);
 
   const getEntityList = useCallback((options?: SearchOptions | ((entity: Entity) => boolean)): Entity[] | PaginatedResponse<Entity> => {
-    return apiService ? apiService.getEntities(options) : [];
-  }, [apiService]);
+    if (!apiService) return [];
+    if (typeof options === "function") {
+      return apiService.getEntities(options);
+    }
+    return apiService.getEntities({ ...options, activeEventIds });
+  }, [apiService, activeEventIds]);
 
   const getShopDetails = useCallback((shopId: string) => {
     return apiService ? apiService.getShopDetails(shopId) : null;
@@ -92,8 +103,12 @@ export function useApi(gameId: string | undefined) {
   }, [apiService]);
 
   const getRecipesList = useCallback((options?: SearchOptions | ((recipe: NormalizedRecipe) => boolean)): NormalizedRecipe[] | PaginatedResponse<NormalizedRecipe> => {
-    return apiService ? apiService.getRecipes(options) : [];
-  }, [apiService]);
+    if (!apiService) return [];
+    if (typeof options === "function") {
+      return apiService.getRecipes(options);
+    }
+    return apiService.getRecipes({ ...options, activeEventIds });
+  }, [apiService, activeEventIds]);
 
   const getCodesList = useCallback(() => {
     return data?.codes || [];
@@ -104,8 +119,8 @@ export function useApi(gameId: string | undefined) {
   }, [apiService]);
 
   const getConjuntosList = useCallback((options?: SearchOptions) => {
-    return apiService ? apiService.getConjuntos(options) : [];
-  }, [apiService]);
+    return apiService ? apiService.getConjuntos({ ...options, activeEventIds }) : [];
+  }, [apiService, activeEventIds]);
 
   return {
     loading,
