@@ -25,8 +25,13 @@ import { DataCard } from "../common/DataCard";
 import { ItemCard } from "./ItemCard";
 import { ItemShopCard } from "../shop/ItemShopCard";
 import { ItemFlowSection } from "./ItemFlowSection";
-import { useMemo } from "react";
-import type { GameDataTypes } from "../../types/gameModels";
+import { useMemo, useState, useEffect } from "react";
+import type { GameDataTypes, Conjunto, GameEvent, Item, Entity } from "../../types/gameModels";
+import type { ItemDetails } from "../../types/apiModels";
+import { eventRepository } from "../../repositories/EventRepository";
+import { itemRepository } from "../../repositories/ItemRepository";
+import { entityRepository } from "../../repositories/EntityRepository";
+import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
 
 export function ItemDetailsPage() {
   const { gameId, itemId = "" } = useParams<{
@@ -35,44 +40,69 @@ export function ItemDetailsPage() {
   }>();
   const navigate = useNavigate();
 
-  const { loading, getItemDetails, raw } = useApi(gameId);
+  const { loading: dbLoading, getItemDetails } = useApi(gameId);
+  const [itemDetails, setItemDetails] = useState<ItemDetails | null>(null);
+  const [dataLoading, setDataLoading] = useState(true);
+  
+  const [events, setEvents] = useState<GameEvent[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [itemConjuntos, setItemConjuntos] = useState<Conjunto[]>([]);
 
-  const itemDetails = useMemo(
-    () => getItemDetails(itemId),
-    [getItemDetails, itemId],
-  );
+  useEffect(() => {
+    if (dbLoading) return;
+
+    let isMounted = true;
+    setDataLoading(true);
+
+    Promise.all([
+      getItemDetails(itemId),
+      eventRepository.getAll(),
+      itemRepository.getAll(),
+      entityRepository.getAll(),
+      conjuntoRepository.getAll()
+    ]).then(([details, allEvents, allItems, allEntities, allConjuntos]) => {
+      if (!isMounted) return;
+      
+      setItemDetails(details);
+      setEvents(allEvents);
+      setItems(allItems);
+      setEntities(allEntities);
+      setItemConjuntos(allConjuntos.filter(c => c.items?.includes(itemId)));
+      
+      setDataLoading(false);
+    }).catch(err => {
+      console.error("Error fetching item details:", err);
+      if (isMounted) setDataLoading(false);
+    });
+
+    return () => { isMounted = false; };
+  }, [dbLoading, itemId, getItemDetails]);
 
   const eventsMap = useMemo(() => {
     const map = new Map<string, string>();
-    if (raw?.events) {
-      raw.events.forEach((e) => map.set(e.id, e.name));
-    }
+    events.forEach((e) => map.set(e.id, e.name));
     return map;
-  }, [raw?.events]);
+  }, [events]);
 
   const itemsMap = useMemo(() => {
     const map = new Map<string, any>();
-    if (raw?.items) raw.items.forEach((i) => map.set(i.id, i));
+    items.forEach((i) => map.set(i.id, i));
     return map;
-  }, [raw?.items]);
+  }, [items]);
 
   const entitiesMap = useMemo(() => {
     const map = new Map<string, any>();
-    if (raw?.entities) raw.entities.forEach((e) => map.set(e.id, e));
+    entities.forEach((e) => map.set(e.id, e));
     return map;
-  }, [raw?.entities]);
-
-  const itemConjuntos = useMemo(() => {
-    if (!raw?.conjuntos) return [];
-    return raw.conjuntos.filter(c => c.items?.includes(itemId));
-  }, [raw?.conjuntos, itemId]);
+  }, [entities]);
 
   const getSourceData = (type: GameDataTypes | undefined, id: string): any => {
     if (type === "entity") return entitiesMap.get(id);
     return itemsMap.get(id);
   };
 
-  if (loading) {
+  if (dbLoading || dataLoading) {
     return (
       <StyledContainer title="Carregando..." label="Obtendo dados do jogo">
         <Typography>Por favor, aguarde...</Typography>
@@ -248,38 +278,38 @@ export function ItemDetailsPage() {
                 </Box>
               )}
               {/* Conjuntos */}
-          {itemConjuntos.length > 0 && (
-            <Paper elevation={0} sx={{ p: 2, borderRadius: 2 }}>
-              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
-                <AutoAwesomeMosaic color="primary" sx={{ fontSize: 18 }} />
-                <Typography variant="subtitle2" fontWeight={800}>Parte de Conjuntos</Typography>
-              </Stack>
-              <Stack spacing={1}>
-                {itemConjuntos.map((conjunto) => (
-                  <DataCard
-                    key={conjunto.id}
-                    onClick={() => navigate(`/game/${gameId}/conjuntos/${conjunto.category}`)}
-                    sx={{
-                      p: 1.5,
-                      "&:hover": {
-                        backgroundColor: "rgba(255, 68, 0, 0.1)",
-                      },
-                    }}
-                  >
-                    <Box>
-                      <Typography variant="body2" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
-                        {conjunto.name}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {conjunto.category}
-                      </Typography>
-                    </Box>
-                  </DataCard>
-                ))}
-              </Stack>
-            </Paper>
-          )}
-        </Stack>
+              {itemConjuntos.length > 0 && (
+                <Paper elevation={0} sx={{ p: 2, borderRadius: 2 }}>
+                  <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+                    <AutoAwesomeMosaic color="primary" sx={{ fontSize: 18 }} />
+                    <Typography variant="subtitle2" fontWeight={800}>Parte de Conjuntos</Typography>
+                  </Stack>
+                  <Stack spacing={1}>
+                    {itemConjuntos.map((conjunto) => (
+                      <DataCard
+                        key={conjunto.id}
+                        onClick={() => navigate(`/game/${gameId}/conjuntos/${conjunto.category}`)}
+                        sx={{
+                          p: 1.5,
+                          "&:hover": {
+                            backgroundColor: "rgba(255, 68, 0, 0.1)",
+                          },
+                        }}
+                      >
+                        <Box>
+                          <Typography variant="body2" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+                            {conjunto.name}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {conjunto.category}
+                          </Typography>
+                        </Box>
+                      </DataCard>
+                    ))}
+                  </Stack>
+                </Paper>
+              )}
+            </Stack>
           </Paper>
         </Stack>
         <Stack spacing={2} overflow={"auto"} flex={1}>
@@ -461,7 +491,7 @@ export function ItemDetailsPage() {
                           entitiesMap={entitiesMap}
                           eventsMap={
                             new Map(
-                              raw?.events?.map((e) => [
+                              events?.map((e) => [
                                 e.id,
                                 { name: e.name },
                               ]) || [],

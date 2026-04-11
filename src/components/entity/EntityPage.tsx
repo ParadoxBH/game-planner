@@ -14,12 +14,13 @@ import { TriplePickSelector } from "../common/TriplePickSelector";
 import type { TripleState } from "../common/TriplePickSelector";
 import { FilterList, BugReport, ShoppingCart, Sell, Storefront } from "@mui/icons-material";
 import { useApi } from "../../hooks/useApi";
-import type { Entity } from "../../types/gameModels";
+import type { Entity, Shop } from "../../types/gameModels";
 import { ListingDataView } from "../common/ListingDataView";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { useViewMode } from "../../hooks/useViewMode";
 import { ItemChip } from "../common/ItemChip";
 import { Tooltip } from "@mui/material";
+import { shopRepository } from "../../repositories/ShopRepository";
 
 export function EntityPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -29,11 +30,15 @@ export function EntityPage() {
   const navigate = useNavigate();
 
   const {
-    loading: loadingApi,
+    loading: dbLoading,
     error: errorApi,
     getEntityList,
-    raw,
   } = useApi(gameId);
+  
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [shops, setShops] = useState<Shop[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useViewMode("entities");
   const [availableSubCategories, setAvailableSubCategories] = useState<
@@ -42,10 +47,28 @@ export function EntityPage() {
   const [subCategoryStates, setSubCategoryStates] = useState<Record<string, TripleState>>({});
   const [showPrices, setShowPrices] = useState(false);
 
-  const entities = useMemo(() => {
-    const results = getEntityList();
-    return Array.isArray(results) ? results : results.data;
-  }, [getEntityList]);
+  useEffect(() => {
+    if (dbLoading) return;
+
+    let isMounted = true;
+    setDataLoading(true);
+
+    Promise.all([
+      getEntityList(),
+      shopRepository.getAll()
+    ]).then(([results, allShops]) => {
+      if (!isMounted) return;
+      const list = Array.isArray(results) ? results : results.data;
+      setEntities(list);
+      setShops(allShops);
+      setDataLoading(false);
+    }).catch(err => {
+      console.error("Error fetching entities data:", err);
+      if (isMounted) setDataLoading(false);
+    });
+
+    return () => { isMounted = false; };
+  }, [dbLoading, getEntityList]);
 
   const categories = useMemo(() => {
     const cats = new Set<string>();
@@ -97,23 +120,27 @@ export function EntityPage() {
   }, [entities, urlCategory]);
 
   const filteredEntities = useMemo(() => {
-    const filters: any = {};
+    let list = [...entities];
 
+    // Apply primary category filter
     if (urlCategory && urlCategory !== "all") {
-      filters.category = [urlCategory];
+      list = list.filter(entity => {
+        const cats = Array.isArray(entity.category) ? entity.category : [entity.category];
+        return cats[0]?.toLowerCase() === urlCategory.toLowerCase();
+      });
     }
 
-    // Add inclusion/negation for sub-category states
+    // Apply sub-category states
     Object.entries(subCategoryStates).forEach(([cat, state]) => {
       if (state === "indifferent") return;
-      if (!filters.category) filters.category = [];
-      filters.category.push(state === "exclude" ? `!${cat}` : cat);
+      list = list.filter(entity => {
+        const cats = Array.isArray(entity.category) ? entity.category : [entity.category || ""];
+        const hasCat = cats.includes(cat);
+        return state === "exclude" ? !hasCat : hasCat;
+      });
     });
 
-    const results = getEntityList({ filters });
-    const list = Array.isArray(results) ? results : results.data;
-
-    // Apply search filter client-side
+    // Apply search filter
     if (!searchTerm) return list;
 
     const lowerSearch = searchTerm.toLowerCase();
@@ -122,19 +149,17 @@ export function EntityPage() {
         entity.name.toLowerCase().includes(lowerSearch) ||
         entity.id.toLowerCase().includes(lowerSearch),
     );
-  }, [getEntityList, urlCategory, subCategoryStates, searchTerm]);
+  }, [entities, urlCategory, subCategoryStates, searchTerm]);
 
   const shopNPCIds = useMemo(() => {
     const ids = new Set<string>();
-    if (raw?.shops) {
-      raw.shops.forEach((s: any) => {
-        if (s.npcId) ids.add(s.npcId.toLowerCase());
-      });
-    }
+    shops.forEach((s: any) => {
+      if (s.npcId) ids.add(s.npcId.toLowerCase());
+    });
     return ids;
-  }, [raw?.shops]);
+  }, [shops]);
 
-  if (loadingApi) {
+  if (dbLoading || dataLoading) {
     return (
       <Box
         sx={{
@@ -166,7 +191,6 @@ export function EntityPage() {
       [option]: newState
     }));
   };
-
 
   return (
     <StyledContainer
@@ -234,6 +258,7 @@ export function EntityPage() {
         emptyMessage="Nenhuma entidade encontrada neste filtro."
         renderCard={(entity: any, variant) => (
           <EntityCard
+            key={entity.id}
             entity={entity}
             showPrices={showPrices}
             hasShop={shopNPCIds.has(entity.id.toLowerCase())}
@@ -243,6 +268,7 @@ export function EntityPage() {
         )}
         renderListItem={(entity: any) => [
           <Box
+            key={`entity_list_${entity.id}`}
             onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
             sx={{
               display: "flex",
@@ -288,7 +314,7 @@ export function EntityPage() {
               )}
             </Typography>
           </Box>,
-            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
+            <Box key={`entity_prices_${entity.id}`} sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
               {entity.buyPrice !== undefined && (
                 <Tooltip title="Compra">
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, backgroundColor: 'rgba(76, 175, 80, 0.1)', px: 1, borderRadius: 1, border: '1px solid rgba(76, 175, 80, 0.2)' }}>
@@ -318,7 +344,7 @@ export function EntityPage() {
             </Box>
         ]}
         renderIconItem={(entity: any) => (
-          <Tooltip title={`${entity.name} (${entity.id})`}>
+          <Tooltip key={`entity_icon_${entity.id}`} title={`${entity.name} (${entity.id})`}>
             <Box
               onClick={() =>
                 navigate(`/game/${gameId}/entity/view/${entity.id}`)

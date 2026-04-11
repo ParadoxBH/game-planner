@@ -13,35 +13,73 @@ import { PickSelector } from "../common/PickSelector";
 import { TriplePickSelector } from "../common/TriplePickSelector";
 import type { TripleState } from "../common/TriplePickSelector";
 import { Build, Science } from "@mui/icons-material";
-import type { GameDataTypes } from "../../types/gameModels";
+import type { GameDataTypes, Recipe, Item, Entity, GameEvent } from "../../types/gameModels";
+import type { NormalizedRecipe } from "../../types/apiModels";
 import { ListingDataView } from "../common/ListingDataView";
 import { Tooltip, Chip } from "@mui/material";
 import { TimeChip } from "../common/TimeChip";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { useViewMode } from "../../hooks/useViewMode";
+import { itemRepository } from "../../repositories/ItemRepository";
+import { entityRepository } from "../../repositories/EntityRepository";
+import { eventRepository } from "../../repositories/EventRepository";
 
 export function RecipesPage() {
   const { gameId, category: urlStation } = useParams<{ gameId: string; category?: string }>();
   const navigate = useNavigate();
 
-  const { loading: loadingApi, error: errorApi, getRecipesList, raw } = useApi(gameId);
+  const { loading: dbLoading, error: errorApi, getRecipesList } = useApi(gameId);
+  const [recipes, setRecipes] = useState<NormalizedRecipe[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [events, setEvents] = useState<GameEvent[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useViewMode("recipes");
   const [availableSubStations, setAvailableSubStations] = useState<string[]>([]);
   const [subStationStates, setSubStationStates] = useState<Record<string, TripleState>>({});
 
+  // Fetch all data for mappings and filtering
+  useEffect(() => {
+    if (dbLoading) return;
+
+    let isMounted = true;
+    setDataLoading(true);
+
+    Promise.all([
+      getRecipesList(),
+      itemRepository.getAll(),
+      entityRepository.getAll(),
+      eventRepository.getAll()
+    ]).then(([results, allItems, allEntities, allEvents]) => {
+      if (!isMounted) return;
+      const list = Array.isArray(results) ? results : results.data;
+      setRecipes(list);
+      setItems(allItems);
+      setEntities(allEntities);
+      setEvents(allEvents);
+      setDataLoading(false);
+    }).catch(err => {
+      console.error("Error fetching recipes data:", err);
+      if (isMounted) setDataLoading(false);
+    });
+
+    return () => { isMounted = false; };
+  }, [dbLoading, getRecipesList]);
+
   // Maps for details
   const itemsMap = useMemo(() => {
     const map = new Map<string, any>();
-    if (raw?.items) raw.items.forEach(i => map.set(i.id, i));
+    items.forEach(i => map.set(i.id, i));
     return map;
-  }, [raw?.items]);
+  }, [items]);
 
   const entitiesMap = useMemo(() => {
     const map = new Map<string, any>();
-    if (raw?.entities) raw.entities.forEach(e => map.set(e.id, e));
+    entities.forEach(e => map.set(e.id, e));
     return map;
-  }, [raw?.entities]);
+  }, [entities]);
 
   const getSourceData = (type: GameDataTypes | undefined, id: string): any => {
     if (type === 'entity') return entitiesMap.get(id);
@@ -50,32 +88,26 @@ export function RecipesPage() {
 
   const eventsMap = useMemo(() => {
     const map = new Map<string, string>();
-    if (raw?.events) {
-      raw.events.forEach(e => map.set(e.id, e.name));
-    }
+    events.forEach(e => map.set(e.id, e.name));
     return map;
-  }, [raw?.events]);
-
-  // Initial list to derive filters
-  const allRecipes = useMemo(() => {
-    const results = getRecipesList();
-    return Array.isArray(results) ? results : results.data;
-  }, [getRecipesList]);
+  }, [events]);
 
   const stationsList = useMemo(() => {
     const stations = new Set<string>();
-    allRecipes.forEach(recipe => {
-      if (recipe.normalizedStations[0]) stations.add(recipe.normalizedStations[0]);
+    recipes.forEach(recipe => {
+      if (recipe.normalizedStations && recipe.normalizedStations[0]) {
+        stations.add(recipe.normalizedStations[0]);
+      }
     });
     return Array.from(stations).sort();
-  }, [allRecipes]);
+  }, [recipes]);
 
   // Update available sub-stations when primary station changes
   useEffect(() => {
     const subs = new Set<string>();
     const currentPrimary = urlStation === "all" ? null : urlStation;
     
-    allRecipes.forEach(recipe => {
+    recipes.forEach(recipe => {
       const primary = recipe.normalizedStations[0];
       if (!currentPrimary || (primary && primary.toLowerCase() === currentPrimary.toLowerCase())) {
         if (recipe.normalizedStations.length > 1) {
@@ -99,26 +131,28 @@ export function RecipesPage() {
       });
       return changed ? next : prev;
     });
-  }, [allRecipes, urlStation]);
+  }, [recipes, urlStation]);
 
   const filteredRecipes = useMemo(() => {
-    const filters: any = {};
+    let list = [...recipes];
     
+    // Apply primary station filter
     if (urlStation && urlStation !== "all") {
-      filters.normalizedStations = [urlStation];
+      list = list.filter(recipe => {
+        return recipe.normalizedStations?.[0]?.toLowerCase() === urlStation.toLowerCase();
+      });
     }
 
-    // Add inclusion/negation for sub-station states
+    // Apply sub-station states (inclusion/negation)
     Object.entries(subStationStates).forEach(([st, state]) => {
       if (state === "indifferent") return;
-      if (!filters.normalizedStations) filters.normalizedStations = [];
-      filters.normalizedStations.push(state === "exclude" ? `!${st}` : st);
+      list = list.filter(recipe => {
+        const hasSt = recipe.normalizedStations?.includes(st);
+        return state === "exclude" ? !hasSt : hasSt;
+      });
     });
 
-    const results = getRecipesList({ filters });
-    const list = Array.isArray(results) ? results : results.data;
-
-    // Apply search client-side for now as it's more complex (multi-field)
+    // Apply search client-side
     if (!searchTerm) return list;
     
     const lowerSearch = searchTerm.toLowerCase();
@@ -128,9 +162,9 @@ export function RecipesPage() {
       recipe.normalizedIngredients.some(i => i.id.toLowerCase().includes(lowerSearch) || (i.name && i.name.toLowerCase().includes(lowerSearch))) ||
       recipe.normalizedProducts.some(p => p.id.toLowerCase().includes(lowerSearch) || (p.name && p.name.toLowerCase().includes(lowerSearch)))
     );
-  }, [getRecipesList, urlStation, subStationStates, searchTerm]);
+  }, [recipes, urlStation, subStationStates, searchTerm]);
 
-  if (loadingApi) {
+  if (dbLoading || dataLoading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
         <CircularProgress color="primary" />
@@ -219,6 +253,7 @@ export function RecipesPage() {
           
           return [
             <Box 
+              key={`recipe_view_${recipe.id}`}
               onClick={() => navigate(`/game/${gameId}/recipes/view/${recipe.id}`)}
               sx={{ display: 'flex', alignItems: 'center', gap: 2, cursor: 'pointer' }}
             >
@@ -232,7 +267,7 @@ export function RecipesPage() {
               <Typography variant="body2" sx={{ fontWeight: 700 }}>{recipe.normalizedName}</Typography>
             </Box>,
 
-            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
+            <Box key={`recipe_ing_${recipe.id}`} sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
               {recipe.craftTime && recipe.craftTime > 0 && (
                 <TimeChip seconds={recipe.craftTime} />
               )}
@@ -266,13 +301,13 @@ export function RecipesPage() {
               })}
             </Box>,
 
-            <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+            <Box key={`recipe_stations_${recipe.id}`} sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
               {recipe.normalizedStations.filter(Boolean).map((station: string) => (
                 <Chip key={station} label={station} size="small" sx={{ height: 18, fontSize: '0.6rem', backgroundColor: 'rgba(255,255,255,0.05)' }} />
               ))}
             </Box>,
 
-            <Typography variant="caption" sx={{ textAlign: 'right', display: 'block', color: 'text.secondary', fontWeight: 700 }}>
+            <Typography key={`recipe_unlock_${recipe.id}`} variant="caption" sx={{ textAlign: 'right', display: 'block', color: 'text.secondary', fontWeight: 700 }}>
               {recipe.unlock && recipe.unlock.length > 0 ? recipe.unlock[0].value : '-'}
             </Typography>
           ];
@@ -282,7 +317,7 @@ export function RecipesPage() {
           const productData = mainProduct ? getSourceData(mainProduct.type, mainProduct.id) : null;
 
           return (
-            <Tooltip title={`${recipe.normalizedName} (${recipe.id})`}>
+            <Tooltip key={`recipe_icon_${recipe.id}`} title={`${recipe.normalizedName} (${recipe.id})`}>
               <Box 
                 onClick={() => navigate(`/game/${gameId}/recipes/view/${recipe.id}`)}
                 sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1 }}

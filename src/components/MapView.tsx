@@ -1,4 +1,4 @@
-import { Box, Typography, Paper, Stack, Collapse, Snackbar, Alert, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Box, Typography, Paper, Stack, Collapse, Snackbar, Alert, ToggleButton, ToggleButtonGroup, CircularProgress } from "@mui/material";
 import { CRS, type LatLngBoundsExpression, Transformation } from "leaflet";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -20,12 +20,17 @@ import { EntityDrawer } from "./entity/EntityDrawer";
 import { OutputField } from "./common/OutputField";
 import { loadGamesList } from "../services/dataLoader";
 import { useApi } from "../hooks/useApi";
-import type { Entity, ReferencePoints, GameInfo, MapMetadata } from "../types/gameModels";
+import type { Entity, ReferencePoints, GameInfo, MapMetadata, Item, Shop } from "../types/gameModels";
 import { parseWKTPoint, parseWKTPolygon, formatWKTPoint, formatWKTPolygon } from "../utils/wkt";
 import { MapToolbox } from "./MapToolbox";
 import { MapDashboard } from "./MapDashboard";
 import MapIcon from "@mui/icons-material/Map";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import { mapRepository } from "../repositories/MapRepository";
+import { entityRepository } from "../repositories/EntityRepository";
+import { itemRepository } from "../repositories/ItemRepository";
+import { referencePointRepository } from "../repositories/ReferencePointRepository";
+import { shopRepository } from "../repositories/ShopRepository";
 
 export interface NavigationItem {
   type: "entity" | "item";
@@ -198,40 +203,67 @@ export const MapView = () => {
   const [currentPoints, setCurrentPoints] = useState<[number, number][]>([]);
   const mapRef = useRef<any>(null);
 
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [referencePoints, setReferencePoints] = useState<ReferencePoints[]>([]);
+  const [shops, setShops] = useState<Shop[]>([]);
+  const [maps, setMaps] = useState<MapMetadata[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
+
   const selectedMapId = urlMapId || "";
 
-  const { loading: loadingApi, raw } = useApi(gameId);
-  const selectedMap = useMemo(() => raw?.maps?.find(m => m.id === selectedMapId), [raw?.maps, selectedMapId]);
+  const { loading: dbLoading } = useApi(gameId);
+
+  // Fetch all data
+  useEffect(() => {
+    if (dbLoading) return;
+
+    let isMounted = true;
+    setDataLoading(true);
+
+    Promise.all([
+      entityRepository.getAll(),
+      referencePointRepository.getAll(),
+      shopRepository.getAll(),
+      mapRepository.getAll(),
+      itemRepository.getAll(),
+      loadGamesList()
+    ]).then(([allEntities, allRefPoints, allShops, allMaps, allItems, allGames]) => {
+      if (!isMounted) return;
+      
+      setEntities(allEntities);
+      setReferencePoints(allRefPoints);
+      setShops(allShops);
+      setMaps(allMaps);
+      setItems(allItems);
+      
+      const game = allGames.find(g => g.id === gameId);
+      if (game) {
+        setGameInfo(game);
+      }
+      
+      setDataLoading(false);
+      setLoadingGame(false);
+      
+      // Se não houver mapId na URL, redireciona para o primeiro mapa
+      if (!urlMapId && allMaps.length > 0) {
+        const firstMap = allMaps[0];
+        const initialView = firstMap.defaultView || (firstMap.availableViews?.[0]) || "map";
+        navigate(`/game/${gameId}/map/${firstMap.id}/${initialView}`, { replace: true });
+      }
+    }).catch(err => {
+      console.error("Error fetching map view data:", err);
+      if (isMounted) setDataLoading(false);
+    });
+
+    return () => { isMounted = false; };
+  }, [dbLoading, gameId, urlMapId, navigate]);
+
+  const selectedMap = useMemo(() => maps.find(m => m.id === selectedMapId), [maps, selectedMapId]);
 
   const availableViews = useMemo(() => selectedMap?.availableViews || ["map", "dashboard"], [selectedMap]);
   const defaultView = selectedMap?.defaultView || availableViews[0] || "map";
   const viewMode = (urlView as "map" | "dashboard") || defaultView;
-
-  useEffect(() => {
-    loadGamesList().then(games => {
-      const game = games.find(g => g.id === gameId);
-      if (game) {
-        setGameInfo(game);
-      }
-      setLoadingGame(false);
-    });
-  }, [gameId]);
-
-  // Sincronizar gameInfo com dados completos (incluindo mapas do maps.json)
-  useEffect(() => {
-    if (raw) {
-      if (raw.gameInfo) {
-        setGameInfo(raw.gameInfo);
-      }
-      
-      // Se não houver mapId na URL, redireciona para o primeiro mapa
-      if (!urlMapId && raw.maps?.length > 0) {
-        const firstMap = raw.maps[0];
-        const initialView = firstMap.defaultView || (firstMap.availableViews?.[0]) || "map";
-        navigate(`/game/${gameId}/map/${firstMap.id}/${initialView}`, { replace: true });
-      }
-    }
-  }, [raw, gameId, urlMapId, navigate]);
 
   // Redirecionar se a view atual não estiver disponível para o mapa selecionado
   useEffect(() => {
@@ -247,9 +279,7 @@ export const MapView = () => {
   const setSelectedMapId = (id: string) => {
     navigate(`/game/${gameId}/map/${id}/${viewMode}`);
   };
-  const referencePoints = (raw?.referencePoints as ReferencePoints[]) || [];
-  const entities = raw?.entities || [];
-  const items = raw?.items || [];
+
   const entityLookup = useMemo(() => {
     const lookup: Record<string, Entity> = {};
     entities.forEach(e => { lookup[e.id] = e; });
@@ -265,7 +295,15 @@ export const MapView = () => {
     return [0, 0] as [number, number];
   }, [selectedMap]);
 
-  if (loadingGame) return <Stack sx={{ p: 4 }}><Typography>Carregando mapa...</Typography></Stack>;
+  if (loadingGame || dbLoading || dataLoading) {
+    return (
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%', gap: 2 }}>
+        <CircularProgress color="primary" />
+        <Typography>Carregando mapa...</Typography>
+      </Box>
+    );
+  }
+
   if (!gameInfo) return <Stack sx={{ p: 4 }}><Typography>Jogo não encontrado.</Typography></Stack>;
   if (!selectedMap) return <Stack sx={{ p: 4 }}><Typography>Mapa não encontrado.</Typography></Stack>;
 
@@ -306,9 +344,10 @@ export const MapView = () => {
               </>
             )}
             {selectedMap.type === "layered" && selectedMap.urlPattern && Array.from({ length: selectedMap.layers || 1 }, (_, i) => i).map(l => <ImageOverlay key={l} zIndex={l} url={selectedMap.urlPattern!.replace("{layer}", l.toString())} bounds={selectedMap.bounds as LatLngBoundsExpression} />)}
+            {selectedMap.type === "single" && selectedMap.url}
             {selectedMap.type === "single" && selectedMap.url && <ImageOverlay url={selectedMap.url} bounds={selectedMap.bounds as LatLngBoundsExpression} />}
             {selectedMap.type === "tile" && selectedMap.url && <TileLayer url={selectedMap.url} minZoom={selectedMap.minZoom} maxZoom={selectedMap.maxZoom} minNativeZoom={selectedMap.tileMinZoom ?? 4} maxNativeZoom={selectedMap.tileMaxZoom ?? 4} noWrap={true} />}
-            {!loadingApi && referencePoints.filter(s => !s.mapId || s.mapId === selectedMapId).map(point => {
+            {referencePoints.filter(s => !s.mapId || s.mapId === selectedMapId).map(point => {
               if (point.geom.type === "Polygon") {
                 const coords = parseWKTPolygon(point.geom.coordinates);
                 return (
@@ -358,10 +397,10 @@ export const MapView = () => {
         ) : (
           <MapDashboard gameId={gameId!} selectedMapId={selectedMapId} availableViews={availableViews} onSelectEntity={id => handlePush({ type: "entity", id })} onSwitchToMap={() => setViewMode("map")} />
         )}
-        {viewMode === "map" && <MapInfoOverlay gameName={gameInfo?.name || ""} coords={cursorCoords} maps={raw?.maps || []} selectedMapId={selectedMapId} onSelectMap={setSelectedMapId} />}
+        {viewMode === "map" && <MapInfoOverlay gameName={gameInfo?.name || ""} coords={cursorCoords} maps={maps} selectedMapId={selectedMapId} onSelectMap={setSelectedMapId} />}
       </Box>
 
-      {navigationStack.length > 0 && <EntityDrawer stack={navigationStack} entities={entities} items={items} referencePoints={referencePoints} shops={raw?.shops || []} maps={raw?.maps || []} onSelectMap={setSelectedMapId} onPush={handlePush} onPop={() => setNavigationStack(s => s.slice(0, -1))} onClose={() => setNavigationStack([])} />}
+      {navigationStack.length > 0 && <EntityDrawer stack={navigationStack} entities={entities} items={items} referencePoints={referencePoints} shops={shops} maps={maps} onSelectMap={setSelectedMapId} onPush={handlePush} onPop={() => setNavigationStack(s => s.slice(0, -1))} onClose={() => setNavigationStack([])} />}
       {viewMode === "map" && <MapToolbox activeTool={activeTool} hasPoints={currentPoints.length > 0} onSelectTool={setActiveTool} onConfirm={() => { navigator.clipboard.writeText(JSON.stringify({ id: `zone_${Date.now()}`, geom: { type: "Polygon", coordinates: formatWKTPolygon(currentPoints.map(p => [p[1], p[0]])) }, mapId: selectedMapId }, null, 2)); setSnackbarMessage("Zona copiada!"); setSnackbarOpen(true); setActiveTool(null); setCurrentPoints([]); }} onClear={() => setCurrentPoints([])} onCancel={() => { setActiveTool(null); setCurrentPoints([]); }} />}
       <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={() => setSnackbarOpen(false)} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}><Alert severity="info" variant="filled" sx={{ width: '100%', borderRadius: 2 }}>{snackbarMessage}</Alert></Snackbar>
     </Box>

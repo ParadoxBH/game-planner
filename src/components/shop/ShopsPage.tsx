@@ -13,66 +13,125 @@ import {
 import { Storefront, Lock, Refresh, Inventory, Map as MapIcon } from "@mui/icons-material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { StyledContainer } from "../common/StyledContainer";
 import { ShopItemCard } from "./ShopItemCard";
 import { ShopCard } from "./ShopCard";
-import type { ShopItem } from "../../types/gameModels";
+import type { ShopItem, Shop, Entity, Item, GameEvent, ReferencePoints, MapMetadata } from "../../types/gameModels";
+import type { ShopDetails } from "../../types/apiModels";
 import { ListingDataView } from "../common/ListingDataView";
 import { Tooltip } from "@mui/material";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { useViewMode } from "../../hooks/useViewMode";
 import { MiniMap } from "../common/MiniMap";
 import { parseWKTPoint } from "../../utils/wkt";
+import { shopRepository } from "../../repositories/ShopRepository";
+import { entityRepository } from "../../repositories/EntityRepository";
+import { itemRepository } from "../../repositories/ItemRepository";
+import { eventRepository } from "../../repositories/EventRepository";
+import { referencePointRepository } from "../../repositories/ReferencePointRepository";
+import { mapRepository } from "../../repositories/MapRepository";
 
 export function ShopsPage() {
   const { gameId, category: urlShopId } = useParams<{ gameId: string; category?: string }>();
   const navigate = useNavigate();
 
-  const { loading: loadingApi, getShopDetails, raw } = useApi(gameId);
+  const { loading: dbLoading, getShopDetails } = useApi(gameId);
+  const [shops, setShops] = useState<Shop[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [events, setEvents] = useState<GameEvent[]>([]);
+  const [referencePoints, setReferencePoints] = useState<ReferencePoints[]>([]);
+  const [maps, setMaps] = useState<MapMetadata[]>([]);
+  
+  const [shopDetails, setShopDetails] = useState<ShopDetails | null>(null);
+  const [dataLoading, setDataLoading] = useState(true);
+
   const [viewMode, setViewMode] = useViewMode("shops");
   const [itemsViewMode, setItemsViewMode] = useViewMode("shop_items");
 
+  // Fetch all data for mappings and filtering
+  useEffect(() => {
+    if (dbLoading) return;
+
+    let isMounted = true;
+    setDataLoading(true);
+
+    const promises: Promise<any>[] = [
+      shopRepository.getAll(),
+      itemRepository.getAll(),
+      entityRepository.getAll(),
+      eventRepository.getAll(),
+      referencePointRepository.getAll(),
+      mapRepository.getAll()
+    ];
+
+    if (urlShopId) {
+      promises.push(getShopDetails(urlShopId));
+    }
+
+    Promise.all(promises).then(([allShops, allItems, allEntities, allEvents, allRefPoints, allMaps, details]) => {
+      if (!isMounted) return;
+      
+      setShops(allShops);
+      setItems(allItems);
+      setEntities(allEntities);
+      setEvents(allEvents);
+      setReferencePoints(allRefPoints);
+      setMaps(allMaps);
+      
+      if (details) {
+        setShopDetails(details);
+      } else {
+        setShopDetails(null);
+      }
+      
+      setDataLoading(false);
+    }).catch(err => {
+      console.error("Error fetching shops data:", err);
+      if (isMounted) setDataLoading(false);
+    });
+
+    return () => { isMounted = false; };
+  }, [dbLoading, getShopDetails, urlShopId]);
+
   const itemsMap = useMemo(() => {
     const map = new Map<string, any>();
-    if (raw?.items) raw.items.forEach((item) => map.set(item.id, item));
+    items.forEach((item) => map.set(item.id, item));
     return map;
-  }, [raw?.items]);
+  }, [items]);
 
   const entitiesMap = useMemo(() => {
     const map = new Map<string, any>();
-    if (raw?.entities) raw.entities.forEach((entity) => map.set(entity.id, entity));
+    entities.forEach((entity) => map.set(entity.id, entity));
     return map;
-  }, [raw?.entities]);
+  }, [entities]);
 
   const eventsMap = useMemo(() => {
     const map = new Map<string, any>();
-    if (raw?.events) raw.events.forEach((event) => map.set(event.id, event));
+    events.forEach((event) => map.set(event.id, event));
     return map;
-  }, [raw?.events]);
-
-  const shops = raw?.shops || [];
+  }, [events]);
 
   const currentIndex = useMemo(() => {
     if (!shops || !urlShopId) return -1;
     return shops.findIndex((s) => s.id === urlShopId);
   }, [shops, urlShopId]);
 
-  const shopDetails = useMemo(() => (urlShopId ? getShopDetails(urlShopId) : null), [getShopDetails, urlShopId]);
   const currentShop = shopDetails?.shop;
   const currentNpc = shopDetails?.npc;
 
   const npcLocation = useMemo(() => {
-    if (!currentNpc || !raw?.referencePoints) return null;
-    return raw.referencePoints.find((s: any) => s.entityId === currentNpc.id);
-  }, [currentNpc, raw?.referencePoints]);
+    if (!currentNpc || !referencePoints) return null;
+    return referencePoints.find((s: any) => s.entityId === currentNpc.id);
+  }, [currentNpc, referencePoints]);
 
   const mapMetadata = useMemo(() => {
-    if (!npcLocation || !raw?.maps) return null;
-    return raw.maps.find((m: any) => m.id === npcLocation.mapId) || raw.maps[0];
-  }, [npcLocation, raw?.maps]);
+    if (!npcLocation || !maps) return null;
+    return maps.find((m: any) => m.id === npcLocation.mapId) || maps[0];
+  }, [npcLocation, maps]);
 
-  if (loadingApi) {
+  if (dbLoading || dataLoading) {
     return (
       <Box
         sx={{
@@ -188,6 +247,7 @@ export function ShopsPage() {
           emptyMessage="Nenhuma loja cadastrada para este jogo."
           renderCard={(shop, variant) => (
             <ShopCard
+              key={shop.id}
               shop={shop}
               npc={entitiesMap.get(shop.npcId)}
               onClick={() => navigate(`/game/${gameId}/shops/list/${shop.id}`)}
@@ -198,6 +258,7 @@ export function ShopsPage() {
             const npc = entitiesMap.get(shop.npcId);
             return [
               <Box
+                key={`shop_list_${shop.id}`}
                 onClick={() => navigate(`/game/${gameId}/shops/list/${shop.id}`)}
                 sx={{ display: 'flex', alignItems: 'center', gap: 2, cursor: 'pointer' }}
               >
@@ -210,8 +271,8 @@ export function ShopsPage() {
                 </Box>
                 <Typography variant="body2" sx={{ fontWeight: 700 }}>{shop.name}</Typography>
               </Box>,
-              <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: 'monospace' }}>{shop.id}</Typography>,
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Typography key={`shop_id_${shop.id}`} variant="caption" sx={{ color: 'text.secondary', fontFamily: 'monospace' }}>{shop.id}</Typography>,
+              <Box key={`shop_status_${shop.id}`} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Chip label="Ativa" size="small" color="success" variant="outlined" sx={{ height: 18, fontSize: '0.6rem' }} />
               </Box>
             ];
@@ -219,13 +280,13 @@ export function ShopsPage() {
           renderIconItem={(shop) => {
             const npc = entitiesMap.get(shop.npcId);
             return (
-              <Tooltip title={`${shop.name || npc?.name || shop.npcId} (${shop.id})`}>
+              <Tooltip key={`shop_icon_${shop.id}`} title={`${shop.name || npc?.name || shop.npcId} (${shop.id})`}>
                 <Box 
                   onClick={() => navigate(`/game/${gameId}/shops/list/${shop.id}`)}
                   sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1 }}
                 >
                   {npc?.icon ? (
-                    <img src={npc.icon} alt={shop.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    <img src={npc.icon} alt={shop.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
                   ) : (
                     <Storefront sx={{ fontSize: 32, color: 'rgba(255, 255, 255, 0.2)' }} />
                   )}
@@ -434,6 +495,7 @@ export function ShopsPage() {
                   ]}
                   renderCard={(shopItem: ShopItem, variant) => (
                     <ShopItemCard
+                      key={shopItem.id}
                       shopItem={shopItem}
                       baseItem={itemsMap.get(shopItem.id)}
                       baseEntity={entitiesMap.get(shopItem.id)}
@@ -452,14 +514,14 @@ export function ShopsPage() {
                     const displayPrice = shopItem.price ?? (baseItem?.buyPrice || baseItem?.sellPrice);
                     
                     return [
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                      <Box key={`shop_item_list_${shopItem.id}`} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Box sx={{ width: 32, height: 32, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
                           <img src={target?.icon} alt={target?.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
                         </Box>
                         <Typography variant="body2" sx={{ fontWeight: 700 }}>{target?.name}</Typography>
                       </Box>,
 
-                      <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                      <Box key={`shop_item_price_${shopItem.id}`} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                         {displayPrice !== undefined && (
                           <Box sx={{ 
                             px: 1, py: 0.25, 
@@ -479,7 +541,7 @@ export function ShopsPage() {
                         )}
                       </Box>,
 
-                      <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 1 }}>
+                      <Box key={`shop_item_limit_${shopItem.id}`} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 1 }}>
                         {shopItem.amount && (
                           <Chip 
                             label={`x${shopItem.amount}`} 
@@ -505,7 +567,7 @@ export function ShopsPage() {
                     const displayPrice = shopItem.price ?? (baseItem?.buyPrice || baseItem?.sellPrice);
                     
                     return (
-                      <Tooltip title={`${target?.name} - ${displayPrice} ${currencyItem?.name || 'ouro'}`}>
+                      <Tooltip key={`shop_item_icon_${shopItem.id}`} title={`${target?.name} - ${displayPrice} ${currencyItem?.name || 'ouro'}`}>
                         <Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1, position: 'relative' }}>
                           <img src={target?.icon} alt={target?.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                           

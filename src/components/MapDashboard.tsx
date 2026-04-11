@@ -7,8 +7,9 @@ import {
   Tooltip,
   Divider,
   Box,
+  CircularProgress,
 } from "@mui/material";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Entity, Item, ReferencePoints, Shop, MapMetadata } from "../types/gameModels";
 import { useApi } from "../hooks/useApi";
@@ -21,6 +22,11 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import { StyledContainer } from "./common/StyledContainer";
 import { DataCard } from "./common/DataCard";
 import { DataChip } from "./common/DataChip";
+import { itemRepository } from "../repositories/ItemRepository";
+import { entityRepository } from "../repositories/EntityRepository";
+import { shopRepository } from "../repositories/ShopRepository";
+import { mapRepository } from "../repositories/MapRepository";
+import { referencePointRepository } from "../repositories/ReferencePointRepository";
 
 interface MapDashboardProps {
   gameId: string;
@@ -39,19 +45,51 @@ export const MapDashboard = ({
 }: MapDashboardProps) => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const { raw: data } = useApi(gameId);
+  const { loading: dbLoading } = useApi(gameId);
+
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [referencePoints, setReferencePoints] = useState<ReferencePoints[]>([]);
+  const [shops, setShops] = useState<Shop[]>([]);
+  const [maps, setMaps] = useState<MapMetadata[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
 
   const { spacing: dtSpacing, borderRadius: dtRadius } = theme.designTokens;
 
-  const entities = (data?.entities || []) as Entity[];
-  const referencePoints = (data?.referencePoints || []) as ReferencePoints[];
-  const shops = (data?.shops || []) as Shop[];
-  const maps = (data?.maps || []) as MapMetadata[];
+  // Fetch all data
+  useEffect(() => {
+    if (dbLoading) return;
+
+    let isMounted = true;
+    setDataLoading(true);
+
+    Promise.all([
+      entityRepository.getAll(),
+      referencePointRepository.getAll(),
+      shopRepository.getAll(),
+      mapRepository.getAll(),
+      itemRepository.getAll()
+    ]).then(([allEntities, allRefPoints, allShops, allMaps, allItems]) => {
+      if (!isMounted) return;
+      setEntities(allEntities);
+      setReferencePoints(allRefPoints);
+      setShops(allShops);
+      setMaps(allMaps);
+      setItems(allItems);
+      setDataLoading(false);
+    }).catch(err => {
+      console.error("Error fetching map dashboard data:", err);
+      if (isMounted) setDataLoading(false);
+    });
+
+    return () => { isMounted = false; };
+  }, [dbLoading]);
+
   const itemLookup = useMemo(() => {
     const lookup: Record<string, Item> = {};
-    data?.items?.forEach((i: Item) => (lookup[i.id] = i));
+    items.forEach((i: Item) => (lookup[i.id] = i));
     return lookup;
-  }, [data]);
+  }, [items]);
 
   const currentMap = useMemo(() => maps.find(m => m.id === selectedMapId), [maps, selectedMapId]);
 
@@ -154,6 +192,14 @@ export const MapDashboard = ({
   );
 
   const hasRegions = regions.length > 0;
+
+  if (dbLoading || dataLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+        <CircularProgress color="primary" />
+      </Box>
+    );
+  }
 
   return (
     <StyledContainer

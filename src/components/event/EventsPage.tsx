@@ -2,25 +2,45 @@ import {
   Box, 
   Typography, 
   Grid, 
-  Chip, 
   Stack,
   Tabs,
   Tab,
   CircularProgress
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
 import { StyledContainer } from "../common/StyledContainer";
 import { EventCard } from "./EventCard";
+import type { GameEvent } from "../../types/gameModels";
+import { eventRepository } from "../../repositories/EventRepository";
 
 export function EventsPage() {
   const { gameId } = useParams<{ gameId: string }>();
-  const { loading, error, raw } = useApi(gameId);
-  const events = raw?.events || [];
+  const { loading: dbLoading, error } = useApi(gameId);
+  const [events, setEvents] = useState<GameEvent[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
   const [tabValue, setTabValue] = useState(0);
 
-  if (loading) {
+  useEffect(() => {
+    if (dbLoading) return;
+
+    let isMounted = true;
+    setDataLoading(true);
+
+    eventRepository.getAll().then(allEvents => {
+      if (!isMounted) return;
+      setEvents(allEvents);
+      setDataLoading(false);
+    }).catch(err => {
+      console.error("Error fetching events:", err);
+      if (isMounted) setDataLoading(false);
+    });
+
+    return () => { isMounted = false; };
+  }, [dbLoading]);
+
+  if (dbLoading || dataLoading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
         <CircularProgress color="primary" />

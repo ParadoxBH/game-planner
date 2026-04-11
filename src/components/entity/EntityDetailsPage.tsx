@@ -25,21 +25,64 @@ import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
 import { RecipeCard } from "../recipe/RecipeCard";
 import { EntityCard } from "./EntityCard";
-import { useMemo } from "react";
-import type { MapMetadata, ReferencePoints, GameDataTypes } from "../../types/gameModels";
+import { useMemo, useState, useEffect } from "react";
+import type { MapMetadata, ReferencePoints, GameDataTypes, Entity, GameEvent, Item, Conjunto } from "../../types/gameModels";
+import type { EntityDetails } from "../../types/apiModels";
 import { MiniMap } from "../common/MiniMap";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
 import { parseWKTPoint } from "../../utils/wkt";
+import { eventRepository } from "../../repositories/EventRepository";
+import { itemRepository } from "../../repositories/ItemRepository";
+import { entityRepository } from "../../repositories/EntityRepository";
+import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
+import { mapRepository } from "../../repositories/MapRepository";
 
 export function EntityDetailsPage() {
   const { gameId, entityId = "" } = useParams<{ gameId: string; entityId: string }>();
   const navigate = useNavigate();
 
-  const { loading, getEntityDetails, raw } = useApi(gameId);
+  const { loading: dbLoading, getEntityDetails } = useApi(gameId);
+  const [entityDetails, setEntityDetails] = useState<EntityDetails | null>(null);
+  const [dataLoading, setDataLoading] = useState(true);
 
-  const entityDetails = useMemo(() => getEntityDetails(entityId), [getEntityDetails, entityId]);
+  const [maps, setMaps] = useState<MapMetadata[]>([]);
+  const [events, setEvents] = useState<GameEvent[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [entityConjuntos, setEntityConjuntos] = useState<Conjunto[]>([]);
 
+  useEffect(() => {
+    if (dbLoading) return;
+
+    let isMounted = true;
+    setDataLoading(true);
+
+    Promise.all([
+      getEntityDetails(entityId),
+      mapRepository.getAll(),
+      eventRepository.getAll(),
+      itemRepository.getAll(),
+      entityRepository.getAll(),
+      conjuntoRepository.getAll()
+    ]).then(([details, allMaps, allEvents, allItems, allEntities, allConjuntos]) => {
+      if (!isMounted) return;
+
+      setEntityDetails(details);
+      setMaps(allMaps);
+      setEvents(allEvents);
+      setItems(allItems);
+      setEntities(allEntities);
+      setEntityConjuntos(allConjuntos.filter(c => c.entitys?.includes(entityId)));
+
+      setDataLoading(false);
+    }).catch(err => {
+      console.error("Error fetching entity details:", err);
+      if (isMounted) setDataLoading(false);
+    });
+
+    return () => { isMounted = false; };
+  }, [dbLoading, entityId, getEntityDetails]);
 
   const groupedReferencePoints = useMemo(() => {
     if (!entityDetails?.referencePoints) return new Map<string, ReferencePoints[]>();
@@ -53,40 +96,33 @@ export function EntityDetailsPage() {
   }, [entityDetails?.referencePoints]);
 
   const getMapMetadata = (mapId: string): MapMetadata | undefined => {
-    return raw?.maps?.find(m => m.id === mapId);
+    return maps.find(m => m.id === mapId);
   };
 
   const eventsMap = useMemo(() => {
     const map = new Map<string, string>();
-    if (raw?.events) raw.events.forEach((e) => map.set(e.id, e.name));
+    events.forEach((e) => map.set(e.id, e.name));
     return map;
-  }, [raw?.events]);
+  }, [events]);
 
   const itemsMap = useMemo(() => {
     const map = new Map<string, any>();
-    if (raw?.items) raw.items.forEach((i) => map.set(i.id, i));
+    items.forEach((i) => map.set(i.id, i));
     return map;
-  }, [raw?.items]);
+  }, [items]);
 
   const entitiesMap = useMemo(() => {
     const map = new Map<string, any>();
-    if (raw?.entities) raw.entities.forEach((e) => map.set(e.id, e));
+    entities.forEach((e) => map.set(e.id, e));
     return map;
-  }, [raw?.entities]);
-  
-  const entityConjuntos = useMemo(() => {
-    if (!raw?.conjuntos) return [];
-    return raw.conjuntos.filter(c => c.entitys?.includes(entityId));
-  }, [raw?.conjuntos, entityId]);
+  }, [entities]);
 
   const getSourceData = (type: GameDataTypes | undefined, id: string): any => {
     if (type === "entity") return entitiesMap.get(id);
     return itemsMap.get(id);
   };
 
-
-
-  if (loading) {
+  if (dbLoading || dataLoading) {
     return (
       <StyledContainer title="Carregando..." label="Obtendo dados do jogo">
         <Typography>Por favor, aguarde...</Typography>
@@ -383,7 +419,7 @@ export function EntityDetailsPage() {
                                     Qtde: {drop.quant}{drop.maxQuant ? `-${drop.maxQuant}` : ''}
                                 </Typography>
                                 <Typography variant="caption" color="primary.main" fontWeight={800}>
-                                    ({(drop.chance * 100).toFixed(0)}%)
+                                    ({((drop.chance || 0) * 100).toFixed(0)}%)
                                 </Typography>
                             </Stack>
                         </Box>

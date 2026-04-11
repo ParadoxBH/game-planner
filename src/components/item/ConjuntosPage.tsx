@@ -7,6 +7,7 @@ import {
   Stack,
   Divider,
   Chip,
+  CircularProgress,
 } from "@mui/material";
 import { AutoAwesomeMosaic, Layers, ArrowBack, CheckCircle, CheckCircleOutline } from "@mui/icons-material";
 import { ItemCard } from "./ItemCard";
@@ -17,6 +18,9 @@ import { Checkbox } from "@mui/material";
 import { StyledContainer } from "../common/StyledContainer";
 import type { Conjunto, Item, Entity } from "../../types/gameModels";
 import { EntityCard } from "../entity/EntityCard";
+import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
+import { itemRepository } from "../../repositories/ItemRepository";
+import { entityRepository } from "../../repositories/EntityRepository";
 
 export function ConjuntosPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -25,9 +29,40 @@ export function ConjuntosPage() {
   }>();
   const navigate = useNavigate();
 
-  const { loading, getConjuntosList, getItemsList, getEntityList } = useApi(gameId);
+  const { loading: dbLoading, getItemsList, getEntityList } = useApi(gameId);
+  
+  const [conjuntos, setConjuntos] = useState<Conjunto[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [collectedIds, setCollectedIds] = useState<Set<string>>(new Set());
+
+  // Load data
+  useEffect(() => {
+    if (dbLoading) return;
+
+    let isMounted = true;
+    setDataLoading(true);
+
+    Promise.all([
+      conjuntoRepository.getAll(),
+      itemRepository.getAll(),
+      entityRepository.getAll()
+    ]).then(([allConjuntos, allItems, allEntities]) => {
+      if (!isMounted) return;
+      setConjuntos(allConjuntos);
+      setItems(allItems);
+      setEntities(allEntities);
+      setDataLoading(false);
+    }).catch(err => {
+      console.error("Error fetching conjuntos data:", err);
+      if (isMounted) setDataLoading(false);
+    });
+
+    return () => { isMounted = false; };
+  }, [dbLoading]);
 
   // Load collected IDs from localStorage
   useEffect(() => {
@@ -56,42 +91,28 @@ export function ConjuntosPage() {
     });
   };
 
-  const allConjuntos = useMemo(() => {
-    return getConjuntosList() as Conjunto[];
-  }, [getConjuntosList]);
-
-  const allGameItems = useMemo(() => {
-    const results = getItemsList();
-    return Array.isArray(results) ? results : results.data;
-  }, [getItemsList]);
-
   const itemMap = useMemo(() => {
     const map = new Map<string, Item>();
-    allGameItems.forEach((item) => map.set(item.id, item));
+    items.forEach((item) => map.set(item.id, item));
     return map;
-  }, [allGameItems]);
-
-  const allGameEntities = useMemo(() => {
-    const results = getEntityList();
-    return Array.isArray(results) ? results : results.data;
-  }, [getEntityList]);
+  }, [items]);
 
   const entityMap = useMemo(() => {
     const map = new Map<string, Entity>();
-    allGameEntities.forEach((entity) => map.set(entity.id, entity));
+    entities.forEach((entity) => map.set(entity.id, entity));
     return map;
-  }, [allGameEntities]);
+  }, [entities]);
 
   const categories = useMemo(() => {
     const cats = new Set<string>();
-    allConjuntos.forEach((c) => {
+    conjuntos.forEach((c) => {
       if (c.category) cats.add(c.category);
     });
     return Array.from(cats).sort();
-  }, [allConjuntos]);
+  }, [conjuntos]);
 
   const filteredConjuntos = useMemo(() => {
-    let list = allConjuntos;
+    let list = [...conjuntos];
 
     if (urlCategory) {
       list = list.filter((c) => c.category === urlCategory);
@@ -107,9 +128,15 @@ export function ConjuntosPage() {
     }
 
     return list;
-  }, [allConjuntos, urlCategory, searchTerm]);
+  }, [conjuntos, urlCategory, searchTerm]);
 
-  if (loading) return null; // Preloader handled by Layout common patterns usually
+  if (dbLoading || dataLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+        <CircularProgress color="primary" />
+      </Box>
+    );
+  }
 
   const renderCategorySelection = () => (
     <Grid container spacing={3}>
@@ -143,7 +170,7 @@ export function ConjuntosPage() {
                 variant="body2"
                 sx={{ color: "text.secondary", mt: 1 }}
               >
-                {allConjuntos.filter((c) => c.category === cat).length}{" "}
+                {conjuntos.filter((c) => c.category === cat).length}{" "}
                 conjuntos
               </Typography>
             </CardActionArea>
@@ -208,6 +235,7 @@ export function ConjuntosPage() {
                   <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={itemId}>
                     <Box sx={{ position: 'relative', height: '100%' }}>
                       <ItemCard
+                        key={item.id}
                         item={item}
                         gameId={gameId || ""}
                         variant="compact"
@@ -264,6 +292,7 @@ export function ConjuntosPage() {
                   <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={entityId}>
                     <Box sx={{ position: 'relative', height: '100%' }}>
                       <EntityCard
+                        key={entity.id}
                         entity={entity}
                         variant="compact"
                         onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}

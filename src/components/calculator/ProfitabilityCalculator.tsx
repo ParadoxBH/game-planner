@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Typography,
   Stack,
@@ -13,10 +13,11 @@ import {
   TextField,
   InputAdornment,
   Tooltip,
+  CircularProgress,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import { useParams } from "react-router-dom";
-import { useGameData } from "../../hooks/useGameData";
+import { useApi } from "../../hooks/useApi";
 import { ItemChip } from "../common/ItemChip";
 import { StyledContainer } from "../common/StyledContainer";
 import { getCraftingTotals } from "../../utils/craftingTree";
@@ -27,6 +28,10 @@ import type {
   Recipe,
   Shop,
 } from "../../types/gameModels";
+import { recipeRepository } from "../../repositories/RecipeRepository";
+import { itemRepository } from "../../repositories/ItemRepository";
+import { entityRepository } from "../../repositories/EntityRepository";
+import { shopRepository } from "../../repositories/ShopRepository";
 
 type Order = "asc" | "desc";
 
@@ -44,30 +49,60 @@ interface CraftProfitData {
 
 export function ProfitabilityCalculator() {
   const { gameId } = useParams<{ gameId: string }>();
-  const { data: recipes } = useGameData<Recipe[]>(gameId || "", "recipes");
-  const { data: items } = useGameData<Item[]>(gameId || "", "items");
-  const { data: entities } = useGameData<Entity[]>(gameId || "", "entities");
-  const { data: shops } = useGameData<Shop[]>(gameId || "", "shops");
+  const { loading: dbLoading } = useApi(gameId);
+
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [shops, setShops] = useState<Shop[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [orderBy, setOrderBy] = useState<keyof CraftProfitData>("profit");
   const [order, setOrder] = useState<Order>("desc");
 
+  // Fetch data
+  useEffect(() => {
+    if (dbLoading) return;
+
+    let isMounted = true;
+    setDataLoading(true);
+
+    Promise.all([
+      recipeRepository.getAll(),
+      itemRepository.getAll(),
+      entityRepository.getAll(),
+      shopRepository.getAll()
+    ]).then(([allRecipes, allItems, allEntities, allShops]) => {
+      if (!isMounted) return;
+      setRecipes(allRecipes);
+      setItems(allItems);
+      setEntities(allEntities);
+      setShops(allShops);
+      setDataLoading(false);
+    }).catch(err => {
+      console.error("Error fetching profitability calculator data:", err);
+      if (isMounted) setDataLoading(false);
+    });
+
+    return () => { isMounted = false; };
+  }, [dbLoading]);
+
   const itemMap = useMemo(() => {
     const map = new Map<string, Item>();
-    items?.forEach((item) => map.set(item.id, item));
+    items.forEach((item) => map.set(item.id, item));
     return map;
   }, [items]);
 
   const entityMap = useMemo(() => {
     const map = new Map<string, Entity>();
-    entities?.forEach((entity) => map.set(entity.id, entity));
+    entities.forEach((entity) => map.set(entity.id, entity));
     return map;
   }, [entities]);
 
   const itemToShopIdMap = useMemo(() => {
     const map = new Map<string, string>();
-    shops?.forEach((shop) => {
+    shops.forEach((shop) => {
       shop.groups.forEach((group) => {
         group.items.forEach((shopItem) => {
           map.set(shopItem.id, shop.id);
@@ -79,7 +114,7 @@ export function ProfitabilityCalculator() {
 
   const recipeMapByProduct = useMemo(() => {
     const map = new Map<string, Recipe>();
-    recipes?.forEach((recipe) => {
+    recipes.forEach((recipe) => {
       if (recipe.itemId) {
         map.set(recipe.itemId, recipe);
       }
@@ -106,7 +141,7 @@ export function ProfitabilityCalculator() {
   }, [itemMap, entityMap, recipeMapByProduct, itemToShopIdMap]);
 
   const profitData = useMemo(() => {
-    if (!recipes || !itemMap) return [];
+    if (dataLoading || !itemMap.size) return [];
 
     const data: CraftProfitData[] = [];
     const processedItems = new Set<string>();
@@ -143,7 +178,7 @@ export function ProfitabilityCalculator() {
     });
 
     return data;
-  }, [recipes, itemMap, calculateBaseCostAndSteps]);
+  }, [recipes, itemMap, calculateBaseCostAndSteps, dataLoading]);
 
   const filteredAndSortedData = useMemo(() => {
     let result = profitData.filter((item) =>
@@ -175,6 +210,14 @@ export function ProfitabilityCalculator() {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+
+  if (dbLoading || dataLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+        <CircularProgress color="primary" />
+      </Box>
+    );
+  }
 
   return (
     <StyledContainer
@@ -255,6 +298,7 @@ export function ProfitabilityCalculator() {
                   <TableCell>
                     <Stack direction="row" spacing={1} alignItems="center">
                       <ItemChip
+                        key={row.id}
                         id={row.id}
                         icon={row.icon}
                         amount={0}
@@ -281,13 +325,16 @@ export function ProfitabilityCalculator() {
                             key={np.id}
                             title={`${npItem?.name || np.id} (x${amount})`}
                           >
-                            <ItemChip
-                              id={np.id}
-                              icon={npItem?.icon}
-                              amount={amount}
-                              size="small"
-                              disableLink
-                            />
+                            <Box>
+                              <ItemChip
+                                key={np.id}
+                                id={np.id}
+                                icon={npItem?.icon}
+                                amount={amount}
+                                size="small"
+                                disableLink
+                              />
+                            </Box>
                           </Tooltip>
                         );
                       })}

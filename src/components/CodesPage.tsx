@@ -30,13 +30,16 @@ import { StyledContainer } from "./common/StyledContainer";
 import { ItemChip } from "./common/ItemChip";
 import { redemptionService } from "../services/redemptionService";
 import type { Item, RedemptionCode } from "../types/gameModels";
+import { codeRepository } from "../repositories/CodeRepository";
+import { itemRepository } from "../repositories/ItemRepository";
 
 export function CodesPage() {
   const { gameId } = useParams<{ gameId: string }>();
-  const { loading: codesLoading, error: codesError, getCodesList, getItemsList } = useApi(gameId);
+  const { loading: dbLoading, error: codesError } = useApi(gameId);
   
-  const codes = useMemo<RedemptionCode[]>(() => getCodesList(), [getCodesList]);
-  const items = useMemo<Item[]>(() => getItemsList(), [getItemsList]);
+  const [codes, setCodes] = useState<RedemptionCode[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
   
   const [copySuccess, setCopySuccess] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -49,6 +52,28 @@ export function CodesPage() {
   const [collectedCodes, setCollectedCodes] = useState<string[]>([]);
 
   useEffect(() => {
+    if (dbLoading) return;
+
+    let isMounted = true;
+    setDataLoading(true);
+
+    Promise.all([
+      codeRepository.getAll(),
+      itemRepository.getAll()
+    ]).then(([allCodes, allItems]) => {
+      if (!isMounted) return;
+      setCodes(allCodes);
+      setItems(allItems);
+      setDataLoading(false);
+    }).catch(err => {
+      console.error("Error fetching codes data:", err);
+      if (isMounted) setDataLoading(false);
+    });
+
+    return () => { isMounted = false; };
+  }, [dbLoading]);
+
+  useEffect(() => {
     if (gameId) {
       setCollectedCodes(redemptionService.getCollectedCodes(gameId));
     }
@@ -56,9 +81,7 @@ export function CodesPage() {
 
   const itemsMap = useMemo(() => {
     const map = new Map<string, Item>();
-    if (items) {
-      items.forEach(item => map.set(item.id, item));
-    }
+    items.forEach(item => map.set(item.id, item));
     return map;
   }, [items]);
 
@@ -106,7 +129,7 @@ export function CodesPage() {
     }
   };
 
-  if (codesLoading) {
+  if (dbLoading || dataLoading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
         <CircularProgress color="primary" />

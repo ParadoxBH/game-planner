@@ -1,11 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Typography,
   Paper,
   Grid,
   TextField,
-  List,
-  ListItem,
   Divider,
   Stack,
   IconButton,
@@ -21,9 +19,10 @@ import {
   Alert,
   AlertTitle,
   Card,
+  CircularProgress,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { useGameData } from "../../hooks/useGameData";
+import { useApi } from "../../hooks/useApi";
 import { ItemChip } from "../common/ItemChip";
 import { HelpOutline, Add, Delete, ClearAll } from "@mui/icons-material";
 import { StyledContainer } from "../common/StyledContainer";
@@ -35,6 +34,9 @@ import type {
   Entity,
   Recipe,
 } from "../../types/gameModels";
+import { recipeRepository } from "../../repositories/RecipeRepository";
+import { itemRepository } from "../../repositories/ItemRepository";
+import { entityRepository } from "../../repositories/EntityRepository";
 
 interface SelectedItem {
   id: string;
@@ -44,9 +46,12 @@ interface SelectedItem {
 
 export function CraftingCalculator() {
   const { gameId } = useParams<{ gameId: string }>();
-  const { data: recipes } = useGameData<Recipe[]>(gameId || "", "recipes");
-  const { data: items } = useGameData<Item[]>(gameId || "", "items");
-  const { data: entities } = useGameData<Entity[]>(gameId || "", "entities");
+  const { loading: dbLoading } = useApi(gameId);
+
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
 
   const [selectedList, setSelectedList] = useState<SelectedItem[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -57,21 +62,46 @@ export function CraftingCalculator() {
     string | null
   >(null);
 
+  // Fetch data
+  useEffect(() => {
+    if (dbLoading) return;
+
+    let isMounted = true;
+    setDataLoading(true);
+
+    Promise.all([
+      recipeRepository.getAll(),
+      itemRepository.getAll(),
+      entityRepository.getAll()
+    ]).then(([allRecipes, allItems, allEntities]) => {
+      if (!isMounted) return;
+      setRecipes(allRecipes);
+      setItems(allItems);
+      setEntities(allEntities);
+      setDataLoading(false);
+    }).catch(err => {
+      console.error("Error fetching calculator data:", err);
+      if (isMounted) setDataLoading(false);
+    });
+
+    return () => { isMounted = false; };
+  }, [dbLoading]);
+
   const itemMap = useMemo(() => {
     const map = new Map<string, Item>();
-    items?.forEach((item) => map.set(item.id, item));
+    items.forEach((item) => map.set(item.id, item));
     return map;
   }, [items]);
 
   const entityMap = useMemo(() => {
     const map = new Map<string, Entity>();
-    entities?.forEach((entity) => map.set(entity.id, entity));
+    entities.forEach((entity) => map.set(entity.id, entity));
     return map;
   }, [entities]);
 
   const recipeMap = useMemo(() => {
     const map = new Map<string, Recipe>();
-    recipes?.forEach((recipe) => {
+    recipes.forEach((recipe) => {
       // Index by legacy itemId or products
       if (recipe.itemId) {
         map.set(recipe.itemId, recipe);
@@ -82,8 +112,6 @@ export function CraftingCalculator() {
     });
     return map;
   }, [recipes]);
-
-  // Data loading moved to GameEntitySelectorDialog
 
   const { totalResourcesMap, unresolvedCategories } = useMemo(() => {
     if (selectedList.length === 0 || !recipeMap)
@@ -214,6 +242,14 @@ export function CraftingCalculator() {
       ),
     );
   };
+
+  if (dbLoading || dataLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+        <CircularProgress color="primary" />
+      </Box>
+    );
+  }
 
   return (
     <StyledContainer
@@ -497,6 +533,7 @@ export function CraftingCalculator() {
                             alignItems="center"
                           >
                             <ItemChip
+                              key={res.id}
                               id={res.id}
                               icon={
                                 res.isCategory
@@ -544,6 +581,7 @@ export function CraftingCalculator() {
                             >
                               {res.choiceItem && (
                                 <ItemChip
+                                  key={res.choiceItem.id}
                                   id={res.choiceItem.id}
                                   icon={res.choiceItem.icon}
                                   amount={0}
