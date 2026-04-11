@@ -1,14 +1,14 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { loadGameData, loadGamesList, loadGameMaps } from "../services/dataLoader";
-import { ApiService } from "../services/apiService";
-import type { GameDataPayload, NormalizedRecipe, SearchOptions, PaginatedResponse } from "../types/apiModels";
+import { apiService } from "../services/apiService";
+import { dbService } from "../services/dbService";
+import { codeRepository } from "../repositories/CodeRepository";
+import type { NormalizedRecipe, SearchOptions, PaginatedResponse } from "../types/apiModels";
 import type { Item, Entity } from "../types/gameModels";
 
 import { useEventFilter } from "../context/EventFilterContext";
 
 export function useApi(gameId: string | undefined) {
   const { activeEventIds } = useEventFilter();
-  const [data, setData] = useState<GameDataPayload | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,39 +22,16 @@ export function useApi(gameId: string | undefined) {
     setLoading(true);
     setError(null);
 
-    const datasets = ["items", "recipes", "entity", "shops", "events", "referencePoints", "codes", "conjuntos"];
-
-    Promise.all([
-      ...(datasets.map((ds) => 
-        loadGameData<any>(gameId, ds).catch((err) => {
-          console.warn(`Dataset ${ds} not found for ${gameId}, using empty list.`, err);
-          return [];
-        })
-      ) as Promise<any>[]),
-      loadGamesList(),
-      loadGameMaps(gameId)
-    ])
-      .then((results) => {
-        const [items, recipes, entities, shops, events, referencePoints, codes, conjuntos, games, maps = []] = results as any[];
+    // Reconstruct database on game change
+    dbService.reconstructDatabase(gameId)
+      .then(() => {
         if (isMounted) {
-          const gameInfo = games.find((g: any) => g.id === gameId);
-          setData({ 
-            items, 
-            recipes, 
-            entities, 
-            shops, 
-            events, 
-            referencePoints, 
-            codes, 
-            conjuntos,
-            gameInfo,
-            maps 
-          });
           setLoading(false);
         }
       })
       .catch((err) => {
         if (isMounted) {
+          console.error(`[useApi] Error during DB reconstruction:`, err);
           setError(err.message || "Failed to load game data");
           setLoading(false);
         }
@@ -65,62 +42,54 @@ export function useApi(gameId: string | undefined) {
     };
   }, [gameId]);
 
-  const apiService = useMemo(() => {
-    if (!data) return null;
-    return new ApiService(data);
-  }, [data]);
+  const getItemDetails = useCallback(async (itemId: string) => {
+    return apiService.getItemDetails(itemId);
+  }, []);
 
-  const getItemDetails = useCallback((itemId: string) => {
-    return apiService ? apiService.getItemDetails(itemId) : null;
-  }, [apiService]);
+  const getEntityDetails = useCallback(async (entityId: string) => {
+    return apiService.getEntityDetails(entityId);
+  }, []);
 
-  const getEntityDetails = useCallback((entityId: string) => {
-    return apiService ? apiService.getEntityDetails(entityId) : null;
-  }, [apiService]);
-
-  const getItemsList = useCallback((options?: SearchOptions | ((item: Item) => boolean)): Item[] | PaginatedResponse<Item> => {
-    if (!apiService) return [];
+  const getItemsList = useCallback(async (options?: SearchOptions | ((item: Item) => boolean)): Promise<Item[] | PaginatedResponse<Item>> => {
     if (typeof options === "function") {
       return apiService.getItems(options);
     }
     return apiService.getItems({ ...options, activeEventIds });
-  }, [apiService, activeEventIds]);
+  }, [activeEventIds]);
 
-  const getEntityList = useCallback((options?: SearchOptions | ((entity: Entity) => boolean)): Entity[] | PaginatedResponse<Entity> => {
-    if (!apiService) return [];
+  const getEntityList = useCallback(async (options?: SearchOptions | ((entity: Entity) => boolean)): Promise<Entity[] | PaginatedResponse<Entity>> => {
     if (typeof options === "function") {
       return apiService.getEntities(options);
     }
     return apiService.getEntities({ ...options, activeEventIds });
-  }, [apiService, activeEventIds]);
+  }, [activeEventIds]);
 
-  const getShopDetails = useCallback((shopId: string) => {
-    return apiService ? apiService.getShopDetails(shopId) : null;
-  }, [apiService]);
+  const getShopDetails = useCallback(async (shopId: string) => {
+    return apiService.getShopDetails(shopId);
+  }, []);
 
-  const getRecipeDetails = useCallback((recipeId: string) => {
-    return apiService ? apiService.getRecipeDetails(recipeId) : null;
-  }, [apiService]);
+  const getRecipeDetails = useCallback(async (recipeId: string) => {
+    return apiService.getRecipeDetails(recipeId);
+  }, []);
 
-  const getRecipesList = useCallback((options?: SearchOptions | ((recipe: NormalizedRecipe) => boolean)): NormalizedRecipe[] | PaginatedResponse<NormalizedRecipe> => {
-    if (!apiService) return [];
+  const getRecipesList = useCallback(async (options?: SearchOptions | ((recipe: NormalizedRecipe) => boolean)): Promise<NormalizedRecipe[] | PaginatedResponse<NormalizedRecipe>> => {
     if (typeof options === "function") {
       return apiService.getRecipes(options);
     }
     return apiService.getRecipes({ ...options, activeEventIds });
-  }, [apiService, activeEventIds]);
+  }, [activeEventIds]);
 
-  const getCodesList = useCallback(() => {
-    return data?.codes || [];
-  }, [data]);
+  const getCodesList = useCallback(async () => {
+    return codeRepository.getAll();
+  }, []);
 
-  const getEventDetails = useCallback((eventId: string) => {
-    return apiService ? apiService.getEventDetails(eventId) : null;
-  }, [apiService]);
+  const getEventDetails = useCallback(async (eventId: string) => {
+    return apiService.getEventDetails(eventId);
+  }, []);
 
-  const getConjuntosList = useCallback((options?: SearchOptions) => {
-    return apiService ? apiService.getConjuntos({ ...options, activeEventIds }) : [];
-  }, [apiService, activeEventIds]);
+  const getConjuntosList = useCallback(async (options?: SearchOptions) => {
+    return apiService.getConjuntos({ ...options, activeEventIds });
+  }, [activeEventIds]);
 
   return {
     loading,
@@ -135,7 +104,5 @@ export function useApi(gameId: string | undefined) {
     getRecipesList,
     getCodesList,
     getConjuntosList,
-    // Original data for fallback if needed
-    raw: data,
   };
 }

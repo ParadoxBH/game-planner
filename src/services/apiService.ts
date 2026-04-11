@@ -2,7 +2,6 @@ import type {
   Item,
   Recipe,
   Entity,
-  ReferencePoints,
   Conjunto,
 } from "../types/gameModels";
 import type {
@@ -12,7 +11,6 @@ import type {
   RecipeDetails,
   ShopDetails,
   EventDetails,
-  GameDataPayload,
   SearchOptions,
   PaginatedResponse,
 } from "../types/apiModels";
@@ -21,118 +19,60 @@ import type { TreeOptions } from "../utils/craftingTree";
 import { isPointInPolygon } from "../utils/spatial";
 import { parseWKTPoint, parseWKTPolygon } from "../utils/wkt";
 
+import { itemRepository } from "../repositories/ItemRepository";
+import { recipeRepository } from "../repositories/RecipeRepository";
+import { entityRepository } from "../repositories/EntityRepository";
+import { shopRepository } from "../repositories/ShopRepository";
+import { eventRepository } from "../repositories/EventRepository";
+import { conjuntoRepository } from "../repositories/ConjuntoRepository";
+import { referencePointRepository } from "../repositories/ReferencePointRepository";
+
 export class ApiService {
-  private data: GameDataPayload;
-  private cachedNormalizedRecipes: NormalizedRecipe[];
+  /**
+   * Data access via Repositories. Methods return Promises to mirror a real Backend API.
+   */
 
-  constructor(data: GameDataPayload) {
-    this.data = data;
-    this.cachedNormalizedRecipes = data.recipes.map(r => this.normalizeRecipe(r));
-  }
-
-  private applyAdvancedSearch<T>(list: T[], options?: SearchOptions): PaginatedResponse<T> | T[] {
-    if (!options) return list;
-
-    let filteredList = [...list];
-
-    if (options.filters) {
-      const filters = options.filters;
-      const processedFilters = Object.entries(filters)
-        .filter(([_, value]) => value !== undefined)
-        .map(([key, value]) => {
-          const values = Array.isArray(value) ? value : [value];
-          const rules = values.map(v => {
-            const str = String(v);
-            const negate = str.startsWith("!");
-            return { negate, target: negate ? str.substring(1) : str };
-          });
-          return { key, rules };
-        });
-
-      if (processedFilters.length > 0) {
-        filteredList = filteredList.filter((item: any) => {
-          return processedFilters.every(({ key, rules }) => {
-            const itemValue = item[key];
-            const isArray = Array.isArray(itemValue);
-            
-            return rules.every(({ negate, target }) => {
-              if (isArray) {
-                const matches = itemValue.some(v => String(v) === target);
-                return negate ? !matches : matches;
-              }
-              const matches = String(itemValue) === target;
-              return negate ? !matches : matches;
-            });
-          });
-        });
-      }
-    }
-
-    // Global Event Filter
-    if (options.activeEventIds !== undefined) {
-      const activeEventIds = options.activeEventIds;
-      filteredList = filteredList.filter((item: any) => {
-        // Se o item não tem eventos associados, sempre exibe
-        if (!item.event || !Array.isArray(item.event) || item.event.length === 0) {
-          return true;
-        }
-        // Se o item tem eventos, só exibe se pelo menos um estiver ativo
-        return item.event.some((id: string) => activeEventIds.includes(id));
-      });
-    }
-
-    if (!options.pagination) {
-      return filteredList;
-    }
-
-    const { page = 1, perPage = 20 } = options.pagination;
-    const total = filteredList.length;
-    const lastPage = Math.ceil(total / perPage);
-    const offset = (page - 1) * perPage;
-    const paginatedData = filteredList.slice(offset, offset + perPage);
-
-    return {
-      data: paginatedData,
-      total,
-      page,
-      perPage,
-      lastPage,
-    };
-  }
-
-  public getItems(options?: SearchOptions | ((item: Item) => boolean)): Item[] | PaginatedResponse<Item> {
+  public async getItems(options?: SearchOptions | ((item: Item) => boolean)): Promise<Item[] | PaginatedResponse<Item>> {
     if (typeof options === "function") {
-      return this.data.items.filter(options);
+      const all = await itemRepository.getAll();
+      return all.filter(options);
     }
-    return this.applyAdvancedSearch(this.data.items, options) as Item[] | PaginatedResponse<Item>;
+    return itemRepository.search(options);
   }
 
-  public getEntities(options?: SearchOptions | ((entity: Entity) => boolean)): Entity[] | PaginatedResponse<Entity> {
+  public async getEntities(options?: SearchOptions | ((entity: Entity) => boolean)): Promise<Entity[] | PaginatedResponse<Entity>> {
     if (typeof options === "function") {
-      return this.data.entities.filter(options);
+      const all = await entityRepository.getAll();
+      return all.filter(options);
     }
-    return this.applyAdvancedSearch(this.data.entities, options) as Entity[] | PaginatedResponse<Entity>;
+    return entityRepository.search(options);
   }
 
-  public getRecipes(options?: SearchOptions | ((recipe: NormalizedRecipe) => boolean)): NormalizedRecipe[] | PaginatedResponse<NormalizedRecipe> {
-    const normalized = this.cachedNormalizedRecipes;
-    if (typeof options === "function") {
-      return normalized.filter(options);
+  public async getRecipes(options?: SearchOptions | ((recipe: NormalizedRecipe) => boolean)): Promise<NormalizedRecipe[] | PaginatedResponse<NormalizedRecipe>> {
+    // Note: We might want a specialized Recipe repository or service if normalization is heavy
+    const results = await recipeRepository.search(options);
+    
+    // Normalize if it's a list
+    if (Array.isArray(results)) {
+      return Promise.all(results.map(r => this.normalizeRecipe(r)));
+    } else {
+      return {
+        ...results,
+        data: await Promise.all(results.data.map(r => this.normalizeRecipe(r)))
+      };
     }
-    return this.applyAdvancedSearch(normalized, options) as NormalizedRecipe[] | PaginatedResponse<NormalizedRecipe>;
   }
 
-  public getConjuntos(options?: SearchOptions): Conjunto[] | PaginatedResponse<Conjunto> {
-    return this.applyAdvancedSearch(this.data.conjuntos || [], options) as Conjunto[] | PaginatedResponse<Conjunto>;
+  public async getConjuntos(options?: SearchOptions): Promise<Conjunto[] | PaginatedResponse<Conjunto>> {
+    return conjuntoRepository.search(options);
   }
 
-  public getItemDetails(itemId: string): ItemDetails | null {
-    const item = this.data.items.find((i) => i.id === itemId);
+  public async getItemDetails(itemId: string): Promise<ItemDetails | null> {
+    const item = await itemRepository.getById(itemId);
     if (!item) return null;
 
-    const normalizedRecipes = this.data.recipes.map((r) =>
-      this.normalizeRecipe(r)
-    );
+    const allRecipes = await recipeRepository.getAll();
+    const normalizedRecipes = await Promise.all(allRecipes.map((r) => this.normalizeRecipe(r)));
 
     const productionRecipes = normalizedRecipes.filter((r) =>
       r.normalizedProducts.some((p) => p.id === itemId)
@@ -142,12 +82,14 @@ export class ApiService {
       r.normalizedIngredients.some((ing) => ing.id === itemId)
     );
 
-    const dropsFrom = this.data.entities.filter((e) =>
+    const dropsFrom = await entityRepository.getAll(); // Better to filter in DB if we had Drops table
+    const entitiesWithDrops = dropsFrom.filter((e) =>
       e.drops?.some((d) => d.itemId === itemId)
     );
 
+    const shops = await shopRepository.getAll();
     const soldIn: ItemDetails["soldIn"] = [];
-    this.data.shops.forEach((s) => {
+    shops.forEach((s) => {
       s.groups.forEach((g) => {
         g.items.forEach((i) => {
           if (i.id === itemId) {
@@ -169,96 +111,96 @@ export class ApiService {
       item,
       productionRecipes,
       usagesAsIngredient,
-      dropsFrom,
+      dropsFrom: entitiesWithDrops,
       soldIn,
     };
   }
 
-  public getEntityDetails(entityId: string): EntityDetails | null {
-    const entity = this.data.entities.find((e) => e.id === entityId);
+  public async getEntityDetails(entityId: string): Promise<EntityDetails | null> {
+    const entity = await entityRepository.getById(entityId);
     if (!entity) return null;
 
     // Hierarchy
-    const parent = entity.parentId ? this.data.entities.find(e => e.id === entity.parentId) : undefined;
-    const children = this.data.entities.filter(e => e.parentId === entityId);
+    const parent = entity.parentId ? await entityRepository.getById(entity.parentId) : undefined;
+    const children = await entityRepository.getByParentId(entityId);
 
-    // Potential Spawns (Explicit Rules)
-    const explicitSpawns = this.data.referencePoints
+    // Potential Spawns
+    const referencePoints = await referencePointRepository.getAll();
+    const explicitSpawns = referencePoints
       .filter(s => s.locationId === entityId || (s.type === "rule" && s.locationId === entityId))
-      .map(s => ({
-        entity: this.data.entities.find(e => e.id === s.entityId) || this.data.items.find(i => i.id === s.entityId),
+      .map(async s => ({
+        entity: (await entityRepository.getById(s.entityId)) || (await itemRepository.getById(s.entityId)),
         chance: s.chance,
         quantity: s.quantity,
         conditions: s.conditions
-      }))
-      .filter(s => s.entity) as EntityDetails["potentialSpawns"];
+      }));
 
-    // Spatial Spawns (Point-in-Polygon Detection)
-    let spatialSpawns: EntityDetails["potentialSpawns"] = [];
+    // Spatial Spawns
+    let spatialSpawnsPromises: Promise<any>[] = [];
     if (entity.geom?.type === "Polygon") {
       const polygonCoords = parseWKTPolygon(entity.geom.coordinates);
       if (polygonCoords.length > 0) {
-        const pointsInside = this.data.referencePoints.filter(s => {
+        const pointsInside = referencePoints.filter(s => {
           if (!s.geom || s.geom.type !== "Point") return false;
           const pointCoords = parseWKTPoint(s.geom.coordinates);
-          // WKT is [X, Y]
           return isPointInPolygon([pointCoords[0], pointCoords[1]], polygonCoords);
         });
 
-        spatialSpawns = pointsInside.map(s => ({
-          entity: this.data.entities.find(e => e.id === s.entityId) || this.data.items.find(i => i.id === s.entityId),
+        spatialSpawnsPromises = pointsInside.map(async s => ({
+          entity: (await entityRepository.getById(s.entityId)) || (await itemRepository.getById(s.entityId)),
           chance: s.chance,
           quantity: s.quantity,
           conditions: s.conditions
-        })).filter(s => s.entity) as EntityDetails["potentialSpawns"];
+        }));
       }
     }
 
-    // Merge potential spawns
-    const potentialSpawns = [...(explicitSpawns || []), ...(spatialSpawns || [])];
+    const potentialSpawnsRaw = await Promise.all([...explicitSpawns, ...spatialSpawnsPromises]);
+    const potentialSpawns = potentialSpawnsRaw.filter(s => s.entity) as EntityDetails["potentialSpawns"];
+    
     // Remove duplicates
-    const uniquePotentialSpawns = potentialSpawns.filter((v, i, a) => a.findIndex(t => t.entity.id === v.entity.id) === i);
+    const uniquePotentialSpawns = potentialSpawns?.filter((v, i, a) => a.findIndex(t => t.entity.id === v.entity.id) === i);
 
-    const drops = (entity.drops || []).map((d) => ({
-      item: this.data.items.find((i) => i.id === d.itemId),
+    const drops = await Promise.all((entity.drops || []).map(async (d) => ({
+      item: await itemRepository.getById(d.itemId),
       chance: d.chance,
       quant: d.quant,
       maxQuant: d.maxQuant,
-    }));
+    })));
 
-    const recipes = this.data.recipes
-      .map((r) => this.normalizeRecipe(r))
-      .filter((r) => {
-        return r.normalizedProducts.some((p) => {
-          if (p.id === entityId) return true;
-          if (p.type === "category") {
-            const categories = Array.isArray(entity.category) ? entity.category : [entity.category];
-            return categories.includes(p.id);
-          }
-          return false;
-        });
+    const allRecipes = await recipeRepository.getAll();
+    const normalizedRecipes = await Promise.all(allRecipes.map(r => this.normalizeRecipe(r)));
+    const recipes = normalizedRecipes.filter((r) => {
+      return r.normalizedProducts.some((p) => {
+        if (p.id === entityId) return true;
+        if (p.type === "category") {
+          const categories = Array.isArray(entity.category) ? entity.category : [entity.category];
+          return categories.includes(p.id);
+        }
+        return false;
       });
+    });
 
-    const referencePoints = this.data.referencePoints.filter((s) => s.entityId?.toLowerCase() === entityId.toLowerCase());
-    const shop = this.data.shops.find((s) => s.npcId?.toLowerCase() === entityId.toLowerCase());
+    const entityReferencePoints = await referencePointRepository.getByEntityId(entityId);
+    const shop = await shopRepository.getByNpcId(entityId);
 
     return {
       entity,
       parent,
       children,
       potentialSpawns: uniquePotentialSpawns,
-      drops,
+      drops: drops as any,
       recipes,
-      referencePoints,
+      referencePoints: entityReferencePoints,
       shop,
     };
   }
 
-  public getShopDetails(shopId: string): ShopDetails | null {
-    const shop = this.data.shops.find((s) => s.id === shopId);
+  public async getShopDetails(shopId: string): Promise<ShopDetails | null> {
+    const shop = await shopRepository.getById(shopId);
     if (!shop) return null;
 
-    const npc = this.data.entities.find((e) => e.id === shop.npcId);
+    const npc = shop.npcId ? await entityRepository.getById(shop.npcId) : undefined;
 
     return {
       shop,
@@ -266,15 +208,16 @@ export class ApiService {
     };
   }
 
-  public getRecipeDetails(recipeId: string): RecipeDetails | null {
-    const rawRecipe = this.data.recipes.find((r) => r.id === recipeId);
+  public async getRecipeDetails(recipeId: string): Promise<RecipeDetails | null> {
+    const rawRecipe = await recipeRepository.getById(recipeId);
     if (!rawRecipe) return null;
 
-    const recipe = this.normalizeRecipe(rawRecipe);
+    const recipe = await this.normalizeRecipe(rawRecipe);
 
-    // Setup options for cost calculation
+    // Setup options for cost calculation (might be expensive if not cached)
+    const shops = await shopRepository.getAll();
     const itemToShopIdMap = new Map<string, string>();
-    this.data.shops.forEach((shop) => {
+    shops.forEach((shop) => {
       shop.groups.forEach((group) => {
         group.items.forEach((shopItem) => {
           itemToShopIdMap.set(shopItem.id, shop.id);
@@ -282,16 +225,20 @@ export class ApiService {
       });
     });
 
+    const allRecipes = await recipeRepository.getAll();
     const recipeMapByProduct = new Map<string, Recipe>();
-    this.data.recipes.forEach((r) => {
+    allRecipes.forEach((r) => {
       if (r.itemId) recipeMapByProduct.set(r.itemId, r);
       r.products?.forEach((p) => recipeMapByProduct.set(p.id, r));
     });
 
+    const allItems = await itemRepository.getAll();
     const itemMap = new Map<string, Item>();
-    this.data.items.forEach((i) => itemMap.set(i.id, i));
+    allItems.forEach((i) => itemMap.set(i.id, i));
+    
+    const allEntities = await entityRepository.getAll();
     const entityMap = new Map<string, Entity>();
-    this.data.entities.forEach((e) => entityMap.set(e.id, e));
+    allEntities.forEach((e) => entityMap.set(e.id, e));
 
     const options: TreeOptions = {
       itemMap,
@@ -300,13 +247,13 @@ export class ApiService {
       shopMap: itemToShopIdMap,
     };
 
-    const ingredients = recipe.normalizedIngredients.map((ing) => {
+    const ingredients = await Promise.all(recipe.normalizedIngredients.map(async (ing) => {
       const isCategory = ing.type === "category";
       let dataOptions: (Item | Entity)[] | undefined = undefined;
       let bestOptionId: string | undefined = undefined;
 
       if (isCategory) {
-        const itemOptions = this.data.items
+        const itemOptions = allItems
           .filter((item) => {
             if (Array.isArray(item.category)) {
               return item.category.includes(ing.id);
@@ -315,7 +262,7 @@ export class ApiService {
           })
           .map((i) => ({ ...i, type: "item" as const }));
 
-        const entityOptions = this.data.entities
+        const entityOptions = allEntities
           .filter((e) => {
             if (Array.isArray(e.category)) {
               return e.category.includes(ing.id);
@@ -326,19 +273,15 @@ export class ApiService {
 
         dataOptions = [...itemOptions, ...entityOptions];
 
-        // Find best option using calculator logic
         if (dataOptions.length > 0) {
           let minCost = Infinity;
           dataOptions.forEach((opt) => {
             const totals = getCraftingTotals(opt.id, 1, "item", options);
-            console.log(`[ApiService] Cost for ${opt.id}: ${totals.totalCost}`);
-            // If an item has a price/cost, it might be better to show it than items with 0 (unknown)
             if (totals.totalCost < minCost) {
               minCost = totals.totalCost;
               bestOptionId = opt.id;
             }
           });
-          console.log(`[ApiService] Best option for ${ing.id}: ${bestOptionId} (Min cost: ${minCost})`);
         }
       }
 
@@ -347,19 +290,19 @@ export class ApiService {
         data: isCategory
           ? undefined
           : ing.type === "entity"
-          ? this.data.entities.find((e) => e.id === ing.id)
-          : this.data.items.find((i) => i.id === ing.id),
+          ? await entityRepository.getById(ing.id)
+          : await itemRepository.getById(ing.id),
         dataOptions,
         bestOptionId,
       };
-    });
+    }));
 
-    const products = recipe.normalizedProducts.map((p) => {
+    const products = await Promise.all(recipe.normalizedProducts.map(async (p) => {
       const isCategory = p.type === "category";
       let dataOptions: (Item | Entity)[] | undefined = undefined;
 
       if (isCategory) {
-        const itemOptions = this.data.items
+        const itemOptions = allItems
           .filter((item) => {
             if (Array.isArray(item.category)) {
               return item.category.includes(p.id);
@@ -368,7 +311,7 @@ export class ApiService {
           })
           .map((i) => ({ ...i, type: "item" as const }));
 
-        const entityOptions = this.data.entities
+        const entityOptions = allEntities
           .filter((e) => {
             if (Array.isArray(e.category)) {
               return e.category.includes(p.id);
@@ -385,51 +328,31 @@ export class ApiService {
         data: isCategory
           ? undefined
           : p.type === "entity"
-          ? this.data.entities.find((e) => e.id === p.id)
-          : this.data.items.find((i) => i.id === p.id),
+          ? await entityRepository.getById(p.id)
+          : await itemRepository.getById(p.id),
         dataOptions,
       };
-    });
+    }));
 
     return {
       recipe,
-      ingredients,
-      products,
+      ingredients: ingredients as any,
+      products: products as any,
     };
   }
 
-  public getEventDetails(eventId: string): EventDetails | null {
-    const event = this.data.events.find((e) => e.id === eventId);
+  public async getEventDetails(eventId: string): Promise<EventDetails | null> {
+    const event = await eventRepository.getById(eventId);
     if (!event) return null;
 
-    // Items belonging to this event
-    const items = this.data.items.filter((item) => {
-      return item.event?.includes(eventId);
-    });
+    const items = await itemRepository.search({ filters: { event: eventId } }) as Item[];
+    
+    // For recipes, they have complex logic, but we can search by event index
+    const recipesRaw = await recipeRepository.search({ filters: { event: eventId } }) as Recipe[];
+    const recipes = await Promise.all(recipesRaw.map(r => this.normalizeRecipe(r)));
 
-    // Recipes unlocked by this event, using stations belonging to this event, or directly marked as event
-    const normalizedRecipes = this.cachedNormalizedRecipes;
-    const recipes = normalizedRecipes.filter((r) => {
-      const isDirectEvent = r.event?.includes(eventId);
-      const isUnlockedByEvent = r.unlock?.some(
-        (u) => u.type === "event" && u.value === eventId
-      );
-      const isProducedInEventStation = r.normalizedStations.some((s) => {
-        const station = this.data.entities.find((e) => e.id === s);
-        return station?.event?.includes(eventId);
-      });
-      return isDirectEvent || isUnlockedByEvent || isProducedInEventStation;
-    });
-
-    // Entities belonging to this event
-    const entities = this.data.entities.filter((entity) => {
-      return entity.event?.includes(eventId);
-    });
-
-    // Conjuntos belonging to this event
-    const conjuntos = (this.data.conjuntos || []).filter((c) => {
-      return c.event?.includes(eventId);
-    });
+    const entities = await entityRepository.search({ filters: { event: eventId } }) as Entity[];
+    const conjuntos = await conjuntoRepository.search({ filters: { event: eventId } }) as Conjunto[];
 
     return {
       event,
@@ -440,7 +363,7 @@ export class ApiService {
     };
   }
 
-  public normalizeRecipe(recipe: Recipe): NormalizedRecipe {
+  public async normalizeRecipe(recipe: Recipe): Promise<NormalizedRecipe> {
     const stations = recipe.stations || recipe.ProducedIn || [];
 
     // Normalize ingredients
@@ -448,12 +371,15 @@ export class ApiService {
     if (recipe.ingredients) {
       ingredients = recipe.ingredients.map((i) => ({ ...i }));
     } else if (recipe.Ingredients) {
-      ingredients = recipe.Ingredients.map((i: any) => ({
-        id: i.ClassName || i.id,
-        name: i.Name || i.name,
-        amount: i.Amount || i.amount || 1,
-        event: i.event,
-        type: i.type || (this.data.entities.some(e => e.id === (i.ClassName || i.id)) ? "entity" : "item")
+      ingredients = await Promise.all(recipe.Ingredients.map(async (i: any) => {
+        const id = i.ClassName || i.id;
+        return {
+          id,
+          name: i.Name || i.name,
+          amount: i.Amount || i.amount || 1,
+          event: i.event,
+          type: i.type || ((await entityRepository.getById(id)) ? "entity" : "item")
+        };
       }));
     }
 
@@ -464,24 +390,26 @@ export class ApiService {
     } else if (recipe.products) {
       products = recipe.products.map((p) => ({ ...p }));
     } else if (recipe.Products) {
-      products = recipe.Products.map((p: any) => ({
-        id: p.ClassName || p.id,
-        name: p.Name || p.name,
-        amount: p.Amount || p.amount || 1,
-        event: p.event,
-        type: p.type || (this.data.entities.some(e => e.id === (p.ClassName || p.id)) ? "entity" : "item")
+      products = await Promise.all(recipe.Products.map(async (p: any) => {
+        const id = p.ClassName || p.id;
+        return {
+          id,
+          name: p.Name || p.name,
+          amount: p.Amount || p.amount || 1,
+          event: p.event,
+          type: p.type || ((await entityRepository.getById(id)) ? "entity" : "item")
+        };
       }));
     }
 
     const firstProduct = products[0];
-    const itemData = firstProduct
-      ? this.data.items.find((i) => i.id === firstProduct.id)
-      : null;
+    const itemData = firstProduct ? await itemRepository.getById(firstProduct.id) : null;
+    const entityData = firstProduct && !itemData ? await entityRepository.getById(firstProduct.id) : null;
 
     const normalizedName =
       recipe.name || 
       itemData?.name || 
-      this.data.entities.find((e) => e.id === firstProduct?.id)?.name ||
+      entityData?.name ||
       firstProduct?.id || 
       recipe.id;
 
@@ -494,3 +422,5 @@ export class ApiService {
     };
   }
 }
+
+export const apiService = new ApiService();

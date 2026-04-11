@@ -21,6 +21,7 @@ import { ViewModeSelector } from "../common/ViewModeSelector";
 import { useViewMode } from "../../hooks/useViewMode";
 import { TriplePickSelector } from "../common/TriplePickSelector";
 import type { TripleState } from "../common/TriplePickSelector";
+import type { Item } from "../../types/gameModels";
 
 export function ItemsPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -29,7 +30,10 @@ export function ItemsPage() {
   }>();
   const navigate = useNavigate();
 
-  const { loading, error, getItemsList } = useApi(gameId);
+  const { loading: dbLoading, error, getItemsList } = useApi(gameId);
+  const [items, setItems] = useState<Item[]>([]);
+  const [dataLoading, setDataLoading] = useState(false);
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [availableSubCategories, setAvailableSubCategories] = useState<
     string[]
@@ -41,14 +45,31 @@ export function ItemsPage() {
   const [showPrices, setShowPrices] = useState(false);
   const [viewMode, setViewMode] = useViewMode("items");
 
-  const allItems = useMemo(() => {
-    const results = getItemsList();
-    return Array.isArray(results) ? results : results.data;
-  }, [getItemsList]);
+  // Fetch all items initially (or when database is ready)
+  useEffect(() => {
+    if (dbLoading) return;
+
+    let isMounted = true;
+    setDataLoading(true);
+
+    getItemsList()
+      .then((results) => {
+        if (!isMounted) return;
+        const list = Array.isArray(results) ? results : results.data;
+        setItems(list);
+        setDataLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching items:", err);
+        if (isMounted) setDataLoading(false);
+      });
+
+    return () => { isMounted = false; };
+  }, [dbLoading, getItemsList]);
 
   const categories = useMemo(() => {
     const cats = new Set<string>();
-    allItems.forEach((item) => {
+    items.forEach((item) => {
       const itemCats = item.category;
       const catsArr = Array.isArray(itemCats)
         ? itemCats
@@ -58,14 +79,14 @@ export function ItemsPage() {
       if (catsArr[0]) cats.add(catsArr[0]);
     });
     return Array.from(cats).sort();
-  }, [allItems]);
+  }, [items]);
 
   // Update available sub-categories when primary category changes
   useEffect(() => {
     const cats = new Set<string>();
     const currentPrimary = urlCategory === "all" ? null : urlCategory;
 
-    allItems.forEach((item) => {
+    items.forEach((item) => {
       const itemCats = item.category;
       const catsArr = Array.isArray(itemCats)
         ? itemCats
@@ -98,26 +119,30 @@ export function ItemsPage() {
       });
       return changed ? next : prev;
     });
-  }, [allItems, urlCategory]);
+  }, [items, urlCategory]);
 
   const filteredItems = useMemo(() => {
-    const filters: any = {};
+    let list = [...items];
 
+    // Apply primary category filter
     if (urlCategory && urlCategory !== "all") {
-      filters.category = [urlCategory];
+      list = list.filter(item => {
+        const cats = Array.isArray(item.category) ? item.category : [item.category];
+        return cats[0]?.toLowerCase() === urlCategory.toLowerCase();
+      });
     }
 
-    // Add inclusion/negation for sub-category states
+    // Apply sub-category states (inclusion/negation)
     Object.entries(subCategoryStates).forEach(([cat, state]) => {
       if (state === "indifferent") return;
-      if (!filters.category) filters.category = [];
-      filters.category.push(state === "exclude" ? `!${cat}` : cat);
+      list = list.filter(item => {
+        const cats = Array.isArray(item.category) ? item.category : [item.category || ""];
+        const hasCat = cats.includes(cat);
+        return state === "exclude" ? !hasCat : hasCat;
+      });
     });
 
-    const results = getItemsList({ filters });
-    let list = Array.isArray(results) ? results : results.data;
-
-    // Apply trade status filtering client-side
+    // Apply trade status filtering
     if (tradeStatus) {
       list = list.filter((item) => {
         if (tradeStatus === "Compraveis") return item.buyPrice !== undefined;
@@ -130,7 +155,7 @@ export function ItemsPage() {
       });
     }
 
-    // Apply search filter client-side
+    // Apply search filter
     if (!searchTerm) return list;
 
     const lowerSearch = searchTerm.toLowerCase();
@@ -140,14 +165,14 @@ export function ItemsPage() {
         item.id.toLowerCase().includes(lowerSearch),
     );
   }, [
-    getItemsList,
+    items,
     urlCategory,
     subCategoryStates,
     tradeStatus,
     searchTerm,
   ]);
 
-  if (loading) {
+  if (dbLoading || dataLoading) {
     return (
       <Box
         sx={{
@@ -265,6 +290,7 @@ export function ItemsPage() {
         )}
         renderListItem={(item: any) => [
           <Box
+            key={`list_item_${item.id}`}
             onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
             sx={{
               display: "flex",
@@ -330,12 +356,12 @@ export function ItemsPage() {
               {item.name}
             </Typography>
           </Box>,
-          <Stack direction={"row"} spacing={1}>
-            {item.category.map((category: string) => (
-              <Chip key={`${item.name}_category_${category}`} label={category} />
+          <Stack direction={"row"} spacing={1} key={`list_cats_${item.id}`}>
+            {(Array.isArray(item.category) ? item.category : [item.category]).map((category: string) => (
+              <Chip key={`${item.id}_category_${category}`} label={category} />
             ))}
           </Stack>,
-          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }} key={`list_prices_${item.id}`}>
             {item.buyPrice !== undefined && (
               <Tooltip title="Compra">
                 <Box
@@ -385,7 +411,7 @@ export function ItemsPage() {
           </Box>,
         ]}
         renderIconItem={(item: any) => (
-          <Tooltip title={item.name}>
+          <Tooltip title={item.name} key={`icon_item_${item.id}`}>
             <Box
               onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
               sx={{
