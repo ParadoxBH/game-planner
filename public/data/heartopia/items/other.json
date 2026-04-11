@@ -6,12 +6,6 @@
     "icon": "/img/heartopia/ferramentas/brinquedo_pet.png"
   },
   {
-    "id": "guarda_sol_cafe_livre",
-    "name": "Guada Sol de Café Livre",
-    "category": ["social"],
-    "icon": "/img/heartopia/ferramentas/guarda_sol_cafe_livre.png"
-  },
-  {
     "id": "bola_neve",
     "name": "Bola de Neve",
     "category": [
