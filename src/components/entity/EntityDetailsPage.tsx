@@ -7,7 +7,7 @@ import {
   Stack,
   Divider,
   Breadcrumbs,
-  Tooltip,
+  Tooltip
 } from "@mui/material";
 import {
   NavigateNext,
@@ -27,11 +27,12 @@ import { RecipeCard } from "../recipe/RecipeCard";
 import { EntityCard } from "./EntityCard";
 import { useMemo, useState, useEffect } from "react";
 import type { MapMetadata, ReferencePoints, GameDataTypes, Entity, GameEvent, Item, Conjunto } from "../../types/gameModels";
-import type { EntityDetails } from "../../types/apiModels";
+import type { EntityDetails, NormalizedRecipe } from "../../types/apiModels";
 import { MiniMap } from "../common/MiniMap";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
 import { parseWKTPoint } from "../../utils/wkt";
+import { TablePaginator } from "../common/TablePaginator";
 import { eventRepository } from "../../repositories/EventRepository";
 import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
@@ -42,9 +43,28 @@ export function EntityDetailsPage() {
   const { gameId, entityId = "" } = useParams<{ gameId: string; entityId: string }>();
   const navigate = useNavigate();
 
-  const { loading: dbLoading, getEntityDetails } = useApi(gameId);
+  const { loading: dbLoading, getEntityDetails, getRecipesList } = useApi(gameId);
   const [entityDetails, setEntityDetails] = useState<EntityDetails | null>(null);
+  const [producedRecipes, setProducedRecipes] = useState<NormalizedRecipe[]>([]);
+  const [producedPage, setProducedPage] = useState(1);
+  const [producedPageSize, setProducedPageSize] = useState(30);
   const [dataLoading, setDataLoading] = useState(true);
+
+  const producedPaginationController = useMemo(() => ({
+    info: {
+      pagination: { page: producedPage, pageSize: producedPageSize },
+      sorting: { column: 'name', direction: 'asc' as const },
+      search: '',
+      criteria: {}
+    },
+    totalItems: producedRecipes.length,
+    lastPage: Math.max(1, Math.ceil(producedRecipes.length / producedPageSize)),
+    setPage: setProducedPage,
+    setPageSize: setProducedPageSize,
+    setSearch: () => {},
+    setCriteria: () => {},
+    setTotalItems: () => {}
+  }), [producedPage, producedPageSize, producedRecipes.length]);
 
   const [maps, setMaps] = useState<MapMetadata[]>([]);
   const [events, setEvents] = useState<GameEvent[]>([]);
@@ -64,8 +84,14 @@ export function EntityDetailsPage() {
       eventRepository.getAll(),
       itemRepository.getAll(),
       entityRepository.getAll(),
-      conjuntoRepository.getAll()
-    ]).then(([details, allMaps, allEvents, allItems, allEntities, allConjuntos]) => {
+      conjuntoRepository.getAll(),
+      getRecipesList({ 
+        pagination: { pageSize: 1000, page: 1 },
+        sorting: { column: 'name', direction: 'asc' },
+        search: '',
+        criteria: {}
+      }) // Load all to filter
+    ]).then(([details, allMaps, allEvents, allItems, allEntities, allConjuntos, allRecipes]) => {
       if (!isMounted) return;
 
       setEntityDetails(details);
@@ -74,6 +100,18 @@ export function EntityDetailsPage() {
       setItems(allItems);
       setEntities(allEntities);
       setEntityConjuntos(allConjuntos.filter(c => c.entitys?.includes(entityId)));
+
+      // Filter recipes produced at this entity
+      if (details) {
+        const entityCats = Array.isArray(details.entity.category) 
+          ? details.entity.category 
+          : [details.entity.category].filter(Boolean) as string[];
+        
+        const produced = allRecipes.data.filter(r => 
+          r.stations?.some(s => entityCats.some(c => c.toLowerCase() === s.toLowerCase()))
+        );
+        setProducedRecipes(produced);
+      }
 
       setDataLoading(false);
     }).catch(err => {
@@ -462,6 +500,62 @@ export function EntityDetailsPage() {
                   </Grid>
                 ))}
               </Grid>
+            </Paper>
+          )}
+
+          {/* Receitas Produzidas Aqui */}
+          {producedRecipes && producedRecipes.length > 0 && (
+            <Paper elevation={0} sx={{ p: 2 }}>
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                justifyContent="space-between"
+                sx={{ mb: 2 }}
+              >
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Construction color="primary" />
+                  <Typography variant="h6" fontWeight={700}>
+                    Receitas Produzidas Aqui
+                  </Typography>
+                  <DataChip label={producedRecipes.length.toString()} color="primary" size="small" />
+                </Stack>
+                {producedRecipes.length > producedPageSize && (
+                  <TablePaginator controller={producedPaginationController} />
+                )}
+              </Stack>
+              <Box 
+                sx={{ 
+                  maxHeight: 500, 
+                  overflowY: 'auto', 
+                  pr: 1,
+                  // Custom scrollbar for cleaner look
+                  '&::-webkit-scrollbar': { width: '4px' },
+                  '&::-webkit-scrollbar-track': { background: 'transparent' },
+                  '&::-webkit-scrollbar-thumb': { background: 'rgba(255,255,255,0.1)', borderRadius: '4px' },
+                  '&::-webkit-scrollbar-thumb:hover': { background: 'primary.main' }
+                }}
+              >
+                <Grid container spacing={1}>
+                  {producedRecipes
+                    .slice((producedPage - 1) * producedPageSize, producedPage * producedPageSize)
+                    .map((recipe) => (
+                      <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={recipe.id}>
+                        <RecipeCard
+                          id={recipe.id}
+                          name={recipe.normalizedName}
+                          stations={recipe.normalizedStations}
+                          ingredients={recipe.normalizedIngredients}
+                          products={recipe.normalizedProducts}
+                          unlock={recipe.unlock}
+                          getSourceData={getSourceData}
+                          eventsMap={eventsMap}
+                          variant="compact"
+                        />
+                      </Grid>
+                    ))}
+                </Grid>
+              </Box>
             </Paper>
           )}
 
