@@ -81,10 +81,10 @@ export function CategoryDetailsPage() {
           <img
             src={category.icon}
             alt={category.name}
-            style={{ width: "80%", height: "80%", objectFit: "contain" }}
+            style={{ height: 60, width: 60, objectFit: "contain" }}
           />
         ) : (
-          <CategoryIcon sx={{ fontSize: 60, color: "primary.main" }} />
+          <CategoryIcon sx={{ height: 60, width: 60, color: "primary.main" }} />
         )
       }
       title={category.name}
