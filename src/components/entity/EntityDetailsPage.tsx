@@ -7,7 +7,9 @@ import {
   Stack,
   Divider,
   Breadcrumbs,
-  Tooltip
+  Tooltip,
+  Tabs,
+  Tab
 } from "@mui/material";
 import {
   NavigateNext,
@@ -17,14 +19,12 @@ import {
   List as ListIcon,
   Construction,
   Storefront,
-  Bookmarks,
   AutoAwesomeMosaic,
 } from "@mui/icons-material";
 import { useApi } from "../../hooks/useApi";
 import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
 import { RecipeCard } from "../recipe/RecipeCard";
-import { EntityCard } from "./EntityCard";
 import { useMemo, useState, useEffect } from "react";
 import type { MapMetadata, ReferencePoints, GameDataTypes, Entity, GameEvent, Item, Conjunto } from "../../types/gameModels";
 import type { EntityDetails, NormalizedRecipe } from "../../types/apiModels";
@@ -48,7 +48,15 @@ export function EntityDetailsPage() {
   const [producedRecipes, setProducedRecipes] = useState<NormalizedRecipe[]>([]);
   const [producedPage, setProducedPage] = useState(1);
   const [producedPageSize, setProducedPageSize] = useState(30);
+  const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [dataLoading, setDataLoading] = useState(true);
+
+  const currentEntityData = useMemo(() => {
+    if (!entityDetails?.entity) return null;
+    if (selectedVariantIndex === 0) return entityDetails.entity;
+    const variant = entityDetails.entity.variants?.[selectedVariantIndex - 1];
+    return { ...entityDetails.entity, ...variant };
+  }, [entityDetails?.entity, selectedVariantIndex]);
 
   const producedPaginationController = useMemo(() => ({
     info: {
@@ -221,97 +229,152 @@ export function EntityDetailsPage() {
           }}
         >
           {/* Info Principal */}
-          <Paper elevation={0} sx={{ p: 2, textAlign: "center", borderRadius: 2 }}>
-            <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-                <Box sx={{ 
-                    width: 120, 
-                    height: 120, 
-                    borderRadius: 2, 
-                    backgroundColor: 'rgba(0,0,0,0.2)',
-                    border: '1px solid',
-                    borderColor: 'divider',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    overflow: 'hidden'
-                }}>
-                    {entity.icon ? (
-                        <img 
-                          src={entity.icon} 
-                          alt={entity.name} 
-                          style={{ width: '80%', height: '80%', objectFit: 'contain' }} 
-                        />
-                    ) : (
-                        <EmojiEvents sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.1)' }} />
-                    )}
-                </Box>
-            </Box>
-            <Typography 
-              variant="h5" 
-              fontWeight={800} 
-              color="primary.main"
-              sx={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                gap: 1.5,
-                lineHeight: 1.2
-              }}
-            >
-              {entity.name}
-              {entityDetails.shop && (
-                <Tooltip title="Este NPC possui uma loja">
-                  <Box sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    backgroundColor: 'rgba(255, 68, 0, 0.15)', 
-                    p: 0.5, 
-                    borderRadius: 1,
-                    animation: 'pulse-glow 2s infinite ease-in-out',
-                    '@keyframes pulse-glow': {
-                      '0%': { boxShadow: '0 0 0 0 rgba(255, 68, 0, 0.4)' },
-                      '70%': { boxShadow: '0 0 0 6px rgba(255, 68, 0, 0)' },
-                      '100%': { boxShadow: '0 0 0 0 rgba(255, 68, 0, 0)' }
+          <Paper elevation={0} sx={{ p: 0, overflow: 'hidden', borderRadius: 2 }}>
+            {entity.variants && entity.variants.length > 0 && (
+              <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: 'rgba(255,255,255,0.02)' }}>
+                <Tabs 
+                  value={selectedVariantIndex} 
+                  onChange={(_, val) => setSelectedVariantIndex(val)}
+                  variant="scrollable"
+                  scrollButtons="auto"
+                  sx={{ 
+                    minHeight: 40,
+                    '& .MuiTabs-indicator': { height: 3, borderRadius: '3px 3px 0 0' },
+                    '& .MuiTab-root': { 
+                      minHeight: 40, 
+                      minWidth: 50, 
+                      p: 1,
+                      opacity: 0.6,
+                      '&.Mui-selected': { opacity: 1 }
                     }
+                  }}
+                >
+                  {[entity, ...entity.variants.map(v => ({ ...entity, ...v }))].map((v, idx) => (
+                    <Tab 
+                      key={idx} 
+                      icon={
+                        <Box 
+                          component="img" 
+                          src={v.icon || entity.icon} 
+                          sx={{ width: 20, height: 20, objectFit: 'contain' }} 
+                        />
+                      } 
+                    />
+                  ))}
+                </Tabs>
+              </Box>
+            )}
+            
+            <Box sx={{ p: 2, textAlign: "center" }}>
+              <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+                  <Box sx={{ 
+                      width: 120, 
+                      height: 120, 
+                      borderRadius: 2, 
+                      backgroundColor: 'rgba(0,0,0,0.2)',
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      overflow: 'hidden',
+                      position: 'relative'
                   }}>
-                    <Storefront sx={{ fontSize: '1.1rem', color: 'primary.main' }} />
+                      {currentEntityData?.level && (
+                        <Box sx={{
+                          position: 'absolute',
+                          top: 8,
+                          left: 8,
+                          bgcolor: 'warning.main',
+                          color: 'warning.contrastText',
+                          px: 1,
+                          borderRadius: 1,
+                          fontSize: '0.7rem',
+                          fontWeight: 900,
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                          zIndex: 2
+                        }}>
+                          {currentEntityData.level}
+                        </Box>
+                      )}
+                      {currentEntityData?.icon ? (
+                          <img 
+                            src={currentEntityData.icon} 
+                            alt={currentEntityData.name} 
+                            style={{ width: '80%', height: '80%', objectFit: 'contain' }} 
+                          />
+                      ) : (
+                          <EmojiEvents sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.1)' }} />
+                      )}
                   </Box>
-                </Tooltip>
-              )}
-            </Typography>
-            <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 2 }}>
-              ID: {entity.id}
-            </Typography>
-            
-            <Divider sx={{ mb: 2 }} />
-            
-            <Stack spacing={1.5} textAlign="left">
-              {entity.category && (
-                <Box>
-                  <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>
-                    Categoria
-                  </Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {Array.isArray(entity.category)
-                      ? entity.category.join(", ")
-                      : entity.category}
-                  </Typography>
-                </Box>
-              )}
+              </Box>
+              <Typography 
+                variant="h5" 
+                fontWeight={800} 
+                color="primary.main"
+                sx={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  gap: 1.5,
+                  lineHeight: 1.2
+                }}
+              >
+                {currentEntityData?.name}
+                {entityDetails.shop && (
+                  <Tooltip title="Este NPC possui uma loja">
+                    <Box sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      backgroundColor: 'rgba(255, 68, 0, 0.15)', 
+                      p: 0.5, 
+                      borderRadius: 1,
+                      animation: 'pulse-glow 2s infinite ease-in-out',
+                      '@keyframes pulse-glow': {
+                        '0%': { boxShadow: '0 0 0 0 rgba(255, 68, 0, 0.4)' },
+                        '70%': { boxShadow: '0 0 0 6px rgba(255, 68, 0, 0)' },
+                        '100%': { boxShadow: '0 0 0 0 rgba(255, 68, 0, 0)' }
+                      }
+                    }}>
+                      <Storefront sx={{ fontSize: '1.1rem', color: 'primary.main' }} />
+                    </Box>
+                  </Tooltip>
+                )}
+              </Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 2 }}>
+                ID: {currentEntityData?.id}
+              </Typography>
               
-              {/* @ts-ignore */}
-              {entity.description && (
-                <Box>
-                  <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>
-                    Descrição
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.4 }}>
-                    {/* @ts-ignore */}
-                    {entity.description}
-                  </Typography>
-                </Box>
-              )}
-            </Stack>
+              <Divider sx={{ mb: 2 }} />
+              
+              <Stack spacing={1.5} textAlign="left">
+                {currentEntityData?.category && (
+                  <Box>
+                    <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>
+                      Categoria
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                      {Array.isArray(currentEntityData.category)
+                        ? currentEntityData.category.join(", ")
+                        : currentEntityData.category}
+                    </Typography>
+                  </Box>
+                )}
+                
+                {/* @ts-ignore */}
+                {currentEntityData?.description && (
+                  <Box>
+                    <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>
+                      Descrição
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.4 }}>
+                      {/* @ts-ignore */}
+                      {currentEntityData.description}
+                    </Typography>
+                  </Box>
+                )}
+              </Stack>
+            </Box>
           </Paper>
 
           {/* Seção de Loja */}
@@ -556,34 +619,6 @@ export function EntityDetailsPage() {
                     ))}
                 </Grid>
               </Box>
-            </Paper>
-          )}
-
-          {/* Variações */}
-          {entity.variants && entity.variants.length > 0 && (
-            <Paper elevation={0} sx={{ p: 2 }}>
-              <Stack
-                direction="row"
-                spacing={1}
-                alignItems="center"
-                sx={{ mb: 2 }}
-              >
-                <Bookmarks color="primary" />
-                <Typography variant="h6" fontWeight={700}>
-                  Variações
-                </Typography>
-              </Stack>
-              <Grid container spacing={1}>
-                {[entity, ...entity.variants.map(v => ({ ...entity, ...v }))].map((v, idx) => (
-                  <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={idx}>
-                    <EntityCard 
-                      entity={{...entity, ...v}} 
-                      variant="compact" 
-                      onClick={() => {}} 
-                    />
-                  </Grid>
-                ))}
-              </Grid>
             </Paper>
           )}
 
