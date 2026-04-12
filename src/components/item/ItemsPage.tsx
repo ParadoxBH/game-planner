@@ -125,31 +125,6 @@ export function ItemsPage() {
     pages.setCriteria({ subCategoryStates: nextSub });
   };
 
-  if (dbLoading || dataLoading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100%",
-          width: "100%",
-        }}
-      >
-        <CircularProgress color="primary" />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Box sx={{ p: 4, textAlign: "center" }}>
-        <Typography color="error" variant="h6">
-          Erro ao carregar itens: {error}
-        </Typography>
-      </Box>
-    );
-  }
 
   return (
     <StyledContainer
@@ -216,204 +191,219 @@ export function ItemsPage() {
         </>
       }
     >
-      <ListingDataView
-        data={items}
-        viewMode={viewMode}
-        variant="compact"
-        cardMinWidth={200}
-        listHeader={[
-          { label: "Item", width: "60%" },
-          { label: "Categorias", width: "30%" },
-          {
-            label: "Preços",
-            align: "right" as const,
-            width: "10%",
-            hidden: !showPrices,
-          },
-        ]}
-        emptyMessage="Nenhum item encontrado com estes filtros."
-        renderCard={(item: any, variant) => (
-          <ItemCard item={item} gameId={gameId || ""} showPrices={showPrices} variant={variant} />
-        )}
-        renderListItem={(item: any) => [
-          <Box
-            key={`list_item_${item.id}`}
-            onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
-            sx={{
-              display: "flex",
-              position: "relative",
-              alignItems: "center",
-              gap: 2,
-              cursor: "pointer",
-            }}
-          >
+      {(dbLoading || dataLoading) ? (
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", py: 10, flex: 1 }}>
+          <CircularProgress color="primary" />
+        </Box>
+      ) : error ? (
+        <Box sx={{ p: 4, textAlign: "center", flex: 1 }}>
+          <Typography color="error" variant="h6" sx={{ fontWeight: 700 }}>
+            Ops! Algo deu errado.
+          </Typography>
+          <Typography variant="body2" sx={{ color: "text.secondary", mt: 1 }}>
+            {error}
+          </Typography>
+        </Box>
+      ) : (
+        <ListingDataView
+          data={items}
+          viewMode={viewMode}
+          variant="compact"
+          cardMinWidth={200}
+          listHeader={[
+            { label: "Item", width: "60%" },
+            { label: "Categorias", width: "30%" },
+            {
+              label: "Preços",
+              align: "right" as const,
+              width: "10%",
+              hidden: !showPrices,
+            },
+          ]}
+          emptyMessage="Nenhum item encontrado com estes filtros."
+          renderCard={(item: any, variant) => (
+            <ItemCard item={item} gameId={gameId || ""} showPrices={showPrices} variant={variant} />
+          )}
+          renderListItem={(item: any) => [
             <Box
-              sx={{
-                width: 32,
-                height: 32,
-                borderRadius: 0.5,
-                backgroundColor: "rgba(0,0,0,0.2)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexShrink: 0,
-              }}
-            >
-              {item.icon ? (
-                <img
-                  src={item.icon}
-                  alt={item.name}
-                  style={{
-                    width: "80%",
-                    height: "80%",
-                    objectFit: "contain",
-                  }}
-                />
-              ) : (
-                <Inventory
-                  sx={{ fontSize: 16, color: "rgba(255, 255, 255, 0.2)" }}
-                />
-              )}
-              {item.level !== undefined && item.level > 0 && (
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: -4,
-                    left: -4,
-                    backgroundColor: "warning.main",
-                    color: "warning.contrastText",
-                    borderRadius: "4px",
-                    px: 0.5,
-                    minWidth: 12,
-                    height: 12,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "0.55rem",
-                    fontWeight: 800,
-                    boxShadow: 1,
-                    zIndex: 1,
-                  }}
-                >
-                  {item.level}
-                </Box>
-              )}
-            </Box>
-            <Typography variant="body2" sx={{ fontWeight: 700 }}>
-              {item.name}
-            </Typography>
-          </Box>,
-          <Stack direction={"row"} spacing={1} key={`list_cats_${item.id}`}>
-            {(Array.isArray(item.category) ? item.category : [item.category]).map((category: string) => (
-              <Chip key={`${item.id}_category_${category}`} label={category} />
-            ))}
-          </Stack>,
-          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }} key={`list_prices_${item.id}`}>
-            {item.buyPrice !== undefined && (
-              <Tooltip title="Compra">
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 0.5,
-                    backgroundColor: "rgba(76, 175, 80, 0.1)",
-                    px: 1,
-                    borderRadius: 1,
-                    border: "1px solid rgba(76, 175, 80, 0.2)",
-                  }}
-                >
-                  <ShoppingCart sx={{ fontSize: 12, color: "success.main" }} />
-                  <ItemChip
-                    id="ouro"
-                    amount={item.buyPrice}
-                    size="small"
-                    icon="/img/heartopia/stats/ouro.png"
-                  />
-                </Box>
-              </Tooltip>
-            )}
-            {item.sellPrice !== undefined && (
-              <Tooltip title="Venda">
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 0.5,
-                    backgroundColor: "rgba(255, 152, 0, 0.1)",
-                    px: 1,
-                    borderRadius: 1,
-                    border: "1px solid rgba(255, 152, 0, 0.2)",
-                  }}
-                >
-                  <Sell sx={{ fontSize: 12, color: "warning.main" }} />
-                  <ItemChip
-                    id="ouro"
-                    amount={item.sellPrice}
-                    size="small"
-                    icon="/img/heartopia/stats/ouro.png"
-                  />
-                </Box>
-              </Tooltip>
-            )}
-          </Box>,
-        ]}
-        renderIconItem={(item: any) => (
-          <Tooltip title={item.name} key={`icon_item_${item.id}`}>
-            <Box
+              key={`list_item_${item.id}`}
               onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
               sx={{
-                position: "relative",
-                width: "100%",
-                height: "100%",
                 display: "flex",
-                justifyContent: "center",
+                position: "relative",
                 alignItems: "center",
-                p: 1,
+                gap: 2,
+                cursor: "pointer",
               }}
             >
-              {item.icon ? (
-                <img
-                  src={item.icon}
-                  alt={item.name}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "contain",
-                  }}
-                />
-              ) : (
-                <Inventory
-                  sx={{ fontSize: 32, color: "rgba(255, 255, 255, 0.2)" }}
-                />
+              <Box
+                sx={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 0.5,
+                  backgroundColor: "rgba(0,0,0,0.2)",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexShrink: 0,
+                }}
+              >
+                {item.icon ? (
+                  <img
+                    src={item.icon}
+                    alt={item.name}
+                    style={{
+                      width: "80%",
+                      height: "80%",
+                      objectFit: "contain",
+                    }}
+                  />
+                ) : (
+                  <Inventory
+                    sx={{ fontSize: 16, color: "rgba(255, 255, 255, 0.2)" }}
+                  />
+                )}
+                {item.level !== undefined && item.level > 0 && (
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: -4,
+                      left: -4,
+                      backgroundColor: "warning.main",
+                      color: "warning.contrastText",
+                      borderRadius: "4px",
+                      px: 0.5,
+                      minWidth: 12,
+                      height: 12,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "0.55rem",
+                      fontWeight: 800,
+                      boxShadow: 1,
+                      zIndex: 1,
+                    }}
+                  >
+                    {item.level}
+                  </Box>
+                )}
+              </Box>
+              <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                {item.name}
+              </Typography>
+            </Box>,
+            <Stack direction={"row"} spacing={1} key={`list_cats_${item.id}`}>
+              {(Array.isArray(item.category) ? item.category : [item.category]).map((category: string) => (
+                <Chip key={`${item.id}_category_${category}`} label={category} />
+              ))}
+            </Stack>,
+            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }} key={`list_prices_${item.id}`}>
+              {item.buyPrice !== undefined && (
+                <Tooltip title="Compra">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 0.5,
+                      backgroundColor: "rgba(76, 175, 80, 0.1)",
+                      px: 1,
+                      borderRadius: 1,
+                      border: "1px solid rgba(76, 175, 80, 0.2)",
+                    }}
+                  >
+                    <ShoppingCart sx={{ fontSize: 12, color: "success.main" }} />
+                    <ItemChip
+                      id="ouro"
+                      amount={item.buyPrice}
+                      size="small"
+                      icon="/img/heartopia/stats/ouro.png"
+                    />
+                  </Box>
+                </Tooltip>
               )}
-              {item.level !== undefined && item.level > 0 && (
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: 4,
-                    left: 4,
-                    backgroundColor: "warning.main",
-                    color: "warning.contrastText",
-                    borderRadius: "4px",
-                    px: 0.5,
-                    minWidth: 16,
-                    height: 16,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "0.65rem",
-                    fontWeight: 800,
-                    boxShadow: 2,
-                    zIndex: 1,
-                  }}
-                >
-                  {item.level}
-                </Box>
+              {item.sellPrice !== undefined && (
+                <Tooltip title="Venda">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 0.5,
+                      backgroundColor: "rgba(255, 152, 0, 0.1)",
+                      px: 1,
+                      borderRadius: 1,
+                      border: "1px solid rgba(255, 152, 0, 0.2)",
+                    }}
+                  >
+                    <Sell sx={{ fontSize: 12, color: "warning.main" }} />
+                    <ItemChip
+                      id="ouro"
+                      amount={item.sellPrice}
+                      size="small"
+                      icon="/img/heartopia/stats/ouro.png"
+                    />
+                  </Box>
+                </Tooltip>
               )}
-            </Box>
-          </Tooltip>
-        )}
-      />
+            </Box>,
+          ]}
+          renderIconItem={(item: any) => (
+            <Tooltip title={item.name} key={`icon_item_${item.id}`}>
+              <Box
+                onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
+                sx={{
+                  position: "relative",
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  p: 1,
+                }}
+              >
+                {item.icon ? (
+                  <img
+                    src={item.icon}
+                    alt={item.name}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain",
+                    }}
+                  />
+                ) : (
+                  <Inventory
+                    sx={{ fontSize: 32, color: "rgba(255, 255, 255, 0.2)" }}
+                  />
+                )}
+                {item.level !== undefined && item.level > 0 && (
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 4,
+                      left: 4,
+                      backgroundColor: "warning.main",
+                      color: "warning.contrastText",
+                      borderRadius: "4px",
+                      px: 0.5,
+                      minWidth: 16,
+                      height: 16,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "0.65rem",
+                      fontWeight: 800,
+                      boxShadow: 2,
+                      zIndex: 1,
+                    }}
+                  >
+                    {item.level}
+                  </Box>
+                )}
+              </Box>
+            </Tooltip>
+          )}
+        />
+      )}
     </StyledContainer>
   );
 }
