@@ -15,7 +15,7 @@ import { TriplePickSelector } from "../common/TriplePickSelector";
 import type { TripleState } from "../common/TriplePickSelector";
 import { FilterList, BugReport, ShoppingCart, Sell, Storefront } from "@mui/icons-material";
 import { useApi } from "../../hooks/useApi";
-import type { Entity, Shop } from "../../types/gameModels";
+import type { Entity, Shop, Category } from "../../types/gameModels";
 import { ListingDataView } from "../common/ListingDataView";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { useViewMode } from "../../hooks/useViewMode";
@@ -46,7 +46,7 @@ export function EntityPage() {
   const [dataLoading, setDataLoading] = useState(false);
   const [viewMode, setViewMode] = useViewMode("entities");
   const [showPrices, setShowPrices] = useState(false);
-  const [allCategories, setAllCategories] = useState<string[]>([]);
+  const [allCategories, setAllCategories] = useState<(Category & { isPrimary: boolean })[]>([]);
   const [availableSubCategories, setAvailableSubCategories] = useState<string[]>([]);
 
   const pages = usePagination<EntityCriteria>({
@@ -124,9 +124,15 @@ export function EntityPage() {
     pages.setCriteria({ subCategoryStates: nextSub });
   };
 
+    const currentCategoryName = useMemo(() => {
+    if (!urlCategory || urlCategory === "all") return "Entidades";
+    const cat = allCategories.find(c => c.id === urlCategory);
+    return cat?.name || urlCategory;
+  }, [allCategories, urlCategory]);
+
   return (
     <StyledContainer
-      title={`${urlCategory && urlCategory !== "all" ? urlCategory.charAt(0).toUpperCase() + urlCategory.slice(1) : "Entidades"} de ${gameId}`}
+      title={`${currentCategoryName} de ${gameId}`}
       label="Explore e descubra todas as entidades do jogo."
       searchValue={pages.info.search}
       onChangeSearch={(val) => pages.setSearch(val)}
@@ -137,7 +143,10 @@ export function EntityPage() {
           <PickSelector
             label="Categoria"
             value={urlCategory === "all" ? null : urlCategory || null}
-            options={allCategories}
+            options={allCategories
+              .filter(cat => cat.isPrimary)
+              .map(cat => ({ value: cat.id, label: cat.name, icon: cat.icon }))
+            }
             onChange={(cat) => {
               navigate(`/game/${gameId}/entity/list/${cat || "all"}`);
             }}
@@ -147,7 +156,14 @@ export function EntityPage() {
             <TriplePickSelector
               label="Sub-categoria"
               states={pages.info.criteria.subCategoryStates || {}}
-              options={availableSubCategories}
+              options={availableSubCategories.map(subId => {
+                const catInfo = allCategories.find(c => c.id === subId);
+                return {
+                  value: subId,
+                  label: catInfo?.name || subId,
+                  icon: catInfo?.icon
+                };
+              })}
               onChange={handleSubCategoryStateChange}
               icon={<FilterList sx={{ fontSize: 18 }} />}
             />

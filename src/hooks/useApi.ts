@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import { apiService } from "../services/apiService";
 import { dbService } from "../services/dbService";
 import { codeRepository } from "../repositories/CodeRepository";
-import type { NormalizedRecipe, PaginatedResponse } from "../types/apiModels";
-import type { Item, Entity } from "../types/gameModels";
-import type { GenericFilter, ItemCriteria, EntityCriteria, RecipeCriteria } from "../types/filterTypes";
+import type { NormalizedRecipe, PaginatedResponse, CategoryDetails } from "../types/apiModels";
+import type { Item, Entity, Category } from "../types/gameModels";
+import type { GenericFilter, ItemCriteria, RecipeCriteria } from "../types/filterTypes";
 
 import { useEventFilter } from "../context/EventFilterContext";
 
@@ -95,6 +95,18 @@ export function useApi(gameId: string | undefined) {
     return apiService.getConjuntos(filter, activeEventIds);
   }, [activeEventIds]);
 
+  const getCategoryDetails = useCallback(async (categoryId: string): Promise<CategoryDetails | null> => {
+    return apiService.getCategoryDetails(categoryId);
+  }, []);
+
+  const getCategories = useCallback(async (): Promise<Category[]> => {
+    return apiService.getCategories();
+  }, []);
+
+  const getCategory = useCallback(async (categoryId: string): Promise<Category> => {
+    return apiService.getCategory(categoryId);
+  }, []);
+
   return {
     loading,
     error,
@@ -111,5 +123,8 @@ export function useApi(gameId: string | undefined) {
     getRecipeStations,
     getCodesList,
     getConjuntosList,
+    getCategoryDetails,
+    getCategories,
+    getCategory,
   };
 }

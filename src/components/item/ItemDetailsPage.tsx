@@ -180,9 +180,11 @@ export function ItemDetailsPage() {
                   CATEGORIA
                 </Typography>
                 <Typography variant="body2">
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                   {Array.isArray(item.category)
-                    ? item.category.join(", ")
-                    : item.category || "N/A"}
+                    ? item.category.map(cat => <ItemChip key={cat} id={cat} type="category" size="small" />)
+                    : item.category ? <ItemChip id={item.category} type="category" size="small" /> : "N/A"}
+                </Box>
                 </Typography>
               </Box>
               {item.description && (

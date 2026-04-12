@@ -353,11 +353,11 @@ export function EntityDetailsPage() {
                     <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>
                       Categoria
                     </Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                       {Array.isArray(currentEntityData.category)
-                        ? currentEntityData.category.join(", ")
-                        : currentEntityData.category}
-                    </Typography>
+                        ? currentEntityData.category.map(cat => <ItemChip key={cat} id={cat} type="category" size="small" />)
+                        : <ItemChip id={currentEntityData.category} type="category" size="small" />}
+                    </Box>
                   </Box>
                 )}
                 

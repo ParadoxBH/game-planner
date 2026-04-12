@@ -12,7 +12,9 @@ import {
   Star as StarIcon
 } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
-import type { GameDataTypes } from "../../types/gameModels";
+import type { GameDataTypes, Category as CategoryType } from "../../types/gameModels";
+import { useApi } from "../../hooks/useApi";
+import { useState, useEffect } from "react";
 
 export interface ItemChipProps {
   id: string;
@@ -84,6 +86,14 @@ export function ItemChip({
 }: ItemChipProps) {
   const navigate = useNavigate();
   const { gameId } = useParams<{ gameId: string }>();
+  const { getCategory } = useApi(gameId);
+  const [categoryData, setCategoryData] = useState<CategoryType | null>(null);
+
+  useEffect(() => {
+    if (type === 'category' && id && gameId) {
+      getCategory(id).then(data => setCategoryData(data));
+    }
+  }, [type, id, gameId, getCategory]);
 
   const formatAmount = (num: number) => {
     if (num < 1000) return num.toString();
@@ -95,7 +105,7 @@ export function ItemChip({
     return (m % 1 === 0 ? m : m.toFixed(1)) + 'M';
   };
 
-  const displayName = type === 'category' ? `Qualquer ${id}` : (name || id);
+  const displayName = type === 'category' ? (categoryData?.name || `Qualquer ${id}`) : (name || id);
   const tooltipTitle = (amount !== undefined || level !== undefined)
     ? `${displayName}${level !== undefined ? ` (Lvl ${level})` : ''}${amount !== undefined ? ` ${amount.toString()}x` : ''}` 
     : displayName;
@@ -104,6 +114,9 @@ export function ItemChip({
 
   const renderIcon = () => {
     if (type === 'category') {
+      if (categoryData?.icon) {
+        return <img src={categoryData.icon} alt={id} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />;
+      }
       return <Category sx={{ fontSize: config.icon, color: 'warning.main' }} />;
     }
     if (iconSrc) {
@@ -128,6 +141,10 @@ export function ItemChip({
         e.preventDefault();
         e.stopPropagation();
         navigate(`/game/${gameId}/entity/view/${id}`);
+      } else if (type === 'category') {
+        e.preventDefault();
+        e.stopPropagation();
+        navigate(`/game/${gameId}/categories/view/${id}`);
       }
     }
   };
@@ -140,7 +157,7 @@ export function ItemChip({
           position: 'relative', 
           width: config.box, 
           height: config.box,
-          cursor: (type === 'item' && !disableLink) ? 'pointer' : 'default'
+          cursor: (!disableLink && (type === 'item' || type === 'entity' || type === 'category')) ? 'pointer' : 'default'
         }}
       >
         <Paper variant="outlined" sx={{ 
@@ -159,9 +176,9 @@ export function ItemChip({
           overflow: 'hidden',
           transition: 'transform 0.2s',
           '&:hover': {
-            transform: (type === 'item' && !disableLink) ? 'scale(1.1)' : 'scale(1.05)',
+            transform: (!disableLink && (type === 'item' || type === 'entity' || type === 'category')) ? 'scale(1.1)' : 'scale(1.05)',
             borderColor: 'primary.main',
-            boxShadow: (type === 'item' && !disableLink) ? '0 0 15px rgba(255, 68, 0, 0.3)' : 'none'
+            boxShadow: (!disableLink && (type === 'item' || type === 'entity' || type === 'category')) ? '0 0 15px rgba(255, 68, 0, 0.3)' : 'none'
           }
         }}>
           {renderIcon()}

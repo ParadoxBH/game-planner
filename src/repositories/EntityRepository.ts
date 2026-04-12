@@ -30,6 +30,22 @@ export class EntityRepository extends BaseRepository<Entity, string> {
     return Array.from(categories).sort((a, b) => a.localeCompare(b));
   }
 
+  async getAllCategories(): Promise<string[]> {
+    const all = await this.table.toArray();
+    const categories = new Set<string>();
+    
+    all.forEach(entity => {
+      const cats = entity.category;
+      if (Array.isArray(cats)) {
+        cats.forEach(c => { if (c) categories.add(c); });
+      } else if (typeof cats === 'string' && cats) {
+        categories.add(cats);
+      }
+    });
+
+    return Array.from(categories).sort((a, b) => a.localeCompare(b));
+  }
+
   async getEntitiesByCategory(category: string): Promise<Entity[]> {
     const searchLower = category.toLowerCase();
     return this.table.filter(entity => {

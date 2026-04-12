@@ -21,12 +21,10 @@ import { ViewModeSelector } from "../common/ViewModeSelector";
 import { useViewMode } from "../../hooks/useViewMode";
 import { TriplePickSelector } from "../common/TriplePickSelector";
 import type { TripleState } from "../common/TriplePickSelector";
-import { Button } from "@mui/material";
-import type { Item } from "../../types/gameModels";
+import type { Item, Category } from "../../types/gameModels";
 import type { ItemCriteria } from "../../types/filterTypes";
 import type { PaginatedResponse } from "../../types/apiModels";
 import { usePagination } from "../../hooks/usePagination";
-import { TablePaginator } from "../common/TablePaginator";
 
 export function ItemsPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -46,7 +44,7 @@ export function ItemsPage() {
   });
 
   const [availableSubCategories, setAvailableSubCategories] = useState<string[]>([]);
-  const [allCategories, setAllCategories] = useState<string[]>([]);
+  const [allCategories, setAllCategories] = useState<(Category & { isPrimary: boolean })[]>([]);
   const [showPrices, setShowPrices] = useState(false);
   const [viewMode, setViewMode] = useViewMode("items");
 
@@ -139,7 +137,10 @@ export function ItemsPage() {
           <PickSelector
             label="Categoria"
             value={urlCategory === "all" ? null : urlCategory || null}
-            options={allCategories}
+            options={allCategories
+              .filter(cat => cat.isPrimary)
+              .map(cat => ({ value: cat.id, label: cat.name, icon: cat.icon }))
+            }
             onChange={(cat) => {
               navigate(`/game/${gameId}/items/list/${cat || "all"}`);
             }}
@@ -148,7 +149,14 @@ export function ItemsPage() {
             <TriplePickSelector
               label="Sub-categoria"
               states={pages.info.criteria.subCategoryStates || {}}
-              options={availableSubCategories}
+              options={availableSubCategories.map(subId => {
+                const catInfo = allCategories.find(c => c.id === subId);
+                return {
+                  value: subId,
+                  label: catInfo?.name || subId,
+                  icon: catInfo?.icon
+                };
+              })}
               onChange={handleSubCategoryStateChange}
             />
           )}

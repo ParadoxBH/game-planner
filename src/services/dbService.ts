@@ -10,6 +10,7 @@ import { codeRepository } from '../repositories/CodeRepository';
 import { conjuntoRepository } from '../repositories/ConjuntoRepository';
 import { gameInfoRepository } from '../repositories/GameInfoRepository';
 import { mapRepository } from '../repositories/MapRepository';
+import { categoryRepository } from '../repositories/CategoryRepository';
 
 export class DbService {
   /**
@@ -19,7 +20,7 @@ export class DbService {
     console.log(`[DbService] Reconstructing database for game: ${gameId}`);
     
     // 1. Fetch all data in parallel
-    const datasets = ["items", "recipes", "entity", "shops", "events", "referencePoints", "codes", "conjuntos"];
+    const datasets = ["items", "recipes", "entity", "shops", "events", "referencePoints", "codes", "conjuntos", "categories"];
     let bug = "Iniciando...";
     try {
       bug = "Carregando dados";
@@ -43,6 +44,7 @@ export class DbService {
         referencePoints, 
         codes, 
         conjuntos, 
+        categories,
         games, 
         maps = []
       ] = results as any[];
@@ -78,6 +80,8 @@ export class DbService {
         if (gameInfo) await gameInfoRepository.bulkAdd([gameInfo]);
         bug = "Populando Mapas";
         if (maps.length) await mapRepository.bulkAdd(clean(maps, 'id', 'Maps'));
+        bug = "Populando Categorias";
+        if (categories.length) await categoryRepository.bulkAdd(clean(categories, 'id', 'Categories'));
       });
 
       console.log(`[DbService] Database reconstruction complete for ${gameId}`);

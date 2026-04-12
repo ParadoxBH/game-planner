@@ -20,6 +20,8 @@ import { ItemDetailsPage } from "./components/item/ItemDetailsPage";
 import { RecipeDetailsPage } from "./components/recipe/RecipeDetailsPage";
 import { Typography } from "@mui/material";
 import { ConjuntosPage } from "./components/item/ConjuntosPage";
+import { CategoriesPage } from "./components/category/CategoriesPage";
+import { CategoryDetailsPage } from "./components/category/CategoryDetailsPage";
 
 export function RoutesPage() {
   return (
@@ -48,6 +50,8 @@ export function RoutesPage() {
           <Route path="shops/list/:category?" element={<ShopsPage />} />
           <Route path="events" element={<EventsPage />} />
           <Route path="events/view/:eventId" element={<EventDetailsPage />} />
+          <Route path="categories" element={<CategoriesPage />} />
+          <Route path="categories/view/:categoryId" element={<CategoryDetailsPage />} />
           <Route path="codes" element={<CodesPage />} />
           <Route path="calculator">
             <Route index element={<CalculatorPage />} />

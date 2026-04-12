@@ -48,7 +48,17 @@ export interface Entity {
   event?: string[];
 }
 
-export type GameDataTypes = "entity" | "item" | "recipe" | "reference_point" | "event" | "skill" | "category";
+export interface Category {
+  id: string;
+  name: string;
+  icon?: string;
+  description?: string;
+  banner?: string;
+  type?: "item" | "entity" | "both";
+}
+
+export type GameDataTypes = "entity" | "item" | "recipe" | "reference_point" | "event" | "skill" | "category" | "conjunto";
+
 
 export interface RecipeItem {
   id: string;

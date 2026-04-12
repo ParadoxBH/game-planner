@@ -1,4 +1,11 @@
-import type { Item, Recipe, Entity, Shop, GameEvent, RedemptionCode, GameDataTypes, ReferencePoints, MapMetadata, GameInfo, Conjunto } from "./gameModels";
+import type { Item, Recipe, Entity, Shop, GameEvent, RedemptionCode, GameDataTypes, ReferencePoints, MapMetadata, GameInfo, Conjunto, Category } from "./gameModels";
+
+export interface CategoryDetails {
+  category: Category;
+  items: Item[];
+  entities: Entity[];
+}
+
 
 export interface NormalizedRecipe extends Recipe {
   normalizedName: string;

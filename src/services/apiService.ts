@@ -3,7 +3,7 @@ import type {
   Recipe,
   Entity,
   Conjunto,
-  GameDataTypes,
+  Category,
 } from "../types/gameModels";
 import type {
   NormalizedRecipe,
@@ -13,6 +13,7 @@ import type {
   ShopDetails,
   EventDetails,
   PaginatedResponse,
+  CategoryDetails,
 } from "../types/apiModels";
 import type { GenericFilter, ItemCriteria, EntityCriteria, RecipeCriteria } from "../types/filterTypes";
 import { getCraftingTotals } from "../utils/craftingTree";
@@ -27,6 +28,7 @@ import { shopRepository } from "../repositories/ShopRepository";
 import { eventRepository } from "../repositories/EventRepository";
 import { conjuntoRepository } from "../repositories/ConjuntoRepository";
 import { referencePointRepository } from "../repositories/ReferencePointRepository";
+import { categoryRepository } from "../repositories/CategoryRepository";
 
 export class ApiService {
   /**
@@ -37,7 +39,7 @@ export class ApiService {
     const matcher = (item: Item, criteria: ItemCriteria) => {
       // 1. Primary Category
       if (criteria.primaryCategory && criteria.primaryCategory !== "all") {
-        const itemCats = Array.isArray(item.category) ? item.category : [item.category];
+        const itemCats = Array.isArray(item.category) ? item.category : [item.category || ""];
         if (itemCats[0]?.toLowerCase() !== criteria.primaryCategory.toLowerCase()) return false;
       }
 
@@ -70,7 +72,7 @@ export class ApiService {
     const matcher = (entity: Entity, criteria: EntityCriteria) => {
       // 1. Primary Category
       if (criteria.primaryCategory && criteria.primaryCategory !== "all") {
-        const cats = Array.isArray(entity.category) ? entity.category : [entity.category];
+        const cats = Array.isArray(entity.category) ? entity.category : [entity.category || ""];
         if (cats[0]?.toLowerCase() !== criteria.primaryCategory.toLowerCase()) return false;
       }
 
@@ -126,16 +128,56 @@ export class ApiService {
     return conjuntoRepository.search(filter, undefined, activeEventIds);
   }
 
-  public async getItemCategories(): Promise<string[]> {
-    return await itemRepository.getPrimaryCategories();
+  public async getItemCategories(): Promise<(Category & { isPrimary: boolean })[]> {
+    const primaryIds = await itemRepository.getPrimaryCategories();
+    const allIds = await itemRepository.getAllCategories();
+    
+    return await Promise.all(allIds.map(async id => {
+      const rich = await this.getRichCategory(id);
+      return { ...rich, isPrimary: primaryIds.includes(id) };
+    }));
   }
 
-  public async getEntityCategories(): Promise<string[]> {
-    return await entityRepository.getPrimaryCategories();
+  public async getEntityCategories(): Promise<(Category & { isPrimary: boolean })[]> {
+    const primaryIds = await entityRepository.getPrimaryCategories();
+    const allIds = await entityRepository.getAllCategories();
+    
+    return await Promise.all(allIds.map(async id => {
+      const rich = await this.getRichCategory(id);
+      return { ...rich, isPrimary: primaryIds.includes(id) };
+    }));
+  }
+
+  public async getRichCategory(categoryId: string): Promise<Category> {
+    // 1. Check if explicit category metadata exists
+    const category = await categoryRepository.getById(categoryId);
+    
+    // 2. Check if there's an entity with the exact same ID
+    const directEntity = await entityRepository.getById(categoryId);
+    
+    // 3. Check if there's exactly one entity in this category
+    const entitiesInCategory = await entityRepository.getEntitiesByCategory(categoryId);
+    const singleEntity = entitiesInCategory.length === 1 ? entitiesInCategory[0] : null;
+
+    // Resolve name and icon
+    return {
+      id: categoryId,
+      name: category?.name || directEntity?.name || singleEntity?.name || categoryId,
+      description: category?.description || directEntity?.description || singleEntity?.description,
+      icon: category?.icon || directEntity?.icon || singleEntity?.icon,
+    };
   }
 
   public async getRecipeStations(): Promise<string[]> {
     return await recipeRepository.getPrimaryStations();
+  }
+  
+  public async getCategories(): Promise<Category[]> {
+    return await categoryRepository.getAllSorted();
+  }
+
+  public async getCategory(categoryId: string): Promise<Category> {
+    return await categoryRepository.getByIdWithFallback(categoryId);
   }
 
   /**
@@ -469,6 +511,33 @@ export class ApiService {
       recipes,
       entities,
       conjuntos,
+    };
+  }
+
+  public async getCategoryDetails(categoryId: string): Promise<CategoryDetails | null> {
+    const category = await this.getCategory(categoryId);
+    
+    const filterBase = (criteria: any = {}) => ({
+      pagination: { page: 1, pageSize: 1000 },
+      sorting: { column: 'id', direction: 'asc' as const },
+      search: '',
+      criteria
+    });
+
+    const itemsRes = await this.getItems(filterBase({ subCategoryStates: { [categoryId]: 'include' } }));
+    const entitiesRes = await this.getEntities(filterBase({ subCategoryStates: { [categoryId]: 'include' } }));
+    
+    // Also include items where this is the PRIMARY category (just in case)
+    const primaryItemsRes = await this.getItems(filterBase({ primaryCategory: categoryId }));
+    const primaryEntitiesRes = await this.getEntities(filterBase({ primaryCategory: categoryId }));
+
+    const allItems = [...itemsRes.data, ...primaryItemsRes.data].filter((v, i, a) => a.findIndex(t => t.id === v.id) === i);
+    const allEntities = [...entitiesRes.data, ...primaryEntitiesRes.data].filter((v, i, a) => a.findIndex(t => t.id === v.id) === i);
+
+    return {
+      category,
+      items: allItems,
+      entities: allEntities,
     };
   }
 

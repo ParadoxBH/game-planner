@@ -25,6 +25,22 @@ export class ItemRepository extends BaseRepository<Item, string> {
 
     return Array.from(categories).sort((a, b) => a.localeCompare(b));
   }
+
+  async getAllCategories(): Promise<string[]> {
+    const all = await this.table.toArray();
+    const categories = new Set<string>();
+    
+    all.forEach(item => {
+      const cats = item.category;
+      if (Array.isArray(cats)) {
+        cats.forEach(c => { if (c) categories.add(c); });
+      } else if (typeof cats === 'string' && cats) {
+        categories.add(cats);
+      }
+    });
+
+    return Array.from(categories).sort((a, b) => a.localeCompare(b));
+  }
 }
 
 export const itemRepository = new ItemRepository();

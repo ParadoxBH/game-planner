@@ -9,7 +9,8 @@ import type {
   RedemptionCode, 
   Conjunto,
   GameInfo,
-  MapMetadata
+  MapMetadata,
+  Category
 } from '../types/gameModels';
 
 export class GameDatabase extends Dexie {
@@ -23,6 +24,7 @@ export class GameDatabase extends Dexie {
   conjuntos!: Table<Conjunto, string>;
   gameInfo!: Table<GameInfo, string>;
   maps!: Table<MapMetadata, string>;
+  categories!: Table<Category, string>;
 
   constructor() {
     super('GamePlannerDB');
@@ -30,7 +32,7 @@ export class GameDatabase extends Dexie {
     // Schema definition
     // The first field is the primary key. 
     // Other fields are indexed for faster searching.
-    this.version(1).stores({
+    this.version(2).stores({
       items: 'id, name, *category, *event',
       recipes: 'id, name, itemId, *stations, *event',
       entities: 'id, name, *category, parentId, *event',
@@ -40,7 +42,8 @@ export class GameDatabase extends Dexie {
       codes: 'code',
       conjuntos: 'id, name, category, *event',
       gameInfo: 'id, name',
-      maps: 'id, name, type'
+      maps: 'id, name, type',
+      categories: 'id, name'
     });
   }
 
