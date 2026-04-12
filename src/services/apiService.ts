@@ -83,7 +83,7 @@ export class ApiService {
   }
 
   public async getItemCategories(): Promise<string[]> {
-    return itemRepository.getUniqueValues('category');
+    return await itemRepository.getPrimaryCategories();
   }
 
   public async getItemDetails(itemId: string): Promise<ItemDetails | null> {
