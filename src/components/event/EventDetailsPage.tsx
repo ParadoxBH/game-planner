@@ -9,6 +9,7 @@ import {
   Breadcrumbs,
   Avatar,
   Chip,
+  CircularProgress,
 } from "@mui/material";
 import {
   NavigateNext,
@@ -23,8 +24,13 @@ import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
 import { RecipeCard } from "../recipe/RecipeCard";
 import { EntityCard } from "../entity/EntityCard";
-import { useMemo } from "react";
-import type { GameDataTypes } from "../../types/gameModels";
+import { useMemo, useState, useEffect } from "react";
+import type { GameDataTypes, GameEvent, Item, Entity, Recipe, Conjunto } from "../../types/gameModels";
+import type { EventDetails } from "../../types/apiModels";
+import { eventRepository } from "../../repositories/EventRepository";
+import { itemRepository } from "../../repositories/ItemRepository";
+import { entityRepository } from "../../repositories/EntityRepository";
+import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
 
 const typeMap = {
   clima: { label: "Clima", color: "#4fc3f7" },
@@ -40,43 +46,68 @@ export function EventDetailsPage() {
   }>();
   const navigate = useNavigate();
 
-  const { loading, getEventDetails, raw } = useApi(gameId);
+  const { loading: dbLoading, getEventDetails } = useApi(gameId);
+  const [eventDetails, setEventDetails] = useState<EventDetails | null>(null);
+  const [dataLoading, setDataLoading] = useState(true);
 
-  const eventDetails = useMemo(
-    () => getEventDetails(eventId),
-    [getEventDetails, eventId],
-  );
+  const [events, setEvents] = useState<GameEvent[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
+  const [entities, setEntities] = useState<Entity[]>([]);
+
+  useEffect(() => {
+    if (dbLoading || !eventId) return;
+
+    let isMounted = true;
+    setDataLoading(true);
+
+    Promise.all([
+      getEventDetails(eventId),
+      eventRepository.getAll(),
+      itemRepository.getAll(),
+      entityRepository.getAll()
+    ]).then(([details, allEvents, allItems, allEntities]) => {
+      if (!isMounted) return;
+      setEventDetails(details);
+      setEvents(allEvents);
+      setItems(allItems);
+      setEntities(allEntities);
+      setDataLoading(false);
+    }).catch(err => {
+      console.error("Error fetching event details:", err);
+      if (isMounted) setDataLoading(false);
+    });
+
+    return () => { isMounted = false; };
+  }, [dbLoading, eventId, getEventDetails]);
 
   const eventsMap = useMemo(() => {
     const map = new Map<string, string>();
-    if (raw?.events) {
-      raw.events.forEach((e) => map.set(e.id, e.name));
-    }
+    events.forEach((e) => map.set(e.id, e.name));
     return map;
-  }, [raw?.events]);
+  }, [events]);
 
   const itemsMap = useMemo(() => {
     const map = new Map<string, any>();
-    if (raw?.items) raw.items.forEach((i) => map.set(i.id, i));
+    items.forEach((i) => map.set(i.id, i));
     return map;
-  }, [raw?.items]);
+  }, [items]);
 
   const entitiesMap = useMemo(() => {
     const map = new Map<string, any>();
-    if (raw?.entities) raw.entities.forEach((e) => map.set(e.id, e));
+    entities.forEach((e) => map.set(e.id, e));
     return map;
-  }, [raw?.entities]);
+  }, [entities]);
 
   const getSourceData = (type: GameDataTypes | undefined, id: string): any => {
     if (type === "entity") return entitiesMap.get(id);
     return itemsMap.get(id);
   };
 
-  if (loading) {
+  if (dbLoading || dataLoading) {
     return (
-      <StyledContainer title="Carregando..." label="Obtendo dados do jogo">
-        <Typography>Por favor, aguarde...</Typography>
-      </StyledContainer>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+        <CircularProgress color="primary" />
+      </Box>
     );
   }
 
@@ -91,7 +122,7 @@ export function EventDetailsPage() {
     );
   }
 
-  const { event, items, recipes, entities, conjuntos } = eventDetails;
+  const { event, items: eventItems, recipes: eventRecipes, entities: eventEntities, conjuntos: eventConjuntos } = eventDetails;
   const typeInfo = typeMap[event.type] || { label: event.type, color: "#999" };
 
   return (
@@ -119,7 +150,6 @@ export function EventDetailsPage() {
       }
     >
       <Stack spacing={4} sx={{ pb: 8 }}>
-        {/* Banner and Header Info */}
         <Paper
           elevation={0}
           sx={{ overflow: "hidden", borderRadius: 4, position: "relative" }}
@@ -218,7 +248,6 @@ export function EventDetailsPage() {
         </Paper>
 
         <Grid container spacing={4}>
-          {/* Related Items */}
           <Grid size={{ xs: 12, lg: 4 }}>
             <Paper
               sx={{
@@ -239,12 +268,12 @@ export function EventDetailsPage() {
                   Itens do Evento
                 </Typography>
                 </Stack>
-                <Chip label={items.length} size="small" sx={{ ml: "auto" }} />
+                <Chip label={eventItems.length} size="small" sx={{ ml: "auto" }} />
               </Stack>
               <Stack overflow={"auto"} maxHeight={500}>
-                {items.length > 0 ? (
+                {eventItems.length > 0 ? (
                   <Grid container spacing={1}>
-                    {items.map((item) => (
+                    {eventItems.map((item) => (
                       <Grid size={{ xs: 4, sm: 3, md: 2, lg: 4 }} key={item.id}>
                         <Box
                           sx={{
@@ -309,7 +338,6 @@ export function EventDetailsPage() {
             </Paper>
           </Grid>
 
-          {/* Related Entities/NPCs */}
           <Grid size={{ xs: 12, lg: 8 }}>
             <Paper
               sx={{
@@ -331,15 +359,15 @@ export function EventDetailsPage() {
                 </Typography>
                 </Stack>
                 <Chip
-                  label={entities.length}
+                  label={eventEntities.length}
                   size="small"
                   sx={{ ml: "auto" }}
                 />
               </Stack>
               <Stack overflow="auto" maxHeight={500}>
-                {entities.length > 0 ? (
+                {eventEntities.length > 0 ? (
                   <Grid container spacing={2}>
-                    {entities.map((entity) => (
+                    {eventEntities.map((entity) => (
                       <Grid size={{ xs: 12, sm: 6 }} key={entity.id}>
                         <EntityCard
                           entity={entity}
@@ -359,8 +387,7 @@ export function EventDetailsPage() {
             </Paper>
           </Grid>
 
-          {/* Conjuntos */}
-          {conjuntos.length > 0 && (
+          {eventConjuntos.length > 0 && (
             <Grid size={{ xs: 12 }}>
               <Paper sx={{ p: 3, backgroundColor: "rgba(255,255,255,0.02)" }}>
                 <Stack
@@ -377,13 +404,13 @@ export function EventDetailsPage() {
                   </Typography>
                   </Stack>
                   <Chip
-                    label={conjuntos.length}
+                    label={eventConjuntos.length}
                     size="small"
                     sx={{ ml: "auto" }}
                   />
                 </Stack>
                 <Grid container spacing={2}>
-                  {conjuntos.map((conjunto) => (
+                  {eventConjuntos.map((conjunto) => (
                     <Grid size={{ xs: 12, md: 6, xl: 4 }} key={conjunto.id}>
                       <Paper
                         sx={{
@@ -432,7 +459,6 @@ export function EventDetailsPage() {
             </Grid>
           )}
 
-          {/* Recipes */}
           <Grid size={{ xs: 12 }}>
             <Paper sx={{ p: 3, backgroundColor: "rgba(255,255,255,0.02)" }}>
               <Stack
@@ -448,12 +474,12 @@ export function EventDetailsPage() {
                   Receitas de Temporada
                 </Typography>
                 </Stack>
-                <Chip label={recipes.length} size="small" sx={{ ml: "auto" }} />
+                <Chip label={eventRecipes.length} size="small" sx={{ ml: "auto" }} />
               </Stack>
               <Stack overflow="auto" maxHeight={500}>
-                {recipes.length > 0 ? (
+                {eventRecipes.length > 0 ? (
                   <Grid container spacing={2}>
-                    {recipes.map((recipe: any) => (
+                    {eventRecipes.map((recipe: any) => (
                       <Grid size={{ xs: 12, md: 6, xl: 4 }} key={recipe.id}>
                         <RecipeCard
                           id={recipe.id}

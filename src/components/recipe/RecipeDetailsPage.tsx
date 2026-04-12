@@ -9,6 +9,7 @@ import {
   Breadcrumbs,
   Tab,
   Tabs,
+  CircularProgress,
 } from "@mui/material";
 import {
   NavigateNext,
@@ -23,14 +24,19 @@ import { useApi } from "../../hooks/useApi";
 import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
 import { TimeChip } from "../common/TimeChip";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { ProductionFlow } from "../flow/ProductionFlow";
 import { CraftingTreeCard } from "./CraftingTreeCard";
 import { GameDataSelector } from "../common/GameDataSelector";
 import { StyledDialog } from "../common/StyledDialog";
 import { getCraftingTree } from "../../utils/craftingTree";
 import type { Item, Entity, Recipe } from "../../types/gameModels";
+import type { RecipeDetails } from "../../types/apiModels";
 import { theme } from "../../theme/theme";
+import { itemRepository } from "../../repositories/ItemRepository";
+import { entityRepository } from "../../repositories/EntityRepository";
+import { recipeRepository } from "../../repositories/RecipeRepository";
+import { shopRepository } from "../../repositories/ShopRepository";
 
 export function RecipeDetailsPage() {
   const { gameId, recipeId = "" } = useParams<{
@@ -38,9 +44,17 @@ export function RecipeDetailsPage() {
     recipeId: string;
   }>();
 
-  const { loading, getRecipeDetails, raw } = useApi(gameId);
+  const { loading: dbLoading, getRecipeDetails } = useApi(gameId);
 
   const [activeTab, setActiveTab] = useState(0);
+  const [recipeDetails, setRecipeDetails] = useState<RecipeDetails | null>(null);
+  const [dataLoading, setDataLoading] = useState(true);
+  
+  const [items, setItems] = useState<Item[]>([]);
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [shops, setShops] = useState<any[]>([]);
+
   const [categoryChoices, setCategoryChoices] = useState<
     Record<string, string>
   >({});
@@ -56,16 +70,48 @@ export function RecipeDetailsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isRecipeDialogOpen, setIsRecipeDialogOpen] = useState(false);
 
+  // Fetch all data needed for the page and tree calculations
+  useEffect(() => {
+    if (dbLoading || !recipeId) return;
+
+    let isMounted = true;
+    setDataLoading(true);
+
+    Promise.all([
+      getRecipeDetails(recipeId),
+      itemRepository.getAll(),
+      entityRepository.getAll(),
+      recipeRepository.getAll(),
+      shopRepository.getAll()
+    ]).then(([details, allItems, allEntities, allRecipes, allShops]) => {
+      if (!isMounted) return;
+      setRecipeDetails(details);
+      setItems(allItems);
+      setEntities(allEntities);
+      setRecipes(allRecipes);
+      setShops(allShops);
+      setDataLoading(false);
+    }).catch(err => {
+      console.error("Error loading recipe details data:", err);
+      if (isMounted) setDataLoading(false);
+    });
+
+    return () => { isMounted = false; };
+  }, [dbLoading, recipeId, getRecipeDetails]);
+
   const treeOptions = useMemo(() => {
+    if (dataLoading) return null;
+
     const itemMap = new Map<string, Item>();
-    raw?.items?.forEach((i: Item) => itemMap.set(i.id, i));
+    items.forEach((i: Item) => itemMap.set(i.id, i));
 
     const entityMap = new Map<string, Entity>();
-    raw?.entities?.forEach((e: Entity) => entityMap.set(e.id, e));
+    entities.forEach((e: Entity) => entityMap.set(e.id, e));
 
     const recipeMapByProduct = new Map<string, Recipe>();
     const allRecipesByProduct = new Map<string, Recipe[]>();
-    raw?.recipes?.forEach((r: Recipe) => {
+    
+    recipes.forEach((r: Recipe) => {
       // Direct product match
       if (r.itemId) {
         recipeMapByProduct.set(r.itemId, r);
@@ -80,7 +126,7 @@ export function RecipeDetailsPage() {
           allRecipesByProduct.set(p.id, [...catAlts, r]);
 
           // If product is a category, this recipe can produce any item/entity in that category
-          raw.items?.forEach((item: Item) => {
+          items.forEach((item: Item) => {
             const categories = Array.isArray(item.category) ? item.category : [item.category];
             if (categories.includes(p.id)) {
               const current = allRecipesByProduct.get(item.id) || [];
@@ -88,7 +134,7 @@ export function RecipeDetailsPage() {
               if (!recipeMapByProduct.has(item.id)) recipeMapByProduct.set(item.id, r);
             }
           });
-          raw.entities?.forEach((ent: Entity) => {
+          entities.forEach((ent: Entity) => {
             const categories = Array.isArray(ent.category) ? ent.category : [ent.category];
             if (categories.includes(p.id)) {
               const current = allRecipesByProduct.get(ent.id) || [];
@@ -106,7 +152,7 @@ export function RecipeDetailsPage() {
 
     const shopMap = new Map<string, string>();
     const shopNames = new Map<string, string>();
-    raw?.shops?.forEach((shop: any) => {
+    shops.forEach((shop: any) => {
       shopNames.set(shop.id, shop.name);
       shop.groups.forEach((group: any) => {
         group.items.forEach((item: any) => {
@@ -125,27 +171,24 @@ export function RecipeDetailsPage() {
       categoryChoices,
       recipeChoices,
     };
-  }, [raw, categoryChoices, recipeChoices]);
-
-  const recipeDetails = useMemo(
-    () => getRecipeDetails(recipeId),
-    [getRecipeDetails, recipeId],
-  );
+  }, [items, entities, recipes, shops, categoryChoices, recipeChoices, dataLoading]);
 
   const tree = useMemo(() => {
-    const product = recipeDetails?.products[0];
-    const itemId = recipeDetails?.recipe.itemId || product?.id || "";
+    if (!recipeDetails || !treeOptions) return null;
+    
+    const product = recipeDetails.products?.[0];
+    const itemId = recipeDetails.recipe.itemId || product?.id || "";
     const type = product?.type || "item";
 
     if (!itemId) return null;
     return getCraftingTree(itemId, 1, type, treeOptions);
   }, [recipeDetails, treeOptions]);
 
-  if (loading) {
+  if (dbLoading || dataLoading) {
     return (
-      <StyledContainer title="Carregando..." label="Obtendo dados do jogo">
-        <Typography>Por favor, aguarde...</Typography>
-      </StyledContainer>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+        <CircularProgress color="primary" />
+      </Box>
     );
   }
 
@@ -208,7 +251,6 @@ export function RecipeDetailsPage() {
         <Stack spacing={2}>
           <Stack spacing={2} direction={"row"}>
             <Paper elevation={0} sx={{ p: 2, height: "100%", width: 400 }}>
-              {/* ... station info ... */}
               <Stack spacing={1} alignItems="center" textAlign="center">
                 <Box
                   sx={{
@@ -316,8 +358,7 @@ export function RecipeDetailsPage() {
                           <AutoFixHigh fontSize="small" color="primary" />
                           <Typography variant="body2">
                             {u.type === "event"
-                              ? raw?.events?.find((e) => e.id === u.value)
-                                  ?.name || u.value
+                              ? "Evento: " + u.value
                               : u.value}
                           </Typography>
                         </Box>
@@ -343,7 +384,7 @@ export function RecipeDetailsPage() {
                     {ingredients.map((ing: any, idx: number) => {
                       const choiceId = categoryChoices[ing.id];
                       const selectedItem = choiceId
-                        ? treeOptions.itemMap.get(choiceId)
+                        ? treeOptions?.itemMap.get(choiceId)
                         : null;
 
                       return (
@@ -378,7 +419,7 @@ export function RecipeDetailsPage() {
                                 id={choiceId || ing.id}
                                 icon={selectedItem?.icon || ing.data?.icon}
                                 amount={ing.amount}
-                                type={choiceId ? (treeOptions.entityMap.has(choiceId) ? "entity" : "item") : ing.type}
+                                type={choiceId ? (treeOptions?.entityMap.has(choiceId) ? "entity" : "item") : ing.type}
                               />
                               <Box sx={{ flexGrow: 1, minWidth: 0 }}>
                                 {ing.type !== "category" ? (
@@ -593,7 +634,7 @@ export function RecipeDetailsPage() {
         </Stack>
       </Box>
 
-      {activeTab === 1 && tree && (
+      {activeTab === 1 && tree && treeOptions && (
         <ProductionFlow
           tree={tree}
           allRecipesByProduct={treeOptions.allRecipesByProduct}
@@ -608,7 +649,7 @@ export function RecipeDetailsPage() {
         />
       )}
 
-      {activeTab === 2 && tree && (
+      {activeTab === 2 && tree && treeOptions && (
         <CraftingTreeCard
           itemId={tree.id}
           amount={1}
@@ -658,13 +699,13 @@ export function RecipeDetailsPage() {
             Escolha qual receita utilizar para produzir{" "}
             <strong>
               {activeRecipeSelection &&
-                treeOptions.itemMap.get(activeRecipeSelection)?.name}
+                treeOptions?.itemMap.get(activeRecipeSelection)?.name}
             </strong>
             :
           </Typography>
           <Stack spacing={2}>
             {activeRecipeSelection &&
-              treeOptions.allRecipesByProduct
+              treeOptions?.allRecipesByProduct
                 ?.get(activeRecipeSelection)
                 ?.map((recipe) => (
                   <Paper
