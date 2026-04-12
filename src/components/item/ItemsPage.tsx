@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Inventory, Sell, ShoppingCart, SwapHoriz } from "@mui/icons-material";
 import { ItemCard } from "./ItemCard";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
 import { useState, useMemo, useEffect } from "react";
 import { StyledContainer } from "../common/StyledContainer";
@@ -32,8 +32,10 @@ export function ItemsPage() {
     category?: string;
   }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const subCategoryParam = searchParams.get("subCategory");
 
-  const { loading: dbLoading, error, getItemsList, getItemCategories } = useApi(gameId);
+  const { loading: dbLoading, error, getItemsList, getItemCategories, getItemSubCategories } = useApi(gameId);
   const [itemsResponse, setItemsResponse] = useState<PaginatedResponse<Item> | null>(null);
   const [dataLoading, setDataLoading] = useState(false);
   
@@ -52,9 +54,18 @@ export function ItemsPage() {
   useEffect(() => {
     pages.setCriteria({
       primaryCategory: urlCategory || "all",
-      subCategoryStates: {} // Reset subcategories when primary changes
+      subCategoryStates: subCategoryParam ? { [subCategoryParam]: "include" } : {}
     });
   }, [urlCategory]);
+
+  // Sync SubCategory from URL specifically (external links)
+  useEffect(() => {
+    if (subCategoryParam) {
+      pages.setCriteria({
+        subCategoryStates: { [subCategoryParam]: "include" }
+      });
+    }
+  }, [subCategoryParam]);
 
   // Load all categories for the selector
   useEffect(() => {
@@ -86,26 +97,14 @@ export function ItemsPage() {
 
   const items = useMemo(() => itemsResponse?.data || [], [itemsResponse]);
 
-  // Derive available sub-categories from all items (or a separate call)
-  // For now, let's derive from ALL categories that are sub-categories of the current primary.
+  // Derive available sub-categories from all items based ONLY on primary category
   useEffect(() => {
-    if (!allCategories.length) return;
+    if (dbLoading) return;
     
-    const currentPrimary = urlCategory === "all" ? null : urlCategory;
-    const cats = new Set<string>();
-    items.forEach((item) => {
-      const itemCats = item.category;
-      const catsArr = Array.isArray(itemCats) ? itemCats : (itemCats ? [itemCats] : []);
-      const primary = catsArr[0];
-
-      if (!currentPrimary || (primary && primary.toLowerCase() === currentPrimary.toLowerCase())) {
-        if (catsArr.length > 1) {
-          catsArr.slice(1).forEach((c) => cats.add(c));
-        }
-      }
-    });
-    setAvailableSubCategories(Array.from(cats).sort());
-  }, [allCategories, urlCategory, items]);
+    getItemSubCategories(urlCategory || "all")
+      .then(setAvailableSubCategories)
+      .catch(console.error);
+  }, [dbLoading, urlCategory, getItemSubCategories]);
 
 
   // Update search specifically

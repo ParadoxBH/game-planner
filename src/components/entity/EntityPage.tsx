@@ -39,6 +39,7 @@ export function EntityPage() {
     error: errorApi,
     getEntityList,
     getEntityCategories,
+    getEntitySubCategories,
   } = useApi(gameId);
   
   const [entitiesResponse, setEntitiesResponse] = useState<PaginatedResponse<Entity> | null>(null);
@@ -60,7 +61,16 @@ export function EntityPage() {
       primaryCategory: urlCategory || "all",
       subCategoryStates: subCategoryParam ? { [subCategoryParam]: "include" } : {}
     });
-  }, [urlCategory, subCategoryParam]);
+  }, [urlCategory]);
+
+  // Sync SubCategory from URL specifically (external links)
+  useEffect(() => {
+    if (subCategoryParam) {
+      pages.setCriteria({
+        subCategoryStates: { [subCategoryParam]: "include" }
+      });
+    }
+  }, [subCategoryParam]);
 
   // Load static data (shops and categories)
   useEffect(() => {
@@ -93,23 +103,14 @@ export function EntityPage() {
 
   const entities = useMemo(() => entitiesResponse?.data || [], [entitiesResponse]);
 
-  // Derive sub-categories from current results
+  // Derive available sub-categories from all entities based ONLY on primary category
   useEffect(() => {
-    const cats = new Set<string>();
-    const currentPrimary = urlCategory === "all" ? null : urlCategory;
-
-    entities.forEach((entity: Entity) => {
-      const catsArr = Array.isArray(entity.category) ? entity.category : [entity.category];
-      const primary = catsArr[0];
-      if (!currentPrimary || (primary && primary.toLowerCase() === currentPrimary.toLowerCase())) {
-        if (catsArr.length > 1) {
-          catsArr.slice(1).forEach((cat) => { if (cat) cats.add(cat); });
-        }
-      }
-    });
-
-    setAvailableSubCategories(Array.from(cats).sort());
-  }, [entities, urlCategory]);
+    if (dbLoading) return;
+    
+    getEntitySubCategories(urlCategory || "all")
+      .then(setAvailableSubCategories)
+      .catch(console.error);
+  }, [dbLoading, urlCategory, getEntitySubCategories]);
 
   const shopNPCIds = useMemo(() => {
     const ids = new Set<string>();

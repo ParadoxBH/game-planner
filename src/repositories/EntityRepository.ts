@@ -58,6 +58,23 @@ export class EntityRepository extends BaseRepository<Entity, string> {
       return false;
     }).toArray();
   }
+
+  async getSubCategoriesByPrimary(primary: string): Promise<string[]> {
+    const all = await this.table.toArray();
+    const categories = new Set<string>();
+    const searchLower = primary ? primary.toLowerCase() : "all";
+    
+    all.forEach(entity => {
+      const cats = Array.isArray(entity.category) ? entity.category : (entity.category ? [entity.category] : []);
+      if (searchLower === "all" || (cats[0]?.toLowerCase() === searchLower)) {
+        if (cats.length > 1) {
+          cats.slice(1).forEach(c => { if (c) categories.add(c); });
+        }
+      }
+    });
+
+    return Array.from(categories).sort((a, b) => a.localeCompare(b));
+  }
 }
 
 export const entityRepository = new EntityRepository();

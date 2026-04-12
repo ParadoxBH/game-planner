@@ -41,6 +41,23 @@ export class ItemRepository extends BaseRepository<Item, string> {
 
     return Array.from(categories).sort((a, b) => a.localeCompare(b));
   }
+
+  async getSubCategoriesByPrimary(primary: string): Promise<string[]> {
+    const all = await this.table.toArray();
+    const categories = new Set<string>();
+    const searchLower = primary ? primary.toLowerCase() : "all";
+    
+    all.forEach(item => {
+      const cats = Array.isArray(item.category) ? item.category : (item.category ? [item.category] : []);
+      if (searchLower === "all" || (cats[0]?.toLowerCase() === searchLower)) {
+        if (cats.length > 1) {
+          cats.slice(1).forEach(c => { if (c) categories.add(c); });
+        }
+      }
+    });
+
+    return Array.from(categories).sort((a, b) => a.localeCompare(b));
+  }
 }
 
 export const itemRepository = new ItemRepository();

@@ -67,6 +67,14 @@ export function useApi(gameId: string | undefined) {
     return apiService.getEntityCategories();
   }, []);
 
+  const getItemSubCategories = useCallback(async (primary: string) => {
+    return apiService.getItemSubCategories(primary);
+  }, []);
+
+  const getEntitySubCategories = useCallback(async (primary: string) => {
+    return apiService.getEntitySubCategories(primary);
+  }, []);
+
   const getShopDetails = useCallback(async (shopId: string) => {
     return apiService.getShopDetails(shopId);
   }, []);
@@ -126,5 +134,7 @@ export function useApi(gameId: string | undefined) {
     getCategoryDetails,
     getCategories,
     getCategory,
+    getItemSubCategories,
+    getEntitySubCategories,
   };
 }

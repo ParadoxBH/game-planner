@@ -45,13 +45,22 @@ export class ApiService {
 
       // 2. Sub Category States
       if (criteria.subCategoryStates) {
-        for (const [cat, state] of Object.entries(criteria.subCategoryStates)) {
-          if (state === 'indifferent') continue;
-          const itemCats = Array.isArray(item.category) ? item.category : [item.category || ""];
-          const hasCat = itemCats.includes(cat);
-          if (state === 'exclude' && hasCat) return false;
-          if (state === 'include' && !hasCat) return false;
-        }
+        const itemCatsLower = (Array.isArray(item.category) ? item.category : [item.category || ""])
+          .map(c => c.toLowerCase());
+        
+        const included = Object.entries(criteria.subCategoryStates)
+          .filter(([_, state]) => state === 'include')
+          .map(([cat]) => cat.toLowerCase());
+          
+        const excluded = Object.entries(criteria.subCategoryStates)
+          .filter(([_, state]) => state === 'exclude')
+          .map(([cat]) => cat.toLowerCase());
+
+        // Fail if any excluded category is present
+        if (excluded.some(cat => itemCatsLower.includes(cat))) return false;
+
+        // Fail if ANY inclusion is defined but NONE match
+        if (included.length > 0 && !included.some(cat => itemCatsLower.includes(cat))) return false;
       }
 
       // 3. Trade Status
@@ -78,13 +87,22 @@ export class ApiService {
 
       // 2. Sub Category States
       if (criteria.subCategoryStates) {
-        for (const [cat, state] of Object.entries(criteria.subCategoryStates)) {
-          if (state === 'indifferent') continue;
-          const cats = Array.isArray(entity.category) ? entity.category : [entity.category || ""];
-          const hasCat = cats.includes(cat);
-          if (state === 'exclude' && hasCat) return false;
-          if (state === 'include' && !hasCat) return false;
-        }
+        const catsLower = (Array.isArray(entity.category) ? entity.category : [entity.category || ""])
+          .map(c => c && c.toLowerCase());
+        
+        const included = Object.entries(criteria.subCategoryStates)
+          .filter(([_, state]) => state === 'include')
+          .map(([cat]) => cat.toLowerCase());
+          
+        const excluded = Object.entries(criteria.subCategoryStates)
+          .filter(([_, state]) => state === 'exclude')
+          .map(([cat]) => cat.toLowerCase());
+
+        // Fail if any excluded category is present
+        if (excluded.some(cat => cat && catsLower.includes(cat))) return false;
+
+        // Fail if ANY inclusion is defined but NONE match
+        if (included.length > 0 && !included.some(cat => cat && catsLower.includes(cat))) return false;
       }
 
       return true;
@@ -105,12 +123,21 @@ export class ApiService {
 
       // 2. Sub Station States
       if (criteria.subStationStates) {
-        for (const [st, state] of Object.entries(criteria.subStationStates)) {
-          if (state === 'indifferent') continue;
-          const hasSt = stationsArr.includes(st);
-          if (state === 'exclude' && hasSt) return false;
-          if (state === 'include' && !hasSt) return false;
-        }
+        const stationsLower = stationsArr.map(s => s && s.toLowerCase());
+        
+        const included = Object.entries(criteria.subStationStates)
+          .filter(([_, state]) => state === 'include')
+          .map(([st]) => st.toLowerCase());
+          
+        const excluded = Object.entries(criteria.subStationStates)
+          .filter(([_, state]) => state === 'exclude')
+          .map(([st]) => st.toLowerCase());
+
+        // Fail if any excluded station is present
+        if (excluded.some(st => st && stationsLower.includes(st))) return false;
+
+        // Fail if ANY inclusion is defined but NONE match
+        if (included.length > 0 && !included.some(st => st && stationsLower.includes(st))) return false;
       }
 
       return true;
@@ -138,6 +165,10 @@ export class ApiService {
     }));
   }
 
+  public async getItemSubCategories(primary: string): Promise<string[]> {
+    return await itemRepository.getSubCategoriesByPrimary(primary);
+  }
+
   public async getEntityCategories(): Promise<(Category & { isPrimary: boolean })[]> {
     const primaryIds = await entityRepository.getPrimaryCategories();
     const allIds = await entityRepository.getAllCategories();
@@ -146,6 +177,10 @@ export class ApiService {
       const rich = await this.getRichCategory(id);
       return { ...rich, isPrimary: primaryIds.includes(id) };
     }));
+  }
+
+  public async getEntitySubCategories(primary: string): Promise<string[]> {
+    return await entityRepository.getSubCategoriesByPrimary(primary);
   }
 
   public async getRichCategory(categoryId: string): Promise<Category> {
