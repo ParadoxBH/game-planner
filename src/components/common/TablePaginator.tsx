@@ -15,8 +15,6 @@ export function TablePaginator({ controller }: TablePaginatorProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openSizeMenu = Boolean(anchorEl);
 
-  if (lastPage <= 1 && pageSize === 30) return null;
-
   return (
     <Box 
       sx={{ 
@@ -123,7 +121,7 @@ export function TablePaginator({ controller }: TablePaginatorProps) {
             }
           }}
         >
-          {[10, 30, 50, 100].map((size) => (
+          {[25, 50, 100, 200, 300].map((size) => (
             <MenuItem 
               key={size} 
               selected={pageSize === size}

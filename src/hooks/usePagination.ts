@@ -30,7 +30,7 @@ export function usePagination<T>(initialCriteria: T): PaginationController<T> {
   const [filter, setFilter] = useState<GenericFilter<T>>(() => {
     const page = parseInt(searchParams.get("page") || "1", 10);
     const search = searchParams.get("search") || "";
-    const pageSize = parseInt(searchParams.get("pageSize") || "30", 10);
+    const pageSize = parseInt(searchParams.get("pageSize") || "100", 10);
     const criteria = parseCriteria();
 
     return {
