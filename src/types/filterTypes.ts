@@ -20,3 +20,8 @@ export interface ItemCriteria {
   subCategoryStates?: Record<string, 'include' | 'exclude' | 'indifferent'>;
   tradeStatus?: string | null;
 }
+
+export interface EntityCriteria {
+  primaryCategory?: string;
+  subCategoryStates?: Record<string, 'include' | 'exclude' | 'indifferent'>;
+}

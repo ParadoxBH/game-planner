@@ -63,6 +63,10 @@ export function useApi(gameId: string | undefined) {
     return apiService.getItemCategories();
   }, []);
 
+  const getEntityCategories = useCallback(async () => {
+    return apiService.getEntityCategories();
+  }, []);
+
   const getShopDetails = useCallback(async (shopId: string) => {
     return apiService.getShopDetails(shopId);
   }, []);
@@ -93,6 +97,7 @@ export function useApi(gameId: string | undefined) {
     getItemDetails,
     getItemCategories,
     getEntityDetails,
+    getEntityCategories,
     getShopDetails,
     getRecipeDetails,
     getEventDetails,

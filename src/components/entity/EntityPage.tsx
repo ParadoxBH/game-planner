@@ -4,6 +4,7 @@ import {
   CircularProgress,
   FormControlLabel,
   Switch,
+  Tooltip,
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useMemo, useEffect } from "react";
@@ -19,8 +20,10 @@ import { ListingDataView } from "../common/ListingDataView";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { useViewMode } from "../../hooks/useViewMode";
 import { ItemChip } from "../common/ItemChip";
-import { Tooltip } from "@mui/material";
 import { shopRepository } from "../../repositories/ShopRepository";
+import { usePagination } from "../../hooks/usePagination";
+import type { EntityCriteria } from "../../types/filterTypes";
+import type { PaginatedResponse } from "../../types/apiModels";
 
 export function EntityPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -33,123 +36,78 @@ export function EntityPage() {
     loading: dbLoading,
     error: errorApi,
     getEntityList,
+    getEntityCategories,
   } = useApi(gameId);
   
-  const [entities, setEntities] = useState<Entity[]>([]);
+  const [entitiesResponse, setEntitiesResponse] = useState<PaginatedResponse<Entity> | null>(null);
   const [shops, setShops] = useState<Shop[]>([]);
-  const [dataLoading, setDataLoading] = useState(true);
-
-  const [searchTerm, setSearchTerm] = useState("");
+  const [dataLoading, setDataLoading] = useState(false);
   const [viewMode, setViewMode] = useViewMode("entities");
-  const [availableSubCategories, setAvailableSubCategories] = useState<
-    string[]
-  >([]);
-  const [subCategoryStates, setSubCategoryStates] = useState<Record<string, TripleState>>({});
   const [showPrices, setShowPrices] = useState(false);
+  const [allCategories, setAllCategories] = useState<string[]>([]);
+  const [availableSubCategories, setAvailableSubCategories] = useState<string[]>([]);
 
+  const pages = usePagination<EntityCriteria>({
+    primaryCategory: urlCategory || "all",
+    subCategoryStates: {},
+  });
+
+  // Sync URL Category to filter
+  useEffect(() => {
+    pages.setCriteria({
+      primaryCategory: urlCategory || "all",
+      subCategoryStates: {}
+    });
+  }, [urlCategory]);
+
+  // Load static data (shops and categories)
+  useEffect(() => {
+    if (dbLoading) return;
+    shopRepository.getAll().then(setShops);
+    getEntityCategories().then(setAllCategories);
+  }, [dbLoading, getEntityCategories]);
+
+  // Load paginated entities
   useEffect(() => {
     if (dbLoading) return;
 
     let isMounted = true;
     setDataLoading(true);
 
-    Promise.all([
-      getEntityList(),
-      shopRepository.getAll()
-    ]).then(([results, allShops]) => {
-      if (!isMounted) return;
-      const list = Array.isArray(results) ? results : results.data;
-      setEntities(list);
-      setShops(allShops);
-      setDataLoading(false);
-    }).catch(err => {
-      console.error("Error fetching entities data:", err);
-      if (isMounted) setDataLoading(false);
-    });
+    getEntityList(pages.info)
+      .then((results) => {
+        if (!isMounted) return;
+        setEntitiesResponse(results);
+        pages.setTotalItems(results.total);
+        setDataLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching entities:", err);
+        if (isMounted) setDataLoading(false);
+      });
 
     return () => { isMounted = false; };
-  }, [dbLoading, getEntityList]);
+  }, [dbLoading, getEntityList, pages.info]);
 
-  const categories = useMemo(() => {
-    const cats = new Set<string>();
-    entities.forEach((entity: Entity) => {
-      const catsArr = Array.isArray(entity.category)
-        ? entity.category
-        : [entity.category];
-      if (catsArr[0]) cats.add(catsArr[0]);
-    });
-    return Array.from(cats).sort();
-  }, [entities]);
+  const entities = useMemo(() => entitiesResponse?.data || [], [entitiesResponse]);
 
-  // Update available sub-categories when primary category changes
+  // Derive sub-categories from current results
   useEffect(() => {
     const cats = new Set<string>();
     const currentPrimary = urlCategory === "all" ? null : urlCategory;
 
     entities.forEach((entity: Entity) => {
-      const catsArr = Array.isArray(entity.category)
-        ? entity.category
-        : [entity.category];
+      const catsArr = Array.isArray(entity.category) ? entity.category : [entity.category];
       const primary = catsArr[0];
-      if (
-        !currentPrimary ||
-        (primary && primary.toLowerCase() === currentPrimary.toLowerCase())
-      ) {
+      if (!currentPrimary || (primary && primary.toLowerCase() === currentPrimary.toLowerCase())) {
         if (catsArr.length > 1) {
-          catsArr.slice(1).forEach((cat: string | undefined) => {
-            if (cat) cats.add(cat);
-          });
+          catsArr.slice(1).forEach((cat) => { if (cat) cats.add(cat); });
         }
       }
     });
 
     setAvailableSubCategories(Array.from(cats).sort());
-
-    // Clean up states for categories that are no longer available
-    setSubCategoryStates(prev => {
-      const next = { ...prev };
-      let changed = false;
-      Object.keys(next).forEach(cat => {
-        if (!cats.has(cat)) {
-          delete next[cat];
-          changed = true;
-        }
-      });
-      return changed ? next : prev;
-    });
   }, [entities, urlCategory]);
-
-  const filteredEntities = useMemo(() => {
-    let list = [...entities];
-
-    // Apply primary category filter
-    if (urlCategory && urlCategory !== "all") {
-      list = list.filter(entity => {
-        const cats = Array.isArray(entity.category) ? entity.category : [entity.category];
-        return cats[0]?.toLowerCase() === urlCategory.toLowerCase();
-      });
-    }
-
-    // Apply sub-category states
-    Object.entries(subCategoryStates).forEach(([cat, state]) => {
-      if (state === "indifferent") return;
-      list = list.filter(entity => {
-        const cats = Array.isArray(entity.category) ? entity.category : [entity.category || ""];
-        const hasCat = cats.includes(cat);
-        return state === "exclude" ? !hasCat : hasCat;
-      });
-    });
-
-    // Apply search filter
-    if (!searchTerm) return list;
-
-    const lowerSearch = searchTerm.toLowerCase();
-    return list.filter(
-      (entity: Entity) =>
-        entity.name.toLowerCase().includes(lowerSearch) ||
-        entity.id.toLowerCase().includes(lowerSearch),
-    );
-  }, [entities, urlCategory, subCategoryStates, searchTerm]);
 
   const shopNPCIds = useMemo(() => {
     const ids = new Set<string>();
@@ -159,52 +117,25 @@ export function EntityPage() {
     return ids;
   }, [shops]);
 
-  if (dbLoading || dataLoading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100%",
-          width: "100%",
-        }}
-      >
-        <CircularProgress color="primary" />
-      </Box>
-    );
-  }
-
-  if (errorApi) {
-    return (
-      <Box sx={{ p: 4, textAlign: "center" }}>
-        <Typography color="error" variant="h6">
-          Erro ao carregar entidades
-        </Typography>
-      </Box>
-    );
-  }
-
   const handleSubCategoryStateChange = (option: string, newState: TripleState) => {
-    setSubCategoryStates(prev => ({
-      ...prev,
-      [option]: newState
-    }));
+    const nextSub = { ...pages.info.criteria.subCategoryStates, [option]: newState };
+    pages.setCriteria({ subCategoryStates: nextSub });
   };
 
   return (
     <StyledContainer
       title={`${urlCategory && urlCategory !== "all" ? urlCategory.charAt(0).toUpperCase() + urlCategory.slice(1) : "Entidades"} de ${gameId}`}
       label="Explore e descubra todas as entidades do jogo."
-      searchValue={searchTerm}
-      onChangeSearch={setSearchTerm}
+      searchValue={pages.info.search}
+      onChangeSearch={(val) => pages.setSearch(val)}
       search={{ placeholder: "Pesquisar entidades..." }}
+      pages={pages}
       actionsStart={
         <>
           <PickSelector
             label="Categoria"
             value={urlCategory === "all" ? null : urlCategory || null}
-            options={categories}
+            options={allCategories}
             onChange={(cat) => {
               navigate(`/game/${gameId}/entity/list/${cat || "all"}`);
             }}
@@ -213,7 +144,7 @@ export function EntityPage() {
           {availableSubCategories.length > 0 && (
             <TriplePickSelector
               label="Sub-categoria"
-              states={subCategoryStates}
+              states={pages.info.criteria.subCategoryStates || {}}
               options={availableSubCategories}
               onChange={handleSubCategoryStateChange}
               icon={<FilterList sx={{ fontSize: 18 }} />}
@@ -246,74 +177,88 @@ export function EntityPage() {
         </>
       }
     >
-      <ListingDataView
-        data={filteredEntities}
-        viewMode={viewMode}
-        variant="compact"
-        cardMinWidth={200}
-        listHeader={[
-          { label: "Entidade", width: "70%" },
-          { label: "Preços", align: "right" as const, width: "30%", hidden: !showPrices },
-        ]}
-        emptyMessage="Nenhuma entidade encontrada neste filtro."
-        renderCard={(entity: any, variant) => (
-          <EntityCard
-            key={entity.id}
-            entity={entity}
-            showPrices={showPrices}
-            hasShop={shopNPCIds.has(entity.id.toLowerCase())}
-            onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
-            variant={variant}
-          />
-        )}
-        renderListItem={(entity: any) => [
-          <Box
-            key={`entity_list_${entity.id}`}
-            onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 2,
-              cursor: "pointer",
-            }}
-          >
+      {(dbLoading || dataLoading) ? (
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", py: 10, flex: 1 }}>
+          <CircularProgress color="primary" />
+        </Box>
+      ) : errorApi ? (
+        <Box sx={{ p: 4, textAlign: "center", flex: 1 }}>
+          <Typography color="error" variant="h6" sx={{ fontWeight: 700 }}>
+            Erro ao carregar entidades
+          </Typography>
+          <Typography variant="body2" sx={{ color: "text.secondary", mt: 1 }}>
+            {errorApi}
+          </Typography>
+        </Box>
+      ) : (
+        <ListingDataView
+          data={entities}
+          viewMode={viewMode}
+          variant="compact"
+          cardMinWidth={200}
+          listHeader={[
+            { label: "Entidade", width: "70%" },
+            { label: "Preços", align: "right" as const, width: "30%", hidden: !showPrices },
+          ]}
+          emptyMessage="Nenhuma entidade encontrada neste filtro."
+          renderCard={(entity: any, variant) => (
+            <EntityCard
+              key={entity.id}
+              entity={entity}
+              showPrices={showPrices}
+              hasShop={shopNPCIds.has(entity.id.toLowerCase())}
+              onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
+              variant={variant}
+            />
+          )}
+          renderListItem={(entity: any) => [
             <Box
+              key={`entity_list_${entity.id}`}
+              onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
               sx={{
-                width: 32,
-                height: 32,
-                borderRadius: 0.5,
-                backgroundColor: "rgba(0,0,0,0.2)",
                 display: "flex",
-                justifyContent: "center",
                 alignItems: "center",
-                flexShrink: 0,
+                gap: 2,
+                cursor: "pointer",
               }}
             >
-              {entity.icon ? (
-                <img
-                  src={entity.icon}
-                  alt={entity.name}
-                  style={{
-                    width: "80%",
-                    height: "80%",
-                    objectFit: "contain",
-                  }}
-                />
-              ) : (
-                <BugReport
-                  sx={{ fontSize: 16, color: "rgba(255, 255, 255, 0.2)" }}
-                />
-              )}
-            </Box>
-            <Typography variant="body2" sx={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
-              {entity.name}
-              {shopNPCIds.has(entity.id.toLowerCase()) && (
-                <Tooltip title="NPC com Loja">
-                  <Storefront sx={{ fontSize: 14, color: 'primary.main' }} />
-                </Tooltip>
-              )}
-            </Typography>
-          </Box>,
+              <Box
+                sx={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 0.5,
+                  backgroundColor: "rgba(0,0,0,0.2)",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexShrink: 0,
+                }}
+              >
+                {entity.icon ? (
+                  <img
+                    src={entity.icon}
+                    alt={entity.name}
+                    style={{
+                      width: "80%",
+                      height: "80%",
+                      objectFit: "contain",
+                    }}
+                  />
+                ) : (
+                  <BugReport
+                    sx={{ fontSize: 16, color: "rgba(255, 255, 255, 0.2)" }}
+                  />
+                )}
+              </Box>
+              <Typography variant="body2" sx={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
+                {entity.name}
+                {shopNPCIds.has(entity.id.toLowerCase()) && (
+                  <Tooltip title="NPC com Loja">
+                    <Storefront sx={{ fontSize: 14, color: 'primary.main' }} />
+                  </Tooltip>
+                )}
+              </Typography>
+            </Box>,
             <Box key={`entity_prices_${entity.id}`} sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
               {entity.buyPrice !== undefined && (
                 <Tooltip title="Compra">
@@ -342,41 +287,42 @@ export function EntityPage() {
                 </Tooltip>
               )}
             </Box>
-        ]}
-        renderIconItem={(entity: any) => (
-          <Tooltip key={`entity_icon_${entity.id}`} title={`${entity.name} (${entity.id})`}>
-            <Box
-              onClick={() =>
-                navigate(`/game/${gameId}/entity/view/${entity.id}`)
-              }
-              sx={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                p: 1,
-              }}
-            >
-              {entity.icon ? (
-                <img
-                  src={entity.icon}
-                  alt={entity.name}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "contain",
-                  }}
-                />
-              ) : (
-                <BugReport
-                  sx={{ fontSize: 32, color: "rgba(255, 255, 255, 0.2)" }}
-                />
-              )}
-            </Box>
-          </Tooltip>
-        )}
-      />
+          ]}
+          renderIconItem={(entity: any) => (
+            <Tooltip key={`entity_icon_${entity.id}`} title={`${entity.name} (${entity.id})`}>
+              <Box
+                onClick={() =>
+                  navigate(`/game/${gameId}/entity/view/${entity.id}`)
+                }
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  p: 1,
+                }}
+              >
+                {entity.icon ? (
+                  <img
+                    src={entity.icon}
+                    alt={entity.name}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain",
+                    }}
+                  />
+                ) : (
+                  <BugReport
+                    sx={{ fontSize: 32, color: "rgba(255, 255, 255, 0.2)" }}
+                  />
+                )}
+              </Box>
+            </Tooltip>
+          )}
+        />
+      )}
     </StyledContainer>
   );
 }

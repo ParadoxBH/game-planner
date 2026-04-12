@@ -13,7 +13,7 @@ import type {
   EventDetails,
   PaginatedResponse,
 } from "../types/apiModels";
-import type { GenericFilter, ItemCriteria } from "../types/filterTypes";
+import type { GenericFilter, ItemCriteria, EntityCriteria } from "../types/filterTypes";
 import { getCraftingTotals } from "../utils/craftingTree";
 import type { TreeOptions } from "../utils/craftingTree";
 import { isPointInPolygon } from "../utils/spatial";
@@ -65,8 +65,29 @@ export class ApiService {
     return itemRepository.search(filter, matcher, activeEventIds);
   }
 
-  public async getEntities(filter: GenericFilter<any>, activeEventIds?: string[]): Promise<PaginatedResponse<Entity>> {
-    return entityRepository.search(filter, undefined, activeEventIds);
+  public async getEntities(filter: GenericFilter<EntityCriteria>, activeEventIds?: string[]): Promise<PaginatedResponse<Entity>> {
+    const matcher = (entity: Entity, criteria: EntityCriteria) => {
+      // 1. Primary Category
+      if (criteria.primaryCategory && criteria.primaryCategory !== "all") {
+        const cats = Array.isArray(entity.category) ? entity.category : [entity.category];
+        if (cats[0]?.toLowerCase() !== criteria.primaryCategory.toLowerCase()) return false;
+      }
+
+      // 2. Sub Category States
+      if (criteria.subCategoryStates) {
+        for (const [cat, state] of Object.entries(criteria.subCategoryStates)) {
+          if (state === 'indifferent') continue;
+          const cats = Array.isArray(entity.category) ? entity.category : [entity.category || ""];
+          const hasCat = cats.includes(cat);
+          if (state === 'exclude' && hasCat) return false;
+          if (state === 'include' && !hasCat) return false;
+        }
+      }
+
+      return true;
+    };
+
+    return entityRepository.search(filter, matcher, activeEventIds);
   }
 
   public async getRecipes(filter: GenericFilter<any>, activeEventIds?: string[]): Promise<PaginatedResponse<NormalizedRecipe>> {
@@ -84,6 +105,10 @@ export class ApiService {
 
   public async getItemCategories(): Promise<string[]> {
     return await itemRepository.getPrimaryCategories();
+  }
+
+  public async getEntityCategories(): Promise<string[]> {
+    return await entityRepository.getPrimaryCategories();
   }
 
   public async getItemDetails(itemId: string): Promise<ItemDetails | null> {
