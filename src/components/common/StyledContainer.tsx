@@ -15,8 +15,10 @@ import { TablePaginator } from "./TablePaginator";
 import type { PaginationController } from "../../hooks/usePagination";
 
 interface StyledContainerProps {
-  title: string;
-  label: string;
+  prefix?: ReactNode;
+  postfix?: ReactNode;
+  title?: string;
+  label?: string;
   searchValue?: string;
   onChangeSearch?: (value: string) => void;
   search?: {
@@ -34,6 +36,8 @@ interface StyledContainerProps {
 }
 
 export function StyledContainer({
+  prefix,
+  postfix,
   title,
   label,
   search,
@@ -62,13 +66,17 @@ export function StyledContainer({
             alignItems={{ xs: "flex-start", md: "center" }}
             spacing={dtSpacing.contentGap}
           >
-            <Stack alignItems={"start"}>
-              <Typography variant="h4" sx={{ color: "text.primary" }}>
-                {title}
-              </Typography>
-              <Typography variant="body1" sx={{ color: "text.secondary" }}>
-                {label}
-              </Typography>
+            <Stack alignItems={"center"} spacing={2} direction={"row"}>
+              {prefix}
+              <Stack alignItems={"start"}>
+                {title && <Typography variant="h4" sx={{ color: "text.primary" }}>
+                  {title}
+                </Typography>}
+                {label && <Typography variant="body1" sx={{ color: "text.secondary" }}>
+                  {label}
+                </Typography>}
+              </Stack>
+              {postfix}
             </Stack>
 
             {onChangeSearch && (
