@@ -4,6 +4,8 @@ import type {
   Entity,
   Conjunto,
   Category,
+  Shop,
+  GameEvent,
 } from "../types/gameModels";
 import type {
   NormalizedRecipe,
@@ -153,6 +155,30 @@ export class ApiService {
 
   public async getConjuntos(filter: GenericFilter<any>, activeEventIds?: string[]): Promise<PaginatedResponse<Conjunto>> {
     return conjuntoRepository.search(filter, undefined, activeEventIds);
+  }
+
+  public async getAllItems(): Promise<Item[]> {
+    return itemRepository.getAll();
+  }
+
+  public async getAllEntities(): Promise<Entity[]> {
+    return entityRepository.getAll();
+  }
+
+  public async getAllRecipes(): Promise<Recipe[]> {
+    return recipeRepository.getAll();
+  }
+
+  public async getAllShops(): Promise<Shop[]> {
+    return shopRepository.getAll();
+  }
+
+  public async getEvents(): Promise<GameEvent[]> {
+    return eventRepository.getAll();
+  }
+
+  public async getAllConjuntos(): Promise<Conjunto[]> {
+    return conjuntoRepository.getAll();
   }
 
   public async getItemCategories(): Promise<(Category & { isPrimary: boolean })[]> {

@@ -103,6 +103,30 @@ export function useApi(gameId: string | undefined) {
     return apiService.getConjuntos(filter, activeEventIds);
   }, [activeEventIds]);
 
+  const getAllItems = useCallback(async () => {
+    return apiService.getAllItems();
+  }, []);
+
+  const getAllEntities = useCallback(async () => {
+    return apiService.getAllEntities();
+  }, []);
+
+  const getAllRecipes = useCallback(async () => {
+    return apiService.getAllRecipes();
+  }, []);
+
+  const getAllShops = useCallback(async () => {
+    return apiService.getAllShops();
+  }, []);
+
+  const getEventsList = useCallback(async () => {
+    return apiService.getEvents();
+  }, []);
+
+  const getAllConjuntos = useCallback(async () => {
+    return apiService.getAllConjuntos();
+  }, []);
+
   const getCategoryDetails = useCallback(async (categoryId: string): Promise<CategoryDetails | null> => {
     return apiService.getCategoryDetails(categoryId);
   }, []);
@@ -136,5 +160,11 @@ export function useApi(gameId: string | undefined) {
     getCategory,
     getItemSubCategories,
     getEntitySubCategories,
+    getEventsList,
+    getAllItems,
+    getAllEntities,
+    getAllRecipes,
+    getAllShops,
+    getAllConjuntos,
   };
 }

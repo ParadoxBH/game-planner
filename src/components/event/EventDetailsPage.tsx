@@ -25,12 +25,11 @@ import { ItemChip } from "../common/ItemChip";
 import { RecipeCard } from "../recipe/RecipeCard";
 import { EntityCard } from "../entity/EntityCard";
 import { useMemo, useState, useEffect } from "react";
-import type { GameDataTypes, GameEvent, Item, Entity, Recipe, Conjunto } from "../../types/gameModels";
+import type { GameDataTypes, GameEvent, Item, Entity } from "../../types/gameModels";
 import type { EventDetails } from "../../types/apiModels";
 import { eventRepository } from "../../repositories/EventRepository";
 import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
-import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
 
 const typeMap = {
   clima: { label: "Clima", color: "#4fc3f7" },

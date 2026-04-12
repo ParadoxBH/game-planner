@@ -15,6 +15,15 @@ import {
 } from "@mui/icons-material";
 import { useGameData } from "./useGameData";
 import { useTheme } from "@mui/material";
+import type { 
+  Item, 
+  Entity, 
+  Recipe, 
+  Shop, 
+  GameEvent, 
+  MapMetadata, 
+  RedemptionCode 
+} from "../types/gameModels";
 
 export interface NavigationOption {
   label: string;
@@ -45,19 +54,19 @@ const CATEGORY_ICONS: Record<string, React.ReactElement> = {
 export function useNavigation(gameId: string | null) {
   const theme = useTheme();
   
-  const { data: entities } = useGameData<any[]>(gameId || "", "entity");
-  const { data: items } = useGameData<any[]>(gameId || "", "items");
-  const { data: recipes } = useGameData<any[]>(gameId || "", "recipes");
-  const { data: shops } = useGameData<any[]>(gameId || "", "shops");
-  const { data: events } = useGameData<any[]>(gameId || "", "events");
-  const { data: codes } = useGameData<any[]>(gameId || "", "codes");
-  const { data: maps } = useGameData<any[]>(gameId || "", "maps");
-  const { data: quests } = useGameData<any[]>(gameId || "", "quests");
+  const { data: entities } = useGameData<Entity>(gameId || "", "entity");
+  const { data: items } = useGameData<Item>(gameId || "", "items");
+  const { data: recipes } = useGameData<Recipe>(gameId || "", "recipes");
+  const { data: shops } = useGameData<Shop>(gameId || "", "shops");
+  const { data: events } = useGameData<GameEvent>(gameId || "", "events");
+  const { data: codes } = useGameData<RedemptionCode>(gameId || "", "codes");
+  const { data: maps } = useGameData<MapMetadata>(gameId || "", "maps");
+  const { data: quests } = useGameData<any>(gameId || "", "quests");
 
   const dynamicEntityCategories = useMemo(() => {
     if (!entities) return [];
     const sets = new Set<string>();
-    entities.forEach(e => {
+    entities.forEach((e: Entity) => {
       if (e.category) {
         if (Array.isArray(e.category)) {
           sets.add(e.category[0].toLowerCase());
@@ -76,7 +85,7 @@ export function useNavigation(gameId: string | null) {
   const dynamicItemCategories = useMemo(() => {
     if (!items) return [];
     const sets = new Set<string>();
-    items.forEach(item => {
+    items.forEach((item: Item) => {
       const cats = Array.isArray(item.category) ? item.category : (item.category ? [item.category] : []);
       if(cats.length > 0)
         sets.add(cats[0].toLowerCase());
@@ -90,7 +99,7 @@ export function useNavigation(gameId: string | null) {
   const dynamicRecipeStations = useMemo(() => {
     if (!recipes) return [];
     const sets = new Set<string>();
-    recipes.forEach(r => {
+    recipes.forEach((r: Recipe) => {
       const stations = r.stations || r.ProducedIn || [];
       stations.forEach((s: string) => sets.add(s));
     });
@@ -102,8 +111,8 @@ export function useNavigation(gameId: string | null) {
 
   const dynamicShops = useMemo(() => {
     if (!shops || !entities) return [];
-    const entityMap = new Map<string, any>(entities.map(e => [e.id, e]));
-    return shops.map(shop => {
+    const entityMap = new Map<string, Entity>(entities.map((e: Entity) => [e.id, e]));
+    return shops.map((shop: Shop) => {
       const npc = entityMap.get(shop.npcId);
       return {
         label: shop.name || npc?.name || shop.npcId,

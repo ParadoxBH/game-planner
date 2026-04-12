@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { GenericFilter } from '../types/filterTypes';
 
@@ -14,7 +14,7 @@ export interface PaginationController<T> {
 }
 
 export function usePagination<T>(initialCriteria: T): PaginationController<T> {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   // Helper to parse criteria from URL
   const parseCriteria = useCallback(() => {

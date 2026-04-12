@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import { loadGamesList, loadGameMaps } from "../services/dataLoader";
 import MapIcon from "@mui/icons-material/Map";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import type { GameInfo } from "../types/gameModels";
+import type { GameInfo, MapMetadata } from "../types/gameModels";
 
 export const MapSelectorPage = () => {
   const { gameId } = useParams();
   const navigate = useNavigate();
-  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
+   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
+  const [maps, setMaps] = useState<MapMetadata[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -17,10 +18,11 @@ export const MapSelectorPage = () => {
     Promise.all([
       loadGamesList(),
       loadGameMaps(gameId)
-    ]).then(([games, maps]) => {
+    ]).then(([games, mps]) => {
       const game = games.find(g => g.id === gameId);
       if (game) {
-        setGameInfo({ ...game, maps });
+        setGameInfo(game);
+        setMaps(mps);
       }
       setLoading(false);
     });
@@ -41,8 +43,8 @@ export const MapSelectorPage = () => {
       </Stack>
 
       <Grid container spacing={3}>
-        {gameInfo.maps?.map((map) => (
-          <Grid item xs={12} md={6} lg={4} key={map.id}>
+        {maps.map((map: MapMetadata) => (
+          <Grid size={{ xs: 12, md: 6, lg: 4 }} key={map.id}>
             <Card 
               sx={{ 
                 bgcolor: "designTokens.colors.glassBg", 

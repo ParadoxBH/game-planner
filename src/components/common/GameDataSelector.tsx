@@ -12,6 +12,7 @@ import {
 import { useApi } from "../../hooks/useApi";
 import { ItemChip } from "./ItemChip";
 import { StyledDialog } from "./StyledDialog";
+import type { Item, Entity } from "../../types/gameModels";
 
 interface Selection {
   id: string;
@@ -38,7 +39,23 @@ export function GameDataSelector({
   initialSelectionType = "item",
   activeCategory,
 }: GameDataSelectorProps) {
-  const { raw, loading } = useApi(gameId);
+  const { getAllItems, getAllEntities, loading: apiLoading } = useApi(gameId);
+  const [items, setItems] = useState<Item[]>([]);
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [localLoading, setLocalLoading] = useState(false);
+
+  useEffect(() => {
+    if (open && !items.length) {
+      setLocalLoading(true);
+      Promise.all([getAllItems(), getAllEntities()]).then(([i, e]) => {
+        setItems(i);
+        setEntities(e);
+        setLocalLoading(false);
+      });
+    }
+  }, [open, getAllItems, getAllEntities, items.length]);
+
+  const loading = apiLoading || localLoading;
 
   const [dialogTab, setDialogTab] = useState(0); // 0: Item, 1: Entidade
   const [searchTerm, setSearchTerm] = useState("");
@@ -59,19 +76,19 @@ export function GameDataSelector({
   }, [open, initialSelectionId, initialSelectionType]);
 
   const filteredData = useMemo(() => {
-    if (!raw) return [];
+    if (loading) return [];
 
     if (activeCategory) {
       // Find all items and entities that belong to this category
-      const catItems = raw.items?.filter((item: any) => {
+      const catItems = items.filter((item) => {
         const cats = Array.isArray(item.category) ? item.category : [item.category];
         return cats.includes(activeCategory);
-      }).map((i: any) => ({ ...i, type: "item" })) || [];
+      }).map((i) => ({ ...i, type: "item" })) || [];
 
-      const catEntities = raw.entities?.filter((ent: any) => {
+      const catEntities = entities.filter((ent) => {
         const cats = Array.isArray(ent.category) ? ent.category : [ent.category];
         return cats.includes(activeCategory);
-      }).map((e: any) => ({ ...e, type: "entity" })) || [];
+      }).map((e) => ({ ...e, type: "entity" })) || [];
 
       return [...catItems, ...catEntities].filter((i) =>
         i.name.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -79,19 +96,19 @@ export function GameDataSelector({
     }
 
     if (dialogTab === 0) {
-      return (raw.items || [])
-        .filter((i: any) =>
+      return items
+        .filter((i) =>
           i.name.toLowerCase().includes(searchTerm.toLowerCase()),
         )
-        .map((i: any) => ({ ...i, type: "item" }));
+        .map((i) => ({ ...i, type: "item" }));
     } else {
-      return (raw.entities || [])
-        .filter((e: any) =>
+      return entities
+        .filter((e) =>
           e.name.toLowerCase().includes(searchTerm.toLowerCase()),
         )
-        .map((e: any) => ({ ...e, type: "entity" }));
+        .map((e) => ({ ...e, type: "entity" }));
     }
-  }, [dialogTab, raw, searchTerm, activeCategory]);
+  }, [dialogTab, items, entities, searchTerm, activeCategory, loading]);
 
   const handleConfirm = () => {
     if (pendingSelection) {
@@ -179,7 +196,7 @@ export function GameDataSelector({
               }}
             >
               <Grid container spacing={1}>
-                {filteredData.map((choice) => {
+                {filteredData.map((choice: any) => {
                   const isSelected = pendingSelection?.id === choice.id;
                   return (
                     <Grid size={{ xs: 6, sm: 4, md: 3 }} key={choice.id}>

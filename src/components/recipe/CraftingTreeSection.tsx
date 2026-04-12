@@ -3,7 +3,8 @@ import { Box, Paper } from "@mui/material";
 import { CraftingTreeCard } from "./CraftingTreeCard";
 import { GameDataSelector } from "../common/GameDataSelector";
 import { useApi } from "../../hooks/useApi";
-import type { Item, Entity, Recipe } from "../../types/gameModels";
+import type { Item, Entity, Recipe, Shop } from "../../types/gameModels";
+import { useEffect } from "react";
 
 interface CraftingTreeSectionProps {
   gameId: string;
@@ -12,30 +13,50 @@ interface CraftingTreeSectionProps {
 }
 
 export function CraftingTreeSection({ gameId, itemId, type = "item" }: CraftingTreeSectionProps) {
-  const { raw } = useApi(gameId);
+  const { getAllItems, getAllEntities, getAllRecipes, getAllShops } = useApi(gameId);
+  const [items, setItems] = useState<Item[]>([]);
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [shops, setShops] = useState<Shop[]>([]);
+
+  useEffect(() => {
+    if (gameId && !items.length) {
+      Promise.all([
+        getAllItems(),
+        getAllEntities(),
+        getAllRecipes(),
+        getAllShops()
+      ]).then(([i, e, r, s]) => {
+        setItems(i);
+        setEntities(e);
+        setRecipes(r);
+        setShops(s);
+      });
+    }
+  }, [gameId, getAllItems, getAllEntities, getAllRecipes, getAllShops, items.length]);
   const [categoryChoices, setCategoryChoices] = useState<Record<string, string>>({});
   const [activeCategorySelection, setActiveCategorySelection] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const treeOptions = useMemo(() => {
     const itemMap = new Map<string, Item>();
-    raw?.items?.forEach((i) => itemMap.set(i.id, i));
+    items.forEach((i: Item) => itemMap.set(i.id, i));
 
     const entityMap = new Map<string, Entity>();
-    raw?.entities?.forEach((e) => entityMap.set(e.id, e));
+    entities.forEach((e: Entity) => entityMap.set(e.id, e));
 
     const recipeMapByProduct = new Map<string, Recipe>();
-    raw?.recipes?.forEach((r) => {
+    recipes.forEach((r: Recipe) => {
       if (r.itemId) recipeMapByProduct.set(r.itemId, r);
-      r.products?.forEach((p) => recipeMapByProduct.set(p.id, r));
+      r.products?.forEach((p: any) => recipeMapByProduct.set(p.id, r));
     });
 
     const shopMap = new Map<string, string>();
     const shopNames = new Map<string, string>();
-    raw?.shops?.forEach((shop) => {
+    shops.forEach((shop: Shop) => {
       shopNames.set(shop.id, shop.name);
-      shop.groups.forEach((group) => {
-        group.items.forEach((item) => {
+      shop.groups.forEach((group: any) => {
+        group.items.forEach((item: any) => {
           shopMap.set(item.id, shop.id);
         });
       });
@@ -49,7 +70,7 @@ export function CraftingTreeSection({ gameId, itemId, type = "item" }: CraftingT
       shopNames,
       categoryChoices,
     };
-  }, [raw, categoryChoices]);
+  }, [items, entities, recipes, shops, categoryChoices]);
 
   return (
     <Box>

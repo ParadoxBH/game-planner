@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { 
   Box, 
   IconButton, 
@@ -16,16 +16,27 @@ import { FilterList, EventAvailable, ClearAll, DoneAll } from "@mui/icons-materi
 import { useEventFilter } from "../../context/EventFilterContext";
 import { useApi } from "../../hooks/useApi";
 import { useParams } from "react-router-dom";
+import type { GameEvent } from "../../types/gameModels";
 
 export function GlobalEventFilter() {
   const { gameId } = useParams<{ gameId: string }>();
   const { activeEventIds, toggleEvent, setAllEvents, clearFilters } = useEventFilter();
-  const { raw } = useApi(gameId);
+  const { getEventsList } = useApi(gameId);
+  const [events, setEvents] = useState<GameEvent[]>([]);
+
+  useEffect(() => {
+    if (gameId && !events.length) {
+      getEventsList().then(evs => {
+        setEvents(evs);
+      });
+    }
+  }, [gameId, getEventsList, events.length]);
+  
+  // const loading = apiLoading || localLoading;
   
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const events = useMemo(() => raw?.events || [], [raw?.events]);
   const activeCount = activeEventIds.length;
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -37,7 +48,7 @@ export function GlobalEventFilter() {
   };
 
   const handleSelectAll = () => {
-    setAllEvents(events.map(e => e.id));
+    setAllEvents(events.map((e: GameEvent) => e.id));
   };
 
   if (!gameId || events.length === 0) return null;
@@ -115,7 +126,7 @@ export function GlobalEventFilter() {
         <Divider sx={{ opacity: 0.1 }} />
         
         <Box sx={{ maxHeight: 300, overflow: 'auto' }}>
-          {events.map((event) => (
+          {events.map((event: GameEvent) => (
             <MenuItem key={event.id} onClick={() => toggleEvent(event.id)}>
               <Checkbox
                 checked={activeEventIds.includes(event.id)}

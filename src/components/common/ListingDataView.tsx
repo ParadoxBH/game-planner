@@ -11,7 +11,6 @@ import {
   TableRow,
   TableCell,
   TableContainer,
-  darken
 } from "@mui/material";
 import { type ReactNode, useMemo } from "react";
 import { type ViewMode } from "./ViewModeSelector";
@@ -163,7 +162,7 @@ export function ListingDataView<T>({
             )}
             <TableBody>
               {data.map((item, index) => {
-                const rawCells = renderListItem ? renderListItem(item) : [<>{renderCard(item)}</>];
+                const rawCells = renderListItem ? renderListItem(item) : [<>{renderCard(item, "default")}</>];
                 // Se temos cabeçalho, filtramos as células que não devem aparecer
                 const cells = listHeader 
                   ? rawCells.filter((_, i) => !listHeader[i]?.hidden)
@@ -228,7 +227,7 @@ export function ListingDataView<T>({
                 boxShadow: `0 0 15px ${alpha(theme.palette.primary.main, 0.2)}`
               }
             }}>
-              {renderIconItem ? renderIconItem(item) : renderCard(item)}
+              {renderIconItem ? renderIconItem(item) : renderCard(item, "compact")}
             </Box>
           ))}
         </Box>

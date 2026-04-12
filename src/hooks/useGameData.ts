@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { loadGameData } from "../services/dataLoader";
 
 export function useGameData<T>(gameId: string | undefined, dataset: string) {
-  const [data, setData] = useState<T | null>(null);
+  const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
