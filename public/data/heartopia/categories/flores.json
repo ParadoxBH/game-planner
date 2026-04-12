@@ -1,0 +1,56 @@
+﻿[
+    {
+        "id": "flower",
+        "name": "Flores"
+    },
+    {
+        "id": "seed_flower",
+        "name": "Sementes de Flores",
+        "description": "Sementes necessárias para plantar diversas variedades de flores."
+    },
+    {
+        "id": "agriculture_flower",
+        "name": "Flores",
+        "description": "Variedade de flores cultiváveis para decoração e presentes."
+    },
+    {
+        "id": "cravo",
+        "name": "Flor Cravo",
+        "icon": "/img/heartopia/agricultura/flores/cravo_branco.png"
+    },
+    {
+        "id": "copo_leite",
+        "name": "Flor Copo de Leite",
+        "icon": "/img/heartopia/agricultura/flores/copo_leite_branca.png"
+    },
+    {
+        "id": "anturio",
+        "name": "Anturio",
+        "icon": "/img/heartopia/agricultura/flores/anturio_branco.png"
+    },
+    {
+        "id": "amor_perfeito",
+        "name": "Flor Amor Perfeito",
+        "icon": "/img/heartopia/agricultura/flores/amor_perfeito_amarelo.png"
+    },
+    {
+        "id": "gloria_manha",
+        "name": "Gloria da Manha",
+        "icon": "/img/heartopia/agricultura/flores/gloria_manha_branca.png"
+    },
+    {
+        "id": "margatida",
+        "name": "Margaridas",
+        "icon": "/img/heartopia/agricultura/flores/margarida_branca.png"
+    },
+    {
+        "id": "papoula",
+        "name": "Papoula",
+        "icon": "/img/heartopia/agricultura/flores/papoula_branca.png"
+    },
+    {
+        "id": "margarida",
+        "name": "Margaridas",
+        "icon": "/img/heartopia/agricultura/flores/margarida_branca.png"
+    }
+]

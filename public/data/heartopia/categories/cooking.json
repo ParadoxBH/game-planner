@@ -1,0 +1,68 @@
+[
+  {
+    "id": "ingredient",
+    "name": "Ingrediente de Receita"
+  },
+  {
+    "id": "food",
+    "name": "Culinária",
+    "description": "Pratos preparados e alimentos prontos para consumo que fornecem benefícios."
+  },
+  {
+    "id": "ingredient_geleia",
+    "name": "Ingrediente de Geleia",
+    "icon": "/img/heartopia/comidas/geleia_mista.png"
+  },
+  {
+    "id": "mushroom",
+    "name": "Cogumelos"
+  },
+  {
+    "id": "cooking_station",
+    "name": "Fogão"
+  },
+  {
+    "id": "champignon",
+    "name": "Cogumelo",
+    "icon": "/img/heartopia/recursos/champignon.png"
+  },
+  {
+    "id": "shiitake",
+    "name": "Shiitake",
+    "icon": "/img/heartopia/recursos/shiitake.png"
+  },
+  {
+    "id": "porcino",
+    "name": "Porcino",
+    "icon": "/img/heartopia/recursos/porcino.png"
+  },
+  {
+    "id": "cafe",
+    "name": "Cafe",
+    "icon": "/img/heartopia/comidas/cafe.png"
+  },
+  {
+    "id": "ingredient_cafe",
+    "name": "Ingrediente de Cafe"
+  },
+  {
+    "id": "cafe_gelado",
+    "name": "Cafe Gelado",
+    "icon": "/img/heartopia/events/gala_neve/foods/cafe_gelado.png"
+  },
+  {
+    "id": "cogumelo_assado",
+    "name": "Cogumelos Assados",
+    "icon": "/img/heartopia/comidas/cogumelo_assado.png"
+  },
+  {
+    "id": "cogumelo_ostra",
+    "name": "Cogumelos Ostra",
+    "icon": "/img/heartopia/recursos/cogumelo_ostra.png"
+  },
+  {
+    "id": "doce",
+    "name": "Doces",
+    "icon": "/img/heartopia/recursos/doce_azul.png"
+  }
+]

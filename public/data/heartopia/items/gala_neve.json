@@ -6,7 +6,9 @@
       "agriculture",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "description": "Um vegetal crocante e nutritivo.",
     "icon": "/img/heartopia/events/gala_neve/vegetables/nabo.png",
     "sellPrice": 30
@@ -20,7 +22,9 @@
       "papoula_himalaia",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_vermelha.png",
     "sellPrice": 125,
     "level": 1
@@ -34,7 +38,9 @@
       "papoula_himalaia",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_amarela.png",
     "sellPrice": 125,
     "level": 1
@@ -48,7 +54,9 @@
       "papoula_himalaia",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_branca.png",
     "sellPrice": 125,
     "level": 1
@@ -62,7 +70,9 @@
       "papoula_himalaia",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_rosa.png",
     "sellPrice": 190,
     "level": 2
@@ -76,7 +86,9 @@
       "papoula_himalaia",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_laranja.png",
     "sellPrice": 190,
     "level": 2
@@ -90,7 +102,9 @@
       "papoula_himalaia",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_preta.png",
     "level": 3,
     "sellPrice": 250
@@ -104,7 +118,9 @@
       "papoula_himalaia",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_pessego.png",
     "level": 3,
     "sellPrice": 250
@@ -118,7 +134,9 @@
       "papoula_himalaia",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_verde.png",
     "level": 4,
     "sellPrice": 315
@@ -132,7 +150,9 @@
       "papoula_himalaia",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_azul.png",
     "level": 4,
     "sellPrice": 315
@@ -146,7 +166,9 @@
       "papoula_himalaia",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_luminosa.png",
     "level": 5,
     "sellPrice": 500
@@ -159,7 +181,9 @@
       "cafe_gelado",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/foods/cafe_gelado.png",
     "sellPrice": 280
   },
@@ -171,7 +195,9 @@
       "cafe_gelado",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/foods/latte_gelado.png",
     "sellPrice": 280
   },
@@ -182,7 +208,9 @@
       "food",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/foods/carne_pure_nabo.png",
     "sellPrice": 630
   },
@@ -193,7 +221,9 @@
       "food",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/foods/caldo_cremoso_nabo.png",
     "sellPrice": 340
   },
@@ -205,7 +235,9 @@
       "panqueca_acucar_po",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/foods/panqueca_acucar_po.png",
     "sellPrice": 330
   },
@@ -217,7 +249,9 @@
       "panqueca_acucar_po",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/foods/panqueca_acucar_po_mirtilo.png",
     "sellPrice": 330
   },
@@ -229,7 +263,9 @@
       "panqueca_acucar_po",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "description": "Panquecas com framboesas e açúcar.",
     "icon": "/img/heartopia/events/gala_neve/foods/panqueca_acucar_po_framboesa.png",
     "sellPrice": 350
@@ -242,7 +278,9 @@
       "panqueca_acucar_po",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/foods/panqueca_acucar_po_maca.png",
     "sellPrice": 360
   },
@@ -254,7 +292,9 @@
       "panqueca_acucar_po",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/foods/panqueca_acucar_po_tangerina.png",
     "sellPrice": 360
   },
@@ -265,7 +305,9 @@
       "food",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/foods/banquete_aurora.png",
     "sellPrice": 1630
   },
@@ -277,7 +319,9 @@
       "vegetable",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/vegetables/semente_nabo.png",
     "buyPrice": 10
   },
@@ -290,7 +334,9 @@
       "papoula_himalaia",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/flowers/semente_papoula_himalaia_vermelha.png",
     "buyPrice": 30,
     "sellPrice": 15
@@ -303,7 +349,9 @@
       "flower",
       "papoula_himalaia"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/flowers/semente_papoula_himalaia_amarela.png",
     "buyPrice": 30,
     "sellPrice": 15
@@ -316,7 +364,9 @@
       "flower",
       "papoula_himalaia"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/flowers/semente_papoula_himalaia_branca.png",
     "buyPrice": 30,
     "sellPrice": 15
@@ -325,11 +375,11 @@
     "id": "creditos_gala_moda",
     "name": "Créditos de Gala de Moda",
     "category": [
-      "wallet",
-      "gala_moda",
-      "vegetable"
+      "wallet"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/itens/creditos_gala_moda.png"
   },
   {
@@ -340,9 +390,33 @@
       "ingredient",
       "vegetable"
     ],
-    "event": ["gala_neve"],
+    "event": [
+      "gala_neve"
+    ],
     "icon": "/img/heartopia/events/gala_neve/itens/acucar_po.png",
     "sellPrice": 25,
     "buyPrice": 50
+  },
+  {
+    "id": "passe_show_neve",
+    "name": "Passe de Show",
+    "category": [
+      "wallet"
+    ],
+    "event": [
+      "gala_neve"
+    ],
+    "icon": "/img/heartopia/stats/passe_show.png"
+  },
+  {
+    "id": "passe_show_temporario_neve",
+    "name": "Passe de Show Temporário",
+    "category": [
+      "wallet"
+    ],
+    "event": [
+      "gala_neve"
+    ],
+    "icon": "/img/heartopia/stats/passe_show_temporario.png"
   }
 ]

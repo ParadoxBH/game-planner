@@ -22,7 +22,7 @@
     {
         "id": "set_gala_neve_itens",
         "name": "Vegetais e Ingredientes",
-        "category": "itens",
+        "category": "gala_neve",
         "event": [
             "gala_neve"
         ],
@@ -34,7 +34,7 @@
     {
         "id": "set_gala_neve_seeds",
         "name": "Sementes",
-        "category": "seeds",
+        "category": "gala_neve",
         "event": [
             "gala_neve"
         ],
@@ -48,7 +48,7 @@
     {
         "id": "set_gala_neve_flores",
         "name": "Flores",
-        "category": "flowers",
+        "category": "gala_neve",
         "event": [
             "gala_neve"
         ],
@@ -68,7 +68,7 @@
     {
         "id": "set_gala_neve_cooking",
         "name": "Receitas",
-        "category": "recipes",
+        "category": "gala_neve",
         "event": [
             "gala_neve"
         ],
@@ -88,7 +88,7 @@
     {
         "id": "set_gala_neve_other",
         "name": "Outros",
-        "category": "others",
+        "category": "gala_neve",
         "event": [
             "gala_neve"
         ],
