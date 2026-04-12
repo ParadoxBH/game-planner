@@ -21,7 +21,12 @@ import { ViewModeSelector } from "../common/ViewModeSelector";
 import { useViewMode } from "../../hooks/useViewMode";
 import { TriplePickSelector } from "../common/TriplePickSelector";
 import type { TripleState } from "../common/TriplePickSelector";
+import { Button } from "@mui/material";
 import type { Item } from "../../types/gameModels";
+import type { ItemCriteria } from "../../types/filterTypes";
+import type { PaginatedResponse } from "../../types/apiModels";
+import { usePagination } from "../../hooks/usePagination";
+import { TablePaginator } from "../common/TablePaginator";
 
 export function ItemsPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -30,33 +35,47 @@ export function ItemsPage() {
   }>();
   const navigate = useNavigate();
 
-  const { loading: dbLoading, error, getItemsList } = useApi(gameId);
-  const [items, setItems] = useState<Item[]>([]);
+  const { loading: dbLoading, error, getItemsList, getItemCategories } = useApi(gameId);
+  const [itemsResponse, setItemsResponse] = useState<PaginatedResponse<Item> | null>(null);
   const [dataLoading, setDataLoading] = useState(false);
   
-  const [searchTerm, setSearchTerm] = useState("");
-  const [availableSubCategories, setAvailableSubCategories] = useState<
-    string[]
-  >([]);
-  const [subCategoryStates, setSubCategoryStates] = useState<
-    Record<string, TripleState>
-  >({});
-  const [tradeStatus, setTradeStatus] = useState<string | null>(null);
+  const pages = usePagination<ItemCriteria>({
+    primaryCategory: urlCategory || "all",
+    subCategoryStates: {},
+    tradeStatus: null,
+  });
+
+  const [availableSubCategories, setAvailableSubCategories] = useState<string[]>([]);
+  const [allCategories, setAllCategories] = useState<string[]>([]);
   const [showPrices, setShowPrices] = useState(false);
   const [viewMode, setViewMode] = useViewMode("items");
 
-  // Fetch all items initially (or when database is ready)
+  // Sync URL Category to filter via controller
+  useEffect(() => {
+    pages.setCriteria({
+      primaryCategory: urlCategory || "all",
+      subCategoryStates: {} // Reset subcategories when primary changes
+    });
+  }, [urlCategory]);
+
+  // Load all categories for the selector
+  useEffect(() => {
+    if (dbLoading) return;
+    getItemCategories().then(setAllCategories);
+  }, [dbLoading, getItemCategories]);
+
+  // Load items when filter or db changes
   useEffect(() => {
     if (dbLoading) return;
 
     let isMounted = true;
     setDataLoading(true);
 
-    getItemsList()
+    getItemsList(pages.info)
       .then((results) => {
         if (!isMounted) return;
-        const list = Array.isArray(results) ? results : results.data;
-        setItems(list);
+        setItemsResponse(results);
+        pages.setTotalItems(results.total);
         setDataLoading(false);
       })
       .catch((err) => {
@@ -65,112 +84,46 @@ export function ItemsPage() {
       });
 
     return () => { isMounted = false; };
-  }, [dbLoading, getItemsList]);
+  }, [dbLoading, getItemsList, pages.info]);
 
-  const categories = useMemo(() => {
-    const cats = new Set<string>();
-    items.forEach((item) => {
-      const itemCats = item.category;
-      const catsArr = Array.isArray(itemCats)
-        ? itemCats
-        : itemCats
-          ? [itemCats]
-          : [];
-      if (catsArr[0]) cats.add(catsArr[0]);
-    });
-    return Array.from(cats).sort();
-  }, [items]);
+  const items = useMemo(() => itemsResponse?.data || [], [itemsResponse]);
 
-  // Update available sub-categories when primary category changes
+  // Derive available sub-categories from all items (or a separate call)
+  // For now, let's derive from ALL categories that are sub-categories of the current primary.
   useEffect(() => {
-    const cats = new Set<string>();
+    if (!allCategories.length) return;
+    
     const currentPrimary = urlCategory === "all" ? null : urlCategory;
-
+    const cats = new Set<string>();
     items.forEach((item) => {
       const itemCats = item.category;
-      const catsArr = Array.isArray(itemCats)
-        ? itemCats
-        : itemCats
-          ? [itemCats]
-          : [];
+      const catsArr = Array.isArray(itemCats) ? itemCats : (itemCats ? [itemCats] : []);
       const primary = catsArr[0];
 
-      if (
-        !currentPrimary ||
-        (primary && primary.toLowerCase() === currentPrimary.toLowerCase())
-      ) {
+      if (!currentPrimary || (primary && primary.toLowerCase() === currentPrimary.toLowerCase())) {
         if (catsArr.length > 1) {
           catsArr.slice(1).forEach((c) => cats.add(c));
         }
       }
     });
-
     setAvailableSubCategories(Array.from(cats).sort());
+  }, [allCategories, urlCategory, items]);
 
-    // Clean up states for categories that are no longer available
-    setSubCategoryStates(prev => {
-      const next = { ...prev };
-      let changed = false;
-      Object.keys(next).forEach(cat => {
-        if (!cats.has(cat)) {
-          delete next[cat];
-          changed = true;
-        }
-      });
-      return changed ? next : prev;
-    });
-  }, [items, urlCategory]);
 
-  const filteredItems = useMemo(() => {
-    let list = [...items];
+  // Update search specifically
+  const handleSearchChange = (val: string) => {
+    pages.setSearch(val);
+  };
 
-    // Apply primary category filter
-    if (urlCategory && urlCategory !== "all") {
-      list = list.filter(item => {
-        const cats = Array.isArray(item.category) ? item.category : [item.category];
-        return cats[0]?.toLowerCase() === urlCategory.toLowerCase();
-      });
-    }
+  // Update trade status
+  const handleTradeStatusChange = (val: string | null) => {
+    pages.setCriteria({ tradeStatus: val });
+  };
 
-    // Apply sub-category states (inclusion/negation)
-    Object.entries(subCategoryStates).forEach(([cat, state]) => {
-      if (state === "indifferent") return;
-      list = list.filter(item => {
-        const cats = Array.isArray(item.category) ? item.category : [item.category || ""];
-        const hasCat = cats.includes(cat);
-        return state === "exclude" ? !hasCat : hasCat;
-      });
-    });
-
-    // Apply trade status filtering
-    if (tradeStatus) {
-      list = list.filter((item) => {
-        if (tradeStatus === "Compraveis") return item.buyPrice !== undefined;
-        if (tradeStatus === "Vendiveis") return item.sellPrice !== undefined;
-        if (tradeStatus === "Não Comercializados")
-          return item.buyPrice === undefined && item.sellPrice === undefined;
-        if (tradeStatus === "Comercializados")
-          return item.buyPrice !== undefined || item.sellPrice !== undefined;
-        return true;
-      });
-    }
-
-    // Apply search filter
-    if (!searchTerm) return list;
-
-    const lowerSearch = searchTerm.toLowerCase();
-    return list.filter(
-      (item) =>
-        item.name.toLowerCase().includes(lowerSearch) ||
-        item.id.toLowerCase().includes(lowerSearch),
-    );
-  }, [
-    items,
-    urlCategory,
-    subCategoryStates,
-    tradeStatus,
-    searchTerm,
-  ]);
+  const handleSubCategoryStateChange = (option: string, newState: TripleState) => {
+    const nextSub = { ...pages.info.criteria.subCategoryStates, [option]: newState };
+    pages.setCriteria({ subCategoryStates: nextSub });
+  };
 
   if (dbLoading || dataLoading) {
     return (
@@ -198,26 +151,20 @@ export function ItemsPage() {
     );
   }
 
-  const handleSubCategoryStateChange = (option: string, newState: TripleState) => {
-    setSubCategoryStates(prev => ({
-      ...prev,
-      [option]: newState
-    }));
-  };
-
   return (
     <StyledContainer
       title={`Itens de ${gameId}`}
       label="Explore e descubra todos os itens disponíveis."
-      searchValue={searchTerm}
-      onChangeSearch={setSearchTerm}
+      searchValue={pages.info.search}
+      onChangeSearch={handleSearchChange}
       search={{ placeholder: "Pesquisar itens..." }}
+      pages={pages}
       actionsStart={
         <>
           <PickSelector
             label="Categoria"
             value={urlCategory === "all" ? null : urlCategory || null}
-            options={categories}
+            options={allCategories}
             onChange={(cat) => {
               navigate(`/game/${gameId}/items/list/${cat || "all"}`);
             }}
@@ -225,21 +172,21 @@ export function ItemsPage() {
           {availableSubCategories.length > 0 && (
             <TriplePickSelector
               label="Sub-categoria"
-              states={subCategoryStates}
+              states={pages.info.criteria.subCategoryStates || {}}
               options={availableSubCategories}
               onChange={handleSubCategoryStateChange}
             />
           )}
           <PickSelector
             label="Status"
-            value={tradeStatus}
+            value={pages.info.criteria.tradeStatus || null}
             options={[
               "Compraveis",
               "Vendiveis",
               "Comercializados",
               "Não Comercializados",
             ]}
-            onChange={setTradeStatus}
+            onChange={handleTradeStatusChange}
             icon={<SwapHoriz sx={{ fontSize: 18 }} />}
           />
         </>
@@ -270,7 +217,7 @@ export function ItemsPage() {
       }
     >
       <ListingDataView
-        data={filteredItems}
+        data={items}
         viewMode={viewMode}
         variant="compact"
         cardMinWidth={200}

@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import type { ReactNode } from "react";
+import { TablePaginator } from "./TablePaginator";
+import type { PaginationController } from "../../hooks/usePagination";
 
 interface StyledContainerProps {
   title: string;
@@ -28,6 +30,7 @@ interface StyledContainerProps {
     container?: SxProps<Theme>;
     header?: SxProps<Theme>;
   };
+  pages?: PaginationController<any>;
 }
 
 export function StyledContainer({
@@ -40,6 +43,7 @@ export function StyledContainer({
   actionsEnd,
   children,
   sx,
+  pages,
 }: StyledContainerProps) {
   const theme = useTheme();
   const { spacing: dtSpacing, borderRadius: dtRadius } = theme.designTokens;
@@ -139,6 +143,9 @@ export function StyledContainer({
         <Stack sx={{ overflowY: "auto", flex: 1, ...sx?.container }}>
           {children}
         </Stack>
+        {!!pages && <TablePaginator 
+          controller={pages}
+        />}
       </Stack>
     </Container>
   );

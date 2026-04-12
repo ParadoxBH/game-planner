@@ -1,9 +1,10 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { apiService } from "../services/apiService";
 import { dbService } from "../services/dbService";
 import { codeRepository } from "../repositories/CodeRepository";
-import type { NormalizedRecipe, SearchOptions, PaginatedResponse } from "../types/apiModels";
+import type { NormalizedRecipe, PaginatedResponse } from "../types/apiModels";
 import type { Item, Entity } from "../types/gameModels";
+import type { GenericFilter, ItemCriteria } from "../types/filterTypes";
 
 import { useEventFilter } from "../context/EventFilterContext";
 
@@ -50,19 +51,17 @@ export function useApi(gameId: string | undefined) {
     return apiService.getEntityDetails(entityId);
   }, []);
 
-  const getItemsList = useCallback(async (options?: SearchOptions | ((item: Item) => boolean)): Promise<Item[] | PaginatedResponse<Item>> => {
-    if (typeof options === "function") {
-      return apiService.getItems(options);
-    }
-    return apiService.getItems({ ...options, activeEventIds });
+  const getItemsList = useCallback(async (filter: GenericFilter<ItemCriteria>): Promise<PaginatedResponse<Item>> => {
+    return apiService.getItems(filter, activeEventIds);
   }, [activeEventIds]);
 
-  const getEntityList = useCallback(async (options?: SearchOptions | ((entity: Entity) => boolean)): Promise<Entity[] | PaginatedResponse<Entity>> => {
-    if (typeof options === "function") {
-      return apiService.getEntities(options);
-    }
-    return apiService.getEntities({ ...options, activeEventIds });
+  const getEntityList = useCallback(async (filter: GenericFilter<any>): Promise<PaginatedResponse<Entity>> => {
+    return apiService.getEntities(filter, activeEventIds);
   }, [activeEventIds]);
+
+  const getItemCategories = useCallback(async () => {
+    return apiService.getItemCategories();
+  }, []);
 
   const getShopDetails = useCallback(async (shopId: string) => {
     return apiService.getShopDetails(shopId);
@@ -72,11 +71,8 @@ export function useApi(gameId: string | undefined) {
     return apiService.getRecipeDetails(recipeId);
   }, []);
 
-  const getRecipesList = useCallback(async (options?: SearchOptions | ((recipe: NormalizedRecipe) => boolean)): Promise<NormalizedRecipe[] | PaginatedResponse<NormalizedRecipe>> => {
-    if (typeof options === "function") {
-      return apiService.getRecipes(options);
-    }
-    return apiService.getRecipes({ ...options, activeEventIds });
+  const getRecipesList = useCallback(async (filter: GenericFilter<any>): Promise<PaginatedResponse<NormalizedRecipe>> => {
+    return apiService.getRecipes(filter, activeEventIds);
   }, [activeEventIds]);
 
   const getCodesList = useCallback(async () => {
@@ -87,14 +83,15 @@ export function useApi(gameId: string | undefined) {
     return apiService.getEventDetails(eventId);
   }, []);
 
-  const getConjuntosList = useCallback(async (options?: SearchOptions) => {
-    return apiService.getConjuntos({ ...options, activeEventIds });
+  const getConjuntosList = useCallback(async (filter: GenericFilter<any>) => {
+    return apiService.getConjuntos(filter, activeEventIds);
   }, [activeEventIds]);
 
   return {
     loading,
     error,
     getItemDetails,
+    getItemCategories,
     getEntityDetails,
     getShopDetails,
     getRecipeDetails,

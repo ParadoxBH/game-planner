@@ -11,9 +11,9 @@ import type {
   RecipeDetails,
   ShopDetails,
   EventDetails,
-  SearchOptions,
   PaginatedResponse,
 } from "../types/apiModels";
+import type { GenericFilter, ItemCriteria } from "../types/filterTypes";
 import { getCraftingTotals } from "../utils/craftingTree";
 import type { TreeOptions } from "../utils/craftingTree";
 import { isPointInPolygon } from "../utils/spatial";
@@ -32,39 +32,58 @@ export class ApiService {
    * Data access via Repositories. Methods return Promises to mirror a real Backend API.
    */
 
-  public async getItems(options?: SearchOptions | ((item: Item) => boolean)): Promise<Item[] | PaginatedResponse<Item>> {
-    if (typeof options === "function") {
-      const all = await itemRepository.getAll();
-      return all.filter(options);
-    }
-    return itemRepository.search(options);
+  public async getItems(filter: GenericFilter<ItemCriteria>, activeEventIds?: string[]): Promise<PaginatedResponse<Item>> {
+    const matcher = (item: Item, criteria: ItemCriteria) => {
+      // 1. Primary Category
+      if (criteria.primaryCategory && criteria.primaryCategory !== "all") {
+        const itemCats = Array.isArray(item.category) ? item.category : [item.category];
+        if (itemCats[0]?.toLowerCase() !== criteria.primaryCategory.toLowerCase()) return false;
+      }
+
+      // 2. Sub Category States
+      if (criteria.subCategoryStates) {
+        for (const [cat, state] of Object.entries(criteria.subCategoryStates)) {
+          if (state === 'indifferent') continue;
+          const itemCats = Array.isArray(item.category) ? item.category : [item.category || ""];
+          const hasCat = itemCats.includes(cat);
+          if (state === 'exclude' && hasCat) return false;
+          if (state === 'include' && !hasCat) return false;
+        }
+      }
+
+      // 3. Trade Status
+      if (criteria.tradeStatus) {
+        if (criteria.tradeStatus === "Compraveis" && item.buyPrice === undefined) return false;
+        if (criteria.tradeStatus === "Vendiveis" && item.sellPrice === undefined) return false;
+        if (criteria.tradeStatus === "Não Comercializados" && (item.buyPrice !== undefined || item.sellPrice !== undefined)) return false;
+        if (criteria.tradeStatus === "Comercializados" && (item.buyPrice === undefined && item.sellPrice === undefined)) return false;
+      }
+
+      return true;
+    };
+
+    return itemRepository.search(filter, matcher, activeEventIds);
   }
 
-  public async getEntities(options?: SearchOptions | ((entity: Entity) => boolean)): Promise<Entity[] | PaginatedResponse<Entity>> {
-    if (typeof options === "function") {
-      const all = await entityRepository.getAll();
-      return all.filter(options);
-    }
-    return entityRepository.search(options);
+  public async getEntities(filter: GenericFilter<any>, activeEventIds?: string[]): Promise<PaginatedResponse<Entity>> {
+    return entityRepository.search(filter, undefined, activeEventIds);
   }
 
-  public async getRecipes(options?: SearchOptions | ((recipe: NormalizedRecipe) => boolean)): Promise<NormalizedRecipe[] | PaginatedResponse<NormalizedRecipe>> {
-    // Note: We might want a specialized Recipe repository or service if normalization is heavy
-    const results = await recipeRepository.search(options);
+  public async getRecipes(filter: GenericFilter<any>, activeEventIds?: string[]): Promise<PaginatedResponse<NormalizedRecipe>> {
+    const results = await recipeRepository.search(filter, undefined, activeEventIds);
     
-    // Normalize if it's a list
-    if (Array.isArray(results)) {
-      return Promise.all(results.map(r => this.normalizeRecipe(r)));
-    } else {
-      return {
-        ...results,
-        data: await Promise.all(results.data.map(r => this.normalizeRecipe(r)))
-      };
-    }
+    return {
+      ...results,
+      data: await Promise.all(results.data.map(r => this.normalizeRecipe(r)))
+    };
   }
 
-  public async getConjuntos(options?: SearchOptions): Promise<Conjunto[] | PaginatedResponse<Conjunto>> {
-    return conjuntoRepository.search(options);
+  public async getConjuntos(filter: GenericFilter<any>, activeEventIds?: string[]): Promise<PaginatedResponse<Conjunto>> {
+    return conjuntoRepository.search(filter, undefined, activeEventIds);
+  }
+
+  public async getItemCategories(): Promise<string[]> {
+    return itemRepository.getUniqueValues('category');
   }
 
   public async getItemDetails(itemId: string): Promise<ItemDetails | null> {
@@ -345,14 +364,24 @@ export class ApiService {
     const event = await eventRepository.getById(eventId);
     if (!event) return null;
 
-    const items = await itemRepository.search({ filters: { event: eventId } }) as Item[];
-    
-    // For recipes, they have complex logic, but we can search by event index
-    const recipesRaw = await recipeRepository.search({ filters: { event: eventId } }) as Recipe[];
-    const recipes = await Promise.all(recipesRaw.map(r => this.normalizeRecipe(r)));
+    const filterBase = (criteria: any = {}) => ({
+      pagination: { page: 1, pageSize: 1000 },
+      sorting: { column: 'id', direction: 'asc' as const },
+      search: '',
+      criteria
+    });
 
-    const entities = await entityRepository.search({ filters: { event: eventId } }) as Entity[];
-    const conjuntos = await conjuntoRepository.search({ filters: { event: eventId } }) as Conjunto[];
+    const itemsRes = await this.getItems(filterBase({}), [eventId]);
+    const items = itemsRes.data;
+    
+    const recipesRes = await this.getRecipes(filterBase({}), [eventId]);
+    const recipes = recipesRes.data;
+
+    const entitiesRes = await this.getEntities(filterBase({}), [eventId]);
+    const entities = entitiesRes.data;
+
+    const conjuntosRes = await this.getConjuntos(filterBase({}), [eventId]);
+    const conjuntos = conjuntosRes.data;
 
     return {
       event,

@@ -29,7 +29,7 @@ export function ConjuntosPage() {
   }>();
   const navigate = useNavigate();
 
-  const { loading: dbLoading, getItemsList, getEntityList } = useApi(gameId);
+  const { loading: dbLoading } = useApi(gameId);
   
   const [conjuntos, setConjuntos] = useState<Conjunto[]>([]);
   const [items, setItems] = useState<Item[]>([]);
