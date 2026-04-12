@@ -41,7 +41,8 @@ export function usePagination<T>(initialCriteria: T): PaginationController<T> {
     };
   });
 
-  // Sync Filter -> URL
+  // Sync Filter -> URL - DISABLED TEMPORARILY DUE TO RE-RENDER ISSUES
+  /*
   useEffect(() => {
     const params = new URLSearchParams();
     if (filter.pagination.page > 1) params.set("page", filter.pagination.page.toString());
@@ -57,6 +58,7 @@ export function usePagination<T>(initialCriteria: T): PaginationController<T> {
     
     setSearchParams(params, { replace: true });
   }, [filter, setSearchParams, initialCriteria]);
+  */
 
   const [totalItems, setTotalItemsState] = useState(0);
 
