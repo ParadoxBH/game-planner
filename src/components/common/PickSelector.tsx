@@ -13,10 +13,16 @@ import {
 } from "@mui/icons-material";
 import { useState } from "react";
 
+interface PickOption {
+  value: string;
+  label: string;
+  icon?: string;
+}
+
 interface PickSelectorProps {
   label: string;
   value: string | null;
-  options: string[];
+  options: (string | PickOption)[];
   onChange: (value: string | null) => void;
   allLabel?: string;
   icon?: React.ReactNode;
@@ -45,6 +51,15 @@ export function PickSelector({
   const handleSelect = (val: string | null) => {
     onChange(val);
     handleClose();
+  };
+
+  const getOptionData = (val: string | null) => {
+    if (!val) return { label: allLabel, icon: null };
+    const option = options.find(opt => 
+      typeof opt === 'string' ? opt === val : opt.value === val
+    );
+    if (!option) return { label: val, icon: null };
+    return typeof option === 'string' ? { label: option, icon: null } : { label: option.label, icon: option.icon };
   };
 
   return (
@@ -82,9 +97,23 @@ export function PickSelector({
           <Typography variant="body2" sx={{ fontWeight: 700, opacity: 0.6, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: 0.5 }}>
             {label}:
           </Typography>
-          <Typography variant="body2" sx={{ fontWeight: 600 }}>
-            {value || allLabel}
-          </Typography>
+          {(() => {
+            const data = getOptionData(value);
+            return (
+              <Stack direction="row" spacing={1} alignItems="center">
+                {data.icon && (
+                  <Box 
+                    component="img" 
+                    src={data.icon} 
+                    sx={{ width: 16, height: 16, objectFit: 'contain' }} 
+                  />
+                )}
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  {data.label}
+                </Typography>
+              </Stack>
+            );
+          })()}
         </Stack>
       </Button>
       <Menu
@@ -136,15 +165,29 @@ export function PickSelector({
         >
           {allLabel}
         </MenuItem>
-        {options.map((option) => (
-          <MenuItem 
-            key={option} 
-            selected={value === option}
-            onClick={() => handleSelect(option)}
-          >
-            {option}
-          </MenuItem>
-        ))}
+        {options.map((option) => {
+          const optValue = typeof option === 'string' ? option : option.value;
+          const optLabel = typeof option === 'string' ? option : option.label;
+          const optIcon = typeof option === 'string' ? null : option.icon;
+          
+          return (
+            <MenuItem 
+              key={optValue} 
+              selected={value === optValue}
+              onClick={() => handleSelect(optValue)}
+              sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}
+            >
+              {optIcon && (
+                <Box 
+                  component="img" 
+                  src={optIcon} 
+                  sx={{ width: 18, height: 18, objectFit: 'contain' }} 
+                />
+              )}
+              {optLabel}
+            </MenuItem>
+          );
+        })}
       </Menu>
     </Box>
   );

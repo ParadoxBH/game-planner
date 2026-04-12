@@ -12,9 +12,7 @@ import {
 } from "@mui/material";
 import { 
   KeyboardArrowDown, 
-  Category,
-  CheckCircle,
-  Block
+  Category
 } from "@mui/icons-material";
 import { useState } from "react";
 
@@ -93,10 +91,16 @@ function TripleToggleGroup({ state, onChange }: TripleToggleGroupProps) {
   );
 }
 
+interface TriplePickOption {
+  value: string;
+  label: string;
+  icon?: string;
+}
+
 interface TriplePickSelectorProps {
   label: string;
   states: Record<string, TripleState>;
-  options: string[];
+  options: (string | TriplePickOption)[];
   onChange: (option: string, newState: TripleState) => void;
   icon?: React.ReactNode;
 }
@@ -210,18 +214,30 @@ export function TriplePickSelector({
           </Typography>
         </Box>
         {options.map((option) => {
-          const state = states[option] || 'indifferent';
+          const optValue = typeof option === 'string' ? option : option.value;
+          const optLabel = typeof option === 'string' ? option : option.label;
+          const state = states[optValue] || 'indifferent';
+          
           return (
-            <MenuItem key={option} disableRipple>
-              <Typography variant="body2" sx={{ 
-                color: state !== 'indifferent' ? 'text.primary' : 'inherit',
-                fontWeight: state !== 'indifferent' ? 700 : 500,
-              }}>
-                {option}
-              </Typography>
+            <MenuItem key={optValue} disableRipple>
+              <Stack direction="row" spacing={1.5} alignItems="center">
+                {typeof option !== 'string' && option.icon && (
+                  <Box 
+                    component="img" 
+                    src={option.icon} 
+                    sx={{ width: 18, height: 18, objectFit: 'contain' }} 
+                  />
+                )}
+                <Typography variant="body2" sx={{ 
+                  color: state !== 'indifferent' ? 'text.primary' : 'inherit',
+                  fontWeight: state !== 'indifferent' ? 700 : 500,
+                }}>
+                  {optLabel}
+                </Typography>
+              </Stack>
               <TripleToggleGroup 
                 state={state} 
-                onChange={(newState) => onChange(option, newState)} 
+                onChange={(newState) => onChange(optValue, newState)} 
               />
             </MenuItem>
           );
