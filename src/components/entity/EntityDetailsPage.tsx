@@ -248,16 +248,18 @@ export function EntityDetailsPage() {
             <Divider sx={{ mb: 2 }} />
             
             <Stack spacing={1.5} textAlign="left">
-              <Box>
-                <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>
-                  Categoria
-                </Typography>
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                  {Array.isArray(entity.category)
-                    ? entity.category.join(", ")
-                    : entity.category || "N/A"}
-                </Typography>
-              </Box>
+              {entity.category && (
+                <Box>
+                  <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>
+                    Categoria
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                    {Array.isArray(entity.category)
+                      ? entity.category.join(", ")
+                      : entity.category}
+                  </Typography>
+                </Box>
+              )}
               
               {/* @ts-ignore */}
               {entity.description && (
@@ -384,19 +386,19 @@ export function EntityDetailsPage() {
 
         <Stack spacing={2} overflow={"auto"} flex={1}>
           {/* Drops */}
-          <Paper elevation={0} sx={{ p: 2 }}>
-            <Stack
-              direction="row"
-              spacing={1}
-              alignItems="center"
-              sx={{ mb: 2 }}
-            >
-              <Inventory color="primary" />
-              <Typography variant="h6" fontWeight={700}>
-                Drops
-              </Typography>
-            </Stack>
-            {drops && drops.length > 0 ? (
+          {drops && drops.length > 0 && (
+            <Paper elevation={0} sx={{ p: 2 }}>
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                sx={{ mb: 2 }}
+              >
+                <Inventory color="primary" />
+                <Typography variant="h6" fontWeight={700}>
+                  Drops
+                </Typography>
+              </Stack>
               <Grid container spacing={2}>
                 {drops.map((drop, idx) => (
                   <Grid size={{ xs: 12, sm: 6, md: 4 }} key={idx}>
@@ -427,12 +429,8 @@ export function EntityDetailsPage() {
                   </Grid>
                 ))}
               </Grid>
-            ) : (
-              <Typography variant="body2" color="text.secondary">
-                Esta entidade não possui drops conhecidos.
-              </Typography>
-            )}
-          </Paper>
+            </Paper>
+          )}
 
           {/* Como Fabricar */}
           {recipes && recipes.length > 0 && (
@@ -496,19 +494,19 @@ export function EntityDetailsPage() {
           )}
 
           {/* Localizações (Spawns) */}
-          <Paper elevation={0} sx={{ p: 2 }}>
-            <Stack
-              direction="row"
-              spacing={1}
-              alignItems="center"
-              sx={{ mb: 2 }}
-            >
-              <MapIcon color="primary" />
-              <Typography variant="h6" fontWeight={700}>
-                Localizações
-              </Typography>
-            </Stack>
-            {groupedReferencePoints.size > 0 ? (
+          {groupedReferencePoints.size > 0 && (
+            <Paper elevation={0} sx={{ p: 2 }}>
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                sx={{ mb: 2 }}
+              >
+                <MapIcon color="primary" />
+                <Typography variant="h6" fontWeight={700}>
+                  Localizações
+                </Typography>
+              </Stack>
               <Grid container spacing={3}>
                 {Array.from(groupedReferencePoints.entries()).map(([mapId, mapPoints]) => {
                   const meta = getMapMetadata(mapId);
@@ -580,12 +578,8 @@ export function EntityDetailsPage() {
                   );
                 })}
               </Grid>
-            ) : (
-              <Typography variant="body2" color="text.secondary">
-                Nenhuma localização de spawn encontrada para esta entidade.
-              </Typography>
-            )}
-          </Paper>
+            </Paper>
+          )}
         </Stack>
       </Stack>
     </StyledContainer>
