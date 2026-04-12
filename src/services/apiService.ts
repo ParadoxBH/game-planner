@@ -3,6 +3,7 @@ import type {
   Recipe,
   Entity,
   Conjunto,
+  GameDataTypes,
 } from "../types/gameModels";
 import type {
   NormalizedRecipe,
@@ -135,6 +136,34 @@ export class ApiService {
 
   public async getRecipeStations(): Promise<string[]> {
     return await recipeRepository.getPrimaryStations();
+  }
+
+  /**
+   * Resolve se uma estação de receita deve levar a uma entidade única ou a uma lista filtrada
+   */
+  public async resolveStation(stationId: string): Promise<{ type: 'single' | 'category' | 'none'; payload: string }> {
+    // 1. Verificar se é uma entidade com ID exato
+    const entity = await entityRepository.getById(stationId);
+    if (entity) {
+      // Se encontrou a entidade, mas existem outras entidades com essa mesma categoria secundária,
+      // talvez o usuário ainda queira ver a lista. Porém, seu pedido diz que se encontrar 1 item, leva direto.
+      // Vamos ver se existem mais entidades com essa categoria (além da busca por ID)
+      const sameCategory = await entityRepository.getEntitiesByCategory(stationId);
+      if (sameCategory.length > 1) {
+        return { type: 'category', payload: stationId };
+      }
+      return { type: 'single', payload: stationId };
+    }
+
+    // 2. Verificar se existem múltiplas entidades com essa categoria
+    const entities = await entityRepository.getEntitiesByCategory(stationId);
+    if (entities.length === 1) {
+      return { type: 'single', payload: entities[0].id };
+    } else if (entities.length > 1) {
+      return { type: 'category', payload: stationId };
+    }
+
+    return { type: 'none', payload: stationId };
   }
 
   public async getItemDetails(itemId: string): Promise<ItemDetails | null> {

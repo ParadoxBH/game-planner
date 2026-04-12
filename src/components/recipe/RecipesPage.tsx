@@ -139,6 +139,42 @@ export function RecipesPage() {
     pages.setCriteria({ subStationStates: nextSub });
   };
 
+  const stationOptions = useMemo(() => {
+    return allStations.map(station => {
+      const relatedEntities = entities.filter(e => {
+        const cats = Array.isArray(e.category) ? e.category : [e.category];
+        return cats.some(c => c && c.toLowerCase() === station.toLowerCase());
+      });
+
+      if (relatedEntities.length === 1) {
+        return { 
+          value: station, 
+          label: relatedEntities[0].name,
+          icon: relatedEntities[0].icon
+        };
+      }
+      return station;
+    });
+  }, [allStations, entities]);
+
+  const subStationOptions = useMemo(() => {
+    return availableSubStations.map(station => {
+      const relatedEntities = entities.filter(e => {
+        const cats = Array.isArray(e.category) ? e.category : [e.category];
+        return cats.some(c => c && c.toLowerCase() === station.toLowerCase());
+      });
+
+      if (relatedEntities.length === 1) {
+        return { 
+          value: station, 
+          label: relatedEntities[0].name,
+          icon: relatedEntities[0].icon
+        };
+      }
+      return station;
+    });
+  }, [availableSubStations, entities]);
+
   return (
     <StyledContainer
       title={`Receitas de ${gameId}`}
@@ -152,7 +188,7 @@ export function RecipesPage() {
           <PickSelector
             label="Estação"
             value={urlStation === "all" ? null : urlStation || null}
-            options={allStations}
+            options={stationOptions}
             onChange={(st: string | null) => {
               navigate(`/game/${gameId}/recipes/list/${st || "all"}`);
             }}
@@ -163,7 +199,7 @@ export function RecipesPage() {
             <TriplePickSelector
               label="Sub-estação"
               states={pages.info.criteria.subStationStates || {}}
-              options={availableSubStations}
+              options={subStationOptions}
               onChange={handleSubStationStateChange}
               icon={<Build sx={{ fontSize: 18 }} />}
             />
@@ -212,6 +248,7 @@ export function RecipesPage() {
               eventsMap={eventsMap}
               craftTime={recipe.craftTime}
               variant={variant}
+              entities={entities}
             />
           )}
           renderListItem={(recipe: any) => {
@@ -269,9 +306,44 @@ export function RecipesPage() {
               </Box>,
 
               <Box key={`recipe_stations_${recipe.id}`} sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-                {recipe.normalizedStations.filter(Boolean).map((station: string) => (
-                  <Chip key={station} label={station} size="small" sx={{ height: 18, fontSize: '0.6rem', backgroundColor: 'rgba(255,255,255,0.05)' }} />
-                ))}
+                {recipe.normalizedStations.filter(Boolean).map((station: string) => {
+                  const relatedEntities = entities.filter(e => {
+                    const cats = Array.isArray(e.category) ? e.category : [e.category];
+                    return cats.some(c => c && c.toLowerCase() === station.toLowerCase());
+                  });
+
+                  const isSingle = relatedEntities.length === 1;
+                  const firstEntity = relatedEntities.length > 0 ? relatedEntities[0] : null;
+                  const displayName = firstEntity ? firstEntity.name : station;
+                  const targetUrl = isSingle 
+                    ? `/game/${gameId}/entity/view/${firstEntity?.id}`
+                    : `/game/${gameId}/entity/list/all?subCategory=${station}`;
+
+                  return (
+                    <Chip 
+                      key={station} 
+                      label={displayName} 
+                      size="small" 
+                      icon={firstEntity?.icon ? (
+                        <Box component="img" src={firstEntity.icon} sx={{ width: 12, height: 12, objectFit: 'contain' }} />
+                      ) : undefined} 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(targetUrl);
+                      }}
+                      sx={{ 
+                        height: 18, 
+                        fontSize: '0.6rem', 
+                        backgroundColor: 'rgba(255,255,255,0.05)',
+                        cursor: 'pointer',
+                        '&:hover': {
+                          backgroundColor: 'rgba(255,255,255,0.1)',
+                          borderColor: 'primary.main',
+                        }
+                      }} 
+                    />
+                  );
+                })}
               </Box>,
 
               <Typography key={`recipe_unlock_${recipe.id}`} variant="caption" sx={{ textAlign: 'right', display: 'block', color: 'text.secondary', fontWeight: 700 }}>

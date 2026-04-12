@@ -10,6 +10,7 @@ import {
   Tab,
   Tabs,
   CircularProgress,
+  Chip,
 } from "@mui/material";
 import {
   NavigateNext,
@@ -37,6 +38,8 @@ import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
 import { recipeRepository } from "../../repositories/RecipeRepository";
 import { shopRepository } from "../../repositories/ShopRepository";
+import { eventRepository } from "../../repositories/EventRepository";
+import type { GameEvent } from "../../types/gameModels";
 
 export function RecipeDetailsPage() {
   const { gameId, recipeId = "" } = useParams<{
@@ -54,6 +57,7 @@ export function RecipeDetailsPage() {
   const [entities, setEntities] = useState<Entity[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [shops, setShops] = useState<any[]>([]);
+  const [events, setEvents] = useState<GameEvent[]>([]);
 
   const [categoryChoices, setCategoryChoices] = useState<
     Record<string, string>
@@ -82,14 +86,16 @@ export function RecipeDetailsPage() {
       itemRepository.getAll(),
       entityRepository.getAll(),
       recipeRepository.getAll(),
-      shopRepository.getAll()
-    ]).then(([details, allItems, allEntities, allRecipes, allShops]) => {
+      shopRepository.getAll(),
+      eventRepository.getAll()
+    ]).then(([details, allItems, allEntities, allRecipes, allShops, allEvents]) => {
       if (!isMounted) return;
       setRecipeDetails(details);
       setItems(allItems);
       setEntities(allEntities);
       setRecipes(allRecipes);
       setShops(allShops);
+      setEvents(allEvents);
       setDataLoading(false);
     }).catch(err => {
       console.error("Error loading recipe details data:", err);
@@ -172,6 +178,12 @@ export function RecipeDetailsPage() {
       recipeChoices,
     };
   }, [items, entities, recipes, shops, categoryChoices, recipeChoices, dataLoading]);
+
+  const eventsMap = useMemo(() => {
+    const map = new Map<string, string>();
+    events.forEach(e => map.set(e.id, e.name));
+    return map;
+  }, [events]);
 
   const tree = useMemo(() => {
     if (!recipeDetails || !treeOptions) return null;
@@ -301,27 +313,65 @@ export function RecipeDetailsPage() {
                   </Typography>
                   <Stack direction="row" spacing={1} flexWrap="wrap">
                     {recipe.normalizedStations.length > 0 ? (
-                      recipe.normalizedStations.map(
-                        (s: string, idx: number) => (
+                      recipe.normalizedStations.map((s: string, idx: number) => {
+                        const relatedEntities = entities.filter(e => {
+                          const cats = Array.isArray(e.category) ? e.category : [e.category];
+                          return cats.some(c => c && c.toLowerCase() === s.toLowerCase());
+                        });
+
+                        const isSingle = relatedEntities.length === 1;
+                        const firstEntity = relatedEntities.length > 0 ? relatedEntities[0] : null;
+                        const displayName = firstEntity ? firstEntity.name : s;
+                        const targetUrl = isSingle 
+                          ? `/game/${gameId}/entity/view/${firstEntity?.id}`
+                          : `/game/${gameId}/entity/list/all?subCategory=${s}`;
+
+                        return (
                           <Box
                             key={idx}
+                            component={Link}
+                            to={targetUrl}
                             sx={{
-                              px: 1.5,
+                              px: 1,
                               py: 0.5,
                               bgcolor: "rgba(255,255,255,0.05)",
                               borderRadius: 1,
                               border: "1px solid rgba(255,255,255,0.1)",
+                              textDecoration: "none",
+                              color: "inherit",
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                              transition: 'all 0.2s',
+                              "&:hover": {
+                                bgcolor: "rgba(255,255,255,0.1)",
+                                borderColor: "primary.main",
+                                transform: 'translateY(-1px)'
+                              },
                             }}
                           >
+                            {firstEntity?.icon && (
+                              <Box 
+                                component="img" 
+                                src={firstEntity.icon} 
+                                sx={{ width: 18, height: 18, objectFit: 'contain' }} 
+                              />
+                            )}
                             <Typography variant="caption" fontWeight={700}>
-                              {s}
+                              {displayName}
                             </Typography>
+                            {!isSingle && relatedEntities.length > 1 && (
+                              <Typography variant="caption" sx={{ opacity: 0.5, fontSize: '0.6rem' }}>
+                                ({relatedEntities.length})
+                              </Typography>
+                            )}
                           </Box>
-                        ),
-                      )
+                        );
+                      })
                     ) : (
                       <Typography variant="body2" color="text.secondary">
-                        Default / Crafting
+                        Produzido manualmente
                       </Typography>
                     )}
                   </Stack>
@@ -356,11 +406,29 @@ export function RecipeDetailsPage() {
                           sx={{ display: "flex", alignItems: "center", gap: 1 }}
                         >
                           <AutoFixHigh fontSize="small" color="primary" />
-                          <Typography variant="body2">
-                            {u.type === "event"
-                              ? "Evento: " + u.value
-                              : u.value}
-                          </Typography>
+                          {u.type === "event" ? (
+                            <Stack direction="row" spacing={1} alignItems="center">
+                              <Typography variant="body2">Evento:</Typography>
+                              <Chip
+                                label={eventsMap.get(u.value) || u.value}
+                                size="small"
+                                component={Link}
+                                to={`/game/${gameId}/events/view/${u.value}`}
+                                clickable
+                                sx={{
+                                  bgcolor: "rgba(25, 118, 210, 0.1)",
+                                  color: "primary.main",
+                                  fontWeight: 700,
+                                  border: "1px solid rgba(25, 118, 210, 0.2)",
+                                  "&:hover": {
+                                    bgcolor: "rgba(25, 118, 210, 0.2)",
+                                  },
+                                }}
+                              />
+                            </Stack>
+                          ) : (
+                            <Typography variant="body2">{u.value}</Typography>
+                          )}
                         </Box>
                       ))}
                     </Stack>

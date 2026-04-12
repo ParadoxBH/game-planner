@@ -18,7 +18,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ItemChip } from "../common/ItemChip";
 import { TimeChip } from "../common/TimeChip";
 
-import type { GameDataTypes, RecipeItem, RecipeUnlock } from "../../types/gameModels";
+import type { GameDataTypes, RecipeItem, RecipeUnlock, Entity } from "../../types/gameModels";
 
 interface RecipeCardProps {
   id: string;
@@ -31,6 +31,7 @@ interface RecipeCardProps {
   eventsMap: Map<string, string>;
   craftTime?: number;
   variant?: "default" | "compact";
+  entities?: Entity[];
 }
 
 
@@ -45,7 +46,8 @@ export function RecipeCard({
   getSourceData,
   eventsMap,
   craftTime,
-  variant = "default"
+  variant = "default",
+  entities = []
 }: RecipeCardProps) {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
@@ -173,15 +175,46 @@ export function RecipeCard({
                   Receita
                 </Typography>
                 <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }}>
-                  {stations.map(s => (
-                    <Chip 
-                      key={s} 
-                      label={s} 
-                      size="small" 
-                      icon={<Construction sx={{ fontSize: '0.8rem !important' }} />} 
-                      sx={{ backgroundColor: 'rgba(255,255,255,0.05)', fontSize: '0.65rem', height: 20 }} 
-                    />
-                  ))}
+                  {stations.map(s => {
+                    const relatedEntities = entities.filter(e => {
+                      const cats = Array.isArray(e.category) ? e.category : [e.category];
+                      return cats.some(c => c && c.toLowerCase() === s.toLowerCase());
+                    });
+
+                    const isSingle = relatedEntities.length === 1;
+                    const firstEntity = relatedEntities.length > 0 ? relatedEntities[0] : null;
+                    const displayName = firstEntity ? firstEntity.name : s;
+                    const targetUrl = isSingle 
+                      ? `/game/${gameId}/entity/view/${firstEntity?.id}`
+                      : `/game/${gameId}/entity/list/all?subCategory=${s}`;
+
+                    return (
+                      <Chip 
+                        key={s} 
+                        label={displayName} 
+                        size="small" 
+                        icon={firstEntity?.icon ? (
+                          <Box component="img" src={firstEntity.icon} sx={{ width: 14, height: 14, objectFit: 'contain' }} />
+                        ) : (
+                          <Construction sx={{ fontSize: '0.8rem !important' }} />
+                        )} 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(targetUrl);
+                        }}
+                        sx={{ 
+                          backgroundColor: 'rgba(255,255,255,0.05)', 
+                          fontSize: '0.65rem', 
+                          height: 20,
+                          cursor: 'pointer',
+                          '&:hover': {
+                            backgroundColor: 'rgba(255,255,255,0.1)',
+                            borderColor: 'primary.main',
+                          }
+                        }} 
+                      />
+                    );
+                  })}
                   {craftTime && craftTime > 0 && (
                     <TimeChip seconds={craftTime} />
                   )}

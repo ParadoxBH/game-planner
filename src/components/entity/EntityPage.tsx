@@ -6,7 +6,7 @@ import {
   Switch,
   Tooltip,
 } from "@mui/material";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useMemo, useEffect } from "react";
 import { StyledContainer } from "../common/StyledContainer";
 import { EntityCard } from "./EntityCard";
@@ -31,6 +31,8 @@ export function EntityPage() {
     category?: string;
   }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const subCategoryParam = searchParams.get("subCategory");
 
   const {
     loading: dbLoading,
@@ -49,16 +51,16 @@ export function EntityPage() {
 
   const pages = usePagination<EntityCriteria>({
     primaryCategory: urlCategory || "all",
-    subCategoryStates: {},
+    subCategoryStates: subCategoryParam ? { [subCategoryParam]: "include" } : {},
   });
 
   // Sync URL Category to filter
   useEffect(() => {
     pages.setCriteria({
       primaryCategory: urlCategory || "all",
-      subCategoryStates: {}
+      subCategoryStates: subCategoryParam ? { [subCategoryParam]: "include" } : {}
     });
-  }, [urlCategory]);
+  }, [urlCategory, subCategoryParam]);
 
   // Load static data (shops and categories)
   useEffect(() => {
