@@ -13,7 +13,7 @@ import type {
   EventDetails,
   PaginatedResponse,
 } from "../types/apiModels";
-import type { GenericFilter, ItemCriteria, EntityCriteria } from "../types/filterTypes";
+import type { GenericFilter, ItemCriteria, EntityCriteria, RecipeCriteria } from "../types/filterTypes";
 import { getCraftingTotals } from "../utils/craftingTree";
 import type { TreeOptions } from "../utils/craftingTree";
 import { isPointInPolygon } from "../utils/spatial";
@@ -90,8 +90,30 @@ export class ApiService {
     return entityRepository.search(filter, matcher, activeEventIds);
   }
 
-  public async getRecipes(filter: GenericFilter<any>, activeEventIds?: string[]): Promise<PaginatedResponse<NormalizedRecipe>> {
-    const results = await recipeRepository.search(filter, undefined, activeEventIds);
+  public async getRecipes(filter: GenericFilter<RecipeCriteria>, activeEventIds?: string[]): Promise<PaginatedResponse<NormalizedRecipe>> {
+    const matcher = (recipe: Recipe, criteria: RecipeCriteria) => {
+      const stations = recipe.stations || (recipe as any).ProducedIn || [];
+      const stationsArr = Array.isArray(stations) ? stations : [stations];
+
+      // 1. Primary Station
+      if (criteria.primaryStation && criteria.primaryStation !== "all") {
+        if (stationsArr[0]?.toLowerCase() !== criteria.primaryStation.toLowerCase()) return false;
+      }
+
+      // 2. Sub Station States
+      if (criteria.subStationStates) {
+        for (const [st, state] of Object.entries(criteria.subStationStates)) {
+          if (state === 'indifferent') continue;
+          const hasSt = stationsArr.includes(st);
+          if (state === 'exclude' && hasSt) return false;
+          if (state === 'include' && !hasSt) return false;
+        }
+      }
+
+      return true;
+    };
+
+    const results = await recipeRepository.search(filter, matcher, activeEventIds);
     
     return {
       ...results,
@@ -109,6 +131,10 @@ export class ApiService {
 
   public async getEntityCategories(): Promise<string[]> {
     return await entityRepository.getPrimaryCategories();
+  }
+
+  public async getRecipeStations(): Promise<string[]> {
+    return await recipeRepository.getPrimaryStations();
   }
 
   public async getItemDetails(itemId: string): Promise<ItemDetails | null> {

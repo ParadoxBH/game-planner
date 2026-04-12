@@ -25,3 +25,8 @@ export interface EntityCriteria {
   primaryCategory?: string;
   subCategoryStates?: Record<string, 'include' | 'exclude' | 'indifferent'>;
 }
+
+export interface RecipeCriteria {
+  primaryStation?: string;
+  subStationStates?: Record<string, 'include' | 'exclude' | 'indifferent'>;
+}

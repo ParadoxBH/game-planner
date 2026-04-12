@@ -4,7 +4,7 @@ import { dbService } from "../services/dbService";
 import { codeRepository } from "../repositories/CodeRepository";
 import type { NormalizedRecipe, PaginatedResponse } from "../types/apiModels";
 import type { Item, Entity } from "../types/gameModels";
-import type { GenericFilter, ItemCriteria } from "../types/filterTypes";
+import type { GenericFilter, ItemCriteria, EntityCriteria, RecipeCriteria } from "../types/filterTypes";
 
 import { useEventFilter } from "../context/EventFilterContext";
 
@@ -75,9 +75,13 @@ export function useApi(gameId: string | undefined) {
     return apiService.getRecipeDetails(recipeId);
   }, []);
 
-  const getRecipesList = useCallback(async (filter: GenericFilter<any>): Promise<PaginatedResponse<NormalizedRecipe>> => {
+  const getRecipesList = useCallback(async (filter: GenericFilter<RecipeCriteria>): Promise<PaginatedResponse<NormalizedRecipe>> => {
     return apiService.getRecipes(filter, activeEventIds);
   }, [activeEventIds]);
+
+  const getRecipeStations = useCallback(async () => {
+    return apiService.getRecipeStations();
+  }, []);
 
   const getCodesList = useCallback(async () => {
     return codeRepository.getAll();
@@ -104,6 +108,7 @@ export function useApi(gameId: string | undefined) {
     getItemsList,
     getEntityList,
     getRecipesList,
+    getRecipeStations,
     getCodesList,
     getConjuntosList,
   };
