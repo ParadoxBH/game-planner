@@ -24,8 +24,10 @@ import { useViewMode } from "../../hooks/useViewMode";
 import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
 import { eventRepository } from "../../repositories/EventRepository";
+import { categoryRepository } from "../../repositories/CategoryRepository";
 import { usePagination } from "../../hooks/usePagination";
 import type { RecipeCriteria } from "../../types/filterTypes";
+import type { Category } from "../../types/gameModels";
 
 export function RecipesPage() {
   const { gameId, category: urlStation } = useParams<{ gameId: string; category?: string }>();
@@ -42,6 +44,7 @@ export function RecipesPage() {
   const [items, setItems] = useState<Item[]>([]);
   const [entities, setEntities] = useState<Entity[]>([]);
   const [events, setEvents] = useState<GameEvent[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
   const [viewMode, setViewMode] = useViewMode("recipes");
   const [allStations, setAllStations] = useState<string[]>([]);
@@ -66,6 +69,7 @@ export function RecipesPage() {
     itemRepository.getAll().then(setItems);
     entityRepository.getAll().then(setEntities);
     eventRepository.getAll().then(setEvents);
+    categoryRepository.getAll().then(setCategories);
     getRecipeStations().then(setAllStations);
   }, [dbLoading, getRecipeStations]);
 
@@ -117,6 +121,44 @@ export function RecipesPage() {
     return map;
   }, [events]);
 
+  const categoriesMap = useMemo(() => {
+    const map = new Map<string, Category>();
+    categories.forEach(c => map.set(c.id.toLowerCase(), c));
+    return map;
+  }, [categories]);
+
+  const resolveStation = (stationId: string) => {
+    const normalizedStation = stationId.toLowerCase();
+    const relatedEntities = entities.filter(e => {
+      const cats = Array.isArray(e.category) ? e.category : [e.category];
+      return cats.some(c => c && c.toLowerCase() === normalizedStation);
+    });
+
+    if (relatedEntities.length === 1) {
+      return { 
+        value: stationId, 
+        label: relatedEntities[0].name,
+        icon: relatedEntities[0].icon,
+        entityId: relatedEntities[0].id
+      };
+    }
+
+    const cat = categoriesMap.get(normalizedStation);
+    if (cat) {
+      return {
+        value: stationId,
+        label: cat.name,
+        icon: cat.icon
+      };
+    }
+
+    return { 
+      value: stationId, 
+      label: stationId,
+      icon: undefined
+    };
+  };
+
   // Update available sub-stations based on current results
   useEffect(() => {
     const subs = new Set<string>();
@@ -140,40 +182,12 @@ export function RecipesPage() {
   };
 
   const stationOptions = useMemo(() => {
-    return allStations.map(station => {
-      const relatedEntities = entities.filter(e => {
-        const cats = Array.isArray(e.category) ? e.category : [e.category];
-        return cats.some(c => c && c.toLowerCase() === station.toLowerCase());
-      });
-
-      if (relatedEntities.length === 1) {
-        return { 
-          value: station, 
-          label: relatedEntities[0].name,
-          icon: relatedEntities[0].icon
-        };
-      }
-      return station;
-    });
-  }, [allStations, entities]);
+    return allStations.map(station => resolveStation(station));
+  }, [allStations, entities, categoriesMap]);
 
   const subStationOptions = useMemo(() => {
-    return availableSubStations.map(station => {
-      const relatedEntities = entities.filter(e => {
-        const cats = Array.isArray(e.category) ? e.category : [e.category];
-        return cats.some(c => c && c.toLowerCase() === station.toLowerCase());
-      });
-
-      if (relatedEntities.length === 1) {
-        return { 
-          value: station, 
-          label: relatedEntities[0].name,
-          icon: relatedEntities[0].icon
-        };
-      }
-      return station;
-    });
-  }, [availableSubStations, entities]);
+    return availableSubStations.map(station => resolveStation(station));
+  }, [availableSubStations, entities, categoriesMap]);
 
   return (
     <StyledContainer
@@ -249,6 +263,7 @@ export function RecipesPage() {
               craftTime={recipe.craftTime}
               variant={variant}
               entities={entities}
+              categories={categories}
             />
           )}
           renderListItem={(recipe: any) => {
@@ -307,25 +322,18 @@ export function RecipesPage() {
 
               <Box key={`recipe_stations_${recipe.id}`} sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
                 {recipe.normalizedStations.filter(Boolean).map((station: string) => {
-                  const relatedEntities = entities.filter(e => {
-                    const cats = Array.isArray(e.category) ? e.category : [e.category];
-                    return cats.some(c => c && c.toLowerCase() === station.toLowerCase());
-                  });
-
-                  const isSingle = relatedEntities.length === 1;
-                  const firstEntity = relatedEntities.length > 0 ? relatedEntities[0] : null;
-                  const displayName = firstEntity ? firstEntity.name : station;
-                  const targetUrl = isSingle 
-                    ? `/game/${gameId}/entity/view/${firstEntity?.id}`
+                  const resolved = resolveStation(station);
+                  const targetUrl = resolved.entityId 
+                    ? `/game/${gameId}/entity/view/${resolved.entityId}`
                     : `/game/${gameId}/entity/list/all?subCategory=${station}`;
 
                   return (
                     <Chip 
                       key={station} 
-                      label={displayName} 
+                      label={resolved.label} 
                       size="small" 
-                      icon={firstEntity?.icon ? (
-                        <Box component="img" src={firstEntity.icon} sx={{ width: 12, height: 12, objectFit: 'contain' }} />
+                      icon={resolved.icon ? (
+                        <Box component="img" src={resolved.icon} sx={{ width: 12, height: 12, objectFit: 'contain' }} />
                       ) : undefined} 
                       onClick={(e) => {
                         e.stopPropagation();

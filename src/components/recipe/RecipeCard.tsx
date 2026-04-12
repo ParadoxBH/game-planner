@@ -18,7 +18,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ItemChip } from "../common/ItemChip";
 import { TimeChip } from "../common/TimeChip";
 
-import type { GameDataTypes, RecipeItem, RecipeUnlock, Entity } from "../../types/gameModels";
+import type { GameDataTypes, RecipeItem, RecipeUnlock, Entity, Category } from "../../types/gameModels";
 
 interface RecipeCardProps {
   id: string;
@@ -32,6 +32,7 @@ interface RecipeCardProps {
   craftTime?: number;
   variant?: "default" | "compact";
   entities?: Entity[];
+  categories?: Category[];
 }
 
 
@@ -47,7 +48,8 @@ export function RecipeCard({
   eventsMap,
   craftTime,
   variant = "default",
-  entities = []
+  entities = [],
+  categories = []
 }: RecipeCardProps) {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
@@ -176,16 +178,33 @@ export function RecipeCard({
                 </Typography>
                 <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }}>
                   {stations.map(s => {
+                    const normalizedStation = s.toLowerCase();
                     const relatedEntities = entities.filter(e => {
                       const cats = Array.isArray(e.category) ? e.category : [e.category];
-                      return cats.some(c => c && c.toLowerCase() === s.toLowerCase());
+                      return cats.some(c => c && c.toLowerCase() === normalizedStation);
                     });
 
                     const isSingle = relatedEntities.length === 1;
                     const firstEntity = relatedEntities.length > 0 ? relatedEntities[0] : null;
-                    const displayName = firstEntity ? firstEntity.name : s;
-                    const targetUrl = isSingle 
-                      ? `/game/${gameId}/entity/view/${firstEntity?.id}`
+
+                    let displayName = s;
+                    let displayIcon = undefined;
+                    let entityId = undefined;
+
+                    if (isSingle && firstEntity) {
+                      displayName = firstEntity.name;
+                      displayIcon = firstEntity.icon;
+                      entityId = firstEntity.id;
+                    } else {
+                      const cat = categories.find(c => c.id.toLowerCase() === normalizedStation);
+                      if (cat) {
+                        displayName = cat.name;
+                        displayIcon = cat.icon;
+                      }
+                    }
+
+                    const targetUrl = entityId 
+                      ? `/game/${gameId}/entity/view/${entityId}`
                       : `/game/${gameId}/entity/list/all?subCategory=${s}`;
 
                     return (
@@ -193,8 +212,8 @@ export function RecipeCard({
                         key={s} 
                         label={displayName} 
                         size="small" 
-                        icon={firstEntity?.icon ? (
-                          <Box component="img" src={firstEntity.icon} sx={{ width: 14, height: 14, objectFit: 'contain' }} />
+                        icon={displayIcon ? (
+                          <Box component="img" src={displayIcon} sx={{ width: 14, height: 14, objectFit: 'contain' }} />
                         ) : (
                           <Construction sx={{ fontSize: '0.8rem !important' }} />
                         )} 
