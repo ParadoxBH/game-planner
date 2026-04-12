@@ -2,7 +2,7 @@
   {
     "id": "recipe_salada_rural",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -22,7 +22,7 @@
   {
     "id": "recipe_geleia_mista",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -42,7 +42,7 @@
   {
     "id": "recipe_geleia_framboesa",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -62,7 +62,7 @@
   {
     "id": "recipe_geleia_mirtilo",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -82,7 +82,7 @@
   {
     "id": "recipe_geleia_maca",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -102,7 +102,7 @@
   {
     "id": "recipe_geleia_tangerina",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -122,7 +122,7 @@
   {
     "id": "recipe_bolo_queijo",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -152,7 +152,7 @@
   {
     "id": "recipe_torta_cogumelo",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -182,7 +182,7 @@
   {
     "id": "recipe_cogumelo_assado",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -202,7 +202,7 @@
   {
     "id": "recipe_cogumelo_ostra_assado",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -222,7 +222,7 @@
   {
     "id": "recipe_shiitake_assado",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -242,7 +242,7 @@
   {
     "id": "recipe_champignon_assado",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -262,7 +262,7 @@
   {
     "id": "recipe_porcino_assado",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -282,7 +282,7 @@
   {
     "id": "recipe_ovo_cozido_terminal",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -302,7 +302,7 @@
   {
     "id": "recipe_cafe",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -327,7 +327,7 @@
   {
     "id": "recipe_latte",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -352,7 +352,7 @@
   {
     "id": "recipe_bagel_peixe_defumado",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -387,7 +387,7 @@
   {
     "id": "recipe_arroz_marisco",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
@@ -417,7 +417,7 @@
   {
     "id": "recipe_ensopado_rustico",
     "stations": [
-      "cooking"
+      "cooking_station"
     ],
     "ingredients": [
       {
