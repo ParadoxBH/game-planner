@@ -140,7 +140,7 @@ export function StyledContainer({
             </Stack>
           )}
         </Stack>
-        <Stack sx={{ overflowY: "auto", flex: 1, ...sx?.container }}>
+        <Stack sx={{ overflowY: "auto", overflowX: "hidden", flex: 1, ...sx?.container }}>
           {children}
         </Stack>
         {!!pages && <TablePaginator 
