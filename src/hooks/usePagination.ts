@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { GenericFilter } from '../types/filterTypes';
+import { usePlatform } from './usePlatform';
 
 export interface PaginationController<T> {
   info: GenericFilter<T>;
@@ -15,6 +16,7 @@ export interface PaginationController<T> {
 
 export function usePagination<T>(initialCriteria: T): PaginationController<T> {
   const [searchParams] = useSearchParams();
+  const { isMobile } = usePlatform();
 
   // Helper to parse criteria from URL
   const parseCriteria = useCallback(() => {
@@ -30,7 +32,7 @@ export function usePagination<T>(initialCriteria: T): PaginationController<T> {
   const [filter, setFilter] = useState<GenericFilter<T>>(() => {
     const page = parseInt(searchParams.get("page") || "1", 10);
     const search = searchParams.get("search") || "";
-    const pageSize = parseInt(searchParams.get("pageSize") || "100", 10);
+    const pageSize = parseInt(searchParams.get("pageSize") || (isMobile ? "30" : "100"), 10);
     const criteria = parseCriteria();
 
     return {
