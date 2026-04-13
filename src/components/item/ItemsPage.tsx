@@ -26,6 +26,7 @@ import type { ItemCriteria } from "../../types/filterTypes";
 import type { PaginatedResponse } from "../../types/apiModels";
 import { usePagination } from "../../hooks/usePagination";
 import { getPublicUrl } from "../../utils/pathUtils";
+import { usePlatform } from "../../hooks/usePlatform";
 
 export function ItemsPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -35,6 +36,7 @@ export function ItemsPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const subCategoryParam = searchParams.get("subCategory");
+  const { isMobile } = usePlatform();
 
   const { loading: dbLoading, error, getItemsList, getItemCategories, getItemSubCategories } = useApi(gameId);
   const [itemsResponse, setItemsResponse] = useState<PaginatedResponse<Item> | null>(null);
@@ -175,7 +177,7 @@ export function ItemsPage() {
         </>
       }
       actionsEnd={
-        <>
+        <Stack flex={1} direction={"row"} justifyContent={isMobile ? "space-between" : "end"} alignItems={"center"}>
           <FormControlLabel
             control={
               <Switch
@@ -196,7 +198,7 @@ export function ItemsPage() {
             sx={{ ml: 1 }}
           />
           <ViewModeSelector mode={viewMode} onChange={setViewMode} />
-        </>
+        </Stack>
       }
     >
       {(dbLoading || dataLoading) ? (
@@ -220,7 +222,7 @@ export function ItemsPage() {
           cardMinWidth={200}
           listHeader={[
             { label: "Item", width: "60%" },
-            { label: "Categorias", width: "30%" },
+            { label: "Categorias", width: "30%", hidden: isMobile },
             {
               label: "Preços",
               align: "right" as const,
@@ -258,7 +260,7 @@ export function ItemsPage() {
               >
                 {item.icon ? (
                   <img
-                    src={item.icon}
+                    src={getPublicUrl(item.icon)}
                     alt={item.name}
                     style={{
                       width: "80%",
@@ -324,7 +326,7 @@ export function ItemsPage() {
                       id="ouro"
                       amount={item.buyPrice}
                       size="small"
-                      icon={getPublicUrl("/img/heartopia/stats/ouro.png")}
+                      icon={"/img/heartopia/stats/ouro.png"}
                     />
                   </Box>
                 </Tooltip>
@@ -347,7 +349,7 @@ export function ItemsPage() {
                       id="ouro"
                       amount={item.sellPrice}
                       size="small"
-                      icon={getPublicUrl("/img/heartopia/stats/ouro.png")}
+                      icon={"/img/heartopia/stats/ouro.png"}
                     />
                   </Box>
                 </Tooltip>
@@ -370,7 +372,7 @@ export function ItemsPage() {
               >
                 {item.icon ? (
                   <img
-                    src={item.icon}
+                    src={getPublicUrl(item.icon)}
                     alt={item.name}
                     style={{
                       width: "100%",

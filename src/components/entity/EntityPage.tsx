@@ -5,6 +5,7 @@ import {
   FormControlLabel,
   Switch,
   Tooltip,
+  Stack,
 } from "@mui/material";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useMemo, useEffect } from "react";
@@ -25,6 +26,7 @@ import { usePagination } from "../../hooks/usePagination";
 import type { EntityCriteria } from "../../types/filterTypes";
 import type { PaginatedResponse } from "../../types/apiModels";
 import { getPublicUrl } from "../../utils/pathUtils";
+import { usePlatform } from "../../hooks/usePlatform";
 
 export function EntityPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -50,6 +52,7 @@ export function EntityPage() {
   const [showPrices, setShowPrices] = useState(false);
   const [allCategories, setAllCategories] = useState<(Category & { isPrimary: boolean })[]>([]);
   const [availableSubCategories, setAvailableSubCategories] = useState<string[]>([]);
+  const { isMobile } = usePlatform();
 
   const pages = usePagination<EntityCriteria>({
     primaryCategory: urlCategory || "all",
@@ -173,7 +176,7 @@ export function EntityPage() {
         </>
       }
       actionsEnd={
-        <>
+        <Stack flex={1} direction={"row"} justifyContent={isMobile ? "space-between" : "end"} alignItems={"center"}>
           <FormControlLabel
             control={
               <Switch
@@ -194,7 +197,7 @@ export function EntityPage() {
             sx={{ ml: 1 }}
           />
           <ViewModeSelector mode={viewMode} onChange={setViewMode} />
-        </>
+        </Stack>
       }
     >
       {(dbLoading || dataLoading) ? (
@@ -256,7 +259,7 @@ export function EntityPage() {
               >
                 {entity.icon ? (
                   <img
-                    src={entity.icon}
+                    src={getPublicUrl(entity.icon)}
                     alt={entity.name}
                     style={{
                       width: "80%",
@@ -288,7 +291,7 @@ export function EntityPage() {
                       id="ouro"
                       amount={entity.buyPrice}
                       size="small"
-                      icon={getPublicUrl("/img/heartopia/stats/ouro.png")}
+                      icon={"/img/heartopia/stats/ouro.png"}
                     />
                   </Box>
                 </Tooltip>
@@ -301,7 +304,7 @@ export function EntityPage() {
                       id="ouro"
                       amount={entity.sellPrice}
                       size="small"
-                      icon={getPublicUrl("/img/heartopia/stats/ouro.png")}
+                      icon={"/img/heartopia/stats/ouro.png"}
                     />
                   </Box>
                 </Tooltip>
@@ -325,7 +328,7 @@ export function EntityPage() {
               >
                 {entity.icon ? (
                   <img
-                    src={entity.icon}
+                    src={getPublicUrl(entity.icon)}
                     alt={entity.name}
                     style={{
                       width: "100%",
