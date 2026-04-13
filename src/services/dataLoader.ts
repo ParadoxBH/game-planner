@@ -4,7 +4,7 @@ export async function loadGameData<T>(
   gameId: string,
   dataset: string
 ): Promise<T[]> {
-  const baseUrl = `/data/${gameId}/${dataset}`;
+  const baseUrl = `${import.meta.env.BASE_URL}data/${gameId}/${dataset}`;
   const manifestUrl = `${baseUrl}/manifest.json`;
 
   try {
@@ -45,7 +45,7 @@ export async function loadGameData<T>(
 
 export async function loadGamesList(): Promise<GameInfo[]> {
   try {
-    const response = await fetch(`/data/games.json`);
+    const response = await fetch(`${import.meta.env.BASE_URL}data/games.json`);
     if (!response.ok) {
       throw new Error(`Failed to load games list`);
     }
@@ -59,7 +59,7 @@ export async function loadGamesList(): Promise<GameInfo[]> {
 
 export async function loadGameMaps(gameId: string): Promise<any[]> {
   try {
-    const response = await fetch(`/data/${gameId}/maps.json`);
+    const response = await fetch(`${import.meta.env.BASE_URL}data/${gameId}/maps.json`);
     if (!response.ok) {
       console.warn(`No maps.json found for ${gameId}, returning empty maps list.`);
       return [];
