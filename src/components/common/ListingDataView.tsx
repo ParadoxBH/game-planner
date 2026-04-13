@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { type ReactNode, useMemo } from "react";
 import { type ViewMode } from "./ViewModeSelector";
+import { usePlatform } from "../../hooks/usePlatform";
 
 export interface ListDataHeader {
   label: string;
@@ -54,7 +55,8 @@ export function ListingDataView<T>({
   variant = "default"
 }: DataViewProps<T>) {
   const theme = useTheme();
-
+  const { isMobile } = usePlatform();
+  const currentViewMode = isMobile && "cards" ? "icons" : viewMode;
   // Calcula os tamanhos do grid com base nas colunas desejadas (padrão: 1, 2, 3, 4)
   const gridSizes = useMemo(() => {
     const defaultCols = { xs: 2, sm: 3, md: 4, lg: 6, xl: 8 };
@@ -91,7 +93,7 @@ export function ListingDataView<T>({
         </Box>
       )}
 
-      {viewMode === "cards" && (
+      {currentViewMode === "cards" && (
         cardMinWidth ? (
           <Box sx={{ 
             display: 'grid', 
@@ -116,7 +118,7 @@ export function ListingDataView<T>({
         )
       )}
 
-      {viewMode === "list" && (
+      {currentViewMode === "list" && (
         <TableContainer sx={{ 
           backgroundColor: alpha(theme.palette.background.paper, 0.05),
           borderRadius: 2,
@@ -203,11 +205,11 @@ export function ListingDataView<T>({
         </TableContainer>
       )}
 
-      {viewMode === "icons" && (
+      {currentViewMode === "icons" && (
         <Box sx={{ 
           display: 'grid', 
           gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', 
-          gap: 2 
+          gap: isMobile ? 1 : 2 
         }}>
           {data.map((item, index) => (
             <Box key={index} sx={{ 

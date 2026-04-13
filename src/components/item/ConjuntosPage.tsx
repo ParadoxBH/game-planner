@@ -5,7 +5,6 @@ import {
   CardActionArea,
   Grid,
   Stack,
-  Divider,
   Chip,
   CircularProgress,
 } from "@mui/material";
@@ -21,6 +20,7 @@ import { EntityCard } from "../entity/EntityCard";
 import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
 import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
+import { usePlatform } from "../../hooks/usePlatform";
 
 export function ConjuntosPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -38,6 +38,7 @@ export function ConjuntosPage() {
   
   const [searchTerm, setSearchTerm] = useState("");
   const [collectedIds, setCollectedIds] = useState<Set<string>>(new Set());
+  const { isMobile } = usePlatform();
 
   // Load data
   useEffect(() => {
@@ -139,14 +140,14 @@ export function ConjuntosPage() {
   }
 
   const renderCategorySelection = () => (
-    <Grid container spacing={3}>
+    <Grid container spacing={isMobile ? 1 : 2}>
       {categories.map((cat) => (
         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={cat}>
           <Card
             sx={{
               backgroundColor: "rgba(255, 255, 255, 0.02)",
               backdropFilter: "blur(16px)",
-              borderRadius: 2,
+              borderRadius: 1,
               border: 1,
               borderColor: "divider",
               transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
@@ -181,7 +182,7 @@ export function ConjuntosPage() {
   );
 
   const renderConjuntosList = () => (
-    <Stack spacing={4}>
+    <Stack spacing={isMobile ? 1 : 2}>
       {filteredConjuntos.map((conjunto) => {
         const totalCount = (conjunto.items?.length || 0) + (conjunto.entitys?.length || 0);
         const collectedCount = [
@@ -190,11 +191,11 @@ export function ConjuntosPage() {
         ].filter(id => collectedIds.has(id)).length;
 
         return (
-          <Stack key={conjunto.id} spacing={1}>
-            <Stack direction="row" alignItems="center" spacing={2} justifyContent={"space-between"}>
+          <Stack key={conjunto.id} spacing={isMobile ? 0.5 : 1}>
+            <Stack direction="row" alignItems="center" spacing={1} justifyContent={"space-between"}>
               <Typography
-                variant="h4"
-                sx={{ fontWeight: 900, color: "text.primary" }}
+                variant={isMobile ? "h6" : "h5"}
+                sx={{ fontWeight: 900, color: "text.primary", textAlign: "start" }}
               >
                 {conjunto.name}
               </Typography>
@@ -220,14 +221,15 @@ export function ConjuntosPage() {
                 if (!item)
                   return (
                     <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={itemId}>
-                      <Box sx={{ position: 'relative' }}>
-                        <Typography>{itemId}</Typography>
-                        <Checkbox
-                          checked={isCollected}
-                          onChange={() => toggleCollected(itemId)}
-                          sx={{ position: 'absolute', top: 0, right: 0 }}
-                        />
-                      </Box>
+                      <Card sx={{p: 1}}>
+                        <Stack flex={1} spacing={1} direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
+                          <Typography variant="subtitle2">{itemId.replaceAll('_', ' ')}</Typography>
+                          <Checkbox
+                            checked={isCollected}
+                            onChange={() => toggleCollected(itemId)}
+                          />
+                        </Stack>
+                      </Card>
                     </Grid>
                   );
 
@@ -327,7 +329,6 @@ export function ConjuntosPage() {
                 );
               })}
             </Grid>
-            <Divider sx={{ mt: 6, borderColor: "rgba(255,255,255,0.05)" }} />
           </Stack>
         );
       })}
@@ -346,7 +347,7 @@ export function ConjuntosPage() {
       onChangeSearch={setSearchTerm}
       search={{ placeholder: "Pesquisar conjuntos..." }}
       actionsEnd={
-        urlCategory ? (
+        (urlCategory && !isMobile) ? (
           <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
             <CardActionArea
               onClick={() => navigate(`/game/${gameId}/conjuntos`)}

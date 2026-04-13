@@ -1,5 +1,6 @@
 import { ToggleButton, ToggleButtonGroup, Tooltip } from "@mui/material";
 import { ViewModule, ViewList, GridView } from "@mui/icons-material";
+import { usePlatform } from "../../hooks/usePlatform";
 
 export type ViewMode = "cards" | "list" | "icons";
 
@@ -14,6 +15,7 @@ export function ViewModeSelector({ mode, onChange }: ViewModeSelectorProps) {
       onChange(nextMode);
     }
   };
+  const { isMobile } = usePlatform();
 
   return (
     <ToggleButtonGroup
@@ -39,11 +41,11 @@ export function ViewModeSelector({ mode, onChange }: ViewModeSelectorProps) {
         }
       }}
     >
-      <ToggleButton value="cards">
+      {!isMobile && <ToggleButton value="cards">
         <Tooltip title="Cards">
           <GridView sx={{ fontSize: 20 }} />
         </Tooltip>
-      </ToggleButton>
+      </ToggleButton>}
       <ToggleButton value="list">
         <Tooltip title="Lista">
           <ViewList sx={{ fontSize: 20 }} />

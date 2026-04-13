@@ -17,12 +17,14 @@ import { useEventFilter } from "../../context/EventFilterContext";
 import { useApi } from "../../hooks/useApi";
 import { useParams } from "react-router-dom";
 import type { GameEvent } from "../../types/gameModels";
+import { usePlatform } from "../../hooks/usePlatform";
 
 export function GlobalEventFilter() {
   const { gameId } = useParams<{ gameId: string }>();
   const { activeEventIds, toggleEvent, setAllEvents, clearFilters } = useEventFilter();
   const { getEventsList } = useApi(gameId);
   const [events, setEvents] = useState<GameEvent[]>([]);
+  const { isMobile } = usePlatform();
 
   useEffect(() => {
     if (gameId && !events.length) {
@@ -54,7 +56,7 @@ export function GlobalEventFilter() {
   if (!gameId || events.length === 0) return null;
 
   return (
-    <Box sx={{ ml: 2 }}>
+    <>
       <Tooltip title="Filtro de Eventos Globais">
         <IconButton
           onClick={handleClick}
@@ -68,7 +70,7 @@ export function GlobalEventFilter() {
           }}
         >
           <Badge badgeContent={activeCount} color="primary">
-            <FilterList />
+            <FilterList fontSize={isMobile ? "small" : undefined}/>
           </Badge>
         </IconButton>
       </Tooltip>
@@ -144,7 +146,7 @@ export function GlobalEventFilter() {
           ))}
         </Box>
       </Menu>
-    </Box>
+    </>
   );
 }
 
