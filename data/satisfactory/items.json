@@ -1,0 +1,1040 @@
+[
+  {
+    "id": "iron_ore",
+    "name": "Minério de Ferro",
+    "description": "Recurso básico extraído de nós de ferro.",
+    "category": "ore",
+    "icon": "/img/satisfactory/itens/Iron_Ore.webp"
+  },
+  {
+    "id": "copper_ore",
+    "name": "Minério de Cobre",
+    "description": "Recurso básico extraído de nós de cobre.",
+    "category": "ore",
+    "icon": "/img/satisfactory/itens/Copper_Ore.png"
+  },
+  {
+    "id": "limestone",
+    "name": "Calcário",
+    "description": "Usado principalmente para fazer Concreto.",
+    "category": "ore",
+    "icon": "/img/satisfactory/itens/Limestone.png"
+  },
+  {
+    "id": "iron_ingot",
+    "name": "Lingote de Ferro",
+    "description": "Fundido a partir de Minério de Ferro.",
+    "category": "ingot"
+  },
+  {
+    "id": "iron_plate",
+    "name": "Chapa de Ferro",
+    "description": "Componente básico de construção.",
+    "category": "parts"
+  },
+  {
+    "id": "iron_rod",
+    "name": "Vara de Ferro",
+    "description": "Componente básico de construção.",
+    "category": "parts"
+  },
+  {
+    "id": "wire",
+    "name": "Fio de Cobre",
+    "description": "Feito de lingotes de cobre.",
+    "category": "parts"
+  },
+  {
+    "id": "power_slug_l1",
+    "name": "Power Slug (Blue)",
+    "description": "A strange slug radiating a strange power",
+    "category": "parts",
+    "maxStack": 50,
+    "icon": "/img/satisfactory/itens/Blue_Power_Slug.webp"
+  },
+  {
+    "id": "power_slug_l2",
+    "name": "Power Slug (Yellow)",
+    "description": "A strange slug radiating a strange power",
+    "category": "parts",
+    "maxStack": 50,
+    "icon": "/img/satisfactory/itens/Yellow_Power_Slug.webp"
+  },
+  {
+    "id": "power_slug_l3",
+    "name": "Power Slug (Purple)",
+    "description": "A strange slug radiating a strange power",
+    "category": "parts",
+    "maxStack": 50,
+    "icon": "/img/satisfactory/itens/Purple_Power_Slug.webp"
+  },
+  {
+    "id": "cement",
+    "name": "Concreto",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "rotor",
+    "name": "Rotor",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "cable",
+    "name": "Cabo",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "ore_iron",
+    "name": "Minério de Ferro",
+    "description": "",
+    "category": "ingot"
+  },
+  {
+    "id": "iron_plate_reinforced",
+    "name": "Chapa de Ferro reforçada",
+    "description": "",
+    "category": "tools"
+  },
+  {
+    "id": "dark_energy",
+    "name": "Resíduo de Matéria escura",
+    "description": "",
+    "category": "electronics"
+  },
+  {
+    "id": "dark_matter",
+    "name": "Cristal de Matéria escura",
+    "description": "",
+    "category": "electronics"
+  },
+  {
+    "id": "time_crystal",
+    "name": "Cronocristal",
+    "description": "",
+    "category": "electronics"
+  },
+  {
+    "id": "coal",
+    "name": "Carvão",
+    "description": "",
+    "category": "parts",
+    "icon": "/img/satisfactory/itens/Coal.webp"
+  },
+  {
+    "id": "stone",
+    "name": "Calcário",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "diamond",
+    "name": "Diamantes",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "liquid_oil",
+    "name": "Petróleo bruto",
+    "description": "",
+    "category": "parts",
+    "icon": "/img/satisfactory/itens/Crude_Oil.webp"
+  },
+  {
+    "id": "petroleum_coke",
+    "name": "Coque de petróleo",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "quartz_crystal",
+    "name": "Cristal de Quartzo",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "turbo_fuel",
+    "name": "Galão de Turbocombustível",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "packaged_rocket_fuel",
+    "name": "Galão de Combustível de foguete",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "ionized_fuel",
+    "name": "Combustível ionizado",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "compacted_coal",
+    "name": "Carvão compactado",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "liquid_fuel",
+    "name": "Combustível",
+    "description": "",
+    "category": "fuel"
+  },
+  {
+    "id": "nitrogen_gas",
+    "name": "Gás nitrogênio",
+    "description": "",
+    "category": "fuel",
+    "icon": "/img/satisfactory/itens/Nitrogen_Gas.webp"
+  },
+  {
+    "id": "sulfur",
+    "name": "Enxofre",
+    "description": "",
+    "category": "fuel",
+    "icon": "/img/satisfactory/itens/Sulfur.webp"
+  },
+  {
+    "id": "rocket_fuel",
+    "name": "Combustível de foguete",
+    "description": "",
+    "category": "fuel"
+  },
+  {
+    "id": "rubber",
+    "name": "Borracha",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "iron_screw",
+    "name": "Parafuso",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "modular_frame",
+    "name": "Armação modular",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "heavy_oil_residue",
+    "name": "Resíduo pesado de petróleo",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "copper_sheet",
+    "name": "Chapa de Cobre",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "fluid_canister",
+    "name": "Recipiente vazio",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "plastic",
+    "name": "Plástico",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "steel_ingot",
+    "name": "Lingote de Aço",
+    "description": "",
+    "category": "ingot"
+  },
+  {
+    "id": "ore_copper",
+    "name": "Minério de Cobre",
+    "description": "",
+    "category": "ingot"
+  },
+  {
+    "id": "copper_ingot",
+    "name": "Lingote de Cobre",
+    "description": "",
+    "category": "ingot"
+  },
+  {
+    "id": "packaged_water",
+    "name": "Galão de Água",
+    "description": "",
+    "category": "fuel",
+    "icon": "/img/satisfactory/itens/Packaged_Water.webp"
+  },
+  {
+    "id": "fuel",
+    "name": "Galão de Combustível",
+    "description": "",
+    "category": "fuel"
+  },
+  {
+    "id": "alumina_solution",
+    "name": "Solução de Alumina",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "aluminum_scrap",
+    "name": "Fragmentos de Alumínio",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "water",
+    "name": "Água",
+    "description": "",
+    "category": "parts",
+    "icon": "/img/satisfactory/itens/Water.webp"
+  },
+  {
+    "id": "circuit_board",
+    "name": "Placa de circuito",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "steel_plate",
+    "name": "Viga de Aço",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "gold_ingot",
+    "name": "Lingote de Catério",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "steel_plate_reinforced",
+    "name": "Viga industrial revestida",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "modular_frame_heavy",
+    "name": "Armação modular pesada",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "polymer_resin",
+    "name": "Resina de polímero",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "stator",
+    "name": "Estator",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "high_speed_connector",
+    "name": "Conector de alta velocidade",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "aluminum_ingot",
+    "name": "Lingote de Alumínio",
+    "description": "",
+    "category": "ingot"
+  },
+  {
+    "id": "ore_gold",
+    "name": "Minério de Catério",
+    "description": "",
+    "category": "ingot"
+  },
+  {
+    "id": "raw_quartz",
+    "name": "Quartzo bruto",
+    "description": "",
+    "category": "parts",
+    "icon": "/img/satisfactory/itens/Raw_Quartz.webp"
+  },
+  {
+    "id": "liquid_turbo_fuel",
+    "name": "Turbocombustível",
+    "description": "",
+    "category": "fuel"
+  },
+  {
+    "id": "aluminum_casing",
+    "name": "Carcaça de Alumínio",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "steel_pipe",
+    "name": "Tubulação de Aço",
+    "description": "",
+    "category": "tools"
+  },
+  {
+    "id": "aluminum_plate",
+    "name": "Chapa de Duralumínio",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "battery",
+    "name": "Bateria",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "aluminum_plate_reinforced",
+    "name": "Dissipador de calor",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "motor",
+    "name": "Motor",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "cooling_system",
+    "name": "Sistema de refrigeração",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "electromagnetic_control_rod",
+    "name": "Barra de controle eletromagnética",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "ore_uranium",
+    "name": "Urânio",
+    "description": "",
+    "category": "parts",
+    "icon": "/img/satisfactory/itens/Uranium.webp"
+  },
+  {
+    "id": "nuclear_waste",
+    "name": "Lixo de Urânio",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "nitric_acid",
+    "name": "Ácido nítrico",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "sulfuric_acid",
+    "name": "Ácido sulfúrico",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "non_fissible_uranium",
+    "name": "Urânio não físsil",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "modular_frame_fused",
+    "name": "Armação modular reforçada",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "plutonium_cell",
+    "name": "Célula de Plutônio revestida",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "ore_bauxite",
+    "name": "Bauxita",
+    "description": "",
+    "category": "parts",
+    "icon": "/img/satisfactory/itens/Bauxite.webp"
+  },
+  {
+    "id": "computer_super",
+    "name": "Supercomputador",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "pressure_conversion_cube",
+    "name": "Cubo de conversão de pressão",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "plutonium_fuel_rod",
+    "name": "Barra de combustível de Plutônio",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "crystal_oscillator",
+    "name": "Oscilador de Cristal",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "computer",
+    "name": "Computador",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "packaged_nitrogen_gas",
+    "name": "Tanque de Gás nitrogênio",
+    "description": "",
+    "category": "parts",
+    "icon": "/img/satisfactory/itens/Packaged_Nitrogen_Gas.webp"
+  },
+  {
+    "id": "high_speed_wire",
+    "name": "Fio-veloz",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "circuit_board_high_speed",
+    "name": "Limitador de IA",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "dissolved_silica",
+    "name": "Solução de Sílica",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "silica",
+    "name": "Sílica",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "wood",
+    "name": "Madeira",
+    "description": "",
+    "category": "fuel"
+  },
+  {
+    "id": "generic_biomass",
+    "name": "Biomassa",
+    "description": "",
+    "category": "fuel"
+  },
+  {
+    "id": "gunpowder",
+    "name": "Pólvora",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "uranium_cell",
+    "name": "Célula de Urânio revestida",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "nuclear_fuel_rod",
+    "name": "Barra de combustível de Urânio",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "chainsaw",
+    "name": "Motosserra",
+    "description": "",
+    "category": "tools"
+  },
+  {
+    "id": "biofuel",
+    "name": "Biocombustível Sólido",
+    "description": "",
+    "category": "fuel"
+  },
+  {
+    "id": "packaged_oil",
+    "name": "Barril de Petróleo",
+    "description": "",
+    "category": "parts",
+    "icon": "/img/satisfactory/itens/Packaged_Oil.webp"
+  },
+  {
+    "id": "packaged_oil_residue",
+    "name": "Barril de Resíduo pesado de petróleo",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "liquid_biofuel",
+    "name": "Biocombustível líquido",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "packaged_biofuel",
+    "name": "Galão de Biocombustível líquido",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "packaged_alumina",
+    "name": "Galão de Solução de Alumina",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "fabric",
+    "name": "Tecido",
+    "description": "",
+    "category": "parts",
+    "icon": "/img/satisfactory/itens/Fabric.webp"
+  },
+  {
+    "id": "filter",
+    "name": "Filtros de gás",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "hazmat_filter",
+    "name": "Filtro com infusão de iodo",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "packaged_sulfuric_acid",
+    "name": "Galão de Ácido sulfúrico",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "gas_tank",
+    "name": "Tanque de fluidos vazio",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "packaged_nitric_acid",
+    "name": "Galão de Ácido nítrico",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "plutonium_pellet",
+    "name": "Pastilha de Plutônio",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "copper_dust",
+    "name": "Pó de Cobre",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "samingot",
+    "name": "MAE reanimada",
+    "description": "",
+    "category": "ingot"
+  },
+  {
+    "id": "ficsite_ingot",
+    "name": "Lingote de Ficsita",
+    "description": "",
+    "category": "ingot"
+  },
+  {
+    "id": "ficsite_mesh",
+    "name": "Trígono de Ficsita",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "sam",
+    "name": "MAE",
+    "description": "",
+    "category": "parts",
+    "icon": "/img/satisfactory/itens/SAM.webp"
+  },
+  {
+    "id": "sink_coupon",
+    "name": "FICSIT Coupon",
+    "description": "A special FICSIT bonus program Coupon, obtained through the AWESOME Sink. Can be redeemed in the AWESOME Shop for bonus milestones and rewards",
+    "maxStack": 500,
+    "category": "special",
+    "icon": "/img/satisfactory/itens/FICSIT_Coupon.webp"
+  },
+  {
+    "id": "samfluctuator",
+    "name": "Flutuador de MAE",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "quantum_energy",
+    "name": "Matéria fotônica energizada",
+    "description": "",
+    "category": "electronics"
+  },
+  {
+    "id": "quantum_oscillator",
+    "name": "Oscilador de superposição",
+    "description": "",
+    "category": "electronics"
+  },
+  {
+    "id": "temporal_processor",
+    "name": "Processador neuroquântico",
+    "description": "",
+    "category": "electronics"
+  },
+  {
+    "id": "singularity_cell",
+    "name": "Célula de singularidade",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "plutonium_waste",
+    "name": "Lixo de plutônio",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "ficsonium",
+    "name": "Ficsônio",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "ficsonium_fuel_rod",
+    "name": "Barra de combustível de Ficsônio",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "hog_parts",
+    "name": "Restos de Javali",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "alien_protein",
+    "name": "Proteína alienígena",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "rebar_gun_projectile",
+    "name": "Arma de Vergalhão",
+    "description": "",
+    "category": "tools"
+  },
+  {
+    "id": "spiked_rebar",
+    "name": "Vergalhão de Ferro",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "alien_dnacapsule",
+    "name": "Cápsula de DNA alienígena",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "hatcher_parts",
+    "name": "Restos de Incubador",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "stinger_parts",
+    "name": "Restos de Picador",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "spitter_parts",
+    "name": "Restos de Cuspidor",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "nut",
+    "name": "Noz-berilo",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "medkit",
+    "name": "Inalador medicinal",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "crystal_shard",
+    "name": "Estilhaço de energia",
+    "description": "",
+    "category": "electronics"
+  },
+  {
+    "id": "alien_power_fuel",
+    "name": "Matriz de energia alienígena",
+    "description": "",
+    "category": "electronics"
+  },
+  {
+    "id": "rebar_stunshot",
+    "name": "Vergalhão Atordoante",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "cartridge_standard",
+    "name": "Munição de fuzil",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "cartridge_smart_projectile",
+    "name": "Munição guiada de fuzil",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "mycelia",
+    "name": "Micélios",
+    "description": "",
+    "category": "fuel"
+  },
+  {
+    "id": "parachute",
+    "name": "Paraquedas",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "berry",
+    "name": "Baga-pálida",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "shroom",
+    "name": "Agário-de-bacon",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "nobelisk_explosive",
+    "name": "Nobelisco",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "nobelisk_gas",
+    "name": "Nobelisco Venenoso",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "crystal",
+    "name": "Lesma elétrica azul",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "crystal_mk2",
+    "name": "Lesma elétrica amarela",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "crystal_mk3",
+    "name": "Lesma elétrica roxa",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "rebar_spreadshot",
+    "name": "Vergalhão de Estilhaços",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "nobelisk_shockwave",
+    "name": "Nobelisco de Pulso",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "gunpowder_mk2",
+    "name": "Pólvora sem Fumaça",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "nobelisk_cluster",
+    "name": "Nobelisco de Fragmentação",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "rebar_explosive",
+    "name": "Vergalhão Explosivo",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "nobelisk_nuke",
+    "name": "Nobelisco Atômico",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "cartridge_chaos",
+    "name": "Munição de fuzil turbo",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "packaged_ionized_fuel",
+    "name": "Galão de Combustível ionizado",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "gift",
+    "name": "Presente FICSNATAL",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "xmas_branch",
+    "name": "Ramo de árvore FICSNATAL",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "xmas_ball1",
+    "name": "Ornamento vermelho FICSNATAL",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "xmas_ball2",
+    "name": "Ornamento azul FICSNATAL",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "xmas_ball3",
+    "name": "Ornamento de Cobre FICSNATAL",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "xmas_ball4",
+    "name": "Ornamento de Ferro FICSNATAL",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "xmas_ball_cluster",
+    "name": "Pacote de enfeites FICSNATAL",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "xmas_wreath",
+    "name": "Guirlanda FICSNATAL",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "candy_cane",
+    "name": "Bengala doce",
+    "description": "",
+    "category": "tools"
+  },
+  {
+    "id": "xmas_bow",
+    "name": "Laço FICSNATAL",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "snow",
+    "name": "Neve de verdade FICSNATAL",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "xmas_star",
+    "name": "Estrela maravilhosa FICSNATAL",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "snowball_projectile",
+    "name": "Bola de neve",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "golf_cart",
+    "name": "Carrinho de Fábrica™",
+    "description": "",
+    "category": "tools"
+  },
+  {
+    "id": "golf_cart_gold",
+    "name": "Carrinho Dourado de Fábrica™",
+    "description": "",
+    "category": "tools"
+  },
+  {
+    "id": "leaves",
+    "name": "Folhas",
+    "description": "",
+    "category": "fuel"
+  },
+  {
+    "id": "fireworks_projectile_01",
+    "name": "Fogos de artifício doces",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "fireworks_projectile_02",
+    "name": "Fogos de artifício chiques",
+    "description": "",
+    "category": "parts"
+  },
+  {
+    "id": "fireworks_projectile_03",
+    "name": "Fogos de artifício brilhantes",
+    "description": "",
+    "category": "parts"
+  }
+]

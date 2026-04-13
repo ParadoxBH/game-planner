@@ -1,0 +1,50 @@
+[
+  {
+    "id": "item_cultivator",
+    "name": "Cultivator",
+    "category": [
+      "Tool"
+    ],
+    "description": "A farming tool for tilling soil.",
+    "icon": "/img/valheim/itens/Tool/Cultivator.webp",
+    "metaData": {
+      "entityId": "Cultivator"
+    }
+  },
+  {
+    "id": "item_feaster",
+    "name": "Serving Tray",
+    "category": [
+      "Tool"
+    ],
+    "description": "Set the table with whatever food and drink you fancy, and impress your guests with a delicious feast.<br/><br/><color=yellow>Once a feast has been eaten of, it won't return any resources if dismantled.</color>",
+    "icon": "/img/valheim/itens/Tool/Feaster.webp",
+    "metaData": {
+      "entityId": "Feaster"
+    }
+  },
+  {
+    "id": "item_hammer",
+    "name": "Hammer",
+    "category": [
+      "Tool"
+    ],
+    "description": "With this to your hand, you can raise high halls and mighty fortifications.",
+    "icon": "/img/valheim/itens/Tool/Hammer.webp",
+    "metaData": {
+      "entityId": "Hammer"
+    }
+  },
+  {
+    "id": "item_hoe",
+    "name": "Hoe",
+    "category": [
+      "Tool"
+    ],
+    "description": "A farmer's tool for working the earth.",
+    "icon": "/img/valheim/itens/Tool/Hoe.webp",
+    "metaData": {
+      "entityId": "Hoe"
+    }
+  }
+]

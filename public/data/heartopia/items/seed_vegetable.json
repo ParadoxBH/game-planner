@@ -1,0 +1,99 @@
+[
+    {
+        "id": "semente_tomate",
+        "name": "Semente de Tomate",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_vegetais/semente_tomate.png",
+        "buyPrice": 10,
+        "sellPrice": 5
+    },
+    {
+        "id": "semente_batata",
+        "name": "Semente de Batata",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_vegetais/semente_batata.png",
+        "buyPrice": 30,
+        "sellPrice": 15
+    },
+    {
+        "id": "semente_trigo",
+        "name": "Semente de Trigo",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_vegetais/semente_trigo.png",
+        "buyPrice": 95,
+        "sellPrice": 47
+    },
+    {
+        "id": "semente_alface_americano",
+        "name": "Semente de Alface Americano",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_vegetais/semente_alface_americana.png",
+        "buyPrice": 145,
+        "sellPrice": 72
+    },
+    {
+        "id": "semente_abacaxi",
+        "name": "Semente de Abacaxi",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "description": "Sementes para plantar Abacaxi.",
+        "icon": "/img/heartopia/agricultura/sementes_vegetais/semente_abacaxi.png",
+        "buyPrice": 15
+    },
+    {
+        "id": "semente_cenoura",
+        "name": "Semente de Cenoura",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "description": "Sementes para plantar Cenoura.",
+        "icon": "/img/heartopia/agricultura/sementes_vegetais/semente_cenoura.png",
+        "buyPrice": 50,
+        "sellPrice": 25
+    },
+    {
+        "id": "semente_morango",
+        "name": "Semente de Morango",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_vegetais/semente_morango.png",
+        "buyPrice": 125
+    },
+    {
+        "id": "semente_milho",
+        "name": "Semente Milho",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_vegetais/semente_milho.png",
+        "buyPrice": 170
+    },
+    {
+        "id": "semente_uva",
+        "name": "Semente Uva",
+        "category": [
+            "seed",
+            "vegetable"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_vegetais/semente_uva.png",
+        "buyPrice": 160
+    }
+]

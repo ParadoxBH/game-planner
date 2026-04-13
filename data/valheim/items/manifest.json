@@ -1,0 +1,23 @@
+[
+    "Ammo.json",
+    "AmmoNonEquipable.json",
+    "Bow.json",
+    "Chest.json",
+    "Consumable.json",
+    "Customization.json",
+    "Fish.json",
+    "Helmet.json",
+    "Legs.json",
+    "Material.json",
+    "Misc.json",
+    "noToken.json",
+    "OneHandedWeapon.json",
+    "Shield.json",
+    "Shoulder.json",
+    "Tool.json",
+    "Torch.json",
+    "Trophy.json",
+    "TwoHandedWeapon.json",
+    "TwoHandedWeaponLeft.json",
+    "Utility.json"
+]

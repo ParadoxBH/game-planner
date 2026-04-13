@@ -1,0 +1,447 @@
+[
+  {
+    "id": "recipe_salada_rural",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "category",
+        "id": "vegetable",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "salada_rural",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_geleia_mista",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "category",
+        "id": "ingredient_geleia",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "geleia_mista",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_geleia_framboesa",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "framboesa",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "geleia_framboesa",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_geleia_mirtilo",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "mirtilo",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "geleia_mirtilo",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_geleia_maca",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "maca",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "geleia_maca",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_geleia_tangerina",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "tangerina",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "geleia_tangerina",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_bolo_queijo",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "queijo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "trigo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "bolo_queijo",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_torta_cogumelo",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "category",
+        "id": "mushroom",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "trigo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "ovo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "torta_cogumelos",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_cogumelo_assado",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "category",
+        "id": "mushroom",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cogumelo_assado",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_cogumelo_ostra_assado",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "cogumelo_ostra",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cogumelo_ostra_assado",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_shiitake_assado",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "shiitake",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "shiitake_assado",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_champignon_assado",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "champignon",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "champignon_assado",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_porcino_assado",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "porcino",
+        "amount": 4
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "porcino_assado",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_ovo_cozido_terminal",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "ovo_pasteurizado",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "ovo_cozido_termal",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_cafe",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "graos_cafe",
+        "amount": 2
+      },
+      {
+        "type": "category",
+        "id": "ingredient_cafe",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cafe",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_latte",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "graos_cafe",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "latte",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_bagel_peixe_defumado",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "category",
+        "id": "fish",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "queijo",
+        "amount": 1
+      },
+      {
+        "type": "category",
+        "id": "vegetable",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "trigo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "bagel_peixe_defumado",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_arroz_marisco",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "category",
+        "id": "seafood",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "trigo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "tomate",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "arroz_marisco",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "recipe_ensopado_rustico",
+    "stations": [
+      "cooking_station"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "tomate",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "batata",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "alface_americano",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "ensopado_rustico",
+        "amount": 1
+      }
+    ]
+  }
+]

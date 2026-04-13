@@ -1,0 +1,95 @@
+[
+  {
+    "id": "atrativo_sereia",
+    "name": "Atrativo de Sereia",
+    "category": ["powerup", "fishing"],
+    "icon": "/img/heartopia/ferramentas/atrativo_sereia.png"
+  },
+  {
+    "id": "perfume_sereia",
+    "name": "Perfume de Sereia",
+    "category": ["powerup", "fishing"],
+    "icon": "/img/heartopia/ferramentas/perfume_sereia.png"
+  },
+  {
+    "id": "mato_camuflagem",
+    "name": "Mato de Camuflagem",
+    "category": ["powerup", "binoculars"],
+    "icon": "/img/heartopia/ferramentas/mato_camuflagem.png"
+  },
+  {
+    "id": "fortificante_onisciente",
+    "name": "Fortificante Onisciente",
+    "category": ["powerup", "bugnet"],
+    "icon": "/img/heartopia/ferramentas/fortificante_onisciente.png",
+    "buyPrice": 4000
+  },
+  {
+    "id": "atrativo_abelha_inflavel",
+    "name": "Atrativo de Abelha Inflável",
+    "category": ["powerup", "bugnet"],
+    "icon": "/img/heartopia/ferramentas/atrativo_abelha_inflavel.png",
+    "buyPrice": 2000
+  },
+  {
+    "id": "po_cultivo_arco_iris",
+    "name": "Pó de Cultivo Arco-íris",
+    "category": ["powerup", "agriculture", "flower"],
+    "icon": "/img/heartopia/ferramentas/po_cultivo_arco_iris.png",
+    "buyPrice": 3000
+  },
+  {
+    "id": "fertilizante",
+    "name": "Fertilizante",
+    "category": ["powerup", "agriculture"],
+    "icon": "/img/heartopia/ferramentas/fertilizante.png",
+    "buyPrice": 160
+  },
+  {
+    "id": "fertilizante_qualidade",
+    "name": "Fertilizante de Qualidade",
+    "category": ["powerup", "agriculture"],
+    "icon": "/img/heartopia/ferramentas/fertilizante_qualidade.png",
+    "buyPrice": 450
+  },
+  {
+    "id": "fertilizante_top",
+    "name": "Fertilizante TOP",
+    "category": ["powerup", "agriculture"],
+    "icon": "/img/heartopia/ferramentas/fertilizante_top.png",
+    "buyPrice": 1000
+  },
+  {
+    "id": "fertilizante_caseiro",
+    "name": "Fertilizante Caseiro",
+    "category": ["powerup", "agriculture"],
+    "icon": "/img/heartopia/ferramentas/fertilizante.png"
+  },
+  {
+    "id": "elixir",
+    "name": "Elixir",
+    "category": ["powerup", "agriculture"],
+    "icon": "/img/heartopia/ferramentas/elixir.png",
+    "buyPrice": 50
+  },
+  {
+    "id": "elixir_qualidade",
+    "name": "Elixir de Qualidade",
+    "category": ["powerup", "agriculture"],
+    "icon": "/img/heartopia/ferramentas/elixir_qualidade.png",
+    "buyPrice": 200
+  },
+  {
+    "id": "elixir_top",
+    "name": "Elixir TOP",
+    "category": ["powerup", "agriculture"],
+    "icon": "/img/heartopia/ferramentas/elixir_top.png",
+    "buyPrice": 600
+  },
+  {
+    "id": "buque_arco_ires",
+    "name": "Buque de Arco-Ires",
+    "category": ["powerup"],
+    "icon": "/img/heartopia/ferramentas/buque_arco_ires.png"
+  }
+]

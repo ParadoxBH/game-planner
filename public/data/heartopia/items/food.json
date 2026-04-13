@@ -1,0 +1,201 @@
+[
+  {
+    "id": "salada_rural",
+    "name": "Salada Rural",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/salada_rural.png",
+    "sellPrice": 90
+  },
+  {
+    "id": "salada_especial_chef",
+    "name": "Salada Especial do Chef",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/salada_rural.png"
+  },
+  {
+    "id": "geleia_mista",
+    "name": "Geleia Mista",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/geleia_mista.png",
+    "sellPrice": 160
+  },
+  {
+    "id": "geleia_framboesa",
+    "name": "Geleia de Framboesa",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/geleia_framboesa.png",
+    "sellPrice": 26
+  },
+  {
+    "id": "geleia_mirtilo",
+    "name": "Geleia de Mirtilo",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/geleia_mirtilo.png",
+    "sellPrice": 170
+  },
+  {
+    "id": "geleia_maca",
+    "name": "Geleia de Maçã",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/geleia_maca.png",
+    "sellPrice": 270
+  },
+  {
+    "id": "geleia_tangerina",
+    "name": "Geleia de Tangerina",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/geleia_tangerina.png",
+    "sellPrice": 270
+  },
+  {
+    "id": "isca_peixe_fritas",
+    "name": "Isca de Peixe com Fritas",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/isca_peixe_fritas.png",
+    "sellPrice": 310
+  },
+  {
+    "id": "alimento_estranho",
+    "name": "Alimento Estranho",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/alimento_estranho.png",
+    "sellPrice": 30
+  },
+  {
+    "id": "bolo_queijo",
+    "name": "Bolo de Queijo",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/bolo_queijo.png",
+    "sellPrice": 480
+  },
+  {
+    "id": "torta_cogumelos",
+    "name": "Torta de Cogumelos",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/torta_cogumelos.png",
+    "sellPrice": 500
+  },
+  {
+    "id": "cogumelo_assado",
+    "name": "Cogumelo Assado",
+    "category": [
+      "food",
+      "cogumelo_assado"
+    ],
+    "icon": "/img/heartopia/comidas/cogumelo_assado.png",
+    "sellPrice": 180
+  },
+  {
+    "id": "cogumelo_ostra_assado",
+    "name": "Cogumelo Ostra Assado",
+    "category": [
+      "food",
+      "cogumelo_assado"
+    ],
+    "icon": "/img/heartopia/comidas/cogumelo_ostra_assado.png",
+    "sellPrice": 180
+  },
+  {
+    "id": "shiitake_assado",
+    "name": "Shiitake Assado",
+    "category": [
+      "food",
+      "cogumelo_assado"
+    ],
+    "icon": "/img/heartopia/comidas/shiitake_assado.png",
+    "sellPrice": 180
+  },
+  {
+    "id": "champignon_assado",
+    "name": "Champignon Assado",
+    "category": [
+      "food",
+      "cogumelo_assado"
+    ],
+    "icon": "/img/heartopia/comidas/champignon_assado.png",
+    "sellPrice": 180
+  },
+  {
+    "id": "porcino_assado",
+    "name": "Porcino Assado",
+    "category": [
+      "food",
+      "cogumelo_assado"
+    ],
+    "icon": "/img/heartopia/comidas/porcino_assado.png",
+    "sellPrice": 180
+  },
+  {
+    "id": "ovo_cozido_termal",
+    "name": "Ovo Cozido Termal",
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/comidas/ovo_cozido_termal.png",
+    "sellPrice": 130
+  },
+  {
+    "id": "cafe",
+    "name": "Café",
+    "category": ["food", "cafe"],
+    "icon": "/img/heartopia/comidas/cafe.png",
+    "sellPrice": 290
+  },
+  {
+    "id": "latte",
+    "name": "Latte",
+    "category": ["food", "cafe"],
+    "icon": "/img/heartopia/comidas/latte.png",
+    "sellPrice": 300
+  },
+  {
+    "id": "bagel_peixe_defumado",
+    "name": "Bagel de Peixe Defumado",
+    "category": ["food"],
+    "icon": "/img/heartopia/comidas/bagel_peixe_defumado.png",
+    "sellPrice": 520
+  },
+  {
+    "id": "arroz_marisco",
+    "name": "Arroz de Marisco",
+    "category": ["food"],
+    "icon": "/img/heartopia/comidas/arroz_marisco.png",
+    "sellPrice": 490
+  },
+  {
+    "id": "ensopado_rustico",
+    "name": "Ensopado Rústico",
+    "category": ["food"],
+    "icon": "/img/heartopia/comidas/ensopado_rustico.png",
+    "sellPrice": 640
+  },
+  {
+    "id": "macarrao_trufa_negra_creme",
+    "name": "Macarrão com Trufa Negra e Creme",
+    "category": ["food"],
+    "icon": "/img/heartopia/comidas/macarrao_trufa_negra_creme.png",
+    "sellPrice": 900
+  }
+]

@@ -1,0 +1,2510 @@
+[
+  {
+    "id": "item_oakseeds",
+    "name": "Acorns",
+    "category": [
+      "Material"
+    ],
+    "description": "Plant them to grow an oak tree.",
+    "icon": "/img/valheim/itens/Material/Acorn.webp",
+    "metaData": {
+      "entityId": "Acorn"
+    }
+  },
+  {
+    "id": "item_askbladder",
+    "name": "Asksvin Bladder",
+    "category": [
+      "Material"
+    ],
+    "description": "An acidic smell still lingers. Prominently.",
+    "icon": "/img/valheim/itens/Material/AskBladder.webp",
+    "metaData": {
+      "entityId": "AskBladder"
+    }
+  },
+  {
+    "id": "item_askhide",
+    "name": "Asksvin Hide",
+    "category": [
+      "Material"
+    ],
+    "description": "This sturdy leather is thick, and still warm to the touch.",
+    "icon": "/img/valheim/itens/Material/AskHide.webp",
+    "metaData": {
+      "entityId": "AskHide"
+    }
+  },
+  {
+    "id": "item_asksvincarrionribcage",
+    "name": "Asksvin Ribcage",
+    "category": [
+      "Material"
+    ],
+    "description": "These ribs have already been stripped clean of any meat.",
+    "icon": "/img/valheim/itens/Material/AsksvinCarrionRibcage.webp",
+    "metaData": {
+      "entityId": "AsksvinCarrionRibcage"
+    }
+  },
+  {
+    "id": "item_barleyflour",
+    "name": "Barley Flour",
+    "category": [
+      "Material"
+    ],
+    "description": "Great for baking bread.",
+    "icon": "/img/valheim/itens/Material/BarleyFlour.webp",
+    "metaData": {
+      "entityId": "BarleyFlour"
+    }
+  },
+  {
+    "id": "item_beechseeds",
+    "name": "Beech Seeds",
+    "category": [
+      "Material"
+    ],
+    "description": "Plant them to grow a beech tree.",
+    "icon": "/img/valheim/itens/Material/BeechSeeds.webp",
+    "metaData": {
+      "entityId": "BeechSeeds"
+    }
+  },
+  {
+    "id": "item_breaddough",
+    "name": "Bread Dough",
+    "category": [
+      "Material"
+    ],
+    "description": "Ready for the oven.",
+    "icon": "/img/valheim/itens/Material/BreadDough.webp",
+    "metaData": {
+      "entityId": "BreadDough"
+    }
+  },
+  {
+    "id": "item_bronze",
+    "name": "Bronze",
+    "category": [
+      "Material"
+    ],
+    "description": "A strong alloy of copper and tin.",
+    "icon": "/img/valheim/itens/Material/Bronze.webp",
+    "metaData": {
+      "entityId": "Bronze"
+    }
+  },
+  {
+    "id": "item_bronzescrap",
+    "name": "Scrap Bronze",
+    "category": [
+      "Material"
+    ],
+    "description": "It's old and oxidized but can be smelted and used again.",
+    "icon": "/img/valheim/itens/Material/BronzeScrap.webp",
+    "metaData": {
+      "entityId": "BronzeScrap"
+    }
+  },
+  {
+    "id": "item_carapace",
+    "name": "Carapace",
+    "category": [
+      "Material"
+    ],
+    "description": "A plate of chitinous armor.",
+    "icon": "/img/valheim/itens/Material/Carapace.webp",
+    "metaData": {
+      "entityId": "Carapace"
+    }
+  },
+  {
+    "id": "item_carrotseeds",
+    "name": "Carrot Seeds",
+    "category": [
+      "Material"
+    ],
+    "description": "Plant these if you like carrots...",
+    "icon": "/img/valheim/itens/Material/CarrotSeeds.webp",
+    "metaData": {
+      "entityId": "CarrotSeeds"
+    }
+  },
+  {
+    "id": "item_catapult_training_ammo",
+    "name": "Grausten Payload",
+    "category": [
+      "Material"
+    ],
+    "description": "Best used with a catapult. Make sure nothing fragile is in the way.",
+    "icon": "/img/valheim/itens/Material/Catapult_ammo.webp",
+    "metaData": {
+      "entityId": "Catapult_ammo"
+    }
+  },
+  {
+    "id": "item_chicken_meat",
+    "name": "Chicken Meat",
+    "category": [
+      "Material"
+    ],
+    "description": "All chickens bear the ancestral curse of being delicious.",
+    "icon": "/img/valheim/itens/Material/ChickenMeat.webp",
+    "metaData": {
+      "entityId": "ChickenMeat"
+    }
+  },
+  {
+    "id": "item_chitin",
+    "name": "Chitin",
+    "category": [
+      "Material"
+    ],
+    "description": "A shard of crustacean shell.",
+    "icon": "/img/valheim/itens/Material/Chitin.webp",
+    "metaData": {
+      "entityId": "Chitin"
+    }
+  },
+  {
+    "id": "item_coal",
+    "name": "Coal",
+    "category": [
+      "Material"
+    ],
+    "description": "A lump of coal.",
+    "icon": "/img/valheim/itens/Material/Coal.webp",
+    "metaData": {
+      "entityId": "Coal"
+    }
+  },
+  {
+    "id": "item_coins",
+    "name": "Coins",
+    "category": [
+      "Material"
+    ],
+    "description": "<color=yellow>Valuable</color>",
+    "icon": "/img/valheim/itens/Material/Coins.webp",
+    "metaData": {
+      "entityId": "Coins"
+    }
+  },
+  {
+    "id": "item_crystal",
+    "name": "Crystal",
+    "category": [
+      "Material"
+    ],
+    "description": "A shard of crystal from deep within the earth.",
+    "icon": "/img/valheim/itens/Material/Crystal.webp",
+    "metaData": {
+      "entityId": "Crystal"
+    }
+  },
+  {
+    "id": "item_amberpearl",
+    "name": "Amber Pearl",
+    "category": [
+      "Material"
+    ],
+    "description": "<color=yellow>Valuable</color>",
+    "icon": "/img/valheim/itens/Material/AmberPearl.webp",
+    "metaData": {
+      "entityId": "AmberPearl"
+    }
+  },
+  {
+    "id": "item_asksvincarrionneck",
+    "name": "Asksvin Neck",
+    "category": [
+      "Material"
+    ],
+    "description": "A neck in its final stage of life.",
+    "icon": "/img/valheim/itens/Material/AsksvinCarrionNeck.webp",
+    "metaData": {
+      "entityId": "AsksvinCarrionNeck"
+    }
+  },
+  {
+    "id": "item_birchseeds",
+    "name": "Birch Seeds",
+    "category": [
+      "Material"
+    ],
+    "description": "Plant them to grow a birch tree.",
+    "icon": "/img/valheim/itens/Material/BirchSeeds.webp",
+    "metaData": {
+      "entityId": "BirchSeeds"
+    }
+  },
+  {
+    "id": "item_blackmetalscrap",
+    "name": "Black Metal Scrap",
+    "category": [
+      "Material"
+    ],
+    "description": "A twisted hunk of dark metal.",
+    "icon": "/img/valheim/itens/Material/BlackMetalScrap.webp",
+    "metaData": {
+      "entityId": "BlackMetalScrap"
+    }
+  },
+  {
+    "id": "item_bonemawmeat",
+    "name": "Bonemaw Meat",
+    "category": [
+      "Material"
+    ],
+    "description": "A tasty, white fish meat. Very good for your bones!",
+    "icon": "/img/valheim/itens/Material/BoneMawSerpentMeat.webp",
+    "metaData": {
+      "entityId": "BoneMawSerpentMeat"
+    }
+  },
+  {
+    "id": "item_celestialfeather",
+    "name": "Celestial Feather",
+    "category": [
+      "Material"
+    ],
+    "description": "The only remnant of the fallen valkyrie's former self.",
+    "icon": "/img/valheim/itens/Material/CelestialFeather.webp",
+    "metaData": {
+      "entityId": "CelestialFeather"
+    }
+  },
+  {
+    "id": "item_charredbone",
+    "name": "Charred Bone",
+    "category": [
+      "Material"
+    ],
+    "description": "Followed by the distinct smell of burnt meat.",
+    "icon": "/img/valheim/itens/Material/CharredBone.webp",
+    "metaData": {
+      "entityId": "CharredBone"
+    }
+  },
+  {
+    "id": "item_copper",
+    "name": "Copper",
+    "category": [
+      "Material"
+    ],
+    "description": "A bar of pure copper ready to be worked.",
+    "icon": "/img/valheim/itens/Material/Copper.webp",
+    "metaData": {
+      "entityId": "Copper"
+    }
+  },
+  {
+    "id": "item_dvergrneedle",
+    "name": "Dvergr Extractor",
+    "category": [
+      "Material"
+    ],
+    "description": "Looks like a perfect piece for piercing something...",
+    "icon": "/img/valheim/itens/Material/DvergrNeedle.webp",
+    "metaData": {
+      "entityId": "DvergrNeedle"
+    }
+  },
+  {
+    "id": "item_Dyrnwyn_blade",
+    "name": "Dyrnwyn Blade Fragment",
+    "category": [
+      "Material"
+    ],
+    "description": "Parts of an old blade. If all the pieces were reassembled it could likely be made whole.",
+    "icon": "/img/valheim/itens/Material/DyrnwynBladeFragment.webp",
+    "metaData": {
+      "entityId": "DyrnwynBladeFragment"
+    }
+  },
+  {
+    "id": "item_Dyrnwyn_tip",
+    "name": "Dyrnwyn Tip Fragment",
+    "category": [
+      "Material"
+    ],
+    "description": "This shard of metal looks like the tip of a sword. One might be able to reforge the blade if more pieces are found...",
+    "icon": "/img/valheim/itens/Material/DyrnwynTipFragment.webp",
+    "metaData": {
+      "entityId": "DyrnwynTipFragment"
+    }
+  },
+  {
+    "id": "item_elderbark",
+    "name": "Ancient Bark",
+    "category": [
+      "Material"
+    ],
+    "description": "An ancient and sturdy material.",
+    "icon": "/img/valheim/itens/Material/ElderBark.webp",
+    "metaData": {
+      "entityId": "ElderBark"
+    }
+  },
+  {
+    "id": "item_entrails",
+    "name": "Entrails",
+    "category": [
+      "Material"
+    ],
+    "description": "A slimy length of something's insides.",
+    "icon": "/img/valheim/itens/Material/Entrails.webp",
+    "metaData": {
+      "entityId": "Entrails"
+    }
+  },
+  {
+    "id": "item_feastmeadows",
+    "name": "Whole Roasted Meadow Boar",
+    "category": [
+      "Material"
+    ],
+    "description": "A boar that has been roasted to perfection, glazed and served atop a bed of greens, with additional cuts of meat on the side. A feast like this is sure to fill your stomach and brighten your day!",
+    "icon": "/img/valheim/itens/Material/FeastMeadows_Material.webp",
+    "metaData": {
+      "entityId": "FeastMeadows_Material"
+    }
+  },
+  {
+    "id": "item_feastmistlands",
+    "name": "Mushrooms Galore  la Mistlands",
+    "category": [
+      "Material"
+    ],
+    "description": "The time has come for mushroom enthusiasts to rejoice! Try different kinds of mushrooms, mushroom marinated seeker meat and mushroom-filled misthare, and don't miss out on the tasty sap dressing.",
+    "icon": "/img/valheim/itens/Material/FeastMistlands_Material.webp",
+    "metaData": {
+      "entityId": "FeastMistlands_Material"
+    }
+  },
+  {
+    "id": "item_feastswamps",
+    "name": "Swamp Dweller's Delight",
+    "category": [
+      "Material"
+    ],
+    "description": "Who knew that leeches were edible? With the correct preparation (lots of cooking and lots of seasoning) you will be able to serve them in this feast for the culinary brave. For those who have a sensitive stomach, there are also tasty skewers of sausages and turnips on the side.",
+    "icon": "/img/valheim/itens/Material/FeastSwamps_Material.webp",
+    "metaData": {
+      "entityId": "FeastSwamps_Material"
+    }
+  },
+  {
+    "id": "item_finewood",
+    "name": "Finewood",
+    "category": [
+      "Material"
+    ],
+    "description": "High quality wood for fine carpentry.",
+    "icon": "/img/valheim/itens/Material/FineWood.webp",
+    "metaData": {
+      "entityId": "FineWood"
+    }
+  },
+  {
+    "id": "item_fireworkrocket_cyan",
+    "name": "Cyan Fireworks",
+    "category": [
+      "Material"
+    ],
+    "description": "This rocket's blasting off again!",
+    "icon": "/img/valheim/itens/Material/FireworksRocket_Cyan.webp",
+    "metaData": {
+      "entityId": "FireworksRocket_Cyan"
+    }
+  },
+  {
+    "id": "item_fireworkrocket_purple",
+    "name": "Purple Fireworks",
+    "category": [
+      "Material"
+    ],
+    "description": "This rocket's blasting off again!",
+    "icon": "/img/valheim/itens/Material/FireworksRocket_Purple.webp",
+    "metaData": {
+      "entityId": "FireworksRocket_Purple"
+    }
+  },
+  {
+    "id": "item_fireworkrocket_yellow",
+    "name": "Yellow Fireworks",
+    "category": [
+      "Material"
+    ],
+    "description": "This rocket's blasting off again!",
+    "icon": "/img/valheim/itens/Material/FireworksRocket_Yellow.webp",
+    "metaData": {
+      "entityId": "FireworksRocket_Yellow"
+    }
+  },
+  {
+    "id": "item_flametal_old",
+    "name": "Ancient Metal",
+    "category": [
+      "Material"
+    ],
+    "description": "A withered metal from ancient times. No one knows what it was once used for.",
+    "icon": "/img/valheim/itens/Material/Flametal.webp",
+    "metaData": {
+      "entityId": "Flametal"
+    }
+  },
+  {
+    "id": "item_flametal",
+    "name": "Flametal",
+    "category": [
+      "Material"
+    ],
+    "description": "According to legend, this metal was used by the gods themselves to craft powerful weapons.",
+    "icon": "/img/valheim/itens/Material/FlametalNew.webp",
+    "metaData": {
+      "entityId": "FlametalNew"
+    }
+  },
+  {
+    "id": "item_flametalore",
+    "name": "Flametal Ore",
+    "category": [
+      "Material"
+    ],
+    "description": "Warm to the touch with glowing veins of strange metal. Needs to be refined in a blast furnace.",
+    "icon": "/img/valheim/itens/Material/FlametalOreNew.webp",
+    "metaData": {
+      "entityId": "FlametalOreNew"
+    }
+  },
+  {
+    "id": "item_fragrantbundle",
+    "name": "Fragrant Bundle",
+    "category": [
+      "Material"
+    ],
+    "description": "These plants carry a strong but pleasant scent. However, it's possible that not all creatures agree...",
+    "icon": "/img/valheim/itens/Material/FragrantBundle.webp",
+    "metaData": {
+      "entityId": "FragrantBundle"
+    }
+  },
+  {
+    "id": "item_freshseaweed",
+    "name": "Fresh Seaweed",
+    "category": [
+      "Material"
+    ],
+    "description": "The saltwater scent of this plant makes you think of the wide open ocean.",
+    "icon": "/img/valheim/itens/Material/FreshSeaweed.webp",
+    "metaData": {
+      "entityId": "FreshSeaweed"
+    }
+  },
+  {
+    "id": "item_gemstone_red",
+    "name": "Bloodstone",
+    "category": [
+      "Material"
+    ],
+    "description": "You wonder how many deals have been made to appease this gem. How many palms have bled onto it in exchange for its power?",
+    "icon": "/img/valheim/itens/Material/GemstoneRed.webp",
+    "metaData": {
+      "entityId": "GemstoneRed"
+    }
+  },
+  {
+    "id": "item_grausten",
+    "name": "Grausten",
+    "category": [
+      "Material"
+    ],
+    "description": "Porous yet sturdy.",
+    "icon": "/img/valheim/itens/Material/Grausten.webp",
+    "metaData": {
+      "entityId": "Grausten"
+    }
+  },
+  {
+    "id": "item_dragontear",
+    "name": "Dragon Tear",
+    "category": [
+      "Material"
+    ],
+    "description": "The last frozen tear of a dragon, pulsating with mysterious energy.",
+    "icon": "/img/valheim/itens/Material/DragonTear.webp",
+    "metaData": {
+      "entityId": "DragonTear"
+    }
+  },
+  {
+    "id": "item_eitr",
+    "name": "Refined Eitr",
+    "category": [
+      "Material"
+    ],
+    "description": "This is the stuff of life, the poison that consumes itself. The Dvergr refine it to use in their esoteric designs.",
+    "icon": "/img/valheim/itens/Material/Eitr.webp",
+    "metaData": {
+      "entityId": "Eitr"
+    }
+  },
+  {
+    "id": "item_fader_drop",
+    "name": "Fader Relic",
+    "category": [
+      "Material"
+    ],
+    "description": "The mystical power will be revealed another day.",
+    "icon": "/img/valheim/itens/Material/FaderDrop.webp",
+    "metaData": {
+      "entityId": "FaderDrop"
+    }
+  },
+  {
+    "id": "item_feastashlands",
+    "name": "Ashlands Gourmet Bowl",
+    "category": [
+      "Material"
+    ],
+    "description": "It's hard to tell whether the steam coming off of this dish is because it's freshly cooked or because of the asksvin meat in it. Either way, the spiced meat together with the vineberries and fiddlehead sprouts is so delicious that it doesn't matter!",
+    "icon": "/img/valheim/itens/Material/FeastAshlands_Material.webp",
+    "metaData": {
+      "entityId": "FeastAshlands_Material"
+    }
+  },
+  {
+    "id": "item_feastplains",
+    "name": "Plains Pie Picnic",
+    "category": [
+      "Material"
+    ],
+    "description": "There's nothing plain about this feast! Enjoy pies and loaves fresh from the oven, both sweet and savoury, and experience the culinary equivalent of a hug.",
+    "icon": "/img/valheim/itens/Material/FeastPlains_Material.webp",
+    "metaData": {
+      "entityId": "FeastPlains_Material"
+    }
+  },
+  {
+    "id": "item_fircone",
+    "name": "Fir Cone",
+    "category": [
+      "Material"
+    ],
+    "description": "Plant it to grow a fir tree.",
+    "icon": "/img/valheim/itens/Material/FirCone.webp",
+    "metaData": {
+      "entityId": "FirCone"
+    }
+  },
+  {
+    "id": "item_fireworkrocket_green",
+    "name": "Green Fireworks",
+    "category": [
+      "Material"
+    ],
+    "description": "This rocket's blasting off again!",
+    "icon": "/img/valheim/itens/Material/FireworksRocket_Green.webp",
+    "metaData": {
+      "entityId": "FireworksRocket_Green"
+    }
+  },
+  {
+    "id": "item_fireworkrocket_red",
+    "name": "Red Fireworks",
+    "category": [
+      "Material"
+    ],
+    "description": "This rocket's blasting off again!",
+    "icon": "/img/valheim/itens/Material/FireworksRocket_Red.webp",
+    "metaData": {
+      "entityId": "FireworksRocket_Red"
+    }
+  },
+  {
+    "id": "item_fish_raw",
+    "name": "Raw Fish",
+    "category": [
+      "Material"
+    ],
+    "description": "A good catch.",
+    "icon": "/img/valheim/itens/Material/FishRaw.webp",
+    "metaData": {
+      "entityId": "FishRaw"
+    }
+  },
+  {
+    "id": "item_flax",
+    "name": "Flax",
+    "category": [
+      "Material"
+    ],
+    "description": "Unspun fibers from a flax plant.",
+    "icon": "/img/valheim/itens/Material/Flax.webp",
+    "metaData": {
+      "entityId": "Flax"
+    }
+  },
+  {
+    "id": "item_gemstone_blue",
+    "name": "Iolite",
+    "category": [
+      "Material"
+    ],
+    "description": "Light is reflected sharply off of this gem, or does it come from within the stone itself?",
+    "icon": "/img/valheim/itens/Material/GemstoneBlue.webp",
+    "metaData": {
+      "entityId": "GemstoneBlue"
+    }
+  },
+  {
+    "id": "item_gemstone_green",
+    "name": "Jade",
+    "category": [
+      "Material"
+    ],
+    "description": "This gem pulses with energy, almost as if it were a living thing.",
+    "icon": "/img/valheim/itens/Material/GemstoneGreen.webp",
+    "metaData": {
+      "entityId": "GemstoneGreen"
+    }
+  },
+  {
+    "id": "item_greydwarfeye",
+    "name": "Greydwarf Eye",
+    "category": [
+      "Material"
+    ],
+    "description": "The milky eyeball of a Greydwarf.",
+    "icon": "/img/valheim/itens/Material/GreydwarfEye.webp",
+    "metaData": {
+      "entityId": "GreydwarfEye"
+    }
+  },
+  {
+    "id": "item_guck",
+    "name": "Guck",
+    "category": [
+      "Material"
+    ],
+    "description": "It smells like fermented fish.",
+    "icon": "/img/valheim/itens/Material/Guck.webp",
+    "metaData": {
+      "entityId": "Guck"
+    }
+  },
+  {
+    "id": "item_asksvincarrionskull",
+    "name": "Asksvin Skull",
+    "category": [
+      "Material"
+    ],
+    "description": "A thick skull, with room for a surprisingly large brain.",
+    "icon": "/img/valheim/itens/Material/AsksvinCarrionSkull.webp",
+    "metaData": {
+      "entityId": "AsksvinCarrionSkull"
+    }
+  },
+  {
+    "id": "item_asksvin_meat",
+    "name": "Asksvin Tail",
+    "category": [
+      "Material"
+    ],
+    "description": "Smells a bit smokey, even when raw.",
+    "icon": "/img/valheim/itens/Material/AsksvinMeat.webp",
+    "metaData": {
+      "entityId": "AsksvinMeat"
+    }
+  },
+  {
+    "id": "item_barley",
+    "name": "Barley",
+    "category": [
+      "Material"
+    ],
+    "description": "A bundle of barley.",
+    "icon": "/img/valheim/itens/Material/Barley.webp",
+    "metaData": {
+      "entityId": "Barley"
+    }
+  },
+  {
+    "id": "item_bellfragment",
+    "name": "Bell Fragment",
+    "category": [
+      "Material"
+    ],
+    "description": "This ancient fragment appears to be a piece of a broken bell...",
+    "icon": "/img/valheim/itens/Material/BellFragment.webp",
+    "metaData": {
+      "entityId": "BellFragment"
+    }
+  },
+  {
+    "id": "item_blackmetal",
+    "name": "Black Metal",
+    "category": [
+      "Material"
+    ],
+    "description": "A heavy bar of dark metal.",
+    "icon": "/img/valheim/itens/Material/BlackMetal.webp",
+    "metaData": {
+      "entityId": "BlackMetal"
+    }
+  },
+  {
+    "id": "item_bonefragments",
+    "name": "Bone Fragments",
+    "category": [
+      "Material"
+    ],
+    "description": "A pile of shattered bones.",
+    "icon": "/img/valheim/itens/Material/BoneFragments.webp",
+    "metaData": {
+      "entityId": "BoneFragments"
+    }
+  },
+  {
+    "id": "item_bonemawscale",
+    "name": "Bonemaw Scale",
+    "category": [
+      "Material"
+    ],
+    "description": "It looks just like bone. Best not to question the anatomy of this creature too much...",
+    "icon": "/img/valheim/itens/Material/BonemawSerpentScale.webp",
+    "metaData": {
+      "entityId": "BonemawSerpentScale"
+    }
+  },
+  {
+    "id": "item_bonemawtooth",
+    "name": "Bonemaw Tooth",
+    "category": [
+      "Material"
+    ],
+    "description": "This has caused the death of many a brave sailor.",
+    "icon": "/img/valheim/itens/Material/BonemawSerpentTooth.webp",
+    "metaData": {
+      "entityId": "BonemawSerpentTooth"
+    }
+  },
+  {
+    "id": "item_bronzenails",
+    "name": "Bronze Nails",
+    "category": [
+      "Material"
+    ],
+    "description": "Used in construction of ships and furniture.",
+    "icon": "/img/valheim/itens/Material/BronzeNails.webp",
+    "metaData": {
+      "entityId": "BronzeNails"
+    }
+  },
+  {
+    "id": "item_candlewick",
+    "name": "Candle Wick",
+    "category": [
+      "Material"
+    ],
+    "description": "Steep these in something flammable for a long lasting and cosy light source.",
+    "icon": "/img/valheim/itens/Material/CandleWick.webp",
+    "metaData": {
+      "entityId": "CandleWick"
+    }
+  },
+  {
+    "id": "item_ceramicplate",
+    "name": "Ceramic Plate",
+    "category": [
+      "Material"
+    ],
+    "description": "No matter how hot this gets, the other side of it remains strangely cool.",
+    "icon": "/img/valheim/itens/Material/CeramicPlate.webp",
+    "metaData": {
+      "entityId": "CeramicPlate"
+    }
+  },
+  {
+    "id": "item_amber",
+    "name": "Amber",
+    "category": [
+      "Material"
+    ],
+    "description": "<color=yellow>Valuable</color>",
+    "icon": "/img/valheim/itens/Material/Amber.webp",
+    "metaData": {
+      "entityId": "Amber"
+    }
+  },
+  {
+    "id": "item_ancientseed",
+    "name": "Ancient Seed",
+    "category": [
+      "Material"
+    ],
+    "description": "Held against your ear, you hear tiny whisperings within...",
+    "icon": "/img/valheim/itens/Material/AncientSeed.webp",
+    "metaData": {
+      "entityId": "AncientSeed"
+    }
+  },
+  {
+    "id": "item_asksvincarrionpelvic",
+    "name": "Asksvin Pelvis",
+    "category": [
+      "Material"
+    ],
+    "description": "The pelvic bone of a four legged creature.",
+    "icon": "/img/valheim/itens/Material/AsksvinCarrionPelvic.webp",
+    "metaData": {
+      "entityId": "AsksvinCarrionPelvic"
+    }
+  },
+  {
+    "id": "item_barleywinebase",
+    "name": "Barley Wine Base: Fire Resistance",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/BarleyWineBase.webp",
+    "metaData": {
+      "entityId": "BarleyWineBase"
+    }
+  },
+  {
+    "id": "item_bilebag",
+    "name": "Bilebag",
+    "category": [
+      "Material"
+    ],
+    "description": "Caustic bile drawn from the corpse of a gjall.",
+    "icon": "/img/valheim/itens/Material/Bilebag.webp",
+    "metaData": {
+      "entityId": "Bilebag"
+    }
+  },
+  {
+    "id": "item_blackcore",
+    "name": "Black Core",
+    "category": [
+      "Material"
+    ],
+    "description": "Filled to the brim with ancient power.",
+    "icon": "/img/valheim/itens/Material/BlackCore.webp",
+    "metaData": {
+      "entityId": "BlackCore"
+    }
+  },
+  {
+    "id": "item_blackmarble",
+    "name": "Black Marble",
+    "category": [
+      "Material"
+    ],
+    "description": "A block of solid stone, seamed with shifting colors.",
+    "icon": "/img/valheim/itens/Material/BlackMarble.webp",
+    "metaData": {
+      "entityId": "BlackMarble"
+    }
+  },
+  {
+    "id": "item_blackwood",
+    "name": "Ashwood",
+    "category": [
+      "Material"
+    ],
+    "description": "Wood hardened by fire and ash.",
+    "icon": "/img/valheim/itens/Material/Blackwood.webp",
+    "metaData": {
+      "entityId": "Blackwood"
+    }
+  },
+  {
+    "id": "item_bloodbag",
+    "name": "Bloodbag",
+    "category": [
+      "Material"
+    ],
+    "description": "The contents of a leech. Ick!",
+    "icon": "/img/valheim/itens/Material/Bloodbag.webp",
+    "metaData": {
+      "entityId": "Bloodbag"
+    }
+  },
+  {
+    "id": "item_catapult_ammo",
+    "name": "Explosive Payload",
+    "category": [
+      "Material"
+    ],
+    "description": "Best used with a catapult. Handle with care.",
+    "icon": "/img/valheim/itens/Material/BombSiege.webp",
+    "metaData": {
+      "entityId": "BombSiege"
+    }
+  },
+  {
+    "id": "item_bug_meat",
+    "name": "Seeker Meat",
+    "category": [
+      "Material"
+    ],
+    "description": "When you crack open their shells, the meat within is tender and succulent.",
+    "icon": "/img/valheim/itens/Material/BugMeat.webp",
+    "metaData": {
+      "entityId": "BugMeat"
+    }
+  },
+  {
+    "id": "item_charcoalresin",
+    "name": "Charcoal Resin",
+    "category": [
+      "Material"
+    ],
+    "description": "The resin from a tree that was set ablaze a long time ago. It's still ready to burn some more.",
+    "icon": "/img/valheim/itens/Material/CharcoalResin.webp",
+    "metaData": {
+      "entityId": "CharcoalResin"
+    }
+  },
+  {
+    "id": "item_charredcogwheel",
+    "name": "Charred Cogwheel",
+    "category": [
+      "Material"
+    ],
+    "description": "This could be used for some clever machinery...",
+    "icon": "/img/valheim/itens/Material/CharredCogwheel.webp",
+    "metaData": {
+      "entityId": "CharredCogwheel"
+    }
+  },
+  {
+    "id": "item_charredskull",
+    "name": "Charred Skull",
+    "category": [
+      "Material"
+    ],
+    "description": "The blackened skull of a long-dead warrior. It's unlikely that a proper burial would grant them any peace.",
+    "icon": "/img/valheim/itens/Material/Charredskull.webp",
+    "metaData": {
+      "entityId": "Charredskull"
+    }
+  },
+  {
+    "id": "item_chain",
+    "name": "Chain",
+    "category": [
+      "Material"
+    ],
+    "description": "A link of iron chain.",
+    "icon": "/img/valheim/itens/Material/Chain.webp",
+    "metaData": {
+      "entityId": "Chain"
+    }
+  },
+  {
+    "id": "item_copperore",
+    "name": "Copper Ore",
+    "category": [
+      "Material"
+    ],
+    "description": "Unrefined copper. Needs to be refined in a smelter.",
+    "icon": "/img/valheim/itens/Material/CopperOre.webp",
+    "metaData": {
+      "entityId": "CopperOre"
+    }
+  },
+  {
+    "id": "item_copperscrap",
+    "name": "Copper Scrap",
+    "category": [
+      "Material"
+    ],
+    "description": "One person's scrap is another person's treasure.",
+    "icon": "/img/valheim/itens/Material/CopperScrap.webp",
+    "metaData": {
+      "entityId": "CopperScrap"
+    }
+  },
+  {
+    "id": "item_curedsquirrelhamstring",
+    "name": "Cured Squirrel Hamstring",
+    "category": [
+      "Material"
+    ],
+    "description": "Elastic and strong. This tendon must have come from a quick and agile animal.",
+    "icon": "/img/valheim/itens/Material/CuredSquirrelHamstring.webp",
+    "metaData": {
+      "entityId": "CuredSquirrelHamstring"
+    }
+  },
+  {
+    "id": "item_deerhide",
+    "name": "Deer Hide",
+    "category": [
+      "Material"
+    ],
+    "description": "A cleaned hide from a deer.",
+    "icon": "/img/valheim/itens/Material/DeerHide.webp",
+    "metaData": {
+      "entityId": "DeerHide"
+    }
+  },
+  {
+    "id": "item_deer_meat",
+    "name": "Deer Meat",
+    "category": [
+      "Material"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/Material/DeerMeat.webp",
+    "metaData": {
+      "entityId": "DeerMeat"
+    }
+  },
+  {
+    "id": "item_Dyrnwyn_hilt",
+    "name": "Dyrnwyn Hilt Fragment",
+    "category": [
+      "Material"
+    ],
+    "description": "The hilt of a long forgotten sword. Perhaps it could be reforged if one had all the pieces...",
+    "icon": "/img/valheim/itens/Material/DyrnwynHiltFragment.webp",
+    "metaData": {
+      "entityId": "DyrnwynHiltFragment"
+    }
+  },
+  {
+    "id": "item_feastblackforest",
+    "name": "Black Forest Buffet Platter",
+    "category": [
+      "Material"
+    ],
+    "description": "You won't be able to resist this platter of delights from the Black Forest! Venison sirloin steaks are served together with spiced thistles and carrots, and the whole meal is tied together with delicious jams. Just have one more bite!",
+    "icon": "/img/valheim/itens/Material/FeastBlackforest_Material.webp",
+    "metaData": {
+      "entityId": "FeastBlackforest_Material"
+    }
+  },
+  {
+    "id": "item_feastmountains",
+    "name": "Hearty Mountain Logger's Stew",
+    "category": [
+      "Material"
+    ],
+    "description": "Gather around this steaming pot full of deliciousness and warm yourselves up again after a day out in the cold. The usually tough and chewey wolf meat has become tender enough to practically melt in your mouth, and the onions and carrots are made even tastier with exciting spices.",
+    "icon": "/img/valheim/itens/Material/FeastMountains_Material.webp",
+    "metaData": {
+      "entityId": "FeastMountains_Material"
+    }
+  },
+  {
+    "id": "item_feastoceans",
+    "name": "Sailor's Bounty",
+    "category": [
+      "Material"
+    ],
+    "description": "Fish, fish, and more fish! And also serpent meat, cut to look like fish! Explore the flavours of the Ocean, along with some grilled greens for those still practicing their sea legs.",
+    "icon": "/img/valheim/itens/Material/FeastOceans_Material.webp",
+    "metaData": {
+      "entityId": "FeastOceans_Material"
+    }
+  },
+  {
+    "id": "item_fireworkrocket_blue",
+    "name": "Blue Fireworks",
+    "category": [
+      "Material"
+    ],
+    "description": "This rocket's blasting off again!",
+    "icon": "/img/valheim/itens/Material/FireworksRocket_Blue.webp",
+    "metaData": {
+      "entityId": "FireworksRocket_Blue"
+    }
+  },
+  {
+    "id": "item_fireworkrocket_white",
+    "name": "Basic Fireworks",
+    "category": [
+      "Material"
+    ],
+    "description": "This rocket's blasting off again!",
+    "icon": "/img/valheim/itens/Material/FireworksRocket_White.webp",
+    "metaData": {
+      "entityId": "FireworksRocket_White"
+    }
+  },
+  {
+    "id": "item_fish_raw",
+    "name": "Raw Fish",
+    "category": [
+      "Material"
+    ],
+    "description": "A good catch.",
+    "icon": "/img/valheim/itens/Material/FishAnglerRaw.webp",
+    "metaData": {
+      "entityId": "FishAnglerRaw"
+    }
+  },
+  {
+    "id": "item_flametalore_old",
+    "name": "Glowing Metal Ore",
+    "category": [
+      "Material"
+    ],
+    "description": "A withered metal from ancient times. No one knows what it was once used for.",
+    "icon": "/img/valheim/itens/Material/FlametalOre.webp",
+    "metaData": {
+      "entityId": "FlametalOre"
+    }
+  },
+  {
+    "id": "item_freezegland",
+    "name": "Freeze Gland",
+    "category": [
+      "Material"
+    ],
+    "description": "This mysterious organ keeps a perfect temperature.",
+    "icon": "/img/valheim/itens/Material/FreezeGland.webp",
+    "metaData": {
+      "entityId": "FreezeGland"
+    }
+  },
+  {
+    "id": "item_dandelion",
+    "name": "Dandelion",
+    "category": [
+      "Material"
+    ],
+    "description": "Some call it a weed, but it's pretty nonetheless.",
+    "icon": "/img/valheim/itens/Material/Dandelion.webp",
+    "metaData": {
+      "entityId": "Dandelion"
+    }
+  },
+  {
+    "id": "item_dvergrkeyfragment",
+    "name": "Sealbreaker Fragment",
+    "category": [
+      "Material"
+    ],
+    "description": "A fragment of a Dvergr sealbreaker.",
+    "icon": "/img/valheim/itens/Material/DvergrKeyFragment.webp",
+    "metaData": {
+      "entityId": "DvergrKeyFragment"
+    }
+  },
+  {
+    "id": "item_feathers",
+    "name": "Feathers",
+    "category": [
+      "Material"
+    ],
+    "description": "A small pile of feathers.",
+    "icon": "/img/valheim/itens/Material/Feathers.webp",
+    "metaData": {
+      "entityId": "Feathers"
+    }
+  },
+  {
+    "id": "item_fishandbreaduncooked",
+    "name": "Uncooked Fish 'n' Bread",
+    "category": [
+      "Material"
+    ],
+    "description": "Ready for the oven.",
+    "icon": "/img/valheim/itens/Material/FishAndBreadUncooked.webp",
+    "metaData": {
+      "entityId": "FishAndBreadUncooked"
+    }
+  },
+  {
+    "id": "item_flint",
+    "name": "Flint",
+    "category": [
+      "Material"
+    ],
+    "description": "Can be shaped into sharp blades.",
+    "icon": "/img/valheim/itens/Material/Flint.webp",
+    "metaData": {
+      "entityId": "Flint"
+    }
+  },
+  {
+    "id": "item_bloodclot",
+    "name": "Blood Clot",
+    "category": [
+      "Material"
+    ],
+    "description": "Be careful not to puncture this while you carry it...",
+    "icon": "/img/valheim/itens/Material/GiantBloodSack.webp",
+    "metaData": {
+      "entityId": "GiantBloodSack"
+    }
+  },
+  {
+    "id": "item_iron",
+    "name": "Iron",
+    "category": [
+      "Material"
+    ],
+    "description": "A bar of pure iron ready to be worked.",
+    "icon": "/img/valheim/itens/Material/Iron.webp",
+    "metaData": {
+      "entityId": "Iron"
+    }
+  },
+  {
+    "id": "item_ironpit",
+    "name": "Iron Pit",
+    "category": [
+      "Material"
+    ],
+    "description": "An empty vessel waiting to be filled with firewood and kindling.",
+    "icon": "/img/valheim/itens/Material/Ironpit.webp",
+    "metaData": {
+      "entityId": "Ironpit"
+    }
+  },
+  {
+    "id": "item_juteblue",
+    "name": "Blue Jute",
+    "category": [
+      "Material"
+    ],
+    "description": "Made from natural fibers and dvergr hair.",
+    "icon": "/img/valheim/itens/Material/JuteBlue.webp",
+    "metaData": {
+      "entityId": "JuteBlue"
+    }
+  },
+  {
+    "id": "item_leatherscraps",
+    "name": "Leather Scraps",
+    "category": [
+      "Material"
+    ],
+    "description": "A small pile of leather scraps.",
+    "icon": "/img/valheim/itens/Material/LeatherScraps.webp",
+    "metaData": {
+      "entityId": "LeatherScraps"
+    }
+  },
+  {
+    "id": "item_loxmeat",
+    "name": "Lox Meat",
+    "category": [
+      "Material"
+    ],
+    "description": "A raw slab of marbled meat.",
+    "icon": "/img/valheim/itens/Material/LoxMeat.webp",
+    "metaData": {
+      "entityId": "LoxMeat"
+    }
+  },
+  {
+    "id": "item_loxpelt",
+    "name": "Lox Pelt",
+    "category": [
+      "Material"
+    ],
+    "description": "A heavy pelt of thick, musty fur.",
+    "icon": "/img/valheim/itens/Material/LoxPelt.webp",
+    "metaData": {
+      "entityId": "LoxPelt"
+    }
+  },
+  {
+    "id": "item_magicallystuffedmushroomuncooked",
+    "name": "Uncooked Stuffed Mushroom",
+    "category": [
+      "Material"
+    ],
+    "description": "Ready for the oven.",
+    "icon": "/img/valheim/itens/Material/MagicallyStuffedShroomUncooked.webp",
+    "metaData": {
+      "entityId": "MagicallyStuffedShroomUncooked"
+    }
+  },
+  {
+    "id": "item_mandible",
+    "name": "Mandible",
+    "category": [
+      "Material"
+    ],
+    "description": "The hand of man could hardly design a more perfect weapon.",
+    "icon": "/img/valheim/itens/Material/Mandible.webp",
+    "metaData": {
+      "entityId": "Mandible"
+    }
+  },
+  {
+    "id": "item_meadbaseeitr_lingering",
+    "name": "Mead Base: Lingering Eitr",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseEitrLingering.webp",
+    "metaData": {
+      "entityId": "MeadBaseEitrLingering"
+    }
+  },
+  {
+    "id": "item_meadbaseeitr",
+    "name": "Mead Base: Minor Eitr",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseEitrMinor.webp",
+    "metaData": {
+      "entityId": "MeadBaseEitrMinor"
+    }
+  },
+  {
+    "id": "item_meadbasehealth_lingering",
+    "name": "Mead Base: Lingering Health",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseHealthLingering.webp",
+    "metaData": {
+      "entityId": "MeadBaseHealthLingering"
+    }
+  },
+  {
+    "id": "item_meadbasehealth_major",
+    "name": "Mead Base: Major Healing",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseHealthMajor.webp",
+    "metaData": {
+      "entityId": "MeadBaseHealthMajor"
+    }
+  },
+  {
+    "id": "item_meadbasestamina_medium",
+    "name": "Mead Base: Medium Stamina",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseStaminaMedium.webp",
+    "metaData": {
+      "entityId": "MeadBaseStaminaMedium"
+    }
+  },
+  {
+    "id": "item_meadbasestamina",
+    "name": "Mead Base: Minor Stamina",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseStaminaMinor.webp",
+    "metaData": {
+      "entityId": "MeadBaseStaminaMinor"
+    }
+  },
+  {
+    "id": "item_meatplatteruncooked",
+    "name": "Uncooked Meat Platter",
+    "category": [
+      "Material"
+    ],
+    "description": "Ready for the oven.",
+    "icon": "/img/valheim/itens/Material/MeatPlatterUncooked.webp",
+    "metaData": {
+      "entityId": "MeatPlatterUncooked"
+    }
+  },
+  {
+    "id": "item_mechanicalspring",
+    "name": "Mechanical Spring",
+    "category": [
+      "Material"
+    ],
+    "description": "A mysterious contraption built by the Dvergr. Used to build traps.",
+    "icon": "/img/valheim/itens/Material/MechanicalSpring.webp",
+    "metaData": {
+      "entityId": "MechanicalSpring"
+    }
+  },
+  {
+    "id": "item_morgenheart",
+    "name": "Morgen Heart",
+    "category": [
+      "Material"
+    ],
+    "description": "It's hard to believe it has ever beaten.",
+    "icon": "/img/valheim/itens/Material/MorgenHeart.webp",
+    "metaData": {
+      "entityId": "MorgenHeart"
+    }
+  },
+  {
+    "id": "item_necktail",
+    "name": "Neck Tail",
+    "category": [
+      "Material"
+    ],
+    "description": "Inedible when raw, but proves to be quite a tasty snack if cooked.",
+    "icon": "/img/valheim/itens/Material/NeckTail.webp",
+    "metaData": {
+      "entityId": "NeckTail"
+    }
+  },
+  {
+    "id": "item_ironscrap",
+    "name": "Scrap Iron",
+    "category": [
+      "Material"
+    ],
+    "description": "It's old and rusty but can be smelted and used again.",
+    "icon": "/img/valheim/itens/Material/IronScrap.webp",
+    "metaData": {
+      "entityId": "IronScrap"
+    }
+  },
+  {
+    "id": "item_meadbasebzerker",
+    "name": "Mead base: Berserkir",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseBzerker.webp",
+    "metaData": {
+      "entityId": "MeadBaseBzerker"
+    }
+  },
+  {
+    "id": "item_meadbasehasty",
+    "name": "Mead base: Ratatosk",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseHasty.webp",
+    "metaData": {
+      "entityId": "MeadBaseHasty"
+    }
+  },
+  {
+    "id": "item_meadbasestamina_lingering",
+    "name": "Mead Base: Lingering Stamina",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseStaminaLingering.webp",
+    "metaData": {
+      "entityId": "MeadBaseStaminaLingering"
+    }
+  },
+  {
+    "id": "item_mistharesupremeuncooked",
+    "name": "Uncooked Misthare Supreme",
+    "category": [
+      "Material"
+    ],
+    "description": "Ready for the oven.",
+    "icon": "/img/valheim/itens/Material/MisthareSupremeUncooked.webp",
+    "metaData": {
+      "entityId": "MisthareSupremeUncooked"
+    }
+  },
+  {
+    "id": "item_needle",
+    "name": "Needle",
+    "category": [
+      "Material"
+    ],
+    "description": "The pointy end of a Deathsquito.",
+    "icon": "/img/valheim/itens/Material/Needle.webp",
+    "metaData": {
+      "entityId": "Needle"
+    }
+  },
+  {
+    "id": "item_pinecone",
+    "name": "Pine Cone",
+    "category": [
+      "Material"
+    ],
+    "description": "Plant it to grow a pine tree.",
+    "icon": "/img/valheim/itens/Material/PineCone.webp",
+    "metaData": {
+      "entityId": "PineCone"
+    }
+  },
+  {
+    "id": "item_boar_meat",
+    "name": "Boar Meat",
+    "category": [
+      "Material"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/Material/RawMeat.webp",
+    "metaData": {
+      "entityId": "RawMeat"
+    }
+  },
+  {
+    "id": "item_resin",
+    "name": "Resin",
+    "category": [
+      "Material"
+    ],
+    "description": "Sticky tree resin which insulates well. If put to the flame it burns slow and steady.",
+    "icon": "/img/valheim/itens/Material/Resin.webp",
+    "metaData": {
+      "entityId": "Resin"
+    }
+  },
+  {
+    "id": "item_serpentmeat",
+    "name": "Serpent Meat",
+    "category": [
+      "Material"
+    ],
+    "description": "A slice of sea serpent. Smells fishy.",
+    "icon": "/img/valheim/itens/Material/SerpentMeat.webp",
+    "metaData": {
+      "entityId": "SerpentMeat"
+    }
+  },
+  {
+    "id": "item_silver",
+    "name": "Silver",
+    "category": [
+      "Material"
+    ],
+    "description": "A bar of pure silver ready to be worked.",
+    "icon": "/img/valheim/itens/Material/Silver.webp",
+    "metaData": {
+      "entityId": "Silver"
+    }
+  },
+  {
+    "id": "item_spicemistlands",
+    "name": "Herbs of the Hidden Hills",
+    "category": [
+      "Material"
+    ],
+    "description": "A good herbalist knows exactly where to go to find ramsons, but she won't tell you the secrets of her trade! Still, if you have the coin for it you may treat yourself to this blend of finely harvested ramson bulbs and leaves.",
+    "icon": "/img/valheim/itens/Material/SpiceMistlands.webp",
+    "metaData": {
+      "entityId": "SpiceMistlands"
+    }
+  },
+  {
+    "id": "item_surtlingcore",
+    "name": "Surtling Core",
+    "category": [
+      "Material"
+    ],
+    "description": "It throbs with inner heat.",
+    "icon": "/img/valheim/itens/Material/SurtlingCore.webp",
+    "metaData": {
+      "entityId": "SurtlingCore"
+    }
+  },
+  {
+    "id": "item_trollhide",
+    "name": "Troll Hide",
+    "category": [
+      "Material"
+    ],
+    "description": "A thick and sturdy hide. This is why trolls are so hard to kill.",
+    "icon": "/img/valheim/itens/Material/TrollHide.webp",
+    "metaData": {
+      "entityId": "TrollHide"
+    }
+  },
+  {
+    "id": "item_turnip",
+    "name": "Turnip",
+    "category": [
+      "Material"
+    ],
+    "description": "A dense vegetable, rich with nutrition.",
+    "icon": "/img/valheim/itens/Material/Turnip.webp",
+    "metaData": {
+      "entityId": "Turnip"
+    }
+  },
+  {
+    "id": "item_vinegreenseeds",
+    "name": "Ivy Seeds",
+    "category": [
+      "Material"
+    ],
+    "description": "These unassuming seeds can grow into vines that might overtake entire buildings.",
+    "icon": "/img/valheim/itens/Material/VineGreenSeeds.webp",
+    "metaData": {
+      "entityId": "VineGreenSeeds"
+    }
+  },
+  {
+    "id": "item_volture_meat",
+    "name": "Volture Meat",
+    "category": [
+      "Material"
+    ],
+    "description": "Given that this bird feasts on all kinds of things, you'd better cook its meat before you even think about eating it.",
+    "icon": "/img/valheim/itens/Material/VoltureMeat.webp",
+    "metaData": {
+      "entityId": "VoltureMeat"
+    }
+  },
+  {
+    "id": "item_witheredbone",
+    "name": "Withered Bone",
+    "category": [
+      "Material"
+    ],
+    "description": "A giant bone, knotted like old wood.",
+    "icon": "/img/valheim/itens/Material/WitheredBone.webp",
+    "metaData": {
+      "entityId": "WitheredBone"
+    }
+  },
+  {
+    "id": "item_wolffang",
+    "name": "Wolf Fang",
+    "category": [
+      "Material"
+    ],
+    "description": "Still sharp.",
+    "icon": "/img/valheim/itens/Material/WolfFang.webp",
+    "metaData": {
+      "entityId": "WolfFang"
+    }
+  },
+  {
+    "id": "item_wolfhairbundle",
+    "name": "Fenris Hair",
+    "category": [
+      "Material"
+    ],
+    "description": "A bundle of thick, rough hair. It has a strong smell.",
+    "icon": "/img/valheim/itens/Material/WolfHairBundle.webp",
+    "metaData": {
+      "entityId": "WolfHairBundle"
+    }
+  },
+  {
+    "id": "item_wood",
+    "name": "Wood",
+    "category": [
+      "Material"
+    ],
+    "description": "Good, strong wood to build with.",
+    "icon": "/img/valheim/itens/Material/Wood.webp",
+    "metaData": {
+      "entityId": "Wood"
+    }
+  },
+  {
+    "id": "item_yagluththing",
+    "name": "Torn Spirit",
+    "category": [
+      "Material"
+    ],
+    "description": "The remains of Yagluth, a twisted spirit torn between this world and the next.",
+    "icon": "/img/valheim/itens/Material/YagluthDrop.webp",
+    "metaData": {
+      "entityId": "YagluthDrop"
+    }
+  },
+  {
+    "id": "item_yggdrasilwood",
+    "name": "Yggdrasil Wood",
+    "category": [
+      "Material"
+    ],
+    "description": "Godflesh, wood from the Great Tree.",
+    "icon": "/img/valheim/itens/Material/YggdrasilWood.webp",
+    "metaData": {
+      "entityId": "YggdrasilWood"
+    }
+  },
+  {
+    "id": "item_serpentscale",
+    "name": "Serpent Scale",
+    "category": [
+      "Material"
+    ],
+    "description": "The shiny metal-like scale from a sea serpent.",
+    "icon": "/img/valheim/itens/Material/SerpentScale.webp",
+    "metaData": {
+      "entityId": "SerpentScale"
+    }
+  },
+  {
+    "id": "item_shieldcore",
+    "name": "Shield Core",
+    "category": [
+      "Material"
+    ],
+    "description": "A protective force within is ready to be unleashed.",
+    "icon": "/img/valheim/itens/Material/ShieldCore.webp",
+    "metaData": {
+      "entityId": "ShieldCore"
+    }
+  },
+  {
+    "id": "item_spiceashlands",
+    "name": "Fiery Spice Powder",
+    "category": [
+      "Material"
+    ],
+    "description": "Whatever spices have been used in this blend, they must come from someplace hot. And as if that wasn't enough, they have also been dried and smoked before being ground into a fine powder.",
+    "icon": "/img/valheim/itens/Material/SpiceAshlands.webp",
+    "metaData": {
+      "entityId": "SpiceAshlands"
+    }
+  },
+  {
+    "id": "item_spicemountains",
+    "name": "Mountain Peak Pepper Powder",
+    "category": [
+      "Material"
+    ],
+    "description": "Only the most seasoned herbalist can find the pepperwood tree and harvest its leaves and bark. After careful preparation it's ready to be added to food, and is sure to give it some warming heat.",
+    "icon": "/img/valheim/itens/Material/SpiceMountains.webp",
+    "metaData": {
+      "entityId": "SpiceMountains"
+    }
+  },
+  {
+    "id": "item_stone",
+    "name": "Stone",
+    "category": [
+      "Material"
+    ],
+    "description": "It's a rock.",
+    "icon": "/img/valheim/itens/Material/Stone.webp",
+    "metaData": {
+      "entityId": "Stone"
+    }
+  },
+  {
+    "id": "item_sulfurstone",
+    "name": "Sulfur",
+    "category": [
+      "Material"
+    ],
+    "description": "Smells like rotten eggs.",
+    "icon": "/img/valheim/itens/Material/SulfurStone.webp",
+    "metaData": {
+      "entityId": "SulfurStone"
+    }
+  },
+  {
+    "id": "item_tar",
+    "name": "Tar",
+    "category": [
+      "Material"
+    ],
+    "description": "A sticky lump of tar.",
+    "icon": "/img/valheim/itens/Material/Tar.webp",
+    "metaData": {
+      "entityId": "Tar"
+    }
+  },
+  {
+    "id": "item_thistle",
+    "name": "Thistle",
+    "category": [
+      "Material"
+    ],
+    "description": "Beautiful but prickly.",
+    "icon": "/img/valheim/itens/Material/Thistle.webp",
+    "metaData": {
+      "entityId": "Thistle"
+    }
+  },
+  {
+    "id": "item_thunderstone",
+    "name": "Thunder Stone",
+    "category": [
+      "Material"
+    ],
+    "description": "It is crackling with energy.",
+    "icon": "/img/valheim/itens/Material/Thunderstone.webp",
+    "metaData": {
+      "entityId": "Thunderstone"
+    }
+  },
+  {
+    "id": "item_turnipseeds",
+    "name": "Turnip Seeds",
+    "category": [
+      "Material"
+    ],
+    "description": "Plant to grow a healthy turnip.",
+    "icon": "/img/valheim/itens/Material/TurnipSeeds.webp",
+    "metaData": {
+      "entityId": "TurnipSeeds"
+    }
+  },
+  {
+    "id": "item_ironore",
+    "name": "Iron Ore",
+    "category": [
+      "Material"
+    ],
+    "description": "Unrefined iron. Needs to be refined in a smelter.",
+    "icon": "/img/valheim/itens/Material/IronOre.webp",
+    "metaData": {
+      "entityId": "IronOre"
+    }
+  },
+  {
+    "id": "item_linenthread",
+    "name": "Linen Thread",
+    "category": [
+      "Material"
+    ],
+    "description": "A fine linen thread made out of a strong flax filament.",
+    "icon": "/img/valheim/itens/Material/LinenThread.webp",
+    "metaData": {
+      "entityId": "LinenThread"
+    }
+  },
+  {
+    "id": "item_meadbasefrostresist",
+    "name": "Mead Base: Frost Resistance",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseFrostResist.webp",
+    "metaData": {
+      "entityId": "MeadBaseFrostResist"
+    }
+  },
+  {
+    "id": "item_meadbasehealth_medium",
+    "name": "Mead Base: Medium Healing",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseHealthMedium.webp",
+    "metaData": {
+      "entityId": "MeadBaseHealthMedium"
+    }
+  },
+  {
+    "id": "item_meadbaselightfoot",
+    "name": "Mead Base: Lightfoot",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseLightFoot.webp",
+    "metaData": {
+      "entityId": "MeadBaseLightFoot"
+    }
+  },
+  {
+    "id": "item_meadbasestrength",
+    "name": "Mead Base: Troll Endurance",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseStrength.webp",
+    "metaData": {
+      "entityId": "MeadBaseStrength"
+    }
+  },
+  {
+    "id": "item_meadbasetamer",
+    "name": "Mead Base: Animal Whispers",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseTamer.webp",
+    "metaData": {
+      "entityId": "MeadBaseTamer"
+    }
+  },
+  {
+    "id": "item_moltencore",
+    "name": "Molten Core",
+    "category": [
+      "Material"
+    ],
+    "description": "Potent energy swirls within, ready to be unleashed.",
+    "icon": "/img/valheim/itens/Material/MoltenCore.webp",
+    "metaData": {
+      "entityId": "MoltenCore"
+    }
+  },
+  {
+    "id": "item_obsidian",
+    "name": "Obsidian",
+    "category": [
+      "Material"
+    ],
+    "description": "Dark volcanic glass.",
+    "icon": "/img/valheim/itens/Material/Obsidian.webp",
+    "metaData": {
+      "entityId": "Obsidian"
+    }
+  },
+  {
+    "id": "item_piquantpie_uncooked",
+    "name": "Uncooked Piquant Pie",
+    "category": [
+      "Material"
+    ],
+    "description": "Ready for the oven.",
+    "icon": "/img/valheim/itens/Material/PiquantPieUncooked.webp",
+    "metaData": {
+      "entityId": "PiquantPieUncooked"
+    }
+  },
+  {
+    "id": "item_pot_shard_green",
+    "name": "Pot Shard",
+    "category": [
+      "Material"
+    ],
+    "description": "A fragment of something brittle.",
+    "icon": "/img/valheim/itens/Material/Pot_Shard_Green.webp",
+    "metaData": {
+      "entityId": "Pot_Shard_Green"
+    }
+  },
+  {
+    "id": "item_pot_shard_red",
+    "name": "[item_pot_shard_red]",
+    "category": [
+      "Material"
+    ],
+    "description": "A fragment of something brittle.",
+    "icon": "/img/valheim/itens/Material/Pot_Shard_Red.webp",
+    "metaData": {
+      "entityId": "Pot_Shard_Red"
+    }
+  },
+  {
+    "id": "item_roastedcrustpie_uncooked",
+    "name": "Uncooked Roasted Crust Pie",
+    "category": [
+      "Material"
+    ],
+    "description": "Ready for the oven.",
+    "icon": "/img/valheim/itens/Material/RoastedCrustPieUncooked.webp",
+    "metaData": {
+      "entityId": "RoastedCrustPieUncooked"
+    }
+  },
+  {
+    "id": "item_root",
+    "name": "Root",
+    "category": [
+      "Material"
+    ],
+    "description": "An old root from an ancient tree stump. It feels both flexible and durable at the same time.",
+    "icon": "/img/valheim/itens/Material/Root.webp",
+    "metaData": {
+      "entityId": "Root"
+    }
+  },
+  {
+    "id": "item_roundlog",
+    "name": "Corewood",
+    "category": [
+      "Material"
+    ],
+    "description": "Perfect for building log cabins.",
+    "icon": "/img/valheim/itens/Material/RoundLog.webp",
+    "metaData": {
+      "entityId": "RoundLog"
+    }
+  },
+  {
+    "id": "item_scalehide",
+    "name": "Scale Hide",
+    "category": [
+      "Material"
+    ],
+    "description": "A pelt of glittering scales.",
+    "icon": "/img/valheim/itens/Material/ScaleHide.webp",
+    "metaData": {
+      "entityId": "ScaleHide"
+    }
+  },
+  {
+    "id": "item_sharpeningstone",
+    "name": "Sharpening Stone",
+    "category": [
+      "Material"
+    ],
+    "description": "A whetstone wheel ready to spin.",
+    "icon": "/img/valheim/itens/Material/SharpeningStone.webp",
+    "metaData": {
+      "entityId": "SharpeningStone"
+    }
+  },
+  {
+    "id": "item_voltureegg",
+    "name": "Volture Egg",
+    "category": [
+      "Material"
+    ],
+    "description": "Warm to the touch, and full of protein.",
+    "icon": "/img/valheim/itens/Material/VoltureEgg.webp",
+    "metaData": {
+      "entityId": "VoltureEgg"
+    }
+  },
+  {
+    "id": "item_wolfclaw",
+    "name": "Fenris Claw",
+    "category": [
+      "Material"
+    ],
+    "description": "It is hard and sharp like iron.",
+    "icon": "/img/valheim/itens/Material/WolfClaw.webp",
+    "metaData": {
+      "entityId": "WolfClaw"
+    }
+  },
+  {
+    "id": "item_wolfpelt",
+    "name": "Wolf Pelt",
+    "category": [
+      "Material"
+    ],
+    "description": "A pelt of shaggy fur.",
+    "icon": "/img/valheim/itens/Material/WolfPelt.webp",
+    "metaData": {
+      "entityId": "WolfPelt"
+    }
+  },
+  {
+    "id": "item_hardantler",
+    "name": "Hard Antler",
+    "category": [
+      "Material"
+    ],
+    "description": "A piece of very hard antlers.",
+    "icon": "/img/valheim/itens/Material/HardAntler.webp",
+    "metaData": {
+      "entityId": "HardAntler"
+    }
+  },
+  {
+    "id": "item_hare_meat",
+    "name": "Hare Meat",
+    "category": [
+      "Material"
+    ],
+    "description": "The meat of a hare is scant but toothsome.",
+    "icon": "/img/valheim/itens/Material/HareMeat.webp",
+    "metaData": {
+      "entityId": "HareMeat"
+    }
+  },
+  {
+    "id": "item_honeyglazedchickenuncooked",
+    "name": "Uncooked Honey Glazed Chicken",
+    "category": [
+      "Material"
+    ],
+    "description": "Ready for the oven.",
+    "icon": "/img/valheim/itens/Material/HoneyGlazedChickenUncooked.webp",
+    "metaData": {
+      "entityId": "HoneyGlazedChickenUncooked"
+    }
+  },
+  {
+    "id": "item_ironnails",
+    "name": "Iron Nails",
+    "category": [
+      "Material"
+    ],
+    "description": "Needed for advanced construction projects.",
+    "icon": "/img/valheim/itens/Material/IronNails.webp",
+    "metaData": {
+      "entityId": "IronNails"
+    }
+  },
+  {
+    "id": "item_jutered",
+    "name": "Red Jute",
+    "category": [
+      "Material"
+    ],
+    "description": "A sturdy, rough fabric.",
+    "icon": "/img/valheim/itens/Material/JuteRed.webp",
+    "metaData": {
+      "entityId": "JuteRed"
+    }
+  },
+  {
+    "id": "item_larva",
+    "name": "[item_larva]",
+    "category": [
+      "Material"
+    ],
+    "description": "[item_larva_description]",
+    "icon": "/img/valheim/itens/Material/Larva.webp",
+    "metaData": {
+      "entityId": "Larva"
+    }
+  },
+  {
+    "id": "item_loxpie_uncooked",
+    "name": "Unbaked Lox Pie",
+    "category": [
+      "Material"
+    ],
+    "description": "Ready for the oven.",
+    "icon": "/img/valheim/itens/Material/LoxPieUncooked.webp",
+    "metaData": {
+      "entityId": "LoxPieUncooked"
+    }
+  },
+  {
+    "id": "item_meadbasebugrepellent",
+    "name": "Mead Base: Anti-Sting",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseBugRepellent.webp",
+    "metaData": {
+      "entityId": "MeadBaseBugRepellent"
+    }
+  },
+  {
+    "id": "item_meadbasehealth",
+    "name": "Mead Base: Minor Healing",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseHealthMinor.webp",
+    "metaData": {
+      "entityId": "MeadBaseHealthMinor"
+    }
+  },
+  {
+    "id": "item_meadbasepoisonresist",
+    "name": "Mead Base: Poison Resistance",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBasePoisonResist.webp",
+    "metaData": {
+      "entityId": "MeadBasePoisonResist"
+    }
+  },
+  {
+    "id": "item_meadbaseswimmer",
+    "name": "Mead Base: Vananidir",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseSwimmer.webp",
+    "metaData": {
+      "entityId": "MeadBaseSwimmer"
+    }
+  },
+  {
+    "id": "item_meadbasetasty",
+    "name": "Mead Base: Tasty",
+    "category": [
+      "Material"
+    ],
+    "description": "Needs to be fermented.",
+    "icon": "/img/valheim/itens/Material/MeadBaseTasty.webp",
+    "metaData": {
+      "entityId": "MeadBaseTasty"
+    }
+  },
+  {
+    "id": "item_morgensinew",
+    "name": "Morgen Sinew",
+    "category": [
+      "Material"
+    ],
+    "description": "Chewy.",
+    "icon": "/img/valheim/itens/Material/MorgenSinew.webp",
+    "metaData": {
+      "entityId": "MorgenSinew"
+    }
+  },
+  {
+    "id": "item_onionseeds",
+    "name": "Onion Seeds",
+    "category": [
+      "Material"
+    ],
+    "description": "Plant to grow a healthy onion.",
+    "icon": "/img/valheim/itens/Material/OnionSeeds.webp",
+    "metaData": {
+      "entityId": "OnionSeeds"
+    }
+  },
+  {
+    "id": "item_ooze",
+    "name": "Ooze",
+    "category": [
+      "Material"
+    ],
+    "description": "Rotten and putrid-smelling. Why do you want this?",
+    "icon": "/img/valheim/itens/Material/Ooze.webp",
+    "metaData": {
+      "entityId": "Ooze"
+    }
+  },
+  {
+    "id": "item_powdereddragonegg",
+    "name": "Powdered Dragon Eggshells",
+    "category": [
+      "Material"
+    ],
+    "description": "Dragon egg is a hard and difficult material to work with, yet here it has been ground to a fine, glittering dust...",
+    "icon": "/img/valheim/itens/Material/PowderedDragonEgg.webp",
+    "metaData": {
+      "entityId": "PowderedDragonEgg"
+    }
+  },
+  {
+    "id": "item_proustitepowder",
+    "name": "Proustite Powder",
+    "category": [
+      "Material"
+    ],
+    "description": "This unstable powder packs great potential.",
+    "icon": "/img/valheim/itens/Material/ProustitePowder.webp",
+    "metaData": {
+      "entityId": "ProustitePowder"
+    }
+  },
+  {
+    "id": "item_pungentpebbles",
+    "name": "Pungent Pebbles",
+    "category": [
+      "Material"
+    ],
+    "description": "An earthy odour clings to these dried lumps. It's best to not think too hard about what they are.",
+    "icon": "/img/valheim/itens/Material/PungentPebbles.webp",
+    "metaData": {
+      "entityId": "PungentPebbles"
+    }
+  },
+  {
+    "id": "item_queenbee",
+    "name": "Queen Bee",
+    "category": [
+      "Material"
+    ],
+    "description": "The queen of the bees!",
+    "icon": "/img/valheim/itens/Material/QueenBee.webp",
+    "metaData": {
+      "entityId": "QueenBee"
+    }
+  },
+  {
+    "id": "item_seekerqueen_drop",
+    "name": "Majestic Carapace",
+    "category": [
+      "Material"
+    ],
+    "description": "Her majesty's will was hard and unrelenting, but this piece of carapace is perhaps even more so.",
+    "icon": "/img/valheim/itens/Material/QueenDrop.webp",
+    "metaData": {
+      "entityId": "QueenDrop"
+    }
+  },
+  {
+    "id": "item_ruby",
+    "name": "Ruby",
+    "category": [
+      "Material"
+    ],
+    "description": "<color=yellow>Valuable</color>",
+    "icon": "/img/valheim/itens/Material/Ruby.webp",
+    "metaData": {
+      "entityId": "Ruby"
+    }
+  },
+  {
+    "id": "item_sap",
+    "name": "Sap",
+    "category": [
+      "Material"
+    ],
+    "description": "Sacred blood from the Great Tree.",
+    "icon": "/img/valheim/itens/Material/Sap.webp",
+    "metaData": {
+      "entityId": "Sap"
+    }
+  },
+  {
+    "id": "item_softtissue",
+    "name": "Soft Tissue",
+    "category": [
+      "Material"
+    ],
+    "description": "It still fizzes softly with ancient memories.",
+    "icon": "/img/valheim/itens/Material/Softtissue.webp",
+    "metaData": {
+      "entityId": "Softtissue"
+    }
+  },
+  {
+    "id": "item_spiceforests",
+    "name": "Woodland Herb Blend",
+    "category": [
+      "Material"
+    ],
+    "description": "Thyme and marjoram carefully harvested and dried, before being mixed together. This blend will turn even the most basic of ingredients into a delicious feast.",
+    "icon": "/img/valheim/itens/Material/SpiceForests.webp",
+    "metaData": {
+      "entityId": "SpiceForests"
+    }
+  },
+  {
+    "id": "item_tin",
+    "name": "Tin",
+    "category": [
+      "Material"
+    ],
+    "description": "A bar of pure tin ready to be worked.",
+    "icon": "/img/valheim/itens/Material/Tin.webp",
+    "metaData": {
+      "entityId": "Tin"
+    }
+  },
+  {
+    "id": "item_vineberryseeds",
+    "name": "Vineberry Seeds",
+    "category": [
+      "Material"
+    ],
+    "description": "Looks like they could crumble at any moment.",
+    "icon": "/img/valheim/itens/Material/VineberrySeeds.webp",
+    "metaData": {
+      "entityId": "VineberrySeeds"
+    }
+  },
+  {
+    "id": "item_wolf_meat",
+    "name": "Wolf Meat",
+    "category": [
+      "Material"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/Material/WolfMeat.webp",
+    "metaData": {
+      "entityId": "WolfMeat"
+    }
+  },
+  {
+    "id": "item_ymirremains",
+    "name": "Ymir Flesh",
+    "category": [
+      "Material"
+    ],
+    "description": "The earthy remains of the giant Ymir.",
+    "icon": "/img/valheim/itens/Material/YmirRemains.webp",
+    "metaData": {
+      "entityId": "YmirRemains"
+    }
+  },
+  {
+    "id": "item_silvernecklace",
+    "name": "Silver Necklace",
+    "category": [
+      "Material"
+    ],
+    "description": "<color=yellow>Valuable</color>",
+    "icon": "/img/valheim/itens/Material/SilverNecklace.webp",
+    "metaData": {
+      "entityId": "SilverNecklace"
+    }
+  },
+  {
+    "id": "item_silverore",
+    "name": "Silver Ore",
+    "category": [
+      "Material"
+    ],
+    "description": "Unrefined silver. Needs to be refined in a smelter.",
+    "icon": "/img/valheim/itens/Material/SilverOre.webp",
+    "metaData": {
+      "entityId": "SilverOre"
+    }
+  },
+  {
+    "id": "item_spiceoceans",
+    "name": "Seafarer's Herbs",
+    "category": [
+      "Material"
+    ],
+    "description": "The sour tang of sorrel, mixed with something the herbalist would rather not disclose, is well suitable for fish. Any fisherfolk worth their salt would do well to keep this blend near, in case of a good catch!",
+    "icon": "/img/valheim/itens/Material/SpiceOceans.webp",
+    "metaData": {
+      "entityId": "SpiceOceans"
+    }
+  },
+  {
+    "id": "item_spiceplains",
+    "name": "Grasslands Herbalist Harvest",
+    "category": [
+      "Material"
+    ],
+    "description": "This blend utilises all aspects of the lovage plant, a rarity in the tenth world. Roots, leaves and seeds have all been gathered, and then mixed together in the perfect quantity.",
+    "icon": "/img/valheim/itens/Material/SpicePlains.webp",
+    "metaData": {
+      "entityId": "SpicePlains"
+    }
+  },
+  {
+    "id": "item_tinore",
+    "name": "Tin Ore",
+    "category": [
+      "Material"
+    ],
+    "description": "Unrefined tin. Needs to be refined in a smelter.",
+    "icon": "/img/valheim/itens/Material/TinOre.webp",
+    "metaData": {
+      "entityId": "TinOre"
+    }
+  },
+  {
+    "id": "item_wisp",
+    "name": "Wisp",
+    "category": [
+      "Material"
+    ],
+    "description": "It keeps whispering jibberish...",
+    "icon": "/img/valheim/itens/Material/Wisp.webp",
+    "metaData": {
+      "entityId": "Wisp"
+    }
+  }
+]

@@ -1,0 +1,626 @@
+[
+  {
+    "id": "item_axe_bronze",
+    "name": "Bronze Axe",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A bright and burnished blade, curved like a smile.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/AxeBronze.webp",
+    "metaData": {
+      "entityId": "AxeBronze"
+    }
+  },
+  {
+    "id": "item_axe_stone",
+    "name": "Stone Axe",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A crude axe for tree-felling.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/AxeStone.webp",
+    "metaData": {
+      "entityId": "AxeStone"
+    }
+  },
+  {
+    "id": "item_lavabomb",
+    "name": "Basalt Bomb",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "With enough heat, it solidifies upon explosion.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/BombLava.webp",
+    "metaData": {
+      "entityId": "BombLava"
+    }
+  },
+  {
+    "id": "item_crossbow_arbalest",
+    "name": "Arbalest",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A slow but powerful weapon.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/DvergerArbalest_shoot.webp",
+    "metaData": {
+      "entityId": "DvergerArbalest_shoot"
+    }
+  },
+  {
+    "id": "item_bilebomb",
+    "name": "Bile Bomb",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Handle with care.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/BombBile.webp",
+    "metaData": {
+      "entityId": "BombBile"
+    }
+  },
+  {
+    "id": "item_oozebomb",
+    "name": "Ooze Bomb",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "The stench is unbearable...",
+    "icon": "/img/valheim/itens/OneHandedWeapon/BombOoze.webp",
+    "metaData": {
+      "entityId": "BombOoze"
+    }
+  },
+  {
+    "id": "item_smokebomb",
+    "name": "Smoke Bomb",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Everyone knows you can't breathe in the smoke.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/BombSmoke.webp",
+    "metaData": {
+      "entityId": "BombSmoke"
+    }
+  },
+  {
+    "id": "item_axe_blackmetal",
+    "name": "Black Metal Axe",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A perfectly-balanced axe forged from dark metal with an emerald sheen.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/AxeBlackMetal.webp",
+    "metaData": {
+      "entityId": "AxeBlackMetal"
+    }
+  },
+  {
+    "id": "item_axe_flint",
+    "name": "Flint Axe",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Sharper than stone.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/AxeFlint.webp",
+    "metaData": {
+      "entityId": "AxeFlint"
+    }
+  },
+  {
+    "id": "item_axe_iron",
+    "name": "Iron Axe",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Sharp and strong, a woodcutter's friend.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/AxeIron.webp",
+    "metaData": {
+      "entityId": "AxeIron"
+    }
+  },
+  {
+    "id": "item_axe_jotunbane",
+    "name": "Jotun Bane",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Not even the giants of old could weather the poisonous bite of this weapon.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/AxeJotunBane.webp",
+    "metaData": {
+      "entityId": "AxeJotunBane"
+    }
+  },
+  {
+    "id": "item_club",
+    "name": "Club",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A crude but useful weapon.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/Club.webp",
+    "metaData": {
+      "entityId": "Club"
+    }
+  },
+  {
+    "id": "item_crossbow_arbalest",
+    "name": "Arbalest",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A slow but powerful weapon.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/DvergerArbalest_shootAshlands.webp",
+    "metaData": {
+      "entityId": "DvergerArbalest_shootAshlands"
+    }
+  },
+  {
+    "id": "item_knife_flint",
+    "name": "Flint Knife",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Sharpened flint. A reliable tool.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/KnifeFlint.webp",
+    "metaData": {
+      "entityId": "KnifeFlint"
+    }
+  },
+  {
+    "id": "item_mace_eldner_lightning",
+    "name": "Storm Star",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Particularly effective on cloudy mornings.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/MaceEldnerLightning.webp",
+    "metaData": {
+      "entityId": "MaceEldnerLightning"
+    }
+  },
+  {
+    "id": "item_mace_eldner_nature",
+    "name": "Klossen",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "If the force of your blow isn't enough to knock your enemies to the ground, perhaps the primal roots will hold them down for you.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/MaceEldnerNature.webp",
+    "metaData": {
+      "entityId": "MaceEldnerNature"
+    }
+  },
+  {
+    "id": "item_knife_butcher",
+    "name": "Butcher Knife",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A butcher's knife designed specifically for slaughtering tamed animals.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/KnifeButcher.webp",
+    "metaData": {
+      "entityId": "KnifeButcher"
+    }
+  },
+  {
+    "id": "item_knife_copper",
+    "name": "Copper Knife",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A glittering copper knife.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/KnifeCopper.webp",
+    "metaData": {
+      "entityId": "KnifeCopper"
+    }
+  },
+  {
+    "id": "item_knife_silver",
+    "name": "Silver Knife",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A savage piece of pain.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/KnifeSilver.webp",
+    "metaData": {
+      "entityId": "KnifeSilver"
+    }
+  },
+  {
+    "id": "item_mace_bronze",
+    "name": "Bronze Mace",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A headache on a stick.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/MaceBronze.webp",
+    "metaData": {
+      "entityId": "MaceBronze"
+    }
+  },
+  {
+    "id": "item_mace_eldner",
+    "name": "Flametal Mace",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Dense yet spiked flametal, perfect for bashing enemy faces in.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/MaceEldner.webp",
+    "metaData": {
+      "entityId": "MaceEldner"
+    }
+  },
+  {
+    "id": "item_mace_eldner_blood",
+    "name": "Bloodgeon",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "The blood all but soaks into this mace, and it always yearns for more.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/MaceEldnerBlood.webp",
+    "metaData": {
+      "entityId": "MaceEldnerBlood"
+    }
+  },
+  {
+    "id": "item_mace_iron",
+    "name": "Iron Mace",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A fist-sized lump of iron on a wooden shaft.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/MaceIron.webp",
+    "metaData": {
+      "entityId": "MaceIron"
+    }
+  },
+  {
+    "id": "item_spear_bronze",
+    "name": "Bronze Spear",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A sturdy spear with a head of burnished bronze.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SpearBronze.webp",
+    "metaData": {
+      "entityId": "SpearBronze"
+    }
+  },
+  {
+    "id": "item_spear_splitner_blood",
+    "name": "Splitnir the Bleeding",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A small sacrifice must be made for every battle...",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SpearSplitner_Blood.webp",
+    "metaData": {
+      "entityId": "SpearSplitner_Blood"
+    }
+  },
+  {
+    "id": "item_spear_wolffang",
+    "name": "Fang Spear",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Even in death, the wolf's tooth aches for flesh.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SpearWolfFang.webp",
+    "metaData": {
+      "entityId": "SpearWolfFang"
+    }
+  },
+  {
+    "id": "item_sword_iron",
+    "name": "Iron Sword",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "The straight line between life and death runs along the edge of this blade.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SwordIron.webp",
+    "metaData": {
+      "entityId": "SwordIron"
+    }
+  },
+  {
+    "id": "item_sword_niedhogg",
+    "name": "Nidhgg",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Named after the evil dragon that dwells by the roots of the world tree, this sword heralds doom for those who cross its path.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SwordNiedhogg.webp",
+    "metaData": {
+      "entityId": "SwordNiedhogg"
+    }
+  },
+  {
+    "id": "item_sword_niedhogg_lightning",
+    "name": "Nidhgg the Thundering",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "The power of lightning dances along the blade of this sword, a promise of the pain to come.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SwordNiedhoggLightning.webp",
+    "metaData": {
+      "entityId": "SwordNiedhoggLightning"
+    }
+  },
+  {
+    "id": "item_tankard",
+    "name": "Tankard",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Skl!",
+    "icon": "/img/valheim/itens/OneHandedWeapon/Tankard.webp",
+    "metaData": {
+      "entityId": "Tankard"
+    }
+  },
+  {
+    "id": "item_dvergrtankard",
+    "name": "Dvergr Tankard",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "It can hold a lot of mead!",
+    "icon": "/img/valheim/itens/OneHandedWeapon/Tankard_dvergr.webp",
+    "metaData": {
+      "entityId": "Tankard_dvergr"
+    }
+  },
+  {
+    "id": "item_tankard_anniversary",
+    "name": "Horn of Celebration",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "One year since we arrived... Skl!",
+    "icon": "/img/valheim/itens/OneHandedWeapon/TankardAnniversary.webp",
+    "metaData": {
+      "entityId": "TankardAnniversary"
+    }
+  },
+  {
+    "id": "item_spear_chitin",
+    "name": "Abyssal Harpoon",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "The ocean's wrath.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SpearChitin.webp",
+    "metaData": {
+      "entityId": "SpearChitin"
+    }
+  },
+  {
+    "id": "item_sword_bronze",
+    "name": "Bronze Sword",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Blood-drinker. A thirsty friend.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SwordBronze.webp",
+    "metaData": {
+      "entityId": "SwordBronze"
+    }
+  },
+  {
+    "id": "item_sword_fire",
+    "name": "Dyrnwyn",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Unsheathed, it sizzles and spits with deathless fire, an impossible blade.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SwordIronFire.webp",
+    "metaData": {
+      "entityId": "SwordIronFire"
+    }
+  },
+  {
+    "id": "item_knife_blackmetal",
+    "name": "Black Metal Knife",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A darkling blade. Strong and sharp.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/KnifeBlackMetal.webp",
+    "metaData": {
+      "entityId": "KnifeBlackMetal"
+    }
+  },
+  {
+    "id": "item_knife_chitin",
+    "name": "Abyssal Razor",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A knife from the deep.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/KnifeChitin.webp",
+    "metaData": {
+      "entityId": "KnifeChitin"
+    }
+  },
+  {
+    "id": "item_mace_needle",
+    "name": "Porcupine",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A deadly weapon, bristling with fiendish spikes.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/MaceNeedle.webp",
+    "metaData": {
+      "entityId": "MaceNeedle"
+    }
+  },
+  {
+    "id": "item_mace_silver",
+    "name": "Frostner",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "The dead fear silver. Remind them why.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/MaceSilver.webp",
+    "metaData": {
+      "entityId": "MaceSilver"
+    }
+  },
+  {
+    "id": "item_spear_carapace",
+    "name": "Carapace Spear",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Sharpened to jagged perfection, this spear is sure to be deadly.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SpearCarapace.webp",
+    "metaData": {
+      "entityId": "SpearCarapace"
+    }
+  },
+  {
+    "id": "item_spear_ancientbark",
+    "name": "Ancient Bark Spear",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Despite its gnarled look, this spear is strong and perfectly balanced.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SpearElderbark.webp",
+    "metaData": {
+      "entityId": "SpearElderbark"
+    }
+  },
+  {
+    "id": "item_spear_splitner_nature",
+    "name": "Splitnir the Primal",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Nature's forces burst through the ground wherever this spear strikes.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SpearSplitner_Nature.webp",
+    "metaData": {
+      "entityId": "SpearSplitner_Nature"
+    }
+  },
+  {
+    "id": "item_sword_blackmetal",
+    "name": "Black Metal Sword",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A thing of death and beauty. It catches the light with a greenish glow.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SwordBlackmetal.webp",
+    "metaData": {
+      "entityId": "SwordBlackmetal"
+    }
+  },
+  {
+    "id": "item_sword_mistwalker",
+    "name": "Mistwalker",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "The faint glow seems to slice through the mist.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SwordMistwalker.webp",
+    "metaData": {
+      "entityId": "SwordMistwalker"
+    }
+  },
+  {
+    "id": "item_sword_niedhogg_blood",
+    "name": "Nidhgg the Bleeding",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "If you bleed, your foes are sure to do so as well.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SwordNiedhoggBlood.webp",
+    "metaData": {
+      "entityId": "SwordNiedhoggBlood"
+    }
+  },
+  {
+    "id": "item_sword_niedhogg_nature",
+    "name": "Nidhgg the Primal",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Tangle your foes in roots, like the namesake of this blade.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SwordNiedhoggNature.webp",
+    "metaData": {
+      "entityId": "SwordNiedhoggNature"
+    }
+  },
+  {
+    "id": "item_sword_silver",
+    "name": "Silver Sword",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Purest of metals, nothing unclean can abide its touch.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SwordSilver.webp",
+    "metaData": {
+      "entityId": "SwordSilver"
+    }
+  },
+  {
+    "id": "item_spear_flint",
+    "name": "Flint Spear",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "If your eye marks a thing for death, let your arm send the messenger.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SpearFlint.webp",
+    "metaData": {
+      "entityId": "SpearFlint"
+    }
+  },
+  {
+    "id": "item_spear_splitner",
+    "name": "Splitnir",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Split your enemies' hearts in two.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SpearSplitner.webp",
+    "metaData": {
+      "entityId": "SpearSplitner"
+    }
+  },
+  {
+    "id": "item_spear_splitner_lightning",
+    "name": "Splitnir the Storming",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Let the crack of thunder split the air.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SpearSplitner_Lightning.webp",
+    "metaData": {
+      "entityId": "SpearSplitner_Lightning"
+    }
+  },
+  {
+    "id": "item_sword_dyrnwyn",
+    "name": "Dyrnwyn",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "The sword that was broken is whole once more. Its flames burn hot, fuelled by the memories of ancient warriors.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SwordDyrnwyn.webp",
+    "metaData": {
+      "entityId": "SwordDyrnwyn"
+    }
+  },
+  {
+    "id": "item_tankard_odin",
+    "name": "Mead Horn of Odin",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Odin's finest warriors deserve the finest drinks.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/TankardOdin.webp",
+    "metaData": {
+      "entityId": "TankardOdin"
+    }
+  }
+]

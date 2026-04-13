@@ -1,0 +1,152 @@
+[
+  {
+    "id": "tintura",
+    "name": "Tintura",
+    "category": [
+      "wallet",
+      "customization",
+      "furniture"
+    ],
+    "description": "Pinte moveis e decorações",
+    "icon": "/img/heartopia/stats/tintura.png",
+    "sellPrice": 50,
+    "buyPrice": 100
+  },
+  {
+    "id": "tinta_estampa",
+    "name": "Tinta de Estampa",
+    "category": [
+      "wallet",
+      "customization",
+      "wall"
+    ],
+    "description": "Estampe roupas e decorações",
+    "icon": "/img/heartopia/stats/tinta_estampa.png"
+  },
+  {
+    "id": "kit_reparo",
+    "name": "Kit de Reparo",
+    "category": [
+      "wallet",
+      "tool"
+    ],
+    "icon": "/img/heartopia/ferramentas/kit_reparo.png",
+    "buyPrice": 200
+  },
+  {
+    "id": "kit_reparo_agil",
+    "name": "Kit de Reparo Agil",
+    "category": [
+      "wallet",
+      "tool"
+    ],
+    "icon": "/img/heartopia/ferramentas/kit_reparo_agil.png"
+  },
+  {
+    "id": "vale_hobby_aprimorado_escultura_neve",
+    "name": "Vale Hobby Aprimorado de Escultura de Neve",
+    "category": [
+      "wallet",
+      "hobby",
+      "escultura_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/vale_hobby_aprimorado_escultura_neve.png"
+  },
+  {
+    "id": "energia",
+    "name": "Energia",
+    "category": [
+      "wallet",
+      "character"
+    ],
+    "description": "Necessária para realizar atividades físicas.",
+    "icon": "/img/heartopia/stats/energia.png"
+  },
+  {
+    "id": "amorita",
+    "name": "Amorita",
+    "category": [
+      "wallet",
+      "coin"
+    ],
+    "icon": "/img/heartopia/stats/amorita.png"
+  },
+  {
+    "id": "cristal_luar",
+    "name": "Cristal do Luar",
+    "category": [
+      "wallet",
+      "coin"
+    ],
+    "icon": "/img/heartopia/stats/cristal_luar.png"
+  },
+  {
+    "id": "estrela_desejavel",
+    "name": "Estrela Desejável",
+    "category": [
+      "wallet",
+      "coin"
+    ],
+    "icon": "/img/heartopia/stats/estrela_desejavel.png"
+  },
+  {
+    "id": "gema_energia_harmoniosa",
+    "name": "Gema de Energia Harmoniosa",
+    "category": [
+      "wallet",
+      "coin"
+    ],
+    "icon": "/img/heartopia/stats/gema_energia_harmoniosa.png"
+  },
+  {
+    "id": "medalha_merito",
+    "name": "Medalha de Mérito",
+    "category": [
+      "wallet"
+    ],
+    "icon": "/img/heartopia/stats/medalha_merito.png"
+  },
+  {
+    "id": "ouro",
+    "name": "Ouro",
+    "category": [
+      "wallet",
+      "coin"
+    ],
+    "icon": "/img/heartopia/stats/ouro.png"
+  },
+  {
+    "id": "progresso_sonho",
+    "name": "Progresso do Sonho",
+    "category": [
+      "wallet"
+    ],
+    "icon": "/img/heartopia/stats/progresso_sonho.png"
+  },
+  {
+    "id": "vale_expansao_hobby",
+    "name": "Vale de Expansão de Hobby",
+    "category": [
+      "wallet",
+      "hobby"
+    ],
+    "icon": "/img/heartopia/stats/vale_expansao_hobby.png"
+  },
+  {
+    "id": "vale_hobby_aprimorado",
+    "name": "Vale de Hobby Aprimorado",
+    "category": [
+      "wallet",
+      "hobby"
+    ],
+    "icon": "/img/heartopia/stats/vale_hobby_aprimorado.png"
+  },
+  {
+    "id": "vale_publicacao",
+    "name": "Vale de Publicação",
+    "category": [
+      "wallet"
+    ],
+    "icon": "/img/heartopia/stats/vale_publicacao.png"
+  }
+]

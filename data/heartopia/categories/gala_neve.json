@@ -1,0 +1,12 @@
+﻿[
+    {
+        "id": "papoula_himalaia",
+        "name": "Papoula do Himalaia",
+        "icon": "/img/heartopia/events/gala_neve/flowers/papoula_himalaia_amarela.png"
+    },
+    {
+        "id": "panqueca_acucar_po",
+        "name": "Panqueca de Açucar em Pó",
+        "icon": "/img/heartopia/events/gala_neve/foods/panqueca_acucar_po.png"
+    }
+]

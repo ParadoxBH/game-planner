@@ -1,0 +1,170 @@
+[
+  {
+    "id": "item_legs_medium_ashlands",
+    "name": "Trousers of Ask",
+    "category": [
+      "Legs"
+    ],
+    "description": "The first man to roam Midgard preferred to tread lightly. Wearers of these trousers could learn a thing or two from him.",
+    "icon": "/img/valheim/itens/Legs/ArmorAshlandsMediumlegs.webp",
+    "metaData": {
+      "entityId": "ArmorAshlandsMediumlegs"
+    }
+  },
+  {
+    "id": "item_legs_bronze",
+    "name": "Bronze Plate Leggings",
+    "category": [
+      "Legs"
+    ],
+    "description": "Bronze greaves to shield your legs.",
+    "icon": "/img/valheim/itens/Legs/ArmorBronzeLegs.webp",
+    "metaData": {
+      "entityId": "ArmorBronzeLegs"
+    }
+  },
+  {
+    "id": "item_legs_trollleather",
+    "name": "Troll Leather Trousers",
+    "category": [
+      "Legs"
+    ],
+    "description": "Leggings of tough troll hide.",
+    "icon": "/img/valheim/itens/Legs/ArmorTrollLeatherLegs.webp",
+    "metaData": {
+      "entityId": "ArmorTrollLeatherLegs"
+    }
+  },
+  {
+    "id": "item_legs_carapace",
+    "name": "Carapace Greaves",
+    "category": [
+      "Legs"
+    ],
+    "description": "Leg guards of a rigid carapace.",
+    "icon": "/img/valheim/itens/Legs/ArmorCarapaceLegs.webp",
+    "metaData": {
+      "entityId": "ArmorCarapaceLegs"
+    }
+  },
+  {
+    "id": "item_legs_flametal",
+    "name": "Flametal Greaves",
+    "category": [
+      "Legs"
+    ],
+    "description": "Heavy trousers insulate against the heat, while solid greaves keep your shins safe from low blows.",
+    "icon": "/img/valheim/itens/Legs/ArmorFlametalLegs.webp",
+    "metaData": {
+      "entityId": "ArmorFlametalLegs"
+    }
+  },
+  {
+    "id": "item_legs_leather",
+    "name": "Leather Trousers",
+    "category": [
+      "Legs"
+    ],
+    "description": "They squeak a little when you walk.",
+    "icon": "/img/valheim/itens/Legs/ArmorLeatherLegs.webp",
+    "metaData": {
+      "entityId": "ArmorLeatherLegs"
+    }
+  },
+  {
+    "id": "item_legs_mage",
+    "name": "Eitr-weave Trousers",
+    "category": [
+      "Legs"
+    ],
+    "description": "The trousers worn by mages are always especially tight. Discomfort fuels the focus that is needed for magic...",
+    "icon": "/img/valheim/itens/Legs/ArmorMageLegs.webp",
+    "metaData": {
+      "entityId": "ArmorMageLegs"
+    }
+  },
+  {
+    "id": "item_legs_pgreaves",
+    "name": "Padded Greaves",
+    "category": [
+      "Legs"
+    ],
+    "description": "Expertly crafted leg protection.",
+    "icon": "/img/valheim/itens/Legs/ArmorPaddedGreaves.webp",
+    "metaData": {
+      "entityId": "ArmorPaddedGreaves"
+    }
+  },
+  {
+    "id": "item_legs_rags",
+    "name": "Rag Trousers",
+    "category": [
+      "Legs"
+    ],
+    "description": "A simple remedy for nudity.",
+    "icon": "/img/valheim/itens/Legs/ArmorRagsLegs.webp",
+    "metaData": {
+      "entityId": "ArmorRagsLegs"
+    }
+  },
+  {
+    "id": "item_legs_fenris",
+    "name": "Fenris Leggings",
+    "category": [
+      "Legs"
+    ],
+    "description": "The legs of the beast were lean and strong, so that it could leap great strides.",
+    "icon": "/img/valheim/itens/Legs/ArmorFenringLegs.webp",
+    "metaData": {
+      "entityId": "ArmorFenringLegs"
+    }
+  },
+  {
+    "id": "item_legs_wolf",
+    "name": "Wolf Hide Trousers",
+    "category": [
+      "Legs"
+    ],
+    "description": "Shaggy breeches of wolfskin.",
+    "icon": "/img/valheim/itens/Legs/ArmorWolfLegs.webp",
+    "metaData": {
+      "entityId": "ArmorWolfLegs"
+    }
+  },
+  {
+    "id": "item_legs_iron",
+    "name": "Iron Greaves",
+    "category": [
+      "Legs"
+    ],
+    "description": "Iron greaves to protect your legs.",
+    "icon": "/img/valheim/itens/Legs/ArmorIronLegs.webp",
+    "metaData": {
+      "entityId": "ArmorIronLegs"
+    }
+  },
+  {
+    "id": "item_legs_mage_ashlands",
+    "name": "Trousers of Embla",
+    "category": [
+      "Legs"
+    ],
+    "description": "Whether or not the first sorceress actually wore trousers exactly like these, we can never know.",
+    "icon": "/img/valheim/itens/Legs/ArmorMageLegs_Ashlands.webp",
+    "metaData": {
+      "entityId": "ArmorMageLegs_Ashlands"
+    }
+  },
+  {
+    "id": "item_legs_root",
+    "name": "Root Leggings",
+    "category": [
+      "Legs"
+    ],
+    "description": "A light armor oddly woven together by ancient roots and bark.",
+    "icon": "/img/valheim/itens/Legs/ArmorRootLegs.webp",
+    "metaData": {
+      "entityId": "ArmorRootLegs"
+    }
+  }
+]

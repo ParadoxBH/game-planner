@@ -1,0 +1,410 @@
+[
+  {
+    "id": "item_atgeir_bronze",
+    "name": "Bronze Atgeir",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "A true warrior's tool.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/AtgeirBronze.webp",
+    "metaData": {
+      "entityId": "AtgeirBronze"
+    }
+  },
+  {
+    "id": "item_axe_berzerkr",
+    "name": "Berserkir Axes",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "Let your rage take over and face the slaughter.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/AxeBerzerkr.webp",
+    "metaData": {
+      "entityId": "AxeBerzerkr"
+    }
+  },
+  {
+    "id": "item_axe_berzerkr_lightning",
+    "name": "Thundering Berserkir Axes",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "Carnage spreads around you when you wield these axes, such that Thor himself would be proud.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/AxeBerzerkrLightning.webp",
+    "metaData": {
+      "entityId": "AxeBerzerkrLightning"
+    }
+  },
+  {
+    "id": "item_axe_berzerkr_blood",
+    "name": "Bleeding Berserkir Axes",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "The closer you are to death, the harder you are sure to hit.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/AxeBerzerkrBlood.webp",
+    "metaData": {
+      "entityId": "AxeBerzerkrBlood"
+    }
+  },
+  {
+    "id": "item_atgeir_blackmetal",
+    "name": "Black Metal Atgeir",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "A vicious hewing-axe of almost unbreakable black metal.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/AtgeirBlackmetal.webp",
+    "metaData": {
+      "entityId": "AtgeirBlackmetal"
+    }
+  },
+  {
+    "id": "item_atgeir_himminafl",
+    "name": "Himminafl",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "It might not be a hammer, but Thor himself would still approve of this weapon.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/AtgeirHimminAfl.webp",
+    "metaData": {
+      "entityId": "AtgeirHimminAfl"
+    }
+  },
+  {
+    "id": "item_atgeir_iron",
+    "name": "Iron Atgeir",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "Blood-drinker, skull-cracker, death-bringer.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/AtgeirIron.webp",
+    "metaData": {
+      "entityId": "AtgeirIron"
+    }
+  },
+  {
+    "id": "item_battleaxe",
+    "name": "Battleaxe",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "Skull-splitter, a warrior's joy.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/Battleaxe.webp",
+    "metaData": {
+      "entityId": "Battleaxe"
+    }
+  },
+  {
+    "id": "item_battleaxe_crystal",
+    "name": "Crystal Battleaxe",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "It's see-through and tears through.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/BattleaxeCrystal.webp",
+    "metaData": {
+      "entityId": "BattleaxeCrystal"
+    }
+  },
+  {
+    "id": "item_axe_berzerkr_nature",
+    "name": "Primal Berserkir Axes",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "Your most primal instincts take over, and the nature around you reaches out to aid you.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/AxeBerzerkrNature.webp",
+    "metaData": {
+      "entityId": "AxeBerzerkrNature"
+    }
+  },
+  {
+    "id": "item_fishingrod",
+    "name": "Fishing Rod",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "Standard issue dvergr fishing rod.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/FishingRod.webp",
+    "metaData": {
+      "entityId": "FishingRod"
+    }
+  },
+  {
+    "id": "item_fistweapon_fenris",
+    "name": "Flesh Rippers",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "If claws work for wolves, why not for a viking?",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/FistFenrirClaw.webp",
+    "metaData": {
+      "entityId": "FistFenrirClaw"
+    }
+  },
+  {
+    "id": "item_pickaxe_antler",
+    "name": "Antler Pickaxe",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "This tool is hard enough to crack even the most stubborn rocks.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/PickaxeAntler.webp",
+    "metaData": {
+      "entityId": "PickaxeAntler"
+    }
+  },
+  {
+    "id": "item_sledge_demolisher",
+    "name": "Demolisher",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "This mighty sledge yearns to wreak havoc.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/SledgeDemolisher.webp",
+    "metaData": {
+      "entityId": "SledgeDemolisher"
+    }
+  },
+  {
+    "id": "item_staffgreenroots",
+    "name": "Staff of the Wild",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "Ancient natural forces lie curled and dormant within this staff, ready to be unleashed.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/StaffGreenRoots.webp",
+    "metaData": {
+      "entityId": "StaffGreenRoots"
+    }
+  },
+  {
+    "id": "item_pickaxe_blackmetal",
+    "name": "Black Metal Pickaxe",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "A good strong pick of glistening dark metal.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/PickaxeBlackMetal.webp",
+    "metaData": {
+      "entityId": "PickaxeBlackMetal"
+    }
+  },
+  {
+    "id": "item_pickaxe_iron",
+    "name": "Iron Pickaxe",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "A sturdy tool of hardened iron.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/PickaxeIron.webp",
+    "metaData": {
+      "entityId": "PickaxeIron"
+    }
+  },
+  {
+    "id": "item_pickaxe_stone",
+    "name": "Stone Pickaxe",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "A rock-breaker made of stone.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/PickaxeStone.webp",
+    "metaData": {
+      "entityId": "PickaxeStone"
+    }
+  },
+  {
+    "id": "item_scythe",
+    "name": "Scythe",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "The right tool makes the task at hand so much easier.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/Scythe.webp",
+    "metaData": {
+      "entityId": "Scythe"
+    }
+  },
+  {
+    "id": "item_staffclusterbomb",
+    "name": "Staff of Fracturing",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "Only those with patience and focus will be able to harness the true power of this staff.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/StaffClusterbomb.webp",
+    "metaData": {
+      "entityId": "StaffClusterbomb"
+    }
+  },
+  {
+    "id": "item_sword_krom",
+    "name": "Krom",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "As deadly as it is shiny, and it's very shiny.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/THSwordKrom.webp",
+    "metaData": {
+      "entityId": "THSwordKrom"
+    }
+  },
+  {
+    "id": "item_sword_slayer_blood",
+    "name": "Brutal Slayer",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "If it bleeds, you can kill it.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/THSwordSlayerBlood.webp",
+    "metaData": {
+      "entityId": "THSwordSlayerBlood"
+    }
+  },
+  {
+    "id": "item_sword_slayer_lightning",
+    "name": "Scourging Slayer",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "The lightning bound into this blade is erratic, ever searching for something to strike.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/THSwordSlayerLightning.webp",
+    "metaData": {
+      "entityId": "THSwordSlayerLightning"
+    }
+  },
+  {
+    "id": "item_sword_slayer_nature",
+    "name": "Primal Slayer",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "The blade works in tandem with the primal forces of the world, seeking death and slaughter.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/THSwordSlayerNature.webp",
+    "metaData": {
+      "entityId": "THSwordSlayerNature"
+    }
+  },
+  {
+    "id": "item_knife_skollandhati",
+    "name": "Skoll and Hati",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "Stab once for those who've betrayed you, and twice for those you hate.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/KnifeSkollAndHati.webp",
+    "metaData": {
+      "entityId": "KnifeSkollAndHati"
+    }
+  },
+  {
+    "id": "item_pickaxe_bronze",
+    "name": "Bronze Pickaxe",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "A good bronze pick. Can break very hard rocks.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/PickaxeBronze.webp",
+    "metaData": {
+      "entityId": "PickaxeBronze"
+    }
+  },
+  {
+    "id": "item_stagbreaker",
+    "name": "Stagbreaker",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "A weapon worthy of the Gods! If you get hit with this, you'll know it...",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/SledgeStagbreaker.webp",
+    "metaData": {
+      "entityId": "SledgeStagbreaker"
+    }
+  },
+  {
+    "id": "item_stafffireball",
+    "name": "Staff of Embers",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "The sweltering heat of Muspelheim seems almost pathetic when compared to what this staff can do...",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/StaffFireball.webp",
+    "metaData": {
+      "entityId": "StaffFireball"
+    }
+  },
+  {
+    "id": "item_stafficeshards",
+    "name": "Staff of Frost",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "A staff as cold as the three-year winter that will herald the end of times.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/StaffIceShards.webp",
+    "metaData": {
+      "entityId": "StaffIceShards"
+    }
+  },
+  {
+    "id": "item_sword_slayer",
+    "name": "Slayer",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "This mighty blade thirsts for the blood of foes.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/THSwordSlayer.webp",
+    "metaData": {
+      "entityId": "THSwordSlayer"
+    }
+  },
+  {
+    "id": "item_sledge_iron",
+    "name": "Iron Sledge",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "A mighty hammer, worthy of a champion.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/SledgeIron.webp",
+    "metaData": {
+      "entityId": "SledgeIron"
+    }
+  },
+  {
+    "id": "item_staff_lightning",
+    "name": "Dundr",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "What happens next may shock you.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/StaffLightning.webp",
+    "metaData": {
+      "entityId": "StaffLightning"
+    }
+  },
+  {
+    "id": "item_staffredtroll",
+    "name": "Trollstav",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "Summons a raging beast to cause death and destruction.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/StaffRedTroll.webp",
+    "metaData": {
+      "entityId": "StaffRedTroll"
+    }
+  },
+  {
+    "id": "item_staffshield",
+    "name": "Staff of Protection",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "For a slight blood offering it will protect the caster in a magical shell.",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/StaffShield.webp",
+    "metaData": {
+      "entityId": "StaffShield"
+    }
+  }
+]

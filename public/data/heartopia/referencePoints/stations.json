@@ -1,0 +1,22 @@
+[
+  {
+    "id": "workbench_city",
+    "entityId": "mesa_artesao",
+    "type": "spawn",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-28.9515380859375 94.68962779821611)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "cooker_city",
+    "entityId": "fogao_clean",
+    "type": "spawn",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-19.301025390625 91.21340079135436)"
+    },
+    "mapId": "main"
+  }
+]

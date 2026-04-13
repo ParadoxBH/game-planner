@@ -1,0 +1,58 @@
+[
+  {
+    "id": "tomate",
+    "name": "Tomate",
+    "category": ["agriculture", "vegetable"],
+    "icon": "/img/heartopia/agricultura/vegetais/tomate.png",
+    "sellPrice": 30
+  },
+  {
+    "id": "batata",
+    "name": "Batata",
+    "category": ["agriculture", "vegetable"],
+    "icon": "/img/heartopia/agricultura/vegetais/batata.png",
+    "sellPrice": 90
+  },
+  {
+    "id": "trigo",
+    "name": "Trigo",
+    "category": ["agriculture", "vegetable"],
+    "icon": "/img/heartopia/agricultura/vegetais/trigo.png",
+    "sellPrice": 285
+  },
+  {
+    "id": "alface_americano",
+    "name": "Alface Americano",
+    "category": ["agriculture", "vegetable"],
+    "icon": "/img/heartopia/agricultura/vegetais/alface_americana.png",
+    "sellPrice": 435
+  },
+  {
+    "id": "abacaxi",
+    "name": "Abacaxi",
+    "category": ["agriculture", "vegetable", "ingredient_geleia"],
+    "icon": "/img/heartopia/agricultura/vegetais/abacaxi.png",
+    "sellPrice": 52
+  },
+  {
+    "id": "cenoura",
+    "name": "Cenoura",
+    "category": ["agriculture", "vegetable", "ingredient_geleia"],
+    "icon": "/img/heartopia/agricultura/vegetais/cenoura.png",
+    "sellPrice": 155
+  },
+  {
+    "id": "morango",
+    "name": "Morango",
+    "category": ["agriculture", "vegetable", "ingredient_geleia"],
+    "icon": "/img/heartopia/agricultura/vegetais/morango.png",
+    "sellPrice": 375
+  },
+  {
+    "id": "milho",
+    "name": "Milho",
+    "category": ["agriculture", "vegetable", "ingredient_geleia"],
+    "icon": "/img/heartopia/agricultura/vegetais/milho.png",
+    "sellPrice": 515
+  }
+]

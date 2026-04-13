@@ -1,0 +1,256 @@
+[
+    {
+        "id": "semente_margarida_vermelha",
+        "name": "Semente de Margarida Vermelha",
+        "category": [
+            "seed",
+            "flower",
+            "margarida"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_margarida_vermelha.png",
+        "buyPrice": 30,
+        "sellPrice": 15
+    },
+    {
+        "id": "semente_margarida_rosa",
+        "name": "Semente de Margarida Rosa",
+        "category": [
+            "seed",
+            "flower",
+            "margarida"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_margarida_rosa.png",
+        "sellPrice": 25
+    },
+    {
+        "id": "semente_margarida_branca",
+        "name": "Semente de Margarida Branca",
+        "category": [
+            "seed",
+            "flower",
+            "margarida"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_margarida_branca.png",
+        "buyPrice": 30
+    },
+    {
+        "id": "semente_amor_perfeito_vermelho",
+        "name": "Semente de Amor-perfeito Vermelho",
+        "category": [
+            "seed",
+            "flower",
+            "amor_perfeito"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_amor_perfeito_vermelho.png",
+        "buyPrice": 30
+    },
+    {
+        "id": "semente_amor_perfeito_amarelo",
+        "name": "Semente de Amor-perfeito Amarelo",
+        "category": [
+            "seed",
+            "flower",
+            "amor_perfeito"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_amor_perfeito_amarelo.png",
+        "buyPrice": 30
+    },
+    {
+        "id": "semente_anturio_vermelho",
+        "name": "Semente de Antúrio Vermelho",
+        "category": [
+            "seed",
+            "flower",
+            "anturio"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_anturio_vermelho.png",
+        "buyPrice": 60
+    },
+    {
+        "id": "semente_anturio_amarelo",
+        "name": "Semente de Antúrio Amarelo",
+        "category": [
+            "seed",
+            "flower",
+            "anturio"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_anturio_amarela.png",
+        "buyPrice": 60
+    },
+    {
+        "id": "semente_anturio_branco",
+        "name": "Semente de Antúrio Branco",
+        "category": [
+            "seed",
+            "flower",
+            "anturio"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_anturio_branco.png",
+        "buyPrice": 60
+    },
+    {
+        "id": "semente_papoula_vermelha",
+        "name": "Semente de Papoula Vermelha",
+        "category": [
+            "seed",
+            "flower",
+            "papoula"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_papoula_vermelha.png",
+        "buyPrice": 60
+    },
+    {
+        "id": "semente_papoula_amarela",
+        "name": "Semente de Papoula Amarela",
+        "category": [
+            "seed",
+            "flower",
+            "papoula"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_papoula_amarela.png",
+        "buyPrice": 60
+    },
+    {
+        "id": "semente_papoula_branca",
+        "name": "Semente de Papoula Branca",
+        "category": [
+            "seed",
+            "flower",
+            "papoula"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_papoula_branca.png",
+        "buyPrice": 60
+    },
+    {
+        "id": "semente_copo_leite_vermelha",
+        "name": "Semente de Copo-de-leite Vermelha",
+        "category": [
+            "seed",
+            "flower",
+            "copo_leite"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_copo_leite_vermelha.png",
+        "buyPrice": 90
+    },
+    {
+        "id": "semente_copo_leite_amarela",
+        "name": "Semente de Copo-de-leite Amarela",
+        "category": [
+            "seed",
+            "flower",
+            "copo_leite"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_copo_leite_amarela.png",
+        "buyPrice": 90
+    },
+    {
+        "id": "semente_copo_leite_branca",
+        "name": "Semente de Copo-de-leite Branca",
+        "category": [
+            "seed",
+            "flower",
+            "copo_leite"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_copo_leite_branca.png",
+        "buyPrice": 90
+    },
+    {
+        "id": "semente_copo_leite_laranja",
+        "name": "Semente de Copo-de-leite Laranja",
+        "category": [
+            "seed",
+            "flower",
+            "copo_leite"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_copo_leite_laranja.png",
+        "sellPrice": 70
+    },
+    {
+        "id": "semente_copo_leite_rosa",
+        "name": "Semente de Copo-de-leite Rosa",
+        "category": [
+            "seed",
+            "flower",
+            "copo_leite"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_copo_leite_rosa.png",
+        "sellPrice": 70
+    },
+    {
+        "id": "semente_gloria_manha_vermelha",
+        "name": "Semente de Glória-da-manhã Vermelha",
+        "category": [
+            "seed",
+            "flower",
+            "gloria_manha"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_gloria_manha_vermelha.png",
+        "buyPrice": 90
+    },
+    {
+        "id": "semente_gloria_manha_amarela",
+        "name": "Semente de Glória-da-manhã Amarela",
+        "category": [
+            "seed",
+            "flower",
+            "gloria_manha"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_gloria_manha_amarela.png",
+        "buyPrice": 90
+    },
+    {
+        "id": "semente_gloria_manha_branca",
+        "name": "Semente de Glória-da-manhã Abranca",
+        "category": [
+            "seed",
+            "flower",
+            "gloria_manha"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_gloria_manha_branca.png",
+        "buyPrice": 90
+    },
+    {
+        "id": "semente_gloria_manha_laranja",
+        "name": "Semente de Glória-da-manhã Laranja",
+        "category": [
+            "seed",
+            "flower",
+            "gloria_manha"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_gloria_manha_laranja.png",
+        "sellPrice": 70
+    },
+    {
+        "id": "semente_cravo_vermelha",
+        "name": "Semente de Cravo Vermelha",
+        "category": [
+            "seed",
+            "flower",
+            "cravo"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_cravo_vermelha.png",
+        "buyPrice": 120
+    },
+    {
+        "id": "semente_cravo_amarela",
+        "name": "Semente de Cravo Amarela",
+        "category": [
+            "seed",
+            "flower",
+            "cravo"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_cravo_amarela.png",
+        "buyPrice": 120
+    },
+    {
+        "id": "semente_cravo_branco",
+        "name": "Semente de Cravo Abranco",
+        "category": [
+            "seed",
+            "flower",
+            "cravo"
+        ],
+        "icon": "/img/heartopia/agricultura/sementes_flores/semente_cravo_branca.png",
+        "buyPrice": 120
+    }
+]

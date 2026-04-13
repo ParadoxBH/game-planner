@@ -1,0 +1,206 @@
+[
+  {
+    "id": "item_shield_bonetower",
+    "name": "Bone Tower Shield",
+    "category": [
+      "Shield"
+    ],
+    "description": "The bones of dead warriors make for a good protection.",
+    "icon": "/img/valheim/itens/Shield/ShieldBoneTower.webp",
+    "metaData": {
+      "entityId": "ShieldBoneTower"
+    }
+  },
+  {
+    "id": "item_shield_bronzebuckler",
+    "name": "Bronze Buckler",
+    "category": [
+      "Shield"
+    ],
+    "description": "A shield of burnished bronze, good to turn a blade or two.",
+    "icon": "/img/valheim/itens/Shield/ShieldBronzeBuckler.webp",
+    "metaData": {
+      "entityId": "ShieldBronzeBuckler"
+    }
+  },
+  {
+    "id": "item_shield_woodtower",
+    "name": "Wood Tower Shield",
+    "category": [
+      "Shield"
+    ],
+    "description": "A rough but heavy wooden shield.",
+    "icon": "/img/valheim/itens/Shield/ShieldWoodTower.webp",
+    "metaData": {
+      "entityId": "ShieldWoodTower"
+    }
+  },
+  {
+    "id": "item_shield_blackmetal_tower",
+    "name": "Black Metal Tower Shield",
+    "category": [
+      "Shield"
+    ],
+    "description": "A tower shield of gleaming dark metal.",
+    "icon": "/img/valheim/itens/Shield/ShieldBlackmetalTower.webp",
+    "metaData": {
+      "entityId": "ShieldBlackmetalTower"
+    }
+  },
+  {
+    "id": "item_shield_carapacebuckler",
+    "name": "Carapace Buckler",
+    "category": [
+      "Shield"
+    ],
+    "description": "The skull of a seeker is solid but not heavy, which makes it perfect for a small and agile shield.",
+    "icon": "/img/valheim/itens/Shield/ShieldCarapaceBuckler.webp",
+    "metaData": {
+      "entityId": "ShieldCarapaceBuckler"
+    }
+  },
+  {
+    "id": "item_shield_ironbuckler",
+    "name": "Iron Buckler",
+    "category": [
+      "Shield"
+    ],
+    "description": "Its lightness and curved center makes it excellent for deflecting attacks.",
+    "icon": "/img/valheim/itens/Shield/ShieldIronBuckler.webp",
+    "metaData": {
+      "entityId": "ShieldIronBuckler"
+    }
+  },
+  {
+    "id": "item_shield_iron_tower",
+    "name": "Iron Tower Shield",
+    "category": [
+      "Shield"
+    ],
+    "description": "A tall shield of strong iron.",
+    "icon": "/img/valheim/itens/Shield/ShieldIronTower.webp",
+    "metaData": {
+      "entityId": "ShieldIronTower"
+    }
+  },
+  {
+    "id": "item_shield_serpentscale",
+    "name": "Serpent Scale Shield",
+    "category": [
+      "Shield"
+    ],
+    "description": "A sturdy shield of overlapping scales.",
+    "icon": "/img/valheim/itens/Shield/ShieldSerpentscale.webp",
+    "metaData": {
+      "entityId": "ShieldSerpentscale"
+    }
+  },
+  {
+    "id": "item_shield_banded",
+    "name": "Banded Shield",
+    "category": [
+      "Shield"
+    ],
+    "description": "Banded with hoops of iron, a true warrior's companion.",
+    "icon": "/img/valheim/itens/Shield/ShieldBanded.webp",
+    "metaData": {
+      "entityId": "ShieldBanded"
+    }
+  },
+  {
+    "id": "item_shield_blackmetal",
+    "name": "Black Metal Shield",
+    "category": [
+      "Shield"
+    ],
+    "description": "Fashioned from the strongest metal, able to turn even the deadliest blades.",
+    "icon": "/img/valheim/itens/Shield/ShieldBlackmetal.webp",
+    "metaData": {
+      "entityId": "ShieldBlackmetal"
+    }
+  },
+  {
+    "id": "item_shield_carapace",
+    "name": "Carapace Shield",
+    "category": [
+      "Shield"
+    ],
+    "description": "The almost unbreakable carapace of your enemies makes an excellent shield.",
+    "icon": "/img/valheim/itens/Shield/ShieldCarapace.webp",
+    "metaData": {
+      "entityId": "ShieldCarapace"
+    }
+  },
+  {
+    "id": "item_shield_flametal",
+    "name": "Flametal Shield",
+    "category": [
+      "Shield"
+    ],
+    "description": "The shield is and always will be a viking's most important weapon.",
+    "icon": "/img/valheim/itens/Shield/ShieldFlametal.webp",
+    "metaData": {
+      "entityId": "ShieldFlametal"
+    }
+  },
+  {
+    "id": "item_shield_iron_square",
+    "name": "Iron Shield",
+    "category": [
+      "Shield"
+    ],
+    "description": "An iron sword-breaker, tile of the battle-wall.",
+    "icon": "/img/valheim/itens/Shield/ShieldIronSquare.webp",
+    "metaData": {
+      "entityId": "ShieldIronSquare"
+    }
+  },
+  {
+    "id": "item_shield_knight",
+    "name": "Knight shield UNUSED",
+    "category": [
+      "Shield"
+    ],
+    "description": "A wooden shield reinforced with iron. UNUSED",
+    "icon": "/img/valheim/itens/Shield/ShieldKnight.webp",
+    "metaData": {
+      "entityId": "ShieldKnight"
+    }
+  },
+  {
+    "id": "item_shield_wood",
+    "name": "Wood Shield",
+    "category": [
+      "Shield"
+    ],
+    "description": "A simple wooden shield.",
+    "icon": "/img/valheim/itens/Shield/ShieldWood.webp",
+    "metaData": {
+      "entityId": "ShieldWood"
+    }
+  },
+  {
+    "id": "item_shield_flametal_tower",
+    "name": "Flametal Tower Shield",
+    "category": [
+      "Shield"
+    ],
+    "description": "The best defence is a great defence.",
+    "icon": "/img/valheim/itens/Shield/ShieldFlametalTower.webp",
+    "metaData": {
+      "entityId": "ShieldFlametalTower"
+    }
+  },
+  {
+    "id": "item_shield_silver",
+    "name": "Silver Shield",
+    "category": [
+      "Shield"
+    ],
+    "description": "A shield of radiant silver.",
+    "icon": "/img/valheim/itens/Shield/ShieldSilver.webp",
+    "metaData": {
+      "entityId": "ShieldSilver"
+    }
+  }
+]

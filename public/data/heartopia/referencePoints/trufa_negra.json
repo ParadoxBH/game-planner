@@ -1,0 +1,86 @@
+[
+    {
+        "id": "truffle_1",
+        "entityId": "trufa_negra_coletavel",
+        "mapId": "main",
+        "type": "spawn",
+        "mode": "respawn",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(630 200)"
+        },
+        "respawnDelay": 15
+    },
+    {
+        "id": "truffle_2",
+        "entityId": "trufa_negra_coletavel",
+        "mapId": "main",
+        "type": "spawn",
+        "mode": "respawn",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(660 210)"
+        },
+        "respawnDelay": 15
+    },
+    {
+        "id": "truffle_3",
+        "entityId": "trufa_negra_coletavel",
+        "mapId": "main",
+        "type": "spawn",
+        "mode": "respawn",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(650 245)"
+        },
+        "respawnDelay": 15
+    },
+    {
+        "id": "truffle_4",
+        "entityId": "trufa_negra_coletavel",
+        "mapId": "main",
+        "type": "spawn",
+        "mode": "respawn",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(675 240)"
+        },
+        "respawnDelay": 15
+    },
+    {
+        "id": "truffle_5",
+        "entityId": "trufa_negra_coletavel",
+        "mapId": "main",
+        "type": "spawn",
+        "mode": "respawn",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(680 270)"
+        },
+        "respawnDelay": 15
+    },
+    {
+        "id": "truffle_6",
+        "entityId": "trufa_negra_coletavel",
+        "mapId": "main",
+        "type": "spawn",
+        "mode": "respawn",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(700 285)"
+        },
+        "respawnDelay": 15
+    },
+    {
+        "id": "truffle_7",
+        "entityId": "trufa_negra_coletavel",
+        "mapId": "main",
+        "type": "spawn",
+        "mode": "respawn",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(725 215)"
+        },
+        "respawnDelay": 15
+    }
+]

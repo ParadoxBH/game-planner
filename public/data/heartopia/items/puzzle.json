@@ -1,0 +1,31 @@
+[
+  {
+    "id": "quebra_cabeca_16",
+    "name": "Quebra Cabeça 16 Peças",
+    "category": ["puzzle", "puzzle_16"],
+    "icon": "/img/heartopia/outros/quebra_cabeca.png",
+    "buyPrice": 1500,
+    "sellPrice": 1630
+  },
+  {
+    "id": "quebra_cabeca_36",
+    "name": "Quebra Cabeça 36 Peças",
+    "category": ["puzzle", "puzzle_36"],
+    "icon": "/img/heartopia/outros/quebra_cabeca.png",
+    "buyPrice": 3000,
+    "sellPrice": 3550
+  },
+  {
+    "id": "quebra_cabeca_64",
+    "name": "Quebra Cabeça 64 Peças",
+    "category": ["puzzle", "puzzle_64"],
+    "icon": "/img/heartopia/outros/quebra_cabeca.png"
+  },
+  {
+    "id": "quebra_cabeca_100",
+    "name": "Quebra Cabeça 100 Peças",
+    "category": ["puzzle", "puzzle_100"],
+    "icon": "/img/heartopia/outros/quebra_cabeca.png",
+    "sellPrice": 9900
+  }
+]

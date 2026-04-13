@@ -1,0 +1,557 @@
+[
+  {
+    "id": "galho_arbusto",
+    "name": "Galho de Arbusto",
+    "category": ["resource", "wood"],
+    "icon": "/img/heartopia/recursos/galho_arbusto.png",
+    "sellPrice": 5
+  },
+  {
+    "id": "madeira",
+    "name": "Madeira",
+    "category": [
+      "resource",
+      "wood"
+    ],
+    "icon": "/img/heartopia/recursos/madeira.png",
+    "sellPrice": 6
+  },
+  {
+    "id": "madeira_qualidade",
+    "name": "Madeira de Qualidade",
+    "category": [
+      "resource",
+      "wood"
+    ],
+    "icon": "/img/heartopia/recursos/madeira_qualidade.png",
+    "sellPrice": 12
+  },
+  {
+    "id": "madeira_rara",
+    "name": "Madeira Rara",
+    "category": [
+      "resource",
+      "wood"
+    ],
+    "icon": "/img/heartopia/recursos/madeira_rara.png",
+    "sellPrice": 50
+  },
+  {
+    "id": "carvalho_delicado",
+    "name": "Carvalho Delicado",
+    "category": [
+      "resource",
+      "wood"
+    ],
+    "icon": "/img/heartopia/recursos/carvalho_delicado.png",
+    "sellPrice": 150
+  },
+  {
+    "id": "pedra",
+    "name": "Pedra",
+    "category": ["resource"],
+    "icon": "/img/heartopia/recursos/pedra.png",
+    "sellPrice": 8
+  },
+  {
+    "id": "minerio",
+    "name": "Minério",
+    "category": ["resource"],
+    "icon": "/img/heartopia/recursos/minerio.png",
+    "sellPrice": 14
+  },
+  {
+    "id": "fluorita_pura",
+    "name": "Fluorita Pura",
+    "category": ["resource"],
+    "icon": "/img/heartopia/recursos/fluorita_pura.png",
+    "sellPrice": 150
+  },
+  {
+    "id": "bambu",
+    "name": "Bambu",
+    "category": ["resource"],
+    "icon": "/img/heartopia/recursos/bambu.png",
+    "sellPrice": 7
+  },
+  {
+    "id": "meteoro_cinza",
+    "name": "Meteoro Cinza",
+    "category": [
+      "resource",
+      "meteor"
+    ],
+    "icon": "/img/heartopia/recursos/meteoro_cinza.png",
+    "sellPrice": 150
+  },
+  {
+    "id": "meteoro_laranja",
+    "name": "Meteoro Laranja",
+    "category": [
+      "resource",
+      "meteor"
+    ],
+    "icon": "/img/heartopia/recursos/meteoro_laranja.png",
+    "sellPrice": 150
+  },
+  {
+    "id": "meteoro_ciano",
+    "name": "Meteoro Ciano",
+    "category": [
+      "resource",
+      "meteor"
+    ],
+    "icon": "/img/heartopia/recursos/meteoro_ciano.png",
+    "sellPrice": 150
+  },
+  {
+    "id": "meteoro_verde",
+    "name": "Meteoro Verde",
+    "category": [
+      "resource",
+      "meteor"
+    ],
+    "icon": "/img/heartopia/recursos/meteoro_verde.png",
+    "sellPrice": 150
+  },
+  {
+    "id": "meteoro_roxo",
+    "name": "Meteoro Roxo",
+    "category": [
+      "resource",
+      "meteor"
+    ],
+    "icon": "/img/heartopia/recursos/meteoro_roxo.png",
+    "sellPrice": 150
+  },
+  {
+    "id": "maca",
+    "name": "Maçã",
+    "category": [
+      "resource",
+      "fruit",
+      "ingredient_geleia"
+    ],
+    "icon": "/img/heartopia/recursos/maca.png",
+    "sellPrice": 28
+  },
+  {
+    "id": "tangerina",
+    "name": "Tangerina",
+    "category": [
+      "resource",
+      "fruit",
+      "ingredient_geleia"
+    ],
+    "icon": "/img/heartopia/recursos/tangerina.png",
+    "sellPrice": 28
+  },
+  {
+    "id": "mirtilo",
+    "name": "Mirtilo",
+    "category": [
+      "resource",
+      "berry",
+      "ingredient_geleia"
+    ],
+    "icon": "/img/heartopia/recursos/mirtilo.png",
+    "sellPrice": 16
+  },
+  {
+    "id": "framboesa",
+    "name": "Framboesa",
+    "category": [
+      "resource",
+      "berry",
+      "ingredient_geleia"
+    ],
+    "icon": "/img/heartopia/recursos/framboesa.png",
+    "sellPrice": 26
+  },
+  {
+    "id": "carne",
+    "name": "Carne",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "icon": "/img/heartopia/recursos/carne.png",
+    "sellPrice": 100,
+    "buyPrice": 200
+  },
+  {
+    "id": "ovo",
+    "name": "Ovo",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "icon": "/img/heartopia/recursos/ovo.png",
+    "sellPrice": 50,
+    "buyPrice": 100
+  },
+  {
+    "id": "leite",
+    "name": "Leite",
+    "category": [
+      "resource",
+      "ingredient",
+      "ingredient_cafe"
+    ],
+    "icon": "/img/heartopia/recursos/leite.png",
+    "sellPrice": 26,
+    "buyPrice": 50
+  },
+  {
+    "id": "queijo",
+    "name": "Queijo",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "icon": "/img/heartopia/recursos/queijo.png",
+    "sellPrice": 50,
+    "buyPrice": 60
+  },
+  {
+    "id": "manteiga",
+    "name": "Manteiga",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "icon": "/img/heartopia/recursos/manteiga.png",
+    "sellPrice": 75,
+    "buyPrice": 150
+  },
+  {
+    "id": "graos_cafe",
+    "name": "Grãos de Café",
+    "category": [
+      "resource",
+      "ingredient",
+      "ingredient_cafe"
+    ],
+    "icon": "/img/heartopia/recursos/graos_cafe.png",
+    "sellPrice": 25,
+    "buyPrice": 30
+  },
+  {
+    "id": "doce_vermelho",
+    "name": "Doce Vermelho",
+    "category": [
+      "resource",
+      "doce"
+    ],
+    "icon": "/img/heartopia/recursos/doce_vermelho.png"
+  },
+  {
+    "id": "doce_Laranja",
+    "name": "Doce Laranja",
+    "category": [
+      "resource",
+      "doce"
+    ],
+    "icon": "/img/heartopia/recursos/doce_laranja.png"
+  },
+  {
+    "id": "doce_amarelo",
+    "name": "Doce Amarelo",
+    "category": [
+      "resource",
+      "doce"
+    ],
+    "icon": "/img/heartopia/recursos/doce_amarelo.png"
+  },
+  {
+    "id": "doce_verde",
+    "name": "Doce Verde",
+    "category": [
+      "resource",
+      "doce"
+    ],
+    "icon": "/img/heartopia/recursos/doce_verde.png"
+  },
+  {
+    "id": "doce_turquesa",
+    "name": "Doce Turquesa",
+    "category": [
+      "resource",
+      "doce"
+    ],
+    "icon": "/img/heartopia/recursos/doce_turquesa.png"
+  },
+  {
+    "id": "doce_azul",
+    "name": "Doce Azul",
+    "category": [
+      "resource",
+      "doce"
+    ],
+    "icon": "/img/heartopia/recursos/doce_azul.png"
+  },
+  {
+    "id": "doce_roxo",
+    "name": "Doce Roxo",
+    "category": [
+      "resource",
+      "doce"
+    ],
+    "icon": "/img/heartopia/recursos/doce_roxo.png"
+  },
+  {
+    "id": "cha_preto",
+    "name": "Chá Preto",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "icon": "/img/heartopia/recursos/cha_preto.png",
+    "sellPrice": 125,
+    "buyPrice": 250
+  },
+  {
+    "id": "po_matcha",
+    "name": "Pó Matcha",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "icon": "/img/heartopia/recursos/po_matcha.png",
+    "sellPrice": 125,
+    "buyPrice": 250
+  },
+  {
+    "id": "macarrao_arroz",
+    "name": "Macarrão de Arroz",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "icon": "/img/heartopia/recursos/macarrao_arroz.png",
+    "sellPrice": 25,
+    "buyPrice": 50
+  },
+  {
+    "id": "feijao_azuki",
+    "name": "Feijão Azuki",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "icon": "/img/heartopia/recursos/feijao_azuki.png",
+    "sellPrice": 25,
+    "buyPrice": 50
+  },
+  {
+    "id": "cogumelo_ostra",
+    "name": "Cogumelo Ostra",
+    "category": [
+      "resource",
+      "mushroom",
+      "cogumelo_ostra"
+    ],
+    "icon": "/img/heartopia/recursos/cogumelo_ostra.png",
+    "sellPrice": 16
+  },
+  {
+    "id": "shiitake",
+    "name": "Shiitake",
+    "category": [
+      "resource",
+      "mushroom",
+      "shiitake"
+    ],
+    "icon": "/img/heartopia/recursos/shiitake.png",
+    "sellPrice": 16
+  },
+  {
+    "id": "champignon",
+    "name": "Champignon",
+    "category": [
+      "resource",
+      "mushroom",
+      "champignon"
+    ],
+    "icon": "/img/heartopia/recursos/champignon.png",
+    "sellPrice": 16
+  },
+  {
+    "id": "porcino",
+    "name": "Porcino",
+    "category": [
+      "resource",
+      "mushroom",
+      "porcino"
+    ],
+    "icon": "/img/heartopia/recursos/porcino.png",
+    "sellPrice": 16
+  },
+  {
+    "id": "trufa_negra",
+    "name": "Trufa Negra",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "icon": "/img/heartopia/recursos/trufa_negra.png",
+    "sellPrice": 99
+  },
+  {
+    "id": "matsutake",
+    "name": "Matsutake",
+    "category": [
+      "resource",
+      "mushroom"
+    ],
+    "icon": "/img/heartopia/recursos/matsutake.png"
+  },
+  {
+    "id": "cogumelo_ostra_estranho_amarelo",
+    "name": "Cogumelo Ostra Estranho Amarelo",
+    "category": [
+      "resource",
+      "mushroom",
+      "cogumelo_ostra"
+    ],
+    "icon": "/img/heartopia/recursos/cogumelo_ostra_estranho_amarelo.png"
+  },
+  {
+    "id": "cogumelo_ostra_estranho_rosa",
+    "name": "Cogumelo Ostra Estranho Rosa",
+    "category": [
+      "resource",
+      "mushroom",
+      "cogumelo_ostra"
+    ],
+    "icon": "/img/heartopia/recursos/cogumelo_ostra_estranho_rosa.png"
+  },
+  {
+    "id": "cogumelo_ostra_estranho_roxo",
+    "name": "Cogumelo Ostra Estranho Roxo",
+    "category": [
+      "resource",
+      "mushroom",
+      "cogumelo_ostra"
+    ],
+    "icon": "/img/heartopia/recursos/cogumelo_ostra_estranho_roxo.png"
+  },
+  {
+    "id": "shiitake_estranho_vermelho",
+    "name": "Shiitake Estranho Vermelho",
+    "category": [
+      "resource",
+      "mushroom",
+      "shiitake"
+    ],
+    "icon": "/img/heartopia/recursos/shiitake_estranho_vermelho.png",
+    "sellPrice": 16
+  },
+  {
+    "id": "shiitake_estranho_roxo",
+    "name": "Shiitake Estranho Roxo",
+    "category": [
+      "resource",
+      "mushroom",
+      "shiitake"
+    ],
+    "icon": "/img/heartopia/recursos/shiitake_estranho_roxo.png",
+    "sellPrice": 16
+  },
+  {
+    "id": "shiitake_estranho_azul",
+    "name": "Shiitake Estranho Azul",
+    "category": [
+      "resource",
+      "mushroom",
+      "shiitake"
+    ],
+    "icon": "/img/heartopia/recursos/shiitake_estranho_azul.png",
+    "sellPrice": 16
+  },
+  {
+    "id": "champignon_estranho_rosa",
+    "name": "Champignon Estranho Rosa",
+    "category": [
+      "resource",
+      "mushroom",
+      "champignon"
+    ],
+    "icon": "/img/heartopia/recursos/champignon_estranho_rosa.png"
+  },
+  {
+    "id": "champignon_estranho_azul",
+    "name": "Champignon Estranho Azul",
+    "category": [
+      "resource",
+      "mushroom",
+      "champignon"
+    ],
+    "icon": "/img/heartopia/recursos/champignon_estranho_azul.png",
+    "sellPrice": 16
+  },
+  {
+    "id": "champignon_estranho_verde",
+    "name": "Champignon Estranho Verde",
+    "category": [
+      "resource",
+      "mushroom",
+      "champignon"
+    ],
+    "icon": "/img/heartopia/recursos/champignon_estranho_verde.png"
+  },
+  {
+    "id": "porcino_estranho_vermelho",
+    "name": "Porcino Estranho Vermelho",
+    "category": [
+      "resource",
+      "mushroom",
+      "porcino"
+    ],
+    "icon": "/img/heartopia/recursos/porcino_estranho_vermelho.png",
+    "sellPrice": 16
+  },
+  {
+    "id": "porcino_estranho_roxo",
+    "name": "Porcino Estranho Roxo",
+    "category": [
+      "resource",
+      "mushroom",
+      "porcino"
+    ],
+    "icon": "/img/heartopia/recursos/porcino_estranho_roxo.png",
+    "sellPrice": 16
+  },
+  {
+    "id": "porcino_estranho_amarelo",
+    "name": "Porcino Estranho Amarelo",
+    "category": [
+      "resource",
+      "mushroom",
+      "porcino"
+    ],
+    "icon": "/img/heartopia/recursos/porcino_estranho_amarelo.png"
+  },
+  {
+    "id": "oleo",
+    "name": "Óleo",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "sellPrice": 50,
+    "buyPrice": 100,
+    "icon": "/img/heartopia/culinaria/oleo.png"
+  },
+  {
+    "id": "ovo_pasteurizado",
+    "name": "Ovo Pasteurizado",
+    "category": [
+      "resource",
+      "ingredient"
+    ],
+    "sellPrice": 50,
+    "buyPrice": 100,
+    "icon": "/img/heartopia/culinaria/ovo_pasteurizado.png"
+  }
+]

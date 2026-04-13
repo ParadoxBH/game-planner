@@ -1,0 +1,146 @@
+[
+  {
+    "id": "animal_fish10",
+    "name": "Northern Salmon",
+    "category": [
+      "Fish"
+    ],
+    "description": "This fish likes the water to be almost freezing cold.",
+    "icon": "/img/valheim/itens/Fish/Fish10.webp",
+    "metaData": {
+      "entityId": "Fish10"
+    }
+  },
+  {
+    "id": "animal_fish3",
+    "name": "Tuna",
+    "category": [
+      "Fish"
+    ],
+    "description": "Chicken of the sea...",
+    "icon": "/img/valheim/itens/Fish/Fish3.webp",
+    "metaData": {
+      "entityId": "Fish3"
+    }
+  },
+  {
+    "id": "animal_fish5",
+    "name": "Trollfish",
+    "category": [
+      "Fish"
+    ],
+    "description": "This fish is a nuisance in the local streams.",
+    "icon": "/img/valheim/itens/Fish/Fish5.webp",
+    "metaData": {
+      "entityId": "Fish5"
+    }
+  },
+  {
+    "id": "animal_fish7",
+    "name": "Grouper",
+    "category": [
+      "Fish"
+    ],
+    "description": "Best served with lots of carbs!",
+    "icon": "/img/valheim/itens/Fish/Fish7.webp",
+    "metaData": {
+      "entityId": "Fish7"
+    }
+  },
+  {
+    "id": "animal_fish11",
+    "name": "Magmafish",
+    "category": [
+      "Fish"
+    ],
+    "description": "Some say this fish lays its eggs directly in molten lava!",
+    "icon": "/img/valheim/itens/Fish/Fish11.webp",
+    "metaData": {
+      "entityId": "Fish11"
+    }
+  },
+  {
+    "id": "animal_fish12",
+    "name": "Pufferfish",
+    "category": [
+      "Fish"
+    ],
+    "description": "Tasty when cooked right, but the flavour has a bit of a sting.",
+    "icon": "/img/valheim/itens/Fish/Fish12.webp",
+    "metaData": {
+      "entityId": "Fish12"
+    }
+  },
+  {
+    "id": "animal_fish2",
+    "name": "Pike",
+    "category": [
+      "Fish"
+    ],
+    "description": "A freshwater fish that needs a lot of seasoning.",
+    "icon": "/img/valheim/itens/Fish/Fish2.webp",
+    "metaData": {
+      "entityId": "Fish2"
+    }
+  },
+  {
+    "id": "animal_fish6",
+    "name": "Giant Herring",
+    "category": [
+      "Fish"
+    ],
+    "description": "Fermented, this fish will smell worse than the swamp it came from.",
+    "icon": "/img/valheim/itens/Fish/Fish6.webp",
+    "metaData": {
+      "entityId": "Fish6"
+    }
+  },
+  {
+    "id": "animal_fish8",
+    "name": "Coral Cod",
+    "category": [
+      "Fish"
+    ],
+    "description": "It has seen some things... Some very haunting things...",
+    "icon": "/img/valheim/itens/Fish/Fish8.webp",
+    "metaData": {
+      "entityId": "Fish8"
+    }
+  },
+  {
+    "id": "animal_fish1",
+    "name": "Perch",
+    "category": [
+      "Fish"
+    ],
+    "description": "A tasty whitemeat fish.",
+    "icon": "/img/valheim/itens/Fish/Fish1.webp",
+    "metaData": {
+      "entityId": "Fish1"
+    }
+  },
+  {
+    "id": "animal_fish4",
+    "name": "Tetra",
+    "category": [
+      "Fish"
+    ],
+    "description": "Spending its whole life in the dark, it has no need for eyes.",
+    "icon": "/img/valheim/itens/Fish/Fish4_cave.webp",
+    "metaData": {
+      "entityId": "Fish4_cave"
+    }
+  },
+  {
+    "id": "animal_fish9",
+    "name": "Anglerfish",
+    "category": [
+      "Fish"
+    ],
+    "description": "The dangling light makes it easier to see that pretty little face!",
+    "icon": "/img/valheim/itens/Fish/Fish9.webp",
+    "metaData": {
+      "entityId": "Fish9"
+    }
+  }
+]

@@ -1,0 +1,462 @@
+[
+  {
+    "id": "Abomination",
+    "category": ["enemy"],
+    "name": "Abomination"
+  },
+  {
+    "id": "Asksvin",
+    "category": ["enemy"],
+    "name": "Asksvin"
+  },
+  {
+    "id": "Bat",
+    "category": ["enemy"],
+    "name": "Bat"
+  },
+  {
+    "id": "Blob",
+    "category": ["enemy"],
+    "name": "Blob"
+  },
+  {
+    "id": "BlobElite",
+    "category": ["enemy"],
+    "name": "Oozer"
+  },
+  {
+    "id": "BlobTar",
+    "category": ["enemy"],
+    "name": "Growth"
+  },
+  {
+    "id": "BlobLava",
+    "category": ["enemy"],
+    "name": "Lava Blob"
+  },
+  {
+    "id": "Boar",
+    "category": ["enemy"],
+    "name": "Boar"
+  },
+  {
+    "id": "Boar_piggy",
+    "category": ["enemy"],
+    "name": "Boar piggy"
+  },
+  {
+    "id": "Charred_Archer",
+    "category": ["enemy"],
+    "name": "Charred Marksman"
+  },
+  {
+    "id": "Charred_Twitcher",
+    "category": ["enemy"],
+    "name": "Charred Twitcher"
+  },
+  {
+    "id": "Charred_Mage",
+    "category": ["enemy"],
+    "name": "Charred Warlock"
+  },
+  {
+    "id": "Charred_Melee",
+    "category": ["enemy"],
+    "name": "Charred Warrior"
+  },
+  {
+    "id": "Chicken",
+    "category": ["enemy"],
+    "name": "Chicken"
+  },
+  {
+    "id": "Hen",
+    "category": ["enemy"],
+    "name": "Hen"
+  },
+  {
+    "id": "Crow",
+    "category": ["enemy"],
+    "name": "Crow"
+  },
+  {
+    "id": "Deathsquito",
+    "category": ["enemy"],
+    "name": "Deathsquito"
+  },
+  {
+    "id": "Deer",
+    "category": ["enemy"],
+    "name": "Deer"
+  },
+  {
+    "id": "Hatchling",
+    "category": ["enemy"],
+    "name": "Drake"
+  },
+  {
+    "id": "Draugr",
+    "category": ["enemy"],
+    "name": "Draugr"
+  },
+  {
+    "id": "Draugr_Elite",
+    "category": ["enemy"],
+    "name": "Draugr elite"
+  },
+  {
+    "id": "Draugr_Ranged",
+    "category": ["enemy"],
+    "name": "Draugr Archer"
+  },
+  {
+    "id": "Dverger",
+    "category": ["enemy"],
+    "name": "Dvergr rogue"
+  },
+  {
+    "id": "DvergerMage",
+    "category": ["enemy"],
+    "name": "Dvergr mage"
+  },
+  {
+    "id": "DvergerMageFire",
+    "category": ["enemy"],
+    "name": "Dvergr mage(Fire Variant)"
+  },
+  {
+    "id": "DvergerMageIce",
+    "category": ["enemy"],
+    "name": "Dvergr mage(Ice Variant)"
+  },
+  {
+    "id": "DvergerMageSupport",
+    "category": ["enemy"],
+    "name": "Dvergr mage(Support Variant)"
+  },
+  {
+    "id": "DvergerAshlands",
+    "category": ["enemy"],
+    "name": "Ashlands Dvergr"
+  },
+  {
+    "id": "FallenValkyrie",
+    "category": ["enemy"],
+    "name": "Fallen Valkyrie"
+  },
+  {
+    "id": "Fenring",
+    "category": ["enemy"],
+    "name": "Fenring"
+  },
+  {
+    "id": "Fenring_Cultist",
+    "category": ["enemy"],
+    "name": "Cultist"
+  },
+  {
+    "id": "Fenring_Cultist_Hildir",
+    "category": ["enemy"],
+    "name": "Geirrhafa"
+  },
+  {
+    "id": "Fish1",
+    "category": ["enemy"],
+    "name": "Perch"
+  },
+  {
+    "id": "Fish2",
+    "category": ["enemy"],
+    "name": "Pike"
+  },
+  {
+    "id": "Fish3",
+    "category": ["enemy"],
+    "name": "Tuna"
+  },
+  {
+    "id": "Fish4_cave",
+    "category": ["enemy"],
+    "name": "Tetra"
+  },
+  {
+    "id": "Fish5",
+    "category": ["enemy"],
+    "name": "Trollfish"
+  },
+  {
+    "id": "Fish6",
+    "category": ["enemy"],
+    "name": "Giant herring"
+  },
+  {
+    "id": "Fish7",
+    "category": ["enemy"],
+    "name": "Grouper"
+  },
+  {
+    "id": "Fish8",
+    "category": ["enemy"],
+    "name": "Coral cod"
+  },
+  {
+    "id": "Fish9",
+    "category": ["enemy"],
+    "name": "Anglerfish"
+  },
+  {
+    "id": "Fish10",
+    "category": ["enemy"],
+    "name": "Northern salmon"
+  },
+  {
+    "id": "Fish11",
+    "category": ["enemy"],
+    "name": "Magmafish"
+  },
+  {
+    "id": "Fish12",
+    "category": ["enemy"],
+    "name": "Pufferfish"
+  },
+  {
+    "id": "Goblin",
+    "category": ["enemy"],
+    "name": "Fuling"
+  },
+  {
+    "id": "GoblinArcher",
+    "category": ["enemy"],
+    "name": "Spear Fuling"
+  },
+  {
+    "id": "GoblinBrute",
+    "category": ["enemy"],
+    "name": "Fuling berserker"
+  },
+  {
+    "id": "GoblinShaman",
+    "category": ["enemy"],
+    "name": "Fuling shaman"
+  },
+  {
+    "id": "Ghost",
+    "category": ["enemy"],
+    "name": "Ghost"
+  },
+  {
+    "id": "Gjall",
+    "category": ["enemy"],
+    "name": "Gjall"
+  },
+  {
+    "id": "Greydwarf",
+    "category": ["enemy"],
+    "name": "Greydwarf"
+  },
+  {
+    "id": "Greydwarf_Elite",
+    "category": ["enemy"],
+    "name": "Greydwarf brute"
+  },
+  {
+    "id": "Greydwarf_Shaman",
+    "category": ["enemy"],
+    "name": "Greydwarf shaman"
+  },
+  {
+    "id": "Greyling",
+    "category": ["enemy"],
+    "name": "Greyling"
+  },
+  {
+    "id": "Hare",
+    "category": ["enemy"],
+    "name": "Hare"
+  },
+  {
+    "id": "Haldor",
+    "category": ["enemy"],
+    "name": "Haldor"
+  },
+  {
+    "id": "Hildir",
+    "category": ["enemy"],
+    "name": "Hildir"
+  },
+  {
+    "id": "Leech",
+    "category": ["enemy"],
+    "name": "Leech"
+  },
+  {
+    "id": "Leech_cave",
+    "category": ["enemy"],
+    "name": "Leech (cave variant)"
+  },
+  {
+    "id": "Leviathan",
+    "category": ["enemy"],
+    "name": "Leviathan"
+  },
+  {
+    "id": "Charred_Melee_Dyrnwyn",
+    "category": ["enemy"],
+    "name": "Lord Reto"
+  },
+  {
+    "id": "Lox",
+    "category": ["enemy"],
+    "name": "Lox"
+  },
+  {
+    "id": "Lox_Calf",
+    "category": ["enemy"],
+    "name": "Lox calf"
+  },
+  {
+    "id": "Morgen",
+    "category": ["enemy"],
+    "name": "Morgen"
+  },
+  {
+    "id": "Neck",
+    "category": ["enemy"],
+    "name": "Neck"
+  },
+  {
+    "id": "odin",
+    "category": ["enemy"],
+    "name": "Odin"
+  },
+  {
+    "id": "Seagal",
+    "category": ["enemy"],
+    "name": "Gull"
+  },
+  {
+    "id": "Seeker",
+    "category": ["enemy"],
+    "name": "Seeker"
+  },
+  {
+    "id": "SeekerBrute",
+    "category": ["enemy"],
+    "name": "Seeker soldier"
+  },
+  {
+    "id": "SeekerBrood",
+    "category": ["enemy"],
+    "name": "Seeker brood"
+  },
+  {
+    "id": "Serpent",
+    "category": ["enemy"],
+    "name": "Serpent"
+  },
+  {
+    "id": "BonemawSerpent",
+    "category": ["enemy"],
+    "name": "Bonemaw"
+  },
+  {
+    "id": "Skeleton",
+    "category": ["enemy"],
+    "name": "Skeleton"
+  },
+  {
+    "id": "Skeleton_NoArcher",
+    "category": ["enemy"],
+    "name": "Melee Skeleton"
+  },
+  {
+    "id": "Skeleton_Poison",
+    "category": ["enemy"],
+    "name": "Rancid remains"
+  },
+  {
+    "id": "Skeleton_Hildir",
+    "category": ["enemy"],
+    "name": "Brenna"
+  },
+  {
+    "id": "piece_Charred_Balista",
+    "category": ["enemy"],
+    "name": "Skugg"
+  },
+  {
+    "id": "StoneGolem",
+    "category": ["enemy"],
+    "name": "Stone golem"
+  },
+  {
+    "id": "Surtling",
+    "category": ["enemy"],
+    "name": "Surtling"
+  },
+  {
+    "id": "TentaRoot",
+    "category": ["enemy"],
+    "name": "Root"
+  },
+  {
+    "id": "Tick",
+    "category": ["enemy"],
+    "name": "Tick"
+  },
+  {
+    "id": "TrainingDummy",
+    "category": ["enemy"],
+    "name": "Training dummy"
+  },
+  {
+    "id": "Troll",
+    "category": ["enemy"],
+    "name": "Troll"
+  },
+  {
+    "id": "Ulv",
+    "category": ["enemy"],
+    "name": "Ulv"
+  },
+  {
+    "id": "Volture",
+    "category": ["enemy"],
+    "name": "Volture"
+  },
+  {
+    "id": "Wisp",
+    "category": ["enemy"],
+    "name": "Wisp"
+  },
+  {
+    "id": "Wolf",
+    "category": ["enemy"],
+    "name": "Wolf"
+  },
+  {
+    "id": "Wolf_cub",
+    "category": ["enemy"],
+    "name": "Wolf cub"
+  },
+  {
+    "id": "Wraith",
+    "category": ["enemy"],
+    "name": "Wraith"
+  },
+  {
+    "id": "GoblinBruteBros",
+    "category": ["enemy"],
+    "name": "Zil & Thungr"
+  },
+  {
+    "id": "GoblinBrute_Hildir",
+    "category": ["enemy"],
+    "name": "Thungr"
+  },
+  {
+    "id": "GoblinShaman_Hildir",
+    "category": ["enemy"],
+    "name": "Zil"
+  }
+]

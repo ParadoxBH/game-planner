@@ -1,0 +1,116 @@
+[
+  {
+    "id": "neve_esculpida",
+    "name": "Neve Esculpida"
+  },
+  {
+    "id": "agriculture_vegetable",
+    "name": "Vegetais",
+    "description": "Produtos cultivados na horta, essenciais para culinária e comércio."
+  },
+  {
+    "id": "wallet",
+    "name": "Moedas e Valores",
+    "description": "Diferentes tipos de moedas e itens de valor financeiro."
+  },
+  {
+    "id": "feed",
+    "name": "Rações de Animais",
+    "description": "Alimentos específicos para animais e pets."
+  },
+  {
+    "id": "powerup",
+    "name": "Melhorias",
+    "description": "Itens especiais que concedem bônus temporários ou permanentes."
+  },
+  {
+    "id": "puzzle",
+    "name": "Quebra Cabeças",
+    "description": "Itens usados para interação entre personagens e jogadores.",
+    "icon": "/img/heartopia/outros/quebra_cabeca.png"
+  },
+  {
+    "id": "social",
+    "name": "Social",
+    "description": "Itens usados para interação entre personagens e jogadores."
+  },
+  {
+    "id": "bugnet",
+    "name": "Rede de Insetos",
+    "icon": "/img/heartopia/ferramentas/rede_bolha.png"
+  },
+  {
+    "id": "firework",
+    "name": "Fogos de Artifício",
+    "icon": "/img/heartopia/outros/fogos_estelares.png"
+  },
+  {
+    "id": "coin",
+    "name": "Moeda"
+  },
+  {
+    "id": "character",
+    "name": "Personagem"
+  },
+  {
+    "id": "pet",
+    "name": "Animais de Estimação"
+  },
+  {
+    "id": "wood",
+    "name": "Madeira",
+    "icon": "/img/heartopia/recursos/madeira.png"
+  },
+  {
+    "id": "cat",
+    "name": "Para Gatos"
+  },
+  {
+    "id": "dog",
+    "name": "Para Cachorros"
+  },
+  {
+    "id": "fish",
+    "name": "Para Peixes"
+  },
+  {
+    "id": "bird",
+    "name": "Para Passaros"
+  },
+  {
+    "id": "furniture",
+    "name": "Mobilha"
+  },
+  {
+    "id": "wall",
+    "name": "Paredes"
+  },
+  {
+    "id": "hobby",
+    "name": "Hobby"
+  },
+  {
+    "id": "meteor",
+    "name": "Meteoros"
+  },
+  {
+    "id": "customization",
+    "name": "Personalização"
+  },
+  {
+    "id": "puzzle_100",
+    "name": "100 Peças"
+  },
+  {
+    "id": "puzzle_16",
+    "name": "16 Peças"
+  },
+  {
+    "id": "puzzle_36",
+    "name": "36 Peças"
+  },
+  {
+    "id": "puzzle_64",
+    "name": "64 Peças"
+  }
+]

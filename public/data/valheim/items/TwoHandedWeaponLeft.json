@@ -1,0 +1,14 @@
+[
+  {
+    "id": "item_staffskeleton",
+    "name": "Dead Raiser",
+    "category": [
+      "TwoHandedWeaponLeft"
+    ],
+    "description": "Sacrifice a bit of blood to raise the dead. Upgrade the skull to spawn multiple skeletons, and increase your blood magic to make them stronger.",
+    "icon": "/img/valheim/itens/TwoHandedWeaponLeft/StaffSkeleton.webp",
+    "metaData": {
+      "entityId": "StaffSkeleton"
+    }
+  }
+]

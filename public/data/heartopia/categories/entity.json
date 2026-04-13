@@ -1,0 +1,28 @@
+[
+    {
+        "id": "escultura_neve",
+        "name": "Escultura de Neve",
+        "description": "Estatuas e objetos criados de neve.",
+        "icon": "/img/heartopia/skill/escultura_neve/bola_neve.png"
+    },
+    {
+        "id": "generator",
+        "name": "Gerador",
+        "description": "Maquinas que geram itens."
+    },
+    {
+        "id": "npc",
+        "name": "NPC",
+        "description": "Personagens não jogáveis."
+    },
+    {
+        "id": "resource",
+        "name": "Recursos",
+        "description": "Materiais básicos obtidos através da coleta, mineração ou atividades na natureza."
+    },
+    {
+        "id": "station",
+        "name": "Estação",
+        "description": "Estações de trabalho para criação de itens."
+    }
+]

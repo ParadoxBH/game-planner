@@ -1,0 +1,52 @@
+[
+  {
+    "id": "racao_gato",
+    "name": "Ração para Gato",
+    "category": ["feed", "cat"],
+    "icon": "/img/heartopia/ferramentas/racao_gato.png",
+    "buyPrice": 150
+  },
+  {
+    "id": "peixinho_seco_ativo",
+    "name": "Peixinho Seco Ativo",
+    "category": ["feed", "cat"],
+    "icon": "/img/heartopia/ferramentas/peixinho_seco_ativo.png",
+    "buyPrice": 2000
+  },
+  {
+    "id": "racao_passaro",
+    "name": "Ração de Pássaro",
+    "category": ["feed", "bird"],
+    "icon": "/img/heartopia/ferramentas/racao_passaro.png",
+    "sellPrice": 100
+  },
+  {
+    "id": "isca",
+    "name": "Isca",
+    "category": ["feed", "fish"],
+    "icon": "/img/heartopia/ferramentas/isca.png",
+    "sellPrice": 50,
+    "buyPrice": 200
+  },
+  {
+    "id": "racao_cao",
+    "name": "Ração para Cão",
+    "category": ["feed", "dog"],
+    "icon": "/img/heartopia/ferramentas/racao_cachorro.png",
+    "buyPrice": 150
+  },
+  {
+    "id": "racao_cao_ativo",
+    "name": "Ração para Cão Ativo",
+    "category": ["feed", "dog"],
+    "icon": "/img/heartopia/ferramentas/racao_cachorro_ativo.png",
+    "buyPrice": 2000
+  },
+  {
+    "id": "alimento_universal_animais",
+    "name": "Alimento Universal de Animais",
+    "category": ["feed"],
+    "icon": "/img/heartopia/ferramentas/alimento_universal_animais.png",
+    "buyPrice": 150
+  }
+]

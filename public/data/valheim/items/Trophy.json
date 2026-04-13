@@ -1,0 +1,698 @@
+[
+  {
+    "id": "item_trophy_asksvin",
+    "name": "Asksvin Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Don't let yourself be fooled by the friendly smile, for it could easily bite your arm off.",
+    "icon": "/img/valheim/itens/Trophy/TrophyAsksvin.webp",
+    "metaData": {
+      "entityId": "TrophyAsksvin"
+    }
+  },
+  {
+    "id": "item_trophy_charredarcher",
+    "name": "Marksman Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "These legs could hold infinite power.",
+    "icon": "/img/valheim/itens/Trophy/TrophyCharredArcher.webp",
+    "metaData": {
+      "entityId": "TrophyCharredArcher"
+    }
+  },
+  {
+    "id": "item_trophy_charredmage",
+    "name": "Warlock Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "A warm glow seems to almost emanate from within. Handle with care.",
+    "icon": "/img/valheim/itens/Trophy/TrophyCharredMage.webp",
+    "metaData": {
+      "entityId": "TrophyCharredMage"
+    }
+  },
+  {
+    "id": "item_trophy_cultist_hildir",
+    "name": "Geirrhafa Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "He's giving you an icy stare.",
+    "icon": "/img/valheim/itens/Trophy/TrophyCultist_Hildir.webp",
+    "metaData": {
+      "entityId": "TrophyCultist_Hildir"
+    }
+  },
+  {
+    "id": "item_trophy_dragonqueen",
+    "name": "Moder Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "The head of a dragon, majestic even in the rigor of death.<br/><br/>Offer it to the Sacrificial Stones.",
+    "icon": "/img/valheim/itens/Trophy/TrophyDragonQueen.webp",
+    "metaData": {
+      "entityId": "TrophyDragonQueen"
+    }
+  },
+  {
+    "id": "item_trophy_draugrelite",
+    "name": "Draugr Elite Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "The dead stare of the glowing red eyes sends a shiver through your bones.",
+    "icon": "/img/valheim/itens/Trophy/TrophyDraugrElite.webp",
+    "metaData": {
+      "entityId": "TrophyDraugrElite"
+    }
+  },
+  {
+    "id": "item_trophy_eikthyr",
+    "name": "Eikthyr Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "This severed head oozes power.<br/><br/>Offer it to the Sacrificial Stones.",
+    "icon": "/img/valheim/itens/Trophy/TrophyEikthyr.webp",
+    "metaData": {
+      "entityId": "TrophyEikthyr"
+    }
+  },
+  {
+    "id": "item_trophy_goblin",
+    "name": "Fuling Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Loose folds of greenish skin gathered in around a pair of dark and hateful eyes.",
+    "icon": "/img/valheim/itens/Trophy/TrophyGoblin.webp",
+    "metaData": {
+      "entityId": "TrophyGoblin"
+    }
+  },
+  {
+    "id": "item_trophy_shamanbro",
+    "name": "Zil Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "In the choice of 'ride or die', he picked the latter.",
+    "icon": "/img/valheim/itens/Trophy/TrophyGoblinBruteBrosShaman.webp",
+    "metaData": {
+      "entityId": "TrophyGoblinBruteBrosShaman"
+    }
+  },
+  {
+    "id": "item_trophy_hare",
+    "name": "Hare Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "These are said to bring luck. But not for their original owner.",
+    "icon": "/img/valheim/itens/Trophy/TrophyHare.webp",
+    "metaData": {
+      "entityId": "TrophyHare"
+    }
+  },
+  {
+    "id": "item_trophy_leech",
+    "name": "Leech Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Although slimy, the skin is beautifully patterned in red and black.",
+    "icon": "/img/valheim/itens/Trophy/TrophyLeech.webp",
+    "metaData": {
+      "entityId": "TrophyLeech"
+    }
+  },
+  {
+    "id": "item_trophy_seeker_brute",
+    "name": "Seeker Soldier Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "The head of a fallen champion.",
+    "icon": "/img/valheim/itens/Trophy/TrophySeekerBrute.webp",
+    "metaData": {
+      "entityId": "TrophySeekerBrute"
+    }
+  },
+  {
+    "id": "item_trophy_seekerqueen",
+    "name": "The Queen Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "She has seen enough.<br/><br/>Offer it to the Sacrificial Stones.",
+    "icon": "/img/valheim/itens/Trophy/TrophySeekerQueen.webp",
+    "metaData": {
+      "entityId": "TrophySeekerQueen"
+    }
+  },
+  {
+    "id": "item_trophy_serpent",
+    "name": "Serpent Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "The scales have dulled but the eyes are still bright.",
+    "icon": "/img/valheim/itens/Trophy/TrophySerpent.webp",
+    "metaData": {
+      "entityId": "TrophySerpent"
+    }
+  },
+  {
+    "id": "item_trophy_skeletonpoison",
+    "name": "Rancid Remains Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "A rank and rotten skull. You're not sure why you kept it...",
+    "icon": "/img/valheim/itens/Trophy/TrophySkeletonPoison.webp",
+    "metaData": {
+      "entityId": "TrophySkeletonPoison"
+    }
+  },
+  {
+    "id": "item_trophy_surtling",
+    "name": "Surtling Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Wreathed in pale flame, it still smolders like an ember.",
+    "icon": "/img/valheim/itens/Trophy/TrophySurtling.webp",
+    "metaData": {
+      "entityId": "TrophySurtling"
+    }
+  },
+  {
+    "id": "item_trophy_elder",
+    "name": "The Elder Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "This severed head oozes power.<br/><br/>Offer it to the Sacrificial Stones.",
+    "icon": "/img/valheim/itens/Trophy/TrophyTheElder.webp",
+    "metaData": {
+      "entityId": "TrophyTheElder"
+    }
+  },
+  {
+    "id": "item_trophy_charredmelee",
+    "name": "Warrior Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Fractures line this skull, as if it has taken many hits over the years.",
+    "icon": "/img/valheim/itens/Trophy/TrophyCharredMelee.webp",
+    "metaData": {
+      "entityId": "TrophyCharredMelee"
+    }
+  },
+  {
+    "id": "item_trophy_cultist",
+    "name": "Cultist Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "The fire in its eyes has still not burned out.",
+    "icon": "/img/valheim/itens/Trophy/TrophyCultist.webp",
+    "metaData": {
+      "entityId": "TrophyCultist"
+    }
+  },
+  {
+    "id": "item_trophy_deer",
+    "name": "Deer Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "A fine specimen but you'll need to kill more than deer to enter Valhalla.",
+    "icon": "/img/valheim/itens/Trophy/TrophyDeer.webp",
+    "metaData": {
+      "entityId": "TrophyDeer"
+    }
+  },
+  {
+    "id": "item_trophy_draugr",
+    "name": "Draugr Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Bind up the mouth if it starts to whisper in the night...",
+    "icon": "/img/valheim/itens/Trophy/TrophyDraugrFem.webp",
+    "metaData": {
+      "entityId": "TrophyDraugrFem"
+    }
+  },
+  {
+    "id": "item_trophy_fader",
+    "name": "Fader Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "The green dragon, corrupted beyond redemption.<br/><br/>Offer him to the sacrificial stones.",
+    "icon": "/img/valheim/itens/Trophy/TrophyFader.webp",
+    "metaData": {
+      "entityId": "TrophyFader"
+    }
+  },
+  {
+    "id": "item_trophy_troll",
+    "name": "Troll Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "The leathery skin bears the faded tracery of ancient symbols.",
+    "icon": "/img/valheim/itens/Trophy/TrophyForestTroll.webp",
+    "metaData": {
+      "entityId": "TrophyForestTroll"
+    }
+  },
+  {
+    "id": "item_trophy_troll",
+    "name": "Troll Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "The leathery skin bears the faded tracery of ancient symbols.",
+    "icon": "/img/valheim/itens/Trophy/TrophyFrostTroll.webp",
+    "metaData": {
+      "entityId": "TrophyFrostTroll"
+    }
+  },
+  {
+    "id": "item_trophy_goblinbrute",
+    "name": "Fuling Berserker Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "The huge grizzled head is as heavy as a boulder.",
+    "icon": "/img/valheim/itens/Trophy/TrophyGoblinBrute.webp",
+    "metaData": {
+      "entityId": "TrophyGoblinBrute"
+    }
+  },
+  {
+    "id": "item_trophy_skeleton",
+    "name": "Skeleton Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "The expressionless grin of this skull reminds you of the inevitability of death.",
+    "icon": "/img/valheim/itens/Trophy/TrophySkeleton.webp",
+    "metaData": {
+      "entityId": "TrophySkeleton"
+    }
+  },
+  {
+    "id": "item_trophy_skeleton_hildir",
+    "name": "Brenna Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Still burning, somehow.",
+    "icon": "/img/valheim/itens/Trophy/TrophySkeletonHildir.webp",
+    "metaData": {
+      "entityId": "TrophySkeletonHildir"
+    }
+  },
+  {
+    "id": "item_trophy_wolf",
+    "name": "Wolf Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Frozen in death, the hair matted with blood and a silent howl lodged in its throat.",
+    "icon": "/img/valheim/itens/Trophy/TrophyWolf.webp",
+    "metaData": {
+      "entityId": "TrophyWolf"
+    }
+  },
+  {
+    "id": "item_trophy_abomination",
+    "name": "Abomination Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "It's been dead so long that it started living again.",
+    "icon": "/img/valheim/itens/Trophy/TrophyAbomination.webp",
+    "metaData": {
+      "entityId": "TrophyAbomination"
+    }
+  },
+  {
+    "id": "item_trophy_blob",
+    "name": "Blob Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "A smelly lump of sticky matter.",
+    "icon": "/img/valheim/itens/Trophy/TrophyBlob.webp",
+    "metaData": {
+      "entityId": "TrophyBlob"
+    }
+  },
+  {
+    "id": "item_trophy_bonemass",
+    "name": "Bonemass Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Bones and viscous goo, held together by some unseen force.<br/><br/>Offer it to the Sacrificial Stones.",
+    "icon": "/img/valheim/itens/Trophy/TrophyBonemass.webp",
+    "metaData": {
+      "entityId": "TrophyBonemass"
+    }
+  },
+  {
+    "id": "item_trophy_deathsquito",
+    "name": "Deathsquito Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "You don't like touching this thing even when it's dead.",
+    "icon": "/img/valheim/itens/Trophy/TrophyDeathsquito.webp",
+    "metaData": {
+      "entityId": "TrophyDeathsquito"
+    }
+  },
+  {
+    "id": "item_trophy_draugr",
+    "name": "Draugr Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Bind up the mouth if it starts to whisper in the night...",
+    "icon": "/img/valheim/itens/Trophy/TrophyDraugr.webp",
+    "metaData": {
+      "entityId": "TrophyDraugr"
+    }
+  },
+  {
+    "id": "item_trophy_gjall",
+    "name": "Gjall Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Hopefully it won't float away.",
+    "icon": "/img/valheim/itens/Trophy/TrophyGjall.webp",
+    "metaData": {
+      "entityId": "TrophyGjall"
+    }
+  },
+  {
+    "id": "item_trophy_goblinking",
+    "name": "Yagluth Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "The crownless head of a dead king.<br/><br/>Offer it to the Sacrificial Stones.",
+    "icon": "/img/valheim/itens/Trophy/TrophyGoblinKing.webp",
+    "metaData": {
+      "entityId": "TrophyGoblinKing"
+    }
+  },
+  {
+    "id": "item_trophy_greydwarf",
+    "name": "Greydwarf Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "The mossy, severed head of a Greydwarf.",
+    "icon": "/img/valheim/itens/Trophy/TrophyGreydwarf.webp",
+    "metaData": {
+      "entityId": "TrophyGreydwarf"
+    }
+  },
+  {
+    "id": "enemy_kvastur",
+    "name": "Kvastur",
+    "category": [
+      "Trophy"
+    ],
+    "description": "A witch's best friend.",
+    "icon": "/img/valheim/itens/Trophy/TrophyKvastur.webp",
+    "metaData": {
+      "entityId": "TrophyKvastur"
+    }
+  },
+  {
+    "id": "item_trophy_lox",
+    "name": "Lox Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "A giant beast's head, thatched with thick fur.",
+    "icon": "/img/valheim/itens/Trophy/TrophyLox.webp",
+    "metaData": {
+      "entityId": "TrophyLox"
+    }
+  },
+  {
+    "id": "item_trophy_neck",
+    "name": "Neck Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "The beady eyes and razorsharp teeth belies the ostensibly calm nature of this small lizard.",
+    "icon": "/img/valheim/itens/Trophy/TrophyNeck.webp",
+    "metaData": {
+      "entityId": "TrophyNeck"
+    }
+  },
+  {
+    "id": "item_trophy_boar",
+    "name": "Boar Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "This boar head would make for a nice decoration in any house.",
+    "icon": "/img/valheim/itens/Trophy/TrophyBoar.webp",
+    "metaData": {
+      "entityId": "TrophyBoar"
+    }
+  },
+  {
+    "id": "item_trophy_bonemaw",
+    "name": "Bonemaw Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "A skull made up of dense bone, as dangerous as it is protective.",
+    "icon": "/img/valheim/itens/Trophy/TrophyBonemawSerpent.webp",
+    "metaData": {
+      "entityId": "TrophyBonemawSerpent"
+    }
+  },
+  {
+    "id": "item_trophy_dvergr",
+    "name": "Dvergr Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "It's frankly a little troubling that you would consider hanging these on your wall...",
+    "icon": "/img/valheim/itens/Trophy/TrophyDvergr.webp",
+    "metaData": {
+      "entityId": "TrophyDvergr"
+    }
+  },
+  {
+    "id": "item_trophy_fallenvalkyrie",
+    "name": "Fallen Valkyrie Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Though she is dead, she yearns for the blood to flow.",
+    "icon": "/img/valheim/itens/Trophy/TrophyFallenValkyrie.webp",
+    "metaData": {
+      "entityId": "TrophyFallenValkyrie"
+    }
+  },
+  {
+    "id": "item_trophy_fenring",
+    "name": "Fenring Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Half-way between wolf and man, its face frozen in a snarl of pain.",
+    "icon": "/img/valheim/itens/Trophy/TrophyFenring.webp",
+    "metaData": {
+      "entityId": "TrophyFenring"
+    }
+  },
+  {
+    "id": "item_trophy_brutebro",
+    "name": "Thungr Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Not so tough now.",
+    "icon": "/img/valheim/itens/Trophy/TrophyGoblinBruteBrosBrute.webp",
+    "metaData": {
+      "entityId": "TrophyGoblinBruteBrosBrute"
+    }
+  },
+  {
+    "id": "item_trophy_goblinshaman",
+    "name": "Fuling Shaman Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Even killing it couldn't wipe the knowing smile from its crooked lips...",
+    "icon": "/img/valheim/itens/Trophy/TrophyGoblinShaman.webp",
+    "metaData": {
+      "entityId": "TrophyGoblinShaman"
+    }
+  },
+  {
+    "id": "item_trophy_greydwarfbrute",
+    "name": "Greydwarf Brute Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "It took seven blows to hack this gnarled head from its body.",
+    "icon": "/img/valheim/itens/Trophy/TrophyGreydwarfBrute.webp",
+    "metaData": {
+      "entityId": "TrophyGreydwarfBrute"
+    }
+  },
+  {
+    "id": "item_trophy_greydwarfshaman",
+    "name": "Greydwarf Shaman Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "It may try to come back so be sure to prune any new shoots...",
+    "icon": "/img/valheim/itens/Trophy/TrophyGreydwarfShaman.webp",
+    "metaData": {
+      "entityId": "TrophyGreydwarfShaman"
+    }
+  },
+  {
+    "id": "item_trophy_growth",
+    "name": "Growth Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "A black and sticky mess.",
+    "icon": "/img/valheim/itens/Trophy/TrophyGrowth.webp",
+    "metaData": {
+      "entityId": "TrophyGrowth"
+    }
+  },
+  {
+    "id": "item_trophy_hatchling",
+    "name": "Drake Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Still cold to the touch.",
+    "icon": "/img/valheim/itens/Trophy/TrophyHatchling.webp",
+    "metaData": {
+      "entityId": "TrophyHatchling"
+    }
+  },
+  {
+    "id": "item_trophy_morgen",
+    "name": "Morgen Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "The waking nightmare has met its end.",
+    "icon": "/img/valheim/itens/Trophy/TrophyMorgen.webp",
+    "metaData": {
+      "entityId": "TrophyMorgen"
+    }
+  },
+  {
+    "id": "item_trophy_seeker",
+    "name": "Seeker Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Less delicate than they look. The leather of the wings catches the firelight as if remembering flight.",
+    "icon": "/img/valheim/itens/Trophy/TrophySeeker.webp",
+    "metaData": {
+      "entityId": "TrophySeeker"
+    }
+  },
+  {
+    "id": "item_trophy_sgolem",
+    "name": "Stone Golem Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "This crystalline rock formation would make for an impressive floor decoration.",
+    "icon": "/img/valheim/itens/Trophy/TrophySGolem.webp",
+    "metaData": {
+      "entityId": "TrophySGolem"
+    }
+  },
+  {
+    "id": "item_trophy_tick",
+    "name": "Tick Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "It's a conversation piece...",
+    "icon": "/img/valheim/itens/Trophy/TrophyTick.webp",
+    "metaData": {
+      "entityId": "TrophyTick"
+    }
+  },
+  {
+    "id": "item_trophy_ulv",
+    "name": "Ulv Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "A rugged tail from a not so good boy.",
+    "icon": "/img/valheim/itens/Trophy/TrophyUlv.webp",
+    "metaData": {
+      "entityId": "TrophyUlv"
+    }
+  },
+  {
+    "id": "item_trophy_volture",
+    "name": "Volture Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "It's like a vulture, but it thrives in volcanic climates.",
+    "icon": "/img/valheim/itens/Trophy/TrophyVolture.webp",
+    "metaData": {
+      "entityId": "TrophyVolture"
+    }
+  },
+  {
+    "id": "item_trophy_wraith",
+    "name": "Wraith Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "The shed skin of a wraith, a flowing robe only visible by moonlight.",
+    "icon": "/img/valheim/itens/Trophy/TrophyWraith.webp",
+    "metaData": {
+      "entityId": "TrophyWraith"
+    }
+  },
+  {
+    "id": "TrophyBjorn",
+    "name": "Bear Trophy",
+    "category": [
+      "Trophy"
+    ],
+    "description": "Bear Trophy but its labeled Bjorn",
+    "icon": "/img/valheim/itens/Trophy/TrophyBjorn.webp",
+    "metaData": {
+      "entityId": "TrophyBjorn"
+    }
+  }
+]

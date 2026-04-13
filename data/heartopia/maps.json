@@ -1,0 +1,16 @@
+[
+  {
+    "id": "main",
+    "name": "Mapa Global",
+    "type": "single",
+    "url": "/map/heartopia/map.png",
+    "bounds": [
+      [-790.57, -790.57],
+      [790.57, 790.57]
+    ],
+    "minZoom": 2,
+    "maxZoom": 4,
+    "thumbnail": "/map/heartopia/map.png",
+    "availableViews": ["map", "dashboard"]
+  }
+]

@@ -1,0 +1,72 @@
+[
+  {
+    "id": "biome_meadows",
+    "type": "biome",
+    "name": "Meadows",
+    "description": "Starting biome of new worlds filled with Birch, Beech, and Oak trees which is inhabited by low level mobs.",
+    "thumb": "/img/valheim/maps/biomes/meadows.webp"
+  },
+  {
+    "id": "biome_black_forest",
+    "type": "biome",
+    "name": "Black Forest",
+    "description": "Dark and hostile forest of Fir and Pine trees with more resources, including Corewood, Tin, and Copper.",
+    "thumb": "/img/valheim/maps/biomes/blackforest.webp"
+  },
+  {
+    "id": "biome_ocean",
+    "type": "biome",
+    "name": "Ocean",
+    "description": "Found off the coast in deep waters. Home to Leviathans and Sea Serpents.",
+    "thumb": "/img/valheim/maps/biomes/ocean.webp"
+  },
+  {
+    "id": "biome_swamp",
+    "type": "biome",
+    "name": "Swamp",
+    "description": "Dangerous, shadowy area with shallow water full of Leeches, Crypts filled with Draugrs, and poisonous Blobs.",
+    "thumb": "/img/valheim/maps/biomes/swamp.webp"
+  },
+  {
+    "id": "biome_mountain",
+    "type": "biome",
+    "name": "Mountain",
+    "description": "Tall frozen mountains teeming with Wolves and flying Drakes that resist the biome's biting cold.",
+    "thumb": "/img/valheim/maps/biomes/mountain.webp"
+  },
+  {
+    "id": "biome_plains",
+    "type": "biome",
+    "name": "Plains",
+    "description": "Warm sunny area with golden grass and killer bugs. Home to the Fuling clan, Lox and Deathsquitoes.",
+    "thumb": "/img/valheim/maps/biomes/plains.webp"
+  },
+  {
+    "id": "biome_mistlands",
+    "type": "biome",
+    "name": "Mistlands",
+    "description": "A fog-covered land with rocky terrain and Yggdrasil shoots, inhabited by Hares, Dvergrs and hostile insects such as Seekers.",
+    "thumb": "/img/valheim/maps/biomes/mistlands.webp"
+  },
+  {
+    "id": "biome_ashlands",
+    "type": "biome",
+    "name": "Ashlands",
+    "description": "A fiery realm, the terrain changes the more inland one travels, with central parts taken up by lava. The undead army of Charred make up most of the population.",
+    "thumb": "/img/valheim/maps/biomes/ashlands.webp"
+  },
+  {
+    "id": "biome_deep_north",
+    "type": "biome",
+    "name": "Deep North",
+    "description": "Snow-capped hills with frozen rivers in the far north of Valheim.",
+    "thumb": "/img/valheim/maps/biomes/deepnorth.webp"
+  },
+  {
+    "id": "biome_desert",
+    "type": "biome",
+    "name": "Desert",
+    "description": "A desert-like area beyond the world’s edge waterfall, accessible only with god mode.",
+    "thumb": "/img/valheim/maps/biomes/desert.png"
+  }
+]

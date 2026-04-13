@@ -1,0 +1,50 @@
+[
+  {
+    "id": "item_torch",
+    "name": "Torch",
+    "category": [
+      "Torch"
+    ],
+    "description": "It brings light and warmth, drives back the darkness.",
+    "icon": "/img/valheim/itens/Torch/Torch.webp",
+    "metaData": {
+      "entityId": "Torch"
+    }
+  },
+  {
+    "id": "item_torchmist",
+    "name": "[item_torchmist]",
+    "category": [
+      "Torch"
+    ],
+    "description": "It brings light and warmth, drives back the darkness.",
+    "icon": "/img/valheim/itens/Torch/TorchMist.webp",
+    "metaData": {
+      "entityId": "TorchMist"
+    }
+  },
+  {
+    "id": "item_lantern",
+    "name": "Dvergr Lantern",
+    "category": [
+      "Torch"
+    ],
+    "description": "A simple torch would just be so old fashioned.",
+    "icon": "/img/valheim/itens/Torch/Lantern.webp",
+    "metaData": {
+      "entityId": "Lantern"
+    }
+  },
+  {
+    "id": "item_sparkler",
+    "name": "Sparkler",
+    "category": [
+      "Torch"
+    ],
+    "description": "It's a stick that sparkles. Pretty!",
+    "icon": "/img/valheim/itens/Torch/Sparkler.webp",
+    "metaData": {
+      "entityId": "Sparkler"
+    }
+  }
+]

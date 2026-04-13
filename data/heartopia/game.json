@@ -1,0 +1,12 @@
+{
+  "id": "heartopia",
+  "resetes": {
+    "diario": {
+      "horario": 6
+    },
+    "semanal": {
+      "horario": 0,
+      "dia": "segunda"
+    }
+  }
+}

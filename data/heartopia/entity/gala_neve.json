@@ -1,0 +1,11 @@
+﻿[
+  {
+    "id": "cooking_pinguim",
+    "name": "Fogão Pinguim",
+    "category": [
+      "station",
+      "cooking_pinguim"
+    ],
+    "icon": "/img/heartopia/eletrodomestico/fogao_pinguim.png"
+  }
+]

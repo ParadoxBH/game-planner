@@ -1,0 +1,110 @@
+[
+  {
+    "id": "guarda_sol_cafe_livre",
+    "name": "Guada Sol de Café Livre",
+    "category": ["social"],
+    "icon": "/img/heartopia/ferramentas/guarda_sol_cafe_livre.png"
+  },
+  {
+    "id": "arvore_fogos_iridescente_laranja",
+    "name": "Arvore de Fogos Iridescente Laranja",
+    "category": ["social", "firework"],
+    "icon": "/img/heartopia/outros/arvore_fogos_iridescente_laranja.png"
+  },
+  {
+    "id": "arvore_fogos_iridescente_rosa",
+    "name": "Arvore de Fogos Iridescente Rosa",
+    "category": ["social", "firework"],
+    "icon": "/img/heartopia/outros/arvore_fogos_iridescente_rosa.png"
+  },
+  {
+    "id": "fogos_estelares",
+    "name": "Fogos Estelares",
+    "category": ["social", "firework"],
+    "icon": "/img/heartopia/outros/fogos_estelares.png"
+  },
+  {
+    "id": "fogos_iridescentes_amarelo",
+    "name": "Fogos Iridescente Estelar",
+    "category": ["social", "firework"],
+    "icon": "/img/heartopia/outros/fogos_iridescentes_amarelo.png"
+  },
+  {
+    "id": "fogos_leao_sorte",
+    "name": "Fogos Leão da Sorte",
+    "category": ["social", "firework"],
+    "icon": "/img/heartopia/outros/fogos_leao_sorte.png"
+  },
+  {
+    "id": "fogos_musicais",
+    "name": "Fogos Musicais",
+    "category": ["social", "firework"],
+    "icon": "/img/heartopia/outros/fogos_musicais.png"
+  },
+  {
+    "id": "foguete_iridescente_amarelo",
+    "name": "Foguete Iridescente Amarelo",
+    "category": ["social", "firework"],
+    "icon": "/img/heartopia/outros/foguete_iridescente_amarelo.png"
+  },
+  {
+    "id": "fumaca_fria_iridescente_laranja",
+    "name": "Fumaça Fria Iridescente Laranja",
+    "category": ["social", "firework"],
+    "icon": "/img/heartopia/outros/fumaca_fria_iridescente_laranja.png"
+  },
+  {
+    "id": "fumaca_fria_iridescente_rosa",
+    "name": "Fumaça Fria Iridescente Rosa",
+    "category": ["social", "firework"],
+    "icon": "/img/heartopia/outros/fumaca_fria_iridescente_rosa.png"
+  },
+  {
+    "id": "liquido_bolha_lhama_branca",
+    "name": "Liquido de Bolhas Lhama Branca",
+    "category": ["social"],
+    "icon": "/img/heartopia/outros/liquido_bolha_lhama_branca.png"
+  },
+  {
+    "id": "rosa_pluma_nevada",
+    "name": "Rosa Pluma Nevada",
+    "category": ["social"],
+    "icon": "/img/heartopia/outros/rosa_pluma_nevada.png"
+  },
+  {
+    "id": "varinha_magica_iridescente_verde",
+    "name": "Varinha Magica Iridescente Verde",
+    "category": ["social", "firework"],
+    "icon": "/img/heartopia/outros/varinha_magica_iridescente_verde.png"
+  },
+  {
+    "id": "varinha_magica_iridescente_azul",
+    "name": "Varinha Magica Iridescente Azul",
+    "category": ["social", "firework"],
+    "icon": "/img/heartopia/outros/varinha_magica_iridescente_azul.png"
+  },
+  {
+    "id": "varinha_magica_iridescente_laranja",
+    "name": "Varinha Magica Iridescente Laranja",
+    "category": ["social", "firework"],
+    "icon": "/img/heartopia/outros/varinha_magica_iridescente_laranja.png"
+  },
+  {
+    "id": "varinha_magica_iridescente_rosa",
+    "name": "Varinha Magica Iridescente Rosa",
+    "category": ["social", "firework"],
+    "icon": "/img/heartopia/outros/varinha_magica_iridescente_rosa.png"
+  },
+  {
+    "id": "varinha_magica_iridescente_roxo",
+    "name": "Varinha Magica Iridescente Roxo",
+    "category": ["social", "firework"],
+    "icon": "/img/heartopia/outros/varinha_magica_iridescente_roxo.png"
+  },
+  {
+    "id": "tubo_fogos_primaveris",
+    "name": "Tubo de Fogos Primaveris",
+    "category": ["social", "firework"],
+    "icon": "/img/heartopia/outros/tubo_fogos_primaveris.png"
+  }
+]

@@ -1,0 +1,29 @@
+[
+    {
+        "id": "agriculture",
+        "name": "Agricultura",
+        "description": "Plantas e Vegetais"
+    },
+    {
+        "id": "seed_vegetable",
+        "name": "Sementes de Vegetais",
+        "description": "Sementes fundamentais para iniciar sua plantação de alimentos."
+    },
+    {
+        "id": "berry",
+        "name": "Frutinhas",
+        "icon": "/img/heartopia/recursos/mirtilo.png"
+    },
+    {
+        "id": "vegetable",
+        "name": "Vegetais"
+    },
+    {
+        "id": "seed",
+        "name": "Sementes"
+    },
+    {
+        "id": "fruit",
+        "name": "Frutas"
+    }
+]

@@ -1,0 +1,36 @@
+﻿[
+  {
+    "id": "tool",
+    "name": "Ferramentas",
+    "description": "Equipamentos essenciais para realizar tarefas diárias em Heartopia."
+  },
+  {
+    "id": "fishing",
+    "name": "Vara de Pesca",
+    "icon": "/img/heartopia/ferramentas/vara_pesca.png"
+  },
+  {
+    "id": "watering",
+    "name": "Regadores",
+    "icon": "/img/heartopia/ferramentas/regador.png"
+  },
+  {
+    "id": "binoculars",
+    "name": "Oculos de Observação",
+    "icon": "/img/heartopia/ferramentas/scanner_passaro.png"
+  },
+  {
+    "id": "builder",
+    "name": "Ferramenta de Construção",
+    "icon": "/img/heartopia/ferramentas/tablet.png"
+  },
+  {
+    "id": "mining",
+    "name": "Mineração"
+  },
+  {
+    "id": "woodencut",
+    "name": "Machados",
+    "icon": "/img/heartopia/ferramentas/machado.png"
+  }
+]

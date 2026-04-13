@@ -1,0 +1,178 @@
+[
+    {
+        "id": "set_margarida",
+        "name": "Margaridas",
+        "category": "flowers",
+        "items": [
+            "margarida_vermelha",
+            "margarida_branca",
+            "margarida_rosa",
+            "margarida_pessego",
+            "margarida_verde",
+            "margarida_luminosa"
+        ]
+    },
+    {
+        "id": "set_amor_perfeito",
+        "name": "Amores-perfeitos",
+        "category": "flowers",
+        "items": [
+            "amor_perfeito_vermelho",
+            "amor_perfeito_amarelo",
+            "amor_perfeito_laranja",
+            "amor_perfeito_preto",
+            "amor_perfeito_roxo",
+            "amor_perfeito_arrebol"
+        ]
+    },
+    {
+        "id": "set_anturio",
+        "name": "Antúrios",
+        "category": "flowers",
+        "items": [
+            "anturio_vermelho",
+            "anturio_amarelo",
+            "anturio_branco",
+            "anturio_laranja",
+            "anturio_rosa",
+            "anturio_pessego",
+            "anturio_verde",
+            "anturio_luminoso"
+        ]
+    },
+    {
+        "id": "set_papoula",
+        "name": "Papoulas",
+        "category": "flowers",
+        "items": [
+            "papoula_vermelha",
+            "papoula_amarela",
+            "papoula_branca",
+            "papoula_laranja",
+            "papoula_rosa",
+            "papoula_preta",
+            "papoula_roxa",
+            "papoula_arrebol"
+        ]
+    },
+    {
+        "id": "set_copo_leite",
+        "name": "Copos-de-leite",
+        "category": "flowers",
+        "items": [
+            "copo_leite_vermelha",
+            "copo_leite_amarela",
+            "copo_leite_branca",
+            "copo_leite_laranja",
+            "copo_leite_rosa",
+            "copo_leite_preto",
+            "copo_leite_pessego",
+            "copo_leite_roxo",
+            "copo_leite_arrebol"
+        ]
+    },
+    {
+        "id": "set_gloria_manha",
+        "name": "Glórias-da-manhã",
+        "category": "flowers",
+        "items": [
+            "gloria_manha_vermelha",
+            "gloria_manha_amarela",
+            "gloria_manha_branca",
+            "gloria_manha_laranja",
+            "gloria_manha_rosa",
+            "gloria_manha_preta",
+            "gloria_manha_pessego",
+            "gloria_manha_roxa",
+            "gloria_manha_luminosa"
+        ]
+    },
+    {
+        "id": "set_cravo",
+        "name": "Cravos",
+        "category": "flowers",
+        "items": [
+            "cravo_vermelho",
+            "cravo_amarelo",
+            "cravo_branco",
+            "cravo_laranja",
+            "cravo_rosa",
+            "cravo_preto",
+            "cravo_pessego",
+            "cravo_verde",
+            "cravo_luminoso"
+        ]
+    },
+    {
+        "id": "set_tulipa",
+        "name": "Tulipas",
+        "category": "flowers",
+        "items": [
+            "tulipa_vermelha",
+            "tulipa_amarela",
+            "tulipa_branca",
+            "tulipa_laranja",
+            "tulipa_rosa",
+            "tulipa_preta",
+            "tulipa_pessego",
+            "tulipa_roxa",
+            "tulipa_azul",
+            "tulipa_arrebol"
+        ]
+    },
+    {
+        "id": "set_lirio",
+        "name": "Lírios",
+        "category": "flowers",
+        "items": [
+            "lirio_vermelho",
+            "lirio_amarelo",
+            "lirio_branco",
+            "lirio_laranja",
+            "lirio_rosa",
+            "lirio_preto",
+            "lirio_pessego",
+            "lirio_roxa",
+            "lirio_verde",
+            "lirio_arrebol"
+        ]
+    },
+    {
+        "id": "set_rosa",
+        "name": "Rosa",
+        "category": "flowers",
+        "items": [
+            "rosa_vermelha",
+            "rosa_amarela",
+            "rosa_branca",
+            "rosa_laranja",
+            "rosa_rosa",
+            "rosa_preta",
+            "rosa_pessego",
+            "rosa_roxa",
+            "rosa_azul",
+            "rosa_arrebol",
+            "rosa_luminosa"
+        ]
+    },
+    {
+        "id": "set_dente_leao",
+        "name": "Dente-de-leão",
+        "category": "flowers",
+        "event": [
+            "gala_cinema"
+        ],
+        "items": [
+            "dente_leao_vermelho",
+            "dente_leao_amarelo",
+            "dente_leao_branco",
+            "dente_leao_laranja",
+            "dente_leao_rosa",
+            "dente_leao_preto",
+            "dente_leao_pessego",
+            "dente_leao_roxo",
+            "dente_leao_azul",
+            "dente_leao_luminoso"
+        ]
+    }
+]

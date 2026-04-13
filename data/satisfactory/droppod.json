@@ -1,0 +1,843 @@
+[
+    {
+        "ID": "BP_DropPod14_389",
+        "location": {
+            "x": -43144,
+            "y": 145820,
+            "z": 7472,
+            "rotation": 90
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Armação modular",
+        "RepairItemClass": "Desc_ModularFrame_C",
+        "RepairAmount": 5,
+        "PowerRequired": 0,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -43144,
+                    "y": 145820,
+                    "z": 7472
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod15_821",
+        "location": {
+            "x": -189258.109375,
+            "y": 116331,
+            "z": -1764.3046875,
+            "rotation": 333.73783874511719
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "No Item",
+        "RepairItemClass": "Desc_NoItem",
+        "RepairAmount": 0,
+        "PowerRequired": 0,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -189258.109375,
+                    "y": 116331,
+                    "z": -1764.3046875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod18",
+        "location": {
+            "x": -259577.125,
+            "y": 105048.828125,
+            "z": -1548.1669921875,
+            "rotation": 2.322509765625
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "No Item",
+        "RepairItemClass": "Desc_NoItem",
+        "RepairAmount": 0,
+        "PowerRequired": 0,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -259577.125,
+                    "y": 105048.828125,
+                    "z": -1548.1669921875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod1_0",
+        "location": {
+            "x": -89284,
+            "y": -50630,
+            "z": 16019,
+            "rotation": 72.27044677734375
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "No Item",
+        "RepairItemClass": "Desc_NoItem",
+        "RepairAmount": 0,
+        "PowerRequired": 120,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -89284,
+                    "y": -50630,
+                    "z": 16019
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod1_1",
+        "location": {
+            "x": 293299.28125,
+            "y": 51.754627227783203,
+            "z": 522.8636474609375,
+            "rotation": 309.58193969726562
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Oscilador de Cristal",
+        "RepairItemClass": "Desc_CrystalOscillator_C",
+        "RepairAmount": 8,
+        "PowerRequired": 85,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 293299.28125,
+                    "y": 51.754627227783203,
+                    "z": 522.8636474609375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod1_3",
+        "location": {
+            "x": 46951.75,
+            "y": 221859.125,
+            "z": 5917.33154296875,
+            "rotation": 86.421124053373887
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "No Item",
+        "RepairItemClass": "Desc_NoItem",
+        "RepairAmount": 0,
+        "PowerRequired": 100,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 46951.75,
+                    "y": 221859.125,
+                    "z": 5917.33154296875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod1_9",
+        "location": {
+            "x": -118480.78125,
+            "y": 74929.7578125,
+            "z": 16995.3515625,
+            "rotation": 146.43727111816412
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "No Item",
+        "RepairItemClass": "Desc_NoItem",
+        "RepairAmount": 0,
+        "PowerRequired": 300,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -118480.78125,
+                    "y": 74929.7578125,
+                    "z": 16995.3515625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod20",
+        "location": {
+            "x": 66652.421875,
+            "y": -13642.076171875,
+            "z": 13420.91796875,
+            "rotation": 342.51554870605435
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Viga industrial revestida",
+        "RepairItemClass": "Desc_SteelPlateReinforced_C",
+        "RepairAmount": 3,
+        "PowerRequired": 90,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 66652.421875,
+                    "y": -13642.076171875,
+                    "z": 13420.91796875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod23",
+        "location": {
+            "x": 360285,
+            "y": -217558.578125,
+            "z": 3900.66015625,
+            "rotation": 351.93807983398426
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "No Item",
+        "RepairItemClass": "Desc_NoItem",
+        "RepairAmount": 0,
+        "PowerRequired": 70,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 360285,
+                    "y": -217558.578125,
+                    "z": 3900.66015625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod2_2",
+        "location": {
+            "x": 232255.375,
+            "y": 79925.5546875,
+            "z": -1275.73828125,
+            "rotation": 10.6129150390625
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Motor turbo",
+        "RepairItemClass": "Desc_MotorLightweight_C",
+        "RepairAmount": 2,
+        "PowerRequired": 200,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 232255.375,
+                    "y": 79925.5546875,
+                    "z": -1275.73828125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod3_1",
+        "location": {
+            "x": 17807.6953125,
+            "y": -136922.796875,
+            "z": 13621.9619140625,
+            "rotation": 242.81892395019531
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Rotor",
+        "RepairItemClass": "Desc_Rotor_C",
+        "RepairAmount": 1,
+        "PowerRequired": 0,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 17807.6953125,
+                    "y": -136922.796875,
+                    "z": 13621.9619140625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod3_7",
+        "location": {
+            "x": 275070,
+            "y": -52585,
+            "z": 5980.0810546875,
+            "rotation": 238.39859008789062
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "No Item",
+        "RepairItemClass": "Desc_NoItem",
+        "RepairAmount": 0,
+        "PowerRequired": 0,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 275070,
+                    "y": -52585,
+                    "z": 5980.0810546875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod3_8",
+        "location": {
+            "x": -56987.55859375,
+            "y": -144927.625,
+            "z": 2202.423828125,
+            "rotation": 85.2781982421875
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Rotor",
+        "RepairItemClass": "Desc_Rotor_C",
+        "RepairAmount": 1,
+        "PowerRequired": 120,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -56987.55859375,
+                    "y": -144927.625,
+                    "z": 2202.423828125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod4",
+        "location": {
+            "x": 111212.859375,
+            "y": -113040.625,
+            "z": 12036.1845703125,
+            "rotation": 213.19728851318359
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Parafuso",
+        "RepairItemClass": "Desc_IronScrew_C",
+        "RepairAmount": 15,
+        "PowerRequired": 10,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 111212.859375,
+                    "y": -113040.625,
+                    "z": 12036.1845703125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod40_1163",
+        "location": {
+            "x": 21373.3828125,
+            "y": 132336.28125,
+            "z": 2510.828125,
+            "rotation": 138.03718566894537
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Motor",
+        "RepairItemClass": "Desc_Motor_C",
+        "RepairAmount": 2,
+        "PowerRequired": 40,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 21373.3828125,
+                    "y": 132336.28125,
+                    "z": 2510.828125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod41_8375",
+        "location": {
+            "x": -9988.3759765625,
+            "y": 227625.5,
+            "z": -1017.2890625,
+            "rotation": 80.44390869140625
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Parafuso",
+        "RepairItemClass": "Desc_IronScrew_C",
+        "RepairAmount": 12,
+        "PowerRequired": 40,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -9988.3759765625,
+                    "y": 227625.5,
+                    "z": -1017.2890625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod44_10",
+        "location": {
+            "x": 109775,
+            "y": -162730,
+            "z": 15570,
+            "rotation": 90
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "No Item",
+        "RepairItemClass": "Desc_NoItem",
+        "RepairAmount": 0,
+        "PowerRequired": 70,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 109775,
+                    "y": -162730,
+                    "z": 15570
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod4_4",
+        "location": {
+            "x": 191366.203125,
+            "y": 37694.171875,
+            "z": 5676.720703125,
+            "rotation": 173.83984375
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Computador",
+        "RepairItemClass": "Desc_Computer_C",
+        "RepairAmount": 4,
+        "PowerRequired": 400,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 191366.203125,
+                    "y": 37694.171875,
+                    "z": 5676.720703125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod4_6",
+        "location": {
+            "x": 88323.6953125,
+            "y": 188913.625,
+            "z": 1420.112060546875,
+            "rotation": 309.83279418945312
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "No Item",
+        "RepairItemClass": "Desc_NoItem",
+        "RepairAmount": 0,
+        "PowerRequired": 30,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 88323.6953125,
+                    "y": 188913.625,
+                    "z": 1420.112060546875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod5_10",
+        "location": {
+            "x": 156569.671875,
+            "y": 191767.78125,
+            "z": -9312.1083984375,
+            "rotation": 25.984619140625
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Borracha",
+        "RepairItemClass": "Desc_Rubber_C",
+        "RepairAmount": 4,
+        "PowerRequired": 300,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 156569.671875,
+                    "y": 191767.78125,
+                    "z": -9312.1083984375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod5_13",
+        "location": {
+            "x": -152676.609375,
+            "y": 33864.58984375,
+            "z": 19283.484375,
+            "rotation": 139.51517868041998
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "No Item",
+        "RepairItemClass": "Desc_NoItem",
+        "RepairAmount": 0,
+        "PowerRequired": 256,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -152676.609375,
+                    "y": 33864.58984375,
+                    "z": 19283.484375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod5_26",
+        "location": {
+            "x": 35096.1328125,
+            "y": 16492.3359375,
+            "z": 22705.03515625,
+            "rotation": 181.73770914295255
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Supercomputador",
+        "RepairItemClass": "Desc_ComputerSuper_C",
+        "RepairAmount": 7,
+        "PowerRequired": 420,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 35096.1328125,
+                    "y": 16492.3359375,
+                    "z": 22705.03515625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod5_6",
+        "location": {
+            "x": 127215.8828125,
+            "y": -116866.953125,
+            "z": -1397.322021484375,
+            "rotation": 216.53013610839844
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Borracha",
+        "RepairItemClass": "Desc_Rubber_C",
+        "RepairAmount": 10,
+        "PowerRequired": 100,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 127215.8828125,
+                    "y": -116866.953125,
+                    "z": -1397.322021484375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod7_5615",
+        "location": {
+            "x": -121994,
+            "y": 166916,
+            "z": -49,
+            "rotation": 356.35470581054688
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Viga de Aço",
+        "RepairItemClass": "Desc_SteelPlate_C",
+        "RepairAmount": 4,
+        "PowerRequired": 60,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -121994,
+                    "y": 166916,
+                    "z": -49
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod9_1568",
+        "location": {
+            "x": -129115,
+            "y": 60165,
+            "z": 4800,
+            "rotation": 82.475341796875
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "No Item",
+        "RepairItemClass": "Desc_NoItem",
+        "RepairAmount": 0,
+        "PowerRequired": 150,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -129115,
+                    "y": 60165,
+                    "z": 4800
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod_1145",
+        "location": {
+            "x": -157080.046875,
+            "y": -67028.15625,
+            "z": 11766.45703125,
+            "rotation": 53.30023193359375
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Rotor",
+        "RepairItemClass": "Desc_Rotor_C",
+        "RepairAmount": 4,
+        "PowerRequired": 120,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -157080.046875,
+                    "y": -67028.15625,
+                    "z": 11766.45703125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod_C_1",
+        "location": {
+            "x": 80980,
+            "y": -44100,
+            "z": 8303,
+            "rotation": 158.98030090332031
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Rotor",
+        "RepairItemClass": "Desc_Rotor_C",
+        "RepairAmount": 3,
+        "PowerRequired": 60,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 80980,
+                    "y": -44100,
+                    "z": 8303
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod_C_7",
+        "location": {
+            "x": -247303.5625,
+            "y": -142348.265625,
+            "z": 4524.17041015625,
+            "rotation": 349.60504150390625
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Rotor",
+        "RepairItemClass": "Desc_Rotor_C",
+        "RepairAmount": 4,
+        "PowerRequired": 100,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -247303.5625,
+                    "y": -142348.265625,
+                    "z": 4524.17041015625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_DropPod_C_8",
+        "location": {
+            "x": 64696.55859375,
+            "y": 156038.6875,
+            "z": 14067.2109375,
+            "rotation": 90
+        },
+        "Opened": false,
+        "Looted": false,
+        "RepairItem": "Armação modular",
+        "RepairItemClass": "Desc_ModularFrame_C",
+        "RepairAmount": 6,
+        "PowerRequired": 0,
+        "features": {
+            "properties": {
+                "name": "Drop Pod",
+                "type": "Drop Pod"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 64696.55859375,
+                    "y": 156038.6875,
+                    "z": 14067.2109375
+                },
+                "type": "Point"
+            }
+        }
+    }
+]

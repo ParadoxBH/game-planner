@@ -1,0 +1,50 @@
+[
+  {
+    "id": "item_turretbolt_flametal",
+    "name": "Flametal Missile",
+    "category": [
+      "AmmoNonEquipable"
+    ],
+    "description": "Forged from one of the hardest metals in all of Valheim, this missile is sure to hold off your enemies.",
+    "icon": "/img/valheim/itens/AmmoNonEquipable/TurretBoltFlametal.webp",
+    "metaData": {
+      "entityId": "TurretBoltFlametal"
+    }
+  },
+  {
+    "id": "item_turretbolt",
+    "name": "Black Metal Missile",
+    "category": [
+      "AmmoNonEquipable"
+    ],
+    "description": "These thick missiles can punch through the hide of even the toughest foes.",
+    "icon": "/img/valheim/itens/AmmoNonEquipable/TurretBolt.webp",
+    "metaData": {
+      "entityId": "TurretBolt"
+    }
+  },
+  {
+    "id": "item_turretboltbone",
+    "name": "[item_turretboltbone]",
+    "category": [
+      "AmmoNonEquipable"
+    ],
+    "description": "[item_turretboltbone_description]",
+    "icon": "/img/valheim/itens/AmmoNonEquipable/TurretBoltBone.webp",
+    "metaData": {
+      "entityId": "TurretBoltBone"
+    }
+  },
+  {
+    "id": "item_turretboltwood",
+    "name": "Wooden Missile",
+    "category": [
+      "AmmoNonEquipable"
+    ],
+    "description": "Sturdy wooden missiles that can provide a tough defense against foes.",
+    "icon": "/img/valheim/itens/AmmoNonEquipable/TurretBoltWood.webp",
+    "metaData": {
+      "entityId": "TurretBoltWood"
+    }
+  }
+]

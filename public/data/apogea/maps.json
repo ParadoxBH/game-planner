@@ -1,0 +1,15 @@
+[
+  {
+    "id": "minimap",
+    "name": "Minimap Principal",
+    "type": "layered",
+    "urlPattern": "https://paszqa.github.io/quickapogean/Map/Levels/combined_y{layer}_minimap.png",
+    "layers": 16,
+    "bounds": [
+      [0, 0],
+      [1000, 1000]
+    ],
+    "minZoom": -2,
+    "maxZoom": 2
+  }
+]

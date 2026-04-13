@@ -1,0 +1,544 @@
+[
+  {
+    "id": "blanc_shop",
+    "npcId": "blanc",
+    "resetType": "diario",
+    "name": "Loja de Jardinagem",
+    "groups": [
+      {
+        "name": "Exclusivo da Gala da Neve",
+        "items": [
+          {
+            "id": "semente_papoula_himalaia_vermelha",
+            "conditions": [
+              {
+                "type": "event",
+                "id": "gala_neve",
+                "description": ""
+              }
+            ]
+          },
+          {
+            "id": "semente_papoula_himalaia_amarela",
+            "conditions": [
+              {
+                "type": "event",
+                "id": "gala_neve",
+                "description": ""
+              }
+            ]
+          },
+          {
+            "id": "semente_papoula_himalaia_branca",
+            "conditions": [
+              {
+                "type": "event",
+                "id": "gala_neve",
+                "description": ""
+              }
+            ]
+          },
+          {
+            "id": "semente_nabo",
+            "conditions": [
+              {
+                "type": "event",
+                "id": "gala_neve",
+                "description": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Caixa de Plantas",
+        "items": [
+          {
+            "id": "caixa_planta",
+            "amount": 10,
+            "type": "entity",
+            "resetType": "unique"
+          },
+          {
+            "id": "caixa_planta",
+            "amount": 10,
+            "type": "entity",
+            "resetType": "unique"
+          },
+          {
+            "id": "caixa_planta",
+            "amount": 10,
+            "price": 500,
+            "type": "entity",
+            "resetType": "unique"
+          },
+          {
+            "id": "caixa_planta",
+            "amount": 10,
+            "price": 1700,
+            "type": "entity",
+            "resetType": "unique"
+          }
+        ]
+      },
+      {
+        "name": "Semente de Cultivo",
+        "items": [
+          {
+            "id": "semente_tomate"
+          },
+          {
+            "id": "semente_batata"
+          },
+          {
+            "id": "semente_trigo"
+          },
+          {
+            "id": "semente_alface_americano"
+          },
+          {
+            "id": "semente_abacaxi"
+          },
+          {
+            "id": "semente_cenoura"
+          },
+          {
+            "id": "semente_morango"
+          },
+          {
+            "id": "semente_milho"
+          },
+          {
+            "id": "semente_uva"
+          }
+        ]
+      },
+      {
+        "name": "Semente de Flor",
+        "items": [
+          {
+            "id": "semente_margarida_vermelha"
+          },
+          {
+            "id": "semente_margarida_branca"
+          },
+          {
+            "id": "semente_amor_perfeito_vermelho"
+          },
+          {
+            "id": "semente_amor_perfeito_amarelo"
+          },
+          {
+            "id": "semente_papoula_vermelha"
+          },
+          {
+            "id": "semente_papoula_amarela"
+          },
+          {
+            "id": "semente_papoula_branca"
+          },
+          {
+            "id": "semente_anturio_vermelho"
+          },
+          {
+            "id": "semente_anturio_amarelo"
+          },
+          {
+            "id": "semente_anturio_branco"
+          },
+          {
+            "id": "semente_copo_leite_vermelha"
+          },
+          {
+            "id": "semente_copo_leite_amarela"
+          },
+          {
+            "id": "semente_copo_leite_branca"
+          },
+          {
+            "id": "semente_gloria_manha_vermelha"
+          },
+          {
+            "id": "semente_gloria_manha_amarela"
+          },
+          {
+            "id": "semente_gloria_manha_branca"
+          },
+          {
+            "id": "semente_cravo_vermelha"
+          },
+          {
+            "id": "semente_cravo_amarela"
+          },
+          {
+            "id": "semente_cravo_branca"
+          }
+        ]
+      },
+      {
+        "name": "Ferramenta Especial",
+        "items": [
+          {
+            "id": "fertilizante",
+            "amount": 25,
+            "resetType": "semanal"
+          },
+          {
+            "id": "fertilizante_qualidade",
+            "amount": 12,
+            "resetType": "semanal"
+          },
+          {
+            "id": "po_cultivo_arco_iris",
+            "amount": 100,
+            "resetType": "semanal",
+            "price": 2,
+            "currency": "estrela_desejavel"
+          },
+          {
+            "id": "po_cultivo_arco_iris",
+            "amount": 10,
+            "resetType": "semanal"
+          },
+          {
+            "id": "elixir",
+            "amount": 8,
+            "resetType": "semanal"
+          },
+          {
+            "id": "elixir_qualidade",
+            "amount": 5,
+            "resetType": "semanal"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "massimo_shop",
+    "npcId": "massimo",
+    "resetType": "diario",
+    "name": "Loja de Receitas",
+    "groups": [
+      {
+        "name": "Exclusivo da Gala da Neve",
+        "items": [
+          {
+            "id": "acucar_po",
+            "amount": 50,
+            "conditions": [
+              {
+                "type": "event",
+                "id": "gala_neve",
+                "description": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ingrediente",
+        "items": [
+          {
+            "id": "carne",
+            "amount": 50
+          },
+          {
+            "id": "ovo",
+            "amount": 50
+          },
+          {
+            "id": "leite",
+            "amount": 50
+          },
+          {
+            "id": "queijo",
+            "amount": 50
+          },
+          {
+            "id": "manteiga",
+            "amount": 50
+          },
+          {
+            "id": "graos_cafe",
+            "amount": 50
+          },
+          {
+            "id": "cha_preto",
+            "amount": 50
+          },
+          {
+            "id": "po_matcha",
+            "amount": 50
+          },
+          {
+            "id": "macarrao_arroz",
+            "amount": 50
+          },
+          {
+            "id": "feijao_azuki",
+            "amount": 50
+          },
+          {
+            "id": "oleo",
+            "amount": 50
+          },
+          {
+            "id": "ovo_pasteurizado",
+            "amount": 50
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ka_ching_shop",
+    "npcId": "ka_ching",
+    "resetType": "diario",
+    "name": "Vendedora de Miudezas",
+    "groups": [
+      {
+        "name": "Geral",
+        "items": [
+          {
+            "id": "tintura",
+            "amount": 200
+          },
+          {
+            "id": "kit_reparo",
+            "amount": 200
+          },
+          {
+            "id": "kit_reparo_agil",
+            "amount": 200,
+            "price": 2,
+            "currency": "cristal_luar"
+          }
+        ]
+      },
+      {
+        "name": "Skin das Ferramentas",
+        "items": [
+          {
+            "id": "mesa_artesao",
+            "type": "entity",
+            "amount": 1,
+            "resetType": "unique"
+          }
+        ]
+      },
+      {
+        "name": "Caixa de Quebra-Cabeça",
+        "items": [
+          {
+            "id": "quebra_cabeca_16",
+            "amount": 5
+          },
+          {
+            "id": "quebra_cabeca_36",
+            "amount": 5
+          },
+          {
+            "id": "quebra_cabeca_100",
+            "amount": 3,
+            "price": 80,
+            "currency": "estrela_desejavel"
+          }
+        ]
+      },
+      {
+        "name": "Ferramentas de Criação",
+        "items": [
+          {
+            "id": "prancheta",
+            "type": "entity"
+          },
+          {
+            "id": "tinta_estampa",
+            "amount": 3,
+            "price": 50,
+            "currency": "cristal_luar"
+          },
+          {
+            "id": "mesa_criacao_livros",
+            "type": "entity",
+            "amount": 1,
+            "resetType": "unique"
+          },
+          {
+            "id": "mesa_criacao_livros",
+            "type": "entity",
+            "amount": 1,
+            "resetType": "unique",
+            "price": 30,
+            "currency": "cristal_luar"
+          },
+          {
+            "id": "vitrola_clean",
+            "type": "entity",
+            "amount": 1,
+            "resetType": "unique"
+          },
+          {
+            "id": "vitrola_clean",
+            "type": "entity",
+            "amount": 1,
+            "resetType": "unique",
+            "price": 40,
+            "currency": "cristal_luar"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vanya_shop",
+    "npcId": "vanya",
+    "name": "Loja de Pesca",
+    "groups": [
+      {
+        "name": "Isca",
+        "items": [
+          {
+            "id": "isca",
+            "amount": 50
+          }
+        ]
+      },
+      {
+        "name": "Ferramenta Especial",
+        "items": [
+          {
+            "id": "atrativo_sereia",
+            "amount": 100,
+            "price": 1,
+            "currency": "estrela_desejavel"
+          },
+          {
+            "id": "atrativo_sereia",
+            "amount": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hobby_moda_shop",
+    "npcId": "azure",
+    "name": "Hobby da Moda",
+    "groups": [
+      {
+        "name": "Escultura de Neve",
+        "items": [
+          { 
+            "id": "escultura_neve",
+            "type": "ability",
+            "price": 100,
+            "currency": "estrela_desejavel",
+            "resetType": "unique"
+          },
+          { 
+            "id": "vale_hobby_aprimorado_escultura_neve",
+            "amount": 10,
+            "price": 50,
+            "currency": "estrela_desejavel",
+            "resetType": "unique"
+          },
+          { 
+            "id": "bancada_bola_neve",
+            "type": "entity",
+            "amount": 2,
+            "resetType": "unique"
+          }
+        ]
+      }
+
+    ]
+  },
+  {
+    "id": "pet_shop",
+    "npcId": "sra_joan",
+    "name": "Loja de Pet",
+    "groups": [
+      {
+        "name": "Alimento",
+        "items": [
+          {"id": "racao_gato"},
+          {"id": "racao_cao"},
+          {"id": "alimento_universal_animais"}
+        ]
+      },
+      {
+        "name": "Ferramenta Especial",
+        "items": [
+          {"id": "peixinho_seco_ativo", "currency": "estrela_desejavel", "price": 1},
+          {"id": "peixinho_seco_ativo"},
+          {"id": "racao_cao_ativo", "currency": "estrela_desejavel", "price": 1},
+          {"id": "racao_cao_ativo"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "caca_insetos",
+    "npcId": "naniwa",
+    "name": "Loja de Bicho",
+    "groups": [
+      {
+        "name": "Ferramenta Especial",
+        "resetType": "semanal",
+        "items": [
+          { 
+            "id": "atrativo_abelha_inflavel",
+            "price": 1,
+            "amount": 100,
+            "currency": "estrela_desejavel",
+            "resetType": "semanal"
+          },
+          { 
+            "id": "atrativo_abelha_inflavel",
+            "amount": 10,
+            "resetType": "semanal"
+          },
+          { 
+            "id": "fortificante_onisciente",
+            "price": 2,
+            "currency": "estrela_desejavel",
+            "resetType": "semanal"
+          },
+          { 
+            "id": "fortificante_onisciente",
+            "resetType": "semanal"
+          }
+        ]
+      }
+
+    ]
+  },
+  {
+    "id": "loja_aves",
+    "npcId": "bailey_j",
+    "name": "Loja de Bicho",
+    "groups": [
+      {
+        "name": "Ferramenta Especial",
+        "resetType": "semanal",
+        "items": [
+          { 
+            "id": "apito_automatico",
+            "price": 1,
+            "amount": 100,
+            "currency": "estrela_desejavel",
+            "resetType": "semanal"
+          },
+          { 
+            "id": "apito_automatico",
+            "amount": 10,
+            "resetType": "semanal"
+          }
+        ]
+      }
+
+    ]
+  }
+]

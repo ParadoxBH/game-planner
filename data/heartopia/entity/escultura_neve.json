@@ -1,0 +1,434 @@
+[
+  {
+    "id": "bancada_bola_neve",
+    "name": "Bancada de Bola de Neve",
+    "category": [
+      "station",
+      "bancada_bola_neve",
+      "escultura_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/bancada_bola_neve.png",
+    "buyPrice": 5000,
+    "level": 1
+  },
+  {
+    "id": "maquina_neve",
+    "name": "Maquina de Neve",
+    "category": [
+      "generator",
+      "maquina_neve",
+      "escultura_neve"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/maquina_neve.png",
+    "level": 1
+  },
+  {
+    "id": "algo_neve",
+    "name": "Algo de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/algo_neve.png",
+    "level": 1
+  },
+  {
+    "id": "abelha_naniwa_neve",
+    "name": "Abelha Naniwa de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t1.png",
+    "sellPrice": 225,
+    "level": 1,
+    "variants": [
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t2.png",
+        "level": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t3.png",
+        "level": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t4.png",
+        "level": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/abelha_naniwa_neve_t5.png",
+        "level": 5
+      }
+    ]
+  },
+  {
+    "id": "alce_tata_neve",
+    "name": "Alce Tata de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/alce_tata_neve_t1.png",
+    "level": 1,
+    "variants": [
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/alce_tata_neve_t2.png",
+        "level": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/alce_tata_neve_t3.png",
+        "level": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/alce_tata_neve_t4.png",
+        "level": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/alce_tata_neve_t5.png",
+        "level": 5
+      }
+    ]
+  },
+  {
+    "id": "bloco_iglu",
+    "name": "Bloco de Iglu",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/bloco_iglu_t1.png",
+    "level": 1,
+    "variants": [
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_iglu_t2.png",
+        "level": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_iglu_t3.png",
+        "level": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_iglu_t4.png",
+        "level": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_iglu_t5.png",
+        "level": 5
+      }
+    ]
+  },
+  {
+    "id": "bloco_neve_geometrico",
+    "name": "Bloco de Neve Geometrico",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t1.png",
+    "sellPrice": 155,
+    "level": 1,
+    "variants": [
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t2.png",
+        "level": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t3.png",
+        "level": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t4.png",
+        "level": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/bloco_neve_geometrico_t5.png",
+        "level": 5
+      }
+    ]
+  },
+  {
+    "id": "casquinha_neve",
+    "name": "Casquinha de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/casquinha_neve_t1.png",
+    "level": 1,
+    "variants": [
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/casquinha_neve_t2.png",
+        "level": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/casquinha_neve_t3.png",
+        "level": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/casquinha_neve_t4.png",
+        "level": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/casquinha_neve_t5.png",
+        "level": 5
+      }
+    ]
+  },
+  {
+    "id": "castor_body_neve",
+    "name": "Castor Boby de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t1.png",
+    "sellPrice": 165,
+    "level": 1,
+    "variants": [
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t2.png",
+        "level": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t3.png",
+        "level": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t4.png",
+        "level": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/castor_boby_neve_t5.png",
+        "level": 5
+      }
+    ]
+  },
+  {
+    "id": "cedro_sorridente",
+    "name": "Cedro Sorridente",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t1.png",
+    "sellPrice": 155,
+    "level": 1,
+    "variants": [
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t2.png",
+        "level": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t3.png",
+        "level": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t4.png",
+        "level": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cedro_sorridente_t5.png",
+        "level": 5
+      }
+    ]
+  },
+  {
+    "id": "chef_momo_neve",
+    "name": "Chef Momo de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/chef_momo_neve_t1.png",
+    "level": 1,
+    "variants": [
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/chef_momo_neve_t2.png",
+        "level": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/chef_momo_neve_t3.png",
+        "level": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/chef_momo_neve_t4.png",
+        "level": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/chef_momo_neve_t5.png",
+        "level": 5
+      }
+    ]
+  },
+  {
+    "id": "cisne_dory_neve",
+    "name": "Cisne Dory de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t1.png",
+    "sellPrice": 190,
+    "level": 1,
+    "variants": [
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t2.png",
+        "level": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t3.png",
+        "level": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t4.png",
+        "level": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/cisne_dory_neve_t5.png",
+        "level": 5
+      }
+    ]
+  },
+  {
+    "id": "coala_bebel_neve",
+    "name": "Coala Bebel de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/coala_bebel_neve_t1.png",
+    "level": 1,
+    "variants": [
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coala_bebel_neve_t2.png",
+        "level": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coala_bebel_neve_t3.png",
+        "level": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coala_bebel_neve_t4.png",
+        "level": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coala_bebel_neve_t5.png",
+        "level": 5
+      }
+    ]
+  },
+  {
+    "id": "coelha_nie_neve",
+    "name": "Coelha Nie de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t1.png",
+    "sellPrice": 225,
+    "level": 1,
+    "variants": [
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t2.png",
+        "level": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t3.png",
+        "level": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t4.png",
+        "level": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/coelha_nie_neve_t5.png",
+        "level": 5
+      }
+    ]
+  },
+  {
+    "id": "ovelha_jojo_neve",
+    "name": "Ovelha Jojo de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t1.png",
+    "sellPrice": 225,
+    "level": 1,
+    "variants": [
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t2.png",
+        "level": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t3.png",
+        "level": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t4.png",
+        "level": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ovelha_jojo_neve_t5.png",
+        "level": 5
+      }
+    ]
+  },
+  {
+    "id": "tigrinho_bubu_neve",
+    "name": "Tigrinho Bubu de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/tigrinho_bubu_neve_t1.png",
+    "level": 1,
+    "variants": [
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/tigrinho_bubu_neve_t2.png",
+        "level": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/tigrinho_bubu_neve_t3.png",
+        "level": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/tigrinho_bubu_neve_t4.png",
+        "level": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/tigrinho_bubu_neve_t5.png",
+        "level": 5
+      }
+    ]
+  },
+  {
+    "id": "ursinho_nini_neve",
+    "name": "Ursinho Nini de Neve",
+    "category": [
+      "escultura_neve",
+      "neve_esculpida"
+    ],
+    "icon": "/img/heartopia/skill/escultura_neve/ursinho_nini_t1.png",
+    "level": 1,
+    "variants": [
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ursinho_nini_t2.png",
+        "level": 2
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ursinho_nini_t3.png",
+        "level": 3
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ursinho_nini_t4.png",
+        "level": 4
+      },
+      {
+        "icon": "/img/heartopia/skill/escultura_neve/ursinho_nini_t5.png",
+        "level": 5
+      }
+    ]
+  }
+]

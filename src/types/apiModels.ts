@@ -1,0 +1,122 @@
+import type { Item, Recipe, Entity, Shop, GameEvent, RedemptionCode, GameDataTypes, ReferencePoints, MapMetadata, GameInfo, Conjunto, Category } from "./gameModels";
+
+export interface CategoryDetails {
+  category: Category;
+  items: Item[];
+  entities: Entity[];
+}
+
+
+export interface NormalizedRecipe extends Recipe {
+  normalizedName: string;
+  normalizedStations: string[];
+  normalizedIngredients: { id: string; name?: string; amount: number; type?: GameDataTypes }[];
+  normalizedProducts: { id: string; name?: string; amount: number; type?: GameDataTypes }[];
+}
+
+export interface ItemDetails {
+  item: Item;
+  productionRecipes: NormalizedRecipe[];
+  usagesAsIngredient: NormalizedRecipe[];
+  dropsFrom: Entity[];
+  soldIn: {
+    shop: Shop;
+    shopItem: {
+      id: string;
+      price?: number;
+      currency?: string;
+      amount?: number;
+      size?: 'small' | 'medium' | 'large' | 'extraLarge';
+      disableLink?: boolean;
+      isBest?: boolean;
+    };
+  }[];
+}
+
+export interface EntityDetails {
+  entity: Entity;
+  parent?: Entity;
+  children?: Entity[];
+  potentialSpawns?: {
+    entity: Entity | Item;
+    chance?: number;
+    quantity?: string;
+    conditions?: any;
+  }[];
+  drops: {
+    item?: Item;
+    chance: number;
+    quant: number;
+    maxQuant?: number;
+  }[];
+  recipes: NormalizedRecipe[];
+  referencePoints: ReferencePoints[];
+  shop?: Shop;
+}
+
+export interface ShopDetails {
+  shop: Shop;
+  npc?: Entity;
+}
+
+export interface RecipeDetails {
+  recipe: NormalizedRecipe;
+  ingredients: {
+    id: string;
+    name?: string;
+    amount: number;
+    type?: GameDataTypes;
+    data?: Item | Entity;
+    dataOptions?: (Item | Entity)[];
+  }[];
+  products: {
+    id: string;
+    name?: string;
+    amount: number;
+    type?: GameDataTypes;
+    data?: Item | Entity;
+    dataOptions?: (Item | Entity)[];
+  }[];
+}
+
+export interface GameDataPayload {
+  items: Item[];
+  recipes: Recipe[];
+  entities: Entity[];
+  shops: Shop[];
+  events: GameEvent[];
+  referencePoints: ReferencePoints[];
+  codes: RedemptionCode[];
+  conjuntos: Conjunto[];
+  gameInfo?: GameInfo;
+  maps: MapMetadata[];
+}
+
+export type FilterParams = Record<string, string | string[] | number | boolean | undefined>;
+
+export interface PaginationParams {
+  page?: number;
+  perPage?: number;
+}
+
+export interface SearchOptions {
+  filters?: FilterParams;
+  pagination?: PaginationParams;
+  activeEventIds?: string[];
+}
+
+export interface EventDetails {
+  event: GameEvent;
+  items: Item[];
+  recipes: NormalizedRecipe[];
+  entities: Entity[];
+  conjuntos: Conjunto[];
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  perPage: number;
+  lastPage: number;
+}

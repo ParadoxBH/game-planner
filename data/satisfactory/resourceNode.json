@@ -1,0 +1,3542 @@
+[
+    {
+        "ID": "BP_FrackingSatellite10",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 212492.40625,
+            "y": 138086.90625,
+            "z": -126.02577209472656,
+            "rotation": 155.90834045410156
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 212492.40625,
+                    "y": 138086.90625,
+                    "z": -126.02577209472656
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite100",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 9269.21875,
+            "y": 190201.78125,
+            "z": -10440.81640625,
+            "rotation": 256.04119873046875
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 9269.21875,
+                    "y": 190201.78125,
+                    "z": -10440.81640625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite101",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 3582.625,
+            "y": 187082.125,
+            "z": -10305.05859375,
+            "rotation": 254.4755859375
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 3582.625,
+                    "y": 187082.125,
+                    "z": -10305.05859375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite102",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 185693.71875,
+            "y": -61072.1796875,
+            "z": 5431.79150390625,
+            "rotation": 224.07371520996094
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 185693.71875,
+                    "y": -61072.1796875,
+                    "z": 5431.79150390625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite103_8",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 314408.25,
+            "y": -292941.6875,
+            "z": 1253.293701171875,
+            "rotation": 254.15634155273438
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 314408.25,
+                    "y": -292941.6875,
+                    "z": 1253.293701171875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite108",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -22450.546875,
+            "y": 171714.265625,
+            "z": -27.8046875,
+            "rotation": 336.68330383300781
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -22450.546875,
+                    "y": 171714.265625,
+                    "z": -27.8046875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite109",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -17700.78125,
+            "y": 174876.78125,
+            "z": -70.81640625,
+            "rotation": 258.09548950195312
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -17700.78125,
+                    "y": 174876.78125,
+                    "z": -70.81640625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite11",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 216407.40625,
+            "y": 139499.90625,
+            "z": -212.02577209472656,
+            "rotation": 90
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 216407.40625,
+                    "y": 139499.90625,
+                    "z": -212.02577209472656
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite110",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -16087.40625,
+            "y": 170350.59375,
+            "z": 351.41796875,
+            "rotation": 254.70848083496094
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -16087.40625,
+                    "y": 170350.59375,
+                    "z": 351.41796875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite111",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -15611.966796875,
+            "y": 172710.390625,
+            "z": 239.21427917480469,
+            "rotation": 307.07020568847656
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -15611.966796875,
+                    "y": 172710.390625,
+                    "z": 239.21427917480469
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite112",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -23406.78515625,
+            "y": 174254.375,
+            "z": -437.7421875,
+            "rotation": 246.2100830078125
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -23406.78515625,
+                    "y": 174254.375,
+                    "z": -437.7421875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite113",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -20451.46875,
+            "y": 175654.28125,
+            "z": -99.55859375,
+            "rotation": 255.99880981445312
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -20451.46875,
+                    "y": 175654.28125,
+                    "z": -99.55859375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite114_7",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -111801.46875,
+            "y": 73189.28125,
+            "z": 3120.44140625,
+            "rotation": 336.68526458740229
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -111801.46875,
+                    "y": 73189.28125,
+                    "z": 3120.44140625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite115",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -111814.8125,
+            "y": 71121.2578125,
+            "z": 3061.7578125,
+            "rotation": 232.38262939453125
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -111814.8125,
+                    "y": 71121.2578125,
+                    "z": 3061.7578125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite116",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -107606.78125,
+            "y": 71069.375,
+            "z": 2912.2578125,
+            "rotation": 254.76597595214844
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -107606.78125,
+                    "y": 71069.375,
+                    "z": 2912.2578125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite117",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -104692.40625,
+            "y": 73355.59375,
+            "z": 3096.41796875,
+            "rotation": 257.20872497558594
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -104692.40625,
+                    "y": 73355.59375,
+                    "z": 3096.41796875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite118",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -110139.15625,
+            "y": 75375.21875,
+            "z": 3196.484375,
+            "rotation": 121.6602783203125
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -110139.15625,
+                    "y": 75375.21875,
+                    "z": 3196.484375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite119",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -104200.78125,
+            "y": 70976.78125,
+            "z": 2859.18359375,
+            "rotation": 256.60090637207031
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -104200.78125,
+                    "y": 70976.78125,
+                    "z": 2859.18359375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite12",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 218169.40625,
+            "y": 137548.90625,
+            "z": -209.02577209472656,
+            "rotation": 90
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 218169.40625,
+                    "y": 137548.90625,
+                    "z": -209.02577209472656
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite120",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -108478.46875,
+            "y": 77599.9375,
+            "z": 3709.2578125,
+            "rotation": 256.51092529296875
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -108478.46875,
+                    "y": 77599.9375,
+                    "z": 3709.2578125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite121",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -20347.14453125,
+            "y": 170787.4375,
+            "z": 6.9913640022277832,
+            "rotation": 336.68330383300781
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -20347.14453125,
+                    "y": 170787.4375,
+                    "z": 6.9913640022277832
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite13",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 211685.875,
+            "y": 133160.875,
+            "z": -247.35888671875,
+            "rotation": 110.69669532775879
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 211685.875,
+                    "y": 133160.875,
+                    "z": -247.35888671875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite14",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 225241.625,
+            "y": -309813.3125,
+            "z": 7875.64013671875,
+            "rotation": 115.15671539306641
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 225241.625,
+                    "y": -309813.3125,
+                    "z": 7875.64013671875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite15",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 221785.265625,
+            "y": -308346,
+            "z": 8244.490234375,
+            "rotation": 34.837051391601562
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 221785.265625,
+                    "y": -308346,
+                    "z": 8244.490234375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite16",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 220214.53125,
+            "y": -310720.59375,
+            "z": 7879.724609375,
+            "rotation": 36.297374725341797
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 220214.53125,
+                    "y": -310720.59375,
+                    "z": 7879.724609375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite17",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 226487.78125,
+            "y": -313623.96875,
+            "z": 8160.9453125,
+            "rotation": 35.903430938720703
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 226487.78125,
+                    "y": -313623.96875,
+                    "z": 8160.9453125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite18_3",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 126644,
+            "y": 253042,
+            "z": -372,
+            "rotation": 90
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 126644,
+                    "y": 253042,
+                    "z": -372
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite19",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 221263.53125,
+            "y": -312256.59375,
+            "z": 7931.724609375,
+            "rotation": 36.206462860107422
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 221263.53125,
+                    "y": -312256.59375,
+                    "z": 7931.724609375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite2",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 125104,
+            "y": 256475,
+            "z": 734,
+            "rotation": 64.085752487182617
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 125104,
+                    "y": 256475,
+                    "z": 734
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite20",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 223981.328125,
+            "y": -314008.65625,
+            "z": 7867.1240234375,
+            "rotation": 36.206462860107422
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 223981.328125,
+                    "y": -314008.65625,
+                    "z": 7867.1240234375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite21",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -253679.4375,
+            "y": -187151.625,
+            "z": -1240.98046875,
+            "rotation": 173.98704528808594
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -253679.4375,
+                    "y": -187151.625,
+                    "z": -1240.98046875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite22",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -254692.421875,
+            "y": -191072.625,
+            "z": -1581.98095703125,
+            "rotation": 37.895442962646484
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -254692.421875,
+                    "y": -191072.625,
+                    "z": -1581.98095703125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite23_5",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 226851.625,
+            "y": -311423.3125,
+            "z": 7905.64013671875,
+            "rotation": 36.206462860107422
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 226851.625,
+                    "y": -311423.3125,
+                    "z": 7905.64013671875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite24",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -251958.171875,
+            "y": -191565.8125,
+            "z": -1741.08642578125,
+            "rotation": 66.11512565612793
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -251958.171875,
+                    "y": -191565.8125,
+                    "z": -1741.08642578125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite25",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -249899.390625,
+            "y": -190381.265625,
+            "z": -1739.56640625,
+            "rotation": 65.632028579711914
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -249899.390625,
+                    "y": -190381.265625,
+                    "z": -1739.56640625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite26",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -249449.390625,
+            "y": -188216.265625,
+            "z": -1739.56640625,
+            "rotation": 64.675086975097656
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -249449.390625,
+                    "y": -188216.265625,
+                    "z": -1739.56640625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite27",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -250936.71875,
+            "y": -184679.1875,
+            "z": -1457.1298828125,
+            "rotation": 175.22946929931641
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -250936.71875,
+                    "y": -184679.1875,
+                    "z": -1457.1298828125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite28",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -147628.71875,
+            "y": 125722.8125,
+            "z": 15315.8701171875,
+            "rotation": 144.91499328613281
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -147628.71875,
+                    "y": 125722.8125,
+                    "z": 15315.8701171875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite29",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -144341.71875,
+            "y": 124609.8125,
+            "z": 15387.8701171875,
+            "rotation": 31.805442810058594
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -144341.71875,
+                    "y": 124609.8125,
+                    "z": 15387.8701171875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite3",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 125098.8671875,
+            "y": 254321.4375,
+            "z": 159.65127563476562,
+            "rotation": 89.393887996673584
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 125098.8671875,
+                    "y": 254321.4375,
+                    "z": 159.65127563476562
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite30",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -145715.25,
+            "y": 119442.078125,
+            "z": 15181.5361328125,
+            "rotation": 66.286333084106445
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -145715.25,
+                    "y": 119442.078125,
+                    "z": 15181.5361328125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite31",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -142779.1875,
+            "y": 120243.1875,
+            "z": 15174.9140625,
+            "rotation": 25.154464721679688
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -142779.1875,
+                    "y": 120243.1875,
+                    "z": 15174.9140625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite32",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -141750.375,
+            "y": 121997.734375,
+            "z": 15259.43359375,
+            "rotation": 65.62763786315918
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -141750.375,
+                    "y": 121997.734375,
+                    "z": 15259.43359375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite33",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -142911.4375,
+            "y": 118402.375,
+            "z": 14995.01953125,
+            "rotation": 64.971893310546875
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -142911.4375,
+                    "y": 118402.375,
+                    "z": 14995.01953125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite34",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -145565.4375,
+            "y": 126028.375,
+            "z": 15439.01953125,
+            "rotation": 76.157591819763184
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -145565.4375,
+                    "y": 126028.375,
+                    "z": 15439.01953125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite35",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 87916.731438699731,
+            "y": 102044.87008308432,
+            "z": 10177.966157366371,
+            "rotation": 172.22770746496167
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 87916.731438699731,
+                    "y": 102044.87008308432,
+                    "z": 10177.966157366371
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite36",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 81638.908422022272,
+            "y": 103495.17488275563,
+            "z": 10183.618181055146,
+            "rotation": 12.422854048037777
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 81638.908422022272,
+                    "y": 103495.17488275563,
+                    "z": 10183.618181055146
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite37",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 88734.252694552662,
+            "y": 107722.66855266178,
+            "z": 9991.8256524032004,
+            "rotation": 95.344547877577327
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 88734.252694552662,
+                    "y": 107722.66855266178,
+                    "z": 9991.8256524032004
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite38",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 83093.965433434307,
+            "y": 101821.15873288568,
+            "z": 10216.438786420073,
+            "rotation": 84.795882367301431
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 83093.965433434307,
+                    "y": 101821.15873288568,
+                    "z": 10216.438786420073
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite39",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 87990.496150764186,
+            "y": 105052.11548484782,
+            "z": 10209.372897261968,
+            "rotation": 65.356889387883541
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 87990.496150764186,
+                    "y": 105052.11548484782,
+                    "z": 10209.372897261968
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite4",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 130516,
+            "y": 255126,
+            "z": -294,
+            "rotation": 90
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 130516,
+                    "y": 255126,
+                    "z": -294
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite40",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 86696.747339543334,
+            "y": 99524.28781914289,
+            "z": 10057.585699549238,
+            "rotation": 31.704181180482067
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 86696.747339543334,
+                    "y": 99524.28781914289,
+                    "z": 10057.585699549238
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite41",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 83988.222497963434,
+            "y": 107803.26244792562,
+            "z": 10103.808093779231,
+            "rotation": 145.92053696589835
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 83988.222497963434,
+                    "y": 107803.26244792562,
+                    "z": 10103.808093779231
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite42",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 84661.389312249667,
+            "y": 99202.775670472387,
+            "z": 10049.584516983912,
+            "rotation": 160.42095399591256
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 84661.389312249667,
+                    "y": 99202.775670472387,
+                    "z": 10049.584516983912
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite43",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 81664.467396032051,
+            "y": 106667.91003192309,
+            "z": 10241.16567819312,
+            "rotation": 168.32661927390291
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 81664.467396032051,
+                    "y": 106667.91003192309,
+                    "z": 10241.16567819312
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite44",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 86027.565537094939,
+            "y": 109451.10555456846,
+            "z": 9962.3173471568334,
+            "rotation": 66.049477710234214
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 86027.565537094939,
+                    "y": 109451.10555456846,
+                    "z": 9962.3173471568334
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite45",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 267123.125,
+            "y": 115156.3125,
+            "z": -101.34375,
+            "rotation": 144.32822418212891
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 267123.125,
+                    "y": 115156.3125,
+                    "z": -101.34375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite46",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 264051.5625,
+            "y": 112280.796875,
+            "z": -66.40234375,
+            "rotation": 63.954132080078125
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 264051.5625,
+                    "y": 112280.796875,
+                    "z": -66.40234375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite47",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 264231.3125,
+            "y": 114518.453125,
+            "z": -77.76171875,
+            "rotation": 88.832453012466431
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 264231.3125,
+                    "y": 114518.453125,
+                    "z": -77.76171875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite48",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 271425.28125,
+            "y": 111504.1015625,
+            "z": -102.578125,
+            "rotation": 65.39030647277832
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 271425.28125,
+                    "y": 111504.1015625,
+                    "z": -102.578125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite49",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 269500.40625,
+            "y": 115587.5859375,
+            "z": -83.2890625,
+            "rotation": 64.579669952392578
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 269500.40625,
+                    "y": 115587.5859375,
+                    "z": -83.2890625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite5",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 131025,
+            "y": 257428,
+            "z": 238,
+            "rotation": 90
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 131025,
+                    "y": 257428,
+                    "z": 238
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite50",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 267439.25,
+            "y": 110349.328125,
+            "z": -91.1640625,
+            "rotation": 63.937637329101562
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 267439.25,
+                    "y": 110349.328125,
+                    "z": -91.1640625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite51_1",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -253968.71875,
+            "y": -189214.1875,
+            "z": -1460.1298828125,
+            "rotation": 144.18864440917969
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -253968.71875,
+                    "y": -189214.1875,
+                    "z": -1460.1298828125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite57",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -40199.91015625,
+            "y": -4304.33203125,
+            "z": 25053.796875,
+            "rotation": 106.66911125183105
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -40199.91015625,
+                    "y": -4304.33203125,
+                    "z": 25053.796875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite58",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 313890.5,
+            "y": -287979.46875,
+            "z": 1212.35009765625,
+            "rotation": 335.14364624023438
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 313890.5,
+                    "y": -287979.46875,
+                    "z": 1212.35009765625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite59",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -43758.80078125,
+            "y": -8409.396484375,
+            "z": 25138.8828125,
+            "rotation": 26.049644470214844
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -43758.80078125,
+                    "y": -8409.396484375,
+                    "z": 25138.8828125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite6",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 214659.703125,
+            "y": 137993.515625,
+            "z": -225.07778930664062,
+            "rotation": 111.05141448974609
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 214659.703125,
+                    "y": 137993.515625,
+                    "z": -225.07778930664062
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite60",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -41776.44921875,
+            "y": -9868.3759765625,
+            "z": 25142.185546875,
+            "rotation": 241.46340942382812
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -41776.44921875,
+                    "y": -9868.3759765625,
+                    "z": 25142.185546875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite61",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -38956.8359375,
+            "y": -10362.68359375,
+            "z": 25325.0703125,
+            "rotation": 27.794689178466797
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -38956.8359375,
+                    "y": -10362.68359375,
+                    "z": 25325.0703125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite61_UAID_40B076DF2F79D7DF01_1933830510",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -260625.76744419913,
+            "y": 72573.223094548128,
+            "z": -1188.0452093515823,
+            "rotation": 27.794689000000005
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -260625.76744419913,
+                    "y": 72573.223094548128,
+                    "z": -1188.0452093515823
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite61_UAID_40B076DF2F79D7DF01_2053713511",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -261941.4641892428,
+            "y": 70474.507791159645,
+            "z": -1159.0598926683115,
+            "rotation": 27.794689000000005
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -261941.4641892428,
+                    "y": 70474.507791159645,
+                    "z": -1159.0598926683115
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite61_UAID_40B076DF2F79D8DF01_1587984689",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -264372.74536456197,
+            "y": 76059.467144235139,
+            "z": -1296.5887133538263,
+            "rotation": 358.036875596838
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -264372.74536456197,
+                    "y": 76059.467144235139,
+                    "z": -1296.5887133538263
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite61_UAID_40B076DF2F79D8DF01_1704280690",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -266194.7413896388,
+            "y": 75227.36969408649,
+            "z": -1279.5224458066907,
+            "rotation": 357.94179706971875
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -266194.7413896388,
+                    "y": 75227.36969408649,
+                    "z": -1279.5224458066907
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite61_UAID_40B076DF2F79D8DF01_1999134691",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -263341.78985671391,
+            "y": 72359.806483674547,
+            "z": -1353.6193743512849,
+            "rotation": 347.94992899999994
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -263341.78985671391,
+                    "y": 72359.806483674547,
+                    "z": -1353.6193743512849
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite61_UAID_40B076DF2F79D9DF01_1230935868",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -265378.23486906866,
+            "y": 72493.36655074064,
+            "z": -1342.2883799905421,
+            "rotation": 347.9296781631034
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -265378.23486906866,
+                    "y": 72493.36655074064,
+                    "z": -1342.2883799905421
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite62",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -36959.1328125,
+            "y": -7833.7783203125,
+            "z": 25170.345703125,
+            "rotation": 27.011592864990234
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -36959.1328125,
+                    "y": -7833.7783203125,
+                    "z": 25170.345703125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite63",
+        "Name": "Petróleo bruto",
+        "ClassName": "Desc_LiquidOil_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": -43238.79296875,
+            "y": -6518.9111328125,
+            "z": 25053.646484375,
+            "rotation": 26.8441162109375
+        },
+        "features": {
+            "properties": {
+                "name": "Petróleo bruto",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": -43238.79296875,
+                    "y": -6518.9111328125,
+                    "z": 25053.646484375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite64",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 314277.5,
+            "y": -289755.78125,
+            "z": 1267.870849609375,
+            "rotation": 256.33238220214844
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 314277.5,
+                    "y": -289755.78125,
+                    "z": 1267.870849609375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite65",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 319126.59375,
+            "y": -290062.65625,
+            "z": 1228.4166259765625,
+            "rotation": 276.88414001464844
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 319126.59375,
+                    "y": -290062.65625,
+                    "z": 1228.4166259765625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite66",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 320535.3125,
+            "y": -291279.5625,
+            "z": 1229.567138671875,
+            "rotation": 224.81503295898438
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 320535.3125,
+                    "y": -291279.5625,
+                    "z": 1229.567138671875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite67",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 316513.25,
+            "y": -293371.6875,
+            "z": 1243.293701171875,
+            "rotation": 287.48442077636719
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 316513.25,
+                    "y": -293371.6875,
+                    "z": 1243.293701171875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite68",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 316668.3125,
+            "y": -288089.65625,
+            "z": 1174.041015625,
+            "rotation": 283.10972595214844
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 316668.3125,
+                    "y": -288089.65625,
+                    "z": 1174.041015625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite69",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 188862.859375,
+            "y": -57590.3046875,
+            "z": 5566.1953125,
+            "rotation": 304.00221252441406
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 188862.859375,
+                    "y": -57590.3046875,
+                    "z": 5566.1953125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite7",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 213448.875,
+            "y": 132706.875,
+            "z": -317.35888671875,
+            "rotation": 110.53889083862305
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 213448.875,
+                    "y": 132706.875,
+                    "z": -317.35888671875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite70",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 183113.640625,
+            "y": -55532.7265625,
+            "z": 5512.052734375,
+            "rotation": 225.20013427734375
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 183113.640625,
+                    "y": -55532.7265625,
+                    "z": 5512.052734375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite71",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 182806.09375,
+            "y": -58147.62109375,
+            "z": 5535.63671875,
+            "rotation": 223.768798828125
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 182806.09375,
+                    "y": -58147.62109375,
+                    "z": 5535.63671875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite72",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 186318.421875,
+            "y": -52985.66015625,
+            "z": 5425.97998046875,
+            "rotation": 224.93922424316406
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 186318.421875,
+                    "y": -52985.66015625,
+                    "z": 5425.97998046875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite73",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 183610.296875,
+            "y": -59943.703125,
+            "z": 5585.63671875,
+            "rotation": 238.13465881347656
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 183610.296875,
+                    "y": -59943.703125,
+                    "z": 5585.63671875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite74",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 188079.21875,
+            "y": -54423.78125,
+            "z": 5518.6484375,
+            "rotation": 223.34751892089844
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 188079.21875,
+                    "y": -54423.78125,
+                    "z": 5518.6484375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite75",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 240891.96875,
+            "y": -66618.5625,
+            "z": 6182.66259765625,
+            "rotation": 303.69412231445312
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 240891.96875,
+                    "y": -66618.5625,
+                    "z": 6182.66259765625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite76",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 238332.1875,
+            "y": -69283.015625,
+            "z": 5403.42529296875,
+            "rotation": 255.03605651855469
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 238332.1875,
+                    "y": -69283.015625,
+                    "z": 5403.42529296875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite77",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 242801.65625,
+            "y": -71309.5390625,
+            "z": 5419.41064453125,
+            "rotation": 249.25355529785156
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 242801.65625,
+                    "y": -71309.5390625,
+                    "z": 5419.41064453125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite78",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 239763.4375,
+            "y": -71695.0625,
+            "z": 5256.6591796875,
+            "rotation": 255.61637878417969
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 239763.4375,
+                    "y": -71695.0625,
+                    "z": 5256.6591796875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite79",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 245033.625,
+            "y": -71845.8359375,
+            "z": 4617.3818359375,
+            "rotation": 250.40914916992188
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 245033.625,
+                    "y": -71845.8359375,
+                    "z": 4617.3818359375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite8",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 215726,
+            "y": 132791,
+            "z": -285,
+            "rotation": 111.95907211303711
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 215726,
+                    "y": 132791,
+                    "z": -285
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite80",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 240788,
+            "y": -74885.2421875,
+            "z": 4801.5166015625,
+            "rotation": 223.38983154296875
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 240788,
+                    "y": -74885.2421875,
+                    "z": 4801.5166015625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite81",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 95981.59375,
+            "y": 85227.59375,
+            "z": 10170.4189453125,
+            "rotation": 336.69541931152344
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 95981.59375,
+                    "y": 85227.59375,
+                    "z": 10170.4189453125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite82",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 101158.71875,
+            "y": 85561.3828125,
+            "z": 10250.3388671875,
+            "rotation": 257.93624877929688
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 101158.71875,
+                    "y": 85561.3828125,
+                    "z": 10250.3388671875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite83",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 98700.53125,
+            "y": 86231.9375,
+            "z": 10246.2578125,
+            "rotation": 256.82989501953125
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 98700.53125,
+                    "y": 86231.9375,
+                    "z": 10246.2578125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite84",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 97653.21875,
+            "y": 82023.7734375,
+            "z": 10255.1845703125,
+            "rotation": 256.96617126464844
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 97653.21875,
+                    "y": 82023.7734375,
+                    "z": 10255.1845703125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite85",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 100208.75,
+            "y": 81507.7265625,
+            "z": 10271.408203125,
+            "rotation": 255.80557250976562
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 100208.75,
+                    "y": 81507.7265625,
+                    "z": 10271.408203125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite86",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 102318.71875,
+            "y": 82976.3828125,
+            "z": 10270.3388671875,
+            "rotation": 229.81301879882812
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 102318.71875,
+                    "y": 82976.3828125,
+                    "z": 10270.3388671875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite87",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 99743.53125,
+            "y": 147302.9375,
+            "z": 6441.2578125,
+            "rotation": 336.80937957763672
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 99743.53125,
+                    "y": 147302.9375,
+                    "z": 6441.2578125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite88",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 106354.59375,
+            "y": 139678.59375,
+            "z": 6603.41796875,
+            "rotation": 279.73080444335938
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 106354.59375,
+                    "y": 139678.59375,
+                    "z": 6603.41796875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite89",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 108080.53125,
+            "y": 142057.28125,
+            "z": 6632.44140625,
+            "rotation": 310.25732421875
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 108080.53125,
+                    "y": 142057.28125,
+                    "z": 6632.44140625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite9",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 218040.875,
+            "y": 134223.296875,
+            "z": -187.51669311523438,
+            "rotation": 90
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 218040.875,
+                    "y": 134223.296875,
+                    "z": -187.51669311523438
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite90",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Impure",
+        "EnumPurity": "RP_Inpure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 108262.0625,
+            "y": 145417.828125,
+            "z": 6486.4375,
+            "rotation": 257.11210632324219
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 108262.0625,
+                    "y": 145417.828125,
+                    "z": 6486.4375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite91",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 103179.53125,
+            "y": 141524.9375,
+            "z": 6429.2578125,
+            "rotation": 154.7030029296875
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 103179.53125,
+                    "y": 141524.9375,
+                    "z": 6429.2578125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite92",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 104641.21875,
+            "y": 149304.78125,
+            "z": 6456.18359375,
+            "rotation": 256.04119873046875
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 104641.21875,
+                    "y": 149304.78125,
+                    "z": 6456.18359375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite93",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 100829.71875,
+            "y": 143446.375,
+            "z": 6461.33984375,
+            "rotation": 254.5179443359375
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 100829.71875,
+                    "y": 143446.375,
+                    "z": 6461.33984375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite94",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Normal",
+        "EnumPurity": "RP_Normal",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 100716.75,
+            "y": 149703.71875,
+            "z": 6494.40625,
+            "rotation": 254.67352294921875
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 100716.75,
+                    "y": 149703.71875,
+                    "z": 6494.40625
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite95",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 4933.53125,
+            "y": 184744.28125,
+            "z": -10424.55859375,
+            "rotation": 336.70327758789062
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 4933.53125,
+                    "y": 184744.28125,
+                    "z": -10424.55859375
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite96",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 7164.15625,
+            "y": 183858.4375,
+            "z": -10524.9453125,
+            "rotation": 258.02598571777344
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 7164.15625,
+                    "y": 183858.4375,
+                    "z": -10524.9453125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite97",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 5973.21484375,
+            "y": 189394.375,
+            "z": -10357.7421875,
+            "rotation": 223.7901611328125
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 5973.21484375,
+                    "y": 189394.375,
+                    "z": -10357.7421875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite98",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 9112.53125,
+            "y": 184869.9375,
+            "z": -10505.7421875,
+            "rotation": 257.11143493652344
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 9112.53125,
+                    "y": 184869.9375,
+                    "z": -10505.7421875
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite99",
+        "Name": "Água",
+        "ClassName": "Desc_Water_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Liquid",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 10342.59375,
+            "y": 187520.59375,
+            "z": -10473.58203125,
+            "rotation": 255.80557250976562
+        },
+        "features": {
+            "properties": {
+                "name": "Água",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 10342.59375,
+                    "y": 187520.59375,
+                    "z": -10473.58203125
+                },
+                "type": "Point"
+            }
+        }
+    },
+    {
+        "ID": "BP_FrackingSatellite_2",
+        "Name": "Gás nitrogênio",
+        "ClassName": "Desc_NitrogenGas_C",
+        "Purity": "Pure",
+        "EnumPurity": "RP_Pure",
+        "ResourceForm": "Gas",
+        "NodeType": "Fracking Satellite",
+        "Exploited": false,
+        "location": {
+            "x": 128216,
+            "y": 258878,
+            "z": 890,
+            "rotation": 206.40773773193359
+        },
+        "features": {
+            "properties": {
+                "name": "Gás nitrogênio",
+                "type": "Resource Node"
+            },
+            "geometry": {
+                "coordinates": {
+                    "x": 128216,
+                    "y": 258878,
+                    "z": 890
+                },
+                "type": "Point"
+            }
+        }
+    }
+]

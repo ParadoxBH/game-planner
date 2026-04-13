@@ -1,0 +1,3122 @@
+[
+  {
+    "id": "lox bite",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Asksvin_Bite.webp",
+    "metaData": {
+      "entityId": "Asksvin_Bite"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Asksvin_Headbutt.webp",
+    "metaData": {
+      "entityId": "Asksvin_Headbutt"
+    }
+  },
+  {
+    "id": "lox bite",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Asksvin_Pounce.webp",
+    "metaData": {
+      "entityId": "Asksvin_Pounce"
+    }
+  },
+  {
+    "id": "fireballattack",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/blobtar_attack.webp",
+    "metaData": {
+      "entityId": "blobtar_attack"
+    }
+  },
+  {
+    "id": "boar attack1",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/boar_base_attack.webp",
+    "metaData": {
+      "entityId": "boar_base_attack"
+    }
+  },
+  {
+    "id": "jaws",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/BogWitchKvastur_attack.webp",
+    "metaData": {
+      "entityId": "BogWitchKvastur_attack"
+    }
+  },
+  {
+    "id": "heal",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/bonemass_attack_spawn.webp",
+    "metaData": {
+      "entityId": "bonemass_attack_spawn"
+    }
+  },
+  {
+    "id": "Serpent bite",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/BonemawSerpent_ram.webp",
+    "metaData": {
+      "entityId": "BonemawSerpent_ram"
+    }
+  },
+  {
+    "id": "bonemaw spit",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/BonemawSerpent_spit.webp",
+    "metaData": {
+      "entityId": "BonemawSerpent_spit"
+    }
+  },
+  {
+    "id": "Bow",
+    "name": "Bow",
+    "category": [
+      "Bow"
+    ],
+    "description": "A simple bow.<br/>",
+    "icon": "/img/valheim/itens/Bow/charred_bow.webp",
+    "metaData": {
+      "entityId": "charred_bow"
+    }
+  },
+  {
+    "id": "Charred Sword",
+    "name": "Charred Sword",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/charred_dyrnwyn_greatsword_feint.webp",
+    "metaData": {
+      "entityId": "charred_dyrnwyn_greatsword_feint"
+    }
+  },
+  {
+    "id": "Charred Sword",
+    "name": "Charred Sword",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/charred_fader_greatsword_feint.webp",
+    "metaData": {
+      "entityId": "charred_fader_greatsword_feint"
+    }
+  },
+  {
+    "id": "Charred Sword",
+    "name": "TwoHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/charred_twitcher_scratch_r.webp",
+    "metaData": {
+      "entityId": "charred_twitcher_scratch_r"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/dragon_bite.webp",
+    "metaData": {
+      "entityId": "dragon_bite"
+    }
+  },
+  {
+    "id": "dragon breath",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/dragon_coldbreath_OLD.webp",
+    "metaData": {
+      "entityId": "dragon_coldbreath_OLD"
+    }
+  },
+  {
+    "id": "Dragur axe",
+    "name": "Dragur axe",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/draugr_sword.webp",
+    "metaData": {
+      "entityId": "draugr_sword"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "OneHandedWeapon",
+    "category": [
+      "A crude but useful weapon."
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/A crude but useful weapon./Dverger_meleeAshlands.webp",
+    "metaData": {
+      "entityId": "Dverger_meleeAshlands"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "Club",
+    "category": [
+      "Utility"
+    ],
+    "description": "A crude but useful weapon.",
+    "icon": "/img/valheim/itens/Utility/DvergerStaffSupport.webp",
+    "metaData": {
+      "entityId": "DvergerStaffSupport"
+    }
+  },
+  {
+    "id": "Swing attack",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Abomination_attack1.webp",
+    "metaData": {
+      "entityId": "Abomination_attack1"
+    }
+  },
+  {
+    "id": "Stub to the ground",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Abomination_attack3.webp",
+    "metaData": {
+      "entityId": "Abomination_attack3"
+    }
+  },
+  {
+    "id": "heal",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/bonemass_attack_aoe.webp",
+    "metaData": {
+      "entityId": "bonemass_attack_aoe"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/bonemass_attack_punch.webp",
+    "metaData": {
+      "entityId": "bonemass_attack_punch"
+    }
+  },
+  {
+    "id": "Charred Sword",
+    "name": "Charred Sword",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/charred_dyrnwyn_greatsword_swing.webp",
+    "metaData": {
+      "entityId": "charred_dyrnwyn_greatsword_swing"
+    }
+  },
+  {
+    "id": "Charred Sword",
+    "name": "Charred Sword",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/charred_dyrnwyn_greatsword_thrustfeint.webp",
+    "metaData": {
+      "entityId": "charred_dyrnwyn_greatsword_thrustfeint"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Legs"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Legs/Charred_HipCloth.webp",
+    "metaData": {
+      "entityId": "Charred_HipCloth"
+    }
+  },
+  {
+    "id": "Bow",
+    "name": "Bow",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "A simple bow.<br/>",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/charred_magestaff_fire.webp",
+    "metaData": {
+      "entityId": "charred_magestaff_fire"
+    }
+  },
+  {
+    "id": "Bow",
+    "name": "Bow",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "A simple bow.<br/>",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/charred_magestaff_summon.webp",
+    "metaData": {
+      "entityId": "charred_magestaff_summon"
+    }
+  },
+  {
+    "id": "Bow",
+    "name": "Bow",
+    "category": [
+      "Bow"
+    ],
+    "description": "A simple bow.<br/>",
+    "icon": "/img/valheim/itens/Bow/charred_twitcher_throw.webp",
+    "metaData": {
+      "entityId": "charred_twitcher_throw"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/dragon_claw_left.webp",
+    "metaData": {
+      "entityId": "dragon_claw_left"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "OneHandedWeapon",
+    "category": [
+      "A crude but useful weapon."
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/A crude but useful weapon./DvergerStaffSupport_buff.webp",
+    "metaData": {
+      "entityId": "DvergerStaffSupport_buff"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Chest"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Chest/DvergerSuitArbalest_Ashlands.webp",
+    "metaData": {
+      "entityId": "DvergerSuitArbalest_Ashlands"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Chest"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Chest/DvergerSuitFire.webp",
+    "metaData": {
+      "entityId": "DvergerSuitFire"
+    }
+  },
+  {
+    "id": "StagAttack1",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Eikthyr_flegs_OLD.webp",
+    "metaData": {
+      "entityId": "Eikthyr_flegs_OLD"
+    }
+  },
+  {
+    "id": "spawn",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_Meteors.webp",
+    "metaData": {
+      "entityId": "Fader_Meteors"
+    }
+  },
+  {
+    "id": "Fallen Valkyrie Wingspin",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/fallenvalkyrie_wingspin.webp",
+    "metaData": {
+      "entityId": "fallenvalkyrie_wingspin"
+    }
+  },
+  {
+    "id": "claw",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fenring_attack_fireclaw.webp",
+    "metaData": {
+      "entityId": "Fenring_attack_fireclaw"
+    }
+  },
+  {
+    "id": "claw",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fenring_attack_fireclaw_double.webp",
+    "metaData": {
+      "entityId": "Fenring_attack_fireclaw_double"
+    }
+  },
+  {
+    "id": "spawn",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/gd_king_rootspawn.webp",
+    "metaData": {
+      "entityId": "gd_king_rootspawn"
+    }
+  },
+  {
+    "id": "jaws",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Ghost_attack.webp",
+    "metaData": {
+      "entityId": "Ghost_attack"
+    }
+  },
+  {
+    "id": "gjall spit",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/gjall_attack_spit.webp",
+    "metaData": {
+      "entityId": "gjall_attack_spit"
+    }
+  },
+  {
+    "id": "Brute sword",
+    "name": "Brute sword",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/GoblinBrute_Attack.webp",
+    "metaData": {
+      "entityId": "GoblinBrute_Attack"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Utility"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Utility/GoblinBrute_LegBones.webp",
+    "metaData": {
+      "entityId": "GoblinBrute_LegBones"
+    }
+  },
+  {
+    "id": "Brute sword",
+    "name": "Brute sword",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/GoblinBrute_RageAttack.webp",
+    "metaData": {
+      "entityId": "GoblinBrute_RageAttack"
+    }
+  },
+  {
+    "id": "spawn",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/GoblinKing_Meteors.webp",
+    "metaData": {
+      "entityId": "GoblinKing_Meteors"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/GoblinKing_Nova.webp",
+    "metaData": {
+      "entityId": "GoblinKing_Nova"
+    }
+  },
+  {
+    "id": "scream",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/GoblinKing_Taunt.webp",
+    "metaData": {
+      "entityId": "GoblinKing_Taunt"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Legs"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Legs/GoblinLoin.webp",
+    "metaData": {
+      "entityId": "GoblinLoin"
+    }
+  },
+  {
+    "id": "heal",
+    "name": "heal",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/GoblinShaman_attack_protect_hildir.webp",
+    "metaData": {
+      "entityId": "GoblinShaman_attack_protect_hildir"
+    }
+  },
+  {
+    "id": "Bronze sword",
+    "name": "Bronze sword",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Blood-drinker. A thirsty friend.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/GoblinSword.webp",
+    "metaData": {
+      "entityId": "GoblinSword"
+    }
+  },
+  {
+    "id": "Torch",
+    "name": "Torch",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "It brings light and warmth, drives back the darkness.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/GoblinTorch.webp",
+    "metaData": {
+      "entityId": "GoblinTorch"
+    }
+  },
+  {
+    "id": "jaws",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Greydwarf_attack.webp",
+    "metaData": {
+      "entityId": "Greydwarf_attack"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/dragon_claw_right.webp",
+    "metaData": {
+      "entityId": "dragon_claw_right"
+    }
+  },
+  {
+    "id": "cold ball",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/dragon_spit_shotgun.webp",
+    "metaData": {
+      "entityId": "dragon_spit_shotgun"
+    }
+  },
+  {
+    "id": "Ironhead arrow",
+    "name": "Ironhead arrow",
+    "category": [
+      "Ammo"
+    ],
+    "description": "Fire it with a bow.",
+    "icon": "/img/valheim/itens/Ammo/draugr_arrow.webp",
+    "metaData": {
+      "entityId": "draugr_arrow"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Legs"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Legs/DvergerHairFemale.webp",
+    "metaData": {
+      "entityId": "DvergerHairFemale"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "OneHandedWeapon",
+    "category": [
+      "A crude but useful weapon."
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/A crude but useful weapon./DvergerStaffFire_clusterbomb.webp",
+    "metaData": {
+      "entityId": "DvergerStaffFire_clusterbomb"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Chest"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Chest/DvergerSuitSupport.webp",
+    "metaData": {
+      "entityId": "DvergerSuitSupport"
+    }
+  },
+  {
+    "id": "StagAttack2",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Eikthyr_charge.webp",
+    "metaData": {
+      "entityId": "Eikthyr_charge"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Eikthyr_stomp.webp",
+    "metaData": {
+      "entityId": "Eikthyr_stomp"
+    }
+  },
+  {
+    "id": "Fader Claw Left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_Claw_Left.webp",
+    "metaData": {
+      "entityId": "Fader_Claw_Left"
+    }
+  },
+  {
+    "id": "Fader Claw Right",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_Claw_Right.webp",
+    "metaData": {
+      "entityId": "Fader_Claw_Right"
+    }
+  },
+  {
+    "id": "Fader Fissure",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_Fissure_Intense.webp",
+    "metaData": {
+      "entityId": "Fader_Fissure_Intense"
+    }
+  },
+  {
+    "id": "Fader Jump",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_Jump.webp",
+    "metaData": {
+      "entityId": "Fader_Jump"
+    }
+  },
+  {
+    "id": "Fader Jump",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_Jump_Right.webp",
+    "metaData": {
+      "entityId": "Fader_Jump_Right"
+    }
+  },
+  {
+    "id": "Fader Roar",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_Roar.webp",
+    "metaData": {
+      "entityId": "Fader_Roar"
+    }
+  },
+  {
+    "id": "Fader Wall of Fire",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_WallOfFire.webp",
+    "metaData": {
+      "entityId": "Fader_WallOfFire"
+    }
+  },
+  {
+    "id": "Fallen Valkyrie Claws",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/fallenvalkyrie_screech.webp",
+    "metaData": {
+      "entityId": "fallenvalkyrie_screech"
+    }
+  },
+  {
+    "id": "Fallen Valkyrie Aoe Spin",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/fallenvalkyrie_spin.webp",
+    "metaData": {
+      "entityId": "fallenvalkyrie_spin"
+    }
+  },
+  {
+    "id": "Fallen Valkyrie Claws",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/fallenvalkyrie_taunt.webp",
+    "metaData": {
+      "entityId": "fallenvalkyrie_taunt"
+    }
+  },
+  {
+    "id": "claw",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fenring_attack_claw.webp",
+    "metaData": {
+      "entityId": "Fenring_attack_claw"
+    }
+  },
+  {
+    "id": "Fenring cultist frost",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fenring_attack_frost.webp",
+    "metaData": {
+      "entityId": "Fenring_attack_frost"
+    }
+  },
+  {
+    "id": "claw",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fenring_attack_iceclaw_double.webp",
+    "metaData": {
+      "entityId": "Fenring_attack_iceclaw_double"
+    }
+  },
+  {
+    "id": "claw",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fenring_attack_jump.webp",
+    "metaData": {
+      "entityId": "Fenring_attack_jump"
+    }
+  },
+  {
+    "id": "jaws",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/gd_king_punch.webp",
+    "metaData": {
+      "entityId": "gd_king_punch"
+    }
+  },
+  {
+    "id": "egg drop",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/gjall_attack_egg.webp",
+    "metaData": {
+      "entityId": "gjall_attack_egg"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Legs"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Legs/GoblinBrute_HipCloth.webp",
+    "metaData": {
+      "entityId": "GoblinBrute_HipCloth"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Shoulder"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Shoulder/GoblinBrute_ShoulderGuard.webp",
+    "metaData": {
+      "entityId": "GoblinBrute_ShoulderGuard"
+    }
+  },
+  {
+    "id": "Brute sword",
+    "name": "Brute sword",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/GoblinBruteBros_Attack.webp",
+    "metaData": {
+      "entityId": "GoblinBruteBros_Attack"
+    }
+  },
+  {
+    "id": "Brute sword",
+    "name": "Brute sword",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/GoblinBruteBros_RageAttack.webp",
+    "metaData": {
+      "entityId": "GoblinBruteBros_RageAttack"
+    }
+  },
+  {
+    "id": "fireballattack",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/GoblinShaman_attack_fireball.webp",
+    "metaData": {
+      "entityId": "GoblinShaman_attack_fireball"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "Club",
+    "category": [
+      "Utility"
+    ],
+    "description": "A crude but useful weapon.",
+    "icon": "/img/valheim/itens/Utility/GoblinShaman_Staff_Feathers.webp",
+    "metaData": {
+      "entityId": "GoblinShaman_Staff_Feathers"
+    }
+  },
+  {
+    "id": "jaws",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Greydwarf_elite_attack.webp",
+    "metaData": {
+      "entityId": "Greydwarf_elite_attack"
+    }
+  },
+  {
+    "id": "shaman attack",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Greydwarf_shaman_attack.webp",
+    "metaData": {
+      "entityId": "Greydwarf_shaman_attack"
+    }
+  },
+  {
+    "id": "Slam attack",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Abomination_attack2.webp",
+    "metaData": {
+      "entityId": "Abomination_attack2"
+    }
+  },
+  {
+    "id": "Bat melee",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/bat_melee.webp",
+    "metaData": {
+      "entityId": "bat_melee"
+    }
+  },
+  {
+    "id": "No Beard",
+    "name": "Customization",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/BeardNone.webp",
+    "metaData": {
+      "entityId": "BeardNone"
+    }
+  },
+  {
+    "id": "slime throw",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/bonemass_attack_throw.webp",
+    "metaData": {
+      "entityId": "bonemass_attack_throw"
+    }
+  },
+  {
+    "id": "Serpent bite",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/BonemawSerpent_bite.webp",
+    "metaData": {
+      "entityId": "BonemawSerpent_bite"
+    }
+  },
+  {
+    "id": "CAPE TEST",
+    "name": "CAPE TEST",
+    "category": [
+      "Shoulder"
+    ],
+    "description": "Da cape",
+    "icon": "/img/valheim/itens/Shoulder/CapeTest.webp",
+    "metaData": {
+      "entityId": "CapeTest"
+    }
+  },
+  {
+    "id": "lox bite",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Asksvin_Turnaround.webp",
+    "metaData": {
+      "entityId": "Asksvin_Turnaround"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/babyseeker_attack.webp",
+    "metaData": {
+      "entityId": "babyseeker_attack"
+    }
+  },
+  {
+    "id": "fart",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/blob_attack_aoe.webp",
+    "metaData": {
+      "entityId": "blob_attack_aoe"
+    }
+  },
+  {
+    "id": "fart",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/blobelite_attack_aoe.webp",
+    "metaData": {
+      "entityId": "blobelite_attack_aoe"
+    }
+  },
+  {
+    "id": "Fallen Valkyrie Poison Breath",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/BonemawSerpent_breath.webp",
+    "metaData": {
+      "entityId": "BonemawSerpent_breath"
+    }
+  },
+  {
+    "id": "Serpent Taunt",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/BonemawSerpent_taunt.webp",
+    "metaData": {
+      "entityId": "BonemawSerpent_taunt"
+    }
+  },
+  {
+    "id": "Bow",
+    "name": "Bow",
+    "category": [
+      "Bow"
+    ],
+    "description": "A simple bow.<br/>",
+    "icon": "/img/valheim/itens/Bow/charred_bow_Fader.webp",
+    "metaData": {
+      "entityId": "charred_bow_Fader"
+    }
+  },
+  {
+    "id": "Bow",
+    "name": "Bow",
+    "category": [
+      "Bow"
+    ],
+    "description": "A simple bow.<br/>",
+    "icon": "/img/valheim/itens/Bow/charred_bow_volley_Fader.webp",
+    "metaData": {
+      "entityId": "charred_bow_volley_Fader"
+    }
+  },
+  {
+    "id": "Charred Sword",
+    "name": "Charred Sword",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/charred_fader_greatsword_thrust.webp",
+    "metaData": {
+      "entityId": "charred_fader_greatsword_thrust"
+    }
+  },
+  {
+    "id": "Charred Sword",
+    "name": "Charred Sword",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/charred_greatsword_swing.webp",
+    "metaData": {
+      "entityId": "charred_greatsword_swing"
+    }
+  },
+  {
+    "id": "Charred Sword",
+    "name": "Charred Sword",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/charred_greatsword_thrust.webp",
+    "metaData": {
+      "entityId": "charred_greatsword_thrust"
+    }
+  },
+  {
+    "id": "Charred Sword",
+    "name": "Charred Sword",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/charred_greatsword_thrustfeint.webp",
+    "metaData": {
+      "entityId": "charred_greatsword_thrustfeint"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Helmet"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Helmet/Charred_Helmet.webp",
+    "metaData": {
+      "entityId": "Charred_Helmet"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Chest"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Chest/Charred_MageCloths.webp",
+    "metaData": {
+      "entityId": "Charred_MageCloths"
+    }
+  },
+  {
+    "id": "Charred Sword",
+    "name": "TwoHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/charred_twitcher_scratch_l.webp",
+    "metaData": {
+      "entityId": "charred_twitcher_scratch_l"
+    }
+  },
+  {
+    "id": "Bow",
+    "name": "Bow",
+    "category": [
+      "Bow"
+    ],
+    "description": "A simple bow.<br/>",
+    "icon": "/img/valheim/itens/Bow/charred_bow_volley.webp",
+    "metaData": {
+      "entityId": "charred_bow_volley"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Chest"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Chest/Charred_Breastplate.webp",
+    "metaData": {
+      "entityId": "Charred_Breastplate"
+    }
+  },
+  {
+    "id": "Charred Sword",
+    "name": "Charred Sword",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/charred_dyrnwyn_greatsword_thrust.webp",
+    "metaData": {
+      "entityId": "charred_dyrnwyn_greatsword_thrust"
+    }
+  },
+  {
+    "id": "Charred Sword",
+    "name": "Charred Sword",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/charred_fader_greatsword_swing.webp",
+    "metaData": {
+      "entityId": "charred_fader_greatsword_swing"
+    }
+  },
+  {
+    "id": "Charred Sword",
+    "name": "Charred Sword",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/charred_fader_greatsword_thrustfeint.webp",
+    "metaData": {
+      "entityId": "charred_fader_greatsword_thrustfeint"
+    }
+  },
+  {
+    "id": "Charred Sword",
+    "name": "Charred Sword",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/charred_greatsword_feint.webp",
+    "metaData": {
+      "entityId": "charred_greatsword_feint"
+    }
+  },
+  {
+    "id": "Bow",
+    "name": "Bow",
+    "category": [
+      "Bow"
+    ],
+    "description": "A simple bow.<br/>",
+    "icon": "/img/valheim/itens/Bow/draugr_bow.webp",
+    "metaData": {
+      "entityId": "draugr_bow"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Legs"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Legs/DvergerHairFemale_Redhair.webp",
+    "metaData": {
+      "entityId": "DvergerHairFemale_Redhair"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Helmet"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Helmet/DvergerHairMale_Redbeard.webp",
+    "metaData": {
+      "entityId": "DvergerHairMale_Redbeard"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "OneHandedWeapon",
+    "category": [
+      "A crude but useful weapon."
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/A crude but useful weapon./DvergerMistile.webp",
+    "metaData": {
+      "entityId": "DvergerMistile"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "OneHandedWeapon",
+    "category": [
+      "A crude but useful weapon."
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/A crude but useful weapon./DvergerStaffBlocker.webp",
+    "metaData": {
+      "entityId": "DvergerStaffBlocker"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "OneHandedWeapon",
+    "category": [
+      "A crude but useful weapon."
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/A crude but useful weapon./DvergerStaffFire_fireball.webp",
+    "metaData": {
+      "entityId": "DvergerStaffFire_fireball"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "Club",
+    "category": [
+      "Utility"
+    ],
+    "description": "A crude but useful weapon.",
+    "icon": "/img/valheim/itens/Utility/DvergerStaffIce.webp",
+    "metaData": {
+      "entityId": "DvergerStaffIce"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "OneHandedWeapon",
+    "category": [
+      "A crude but useful weapon."
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/A crude but useful weapon./DvergerStaffIce_icebolt.webp",
+    "metaData": {
+      "entityId": "DvergerStaffIce_icebolt"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Chest"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Chest/DvergerSuitIce.webp",
+    "metaData": {
+      "entityId": "DvergerSuitIce"
+    }
+  },
+  {
+    "id": "Fader Bite",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_Bite.webp",
+    "metaData": {
+      "entityId": "Fader_Bite"
+    }
+  },
+  {
+    "id": "Fader Fissure",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_Fissure.webp",
+    "metaData": {
+      "entityId": "Fader_Fissure"
+    }
+  },
+  {
+    "id": "Fader Jump",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_Jump_Left.webp",
+    "metaData": {
+      "entityId": "Fader_Jump_Left"
+    }
+  },
+  {
+    "id": "Fallen Valkyrie Poison Breath",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/fallenvalkyrie_poisonbreath.webp",
+    "metaData": {
+      "entityId": "fallenvalkyrie_poisonbreath"
+    }
+  },
+  {
+    "id": "cold ball",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/fallenvalkyrie_spit.webp",
+    "metaData": {
+      "entityId": "fallenvalkyrie_spit"
+    }
+  },
+  {
+    "id": "Fenring cultist flames",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fenring_attack_flames.webp",
+    "metaData": {
+      "entityId": "Fenring_attack_flames"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "OneHandedWeapon",
+    "category": [
+      "A crude but useful weapon."
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/A crude but useful weapon./Fenring_attack_IceNova.webp",
+    "metaData": {
+      "entityId": "Fenring_attack_IceNova"
+    }
+  },
+  {
+    "id": "scream",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/gd_king_scream.webp",
+    "metaData": {
+      "entityId": "gd_king_scream"
+    }
+  },
+  {
+    "id": "shaman attack",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/gd_king_shoot.webp",
+    "metaData": {
+      "entityId": "gd_king_shoot"
+    }
+  },
+  {
+    "id": "jaws",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/gd_king_stomp.webp",
+    "metaData": {
+      "entityId": "gd_king_stomp"
+    }
+  },
+  {
+    "id": "gjall taunt",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/gjall_attack_taunt.webp",
+    "metaData": {
+      "entityId": "gjall_attack_taunt"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Chest"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Chest/GoblinArmband.webp",
+    "metaData": {
+      "entityId": "GoblinArmband"
+    }
+  },
+  {
+    "id": "Wraith melee",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Deathsquito_sting.webp",
+    "metaData": {
+      "entityId": "Deathsquito_sting"
+    }
+  },
+  {
+    "id": "dragon breath",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/dragon_coldbreath.webp",
+    "metaData": {
+      "entityId": "dragon_coldbreath"
+    }
+  },
+  {
+    "id": "scream",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/dragon_taunt.webp",
+    "metaData": {
+      "entityId": "dragon_taunt"
+    }
+  },
+  {
+    "id": "Dragur axe",
+    "name": "Dragur axe",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/draugr_axe.webp",
+    "metaData": {
+      "entityId": "draugr_axe"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "OneHandedWeapon",
+    "category": [
+      "A crude but useful weapon."
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/A crude but useful weapon./Dverger_melee.webp",
+    "metaData": {
+      "entityId": "Dverger_melee"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Helmet"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Helmet/DvergerHairMale.webp",
+    "metaData": {
+      "entityId": "DvergerHairMale"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "Club",
+    "category": [
+      "Utility"
+    ],
+    "description": "A crude but useful weapon.",
+    "icon": "/img/valheim/itens/Utility/DvergerStaffFire.webp",
+    "metaData": {
+      "entityId": "DvergerStaffFire"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "Club",
+    "category": [
+      "Utility"
+    ],
+    "description": "A crude but useful weapon.",
+    "icon": "/img/valheim/itens/Utility/DvergerStaffHeal.webp",
+    "metaData": {
+      "entityId": "DvergerStaffHeal"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "OneHandedWeapon",
+    "category": [
+      "A crude but useful weapon."
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/A crude but useful weapon./DvergerStaffHeal_heal.webp",
+    "metaData": {
+      "entityId": "DvergerStaffHeal_heal"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "OneHandedWeapon",
+    "category": [
+      "A crude but useful weapon."
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/A crude but useful weapon./DvergerStaffNova.webp",
+    "metaData": {
+      "entityId": "DvergerStaffNova"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Chest"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Chest/DvergerSuitArbalest.webp",
+    "metaData": {
+      "entityId": "DvergerSuitArbalest"
+    }
+  },
+  {
+    "id": "StagAttack1",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Eikthyr_antler.webp",
+    "metaData": {
+      "entityId": "Eikthyr_antler"
+    }
+  },
+  {
+    "id": "Fader Firebreath",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_Flamebreath.webp",
+    "metaData": {
+      "entityId": "Fader_Flamebreath"
+    }
+  },
+  {
+    "id": "spawn",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_Meteors_Intense.webp",
+    "metaData": {
+      "entityId": "Fader_Meteors_Intense"
+    }
+  },
+  {
+    "id": "Fader Roar",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_Roar_Intense.webp",
+    "metaData": {
+      "entityId": "Fader_Roar_Intense"
+    }
+  },
+  {
+    "id": "Fader Spin",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_Spin.webp",
+    "metaData": {
+      "entityId": "Fader_Spin"
+    }
+  },
+  {
+    "id": "Fader Taunt",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fader_Taunt.webp",
+    "metaData": {
+      "entityId": "Fader_Taunt"
+    }
+  },
+  {
+    "id": "Fallen Valkyrie Claws",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/fallenvalkyrie_claws.webp",
+    "metaData": {
+      "entityId": "fallenvalkyrie_claws"
+    }
+  },
+  {
+    "id": "Fallen Valkyrie swooping",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/fallenvalkyrie_swoopattack.webp",
+    "metaData": {
+      "entityId": "fallenvalkyrie_swoopattack"
+    }
+  },
+  {
+    "id": "claw",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fenring_attack_iceclaw.webp",
+    "metaData": {
+      "entityId": "Fenring_attack_iceclaw"
+    }
+  },
+  {
+    "id": "scream",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Fenring_taunt.webp",
+    "metaData": {
+      "entityId": "Fenring_taunt"
+    }
+  },
+  {
+    "id": "gjall shake",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/gjall_attack_shake.webp",
+    "metaData": {
+      "entityId": "gjall_attack_shake"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Chest"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Chest/GoblinBrute_ArmGuard.webp",
+    "metaData": {
+      "entityId": "GoblinBrute_ArmGuard"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Helmet"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Helmet/GoblinBrute_ExecutionerCap.webp",
+    "metaData": {
+      "entityId": "GoblinBrute_ExecutionerCap"
+    }
+  },
+  {
+    "id": "Brute taunt",
+    "name": "Brute taunt",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/GoblinBrute_Taunt.webp",
+    "metaData": {
+      "entityId": "GoblinBrute_Taunt"
+    }
+  },
+  {
+    "id": "fireballattack",
+    "name": "fireballattack",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/GoblinShaman_attack_fireball_hildir.webp",
+    "metaData": {
+      "entityId": "GoblinShaman_attack_fireball_hildir"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "Club",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A crude but useful weapon.",
+    "icon": "/img/valheim/itens/Helmet/GoblinShaman_Headdress_antlers.webp",
+    "metaData": {
+      "entityId": "GoblinShaman_Headdress_antlers"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "Club",
+    "category": [
+      "Helmet"
+    ],
+    "description": "A crude but useful weapon.",
+    "icon": "/img/valheim/itens/Helmet/GoblinShaman_Headdress_feathers.webp",
+    "metaData": {
+      "entityId": "GoblinShaman_Headdress_feathers"
+    }
+  },
+  {
+    "id": "heal",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Greydwarf_shaman_heal.webp",
+    "metaData": {
+      "entityId": "Greydwarf_shaman_heal"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Helmet"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Helmet/GoblinBrute_Backbones.webp",
+    "metaData": {
+      "entityId": "GoblinBrute_Backbones"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "Club",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A crude but useful weapon.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/GoblinClub.webp",
+    "metaData": {
+      "entityId": "GoblinClub"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Chest"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Chest/GoblinHelmet.webp",
+    "metaData": {
+      "entityId": "GoblinHelmet"
+    }
+  },
+  {
+    "id": "dragon breath",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/GoblinKing_Beam.webp",
+    "metaData": {
+      "entityId": "GoblinKing_Beam"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Chest"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Chest/GoblinLegband.webp",
+    "metaData": {
+      "entityId": "GoblinLegband"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "Club",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "A crude but useful weapon.",
+    "icon": "/img/valheim/itens/OneHandedWeapon/GoblinShaman_attack_poke.webp",
+    "metaData": {
+      "entityId": "GoblinShaman_attack_poke"
+    }
+  },
+  {
+    "id": "heal",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/GoblinShaman_attack_protect.webp",
+    "metaData": {
+      "entityId": "GoblinShaman_attack_protect"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "Club",
+    "category": [
+      "Utility"
+    ],
+    "description": "A crude but useful weapon.",
+    "icon": "/img/valheim/itens/Utility/GoblinShaman_Staff_Bones.webp",
+    "metaData": {
+      "entityId": "GoblinShaman_Staff_Bones"
+    }
+  },
+  {
+    "id": "Club",
+    "name": "Club",
+    "category": [
+      "Utility"
+    ],
+    "description": "A crude but useful weapon.",
+    "icon": "/img/valheim/itens/Utility/GoblinShaman_Staff_Hildir.webp",
+    "metaData": {
+      "entityId": "GoblinShaman_Staff_Hildir"
+    }
+  },
+  {
+    "id": "Iron plate armor",
+    "name": "Iron plate armor",
+    "category": [
+      "Chest"
+    ],
+    "description": "An iron scale mail, this will turn all but the strongest of blows.",
+    "icon": "/img/valheim/itens/Chest/GoblinShoulders.webp",
+    "metaData": {
+      "entityId": "GoblinShoulders"
+    }
+  },
+  {
+    "id": "Flint spear",
+    "name": "Flint spear",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "[item_spearflint_description]",
+    "icon": "/img/valheim/itens/OneHandedWeapon/GoblinSpear.webp",
+    "metaData": {
+      "entityId": "GoblinSpear"
+    }
+  },
+  {
+    "id": "throw stone",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Greydwarf_throw.webp",
+    "metaData": {
+      "entityId": "Greydwarf_throw"
+    }
+  },
+  {
+    "id": "jaws",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Greyling_attack.webp",
+    "metaData": {
+      "entityId": "Greyling_attack"
+    }
+  },
+  {
+    "id": "No Hair",
+    "name": "Customization",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/HairNone.webp",
+    "metaData": {
+      "entityId": "HairNone"
+    }
+  },
+  {
+    "id": "cold ball",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/hatchling_spit_cold.webp",
+    "metaData": {
+      "entityId": "hatchling_spit_cold"
+    }
+  },
+  {
+    "id": "heal",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/hive_attack_aoe.webp",
+    "metaData": {
+      "entityId": "hive_attack_aoe"
+    }
+  },
+  {
+    "id": "slime throw",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/hive_attack_throw.webp",
+    "metaData": {
+      "entityId": "hive_attack_throw"
+    }
+  },
+  {
+    "id": "Mistile Kamikaze",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Mistile_kamikaze.webp",
+    "metaData": {
+      "entityId": "Mistile_kamikaze"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Morgen_bodyslam.webp",
+    "metaData": {
+      "entityId": "Morgen_bodyslam"
+    }
+  },
+  {
+    "id": "Morgen Roll Right",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Morgen_roll_right.webp",
+    "metaData": {
+      "entityId": "Morgen_roll_right"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Morgen_swipe_2.webp",
+    "metaData": {
+      "entityId": "Morgen_swipe_2"
+    }
+  },
+  {
+    "id": "jaws",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Neck_BiteAttack.webp",
+    "metaData": {
+      "entityId": "Neck_BiteAttack"
+    }
+  },
+  {
+    "id": "Bonemass heart",
+    "name": "Bonemass heart",
+    "category": [
+      "Consumable"
+    ],
+    "description": "[item_healthupgrade_description]",
+    "icon": "/img/valheim/itens/Consumable/HealthUpgrade_Bonemass.webp",
+    "metaData": {
+      "entityId": "HealthUpgrade_Bonemass"
+    }
+  },
+  {
+    "id": "dragon breath",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/hive_attack_ranged.webp",
+    "metaData": {
+      "entityId": "hive_attack_ranged"
+    }
+  },
+  {
+    "id": "lox bite",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/lox_bite.webp",
+    "metaData": {
+      "entityId": "lox_bite"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Morgen_swipe_6.webp",
+    "metaData": {
+      "entityId": "Morgen_swipe_6"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/SeekerBrute_bite.webp",
+    "metaData": {
+      "entityId": "SeekerBrute_bite"
+    }
+  },
+  {
+    "id": "Bow",
+    "name": "Bow",
+    "category": [
+      "Bow"
+    ],
+    "description": "A simple bow.<br/>",
+    "icon": "/img/valheim/itens/Bow/skeleton_bow.webp",
+    "metaData": {
+      "entityId": "skeleton_bow"
+    }
+  },
+  {
+    "id": "Stamina Troll",
+    "name": "Stamina Troll",
+    "category": [
+      "Consumable"
+    ],
+    "description": "[item_staminaupgrade_description]",
+    "icon": "/img/valheim/itens/Consumable/StaminaUpgrade_Troll.webp",
+    "metaData": {
+      "entityId": "StaminaUpgrade_Troll"
+    }
+  },
+  {
+    "id": "Spike sweep",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/stonegolem_attack3_spikesweep.webp",
+    "metaData": {
+      "entityId": "stonegolem_attack3_spikesweep"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/troll_groundslam.webp",
+    "metaData": {
+      "entityId": "troll_groundslam"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/seeker_groundslam.webp",
+    "metaData": {
+      "entityId": "seeker_groundslam"
+    }
+  },
+  {
+    "id": "land",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/seeker_land.webp",
+    "metaData": {
+      "entityId": "seeker_land"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/SeekerQueen_Bite.webp",
+    "metaData": {
+      "entityId": "SeekerQueen_Bite"
+    }
+  },
+  {
+    "id": "Bow",
+    "name": "Bow",
+    "category": [
+      "Bow"
+    ],
+    "description": "A simple bow.<br/>",
+    "icon": "/img/valheim/itens/Bow/skeleton_bow2.webp",
+    "metaData": {
+      "entityId": "skeleton_bow2"
+    }
+  },
+  {
+    "id": "Dragur axe",
+    "name": "Dragur axe",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/skeleton_sword.webp",
+    "metaData": {
+      "entityId": "skeleton_sword"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/stonegolem_attack_doublesmash.webp",
+    "metaData": {
+      "entityId": "stonegolem_attack_doublesmash"
+    }
+  },
+  {
+    "id": "Spike attack",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/stonegolem_attack1_spike.webp",
+    "metaData": {
+      "entityId": "stonegolem_attack1_spike"
+    }
+  },
+  {
+    "id": "One hand ground slam",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/stonegolem_attack2_left_groundslam.webp",
+    "metaData": {
+      "entityId": "stonegolem_attack2_left_groundslam"
+    }
+  },
+  {
+    "id": "LOG",
+    "name": "LOG",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/troll_log_swing_v.webp",
+    "metaData": {
+      "entityId": "troll_log_swing_v"
+    }
+  },
+  {
+    "id": "LOG",
+    "name": "LOG",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/troll_summoned_log_swing_v.webp",
+    "metaData": {
+      "entityId": "troll_summoned_log_swing_v"
+    }
+  },
+  {
+    "id": "fireballattack",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/troll_throw.webp",
+    "metaData": {
+      "entityId": "troll_throw"
+    }
+  },
+  {
+    "id": "Bite Attack",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Ulv_attack1_bite.webp",
+    "metaData": {
+      "entityId": "Ulv_attack1_bite"
+    }
+  },
+  {
+    "id": "Slash Attack",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Ulv_attack2_slash.webp",
+    "metaData": {
+      "entityId": "Ulv_attack2_slash"
+    }
+  },
+  {
+    "id": "Volture Talons",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/volture_talons.webp",
+    "metaData": {
+      "entityId": "volture_talons"
+    }
+  },
+  {
+    "id": "jaws",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Leech_BiteAttack.webp",
+    "metaData": {
+      "entityId": "Leech_BiteAttack"
+    }
+  },
+  {
+    "id": "Morgen Roll Left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Morgen_roll_left.webp",
+    "metaData": {
+      "entityId": "Morgen_roll_left"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Morgen_swipe_1.webp",
+    "metaData": {
+      "entityId": "Morgen_swipe_1"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Morgen_swipe_4.webp",
+    "metaData": {
+      "entityId": "Morgen_swipe_4"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Morgen_swipe_5.webp",
+    "metaData": {
+      "entityId": "Morgen_swipe_5"
+    }
+  },
+  {
+    "id": "Unarmed",
+    "name": "Unarmed",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/PlayerUnarmed.webp",
+    "metaData": {
+      "entityId": "PlayerUnarmed"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/seeker_groundslam_flying.webp",
+    "metaData": {
+      "entityId": "seeker_groundslam_flying"
+    }
+  },
+  {
+    "id": "takeoff",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/seeker_takeoff.webp",
+    "metaData": {
+      "entityId": "seeker_takeoff"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/SeekerBrute_groundslam.webp",
+    "metaData": {
+      "entityId": "SeekerBrute_groundslam"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/SeekerQueen_Rush.webp",
+    "metaData": {
+      "entityId": "SeekerQueen_Rush"
+    }
+  },
+  {
+    "id": "Serpent Taunt",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Serpent_taunt.webp",
+    "metaData": {
+      "entityId": "Serpent_taunt"
+    }
+  },
+  {
+    "id": "Wraith melee",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/wraith_melee.webp",
+    "metaData": {
+      "entityId": "wraith_melee"
+    }
+  },
+  {
+    "id": "Elder heart",
+    "name": "Elder heart",
+    "category": [
+      "Consumable"
+    ],
+    "description": "[item_healthupgrade_description]",
+    "icon": "/img/valheim/itens/Consumable/HealthUpgrade_GDKing.webp",
+    "metaData": {
+      "entityId": "HealthUpgrade_GDKing"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/hive_attack_punch.webp",
+    "metaData": {
+      "entityId": "hive_attack_punch"
+    }
+  },
+  {
+    "id": "fireballattack",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/imp_fireball_attack.webp",
+    "metaData": {
+      "entityId": "imp_fireball_attack"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/lox_stomp.webp",
+    "metaData": {
+      "entityId": "lox_stomp"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Morgen_bite.webp",
+    "metaData": {
+      "entityId": "Morgen_bite"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Morgen_swipe_3.webp",
+    "metaData": {
+      "entityId": "Morgen_swipe_3"
+    }
+  },
+  {
+    "id": "Dragur axe",
+    "name": "Dragur axe",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/skeleton_mace.webp",
+    "metaData": {
+      "entityId": "skeleton_mace"
+    }
+  },
+  {
+    "id": "Dragur axe",
+    "name": "Dragur axe",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/skeleton_sword2.webp",
+    "metaData": {
+      "entityId": "skeleton_sword2"
+    }
+  },
+  {
+    "id": "Dragur axe",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/staff_greenroots_tentaroot_attack.webp",
+    "metaData": {
+      "entityId": "staff_greenroots_tentaroot_attack"
+    }
+  },
+  {
+    "id": "Stamina Greydwarf",
+    "name": "Stamina Greydwarf",
+    "category": [
+      "Consumable"
+    ],
+    "description": "[item_staminaupgrade_description]",
+    "icon": "/img/valheim/itens/Consumable/StaminaUpgrade_Greydwarf.webp",
+    "metaData": {
+      "entityId": "StaminaUpgrade_Greydwarf"
+    }
+  },
+  {
+    "id": "Stamina Wraith",
+    "name": "Stamina Wraith",
+    "category": [
+      "Consumable"
+    ],
+    "description": "[item_staminaupgrade_description]",
+    "icon": "/img/valheim/itens/Consumable/StaminaUpgrade_Wraith.webp",
+    "metaData": {
+      "entityId": "StaminaUpgrade_Wraith"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/stonegolem_attack_sonicboom_NOTUSED.webp",
+    "metaData": {
+      "entityId": "stonegolem_attack_sonicboom_NOTUSED"
+    }
+  },
+  {
+    "id": "NULL",
+    "name": "Chest",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/StoneGolem_clubs.webp",
+    "metaData": {
+      "entityId": "StoneGolem_clubs"
+    }
+  },
+  {
+    "id": "NULL",
+    "name": "Chest",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/StoneGolem_spikes.webp",
+    "metaData": {
+      "entityId": "StoneGolem_spikes"
+    }
+  },
+  {
+    "id": "Cheat sword",
+    "name": "Cheat sword",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "Cheater!",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SwordCheat.webp",
+    "metaData": {
+      "entityId": "SwordCheat"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/troll_summoned_groundslam.webp",
+    "metaData": {
+      "entityId": "troll_summoned_groundslam"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/troll_summoned_punch.webp",
+    "metaData": {
+      "entityId": "troll_summoned_punch"
+    }
+  },
+  {
+    "id": "Yagluth thing",
+    "name": "Yagluth thing",
+    "category": [
+      "Material"
+    ],
+    "description": "Placeholder item for Yagluth item drop.",
+    "icon": "/img/valheim/itens/Material/VegvisirShard_Bonemass.webp",
+    "metaData": {
+      "entityId": "VegvisirShard_Bonemass"
+    }
+  },
+  {
+    "id": "WolfAttack2",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Wolf_Attack2.webp",
+    "metaData": {
+      "entityId": "Wolf_Attack2"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/seeker_claw_left.webp",
+    "metaData": {
+      "entityId": "seeker_claw_left"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/seeker_claw_right.webp",
+    "metaData": {
+      "entityId": "seeker_claw_right"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/seeker_pincers.webp",
+    "metaData": {
+      "entityId": "seeker_pincers"
+    }
+  },
+  {
+    "id": "Dragon claw left",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/SeekerBrute_ram.webp",
+    "metaData": {
+      "entityId": "SeekerBrute_ram"
+    }
+  },
+  {
+    "id": "Brute taunt",
+    "name": "Brute taunt",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SeekerBrute_Taunt.webp",
+    "metaData": {
+      "entityId": "SeekerBrute_Taunt"
+    }
+  },
+  {
+    "id": "Brute taunt",
+    "name": "Brute taunt",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SeekerQueen_Call.webp",
+    "metaData": {
+      "entityId": "SeekerQueen_Call"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/SeekerQueen_PierceAOE.webp",
+    "metaData": {
+      "entityId": "SeekerQueen_PierceAOE"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/SeekerQueen_Slap.webp",
+    "metaData": {
+      "entityId": "SeekerQueen_Slap"
+    }
+  },
+  {
+    "id": "dragon breath",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/SeekerQueen_Spit.webp",
+    "metaData": {
+      "entityId": "SeekerQueen_Spit"
+    }
+  },
+  {
+    "id": "Brute taunt",
+    "name": "Brute taunt",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/SeekerQueen_Teleport.webp",
+    "metaData": {
+      "entityId": "SeekerQueen_Teleport"
+    }
+  },
+  {
+    "id": "Serpent bite",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Serpent_attack.webp",
+    "metaData": {
+      "entityId": "Serpent_attack"
+    }
+  },
+  {
+    "id": "Fire Skeleton Sword",
+    "name": "Fire Skeleton Sword",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/skeleton_hildir_firenova.webp",
+    "metaData": {
+      "entityId": "skeleton_hildir_firenova"
+    }
+  },
+  {
+    "id": "Fire Skeleton Sword",
+    "name": "Fire Skeleton Sword",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/skeleton_sword_hildir.webp",
+    "metaData": {
+      "entityId": "skeleton_sword_hildir"
+    }
+  },
+  {
+    "id": "Cheat sledge",
+    "name": "Cheat sledge",
+    "category": [
+      "TwoHandedWeapon"
+    ],
+    "description": "Cheater!",
+    "icon": "/img/valheim/itens/TwoHandedWeapon/SledgeCheat.webp",
+    "metaData": {
+      "entityId": "SledgeCheat"
+    }
+  },
+  {
+    "id": "NULL",
+    "name": "Helmet",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/StoneGolem_hat.webp",
+    "metaData": {
+      "entityId": "StoneGolem_hat"
+    }
+  },
+  {
+    "id": "Dragur axe",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/tentaroot_attack.webp",
+    "metaData": {
+      "entityId": "tentaroot_attack"
+    }
+  },
+  {
+    "id": "boar attack1",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/tick_attack.webp",
+    "metaData": {
+      "entityId": "tick_attack"
+    }
+  },
+  {
+    "id": "boar attack1",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/tick_attack_attach.webp",
+    "metaData": {
+      "entityId": "tick_attack_attach"
+    }
+  },
+  {
+    "id": "LOG",
+    "name": "LOG",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/troll_log_swing_h.webp",
+    "metaData": {
+      "entityId": "troll_log_swing_h"
+    }
+  },
+  {
+    "id": "slap",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/troll_punch.webp",
+    "metaData": {
+      "entityId": "troll_punch"
+    }
+  },
+  {
+    "id": "LOG",
+    "name": "LOG",
+    "category": [
+      "OneHandedWeapon"
+    ],
+    "description": "NULL",
+    "icon": "/img/valheim/itens/OneHandedWeapon/troll_summoned_log_swing_h.webp",
+    "metaData": {
+      "entityId": "troll_summoned_log_swing_h"
+    }
+  },
+  {
+    "id": "fireballattack",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/troll_summoned_throw.webp",
+    "metaData": {
+      "entityId": "troll_summoned_throw"
+    }
+  },
+  {
+    "id": "WolfAttack1",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Wolf_Attack1.webp",
+    "metaData": {
+      "entityId": "Wolf_Attack1"
+    }
+  },
+  {
+    "id": "WolfAttack3",
+    "name": "OneHandedWeapon",
+    "category": [
+      "NULL"
+    ],
+    "description": "",
+    "icon": "/img/valheim/itens/NULL/Wolf_Attack3.webp",
+    "metaData": {
+      "entityId": "Wolf_Attack3"
+    }
+  }
+]

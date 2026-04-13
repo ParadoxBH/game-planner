@@ -1,0 +1,44 @@
+[
+    
+  {
+    "id": "poi_burial_chambers",
+    "type": "poi",
+    "entityId": "poi_burial_chambers",
+    "name": "Burial Chambers",
+    "parentId": "biome_black_forest",
+    "description": "Dungeons subterrâneas encontradas na Floresta Negra.",
+    "icon": "https://placehold.co/100/333/fff?text=Dungeon",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(120 120)"
+    }
+  },
+  {
+    "id": "spawn_copper_forest",
+    "type": "rule",
+    "entityId": "copper_node",
+    "parentId": "biome_black_forest",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(0 0)"
+    },
+    "data": {
+      "chance": 1,
+      "quantity": "Vários"
+    }
+  },
+  {
+    "id": "spawn_skeleton_dungeon",
+    "type": "rule",
+    "entityId": "skeleton",
+    "parentId": "poi_burial_chambers",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(0 0)"
+    },
+    "data": {
+      "chance": 1,
+      "quantity": "1-3"
+    }
+  }
+]
