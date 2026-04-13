@@ -11,6 +11,7 @@ import {
 import { Inventory, Sell, ShoppingCart } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { ItemChip } from "../common/ItemChip";
+import { getPublicUrl } from "../../utils/pathUtils";
 import type { Item } from "../../types/gameModels";
 
 interface ItemCardProps {
@@ -80,7 +81,7 @@ export function ItemCard({ item, gameId, showPrices, variant = "default" }: Item
             >
               {item.icon ? (
                 <img
-                  src={item.icon}
+                  src={getPublicUrl(item.icon)}
                   alt={item.name}
                   style={{
                     width: "80%",
@@ -162,7 +163,7 @@ export function ItemCard({ item, gameId, showPrices, variant = "default" }: Item
               >
                 {item.icon ? (
                   <img
-                    src={item.icon}
+                    src={getPublicUrl(item.icon)}
                     alt={item.name}
                     style={{
                       width: "80%",
@@ -297,7 +298,7 @@ export function ItemCard({ item, gameId, showPrices, variant = "default" }: Item
                               id="ouro"
                               amount={item.buyPrice}
                               size="small"
-                              icon="/img/heartopia/stats/ouro.png"
+                              icon={getPublicUrl("/img/heartopia/stats/ouro.png")}
                             />
                           </Stack>
                         </Tooltip>
@@ -322,7 +323,7 @@ export function ItemCard({ item, gameId, showPrices, variant = "default" }: Item
                               id="ouro"
                               amount={item.sellPrice}
                               size="small"
-                              icon="/img/heartopia/stats/ouro.png"
+                              icon={getPublicUrl("/img/heartopia/stats/ouro.png")}
                             />
                           </Stack>
                         </Tooltip>

@@ -17,6 +17,7 @@ import {
 } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import { ItemChip } from "../common/ItemChip";
+import { getPublicUrl } from "../../utils/pathUtils";
 import type { Entity } from "../../types/gameModels";
 
 interface EntityCardProps {
@@ -80,7 +81,7 @@ export function EntityCard({ entity, showPrices, hasShop, onClick, variant = "de
           >
             {entity.icon ? (
               <img
-                src={entity.icon}
+                src={getPublicUrl(entity.icon)}
                 alt={entity.name}
                 style={{
                   width: "80%",
@@ -164,7 +165,7 @@ export function EntityCard({ entity, showPrices, hasShop, onClick, variant = "de
               flexShrink: 0
             }}>
               {entity.icon ? (
-                <img src={entity.icon} alt={entity.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                <img src={getPublicUrl(entity.icon)} alt={entity.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
               ) : (
                 <CategoryIcon sx={{ fontSize: 32, color: 'rgba(255, 255, 255, 0.2)' }} />
               )}
@@ -256,7 +257,7 @@ export function EntityCard({ entity, showPrices, hasShop, onClick, variant = "de
                       border: '1px solid rgba(76, 175, 80, 0.1)'
                     }}>
                       <ShoppingCart sx={{ fontSize: 12, color: 'success.main' }} />
-                      <ItemChip id="ouro" amount={entity.buyPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+                      <ItemChip id="ouro" amount={entity.buyPrice} size="small" icon={getPublicUrl("/img/heartopia/stats/ouro.png")} />
                     </Stack>
                   </Tooltip>
                 )}
@@ -269,7 +270,7 @@ export function EntityCard({ entity, showPrices, hasShop, onClick, variant = "de
                       border: '1px solid rgba(255, 152, 0, 0.1)'
                     }}>
                       <Sell sx={{ fontSize: 12, color: 'warning.main' }} />
-                      <ItemChip id="ouro" amount={entity.sellPrice} size="small" icon="/img/heartopia/stats/ouro.png" />
+                      <ItemChip id="ouro" amount={entity.sellPrice} size="small" icon={getPublicUrl("/img/heartopia/stats/ouro.png")} />
                     </Stack>
                   </Tooltip>
                 )}

@@ -15,6 +15,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import type { GameDataTypes, Category as CategoryType } from "../../types/gameModels";
 import { useApi } from "../../hooks/useApi";
 import { useState, useEffect } from "react";
+import { getPublicUrl } from "../../utils/pathUtils";
 
 export interface ItemChipProps {
   id: string;
@@ -115,12 +116,12 @@ export function ItemChip({
   const renderIcon = () => {
     if (type === 'category') {
       if (categoryData?.icon) {
-        return <img src={categoryData.icon} alt={id} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />;
+        return <img src={getPublicUrl(categoryData.icon)} alt={id} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />;
       }
       return <Category sx={{ fontSize: config.icon, color: 'warning.main' }} />;
     }
     if (iconSrc) {
-      return <img src={iconSrc} alt={id} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />;
+      return <img src={getPublicUrl(iconSrc)} alt={id} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />;
     }
     if (type === 'entity') {
       return <Bolt sx={{ fontSize: config.icon, color: 'secondary.main' }} />;

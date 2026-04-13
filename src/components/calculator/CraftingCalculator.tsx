@@ -25,6 +25,7 @@ import { useParams } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
 import { ItemChip } from "../common/ItemChip";
 import { HelpOutline, Add, Delete, ClearAll } from "@mui/icons-material";
+import { getPublicUrl } from "../../utils/pathUtils";
 import { StyledContainer } from "../common/StyledContainer";
 import { GameDataSelector } from "../common/GameDataSelector";
 import { getCraftingTotals } from "../../utils/craftingTree";
@@ -641,7 +642,7 @@ export function CraftingCalculator() {
                                   </Typography>
                                   <Box
                                     component="img"
-                                    src="/img/heartopia/stats/ouro.png"
+                                    src={getPublicUrl("/img/heartopia/stats/ouro.png")}
                                     sx={{ width: 12, height: 12 }}
                                     alt="Ouro"
                                   />
@@ -678,7 +679,7 @@ export function CraftingCalculator() {
                         </Typography>
                         <Box
                           component="img"
-                          src="/img/heartopia/stats/ouro.png"
+                          src={getPublicUrl("/img/heartopia/stats/ouro.png")}
                           sx={{ width: 12, height: 12 }}
                           alt="Ouro"
                         />
@@ -703,7 +704,7 @@ export function CraftingCalculator() {
                         </Typography>
                         <Box
                           component="img"
-                          src="/img/heartopia/stats/ouro.png"
+                          src={getPublicUrl("/img/heartopia/stats/ouro.png")}
                           sx={{ width: 12, height: 12 }}
                           alt="Ouro"
                         />
@@ -752,7 +753,7 @@ export function CraftingCalculator() {
                     </Typography>
                     <Box
                       component="img"
-                      src="/img/heartopia/stats/ouro.png"
+                      src={getPublicUrl("/img/heartopia/stats/ouro.png")}
                       sx={{
                         width: 24,
                         height: 24,

@@ -1,38 +1,47 @@
 import type { GameInfo } from "../types/gameModels";
+import { getPublicUrl } from "../utils/pathUtils";
+
+const missingManifests = new Set<string>();
 
 export async function loadGameData<T>(
   gameId: string,
   dataset: string
 ): Promise<T[]> {
-  const baseUrl = `${import.meta.env.BASE_URL}data/${gameId}/${dataset}`;
+  const baseUrl = getPublicUrl(`data/${gameId}/${dataset}`);
   const manifestUrl = `${baseUrl}/manifest.json`;
+  const cacheKey = `${gameId}:${dataset}`;
 
-  try {
-    const manifestResponse = await fetch(manifestUrl);
-    
-    if (manifestResponse.ok) {
-      const files: string[] = await manifestResponse.json();
-      console.log(`[DataLoader] Carregando manifest de ${dataset}: ${files.length} arquivos.`);
+  if (!missingManifests.has(cacheKey)) {
+    try {
+      const manifestResponse = await fetch(manifestUrl);
       
-      const results = await Promise.all(
-        files.map(async (file) => {
-          const response = await fetch(`${baseUrl}/${file}`);
-          if (!response.ok) {
-            console.error(`[DataLoader] Erro ao carregar arquivo de manifest: ${file} (Status: ${response.status})`);
-            throw new Error(`Falha ao carregar ${file} de ${dataset}`);
-          }
-          return response.json();
-        })
-      );
+      if (manifestResponse.ok) {
+        const files: string[] = await manifestResponse.json();
+        console.log(`[DataLoader] Carregando manifest de ${dataset}: ${files.length} arquivos.`);
+        
+        const results = await Promise.all(
+          files.map(async (file) => {
+            const response = await fetch(`${baseUrl}/${file}`);
+            if (!response.ok) {
+              console.error(`[DataLoader] Erro ao carregar arquivo de manifest: ${file} (Status: ${response.status})`);
+              throw new Error(`Falha ao carregar ${file} de ${dataset}`);
+            }
+            return response.json();
+          })
+        );
 
-      return results.flat() as T[];
+        return results.flat() as T[];
+      } else {
+        missingManifests.add(cacheKey);
+      }
+    } catch (error: any) {
+      // Se o erro foi proposital dentro do bloco 'ok' (fetch de arquivo falhou), propaga
+      if (error.message?.includes("Falha ao carregar")) {
+        throw error;
+      }
+      console.warn(`[DataLoader] Manifest não encontrado para ${dataset} em ${gameId}, tentando arquivo único.`);
+      missingManifests.add(cacheKey);
     }
-  } catch (error: any) {
-    // Se o erro foi proposital dentro do bloco 'ok' (fetch de arquivo falhou), propaga
-    if (error.message?.includes("Falha ao carregar")) {
-      throw error;
-    }
-    console.warn(`[DataLoader] Manifest não encontrado para ${dataset} em ${gameId}, tentando arquivo único.`);
   }
 
   // Fallback: carregar arquivo único
@@ -45,7 +54,7 @@ export async function loadGameData<T>(
 
 export async function loadGamesList(): Promise<GameInfo[]> {
   try {
-    const response = await fetch(`${import.meta.env.BASE_URL}data/games.json`);
+    const response = await fetch(getPublicUrl('data/games.json'));
     if (!response.ok) {
       throw new Error(`Failed to load games list`);
     }
@@ -59,7 +68,7 @@ export async function loadGamesList(): Promise<GameInfo[]> {
 
 export async function loadGameMaps(gameId: string): Promise<any[]> {
   try {
-    const response = await fetch(`${import.meta.env.BASE_URL}data/${gameId}/maps.json`);
+    const response = await fetch(getPublicUrl(`data/${gameId}/maps.json`));
     if (!response.ok) {
       console.warn(`No maps.json found for ${gameId}, returning empty maps list.`);
       return [];

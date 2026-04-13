@@ -27,6 +27,7 @@ import { entityRepository } from "../repositories/EntityRepository";
 import { shopRepository } from "../repositories/ShopRepository";
 import { mapRepository } from "../repositories/MapRepository";
 import { referencePointRepository } from "../repositories/ReferencePointRepository";
+import { getPublicUrl } from "../utils/pathUtils";
 
 interface MapDashboardProps {
   gameId: string;
@@ -151,7 +152,7 @@ export const MapDashboard = ({
             category: "shop",
             icon:
               entities.find((e) => e.id === s.npcId)?.icon ||
-              "/img/icons/shop.png",
+              getPublicUrl("/img/icons/shop.png"),
             description: `Aberta por ${entities.find((e) => e.id === s.npcId)?.name || s.npcId}.`,
           }) as any,
       );
@@ -295,7 +296,8 @@ export const MapDashboard = ({
                 .map((region) => (
                   <Grid size={{ xs: 12, md: 6, lg: 4 }} key={region.id}>
                     {(() => {
-                      const bgImage = region.thumb || region.icon;
+                      const rawBg = region.thumb || region.icon;
+                      const bgImage = getPublicUrl(rawBg);
                       const hasIcon = Boolean(region.icon);
                       
                       return (
@@ -328,7 +330,7 @@ export const MapDashboard = ({
                               >
                                 {hasIcon && (
                                   <Avatar
-                                    src={region.icon}
+                                    src={getPublicUrl(region.icon)}
                                     variant="rounded"
                                     sx={{
                                       width: 48,
@@ -399,7 +401,7 @@ export const MapDashboard = ({
                                         arrow
                                       >
                                         <Avatar
-                                          src={entities.find((e) => e.id === ps.entityId)?.icon || itemLookup[ps.entityId]?.icon}
+                                          src={getPublicUrl(entities.find((e) => e.id === ps.entityId)?.icon || itemLookup[ps.entityId]?.icon)}
                                           sx={{
                                             width: 26,
                                             height: 26,
@@ -501,7 +503,7 @@ export const MapDashboard = ({
                                 filter: "grayscale(1) brightness(1.5)",
                                 zIndex: 0,
                                 pointerEvents: "none",
-                                backgroundImage: `url(${entity.icon})`,
+                                backgroundImage: `url(${getPublicUrl(entity.icon)})`,
                                 backgroundSize: "contain",
                                 backgroundRepeat: "no-repeat",
                               }}
@@ -514,7 +516,7 @@ export const MapDashboard = ({
                               sx={{ zIndex: 1, width: "100%" }}
                             >
                               <Avatar
-                                src={entity.icon}
+                                src={getPublicUrl(entity.icon)}
                                 variant="rounded"
                                 sx={{
                                   width: 40,

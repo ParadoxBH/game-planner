@@ -19,6 +19,7 @@ import { getCraftingTree } from "../../utils/craftingTree";
 import type { CraftNode, TreeOptions } from "../../utils/craftingTree";
 import { ItemChip } from "../common/ItemChip";
 import { TimeChip } from "../common/TimeChip";
+import { getPublicUrl } from "../../utils/pathUtils";
 
 interface CraftingTreeCardProps {
   itemId: string;
@@ -111,7 +112,7 @@ const TreeNode = ({
               </Typography>
               <Box
                 component="img"
-                src="/img/heartopia/stats/ouro.png"
+                src={getPublicUrl("/img/heartopia/stats/ouro.png")}
                 sx={{ width: 10, height: 10 }}
               />
               {node.shopName && (

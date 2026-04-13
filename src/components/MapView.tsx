@@ -31,6 +31,7 @@ import { entityRepository } from "../repositories/EntityRepository";
 import { itemRepository } from "../repositories/ItemRepository";
 import { referencePointRepository } from "../repositories/ReferencePointRepository";
 import { shopRepository } from "../repositories/ShopRepository";
+import { getPublicUrl } from "../utils/pathUtils";
 
 export interface NavigationItem {
   type: "entity" | "item";
@@ -132,7 +133,7 @@ const MapInfoOverlay = ({
               boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
             }}
           >
-            <img src={currentMap?.thumbnail || "https://placehold.co/100x100/333/fff?text=Map"} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <img src={getPublicUrl(currentMap?.thumbnail || "https://placehold.co/100x100/333/fff?text=Map")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             <Stack sx={{ position: "absolute", bottom: 0, width: "100%", bgcolor: "rgba(0,0,0,0.6)", textAlign: "center" }}>
               <Typography variant="caption" sx={{ fontSize: "9px", fontWeight: 800 }}>MAPAS</Typography>
             </Stack>
@@ -155,7 +156,7 @@ const MapInfoOverlay = ({
                     "&:hover": { opacity: 1, borderColor: "rgba(255,255,255,0.5)" },
                   }}
                 >
-                  <img src={map.thumbnail || "https://placehold.co/100x100/333/fff?text=Map"} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  <img src={getPublicUrl(map.thumbnail || "https://placehold.co/100x100/333/fff?text=Map")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   <Typography variant="caption" sx={{ position: "absolute", bottom: 0, width: "100%", bgcolor: "rgba(0,0,0,0.7)", fontSize: "10px", textAlign: "center", p: 0.5 }}>{map.name}</Typography>
                 </Box>
               ))}
@@ -343,10 +344,9 @@ export const MapView = () => {
                 <Polyline positions={[currentPoints[currentPoints.length - 1], cursorCoords]} pathOptions={{ color: theme.palette.primary.main, weight: 2, dashArray: '5, 5', opacity: 0.8 }} interactive={false} />
               </>
             )}
-            {selectedMap.type === "layered" && selectedMap.urlPattern && Array.from({ length: selectedMap.layers || 1 }, (_, i) => i).map(l => <ImageOverlay key={l} zIndex={l} url={selectedMap.urlPattern!.replace("{layer}", l.toString())} bounds={selectedMap.bounds as LatLngBoundsExpression} />)}
-            {selectedMap.type === "single" && selectedMap.url}
-            {selectedMap.type === "single" && selectedMap.url && <ImageOverlay url={selectedMap.url} bounds={selectedMap.bounds as LatLngBoundsExpression} />}
-            {selectedMap.type === "tile" && selectedMap.url && <TileLayer url={selectedMap.url} minZoom={selectedMap.minZoom} maxZoom={selectedMap.maxZoom} minNativeZoom={selectedMap.tileMinZoom ?? 4} maxNativeZoom={selectedMap.tileMaxZoom ?? 4} noWrap={true} />}
+            {selectedMap.type === "layered" && selectedMap.urlPattern && Array.from({ length: selectedMap.layers || 1 }, (_, i) => i).map(l => <ImageOverlay key={l} zIndex={l} url={getPublicUrl(selectedMap.urlPattern!.replace("{layer}", l.toString()))} bounds={selectedMap.bounds as LatLngBoundsExpression} />)}
+            {selectedMap.type === "single" && selectedMap.url && <ImageOverlay url={getPublicUrl(selectedMap.url)} bounds={selectedMap.bounds as LatLngBoundsExpression} />}
+            {selectedMap.type === "tile" && selectedMap.url && <TileLayer url={getPublicUrl(selectedMap.url)} minZoom={selectedMap.minZoom} maxZoom={selectedMap.maxZoom} minNativeZoom={selectedMap.tileMinZoom ?? 4} maxNativeZoom={selectedMap.tileMaxZoom ?? 4} noWrap={true} />}
             {referencePoints.filter(s => !s.mapId || s.mapId === selectedMapId).map(point => {
               if (point.geom.type === "Polygon") {
                 const coords = parseWKTPolygon(point.geom.coordinates);
@@ -377,7 +377,7 @@ export const MapView = () => {
                   key={point.id} 
                   position={pos} 
                   icon={divIcon({ 
-                    html: `<div style="width: 32px; height: 32px; border: 2px solid ${point.type === 'poi' ? theme.palette.secondary.main : theme.palette.primary.main}; border-radius: ${theme.shape.borderRadius}px; background: ${theme.designTokens.colors.glassBg}; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.5); transform: translate(-16px, -16px);"><img src="${point.icon || entity?.icon || '/img/placeholder.png'}" style="width: 85%; height: 85%; object-fit: contain;" /></div>`, 
+                    html: `<div style="width: 32px; height: 32px; border: 2px solid ${point.type === 'poi' ? theme.palette.secondary.main : theme.palette.primary.main}; border-radius: ${theme.shape.borderRadius}px; background: ${theme.designTokens.colors.glassBg}; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.5); transform: translate(-16px, -16px);"><img src="${getPublicUrl(point.icon || entity?.icon || '/img/placeholder.png')}" style="width: 85%; height: 85%; object-fit: contain;" /></div>`, 
                     className: 'custom-entity-icon' 
                   })}
                 >

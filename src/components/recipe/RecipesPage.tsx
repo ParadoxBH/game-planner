@@ -1,3 +1,4 @@
+import { getPublicUrl } from "../../utils/pathUtils";
 import { 
   Box, 
   Typography, 
@@ -278,7 +279,7 @@ export function RecipesPage() {
               >
                 <Box sx={{ width: 32, height: 32, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
                   {productData?.icon ? (
-                    <img src={productData.icon} alt={recipe.normalizedName} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                    <img src={getPublicUrl(productData.icon)} alt={recipe.normalizedName} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
                   ) : (
                     <Science sx={{ fontSize: 16, color: 'rgba(255, 255, 255, 0.2)' }} />
                   )}
@@ -302,7 +303,7 @@ export function RecipesPage() {
                         display: 'flex', justifyContent: 'center', alignItems: 'center',
                         position: 'relative'
                       }}>
-                        <img src={ingData?.icon} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                        <img src={getPublicUrl(ingData?.icon)} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
                         {ing.amount > 1 && (
                           <Typography sx={{ 
                             position: 'absolute', bottom: -2, right: -2, 
@@ -333,7 +334,7 @@ export function RecipesPage() {
                       label={resolved.label} 
                       size="small" 
                       icon={resolved.icon ? (
-                        <Box component="img" src={resolved.icon} sx={{ width: 12, height: 12, objectFit: 'contain' }} />
+                        <Box component="img" src={getPublicUrl(resolved.icon)} sx={{ width: 12, height: 12, objectFit: 'contain' }} />
                       ) : undefined} 
                       onClick={(e) => {
                         e.stopPropagation();
@@ -370,7 +371,7 @@ export function RecipesPage() {
                   sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1 }}
                 >
                   {productData?.icon ? (
-                    <img src={productData.icon} alt={recipe.normalizedName} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    <img src={getPublicUrl(productData.icon)} alt={recipe.normalizedName} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                   ) : (
                     <Science sx={{ fontSize: 32, color: 'rgba(255, 255, 255, 0.2)' }} />
                   )}

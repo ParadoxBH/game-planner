@@ -25,6 +25,7 @@ import type { Item, Category } from "../../types/gameModels";
 import type { ItemCriteria } from "../../types/filterTypes";
 import type { PaginatedResponse } from "../../types/apiModels";
 import { usePagination } from "../../hooks/usePagination";
+import { getPublicUrl } from "../../utils/pathUtils";
 
 export function ItemsPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -323,7 +324,7 @@ export function ItemsPage() {
                       id="ouro"
                       amount={item.buyPrice}
                       size="small"
-                      icon="/img/heartopia/stats/ouro.png"
+                      icon={getPublicUrl("/img/heartopia/stats/ouro.png")}
                     />
                   </Box>
                 </Tooltip>
@@ -346,7 +347,7 @@ export function ItemsPage() {
                       id="ouro"
                       amount={item.sellPrice}
                       size="small"
-                      icon="/img/heartopia/stats/ouro.png"
+                      icon={getPublicUrl("/img/heartopia/stats/ouro.png")}
                     />
                   </Box>
                 </Tooltip>

@@ -17,6 +17,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
+import { getPublicUrl } from "../../utils/pathUtils";
 import { useParams } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
 import { ItemChip } from "../common/ItemChip";
@@ -396,7 +397,7 @@ export function ProfitPerTimeCalculator() {
                         </Typography>
                         <Box
                           component="img"
-                          src="/img/heartopia/stats/ouro.png"
+                          src={getPublicUrl("/img/heartopia/stats/ouro.png")}
                           sx={{ width: 14, height: 14 }}
                         />
                       </Stack>
@@ -433,7 +434,7 @@ export function ProfitPerTimeCalculator() {
                         </Typography>
                         <Box
                           component="img"
-                          src="/img/heartopia/stats/ouro.png"
+                          src={getPublicUrl("/img/heartopia/stats/ouro.png")}
                           sx={{ width: 14, height: 14 }}
                         />
                       </Stack>

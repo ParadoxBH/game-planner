@@ -9,6 +9,7 @@ import {
 import L, { CRS, Transformation } from "leaflet";
 import { useEffect, useMemo } from "react";
 import type { MapMetadata } from "../../types/gameModels";
+import { getPublicUrl } from "../../utils/pathUtils";
 
 interface MiniMapProps {
   meta: MapMetadata;
@@ -136,20 +137,20 @@ export const MiniMap = ({ meta, markers, onClick, height = 200 }: MiniMapProps) 
                 <ImageOverlay
                     key={`layer_${l}`}
                     zIndex={l}
-                    url={meta.urlPattern!.replace("{layer}", l.toString())}
+                    url={getPublicUrl(meta.urlPattern!.replace("{layer}", l.toString()))}
                     bounds={meta.bounds as any}
                 />
             ))
         )}
         {meta.type === "single" && meta.url && (
             <ImageOverlay
-                url={meta.url}
+                url={getPublicUrl(meta.url)}
                 bounds={meta.bounds as any}
             />
         )}
         {meta.type === "tile" && meta.url && (
             <TileLayer
-                url={meta.url}
+                url={getPublicUrl(meta.url)}
                 minZoom={meta.minZoom}
                 maxZoom={meta.maxZoom}
                 noWrap={true}

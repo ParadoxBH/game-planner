@@ -1,3 +1,4 @@
+import { getPublicUrl } from "../../utils/pathUtils";
 import { 
   Box, 
   Typography, 
@@ -61,7 +62,7 @@ export function EventCard({ event }: EventCardProps) {
       {event.banner && (
         <Box sx={{ height: 160, overflow: 'hidden', position: 'relative' }}>
           <img 
-            src={event.banner} 
+            src={getPublicUrl(event.banner)} 
             className="event-banner"
             style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} 
             alt="" 
@@ -77,7 +78,7 @@ export function EventCard({ event }: EventCardProps) {
       <CardContent sx={{ p: 3 }}>
         <Stack direction="row" spacing={2} alignItems="flex-start" sx={{ mb: 2 }}>
           <Avatar 
-            src={event.icon} 
+            src={getPublicUrl(event.icon)} 
             sx={{ 
               width: 64, 
               height: 64, 

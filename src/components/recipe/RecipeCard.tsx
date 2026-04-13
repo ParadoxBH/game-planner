@@ -1,3 +1,4 @@
+import { getPublicUrl } from "../../utils/pathUtils";
 import { 
   Box, 
   Typography, 
@@ -107,7 +108,7 @@ export function RecipeCard({
               
               return productData?.icon ? (
                 <img
-                  src={productData.icon}
+                  src={getPublicUrl(productData.icon)}
                   alt={name}
                   style={{
                     width: "80%",
@@ -213,7 +214,7 @@ export function RecipeCard({
                         label={displayName} 
                         size="small" 
                         icon={displayIcon ? (
-                          <Box component="img" src={displayIcon} sx={{ width: 14, height: 14, objectFit: 'contain' }} />
+                          <Box component="img" src={getPublicUrl(displayIcon)} sx={{ width: 14, height: 14, objectFit: 'contain' }} />
                         ) : (
                           <Construction sx={{ fontSize: '0.8rem !important' }} />
                         )} 

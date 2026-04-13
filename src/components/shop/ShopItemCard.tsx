@@ -1,3 +1,4 @@
+import { getPublicUrl } from "../../utils/pathUtils";
 import { 
   Box, 
   Typography, 
@@ -92,7 +93,7 @@ export function ShopItemCard({
           >
             {icon ? (
               <img
-                src={icon}
+                src={getPublicUrl(icon)}
                 alt={name}
                 style={{
                   width: "80%",

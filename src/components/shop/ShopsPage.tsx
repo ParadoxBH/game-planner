@@ -1,3 +1,4 @@
+import { getPublicUrl } from "../../utils/pathUtils";
 import {
   Box,
   Typography,
@@ -211,7 +212,7 @@ export function ShopsPage() {
                   icon={
                     npc?.icon ? (
                       <Avatar
-                        src={npc.icon}
+                        src={getPublicUrl(npc.icon)}
                         sx={{ width: 24, height: 24, mr: 1 }}
                       />
                     ) : (
@@ -264,7 +265,7 @@ export function ShopsPage() {
               >
                 <Box sx={{ width: 32, height: 32, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
                   {npc?.icon ? (
-                    <img src={npc.icon} alt={shop.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                    <img src={getPublicUrl(npc.icon)} alt={shop.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
                   ) : (
                     <Inventory sx={{ fontSize: 16, color: 'rgba(255, 255, 255, 0.2)' }} />
                   )}
@@ -286,7 +287,7 @@ export function ShopsPage() {
                   sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1 }}
                 >
                   {npc?.icon ? (
-                    <img src={npc.icon} alt={shop.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                    <img src={getPublicUrl(npc.icon)} alt={shop.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
                   ) : (
                     <Storefront sx={{ fontSize: 32, color: 'rgba(255, 255, 255, 0.2)' }} />
                   )}
@@ -325,7 +326,7 @@ export function ShopsPage() {
                     },
                     background:
                       "linear-gradient(135deg, rgba(255, 68, 0, 0.05), rgba(255, 136, 0, 0.05))",
-                    backgroundImage: `url(${currentNpc?.icon})`,
+                    backgroundImage: `url(${getPublicUrl(currentNpc?.icon)})`,
                     backgroundPosition: "top center",
                     backgroundSize: "cover",
                   }}
@@ -516,7 +517,7 @@ export function ShopsPage() {
                     return [
                       <Box key={`shop_item_list_${shopItem.id}`} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Box sx={{ width: 32, height: 32, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
-                          <img src={target?.icon} alt={target?.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                          <img src={getPublicUrl(target?.icon)} alt={target?.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
                         </Box>
                         <Typography variant="body2" sx={{ fontWeight: 700 }}>{target?.name}</Typography>
                       </Box>,
@@ -535,7 +536,7 @@ export function ShopsPage() {
                               {displayPrice.toLocaleString()}
                             </Typography>
                             {currencyItem?.icon && (
-                              <img src={currencyItem.icon} alt={currencyItem.name} style={{ width: 16, height: 16, objectFit: 'contain' }} />
+                              <img src={getPublicUrl(currencyItem.icon)} alt={currencyItem.name} style={{ width: 16, height: 16, objectFit: 'contain' }} />
                             )}
                           </Box>
                         )}
@@ -569,7 +570,7 @@ export function ShopsPage() {
                     return (
                       <Tooltip key={`shop_item_icon_${shopItem.id}`} title={`${target?.name} - ${displayPrice} ${currencyItem?.name || 'ouro'}`}>
                         <Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1, position: 'relative' }}>
-                          <img src={target?.icon} alt={target?.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                          <img src={getPublicUrl(target?.icon)} alt={target?.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                           
                           {/* Top-Right: Purchase Limit / Quantity */}
                           {shopItem.amount && (
@@ -614,7 +615,7 @@ export function ShopsPage() {
                                 {displayPrice >= 1000 ? `${(displayPrice / 1000).toFixed(1)}k` : displayPrice}
                               </Typography>
                               {currencyItem?.icon && (
-                                <img src={currencyItem.icon} alt={currencyItem.name} style={{ width: 10, height: 10, objectFit: 'contain' }} />
+                                <img src={getPublicUrl(currencyItem.icon)} alt={currencyItem.name} style={{ width: 10, height: 10, objectFit: 'contain' }} />
                               )}
                             </Box>
                           )}

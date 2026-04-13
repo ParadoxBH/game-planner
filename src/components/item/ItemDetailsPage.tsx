@@ -32,6 +32,7 @@ import { eventRepository } from "../../repositories/EventRepository";
 import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
 import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
+import { getPublicUrl } from "../../utils/pathUtils";
 
 export function ItemDetailsPage() {
   const { gameId, itemId = "" } = useParams<{
@@ -235,7 +236,7 @@ export function ItemDetailsPage() {
                           </Typography>
                           {itemsMap.get("ouro")?.icon && (
                             <img
-                              src={itemsMap.get("ouro").icon}
+                              src={getPublicUrl(itemsMap.get("ouro").icon)}
                               style={{ width: 14, height: 14 }}
                             />
                           )}
@@ -269,7 +270,7 @@ export function ItemDetailsPage() {
                           </Typography>
                           {itemsMap.get("ouro")?.icon && (
                             <img
-                              src={itemsMap.get("ouro").icon}
+                              src={getPublicUrl(itemsMap.get("ouro").icon)}
                               style={{ width: 14, height: 14 }}
                             />
                           )}
@@ -446,7 +447,7 @@ export function ItemDetailsPage() {
                         >
                           {e.icon ? (
                             <img
-                              src={e.icon}
+                              src={getPublicUrl(e.icon)}
                               style={{
                                 width: "100%",
                                 height: "100%",

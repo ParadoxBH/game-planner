@@ -6,6 +6,7 @@ import {
 } from "@mui/material";
 import { Storefront, ChevronRight } from "@mui/icons-material";
 
+import { getPublicUrl } from "../../utils/pathUtils";
 import { useNavigate, useParams } from "react-router-dom";
 import type { Shop, Entity } from "../../types/gameModels";
 
@@ -53,7 +54,7 @@ export const ShopCard = ({ shop, npc, onClick, variant = "default" }: ShopCardPr
               position: 'relative'
             }}>
               {npc?.icon ? (
-                <img src={npc.icon} alt={npc.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={getPublicUrl(npc.icon)} alt={npc.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <Storefront sx={{ fontSize: 40, color: 'text.disabled' }} />
               )}
@@ -78,7 +79,7 @@ export const ShopCard = ({ shop, npc, onClick, variant = "default" }: ShopCardPr
               position: 'relative'
             }}>
               {npc?.icon ? (
-                <img src={npc.icon} alt={npc.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={getPublicUrl(npc.icon)} alt={npc.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <Storefront sx={{ fontSize: 50, color: 'text.disabled' }} />
               )}

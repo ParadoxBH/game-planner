@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loadGamesList } from "../services/dataLoader";
 import { StyledContainer } from "./common/StyledContainer";
+import { getPublicUrl } from "../utils/pathUtils";
 import type { GameInfo } from "../types/gameModels";
 
 export function Home() {
@@ -79,7 +80,7 @@ export function Home() {
                 <CardMedia
                   component="img"
                   height="200"
-                  image={game.thumbnail || `/public/img/${game.id}/logo.png`}
+                  image={game.thumbnail || getPublicUrl(`img/${game.id}/logo.png`)}
                   alt={`Thumbnail of ${game.name}`}
                   sx={{ filter: "brightness(0.7)" }}
                 />

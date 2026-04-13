@@ -38,6 +38,7 @@ import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
 import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
 import { mapRepository } from "../../repositories/MapRepository";
+import { getPublicUrl } from "../../utils/pathUtils";
 
 export function EntityDetailsPage() {
   const { gameId, entityId = "" } = useParams<{ gameId: string; entityId: string }>();
@@ -255,7 +256,7 @@ export function EntityDetailsPage() {
                       icon={
                         <Box 
                           component="img" 
-                          src={v.icon || entity.icon} 
+                          src={getPublicUrl(v.icon || entity.icon)} 
                           sx={{ width: 20, height: 20, objectFit: 'contain' }} 
                         />
                       } 
@@ -299,7 +300,7 @@ export function EntityDetailsPage() {
                       )}
                       {currentEntityData?.icon ? (
                           <img 
-                            src={currentEntityData.icon} 
+                            src={getPublicUrl(currentEntityData.icon)} 
                             alt={currentEntityData.name} 
                             style={{ width: '80%', height: '80%', objectFit: 'contain' }} 
                           />

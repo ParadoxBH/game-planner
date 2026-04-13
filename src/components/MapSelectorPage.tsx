@@ -5,6 +5,8 @@ import { loadGamesList, loadGameMaps } from "../services/dataLoader";
 import MapIcon from "@mui/icons-material/Map";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import type { GameInfo, MapMetadata } from "../types/gameModels";
+import { getPublicUrl } from "../utils/pathUtils";
+import { StyledContainer } from "./common/StyledContainer";
 
 export const MapSelectorPage = () => {
   const { gameId } = useParams();
@@ -32,16 +34,7 @@ export const MapSelectorPage = () => {
   if (!gameInfo) return <Box sx={{ p: 4 }}><Typography>Jogo não encontrado.</Typography></Box>;
 
   return (
-    <Box sx={{ p: 4, pt: 8, height: "100%", overflowY: "auto", bgcolor: "#0b0b0b", color: "text.primary" }}>
-      <Stack spacing={1} sx={{ mb: 6 }}>
-        <Typography variant="h3" fontWeight={900} sx={{ letterSpacing: "-1.5px" }}>
-          Mapas de {gameInfo.name}
-        </Typography>
-        <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400, opacity: 0.7 }}>
-          Selecione um mapa para explorar regiões, recursos e detalhes técnicos.
-        </Typography>
-      </Stack>
-
+    <StyledContainer title={`Mapas de ${gameInfo.name}`} label={"Selecione um mapa para explorar regiões, recursos e detalhes técnicos."}>
       <Grid container spacing={3}>
         {maps.map((map: MapMetadata) => (
           <Grid size={{ xs: 12, md: 6, lg: 4 }} key={map.id}>
@@ -66,7 +59,7 @@ export const MapSelectorPage = () => {
                 <CardMedia
                   component="img"
                   height="200"
-                  image={map.thumbnail || "https://placehold.co/600x400/333/fff?text=Map"}
+                  image={getPublicUrl(map.thumbnail || "https://placehold.co/600x400/333/fff?text=Map")}
                   alt={map.name}
                   sx={{ borderBottom: 1, borderColor: "divider" }}
                 />
@@ -105,6 +98,6 @@ export const MapSelectorPage = () => {
           </Grid>
         ))}
       </Grid>
-    </Box>
+    </StyledContainer>
   );
 };

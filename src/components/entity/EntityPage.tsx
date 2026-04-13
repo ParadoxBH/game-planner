@@ -24,6 +24,7 @@ import { shopRepository } from "../../repositories/ShopRepository";
 import { usePagination } from "../../hooks/usePagination";
 import type { EntityCriteria } from "../../types/filterTypes";
 import type { PaginatedResponse } from "../../types/apiModels";
+import { getPublicUrl } from "../../utils/pathUtils";
 
 export function EntityPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -287,7 +288,7 @@ export function EntityPage() {
                       id="ouro"
                       amount={entity.buyPrice}
                       size="small"
-                      icon="/img/heartopia/stats/ouro.png"
+                      icon={getPublicUrl("/img/heartopia/stats/ouro.png")}
                     />
                   </Box>
                 </Tooltip>
@@ -300,7 +301,7 @@ export function EntityPage() {
                       id="ouro"
                       amount={entity.sellPrice}
                       size="small"
-                      icon="/img/heartopia/stats/ouro.png"
+                      icon={getPublicUrl("/img/heartopia/stats/ouro.png")}
                     />
                   </Box>
                 </Tooltip>

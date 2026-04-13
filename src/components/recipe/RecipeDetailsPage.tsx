@@ -39,6 +39,7 @@ import { entityRepository } from "../../repositories/EntityRepository";
 import { recipeRepository } from "../../repositories/RecipeRepository";
 import { shopRepository } from "../../repositories/ShopRepository";
 import { eventRepository } from "../../repositories/EventRepository";
+import { getPublicUrl } from "../../utils/pathUtils";
 import type { GameEvent } from "../../types/gameModels";
 
 export function RecipeDetailsPage() {
@@ -280,7 +281,7 @@ export function RecipeDetailsPage() {
                 >
                   {products[0]?.data?.icon ? (
                     <img
-                      src={products[0].data.icon}
+                      src={getPublicUrl(products[0].data.icon)}
                       alt={recipe.normalizedName}
                       style={{
                         width: "80%",
@@ -354,7 +355,7 @@ export function RecipeDetailsPage() {
                             {firstEntity?.icon && (
                               <Box 
                                 component="img" 
-                                src={firstEntity.icon} 
+                                src={getPublicUrl(firstEntity.icon)} 
                                 sx={{ width: 18, height: 18, objectFit: 'contain' }} 
                               />
                             )}
