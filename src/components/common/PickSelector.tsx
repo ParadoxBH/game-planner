@@ -39,6 +39,7 @@ export function PickSelector({
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const { isMobile } = usePlatform();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -79,9 +80,9 @@ export function PickSelector({
         sx={{
           backgroundColor: value ? alpha(theme.palette.primary.main, 0.1) : 'rgba(255, 255, 255, 0.03)',
           color: value ? 'primary.main' : 'text.primary',
-          borderRadius: 2,
-          px: 2,
-          py: 1,
+          borderRadius: isMobile ? 1 : 2,
+          px: isMobile ? 1 : 2,
+          py: isMobile ? 0.5 : 1,
           textTransform: 'none',
           fontWeight: 600,
           border: '1px solid',
@@ -93,10 +94,10 @@ export function PickSelector({
           }
         }}
       >
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Typography variant="body2" sx={{ fontWeight: 700, opacity: 0.6, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+        <Stack direction={isMobile ? "column" : "row"} spacing={isMobile ? 0.5 : 1} alignItems={isMobile ? "start" : "center"}>
+          {!isMobile && <Typography variant="body2" sx={{ fontWeight: 700, opacity: 0.6, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: 0.5 }}>
             {label}:
-          </Typography>
+          </Typography>}
           {(() => {
             const data = getOptionData(value);
             return (
@@ -104,7 +105,7 @@ export function PickSelector({
                 {data.icon && (
                   <Box 
                     component="img" 
-                    src={data.icon} 
+                    src={getPublicUrl(data.icon)} 
                     sx={{ width: 16, height: 16, objectFit: 'contain' }} 
                   />
                 )}
@@ -180,7 +181,7 @@ export function PickSelector({
               {optIcon && (
                 <Box 
                   component="img" 
-                  src={optIcon} 
+                  src={getPublicUrl(optIcon)} 
                   sx={{ width: 18, height: 18, objectFit: 'contain' }} 
                 />
               )}
@@ -194,4 +195,6 @@ export function PickSelector({
 }
 
 // Utility Stack for usage within PickSelector button
-import { Stack } from "@mui/material";
+import { Stack } from "@mui/material";import { usePlatform } from "../../hooks/usePlatform";
+import { getPublicUrl } from "../../utils/pathUtils";
+

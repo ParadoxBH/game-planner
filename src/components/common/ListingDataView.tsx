@@ -56,7 +56,7 @@ export function ListingDataView<T>({
 }: DataViewProps<T>) {
   const theme = useTheme();
   const { isMobile } = usePlatform();
-  const currentViewMode = isMobile && "cards" ? "icons" : viewMode;
+  const currentViewMode = (isMobile && viewMode === "cards") ? "icons" : viewMode;
   // Calcula os tamanhos do grid com base nas colunas desejadas (padrão: 1, 2, 3, 4)
   const gridSizes = useMemo(() => {
     const defaultCols = { xs: 2, sm: 3, md: 4, lg: 6, xl: 8 };
@@ -137,7 +137,7 @@ export function ListingDataView<T>({
                       align={header.align || 'left'}
                       sx={{ 
                         borderBottom: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
-                        py: 1.5,
+                        py: isMobile ? 0.5 : 1.5,
                         width: header.width,
                         backgroundColor: theme.palette.header
                       }}
@@ -188,8 +188,8 @@ export function ListingDataView<T>({
                           align={headerInfo?.align || 'left'}
                           sx={{ 
                             borderBottom: `1px solid ${alpha(theme.palette.divider, 0.05)}`,
-                            py: 1.5,
-                            px: 2,
+                            py: isMobile ? 0.5 : 1.5,
+                            px: isMobile ? 1 : 2,
                             color: 'text.primary'
                           }}
                         >
