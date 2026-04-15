@@ -1,0 +1,351 @@
+﻿[
+  {
+    "id": "semente_dente_leao_laranja",
+    "stations": [
+      "hibridacao"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "dente_leao_vermelho",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "dente_leao_amarelo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "semente_dente_leao_laranja",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "dente_leao_rosa",
+    "stations": [
+      "hibridacao"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "dente_leao_vermelho",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "dente_leao_branco",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "semente_dente_leao_rosa",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "semente_dente_leao_azul",
+    "stations": [
+      "hibridacao"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "dente_leao_pessego",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "dente_leao_pessego",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "semente_dente_leao_azul",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "semente_dente_leao_preto",
+    "stations": [
+      "hibridacao"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "dente_leao_rosa",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "dente_leao_laranja",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "semente_dente_leao_preto",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "semente_dente_leao_pessego",
+    "stations": [
+      "hibridacao"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "dente_leao_laranja",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "dente_leao_rosa",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "semente_dente_leao_pessego",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "semente_dente_leao_roxo",
+    "stations": [
+      "hibridacao"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "dente_leao_preto",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "dente_leao_pessego",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "semente_dente_leao_roxo",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "semente_dente_leao_luminoso",
+    "stations": [
+      "hibridacao"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "dente_leao_roxo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "dente_leao_azul",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "semente_dente_leao_luminoso",
+        "amount": 1
+      }
+    ]
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {
+    "id": "dente_leao_laranja",
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_dente_leao_laranja",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "dente_leao_laranja",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "dente_leao_rosa",
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_dente_leao_rosa",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "dente_leao_rosa",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "dente_leao_azul",
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_dente_leao_azul",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "dente_leao_azul",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "dente_leao_preto",
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_dente_leao_preto",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "dente_leao_preto",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "dente_leao_pessego",
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_dente_leao_pessego",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "dente_leao_pessego",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "dente_leao_roxo",
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_dente_leao_roxo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "dente_leao_roxo",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "dente_leao_luminoso",
+    "stations": [
+      "caixa_planta"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "semente_dente_leao_luminoso",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "dente_leao_luminoso",
+        "amount": 1
+      }
+    ]
+  }
+]
