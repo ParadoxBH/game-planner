@@ -30,6 +30,7 @@ import { HeaderNavDropdown } from "./common/HeaderNavDropdown";
 import { GlobalEventFilter } from "./common/GlobalEventFilter";
 import { theme } from "../theme/theme";
 import { usePlatform } from "../hooks/usePlatform";
+import { RemmaperObj } from "../utils/mapper";
 
 export function Header() {
   const location = useLocation();
@@ -92,8 +93,7 @@ export function Header() {
                     fontSize: { xs: '0.9rem', sm: '1.25rem' }
                   }}
                 >
-                  {/* Abreviação no mobile se estiver em um jogo */}
-                  {isMobile ? "GP" : "Game Planner"}
+                  Game Planner
                 </Typography>
               </Link>
               {gameId && (
@@ -119,6 +119,7 @@ export function Header() {
             </Breadcrumbs>
           </Stack>
 
+          {!gameId && <RemmaperObj/>}
           {/* Somente exibe abas extras se estiver dentro de um jogo */}
           {gameId && (
             <>

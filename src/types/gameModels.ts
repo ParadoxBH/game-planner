@@ -1,3 +1,5 @@
+import type { GeoJsonGeometry, WktGeometry } from "./geoJsonGeometry";
+
 export interface Item {
   id: string;
   name: string;
@@ -185,10 +187,7 @@ export interface ReferencePoints {
   conditions?: Record<string, any>;
   chance?: number;
   quantity?: string;
-  geom: {
-    type: string;
-    coordinates: string;
-  };
+  geom: WktGeometry;
   mapId?: string;
   respawnDelay?: number;
   data?: Record<string, any>;
