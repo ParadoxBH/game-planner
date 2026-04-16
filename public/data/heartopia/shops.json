@@ -6,6 +6,47 @@
     "name": "Loja de Jardinagem",
     "groups": [
       {
+        "name": "Exclusivo da Luz e Sombra",
+        "items": [
+          {
+            "id": "semente_dente_leao_vermelho",
+            "conditions": [
+              {
+                "type": "event",
+                "id": "luz_sombra"
+              }
+            ]
+          },
+          {
+            "id": "semente_dente_leao_amarelo",
+            "conditions": [
+              {
+                "type": "event",
+                "id": "luz_sombra"
+              }
+            ]
+          },
+          {
+            "id": "semente_dente_leao_branco",
+            "conditions": [
+              {
+                "type": "event",
+                "id": "luz_sombra"
+              }
+            ]
+          },
+          {
+            "id": "semente_alface_americano",
+            "conditions": [
+              {
+                "type": "event",
+                "id": "luz_sombra"
+              }
+            ]
+          }
+        ]
+      },
+      {
         "name": "Exclusivo da Gala da Neve",
         "items": [
           {
@@ -430,21 +471,21 @@
       {
         "name": "Escultura de Neve",
         "items": [
-          { 
+          {
             "id": "escultura_neve",
             "type": "ability",
             "price": 100,
             "currency": "estrela_desejavel",
             "resetType": "unique"
           },
-          { 
+          {
             "id": "vale_hobby_aprimorado_escultura_neve",
             "amount": 10,
             "price": 50,
             "currency": "estrela_desejavel",
             "resetType": "unique"
           },
-          { 
+          {
             "id": "bancada_bola_neve",
             "type": "entity",
             "amount": 2,
@@ -452,7 +493,6 @@
           }
         ]
       }
-
     ]
   },
   {
@@ -463,18 +503,36 @@
       {
         "name": "Alimento",
         "items": [
-          {"id": "racao_gato"},
-          {"id": "racao_cao"},
-          {"id": "alimento_universal_animais"}
+          {
+            "id": "racao_gato"
+          },
+          {
+            "id": "racao_cao"
+          },
+          {
+            "id": "alimento_universal_animais"
+          }
         ]
       },
       {
         "name": "Ferramenta Especial",
         "items": [
-          {"id": "peixinho_seco_ativo", "currency": "estrela_desejavel", "price": 1},
-          {"id": "peixinho_seco_ativo"},
-          {"id": "racao_cao_ativo", "currency": "estrela_desejavel", "price": 1},
-          {"id": "racao_cao_ativo"}
+          {
+            "id": "peixinho_seco_ativo",
+            "currency": "estrela_desejavel",
+            "price": 1
+          },
+          {
+            "id": "peixinho_seco_ativo"
+          },
+          {
+            "id": "racao_cao_ativo",
+            "currency": "estrela_desejavel",
+            "price": 1
+          },
+          {
+            "id": "racao_cao_ativo"
+          }
         ]
       }
     ]
@@ -488,31 +546,30 @@
         "name": "Ferramenta Especial",
         "resetType": "semanal",
         "items": [
-          { 
+          {
             "id": "atrativo_abelha_inflavel",
             "price": 1,
             "amount": 100,
             "currency": "estrela_desejavel",
             "resetType": "semanal"
           },
-          { 
+          {
             "id": "atrativo_abelha_inflavel",
             "amount": 10,
             "resetType": "semanal"
           },
-          { 
+          {
             "id": "fortificante_onisciente",
             "price": 2,
             "currency": "estrela_desejavel",
             "resetType": "semanal"
           },
-          { 
+          {
             "id": "fortificante_onisciente",
             "resetType": "semanal"
           }
         ]
       }
-
     ]
   },
   {
@@ -524,21 +581,20 @@
         "name": "Ferramenta Especial",
         "resetType": "semanal",
         "items": [
-          { 
+          {
             "id": "apito_automatico",
             "price": 1,
             "amount": 100,
             "currency": "estrela_desejavel",
             "resetType": "semanal"
           },
-          { 
+          {
             "id": "apito_automatico",
             "amount": 10,
             "resetType": "semanal"
           }
         ]
       }
-
     ]
   }
 ]
