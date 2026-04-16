@@ -1,0 +1,73 @@
+[
+    {
+        "id": "set_dente_leao",
+        "name": "Dente de Leão",
+        "category": "flowers",
+        "event": [
+            "luz_sombra"
+        ],
+        "items": [
+            "dente_leao_vermelha",
+            "dente_leao_amarela",
+            "dente_leao_branca",
+            "dente_leao_rosa",
+            "dente_leao_laranja",
+            "dente_leao_preta",
+            "dente_leao_pessego",
+            "dente_leao_verde",
+            "dente_leao_azul",
+            "dente_leao_roxo",
+            "dente_leao_luminoso"
+        ]
+    },
+    {
+        "id": "set_luz_sombra_itens",
+        "name": "Vegetais e Ingredientes",
+        "category": "luz_sombra",
+        "event": [
+            "luz_sombra"
+        ],
+        "items": [
+            "alface_americano"
+        ]
+    },
+    {
+        "id": "set_luz_sombra_seeds",
+        "name": "Sementes",
+        "category": "luz_sombra",
+        "event": [
+            "luz_sombra"
+        ],
+        "items": [
+            "semente_alface_americano",
+            "semente_dente_leao_vermelho",
+            "semente_dente_leao_amarelo",
+            "semente_dente_leao_branco",
+            "semente_dente_leao_laranja",
+            "semente_dente_leao_preto",
+            "semente_dente_leao_pessego",
+            "semente_dente_leao_azul",
+            "semente_dente_leao_luminoso"
+        ]
+    },
+    {
+        "id": "set_luz_sombra_flores",
+        "name": "Flores",
+        "category": "luz_sombra",
+        "event": [
+            "luz_sombra"
+        ],
+        "items": [
+            "dente_leao_vermelho",
+            "dente_leao_amarelo",
+            "dente_leao_branco",
+            "dente_leao_laranja",
+            "dente_leao_rosa",
+            "dente_leao_preto",
+            "dente_leao_pessego",
+            "dente_leao_azul",
+            "dente_leao_roxo",
+            "dente_leao_luminoso"
+        ]
+    }
+]
