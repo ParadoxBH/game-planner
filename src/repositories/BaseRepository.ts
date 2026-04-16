@@ -20,19 +20,33 @@ export abstract class BaseRepository<T, ID extends string | number> {
   async search<C>(
     filter: GenericFilter<C>,
     criteriaMatcher?: (item: T, criteria: C) => boolean,
-    activeEventIds?: string[]
+    activeEventIds?: string[],
+    strictEventFilter?: boolean
   ): Promise<PaginatedResponse<T>> {
     let collection = this.table.toCollection();
 
     // 1. Global Event Filter
-    if (activeEventIds && activeEventIds.length > 0) {
-      collection = collection.filter((item: any) => {
-        if (!item.event || !Array.isArray(item.event) || item.event.length === 0) {
-          return true;
-        }
-        return item.event.some((id: string) => activeEventIds.includes(id));
-      });
-    }
+    collection = collection.filter((item: any) => {
+      const itemEvents = item.event;
+      const hasEvent = itemEvents && (Array.isArray(itemEvents) ? itemEvents.length > 0 : true);
+      
+      // If it doesn't have an event, it's a "base" resource.
+      // We only show it in general lists (!strictEventFilter).
+      if (!hasEvent) {
+        return !strictEventFilter;
+      }
+
+      // If it has an event, we only show it if a matching filter is active
+      if (activeEventIds && activeEventIds.length > 0) {
+        const activeLower = activeEventIds.map(id => id.toLowerCase());
+        const eventsArray = Array.isArray(itemEvents) ? itemEvents : [itemEvents];
+        const match = eventsArray.some((id: string) => id && activeLower.includes(id.toLowerCase()));
+        return match;
+      }
+
+      // Has event but no filter is active -> hide it
+      return false;
+    });
 
     // 2. Generic Search (Name/ID)
     if (filter.search) {

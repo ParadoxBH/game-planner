@@ -68,7 +68,7 @@ export function StationFlowNode({ data }: NodeProps & { data: StationNodeData })
                     >
                       <Tooltip title={isCategory ? "Clique para escolher o item desta categoria" : ""}>
                         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                          <ItemChip id={ing.id} icon={ing.icon} size="small" amount={ing.amount} type={ing.type as any} disableLink />
+                          <ItemChip {...ing} size="small" disableLink />
                           <Typography variant="caption" noWrap sx={{ maxWidth: 80, fontSize: "0.7rem", color: isCategory ? "primary.main" : "inherit", fontWeight: isCategory ? 600 : 400 }}>
                             {ing.name}
                           </Typography>
@@ -126,27 +126,7 @@ export function StationFlowNode({ data }: NodeProps & { data: StationNodeData })
                   : (recipe.hasAlternatives ? "Múltiplas receitas disponíveis. Clique para trocar." : "")
               }>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flex: 1, minWidth: 0 }}>
-                  <Box
-                    sx={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: 1,
-                      backgroundColor: (recipe.categoryId || recipe.type === "category") ? "rgba(255, 152, 0, 0.1)" : "rgba(25, 118, 210, 0.1)",
-                      border: "1px solid",
-                      borderColor: (recipe.categoryId || recipe.type === "category") ? "orange" : "primary.main",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    {recipe.icon ? (
-                      <img src={recipe.icon} alt={recipe.name} style={{ width: "80%", height: "80%", objectFit: "contain" }} />
-                    ) : (recipe.categoryId || recipe.type === "category") ? (
-                      <HelpOutline sx={{ fontSize: 18, color: "orange" }} />
-                    ) : (
-                      <Construction color="primary" sx={{ fontSize: 18 }} />
-                    )}
-                  </Box>
+                  <ItemChip {...recipe} size="small" disableLink />
                   <Box sx={{ minWidth: 0, flex: 1 }}>
                     <Typography 
                         variant="caption" 

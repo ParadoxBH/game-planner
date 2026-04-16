@@ -15,6 +15,7 @@ import { StationFlowNode, type StationNodeData } from "./StationFlowNode";
 import { ShopFlowNode, type ShopNodeData } from "./ShopFlowNode";
 import { MoneyFlowNode } from "./MoneyFlowNode";
 import { ResultFlowNode } from "./ResultFlowNode";
+import { StageGroup } from "./StageGroup";
 import { type Recipe } from "../../types/gameModels";
 
 const nodeTypes = {
@@ -22,6 +23,7 @@ const nodeTypes = {
   shopNode: ShopFlowNode,
   moneyNode: MoneyFlowNode,
   resultNode: ResultFlowNode,
+  stageGroup: StageGroup,
 };
 
 interface ProductionFlowProps {
@@ -36,16 +38,34 @@ export function ProductionFlow({ tree, allRecipesByProduct, onSelectCategory, on
     const nodes: Node[] = [];
     const edges: Edge[] = [];
     
-    // Maps to track existing nodes to avoid duplication
-    const shopNodesMap = new Map<string, Node>();
-    const stationNodesMap = new Map<string, Node>(); // stationName -> nodeId
+    // Maps to track existing nodes per level to avoid duplication across stages
+    const shopNodesMap = new Map<string, Node>(); // shopName-level -> node
+    const stationNodesMap = new Map<string, Node>(); // stationName-level -> node
     
-    const horizontalSpacing = 500;
-    const verticalSpacing = 250;
+    const horizontalSpacing = 600;
+    const verticalSpacing = 280;
 
-    // Helper to aggregate shop items
+    // Helper to calculate max depth of the tree
+    const getMaxDepth = (node: CraftNode): number => {
+        if (!node.ingredients || node.ingredients.length === 0) return 0;
+        return 1 + Math.max(...node.ingredients.map(getMaxDepth));
+    };
+
+    const maxDepth = getMaxDepth(tree);
+
+    // Track how many nodes we have at each level for Y positioning
+    const levelNodeCounts = new Map<number, number>();
+
+    const getNextYPos = (level: number) => {
+        const count = levelNodeCounts.get(level) || 0;
+        levelNodeCounts.set(level, count + 1);
+        return count * verticalSpacing + 100; // Offset for stage header
+    };
+
+    // Helper to aggregate shop items within a specific level
     const getOrAddShopNode = (shopName: string, item: CraftNode, level: number) => {
-      const existing = shopNodesMap.get(shopName);
+      const key = `${shopName}-${level}`;
+      const existing = shopNodesMap.get(key);
       if (existing) {
         const data = existing.data as unknown as ShopNodeData;
         const existingItem = data.items.find(i => i.id === item.id);
@@ -57,24 +77,26 @@ export function ProductionFlow({ tree, allRecipesByProduct, onSelectCategory, on
         return existing.id;
       }
 
-      const id = `shop-${shopName.replace(/\s+/g, "-")}`;
+      const id = `shop-${shopName.replace(/\s+/g, "-")}-L${level}`;
       const newNode: Node = {
         id,
         type: "shopNode",
-        position: { x: (level - 1) * horizontalSpacing, y: shopNodesMap.size * verticalSpacing },
+        position: { x: 50, y: getNextYPos(level) },
         data: {
           shopName,
           items: [{ id: item.id, name: item.name, icon: item.icon, amount: item.amount, price: item.buyPrice }]
-        }
+        },
+        parentId: `stage-${level}`
       };
       nodes.push(newNode);
-      shopNodesMap.set(shopName, newNode);
+      shopNodesMap.set(key, newNode);
       return id;
     };
 
-    // Helper to aggregate recipes by station
+    // Helper to aggregate recipes by station within a specific level
     const getOrAddStationNode = (stationName: string, recipe: CraftNode, level: number) => {
-        const existing = stationNodesMap.get(stationName);
+        const key = `${stationName}-${level}`;
+        const existing = stationNodesMap.get(key);
         if (existing) {
             const data = existing.data as unknown as StationNodeData;
             const existingRecipe = data.recipes.find(r => r.id === recipe.id);
@@ -86,23 +108,40 @@ export function ProductionFlow({ tree, allRecipesByProduct, onSelectCategory, on
             return existing.id;
         }
 
-        const id = `station-${stationName.replace(/\s+/g, "-")}`;
+        const id = `station-${stationName.replace(/\s+/g, "-")}-L${level}`;
         const hasAlts = allRecipesByProduct?.has(recipe.id) && (allRecipesByProduct.get(recipe.id)?.length || 0) > 1;
         const newNode: Node = {
             id,
             type: "stationNode",
-            position: { x: level * horizontalSpacing, y: stationNodesMap.size * verticalSpacing },
+            position: { x: 50, y: getNextYPos(level) },
             data: {
                 stationName,
                 recipes: [{ ...recipe, hasAlternatives: hasAlts }],
                 onSelectCategory,
                 onSelectRecipe
-            }
+            },
+            parentId: `stage-${level}`
         };
         nodes.push(newNode);
-        stationNodesMap.set(stationName, newNode);
+        stationNodesMap.set(key, newNode);
         return id;
     };
+
+    // Create Stage containers first
+    for (let i = 0; i <= maxDepth; i++) {
+        nodes.push({
+            id: `stage-${i}`,
+            type: 'stageGroup',
+            data: { label: i === maxDepth ? "Etapa Final" : i === 0 ? "Matérias-Primas" : `Etapa ${i + 1}` },
+            position: { x: i * horizontalSpacing, y: 0 },
+            style: {
+                width: horizontalSpacing - 100,
+                height: 1000, // Will be adjusted later
+                zIndex: -1,
+                pointerEvents: 'none',
+            },
+        } as Node);
+    }
 
     const traverse = (currentNode: CraftNode, level: number): { nodeId: string, handleId?: string } => {
       // If it's a recipe, group by station
@@ -140,39 +179,17 @@ export function ProductionFlow({ tree, allRecipesByProduct, onSelectCategory, on
       }
     };
 
-    // Start traversal from the root product (level 0)
-    traverse(tree, 0);
+    // Start traversal from the final product (highest level)
+    traverse(tree, maxDepth);
 
-    // Add Money Node if there are any shops
-    if (shopNodesMap.size > 0) {
-        let totalCost = 0;
-        let minX = 0;
-        shopNodesMap.forEach(node => {
-            const data = node.data as unknown as ShopNodeData;
-            data.items.forEach(item => {
-                totalCost += (item.price || 0) * item.amount;
-            });
-            if (node.position.x < minX) minX = node.position.x;
-        });
-
-        const moneyNodeId = 'money-node';
-        nodes.push({
-            id: moneyNodeId,
-            type: 'moneyNode',
-            position: { x: minX - horizontalSpacing, y: (shopNodesMap.size - 1) * verticalSpacing / 2 },
-            data: { totalCost }
-        } as Node);
-
-        shopNodesMap.forEach(shopNode => {
-            edges.push({
-                id: `e-${moneyNodeId}-${shopNode.id}`,
-                source: moneyNodeId,
-                target: shopNode.id,
-                animated: true,
-                style: { stroke: "#ffeb3b", strokeWidth: 3 },
-            });
-        });
-    }
+    // Adjust Stage heights based on node counts
+    nodes.forEach(node => {
+        if (node.type === 'stageGroup' && node.id.startsWith('stage-')) {
+            const level = parseInt(node.id.split('-')[1]);
+            const count = levelNodeCounts.get(level) || 1;
+            node.style = { ...node.style, height: count * verticalSpacing + 150 };
+        }
+    });
 
     // --- LEFTOVERS & PROFIT CALCULATION ---
     const leftoversMap = new Map<string, { name: string, icon?: string, amount: number }>();
@@ -212,17 +229,37 @@ export function ProductionFlow({ tree, allRecipesByProduct, onSelectCategory, on
         .filter(([id]) => id !== tree.id)
         .map(([id, data]) => ({ id, ...data }));
 
-    // --- RESULT NODE ---
+    // --- TERMINAL NODES (Money & Result) ---
     const sellPrice = tree.sellPrice;
-
     const resultNodeId = 'result-node';
-    let maxX = 0;
-    nodes.forEach(n => { if (n.position.x > maxX) maxX = n.position.x; });
+    const moneyNodeId = 'money-node';
 
+    // Add Money Node on the far left
+    if (totalBuyCost > 0 || shopNodesMap.size > 0) {
+        nodes.push({
+            id: moneyNodeId,
+            type: 'moneyNode',
+            position: { x: -horizontalSpacing / 2, y: ((levelNodeCounts.get(0) || 1) * verticalSpacing) / 2 },
+            data: { totalCost: totalBuyCost }
+        } as Node);
+
+        // Connect money to ALL shop nodes
+        shopNodesMap.forEach((shopNode) => {
+            edges.push({
+                id: `e-${moneyNodeId}-${shopNode.id}`,
+                source: moneyNodeId,
+                target: shopNode.id,
+                animated: true,
+                style: { stroke: "#ffeb3b", strokeWidth: 3 },
+            });
+        });
+    }
+
+    // Add Result Node on the far right
     nodes.push({
         id: resultNodeId,
         type: 'resultNode',
-        position: { x: maxX + horizontalSpacing, y: (stationNodesMap.size - 1) * verticalSpacing / 2 },
+        position: { x: (maxDepth + 1) * horizontalSpacing, y: ((levelNodeCounts.get(maxDepth) || 1) * verticalSpacing) / 2 },
         data: {
             itemName: tree.name,
             itemId: tree.id,
@@ -235,33 +272,37 @@ export function ProductionFlow({ tree, allRecipesByProduct, onSelectCategory, on
     } as Node);
 
     // Connect final production steps or shops to result node
-    stationNodesMap.forEach((node) => {
-        const data = node.data as unknown as StationNodeData;
-        data.recipes.forEach(recipe => {
-            // If this recipe produces the final item (root of tree), connect it
-            if (recipe.id === tree.id || recipe.recipe?.products?.some(p => p.id === tree.id)) {
+    stationNodesMap.forEach((node, key) => {
+        if (key.endsWith(`-${maxDepth}`)) {
+            const data = node.data as unknown as StationNodeData;
+            data.recipes.forEach(recipe => {
+                // If this recipe produces the final item (root of tree), connect it
+                if (recipe.id === tree.id || recipe.recipe?.products?.some(p => p.id === tree.id)) {
+                    edges.push({
+                        id: `e-${node.id}-source-${recipe.id}-${resultNodeId}`,
+                        source: node.id,
+                        sourceHandle: `source-${recipe.id}`,
+                        target: resultNodeId,
+                        animated: true,
+                        style: { stroke: "#2196f3", strokeWidth: 3 },
+                    });
+                }
+            });
+        }
+    });
+
+    shopNodesMap.forEach((node, key) => {
+        if (key.endsWith(`-${maxDepth}`)) {
+            const data = node.data as unknown as ShopNodeData;
+            if (data.items.some(i => i.id === tree.id)) {
                 edges.push({
-                    id: `e-${node.id}-source-${recipe.id}-${resultNodeId}`,
+                    id: `e-${node.id}-source-root-${resultNodeId}`,
                     source: node.id,
-                    sourceHandle: `source-${recipe.id}`,
                     target: resultNodeId,
                     animated: true,
                     style: { stroke: "#2196f3", strokeWidth: 3 },
                 });
             }
-        });
-    });
-
-    shopNodesMap.forEach((node) => {
-        const data = node.data as unknown as ShopNodeData;
-        if (data.items.some(i => i.id === tree.id)) {
-            edges.push({
-                id: `e-${node.id}-source-root-${resultNodeId}`,
-                source: node.id,
-                target: resultNodeId,
-                animated: true,
-                style: { stroke: "#2196f3", strokeWidth: 3 },
-            });
         }
     });
 

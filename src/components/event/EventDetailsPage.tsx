@@ -24,12 +24,13 @@ import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
 import { RecipeCard } from "../recipe/RecipeCard";
 import { EntityCard } from "../entity/EntityCard";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import type { GameDataTypes, GameEvent, Item, Entity } from "../../types/gameModels";
 import type { EventDetails } from "../../types/apiModels";
 import { eventRepository } from "../../repositories/EventRepository";
 import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
+import { getPublicUrl } from "../../utils/pathUtils";
 
 const typeMap = {
   clima: { label: "Clima", color: "#4fc3f7" },
@@ -97,10 +98,22 @@ export function EventDetailsPage() {
     return map;
   }, [entities]);
 
-  const getSourceData = (type: GameDataTypes | undefined, id: string): any => {
+  const getSourceData = useCallback((type: GameDataTypes | undefined, id: string): any => {
     if (type === "entity") return entitiesMap.get(id);
     return itemsMap.get(id);
-  };
+  }, [entitiesMap, itemsMap]);
+
+  const handleItemClick = useCallback((itemId: string) => {
+    navigate(`/game/${gameId}/items/view/${itemId}`);
+  }, [navigate, gameId]);
+
+  const handleEntityClick = useCallback((entityId: string) => {
+    navigate(`/game/${gameId}/entity/view/${entityId}`);
+  }, [navigate, gameId]);
+
+  const handleConjuntoClick = useCallback((conjunto: any) => {
+    navigate(`/game/${gameId}/conjuntos/${conjunto.category || ""}`);
+  }, [navigate, gameId]);
 
   if (dbLoading || dataLoading) {
     return (
@@ -156,7 +169,7 @@ export function EventDetailsPage() {
           {event.banner && (
             <Box sx={{ height: 300, overflow: "hidden", position: "relative" }}>
               <img
-                src={event.banner}
+                src={getPublicUrl(event.banner)}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 alt=""
               />
@@ -187,7 +200,7 @@ export function EventDetailsPage() {
               alignItems="flex-start"
             >
               <Avatar
-                src={event.icon}
+                src={getPublicUrl(event.icon)}
                 sx={{
                   width: 120,
                   height: 120,
@@ -299,9 +312,7 @@ export function EventDetailsPage() {
                               },
                             },
                           }}
-                          onClick={() =>
-                            navigate(`/game/${gameId}/items/view/${item.id}`)
-                          }
+                          onClick={() => handleItemClick(item.id)}
                         >
                           <ItemChip
                             id={item.id}
@@ -370,9 +381,7 @@ export function EventDetailsPage() {
                       <Grid size={{ xs: 12, sm: 6 }} key={entity.id}>
                         <EntityCard
                           entity={entity}
-                          onClick={() =>
-                            navigate(`/game/${gameId}/entity/view/${entity.id}`)
-                          }
+                          onClick={() => handleEntityClick(entity.id)}
                         />
                       </Grid>
                     ))}
@@ -425,15 +434,11 @@ export function EventDetailsPage() {
                             transform: "translateY(-2px)",
                           },
                         }}
-                        onClick={() =>
-                          navigate(
-                            `/game/${gameId}/conjuntos/${conjunto.category || ""}`,
-                          )
-                        }
+                        onClick={() => handleConjuntoClick(conjunto)}
                       >
                         <Stack direction="row" spacing={2} alignItems="center">
                           <Avatar
-                            src={conjunto.icon}
+                            src={getPublicUrl(conjunto.icon)}
                             variant="rounded"
                             sx={{ width: 48, height: 48 }}
                           >

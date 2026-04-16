@@ -20,23 +20,28 @@ export function useApi(gameId: string | undefined) {
     }
 
     let isMounted = true;
-    setLoading(true);
-    setError(null);
-
-    // Reconstruct database on game change
-    dbService.reconstructDatabase(gameId)
-      .then(() => {
-        if (isMounted) {
-          setLoading(false);
+    
+    const checkAndInit = async () => {
+      try {
+        const isPopulated = await dbService.isDatabasePopulated(gameId);
+        if (isPopulated) {
+          if (isMounted) setLoading(false);
+          return;
         }
-      })
-      .catch((err) => {
+
+        if (isMounted) setLoading(true);
+        await dbService.reconstructDatabase(gameId);
+        if (isMounted) setLoading(false);
+      } catch (err: any) {
         if (isMounted) {
-          console.error(`[useApi] Error during DB reconstruction:`, err);
+          console.error(`[useApi] Error during DB initialization:`, err);
           setError(err.message || "Failed to load game data");
           setLoading(false);
         }
-      });
+      }
+    };
+
+    checkAndInit();
 
     return () => {
       isMounted = false;

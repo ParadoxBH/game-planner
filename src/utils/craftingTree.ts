@@ -5,7 +5,7 @@ export interface CraftNode {
   name: string;
   icon?: string;
   amount: number;
-  type: string;
+  type: "category";
   recipe?: Recipe;
   ingredients: CraftNode[];
   isBaseResource: boolean;

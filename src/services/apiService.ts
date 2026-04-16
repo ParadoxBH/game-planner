@@ -33,11 +33,13 @@ import { referencePointRepository } from "../repositories/ReferencePointReposito
 import { categoryRepository } from "../repositories/CategoryRepository";
 
 export class ApiService {
+  private lookupCache: Map<string, "item" | "entity"> = new Map();
+
   /**
    * Data access via Repositories. Methods return Promises to mirror a real Backend API.
    */
 
-  public async getItems(filter: GenericFilter<ItemCriteria>, activeEventIds?: string[]): Promise<PaginatedResponse<Item>> {
+  public async getItems(filter: GenericFilter<ItemCriteria>, activeEventIds?: string[], strictEventFilter?: boolean): Promise<PaginatedResponse<Item>> {
     const matcher = (item: Item, criteria: ItemCriteria) => {
       // 1. Primary Category
       if (criteria.primaryCategory && criteria.primaryCategory !== "all") {
@@ -76,10 +78,10 @@ export class ApiService {
       return true;
     };
 
-    return itemRepository.search(filter, matcher, activeEventIds);
+    return itemRepository.search(filter, matcher, activeEventIds, strictEventFilter);
   }
 
-  public async getEntities(filter: GenericFilter<EntityCriteria>, activeEventIds?: string[]): Promise<PaginatedResponse<Entity>> {
+  public async getEntities(filter: GenericFilter<EntityCriteria>, activeEventIds?: string[], strictEventFilter?: boolean): Promise<PaginatedResponse<Entity>> {
     const matcher = (entity: Entity, criteria: EntityCriteria) => {
       // 1. Primary Category
       if (criteria.primaryCategory && criteria.primaryCategory !== "all") {
@@ -110,10 +112,10 @@ export class ApiService {
       return true;
     };
 
-    return entityRepository.search(filter, matcher, activeEventIds);
+    return entityRepository.search(filter, matcher, activeEventIds, strictEventFilter);
   }
 
-  public async getRecipes(filter: GenericFilter<RecipeCriteria>, activeEventIds?: string[]): Promise<PaginatedResponse<NormalizedRecipe>> {
+  public async getRecipes(filter: GenericFilter<RecipeCriteria>, activeEventIds?: string[], strictEventFilter?: boolean): Promise<PaginatedResponse<NormalizedRecipe>> {
     const matcher = (recipe: Recipe, criteria: RecipeCriteria) => {
       const stations = recipe.stations || (recipe as any).ProducedIn || [];
       const stationsArr = Array.isArray(stations) ? stations : [stations];
@@ -145,7 +147,7 @@ export class ApiService {
       return true;
     };
 
-    const results = await recipeRepository.search(filter, matcher, activeEventIds);
+    const results = await recipeRepository.search(filter, matcher, activeEventIds, strictEventFilter);
     
     return {
       ...results,
@@ -153,8 +155,8 @@ export class ApiService {
     };
   }
 
-  public async getConjuntos(filter: GenericFilter<any>, activeEventIds?: string[]): Promise<PaginatedResponse<Conjunto>> {
-    return conjuntoRepository.search(filter, undefined, activeEventIds);
+  public async getConjuntos(filter: GenericFilter<any>, activeEventIds?: string[], strictEventFilter?: boolean): Promise<PaginatedResponse<Conjunto>> {
+    return conjuntoRepository.search(filter, undefined, activeEventIds, strictEventFilter);
   }
 
   public async getAllItems(): Promise<Item[]> {
@@ -554,16 +556,16 @@ export class ApiService {
       criteria
     });
 
-    const itemsRes = await this.getItems(filterBase({}), [eventId]);
+    const itemsRes = await this.getItems(filterBase({}), [eventId], true);
     const items = itemsRes.data;
     
-    const recipesRes = await this.getRecipes(filterBase({}), [eventId]);
+    const recipesRes = await this.getRecipes(filterBase({}), [eventId], true);
     const recipes = recipesRes.data;
 
-    const entitiesRes = await this.getEntities(filterBase({}), [eventId]);
+    const entitiesRes = await this.getEntities(filterBase({}), [eventId], true);
     const entities = entitiesRes.data;
 
-    const conjuntosRes = await this.getConjuntos(filterBase({}), [eventId]);
+    const conjuntosRes = await this.getConjuntos(filterBase({}), [eventId], true);
     const conjuntos = conjuntosRes.data;
 
     return {
@@ -612,18 +614,29 @@ export class ApiService {
     } else if (recipe.Ingredients) {
       ingredients = await Promise.all(recipe.Ingredients.map(async (i: any) => {
         const id = i.ClassName || i.id;
+        
+        let type = i.type;
+        if (!type) {
+          if (this.lookupCache.has(id)) {
+            type = this.lookupCache.get(id);
+          } else {
+            type = (await entityRepository.getById(id)) ? "entity" : "item";
+            this.lookupCache.set(id, type);
+          }
+        }
+
         return {
           id,
           name: i.Name || i.name,
           amount: i.Amount || i.amount || 1,
           event: i.event,
-          type: i.type || ((await entityRepository.getById(id)) ? "entity" : "item")
+          type
         };
       }));
     }
 
     // Normalize products
-    let products: { id: string; name?: string; amount: number }[] = [];
+    let products: { id: string; name?: string; amount: number; type?: string }[] = [];
     if (recipe.itemId) {
       products.push({ id: recipe.itemId, amount: recipe.amount || 1 });
     } else if (recipe.products) {
@@ -631,12 +644,23 @@ export class ApiService {
     } else if (recipe.Products) {
       products = await Promise.all(recipe.Products.map(async (p: any) => {
         const id = p.ClassName || p.id;
+
+        let type = p.type;
+        if (!type) {
+          if (this.lookupCache.has(id)) {
+            type = this.lookupCache.get(id);
+          } else {
+            type = (await entityRepository.getById(id)) ? "entity" : "item";
+            this.lookupCache.set(id, type);
+          }
+        }
+
         return {
           id,
           name: p.Name || p.name,
           amount: p.Amount || p.amount || 1,
           event: p.event,
-          type: p.type || ((await entityRepository.getById(id)) ? "entity" : "item")
+          type
         };
       }));
     }
