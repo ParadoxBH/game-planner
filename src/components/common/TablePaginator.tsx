@@ -26,6 +26,20 @@ export function TablePaginator({ controller }: TablePaginatorProps) {
   const openSizeMenu = Boolean(anchorEl);
   const { isMobile } = usePlatform();
 
+  const arrowSx = {
+            borderRadius: 1,
+            textTransform: "none",
+            fontWeight: 700,
+            minWidth: "auto",
+            p: isMobile ? 0 : 0.5,
+            px: isMobile ? undefined : 2,
+            borderColor: alpha(theme.palette.divider, 0.2),
+            "&:hover": {
+              borderColor: "primary.main",
+              backgroundColor: alpha(theme.palette.primary.main, 0.05),
+            },
+          };
+
   return (
     <Box
       sx={{
@@ -45,19 +59,7 @@ export function TablePaginator({ controller }: TablePaginatorProps) {
           disabled={page === 1}
           startIcon={isMobile ? undefined : <ChevronLeft />}
           onClick={() => setPage(page - 1)}
-          sx={{
-            borderRadius: 1,
-            textTransform: "none",
-            fontWeight: 700,
-            minWidth: "auto",
-            p: 0.5,
-            px: isMobile ? undefined : 2,
-            borderColor: alpha(theme.palette.divider, 0.2),
-            "&:hover": {
-              borderColor: "primary.main",
-              backgroundColor: alpha(theme.palette.primary.main, 0.05),
-            },
-          }}
+          sx={arrowSx}
         >
           {isMobile ? <ChevronLeft /> : "Anterior"}
         </Button>
@@ -107,19 +109,7 @@ export function TablePaginator({ controller }: TablePaginatorProps) {
           disabled={page === lastPage}
           endIcon={isMobile ? undefined : <ChevronRight />}
           onClick={() => setPage(page + 1)}
-          sx={{
-            borderRadius: 1,
-            textTransform: "none",
-            fontWeight: 700,
-            minWidth: "auto",
-            p: 0.5,
-            px: isMobile ? undefined : 2,
-            borderColor: alpha(theme.palette.divider, 0.2),
-            "&:hover": {
-              borderColor: "primary.main",
-              backgroundColor: alpha(theme.palette.primary.main, 0.05),
-            },
-          }}
+          sx={arrowSx}
         >
           {isMobile ? <ChevronRight /> : "Próxima"}
         </Button>

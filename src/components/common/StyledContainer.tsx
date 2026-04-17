@@ -175,16 +175,12 @@ export function StyledContainer({
                 <Stack
                   direction="row"
                   spacing={dtSpacing.itemGap}
+                  overflow={"hidden"}
                   justifyContent={'flex-end'}
                   sx={{
                     flex: 1,
-                    overflowX: "auto",
+                    overflowX: "hidden",
                     py: isMobile ? undefined : 0.5,
-                    "&::-webkit-scrollbar": { height: "4px" },
-                    "&::-webkit-scrollbar-thumb": {
-                      backgroundColor: "rgba(255, 255, 255, 0.1)",
-                      borderRadius: "4px",
-                    },
                   }}
                 >
                   {actionsEnd}
