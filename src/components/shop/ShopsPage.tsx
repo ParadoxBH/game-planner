@@ -32,11 +32,12 @@ import { itemRepository } from "../../repositories/ItemRepository";
 import { eventRepository } from "../../repositories/EventRepository";
 import { referencePointRepository } from "../../repositories/ReferencePointRepository";
 import { mapRepository } from "../../repositories/MapRepository";
+import { usePlatform } from "../../hooks/usePlatform";
 
 export function ShopsPage() {
   const { gameId, category: urlShopId } = useParams<{ gameId: string; category?: string }>();
   const navigate = useNavigate();
-
+  const { isMobile } = usePlatform();
   const { loading: dbLoading, getShopDetails } = useApi(gameId);
   const [shops, setShops] = useState<Shop[]>([]);
   const [items, setItems] = useState<Item[]>([]);
@@ -242,7 +243,7 @@ export function ShopsPage() {
           cardMinWidth={200}
           listHeader={[
             { label: "Loja / NPC", width: "60%" },
-            { label: "ID", width: "20%" },
+            { label: "ID", width: "20%", hidden: isMobile },
             { label: "Status", align: "right" as const, width: "20%" },
           ]}
           emptyMessage="Nenhuma loja cadastrada para este jogo."

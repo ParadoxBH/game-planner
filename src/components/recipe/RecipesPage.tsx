@@ -29,11 +29,12 @@ import { categoryRepository } from "../../repositories/CategoryRepository";
 import { usePagination } from "../../hooks/usePagination";
 import type { RecipeCriteria } from "../../types/filterTypes";
 import type { Category } from "../../types/gameModels";
+import { usePlatform } from "../../hooks/usePlatform";
 
 export function RecipesPage() {
   const { gameId, category: urlStation } = useParams<{ gameId: string; category?: string }>();
   const navigate = useNavigate();
-
+  const { isMobile } = usePlatform();
   const { 
     loading: dbLoading, 
     error: errorApi, 
@@ -199,7 +200,8 @@ export function RecipesPage() {
       search={{ placeholder: "Pesquisar receitas, ingredientes..." }}
       pages={pages}
       actionsStart={
-        <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
+        <Stack direction={"row"} spacing={1} justifyContent={"space-between"} flex={1} alignItems={"center"}>
+        <Stack direction="row" spacing={1} flex={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
           <PickSelector
             label="Estação"
             value={urlStation === "all" ? null : urlStation || null}
@@ -209,6 +211,7 @@ export function RecipesPage() {
             }}
             allLabel="Todas Estações"
             icon={<Build sx={{ fontSize: 18 }} />}
+            fullWidth={isMobile}
           />
           {availableSubStations.length > 0 && (
             <TriplePickSelector
@@ -217,12 +220,12 @@ export function RecipesPage() {
               options={subStationOptions}
               onChange={handleSubStationStateChange}
               icon={<Build sx={{ fontSize: 18 }} />}
+              fullWidth={isMobile}
             />
           )}
         </Stack>
-      }
-      actionsEnd={
         <ViewModeSelector mode={viewMode} onChange={setViewMode} />
+        </Stack>
       }
     >
       {(dbLoading || dataLoading) ? (

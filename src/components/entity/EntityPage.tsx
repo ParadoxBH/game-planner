@@ -156,6 +156,7 @@ export function EntityPage() {
               navigate(`/game/${gameId}/entity/list/${cat || "all"}`);
             }}
             icon={<FilterList sx={{ fontSize: 18 }} />}
+            fullWidth={isMobile}
           />
           {availableSubCategories.length > 0 && (
             <TriplePickSelector
@@ -171,6 +172,7 @@ export function EntityPage() {
               })}
               onChange={handleSubCategoryStateChange}
               icon={<FilterList sx={{ fontSize: 18 }} />}
+              fullWidth={isMobile}
             />
           )}
         </>

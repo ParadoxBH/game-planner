@@ -10,6 +10,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { Construction } from "@mui/icons-material";
 import { StyledContainer } from "../common/StyledContainer";
+import { usePlatform } from "../../hooks/usePlatform";
 
 interface CalculatorOption {
   id: string;
@@ -22,6 +23,7 @@ interface CalculatorOption {
 export function CalculatorPage() {
   const navigate = useNavigate();
   const { gameId } = useParams<{ gameId: string }>();
+  const { isMobile } = usePlatform();
 
   const calculatorOptions: CalculatorOption[] = [
     {
@@ -53,9 +55,9 @@ export function CalculatorPage() {
       title="Calculadoras"
       label="Ferramentas e utilitários para auxiliar sua jornada no jogo."
     >
-      <Grid container spacing={3} sx={{ mt: 1 }}>
+      <Grid container spacing={1}>
         {calculatorOptions.map((option) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={option.id}>
+          <Grid size={{ xs: 6, sm: 4, md: 4 }} key={option.id}>
             <Card
               sx={{
                 height: "100%",
@@ -69,19 +71,19 @@ export function CalculatorPage() {
                 },
                 backgroundColor: "rgba(255, 255, 255, 0.02)",
                 backdropFilter: "blur(10px)",
-                borderRadius: 2,
+                borderRadius: 1,
                 border: "1px solid rgba(255, 255, 255, 0.05)"
               }}
             >
               <CardActionArea
                 onClick={() => navigate(option.path)}
-                sx={{ flexGrow: 1, p: 2 }}
+                sx={{ flexGrow: 1, p: isMobile ? 1 : 2 }}
               >
                 <CardContent>
-                  <Stack spacing={2} alignItems="center" textAlign="center">
+                  <Stack spacing={1} alignItems="center" textAlign="center">
                     <Box 
                       sx={{ 
-                        p: 2, 
+                        p: 1, 
                         borderRadius: "50%", 
                         backgroundColor: "rgba(255, 68, 0, 0.1)",
                         display: "flex",
@@ -91,12 +93,12 @@ export function CalculatorPage() {
                     >
                       {option.icon}
                     </Box>
-                    <Typography variant="h6" fontWeight="bold">
+                    <Typography variant="subtitle2" fontSize={isMobile ? undefined : 24} fontWeight="bold">
                       {option.title}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    {!isMobile && <Typography variant="subtitle2" color="text.secondary">
                       {option.description}
-                    </Typography>
+                    </Typography>}
                   </Stack>
                 </CardContent>
               </CardActionArea>

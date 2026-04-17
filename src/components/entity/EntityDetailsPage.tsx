@@ -39,6 +39,7 @@ import { entityRepository } from "../../repositories/EntityRepository";
 import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
 import { mapRepository } from "../../repositories/MapRepository";
 import { getPublicUrl } from "../../utils/pathUtils";
+import { usePlatform } from "../../hooks/usePlatform";
 
 export function EntityDetailsPage() {
   const { gameId, entityId = "" } = useParams<{ gameId: string; entityId: string }>();
@@ -80,6 +81,7 @@ export function EntityDetailsPage() {
   const [items, setItems] = useState<Item[]>([]);
   const [entities, setEntities] = useState<Entity[]>([]);
   const [entityConjuntos, setEntityConjuntos] = useState<Conjunto[]>([]);
+  const { isMobile } = usePlatform();
 
   useEffect(() => {
     if (dbLoading) return;
@@ -217,20 +219,19 @@ export function EntityDetailsPage() {
         </Box>
       }
     >
-      <Stack direction="row" spacing={4} flex={1} overflow="hidden">
+      <Stack direction={isMobile ? "column" : "row"} spacing={isMobile ? 1 : 2} flex={1} overflow={isMobile ? "auto" : "hidden"}>
         <Stack 
-          spacing={2} 
+          spacing={2}
           sx={{
             overflowY: "auto", 
             overflowX: "hidden", 
-            width: sizeEntityCard,
+            width: isMobile ? "auto" : sizeEntityCard,
             minWidth: sizeEntityCard,
-            height: "100%",
-            pr: 1
+            height: isMobile ? "auto" : "100%"
           }}
         >
           {/* Info Principal */}
-          <Paper elevation={0} sx={{ p: 0, overflow: 'hidden', borderRadius: 2 }}>
+          <Paper elevation={0} sx={{ p: 0, overflow: 'hidden', borderRadius: 1 }}>
             {entity.variants && entity.variants.length > 0 && (
               <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: 'rgba(255,255,255,0.02)' }}>
                 <Tabs 

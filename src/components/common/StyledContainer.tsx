@@ -155,10 +155,11 @@ export function StyledContainer({
               spacing={0.5}
               sx={isMobile ? undefined : { pb: 1 }}
             >
-              <Stack
+              {actionsStart && <Stack
                 direction="row"
                 spacing={dtSpacing.itemGap}
                 sx={{
+                  flex: 1,
                   overflowX: "auto",
                   py: isMobile ? undefined : 0.5,
                   "&::-webkit-scrollbar": { height: "4px" },
@@ -169,13 +170,14 @@ export function StyledContainer({
                 }}
               >
                 {actionsStart}
-              </Stack>
+              </Stack>}
               {actionsEnd && (
                 <Stack
                   direction="row"
                   spacing={dtSpacing.itemGap}
-                  justifyContent={isMobile ? 'flex-end' : 'flex-start'}
+                  justifyContent={'flex-end'}
                   sx={{
+                    flex: 1,
                     overflowX: "auto",
                     py: isMobile ? undefined : 0.5,
                     "&::-webkit-scrollbar": { height: "4px" },

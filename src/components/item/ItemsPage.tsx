@@ -146,6 +146,7 @@ export function ItemsPage() {
             onChange={(cat) => {
               navigate(`/game/${gameId}/items/list/${cat || "all"}`);
             }}
+            fullWidth={isMobile}
           />
           {availableSubCategories.length > 0 && (
             <TriplePickSelector
@@ -160,6 +161,7 @@ export function ItemsPage() {
                 };
               })}
               onChange={handleSubCategoryStateChange}
+              fullWidth={isMobile}
             />
           )}
           <PickSelector
@@ -173,6 +175,7 @@ export function ItemsPage() {
             ]}
             onChange={handleTradeStatusChange}
             icon={<SwapHoriz sx={{ fontSize: 18 }} />}
+            fullWidth={isMobile}
           />
         </>
       }

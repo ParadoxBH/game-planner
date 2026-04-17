@@ -142,7 +142,7 @@ export function ConjuntosPage() {
   const renderCategorySelection = () => (
     <Grid container spacing={isMobile ? 1 : 2}>
       {categories.map((cat) => (
-        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={cat}>
+        <Grid size={{ xs: 6, sm: 6, md: 4, lg: 3 }} key={cat}>
           <Card
             sx={{
               backgroundColor: "rgba(255, 255, 255, 0.02)",
@@ -161,19 +161,21 @@ export function ConjuntosPage() {
           >
             <CardActionArea
               onClick={() => navigate(`/game/${gameId}/conjuntos/${cat}`)}
-              sx={{ p: 4, textAlign: "center" }}
+              sx={{ p: isMobile ? 2 : 4 }}
             >
-              <Layers sx={{ fontSize: 48, color: "primary.main", mb: 2 }} />
-              <Typography variant="h5" sx={{ fontWeight: 800 }}>
-                {cat}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: "text.secondary", mt: 1 }}
-              >
-                {conjuntos.filter((c) => c.category === cat).length}{" "}
-                conjuntos
-              </Typography>
+              <Stack alignItems={"center"} textAlign={"center"} spacing={1}>
+                <Layers sx={{ fontSize: 48, color: "primary.main" }} />
+                <Typography variant={"subtitle2"} fontSize={isMobile ? undefined : 24} sx={{ fontWeight: 800 }}>
+                  {cat}
+                </Typography>
+                <Typography
+                  variant={"subtitle2"}
+                  sx={{ color: "text.secondary" }}
+                >
+                  {conjuntos.filter((c) => c.category === cat).length}{" "}
+                  conjuntos
+                </Typography>
+              </Stack>
             </CardActionArea>
           </Card>
         </Grid>

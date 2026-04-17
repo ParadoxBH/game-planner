@@ -32,10 +32,14 @@ import { redemptionService } from "../services/redemptionService";
 import type { Item, RedemptionCode } from "../types/gameModels";
 import { codeRepository } from "../repositories/CodeRepository";
 import { itemRepository } from "../repositories/ItemRepository";
+import { theme } from "../theme/theme";
+import { Ribbon } from "./Ribbon";
+import { usePlatform } from "../hooks/usePlatform";
 
 export function CodesPage() {
   const { gameId } = useParams<{ gameId: string }>();
   const { loading: dbLoading, error: codesError } = useApi(gameId);
+  const { isMobile } = usePlatform();
   
   const [codes, setCodes] = useState<RedemptionCode[]>([]);
   const [items, setItems] = useState<Item[]>([]);
@@ -45,7 +49,7 @@ export function CodesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   
   // States for filters
-  const [hideExpired, setHideExpired] = useState(false);
+  const [hideExpired, setHideExpired] = useState(true);
   const [hideCollected, setHideCollected] = useState(false);
   
   // State for collected codes
@@ -153,34 +157,30 @@ export function CodesPage() {
       onChangeSearch={setSearchTerm}
       search={{ placeholder: "Pesquisar códigos ou recompensas..." }}
       actionsStart={
-        <Stack direction="row" spacing={2} sx={{ alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}>
-            <FilterList fontSize="small" />
-            <Typography variant="body2" sx={{ fontWeight: 600 }}>Filtros:</Typography>
-          </Box>
-          <FormControlLabel 
-            control={<Switch size="small" checked={hideExpired} onChange={(e) => setHideExpired(e.target.checked)} />} 
-            label={<Typography variant="caption" sx={{ color: 'text.secondary' }}>Ocultar Expirados</Typography>}
-          />
-          <FormControlLabel 
-            control={<Switch size="small" checked={hideCollected} onChange={(e) => setHideCollected(e.target.checked)} />} 
-            label={<Typography variant="caption" sx={{ color: 'text.secondary' }}>Ocultar Coletados</Typography>}
-          />
-        </Stack>
-      }
+          <Stack flex={1} px={1} direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
+            <Stack direction={"row"} alignItems={"center"} justifyContent={"start"}>
+              <Switch size="small" checked={hideExpired} onChange={(e) => setHideExpired(e.target.checked)} />
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>Ocultar Expirados</Typography>
+            </Stack>
+            <Stack direction={"row"} alignItems={"center"} justifyContent={"end"}>
+              <Switch size="small" checked={hideCollected} onChange={(e) => setHideCollected(e.target.checked)} />
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>Ocultar Coletados</Typography>
+            </Stack>
+          </Stack>
+        }
     >
       {filteredCodes && filteredCodes.length > 0 ? (
-        <Grid container spacing={3}>
+        <Grid container spacing={1}>
           {filteredCodes.map((c, idx) => {
             const isExpired = new Date(c.expiresAt) < new Date();
             const isCollected = collectedCodes.includes(c.code);
             
             return (
-              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={idx}>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} spacing={1} key={idx}>
                 <Card sx={{ 
                   backgroundColor: isCollected ? 'rgba(0, 255, 0, 0.01)' : 'rgba(255, 255, 255, 0.02)', 
                   backdropFilter: 'blur(16px)',
-                  borderRadius: 2,
+                  borderRadius: 1,
                   border: 1,
                   borderColor: isCollected ? 'rgba(0, 255, 0, 0.2)' : isExpired ? 'rgba(255, 0, 0, 0.2)' : 'divider',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -196,44 +196,12 @@ export function CodesPage() {
                     boxShadow: '0 8px 32px rgba(0,0,0,0.4)'
                   }
                 }}>
-                  {isCollected ? (
-                    <Box sx={{ 
-                      position: 'absolute', 
-                      top: 12, 
-                      right: -30, 
-                      backgroundColor: 'success.main', 
-                      color: 'white', 
-                      px: 4, 
-                      py: 0.5, 
-                      transform: 'rotate(45deg)',
-                      zIndex: 1,
-                      fontSize: '0.6rem',
-                      fontWeight: 800,
-                      textTransform: 'uppercase'
-                    }}>
-                      Coletado
-                    </Box>
-                  ) : isExpired && (
-                    <Box sx={{ 
-                      position: 'absolute', 
-                      top: 12, 
-                      right: -30, 
-                      backgroundColor: 'error.main', 
-                      color: 'white', 
-                      px: 4, 
-                      py: 0.5, 
-                      transform: 'rotate(45deg)',
-                      zIndex: 1,
-                      fontSize: '0.6rem',
-                      fontWeight: 800,
-                      textTransform: 'uppercase'
-                    }}>
-                      Expirado
-                    </Box>
+                  {isCollected ? <Ribbon backgroundColor={theme.palette.success.main} label="Coletado"/>
+                  : isExpired && (
+                    <Ribbon backgroundColor={theme.palette.error.main} label={"Expirado"}/>
                   )}
                   
-                  <CardContent sx={{ p: 3, flexGrow: 1 }}>
-                    <Stack spacing={2}>
+                    <Stack spacing={1} sx={{ p: isMobile ? 1 : 3, flexGrow: 1 }}>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Typography variant="h5" sx={{ 
                           fontWeight: 900, 
@@ -275,8 +243,8 @@ export function CodesPage() {
 
                       <Divider sx={{ opacity: 0.1 }} />
 
-                      <Box>
-                        <Typography variant="subtitle2" sx={{ color: 'text.secondary', mb: 1.5, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: 1 }}>
+                      <Stack spacing={1}>
+                        <Typography variant="subtitle2" sx={{ color: 'text.secondary', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: 1 }}>
                           Recompensas
                         </Typography>
                         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ gap: 1 }}>
@@ -294,16 +262,15 @@ export function CodesPage() {
                             );
                           })}
                         </Stack>
-                      </Box>
+                      </Stack>
 
-                      <Box sx={{ mt: 'auto', pt: 2 }}>
                         <Stack spacing={1}>
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          {false && <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <CalendarToday sx={{ fontSize: '0.9rem', color: 'text.disabled' }} />
                             <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                               Adicionado em: <b>{new Date(c.addedAt).toLocaleDateString()}</b>
                             </Typography>
-                          </Box>
+                          </Box>}
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <TimerOff sx={{ fontSize: '0.9rem', color: isExpired ? 'error.main' : 'warning.main' }} />
                             <Typography variant="caption" sx={{ color: isExpired ? 'error.main' : 'text.secondary' }}>
@@ -311,9 +278,7 @@ export function CodesPage() {
                             </Typography>
                           </Box>
                         </Stack>
-                      </Box>
                     </Stack>
-                  </CardContent>
                 </Card>
               </Grid>
             );
