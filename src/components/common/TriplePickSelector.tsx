@@ -105,6 +105,7 @@ interface TriplePickSelectorProps {
   options: (string | TriplePickOption)[];
   onChange: (option: string, newState: TripleState) => void;
   icon?: React.ReactNode;
+  fullWidth?: boolean;
 }
 
 export function TriplePickSelector({
@@ -112,6 +113,7 @@ export function TriplePickSelector({
   states,
   options,
   onChange,
+  fullWidth,
   icon = <Category sx={{ fontSize: 18 }} />
 }: TriplePickSelectorProps) {
   const theme = useTheme();
@@ -134,7 +136,7 @@ export function TriplePickSelector({
     : `${activeCount} Filtros`;
 
   return (
-    <Box>
+    <>
       <Button
         id="triple-pick-selector-button"
         aria-controls={open ? 'triple-pick-selector-menu' : undefined}
@@ -148,6 +150,7 @@ export function TriplePickSelector({
         }} />}
         startIcon={icon}
         sx={{
+          flex: fullWidth ? 1 : undefined,
           backgroundColor: activeCount > 0 ? alpha(theme.palette.primary.main, 0.1) : 'rgba(255, 255, 255, 0.03)',
           color: activeCount > 0 ? 'primary.main' : 'text.primary',
           borderRadius: isMobile ? 1 : 2,
@@ -246,6 +249,6 @@ export function TriplePickSelector({
           );
         })}
       </Menu>
-    </Box>
+    </>
   );
 }

@@ -26,6 +26,7 @@ interface PickSelectorProps {
   onChange: (value: string | null) => void;
   allLabel?: string;
   icon?: React.ReactNode;
+  fullWidth?: boolean;
 }
 
 export function PickSelector({
@@ -33,6 +34,7 @@ export function PickSelector({
   value,
   options,
   onChange,
+  fullWidth,
   allLabel = "Todos",
   icon = <Category sx={{ fontSize: 18 }} />
 }: PickSelectorProps) {
@@ -64,7 +66,7 @@ export function PickSelector({
   };
 
   return (
-    <Box>
+    <>
       <Button
         id="pick-selector-button"
         aria-controls={open ? 'pick-selector-menu' : undefined}
@@ -78,6 +80,7 @@ export function PickSelector({
         }} />}
         startIcon={icon}
         sx={{
+          flex: fullWidth ? 1 : undefined,
           backgroundColor: value ? alpha(theme.palette.primary.main, 0.1) : 'rgba(255, 255, 255, 0.03)',
           color: value ? 'primary.main' : 'text.primary',
           borderRadius: isMobile ? 1 : 2,
@@ -190,7 +193,7 @@ export function PickSelector({
           );
         })}
       </Menu>
-    </Box>
+    </>
   );
 }
 
