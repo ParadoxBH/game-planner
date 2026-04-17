@@ -67,7 +67,7 @@ export function StyledContainer({
       }}
     >
       <Stack spacing={isMobile ? undefined : dtSpacing.itemGap} sx={{ flex: 1, height: "100%", overflowY: "hidden" }}>
-        <Stack sx={{...sx?.header, mb: 2}} spacing={isMobile ? 0.5 :dtSpacing.itemGap}>
+        <Stack sx={{...sx?.header, mb: isMobile ? 1 : 2}} spacing={isMobile ? 0.5 :dtSpacing.itemGap}>
           {/* Header Section */}
           <Stack
             direction={{ xs: "column", md: "row" }}
@@ -152,7 +152,7 @@ export function StyledContainer({
               direction={{ xs: "column", sm: "row" }}
               justifyContent={"space-between"}
               alignItems={{ xs: "stretch", sm: "center" }}
-              spacing={isMobile ? undefined : 1}
+              spacing={0.5}
               sx={isMobile ? undefined : { pb: 1 }}
             >
               <Stack
