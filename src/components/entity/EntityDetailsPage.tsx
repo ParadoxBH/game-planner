@@ -9,7 +9,8 @@ import {
   Breadcrumbs,
   Tooltip,
   Tabs,
-  Tab
+  Tab,
+  Chip,
 } from "@mui/material";
 import {
   NavigateNext,
@@ -26,7 +27,16 @@ import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
 import { RecipeCard } from "../recipe/RecipeCard";
 import { useMemo, useState, useEffect } from "react";
-import type { MapMetadata, ReferencePoints, GameDataTypes, Entity, GameEvent, Item, Conjunto } from "../../types/gameModels";
+import type {
+  MapMetadata,
+  ReferencePoints,
+  GameDataTypes,
+  Entity,
+  GameEvent,
+  Item,
+  Conjunto,
+  Category,
+} from "../../types/gameModels";
 import type { EntityDetails, NormalizedRecipe } from "../../types/apiModels";
 import { MiniMap } from "../common/MiniMap";
 import { DataCard } from "../common/DataCard";
@@ -38,16 +48,31 @@ import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
 import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
 import { mapRepository } from "../../repositories/MapRepository";
+import { categoryRepository } from "../../repositories/CategoryRepository";
 import { getPublicUrl } from "../../utils/pathUtils";
 import { usePlatform } from "../../hooks/usePlatform";
+import { DetainContainer } from "../common/DetainContainer";
+import { DetainItem } from "../common/DetainItem";
+import { DetainConjunto } from "../item/DetainConjunto";
 
 export function EntityDetailsPage() {
-  const { gameId, entityId = "" } = useParams<{ gameId: string; entityId: string }>();
+  const { gameId, entityId = "" } = useParams<{
+    gameId: string;
+    entityId: string;
+  }>();
   const navigate = useNavigate();
 
-  const { loading: dbLoading, getEntityDetails, getRecipesList } = useApi(gameId);
-  const [entityDetails, setEntityDetails] = useState<EntityDetails | null>(null);
-  const [producedRecipes, setProducedRecipes] = useState<NormalizedRecipe[]>([]);
+  const {
+    loading: dbLoading,
+    getEntityDetails,
+    getRecipesList,
+  } = useApi(gameId);
+  const [entityDetails, setEntityDetails] = useState<EntityDetails | null>(
+    null,
+  );
+  const [producedRecipes, setProducedRecipes] = useState<NormalizedRecipe[]>(
+    [],
+  );
   const [producedPage, setProducedPage] = useState(1);
   const [producedPageSize, setProducedPageSize] = useState(30);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
@@ -60,27 +85,34 @@ export function EntityDetailsPage() {
     return { ...entityDetails.entity, ...variant };
   }, [entityDetails?.entity, selectedVariantIndex]);
 
-  const producedPaginationController = useMemo(() => ({
-    info: {
-      pagination: { page: producedPage, pageSize: producedPageSize },
-      sorting: { column: 'name', direction: 'asc' as const },
-      search: '',
-      criteria: {}
-    },
-    totalItems: producedRecipes.length,
-    lastPage: Math.max(1, Math.ceil(producedRecipes.length / producedPageSize)),
-    setPage: setProducedPage,
-    setPageSize: setProducedPageSize,
-    setSearch: () => {},
-    setCriteria: () => {},
-    setTotalItems: () => {}
-  }), [producedPage, producedPageSize, producedRecipes.length]);
+  const producedPaginationController = useMemo(
+    () => ({
+      info: {
+        pagination: { page: producedPage, pageSize: producedPageSize },
+        sorting: { column: "name", direction: "asc" as const },
+        search: "",
+        criteria: {},
+      },
+      totalItems: producedRecipes.length,
+      lastPage: Math.max(
+        1,
+        Math.ceil(producedRecipes.length / producedPageSize),
+      ),
+      setPage: setProducedPage,
+      setPageSize: setProducedPageSize,
+      setSearch: () => {},
+      setCriteria: () => {},
+      setTotalItems: () => {},
+    }),
+    [producedPage, producedPageSize, producedRecipes.length],
+  );
 
   const [maps, setMaps] = useState<MapMetadata[]>([]);
   const [events, setEvents] = useState<GameEvent[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [entities, setEntities] = useState<Entity[]>([]);
   const [entityConjuntos, setEntityConjuntos] = useState<Conjunto[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const { isMobile } = usePlatform();
 
   useEffect(() => {
@@ -96,45 +128,125 @@ export function EntityDetailsPage() {
       itemRepository.getAll(),
       entityRepository.getAll(),
       conjuntoRepository.getAll(),
-      getRecipesList({ 
+      categoryRepository.getAll(),
+      getRecipesList({
         pagination: { pageSize: 1000, page: 1 },
-        sorting: { column: 'name', direction: 'asc' },
-        search: '',
-        criteria: {}
-      }) // Load all to filter
-    ]).then(([details, allMaps, allEvents, allItems, allEntities, allConjuntos, allRecipes]) => {
-      if (!isMounted) return;
+        sorting: { column: "name", direction: "asc" },
+        search: "",
+        criteria: {},
+      }), // Load all to filter
+    ])
+      .then(
+        ([
+          details,
+          allMaps,
+          allEvents,
+          allItems,
+          allEntities,
+          allConjuntos,
+          allCategories,
+          allRecipes,
+        ]) => {
+          if (!isMounted) return;
 
-      setEntityDetails(details);
-      setMaps(allMaps);
-      setEvents(allEvents);
-      setItems(allItems);
-      setEntities(allEntities);
-      setEntityConjuntos(allConjuntos.filter(c => c.entitys?.includes(entityId)));
+          setEntityDetails(details);
+          setMaps(allMaps);
+          setEvents(allEvents);
+          setItems(allItems);
+          setEntities(allEntities);
+          setCategories(allCategories);
+          setEntityConjuntos(
+            allConjuntos.filter((c) => c.entitys?.includes(entityId)),
+          );
 
-      // Filter recipes produced at this entity
-      if (details) {
-        const entityCats = Array.isArray(details.entity.category) 
-          ? details.entity.category 
-          : [details.entity.category].filter(Boolean) as string[];
-        
-        const produced = allRecipes.data.filter(r => 
-          r.stations?.some(s => entityCats.some(c => c.toLowerCase() === s.toLowerCase()))
-        );
-        setProducedRecipes(produced);
-      }
+          // Filter recipes produced at this entity
+          if (details) {
+            const entityCats = Array.isArray(details.entity.category)
+              ? [...details.entity.category]
+              : ([details.entity.category].filter(Boolean) as string[]);
 
-      setDataLoading(false);
-    }).catch(err => {
-      console.error("Error fetching entity details:", err);
-      if (isMounted) setDataLoading(false);
-    });
+            // Include the entity ID as a potential station
+            entityCats.push(details.entity.id);
 
-    return () => { isMounted = false; };
+            const produced = allRecipes.data.filter((r) =>
+              r.stations?.some((s) =>
+                entityCats.some((c) => c.toLowerCase() === s.toLowerCase()),
+              ),
+            );
+            setProducedRecipes(produced);
+          }
+
+          setDataLoading(false);
+        },
+      )
+      .catch((err) => {
+        console.error("Error fetching entity details:", err);
+        if (isMounted) setDataLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [dbLoading, entityId, getEntityDetails]);
 
+  const matchingStations = useMemo(() => {
+    if (!entityDetails?.entity || !producedRecipes.length) return [];
+
+    const entityCats = Array.isArray(entityDetails.entity.category)
+      ? [...entityDetails.entity.category]
+      : ([entityDetails.entity.category].filter(Boolean) as string[]);
+
+    entityCats.push(entityDetails.entity.id);
+    const entityCatsLower = entityCats.map((c) => c.toLowerCase());
+
+    const stationSet = new Set<string>();
+    producedRecipes.forEach((r) => {
+      r.stations?.forEach((s) => {
+        if (entityCatsLower.includes(s.toLowerCase())) {
+          stationSet.add(s);
+        }
+      });
+    });
+
+    return Array.from(stationSet).map((s) => {
+      const normalizedStation = s.toLowerCase();
+
+      // Representation Rule:
+      // 1. Find entities that belong to this station/category OR match the ID directly
+      const relatedEntities = entities.filter((e) => {
+        const cats = Array.isArray(e.category) ? e.category : [e.category];
+        return (
+          cats.some((c) => c && c.toLowerCase() === normalizedStation) ||
+          e.id.toLowerCase() === normalizedStation
+        );
+      });
+
+      const isSingle = relatedEntities.length === 1;
+      const firstEntity =
+        relatedEntities.length > 0 ? relatedEntities[0] : null;
+
+      if (isSingle && firstEntity) {
+        return {
+          id: s,
+          name: firstEntity.name,
+          icon: firstEntity.icon,
+        };
+      } else {
+        const cat = categories.find(
+          (c) => c.id.toLowerCase() === normalizedStation,
+        );
+        return {
+          id: s,
+          name: cat?.name || s,
+          icon: cat?.icon,
+        };
+      }
+    });
+  }, [entityDetails?.entity, producedRecipes, categories, entities]);
+
   const groupedReferencePoints = useMemo(() => {
-    if (!entityDetails?.referencePoints) return new Map<string, ReferencePoints[]>();
+    if (!entityDetails?.referencePoints)
+      return new Map<string, ReferencePoints[]>();
     const map = new Map<string, ReferencePoints[]>();
     entityDetails.referencePoints.forEach((s: any) => {
       const mapId = s.mapId || "Mundo Aberto";
@@ -145,7 +257,7 @@ export function EntityDetailsPage() {
   }, [entityDetails?.referencePoints]);
 
   const getMapMetadata = (mapId: string): MapMetadata | undefined => {
-    return maps.find(m => m.id === mapId);
+    return maps.find((m) => m.id === mapId);
   };
 
   const eventsMap = useMemo(() => {
@@ -199,9 +311,7 @@ export function EntityDetailsPage() {
       label={`Detalhes e localizações`}
       actionsStart={
         <Box>
-          <Breadcrumbs
-            separator={<NavigateNext fontSize="small" />}
-          >
+          <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
             <Link
               to={`/game/${gameId}`}
               style={{ color: "inherit", textDecoration: "none" }}
@@ -219,157 +329,213 @@ export function EntityDetailsPage() {
         </Box>
       }
     >
-      <Stack direction={isMobile ? "column" : "row"} spacing={isMobile ? 1 : 2} flex={1} overflow={isMobile ? "auto" : "hidden"}>
-        <Stack 
-          spacing={2}
-          sx={{
-            overflowY: "auto", 
-            overflowX: "hidden", 
-            width: isMobile ? "auto" : sizeEntityCard,
-            minWidth: sizeEntityCard,
-            height: isMobile ? "auto" : "100%"
-          }}
-        >
+      <DetainContainer>
+        <Stack spacing={2}>
           {/* Info Principal */}
-          <Paper elevation={0} sx={{ p: 0, overflow: 'hidden', borderRadius: 1 }}>
+          <Paper
+            elevation={0}
+            sx={{ p: 0, overflow: "hidden", borderRadius: 1 }}
+          >
             {entity.variants && entity.variants.length > 0 && (
-              <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: 'rgba(255,255,255,0.02)' }}>
-                <Tabs 
-                  value={selectedVariantIndex} 
+              <Box
+                sx={{
+                  borderBottom: 1,
+                  borderColor: "divider",
+                  bgcolor: "rgba(255,255,255,0.02)",
+                }}
+              >
+                <Tabs
+                  value={selectedVariantIndex}
                   onChange={(_, val) => setSelectedVariantIndex(val)}
                   variant="scrollable"
                   scrollButtons="auto"
-                  sx={{ 
+                  sx={{
                     minHeight: 40,
-                    '& .MuiTabs-indicator': { height: 3, borderRadius: '3px 3px 0 0' },
-                    '& .MuiTab-root': { 
-                      minHeight: 40, 
-                      minWidth: 50, 
+                    "& .MuiTabs-indicator": {
+                      height: 3,
+                      borderRadius: "3px 3px 0 0",
+                    },
+                    "& .MuiTab-root": {
+                      minHeight: 40,
+                      minWidth: 50,
                       p: 1,
                       opacity: 0.6,
-                      '&.Mui-selected': { opacity: 1 }
-                    }
+                      "&.Mui-selected": { opacity: 1 },
+                    },
                   }}
                 >
-                  {[entity, ...entity.variants.map(v => ({ ...entity, ...v }))].map((v, idx) => (
-                    <Tab 
-                      key={idx} 
+                  {[
+                    entity,
+                    ...entity.variants.map((v) => ({ ...entity, ...v })),
+                  ].map((v, idx) => (
+                    <Tab
+                      key={idx}
                       icon={
-                        <Box 
-                          component="img" 
-                          src={getPublicUrl(v.icon || entity.icon)} 
-                          sx={{ width: 20, height: 20, objectFit: 'contain' }} 
+                        <Box
+                          component="img"
+                          src={getPublicUrl(v.icon || entity.icon)}
+                          sx={{ width: 20, height: 20, objectFit: "contain" }}
                         />
-                      } 
+                      }
                     />
                   ))}
                 </Tabs>
               </Box>
             )}
-            
+
             <Box sx={{ p: 2, textAlign: "center" }}>
               <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-                  <Box sx={{ 
-                      width: 120, 
-                      height: 120, 
-                      borderRadius: 2, 
-                      backgroundColor: 'rgba(0,0,0,0.2)',
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      overflow: 'hidden',
-                      position: 'relative'
-                  }}>
-                      {currentEntityData?.level && (
-                        <Box sx={{
-                          position: 'absolute',
-                          top: 8,
-                          left: 8,
-                          bgcolor: 'warning.main',
-                          color: 'warning.contrastText',
-                          px: 1,
-                          borderRadius: 1,
-                          fontSize: '0.7rem',
-                          fontWeight: 900,
-                          boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
-                          zIndex: 2
-                        }}>
-                          {currentEntityData.level}
-                        </Box>
-                      )}
-                      {currentEntityData?.icon ? (
-                          <img 
-                            src={getPublicUrl(currentEntityData.icon)} 
-                            alt={currentEntityData.name} 
-                            style={{ width: '80%', height: '80%', objectFit: 'contain' }} 
-                          />
-                      ) : (
-                          <EmojiEvents sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.1)' }} />
-                      )}
-                  </Box>
+                <Box
+                  sx={{
+                    width: 120,
+                    height: 120,
+                    borderRadius: 2,
+                    backgroundColor: "rgba(0,0,0,0.2)",
+                    border: "1px solid",
+                    borderColor: "divider",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    overflow: "hidden",
+                    position: "relative",
+                  }}
+                >
+                  {currentEntityData?.level && (
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: 8,
+                        left: 8,
+                        bgcolor: "warning.main",
+                        color: "warning.contrastText",
+                        px: 1,
+                        borderRadius: 1,
+                        fontSize: "0.7rem",
+                        fontWeight: 900,
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+                        zIndex: 2,
+                      }}
+                    >
+                      {currentEntityData.level}
+                    </Box>
+                  )}
+                  {currentEntityData?.icon ? (
+                    <img
+                      src={getPublicUrl(currentEntityData.icon)}
+                      alt={currentEntityData.name}
+                      style={{
+                        width: "80%",
+                        height: "80%",
+                        objectFit: "contain",
+                      }}
+                    />
+                  ) : (
+                    <EmojiEvents
+                      sx={{ fontSize: 64, color: "rgba(255, 255, 255, 0.1)" }}
+                    />
+                  )}
+                </Box>
               </Box>
-              <Typography 
-                variant="h5" 
-                fontWeight={800} 
+              <Typography
+                variant="h5"
+                fontWeight={800}
                 color="primary.main"
-                sx={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center', 
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                   gap: 1.5,
-                  lineHeight: 1.2
+                  lineHeight: 1.2,
                 }}
               >
                 {currentEntityData?.name}
                 {entityDetails.shop && (
                   <Tooltip title="Este NPC possui uma loja">
-                    <Box sx={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      backgroundColor: 'rgba(255, 68, 0, 0.15)', 
-                      p: 0.5, 
-                      borderRadius: 1,
-                      animation: 'pulse-glow 2s infinite ease-in-out',
-                      '@keyframes pulse-glow': {
-                        '0%': { boxShadow: '0 0 0 0 rgba(255, 68, 0, 0.4)' },
-                        '70%': { boxShadow: '0 0 0 6px rgba(255, 68, 0, 0)' },
-                        '100%': { boxShadow: '0 0 0 0 rgba(255, 68, 0, 0)' }
-                      }
-                    }}>
-                      <Storefront sx={{ fontSize: '1.1rem', color: 'primary.main' }} />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        backgroundColor: "rgba(255, 68, 0, 0.15)",
+                        p: 0.5,
+                        borderRadius: 1,
+                        animation: "pulse-glow 2s infinite ease-in-out",
+                        "@keyframes pulse-glow": {
+                          "0%": { boxShadow: "0 0 0 0 rgba(255, 68, 0, 0.4)" },
+                          "70%": { boxShadow: "0 0 0 6px rgba(255, 68, 0, 0)" },
+                          "100%": { boxShadow: "0 0 0 0 rgba(255, 68, 0, 0)" },
+                        },
+                      }}
+                    >
+                      <Storefront
+                        sx={{ fontSize: "1.1rem", color: "primary.main" }}
+                      />
                     </Box>
                   </Tooltip>
                 )}
               </Typography>
-              <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 2 }}>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ display: "block", mb: 2 }}
+              >
                 ID: {currentEntityData?.id}
               </Typography>
-              
+
               <Divider sx={{ mb: 2 }} />
-              
+
               <Stack spacing={1.5} textAlign="left">
                 {currentEntityData?.category && (
                   <Box>
-                    <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color: "text.secondary",
+                        fontWeight: 700,
+                        textTransform: "uppercase",
+                        letterSpacing: 1,
+                      }}
+                    >
                       Categoria
                     </Typography>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                      {Array.isArray(currentEntityData.category)
-                        ? currentEntityData.category.map(cat => <ItemChip key={cat} id={cat} type="category" size="small" />)
-                        : <ItemChip id={currentEntityData.category} type="category" size="small" />}
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                      {Array.isArray(currentEntityData.category) ? (
+                        currentEntityData.category.map((cat) => (
+                          <ItemChip
+                            key={cat}
+                            id={cat}
+                            type="category"
+                            size="small"
+                          />
+                        ))
+                      ) : (
+                        <ItemChip
+                          id={currentEntityData.category}
+                          type="category"
+                          size="small"
+                        />
+                      )}
                     </Box>
                   </Box>
                 )}
-                
+
                 {/* @ts-ignore */}
                 {currentEntityData?.description && (
                   <Box>
-                    <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color: "text.secondary",
+                        fontWeight: 700,
+                        textTransform: "uppercase",
+                        letterSpacing: 1,
+                      }}
+                    >
                       Descrição
                     </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.4 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "text.secondary", lineHeight: 1.4 }}
+                    >
                       {/* @ts-ignore */}
                       {currentEntityData.description}
                     </Typography>
@@ -382,13 +548,24 @@ export function EntityDetailsPage() {
           {/* Seção de Loja */}
           {entityDetails.shop && (
             <Paper elevation={0} sx={{ p: 2, borderRadius: 2 }}>
-              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                sx={{ mb: 2 }}
+              >
                 <Storefront color="primary" sx={{ fontSize: 18 }} />
-                <Typography variant="subtitle2" fontWeight={800}>Possui Loja</Typography>
+                <Typography variant="subtitle2" fontWeight={800}>
+                  Possui Loja
+                </Typography>
               </Stack>
-              
+
               <DataCard
-                onClick={() => navigate(`/game/${gameId}/shops/list/${entityDetails.shop?.id}`)}
+                onClick={() =>
+                  navigate(
+                    `/game/${gameId}/shops/list/${entityDetails.shop?.id}`,
+                  )
+                }
                 sx={{
                   justifyContent: "space-between",
                   p: 1.5,
@@ -412,7 +589,10 @@ export function EntityDetailsPage() {
                     <Storefront sx={{ fontSize: 20, color: "primary.main" }} />
                   </Box>
                   <Box>
-                    <Typography variant="body2" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: 700, lineHeight: 1.2 }}
+                    >
                       {entityDetails.shop.name || "Visitar Loja"}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
@@ -428,127 +608,114 @@ export function EntityDetailsPage() {
           {/* Requisitos */}
           {entity.requirements && entity.requirements.length > 0 && (
             <Paper elevation={0} sx={{ p: 2, borderRadius: 2 }}>
-                <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
-                    <ListIcon color="primary" sx={{ fontSize: 18 }} />
-                    <Typography variant="subtitle2" fontWeight={800}>Requisitos</Typography>
-                </Stack>
-                <Stack spacing={1}>
-                    {entity.requirements.map((req, idx) => (
-                        <Box 
-                          key={idx} 
-                          sx={{ 
-                            display: 'flex', 
-                            justifyContent: 'space-between', 
-                            alignItems: 'center',
-                            p: 1,
-                            borderRadius: 1,
-                            bgcolor: 'rgba(255,255,255,0.02)'
-                          }}
-                        >
-                            <ItemChip id={req.itemId} size="small" />
-                            <Typography variant="body2" fontWeight={800} color="primary.main">x{req.quant}</Typography>
-                        </Box>
-                    ))}
-                </Stack>
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                sx={{ mb: 2 }}
+              >
+                <ListIcon color="primary" sx={{ fontSize: 18 }} />
+                <Typography variant="subtitle2" fontWeight={800}>
+                  Requisitos
+                </Typography>
+              </Stack>
+              <Stack spacing={1}>
+                {entity.requirements.map((req, idx) => (
+                  <Box
+                    key={idx}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      p: 1,
+                      borderRadius: 1,
+                      bgcolor: "rgba(255,255,255,0.02)",
+                    }}
+                  >
+                    <ItemChip id={req.itemId} size="small" />
+                    <Typography
+                      variant="body2"
+                      fontWeight={800}
+                      color="primary.main"
+                    >
+                      x{req.quant}
+                    </Typography>
+                  </Box>
+                ))}
+              </Stack>
             </Paper>
           )}
 
           {/* Conjuntos */}
-          {entityConjuntos.length > 0 && (
-            <Paper elevation={0} sx={{ p: 2, borderRadius: 2 }}>
-              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
-                <AutoAwesomeMosaic color="primary" sx={{ fontSize: 18 }} />
-                <Typography variant="subtitle2" fontWeight={800}>Parte de Conjuntos</Typography>
-              </Stack>
-              <Stack spacing={1}>
-                {entityConjuntos.map((conjunto) => (
-                  <DataCard
-                    key={conjunto.id}
-                    onClick={() => navigate(`/game/${gameId}/conjuntos/${conjunto.category}`)}
-                    sx={{
-                      p: 1.5,
-                      "&:hover": {
-                        backgroundColor: "rgba(255, 68, 0, 0.1)",
-                      },
-                    }}
-                  >
-                    <Box>
-                      <Typography variant="body2" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
-                        {conjunto.name}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {conjunto.category}
-                      </Typography>
-                    </Box>
-                  </DataCard>
-                ))}
-              </Stack>
-            </Paper>
-          )}
+          <DetainConjunto itens={entityConjuntos}/>
         </Stack>
 
-        <Stack spacing={2} overflow={"auto"} flex={1}>
+        <>
           {/* Drops */}
-          {drops && drops.length > 0 && (
-            <Paper elevation={0} sx={{ p: 2 }}>
-              <Stack
-                direction="row"
-                spacing={1}
-                alignItems="center"
-                sx={{ mb: 2 }}
-              >
-                <Inventory color="primary" />
-                <Typography variant="h6" fontWeight={700}>
-                  Drops
-                </Typography>
-              </Stack>
+
+          <DetainItem startIcon={<Inventory color="primary" />} label="Drops">
+            {drops && drops.length > 0 && (
               <Grid container spacing={2}>
                 {drops.map((drop, idx) => (
                   <Grid size={{ xs: 12, sm: 6, md: 4 }} key={idx}>
-                    <Box sx={{ 
-                        p: 1.5, 
-                        backgroundColor: 'rgba(255,255,255,0.02)', 
-                        borderRadius: 2, 
-                        border: '1px solid rgba(255,255,255,0.05)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1.5
-                    }}>
-                        <ItemChip id={drop.item?.id || ""} icon={drop.item?.icon} size="medium" />
-                        <Box sx={{ flexGrow: 1 }}>
-                            <Typography variant="body2" fontWeight={700} sx={{ lineHeight: 1.2 }}>
-                                {drop.item?.name || drop.item?.id || "Item Desconhecido"}
-                            </Typography>
-                            <Stack direction="row" spacing={1} alignItems="center">
-                                <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>
-                                    Qtde: {drop.quant}{drop.maxQuant ? `-${drop.maxQuant}` : ''}
-                                </Typography>
-                                <Typography variant="caption" color="primary.main" fontWeight={800}>
-                                    ({((drop.chance || 0) * 100).toFixed(0)}%)
-                                </Typography>
-                            </Stack>
-                        </Box>
+                    <Box
+                      sx={{
+                        p: 1.5,
+                        backgroundColor: "rgba(255,255,255,0.02)",
+                        borderRadius: 2,
+                        border: "1px solid rgba(255,255,255,0.05)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1.5,
+                      }}
+                    >
+                      <ItemChip
+                        id={drop.item?.id || ""}
+                        icon={drop.item?.icon}
+                        size="medium"
+                      />
+                      <Box sx={{ flexGrow: 1 }}>
+                        <Typography
+                          variant="body2"
+                          fontWeight={700}
+                          sx={{ lineHeight: 1.2 }}
+                        >
+                          {drop.item?.name ||
+                            drop.item?.id ||
+                            "Item Desconhecido"}
+                        </Typography>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              color: "rgba(255,255,255,0.5)",
+                              fontWeight: 600,
+                            }}
+                          >
+                            Qtde: {drop.quant}
+                            {drop.maxQuant ? `-${drop.maxQuant}` : ""}
+                          </Typography>
+                          <Typography
+                            variant="caption"
+                            color="primary.main"
+                            fontWeight={800}
+                          >
+                            ({((drop.chance || 0) * 100).toFixed(0)}%)
+                          </Typography>
+                        </Stack>
+                      </Box>
                     </Box>
                   </Grid>
                 ))}
               </Grid>
-            </Paper>
-          )}
-
+            )}
+          </DetainItem>
           {/* Como Fabricar */}
-          {recipes && recipes.length > 0 && (
-            <Paper elevation={0} sx={{ p: 2 }}>
-              <Stack
-                direction="row"
-                spacing={1}
-                alignItems="center"
-                sx={{ mb: 2 }}
-              >
-                <Construction color="primary" />
-                <Typography variant="h6" fontWeight={700}>
-                  Como Fabricar
-                </Typography>
-              </Stack>
+          <DetainItem
+            startIcon={<Construction color="primary" />}
+            label="Como Fabricar"
+          >
+            {recipes && recipes.length > 0 && (
               <Grid container spacing={2}>
                 {recipes.map((recipe) => (
                   <Grid size={{ xs: 12, lg: 6 }} key={recipe.id}>
@@ -565,154 +732,228 @@ export function EntityDetailsPage() {
                   </Grid>
                 ))}
               </Grid>
-            </Paper>
-          )}
+            )}
+          </DetainItem>
 
           {/* Receitas Produzidas Aqui */}
-          {producedRecipes && producedRecipes.length > 0 && (
-            <Paper elevation={0} sx={{ p: 2 }}>
-              <Stack
-                direction="row"
-                spacing={1}
-                alignItems="center"
-                justifyContent="space-between"
-                sx={{ mb: 2 }}
-              >
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Construction color="primary" />
-                  <Typography variant="h6" fontWeight={700}>
-                    Receitas Produzidas Aqui
-                  </Typography>
-                  <DataChip label={producedRecipes.length.toString()} color="primary" size="small" />
-                </Stack>
-                {producedRecipes.length > producedPageSize && (
-                  <TablePaginator controller={producedPaginationController} />
-                )}
-              </Stack>
-              <Box 
-                sx={{ 
-                  maxHeight: 500, 
-                  overflowY: 'auto', 
-                  pr: 1,
-                  // Custom scrollbar for cleaner look
-                  '&::-webkit-scrollbar': { width: '4px' },
-                  '&::-webkit-scrollbar-track': { background: 'transparent' },
-                  '&::-webkit-scrollbar-thumb': { background: 'rgba(255,255,255,0.1)', borderRadius: '4px' },
-                  '&::-webkit-scrollbar-thumb:hover': { background: 'primary.main' }
-                }}
-              >
-                <Grid container spacing={1}>
-                  {producedRecipes
-                    .slice((producedPage - 1) * producedPageSize, producedPage * producedPageSize)
-                    .map((recipe) => (
-                      <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={recipe.id}>
-                        <RecipeCard
-                          id={recipe.id}
-                          name={recipe.normalizedName}
-                          stations={recipe.normalizedStations}
-                          ingredients={recipe.normalizedIngredients}
-                          products={recipe.normalizedProducts}
-                          unlock={recipe.unlock}
-                          getSourceData={getSourceData}
-                          eventsMap={eventsMap}
-                          variant="compact"
-                        />
-                      </Grid>
-                    ))}
-                </Grid>
-              </Box>
-            </Paper>
-          )}
-
+          <DetainItem
+            startIcon={<Construction color="primary" />}
+            label="Receitas Produzidas Aqui"
+            count={producedRecipes.length}
+            pages={producedRecipes.length > producedPageSize ? producedPaginationController : undefined}
+            actions={
+              matchingStations.length > 0 && (
+                <>
+                  {matchingStations.map((station) => (
+                    <Chip
+                      key={station.id}
+                      label={station.name}
+                      size="small"
+                      icon={
+                        station.icon ? (
+                          <Box
+                            component="img"
+                            src={getPublicUrl(station.icon)}
+                            sx={{
+                              width: 14,
+                              height: 14,
+                              objectFit: "contain",
+                            }}
+                          />
+                        ) : (
+                          <Construction
+                            sx={{ fontSize: "0.9rem !important" }}
+                          />
+                        )
+                      }
+                      onClick={() =>
+                        navigate(`/game/${gameId}/recipes/list/${station.id}`)
+                      }
+                      sx={{
+                        backgroundColor: "rgba(255, 68, 0, 0.1)",
+                        color: "primary.main",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        "&:hover": {
+                          backgroundColor: "rgba(255, 68, 0, 0.2)",
+                          transform: "translateY(-1px)",
+                        },
+                        transition: "all 0.2s",
+                      }}
+                    />
+                  ))}
+                </>
+              )
+            }
+          >
+            {producedRecipes && producedRecipes.length > 0 && (
+                <Box
+                  sx={{
+                    maxHeight: 500,
+                    overflowY: "auto",
+                    pr: 1,
+                    // Custom scrollbar for cleaner look
+                    "&::-webkit-scrollbar": { width: "4px" },
+                    "&::-webkit-scrollbar-track": { background: "transparent" },
+                    "&::-webkit-scrollbar-thumb": {
+                      background: "rgba(255,255,255,0.1)",
+                      borderRadius: "4px",
+                    },
+                    "&::-webkit-scrollbar-thumb:hover": {
+                      background: "primary.main",
+                    },
+                  }}
+                >
+                  <Grid container spacing={1}>
+                    {producedRecipes
+                      .slice(
+                        (producedPage - 1) * producedPageSize,
+                        producedPage * producedPageSize,
+                      )
+                      .map((recipe) => (
+                        <Grid
+                          size={{ xs: 6, sm: 4, md: 3, lg: 2 }}
+                          key={recipe.id}
+                        >
+                          <RecipeCard
+                            id={recipe.id}
+                            name={recipe.normalizedName}
+                            stations={recipe.normalizedStations}
+                            ingredients={recipe.normalizedIngredients}
+                            products={recipe.normalizedProducts}
+                            unlock={recipe.unlock}
+                            getSourceData={getSourceData}
+                            eventsMap={eventsMap}
+                            variant="compact"
+                          />
+                        </Grid>
+                      ))}
+                  </Grid>
+                </Box>
+              
+            )}
+          </DetainItem>
           {/* Localizações (Spawns) */}
-          {groupedReferencePoints.size > 0 && (
-            <Paper elevation={0} sx={{ p: 2 }}>
-              <Stack
-                direction="row"
-                spacing={1}
-                alignItems="center"
-                sx={{ mb: 2 }}
-              >
-                <MapIcon color="primary" />
-                <Typography variant="h6" fontWeight={700}>
-                  Localizações
-                </Typography>
-              </Stack>
+          <DetainItem
+            startIcon={<MapIcon color="primary" />}
+            label="Localizações"
+          >
+            {groupedReferencePoints.size > 0 && (
               <Grid container spacing={3}>
-                {Array.from(groupedReferencePoints.entries()).map(([mapId, mapPoints]) => {
-                  const meta = getMapMetadata(mapId);
+                {Array.from(groupedReferencePoints.entries()).map(
+                  ([mapId, mapPoints]) => {
+                    const meta = getMapMetadata(mapId);
 
-                  return (
-                    <Grid size={{ xs: 12, md: 6, lg: 4 }} key={mapId}>
-                      <Paper 
-                        elevation={0}
-                        sx={{ 
-                          p: 2, 
-                          backgroundColor: 'rgba(255,255,255,0.02)', 
-                          borderRadius: 2, 
-                          border: '1px solid rgba(255,255,255,0.05)',
-                          overflow: 'hidden'
-                        }}
-                      >
-                        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.5 }}>
+                    return (
+                      <Grid size={{ xs: 12, md: 6, lg: 4 }} key={mapId}>
+                        <Paper
+                          elevation={0}
+                          sx={{
+                            p: 2,
+                            backgroundColor: "rgba(255,255,255,0.02)",
+                            borderRadius: 2,
+                            border: "1px solid rgba(255,255,255,0.05)",
+                            overflow: "hidden",
+                          }}
+                        >
+                          <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            sx={{ mb: 1.5 }}
+                          >
                             <Box>
-                                <Typography variant="subtitle1" fontWeight={700} color="primary.main">
-                                    {meta?.name || mapId}
-                                </Typography>
-                                <Typography variant="caption" color="text.secondary">
-                                    {mapPoints.length} Ocorrência(s)
-                                </Typography>
+                              <Typography
+                                variant="subtitle1"
+                                fontWeight={700}
+                                color="primary.main"
+                              >
+                                {meta?.name || mapId}
+                              </Typography>
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                              >
+                                {mapPoints.length} Ocorrência(s)
+                              </Typography>
                             </Box>
                             <MapIcon sx={{ opacity: 0.3 }} />
-                        </Stack>
+                          </Stack>
 
-                        <Box sx={{ 
-                            height: 200, 
-                            width: '100%', 
-                            borderRadius: 1, 
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            overflow: 'hidden',
-                            position: 'relative',
-                            cursor: 'pointer'
-                        }}
-                        onClick={() => navigate(`/game/${gameId}/map?entity=${entity.id}&mapId=${mapId}`)}
-                        >
-                        <Box sx={{ flexGrow: 1 }}>
-                          {meta ? (
-                            <MiniMap 
-                                meta={meta}
-                                markers={mapPoints.map(s => {
+                          <Box
+                            sx={{
+                              height: 200,
+                              width: "100%",
+                              borderRadius: 1,
+                              border: "1px solid rgba(255,255,255,0.1)",
+                              overflow: "hidden",
+                              position: "relative",
+                              cursor: "pointer",
+                            }}
+                            onClick={() =>
+                              navigate(
+                                `/game/${gameId}/map?entity=${entity.id}&mapId=${mapId}`,
+                              )
+                            }
+                          >
+                            <Box sx={{ flexGrow: 1 }}>
+                              {meta ? (
+                                <MiniMap
+                                  meta={meta}
+                                  markers={mapPoints.map((s) => {
                                     let pos: [number, number] = [0, 0];
-                                    if (s.geom?.type === 'Point' && s.geom.coordinates) {
-                                      const wktCoords = parseWKTPoint(s.geom.coordinates);
+                                    if (
+                                      s.geom?.type === "Point" &&
+                                      s.geom.coordinates
+                                    ) {
+                                      const wktCoords = parseWKTPoint(
+                                        s.geom.coordinates,
+                                      );
                                       // WKT is [X, Y], Leaflet wants [Y, X] for Lat/Lng
                                       pos = [wktCoords[1], wktCoords[0]];
                                     }
                                     return {
-                                        id: s.id,
-                                        position: pos,
-                                        color: '#ff4400'
+                                      id: s.id,
+                                      position: pos,
+                                      color: "#ff4400",
                                     };
-                                })}
-                                onClick={() => navigate(`/game/${gameId}/map/${mapId}`)}
-                                height={200}
-                            />
-                          ) : (
-                            <Box sx={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'rgba(0,0,0,0.2)', borderRadius: 1 }}>
-                                <Typography variant="caption" color="text.secondary">Mapa não encontrado</Typography>
+                                  })}
+                                  onClick={() =>
+                                    navigate(`/game/${gameId}/map/${mapId}`)
+                                  }
+                                  height={200}
+                                />
+                              ) : (
+                                <Box
+                                  sx={{
+                                    height: 200,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    bgcolor: "rgba(0,0,0,0.2)",
+                                    borderRadius: 1,
+                                  }}
+                                >
+                                  <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                  >
+                                    Mapa não encontrado
+                                  </Typography>
+                                </Box>
+                              )}
                             </Box>
-                          )}
-                        </Box>
-                        </Box>
-                      </Paper>
-                    </Grid>
-                  );
-                })}
+                          </Box>
+                        </Paper>
+                      </Grid>
+                    );
+                  },
+                )}
               </Grid>
-            </Paper>
-          )}
-        </Stack>
-      </Stack>
+            )}
+          </DetainItem>
+        </>
+      </DetainContainer>
     </StyledContainer>
   );
 }
