@@ -10,5 +10,17 @@
       "start": "24/01/2026",
       "end": "14/03/2026"
     }
+  },
+  {
+    "id": "luz_sombra",
+    "name": "Luz e Sombra Onírica",
+    "type": "season",
+    "description": "Luz e Sombra Onírica é uma celebração da vila comandada pela Embaixadora da Moda Azure. É dividida em 6 semanas de celebração. A cada semana mais Desafios Semanais e Eventos ficam disponíveis para serem feitos.",
+    "icon": "/img/heartopia/events/luz_sombra/icon.webp",
+    "banner": "/img/heartopia/events/luz_sombra/banner.webp",
+    "period": {
+      "start": "21/03/2026",
+      "end": "09/05/2026"
+    }
   }
 ]

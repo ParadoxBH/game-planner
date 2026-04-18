@@ -1,0 +1,256 @@
+﻿[
+    {
+        "id": "dente_leao_vermelho",
+        "name": "Dente-de-leão Vermelho",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_vermelho.webp",
+        "sellPrice": 125
+    },
+    {
+        "id": "dente_leao_amarelo",
+        "name": "Dente-de-leão Amarelo",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_amarelo.webp",
+        "sellPrice": 125
+    },
+    {
+        "id": "dente_leao_branco",
+        "name": "Dente-de-leão Branco",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_branco.webp",
+        "sellPrice": 125
+    },
+    {
+        "id": "dente_leao_laranja",
+        "name": "Dente-de-leão Laranja",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_laranja.webp",
+        "sellPrice": 190
+    },
+    {
+        "id": "dente_leao_rosa",
+        "name": "Dente-de-leão Rosa",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_rosa.webp",
+        "sellPrice": 190
+    },
+    {
+        "id": "dente_leao_preto",
+        "name": "Dente-de-leão Preto",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_preto.webp",
+        "sellPrice": 250
+    },
+    {
+        "id": "dente_leao_pessego",
+        "name": "Dente-de-leão Pessego",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_pessego.webp",
+        "sellPrice": 250
+    },
+    {
+        "id": "dente_leao_roxo",
+        "name": "Dente-de-leão Roxo",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_roxo.webp",
+        "sellPrice": 315
+    },
+    {
+        "id": "dente_leao_azul",
+        "name": "Dente-de-leão Azul",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_azul.webp",
+        "sellPrice": 315
+    },
+    {
+        "id": "dente_leao_luminoso",
+        "name": "Dente-de-leão Luminoso",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_luminoso.webp",
+        "sellPrice": 500
+    },
+    
+    {
+        "id": "semente_dente_leao_vermelho",
+        "name": "Semente de Dente-de-leão Vermelho",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_vermelho.webp",
+        "buyPrice": 30
+    },
+    {
+        "id": "semente_dente_leao_amarelo",
+        "name": "Semente de Dente-de-leão Amarelo",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_amarelo.webp",
+        "buyPrice": 30
+    },
+    {
+        "id": "semente_dente_leao_branco",
+        "name": "Semente de Dente-de-leão Branco",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_branco.webp",
+        "buyPrice": 30
+    },
+    {
+        "id": "semente_dente_leao_laranja",
+        "name": "Semente de Dente-de-leão Laranja",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_laranja.webp"
+    },
+    {
+        "id": "semente_dente_leao_rosa",
+        "name": "Semente de Dente-de-leão Rosa",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_rosa.webp"
+    },
+    {
+        "id": "semente_dente_leao_preto",
+        "name": "Semente de Dente-de-leão Preto",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_preto.webp"
+    },
+    {
+        "id": "semente_dente_leao_pessego",
+        "name": "Semente de Dente-de-leão Pessego",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_pessego.webp"
+    },
+    {
+        "id": "semente_dente_leao_roxo",
+        "name": "Semente de Dente-de-leão Roxo",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_roxo.webp"
+    },
+    {
+        "id": "semente_dente_leao_azul",
+        "name": "Semente de Dente-de-leão Azul",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_azul.webp"
+    },
+    {
+        "id": "semente_dente_leao_luminoso",
+        "name": "Semente de Dente-de-leão Luminoso",
+        "category": [
+        "agriculture",
+        "flower"
+        ],
+        "event": [
+        "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_luminoso.webp"
+    }
+]
