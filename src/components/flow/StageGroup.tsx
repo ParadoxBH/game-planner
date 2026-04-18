@@ -1,7 +1,9 @@
-import type { NodeProps } from "@xyflow/react";
+import type { Node, NodeProps } from "@xyflow/react";
 import { Box, Typography } from "@mui/material";
 
-export function StageGroup({ data }: NodeProps<{ label: string }>) {
+export type StageGroupNode = Node<{ label: string }, 'stageGroup'>;
+
+export function StageGroup({ data }: NodeProps<StageGroupNode>) {
   return (
     <Box
       sx={{

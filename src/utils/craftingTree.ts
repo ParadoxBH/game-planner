@@ -1,11 +1,11 @@
-import type { Recipe, RecipeItem, Item, Entity } from "../types/gameModels";
+import type { Recipe, RecipeItem, Item, Entity, GameDataTypes } from "../types/gameModels";
 
 export interface CraftNode {
   id: string;
   name: string;
   icon?: string;
   amount: number;
-  type: "category";
+  type: GameDataTypes;
   recipe?: Recipe;
   ingredients: CraftNode[];
   isBaseResource: boolean;
@@ -38,7 +38,7 @@ export function getCraftingTree(
 
   // Resolve category if choice exists
   let actualId = id;
-  let actualType = type;
+  let actualType: GameDataTypes = type as GameDataTypes;
   let resolvedFromCategory = false;
 
   if (type === "category" && categoryChoices?.[id]) {

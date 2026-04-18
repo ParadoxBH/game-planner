@@ -6,6 +6,7 @@ import type {
   Category,
   Shop,
   GameEvent,
+  GameDataTypes,
 } from "../types/gameModels";
 import type {
   NormalizedRecipe,
@@ -608,7 +609,7 @@ export class ApiService {
     const stations = recipe.stations || recipe.ProducedIn || [];
 
     // Normalize ingredients
-    let ingredients: { id: string; name?: string; amount: number }[] = [];
+    let ingredients: { id: string; name?: string; amount: number; type?: GameDataTypes }[] = [];
     if (recipe.ingredients) {
       ingredients = recipe.ingredients.map((i) => ({ ...i }));
     } else if (recipe.Ingredients) {
@@ -630,13 +631,13 @@ export class ApiService {
           name: i.Name || i.name,
           amount: i.Amount || i.amount || 1,
           event: i.event,
-          type
+          type: type as GameDataTypes
         };
       }));
     }
 
     // Normalize products
-    let products: { id: string; name?: string; amount: number; type?: string }[] = [];
+    let products: { id: string; name?: string; amount: number; type?: GameDataTypes }[] = [];
     if (recipe.itemId) {
       products.push({ id: recipe.itemId, amount: recipe.amount || 1 });
     } else if (recipe.products) {
@@ -660,7 +661,7 @@ export class ApiService {
           name: p.Name || p.name,
           amount: p.Amount || p.amount || 1,
           event: p.event,
-          type
+          type: type as GameDataTypes
         };
       }));
     }

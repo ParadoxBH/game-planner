@@ -7,7 +7,6 @@ import {
   Stack,
   Breadcrumbs,
   IconButton,
-  Box,
 } from "@mui/material";
 import {
   NavigateNext,

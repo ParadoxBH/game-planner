@@ -1,4 +1,4 @@
-import { Grid, Paper, Stack } from "@mui/material";
+import { Grid, Stack } from "@mui/material";
 import type { ReactNode } from "react";
 import React from "react";
 import { usePlatform } from "../../hooks/usePlatform";

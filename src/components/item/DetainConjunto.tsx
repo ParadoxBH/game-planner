@@ -1,5 +1,5 @@
-﻿import { AutoAwesomeMosaic } from "@mui/icons-material";
-import { Box, Paper, Stack, Typography } from "@mui/material";
+import { AutoAwesomeMosaic } from "@mui/icons-material";
+import { Stack, Typography } from "@mui/material";
 import { DataCard } from "../common/DataCard";
 import { useNavigate, useParams } from "react-router-dom";
 import type { Conjunto } from "../../types/gameModels";

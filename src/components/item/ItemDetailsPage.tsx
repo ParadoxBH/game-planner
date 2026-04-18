@@ -15,14 +15,11 @@ import {
   Construction,
   Architecture,
   Bookmarks,
-  AutoAwesomeMosaic,
 } from "@mui/icons-material";
 import { useApi } from "../../hooks/useApi";
 import { StyledContainer } from "../common/StyledContainer";
 import { ItemChip } from "../common/ItemChip";
 import { RecipeCard } from "../recipe/RecipeCard";
-import { DataCard } from "../common/DataCard";
-import { ItemCard } from "./ItemCard";
 import { ItemShopCard } from "../shop/ItemShopCard";
 import { ItemFlowSection } from "./ItemFlowSection";
 import { useMemo, useState, useEffect } from "react";

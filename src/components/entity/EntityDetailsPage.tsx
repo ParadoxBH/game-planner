@@ -20,7 +20,6 @@ import {
   List as ListIcon,
   Construction,
   Storefront,
-  AutoAwesomeMosaic,
 } from "@mui/icons-material";
 import { useApi } from "../../hooks/useApi";
 import { StyledContainer } from "../common/StyledContainer";
@@ -42,7 +41,6 @@ import { MiniMap } from "../common/MiniMap";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
 import { parseWKTPoint } from "../../utils/wkt";
-import { TablePaginator } from "../common/TablePaginator";
 import { eventRepository } from "../../repositories/EventRepository";
 import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
@@ -50,7 +48,6 @@ import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
 import { mapRepository } from "../../repositories/MapRepository";
 import { categoryRepository } from "../../repositories/CategoryRepository";
 import { getPublicUrl } from "../../utils/pathUtils";
-import { usePlatform } from "../../hooks/usePlatform";
 import { DetainContainer } from "../common/DetainContainer";
 import { DetainItem } from "../common/DetainItem";
 import { DetainConjunto } from "../item/DetainConjunto";
@@ -113,7 +110,6 @@ export function EntityDetailsPage() {
   const [entities, setEntities] = useState<Entity[]>([]);
   const [entityConjuntos, setEntityConjuntos] = useState<Conjunto[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const { isMobile } = usePlatform();
 
   useEffect(() => {
     if (dbLoading) return;
@@ -303,7 +299,6 @@ export function EntityDetailsPage() {
   }
 
   const { entity, drops, recipes } = entityDetails;
-  const sizeEntityCard = 300;
 
   return (
     <StyledContainer

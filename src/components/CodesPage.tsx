@@ -3,7 +3,6 @@ import {
   Typography, 
   Grid, 
   Card, 
-  CardContent, 
   Stack,
   CircularProgress,
   IconButton,
@@ -12,7 +11,6 @@ import {
   Snackbar,
   Alert,
   Switch,
-  FormControlLabel
 } from "@mui/material";
 import { 
   ContentCopy,
@@ -21,7 +19,6 @@ import {
   TimerOff,
   CheckCircle,
   RadioButtonUnchecked,
-  FilterList
 } from "@mui/icons-material";
 import { useParams } from "react-router-dom";
 import { useApi } from "../hooks/useApi";

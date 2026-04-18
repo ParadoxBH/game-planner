@@ -3,7 +3,6 @@ import {
   Typography,
   Card,
   CardContent,
-  Stack,
   Chip,
   Tooltip,
 } from "@mui/material";
@@ -14,6 +13,7 @@ import { getPublicUrl } from "../../utils/pathUtils";
 import { parseWKTPoint } from "../../utils/wkt";
 import { MiniMap } from "../common/MiniMap";
 import { ListingDataView } from "../common/ListingDataView";
+import { type ViewMode } from "../common/ViewModeSelector";
 import { ShopItemCard } from "./ShopItemCard";
 import type {
   ShopItem,
@@ -35,7 +35,7 @@ interface ShopsDetailsPageProps {
   eventsMap: Map<string, GameEvent>;
   referencePoints: ReferencePoints[];
   maps: MapMetadata[];
-  itemsViewMode: string;
+  itemsViewMode: ViewMode;
 }
 
 export function ShopsDetailsPage({

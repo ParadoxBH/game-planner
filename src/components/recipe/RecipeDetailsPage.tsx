@@ -7,8 +7,6 @@ import {
   Stack,
   Divider,
   Breadcrumbs,
-  Tab,
-  Tabs,
   CircularProgress,
   Chip,
   ButtonGroup,
@@ -35,7 +33,6 @@ import { StyledDialog } from "../common/StyledDialog";
 import { getCraftingTree } from "../../utils/craftingTree";
 import type { Item, Entity, Recipe } from "../../types/gameModels";
 import type { RecipeDetails } from "../../types/apiModels";
-import { theme } from "../../theme/theme";
 import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
 import { recipeRepository } from "../../repositories/RecipeRepository";

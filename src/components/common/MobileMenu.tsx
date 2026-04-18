@@ -59,7 +59,7 @@ export function MobileMenu({
     setOpenDropdowns((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const currentGame = games.find((g) => g.id === gameId);
+
 
   return (
     <Drawer

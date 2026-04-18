@@ -7,6 +7,7 @@ import {
   useEdgesState,
   type Edge,
   type Node,
+  type NodeTypes,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Box } from "@mui/material";
@@ -18,7 +19,7 @@ import { ResultFlowNode } from "./ResultFlowNode";
 import { StageGroup } from "./StageGroup";
 import { type Recipe } from "../../types/gameModels";
 
-const nodeTypes = {
+const nodeTypes: NodeTypes = {
   stationNode: StationFlowNode,
   shopNode: ShopFlowNode,
   moneyNode: MoneyFlowNode,

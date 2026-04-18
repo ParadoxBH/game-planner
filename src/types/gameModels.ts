@@ -1,4 +1,4 @@
-import type { GeoJsonGeometry, WktGeometry } from "./geoJsonGeometry";
+import type { WktGeometry } from "./geoJsonGeometry";
 
 export interface Item {
   id: string;

@@ -4,28 +4,18 @@ import {
   Typography,
   Chip,
   Stack,
-  Tabs,
-  Tab,
-  Avatar,
-  Card,
-  CardContent,
   CircularProgress,
 } from "@mui/material";
 import {
   Storefront,
-  Lock,
-  Refresh,
   Inventory,
-  Map as MapIcon,
 } from "@mui/icons-material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
 import { useMemo, useState, useEffect } from "react";
 import { StyledContainer } from "../common/StyledContainer";
-import { ShopItemCard } from "./ShopItemCard";
 import { ShopCard } from "./ShopCard";
 import type {
-  ShopItem,
   Shop,
   Entity,
   Item,
@@ -38,8 +28,6 @@ import { ListingDataView } from "../common/ListingDataView";
 import { Tooltip } from "@mui/material";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { useViewMode } from "../../hooks/useViewMode";
-import { MiniMap } from "../common/MiniMap";
-import { parseWKTPoint } from "../../utils/wkt";
 import { shopRepository } from "../../repositories/ShopRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
 import { itemRepository } from "../../repositories/ItemRepository";
