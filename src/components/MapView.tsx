@@ -1,4 +1,4 @@
-import { Box, Typography, Paper, Stack, Collapse, Snackbar, Alert, ToggleButton, ToggleButtonGroup, CircularProgress } from "@mui/material";
+import { Box, Typography, Paper, Stack, Collapse, Snackbar, Alert, ToggleButton, ToggleButtonGroup, CircularProgress, Button } from "@mui/material";
 import { CRS, type LatLngBoundsExpression, Transformation } from "leaflet";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -32,6 +32,7 @@ import { itemRepository } from "../repositories/ItemRepository";
 import { referencePointRepository } from "../repositories/ReferencePointRepository";
 import { shopRepository } from "../repositories/ShopRepository";
 import { getPublicUrl } from "../utils/pathUtils";
+import { PointMarkerPanel } from "./PointMarkerPanel";
 
 export interface NavigationItem {
   type: "entity" | "item";
@@ -204,6 +205,11 @@ export const MapView = () => {
   const [currentPoints, setCurrentPoints] = useState<[number, number][]>([]);
   const mapRef = useRef<any>(null);
 
+  // Improved Point Marker States
+  const [sessionPoints, setSessionPoints] = useState<ReferencePoints[]>([]);
+  const [pointConfig, setPointConfig] = useState({ type: "poi", entityId: "TODO" });
+  const [isMarkerPanelOpen, setIsMarkerPanelOpen] = useState(false);
+
   const [entities, setEntities] = useState<Entity[]>([]);
   const [referencePoints, setReferencePoints] = useState<ReferencePoints[]>([]);
   const [shops, setShops] = useState<Shop[]>([]);
@@ -260,6 +266,22 @@ export const MapView = () => {
     return () => { isMounted = false; };
   }, [dbLoading, gameId, urlMapId, navigate]);
 
+  // Load/Save session points
+  useEffect(() => {
+    const saved = localStorage.getItem(`session_points_${gameId}`);
+    if (saved) {
+      try { setSessionPoints(JSON.parse(saved)); } catch (e) { console.error("Error loading session points", e); }
+    }
+  }, [gameId]);
+
+  useEffect(() => {
+    if (sessionPoints.length > 0) {
+      localStorage.setItem(`session_points_${gameId}`, JSON.stringify(sessionPoints));
+    } else {
+      localStorage.removeItem(`session_points_${gameId}`);
+    }
+  }, [sessionPoints, gameId]);
+
   const selectedMap = useMemo(() => maps.find(m => m.id === selectedMapId), [maps, selectedMapId]);
 
   const availableViews = useMemo(() => selectedMap?.availableViews || ["map", "dashboard"], [selectedMap]);
@@ -312,9 +334,27 @@ export const MapView = () => {
   const handleMapClick = (latlng: [number, number]) => {
     if (activeTool === 'polygon') setCurrentPoints(prev => [...prev, latlng]);
     else if (activeTool === 'point') {
-      const obj = { id: `point_${Date.now()}`, type: "poi", entityId: "TODO", geom: { type: "Point", coordinates: formatWKTPoint([latlng[1], latlng[0]]) }, mapId: selectedMapId };
-      navigator.clipboard.writeText(JSON.stringify(obj, null, 2)).then(() => { setSnackbarMessage("Ponto copiado!"); setSnackbarOpen(true); });
+      const newPoint: ReferencePoints = { 
+        id: `point_${Date.now()}`, 
+        type: pointConfig.type as any, 
+        entityId: pointConfig.entityId, 
+        geom: { type: "Point", coordinates: formatWKTPoint([latlng[1], latlng[0]]) }, 
+        mapId: selectedMapId 
+      };
+      setSessionPoints(prev => [...prev, newPoint]);
+      setSnackbarMessage("Ponto adicionado à lista!");
+      setSnackbarOpen(true);
+      if (!isMarkerPanelOpen) setIsMarkerPanelOpen(true);
     }
+  };
+
+  const handleDeleteSessionPoint = (id: string) => setSessionPoints(prev => prev.filter(p => p.id !== id));
+  const handleClearSessionPoints = () => setSessionPoints([]);
+  const handleCopySessionPoints = () => {
+    navigator.clipboard.writeText(JSON.stringify(sessionPoints, null, 2)).then(() => {
+      setSnackbarMessage("Toda a lista foi copiada!");
+      setSnackbarOpen(true);
+    });
   };
 
   return (
@@ -393,6 +433,31 @@ export const MapView = () => {
                 </Marker>
               );
             })}
+
+            {/* Session Points */}
+            {sessionPoints.filter(p => p.mapId === selectedMapId).map(point => {
+              const cp = parseWKTPoint(point.geom.coordinates);
+              const pos: [number, number] = [cp[1], cp[0]];
+              const entity = entityLookup[point.entityId] || items.find(i => i.id === point.entityId);
+
+              return (
+                <Marker 
+                  key={point.id} 
+                  position={pos} 
+                  icon={divIcon({ 
+                    html: `<div style="width: 32px; height: 32px; border: 2px dashed ${theme.palette.success.main}; border-radius: ${theme.shape.borderRadius}px; background: ${theme.designTokens.colors.glassBg}; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 12px rgba(0,255,100,0.3); transform: translate(-16px, -16px);"><img src="${getPublicUrl(point.icon || entity?.icon || '/img/placeholder.png')}" style="width: 85%; height: 85%; object-fit: contain; opacity: 0.8;" /></div>`, 
+                    className: 'session-point-icon' 
+                  })}
+                >
+                  <Popup>
+                    <Typography variant="subtitle2" color="success.main">Ponto na Sessora</Typography>
+                    <Typography variant="body2">{entity?.name || point.entityId}</Typography>
+                    <Typography variant="caption" display="block">{point.type}</Typography>
+                    <Button size="small" color="error" onClick={() => handleDeleteSessionPoint(point.id)} sx={{ mt: 1 }}>Remover</Button>
+                  </Popup>
+                </Marker>
+              );
+            })}
           </MapContainer>
         ) : (
           <MapDashboard gameId={gameId!} selectedMapId={selectedMapId} availableViews={availableViews} onSelectEntity={id => handlePush({ type: "entity", id })} onSwitchToMap={() => setViewMode("map")} />
@@ -401,7 +466,31 @@ export const MapView = () => {
       </Box>
 
       {navigationStack.length > 0 && <EntityDrawer stack={navigationStack} entities={entities} items={items} referencePoints={referencePoints} shops={shops} maps={maps} onSelectMap={setSelectedMapId} onPush={handlePush} onPop={() => setNavigationStack(s => s.slice(0, -1))} onClose={() => setNavigationStack([])} />}
-      {viewMode === "map" && <MapToolbox activeTool={activeTool} hasPoints={currentPoints.length > 0} onSelectTool={setActiveTool} onConfirm={() => { navigator.clipboard.writeText(JSON.stringify({ id: `zone_${Date.now()}`, geom: { type: "Polygon", coordinates: formatWKTPolygon(currentPoints.map(p => [p[1], p[0]])) }, mapId: selectedMapId }, null, 2)); setSnackbarMessage("Zona copiada!"); setSnackbarOpen(true); setActiveTool(null); setCurrentPoints([]); }} onClear={() => setCurrentPoints([])} onCancel={() => { setActiveTool(null); setCurrentPoints([]); }} />}
+      {viewMode === "map" && (
+        <MapToolbox 
+          activeTool={activeTool} 
+          hasPoints={currentPoints.length > 0} 
+          onSelectTool={setActiveTool} 
+          onConfirm={() => { navigator.clipboard.writeText(JSON.stringify({ id: `zone_${Date.now()}`, geom: { type: "Polygon", coordinates: formatWKTPolygon(currentPoints.map(p => [p[1], p[0]])) }, mapId: selectedMapId }, null, 2)); setSnackbarMessage("Zona copiada!"); setSnackbarOpen(true); setActiveTool(null); setCurrentPoints([]); }} 
+          onClear={() => setCurrentPoints([])} 
+          onCancel={() => { setActiveTool(null); setCurrentPoints([]); }}
+          sessionCount={sessionPoints.length}
+          isPanelOpen={isMarkerPanelOpen}
+          onTogglePanel={() => setIsMarkerPanelOpen(!isMarkerPanelOpen)}
+        />
+      )}
+      <PointMarkerPanel
+        open={isMarkerPanelOpen}
+        onClose={() => setIsMarkerPanelOpen(false)}
+        sessionPoints={sessionPoints}
+        onDeletePoint={handleDeleteSessionPoint}
+        onClearPoints={handleClearSessionPoints}
+        onCopyAll={handleCopySessionPoints}
+        pointConfig={pointConfig}
+        onConfigChange={setPointConfig}
+        entities={entities}
+        items={items}
+      />
       <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={() => setSnackbarOpen(false)} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}><Alert severity="info" variant="filled" sx={{ width: '100%', borderRadius: 2 }}>{snackbarMessage}</Alert></Snackbar>
     </Box>
   );

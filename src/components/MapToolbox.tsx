@@ -1,4 +1,4 @@
-import { Paper, Stack, IconButton, Tooltip, Divider } from "@mui/material";
+import { Paper, Stack, IconButton, Tooltip, Divider, Badge } from "@mui/material";
 import PolylineIcon from "@mui/icons-material/Polyline";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -12,6 +12,9 @@ interface MapToolboxProps {
   onConfirm: () => void;
   onClear: () => void;
   onCancel: () => void;
+  sessionCount?: number;
+  isPanelOpen?: boolean;
+  onTogglePanel?: () => void;
 }
 
 export const MapToolbox = ({
@@ -21,6 +24,9 @@ export const MapToolbox = ({
   onConfirm,
   onClear,
   onCancel,
+  sessionCount = 0,
+  isPanelOpen = false,
+  onTogglePanel,
 }: MapToolboxProps) => {
 
   return (
@@ -90,6 +96,19 @@ export const MapToolbox = ({
             <Tooltip title={activeTool === 'point' ? "Sair do modo Ponto" : "Cancelar Desenho"} placement="bottom">
               <IconButton onClick={onCancel} color="error" size="medium">
                 <CancelIcon />
+              </IconButton>
+            </Tooltip>
+          </>
+        )}
+
+        {(sessionCount > 0 || isPanelOpen) && (
+          <>
+            <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
+            <Tooltip title="Lista de Pontos" placement="left">
+              <IconButton onClick={onTogglePanel} color={isPanelOpen ? "primary" : "default"} size="medium">
+                <Badge badgeContent={sessionCount} color="primary" sx={{ "& .MuiBadge-badge": { fontSize: '0.6rem', height: 16, minWidth: 16 } }}>
+                  <PlaceIcon />
+                </Badge>
               </IconButton>
             </Tooltip>
           </>
