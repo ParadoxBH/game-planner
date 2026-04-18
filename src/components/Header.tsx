@@ -7,21 +7,11 @@ import {
   Stack,
   Breadcrumbs,
   IconButton,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Collapse,
   Box,
-  Divider,
 } from "@mui/material";
 import {
   NavigateNext,
   Menu as MenuIcon,
-  ExpandLess,
-  ExpandMore,
 } from "@mui/icons-material";
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from "react";
@@ -31,13 +21,13 @@ import { GlobalEventFilter } from "./common/GlobalEventFilter";
 import { theme } from "../theme/theme";
 import { usePlatform } from "../hooks/usePlatform";
 import { RemmaperObj } from "../utils/mapper";
+import { MobileMenu } from "./common/MobileMenu";
 
 export function Header() {
   const location = useLocation();
   const pathParts = location.pathname.split('/').filter(Boolean);
   
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [openDropdowns, setOpenDropdowns] = useState<Record<string, boolean>>({});
   const { isMobile } = usePlatform();
 
   // Basic heuristic: Se a rota for /game/:gameId/..., extrai o gameId
@@ -48,11 +38,6 @@ export function Header() {
 
   const toggleMobileMenu = (open: boolean) => () => {
     setMobileMenuOpen(open);
-  };
-
-  const toggleDropdown = (id: string) => (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setOpenDropdowns(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
@@ -169,96 +154,12 @@ export function Header() {
         </Toolbar>
       </Container>
 
-      {/* Mobile Drawer */}
-      <Drawer
-        anchor="left"
+      <MobileMenu
         open={mobileMenuOpen}
         onClose={toggleMobileMenu(false)}
-        PaperProps={{
-          sx: {
-            width: 280,
-            backgroundColor: '#0d0d0d',
-            backgroundImage: 'none',
-          }
-        }}
-      >
-        <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
-            Game Planner
-          </Typography>
-        </Box>
-        <Divider />
-        <List sx={{ pt: 0 }}>
-          {menuItems.map((item) => {
-            const isActive = location.pathname.includes(item.path);
-            const isDropdownOpen = !!openDropdowns[item.id];
-
-            return (
-              <Box key={item.id}>
-                <ListItem disablePadding>
-                  <ListItemButton 
-                    component={item.isDropdown ? 'div' : Link}
-                    //@ts-ignore
-                    to={item.isDropdown ? undefined : item.path}
-                    onClick={item.isDropdown ? toggleDropdown(item.id) : toggleMobileMenu(false)}
-                    selected={isActive}
-                    sx={{
-                      py: 1.5,
-                      borderLeft: isActive ? '4px solid #ff4400' : '4px solid transparent',
-                      '&.Mui-selected': {
-                        backgroundColor: 'rgba(255, 68, 0, 0.08)',
-                        '&:hover': {
-                          backgroundColor: 'rgba(255, 68, 0, 0.12)',
-                        }
-                      }
-                    }}
-                  >
-                    <ListItemIcon sx={{ color: isActive ? 'primary.main' : 'text.secondary', minWidth: 40 }}>
-                      {item.icon}
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary={item.label} 
-                      primaryTypographyProps={{ 
-                        fontWeight: isActive ? 700 : 500,
-                        color: isActive ? 'primary.main' : 'text.primary'
-                      }} 
-                    />
-                    {item.isDropdown && (isDropdownOpen ? <ExpandLess /> : <ExpandMore />)}
-                  </ListItemButton>
-                </ListItem>
-                
-                {item.isDropdown && item.options && (
-                  <Collapse in={isDropdownOpen} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding sx={{ backgroundColor: 'rgba(255, 255, 255, 0.02)' }}>
-                      <ListItemButton 
-                        component={Link}
-                        to={item.path}
-                        onClick={toggleMobileMenu(false)}
-                        sx={{ pl: 7, py: 1 }}
-                        selected={location.pathname === item.path}
-                      >
-                        <ListItemText primary="Ver Todos" primaryTypographyProps={{ fontSize: '0.875rem' }} />
-                      </ListItemButton>
-                      {item.options.map((opt) => (
-                        <ListItemButton 
-                          key={opt.path}
-                          component={Link}
-                          to={opt.path}
-                          onClick={toggleMobileMenu(false)}
-                          sx={{ pl: 7, py: 1 }}
-                          selected={location.pathname === opt.path}
-                        >
-                          <ListItemText primary={opt.label} primaryTypographyProps={{ fontSize: '0.875rem' }} />
-                        </ListItemButton>
-                      ))}
-                    </List>
-                  </Collapse>
-                )}
-              </Box>
-            );
-          })}
-        </List>
-      </Drawer>
+        gameId={gameId}
+        menuItems={menuItems}
+      />
     </AppBar>
   );
 }
