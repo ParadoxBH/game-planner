@@ -24,7 +24,9 @@ export function useApi(gameId: string | undefined) {
     const checkAndInit = async () => {
       try {
         const isPopulated = await dbService.isDatabasePopulated(gameId);
-        if (isPopulated) {
+        const isDev = localStorage.getItem("showDev") === "true";
+
+        if (isPopulated && !isDev) {
           if (isMounted) setLoading(false);
           return;
         }

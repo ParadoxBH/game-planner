@@ -3,6 +3,21 @@ import { getPublicUrl } from "../utils/pathUtils";
 
 const missingManifests = new Set<string>();
 
+/**
+ * Helper to fetch data with cache-busting in development
+ */
+async function fetchData(url: string) {
+  const isDev = import.meta.env.DEV || localStorage.getItem("showDev") === "true";
+  
+  if (isDev) {
+    const separator = url.includes('?') ? '&' : '?';
+    const bustedUrl = `${url}${separator}t=${Date.now()}`;
+    return fetch(bustedUrl, { cache: 'no-store' });
+  }
+  
+  return fetch(url);
+}
+
 export async function loadGameData<T>(
   gameId: string,
   dataset: string
@@ -13,7 +28,7 @@ export async function loadGameData<T>(
 
   if (!missingManifests.has(cacheKey)) {
     try {
-      const manifestResponse = await fetch(manifestUrl);
+      const manifestResponse = await fetchData(manifestUrl);
       
       if (manifestResponse.ok) {
         const files: string[] = await manifestResponse.json();
@@ -21,7 +36,7 @@ export async function loadGameData<T>(
         
         const results = await Promise.all(
           files.map(async (file) => {
-            const response = await fetch(`${baseUrl}/${file}`);
+            const response = await fetchData(`${baseUrl}/${file}`);
             if (!response.ok) {
               console.error(`[DataLoader] Erro ao carregar arquivo de manifest: ${file} (Status: ${response.status})`);
               throw new Error(`Falha ao carregar ${file} de ${dataset}`);
@@ -45,7 +60,7 @@ export async function loadGameData<T>(
   }
 
   // Fallback: carregar arquivo único
-  const response = await fetch(`${baseUrl}.json`);
+  const response = await fetchData(`${baseUrl}.json`);
   if (!response.ok) {
     throw new Error(`Falha ao carregar dados de ${dataset} (Manifest e arquivo único não encontrados)`);
   }
@@ -54,7 +69,7 @@ export async function loadGameData<T>(
 
 export async function loadGamesList(): Promise<GameInfo[]> {
   try {
-    const response = await fetch(getPublicUrl('data/games.json'));
+    const response = await fetchData(getPublicUrl('data/games.json'));
     if (!response.ok) {
       throw new Error(`Failed to load games list`);
     }
@@ -68,7 +83,7 @@ export async function loadGamesList(): Promise<GameInfo[]> {
 
 export async function loadGameMaps(gameId: string): Promise<any[]> {
   try {
-    const response = await fetch(getPublicUrl(`data/${gameId}/maps.json`));
+    const response = await fetchData(getPublicUrl(`data/${gameId}/maps.json`));
     if (!response.ok) {
       console.warn(`No maps.json found for ${gameId}, returning empty maps list.`);
       return [];
