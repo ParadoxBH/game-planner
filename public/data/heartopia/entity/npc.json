@@ -4,114 +4,168 @@
     "id": "albert_jr",
     "name": "Albert Jr.",
     "category": "npc",
-    "icon": "/img/heartopia/npc/albert_jr.png"
+    "icon": "/img/heartopia/npc/head/albert_jr.png",
+    "thumbnail": "/img/heartopia/npc/albert_jr.png"
   },
   {
     "id": "andrew",
     "name": "Andrew",
     "category": "npc",
-    "icon": "/img/heartopia/npc/andrew.png"
+    "icon": "/img/heartopia/npc/head/andrew.png",
+    "thumbnail": "/img/heartopia/npc/andrew.png"
   },
   {
     "id": "annie",
     "name": "Annie",
     "category": "npc",
-    "icon": "/img/heartopia/npc/annie.png"
+    "icon": "/img/heartopia/npc/head/annie.png",
+    "thumbnail": "/img/heartopia/npc/annie.png"
   },
   {
     "id": "azure",
     "name": "Azure",
     "category": "npc",
-    "icon": "/img/heartopia/npc/azure.png"
+    "icon": "/img/heartopia/npc/head/azure.png",
+    "thumbnail": "/img/heartopia/npc/azure.png"
   },
   {
     "id": "bailey_j",
     "name": "Bailey J.",
     "category": "npc",
-    "icon": "/img/heartopia/npc/bailey_j.png"
+    "icon": "/img/heartopia/npc/head/bailey_j.png",
+    "thumbnail": "/img/heartopia/npc/bailey_j.png" 
   },
   {
     "id": "blanc",
     "name": "Blanc",
     "category": "npc",
-    "icon": "/img/heartopia/npc/blanc.png"
+    "icon": "/img/heartopia/npc/head/blanc.png",
+    "thumbnail": "/img/heartopia/npc/blanc.png"
   },
   {
     "id": "colecionador",
     "name": "Colecionador",
     "category": "npc",
-    "icon": "/img/heartopia/npc/colecionador.png"
+    "icon": "/img/heartopia/npc/head/colecionador.png",
+    "thumbnail": "/img/heartopia/npc/colecionador.png"
   },
   {
     "id": "dorothee",
     "name": "Dorothee",
     "category": "npc",
-    "icon": "/img/heartopia/npc/dorothee.png"
+    "icon": "/img/heartopia/npc/head/dorothee.png",
+    "thumbnail": "/img/heartopia/npc/dorothee.png"
   },
   {
     "id": "ka_ching",
     "name": "Ka-ching",
     "category": "npc",
-    "icon": "/img/heartopia/npc/ka_ching.png"
+    "icon": "/img/heartopia/npc/head/ka_ching.png",
+    "thumbnail": "/img/heartopia/npc/ka_ching.png"
   },
   {
     "id": "massimo",
     "name": "Massimo",
     "category": "npc",
-    "icon": "/img/heartopia/npc/massimo.png"
+    "icon": "/img/heartopia/npc/head/massimo.png",
+    "thumbnail": "/img/heartopia/npc/massimo.png"
   },
   {
     "id": "naniwa",
     "name": "Naniwa",
     "category": "npc",
-    "icon": "/img/heartopia/npc/naniwa.png"
+    "icon": "/img/heartopia/npc/head/naniwa.png",
+    "thumbnail": "/img/heartopia/npc/naniwa.png"
   },
   {
     "id": "vanya",
     "name": "Vanya",
     "category": "npc",
-    "icon": "/img/heartopia/npc/vanya.png"
+    "icon": "/img/heartopia/npc/head/vanya.png",
+    "thumbnail": "/img/heartopia/npc/vanya.png"
   },
   {
     "id": "sra_joan",
     "name": "Sr. Joan",
     "category": "npc",
-    "icon": "/img/heartopia/npc/sra_joan.png"
+    "icon": "/img/heartopia/npc/head/sra_joan.png",
+    "thumbnail": "/img/heartopia/npc/sra_joan.png"
   },
   {
     "id": "patti",
     "name": "Patti",
     "category": "npc",
-    "icon": "/img/heartopia/npc/patti.webp"
+    "icon": "/img/heartopia/npc/head/patti.png",
+    "thumbnail": "/img/heartopia/npc/patti.png"
   },
   {
     "id": "bob",
     "name": "Bob",
     "category": "npc",
-    "icon": "/img/heartopia/npc/bob.webp"
+    "icon": "/img/heartopia/npc/head/bob.png",
+    "thumbnail": "/img/heartopia/npc/bob.png"
   },
   {
     "id": "atara",
     "name": "Atara",
     "category": "npc",
-    "icon": "/img/heartopia/npc/atara.webp"
+    "icon": "/img/heartopia/npc/head/atara.png",
+    "thumbnail": "/img/heartopia/npc/atara.png"
   },
   {
     "id": "will",
     "name": "Will",
     "category": "npc",
-    "icon": "/img/heartopia/npc/will.png"
+    "icon": "/img/heartopia/npc/head/will.png",
+    "thumbnail": "/img/heartopia/npc/will.png"
+  },
+  {
+    "id": "bill",
+    "name": "Bill",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/bill.png",
+    "thumbnail": "/img/heartopia/npc/bill.png"
   },
   {
     "id": "vernie",
     "name": "Vernie",
     "category": "npc",
-    "icon": "/img/heartopia/npc/vernie.png"
+    "icon": "/img/heartopia/npc/head/vernie.png",
+    "thumbnail": "/img/heartopia/npc/vernie.png"
+  },
+  {
+    "id": "surfista",
+    "name": "Surfista da Praia",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/surfista.png",
+    "thumbnail": "/img/heartopia/npc/surfista.png"
+  },
+  {
+    "id": "sally",
+    "name": "Sally",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/sally.png",
+    "thumbnail": "/img/heartopia/npc/sally.png"
   },
   {
     "id": "eric",
     "name": "Eric",
     "category": "npc",
-    "icon": "/img/heartopia/npc/eric.webp"
+    "icon": "/img/heartopia/npc/head/eric.png",
+    "thumbnail": "/img/heartopia/npc/eric.png"
+  },
+  {
+    "id": "vovo",
+    "name": "Vovo",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/veia.png",
+    "thumbnail": "/img/heartopia/npc/veia.png"
+  },
+  {
+    "id": "cassie",
+    "name": "Cassie",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/cassie.png",
+    "thumbnail": "/img/heartopia/npc/cassie.png"
   }
 ]

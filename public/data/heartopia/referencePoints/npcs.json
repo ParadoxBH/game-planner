@@ -188,5 +188,68 @@
       "coordinates": "POINT(-36.671948242187504 46.885515458962566)"
     },
     "mapId": "main"
+  },
+  {
+    "id": "bill_npc",
+    "type": "spawn",
+    "entityId": "bill",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-84.92451171875001 -371.35172851562504)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "vovo_npc",
+    "type": "spawn",
+    "entityId": "vovo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(74.1159375 -455.1181787109375)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "cassie_npc",
+    "type": "spawn",
+    "entityId": "cassie",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(444.695625 -267.5122119140625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "sally_npc",
+    "type": "spawn",
+    "entityId": "sally",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-476.73532714843753 -356.68294921875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "surfista_npc",
+    "type": "spawn",
+    "entityId": "surfista",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-380.616220703125 -382.5463232421875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "luz_sombra_vanya_npc",
+    "type": "spawn",
+    "entityId": "vanya",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-540.4287109375 -235.8585302734375)"
+    },
+    "mapId": "main",
+    "event": "luz_sombra"
   }
+
+
 ]
