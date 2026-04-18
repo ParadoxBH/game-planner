@@ -1,0 +1,152 @@
+[
+    {
+        "id": "point_1776507192538",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(79.90624511718751 -445.467666015625)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776507198060",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(306.1142626953125 -393.74091796875)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776507199304",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(270.21435546875 -344.7163134765625)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776507201694",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(191.85219238281252 -267.89823242187504)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776507208766",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(436.20317382812505 -229.296181640625)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776507214647",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(-91.872880859375 -379.072138671875)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776507219189",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(-233.54240722656252 -347.0324365234375)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776507228291",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(-395.285 -181.429638671875)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776507231803",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(-424.62255859375 -68.71165039062501)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776507238404",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(-340.470087890625 194.1683154296875)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776507241397",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(-308.4303857421875 263.265986328125)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776507247088",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(14.2827587890625 100.75135253906251)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776507252600",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(94.57502441406251 17.756943359375)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776507265642",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(215.399443359375 467.08481445312503)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776507275603",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(-279.0928271484375 602.1919921875001)"
+        },
+        "mapId": "main"
+    }
+]
