@@ -20,6 +20,7 @@ import type { CraftNode, TreeOptions } from "../../utils/craftingTree";
 import { ItemChip } from "../common/ItemChip";
 import { TimeChip } from "../common/TimeChip";
 import { getPublicUrl } from "../../utils/pathUtils";
+import { usePlatform } from "../../hooks/usePlatform";
 
 interface CraftingTreeCardProps {
   itemId: string;
@@ -44,7 +45,7 @@ const TreeNode = ({
 }) => {
   const [open, setOpen] = React.useState(level < 2);
   const hasIngredients = node.ingredients.length > 0;
-
+  const { isMobile } = usePlatform();
   const isCategory = originalType === "category";
 
   return (
@@ -74,77 +75,88 @@ const TreeNode = ({
           amount={node.amount}
           size="small"
         />
-
-        <Typography variant="body2" fontWeight={level === 0 ? 700 : 500}>
-          {node.name}
-        </Typography>
-
-        {isCategory && onSelectCategory && (
-          <IconButton
-            size="small"
-            color="primary"
-            onClick={() => onSelectCategory(originalId!)}
-            sx={{ ml: 0.5 }}
+        <Stack
+          direction={isMobile ? "column" : "row"}
+          spacing={isMobile ? 0 : 1}
+          alignItems={isMobile ? "start" : "center"}
+          justifyContent={"space-between"}
+          flex={1}
+        >
+          <Typography
+            variant="body2"
+            textAlign={"start"}
+            fontWeight={level === 0 ? 700 : 500}
           >
-            <Edit sx={{ fontSize: 14 }} />
-          </IconButton>
-        )}
+            {node.name}
+          </Typography>
 
-        {node.buyPrice > 0 && (
-          <Tooltip
-            title={
-              node.shopName
-                ? `Vendido em: ${node.shopName}`
-                : `Custo de compra unitário: ${node.buyPrice}`
-            }
-          >
-            <Stack
-              direction="row"
-              spacing={0.5}
-              alignItems="center"
-              sx={{ opacity: 0.8 }}
+          {isCategory && onSelectCategory && (
+            <IconButton
+              size="small"
+              color="primary"
+              onClick={() => onSelectCategory(originalId!)}
+              sx={{ ml: 0.5 }}
             >
+              <Edit sx={{ fontSize: 14 }} />
+            </IconButton>
+          )}
+
+          {node.buyPrice > 0 && (
+            <Tooltip
+              title={
+                node.shopName
+                  ? `Vendido em: ${node.shopName}`
+                  : `Custo de compra unitário: ${node.buyPrice}`
+              }
+            >
+              <Stack
+                direction="row"
+                spacing={0.5}
+                alignItems="center"
+                sx={{ opacity: 0.8 }}
+              >
+                <Typography
+                  variant="caption"
+                  sx={{ fontWeight: 700, color: "primary.light" }}
+                >
+                  {Math.round(node.buyPrice * node.amount).toLocaleString()}
+                </Typography>
+                <Box
+                  component="img"
+                  src={getPublicUrl("/img/heartopia/stats/ouro.png")}
+                  sx={{ width: 10, height: 10 }}
+                />
+                {node.shopName && (
+                  <>
+                    <Divider
+                      orientation="vertical"
+                      flexItem
+                      sx={{ mx: 0.5, height: 12, alignSelf: "center" }}
+                    />
+                    <Store sx={{ fontSize: 12, opacity: 0.6 }} />
+                    <Typography variant="caption" sx={{ opacity: 0.8 }}>
+                      {node.shopName}
+                    </Typography>
+                  </>
+                )}
+              </Stack>
+            </Tooltip>
+          )}
+
+          {node.recipe?.stations && node.recipe.stations.length > 0 && (
+            <Stack direction="row" spacing={1} alignItems="center">
               <Typography
                 variant="caption"
-                sx={{ fontWeight: 700, color: "primary.light" }}
+                sx={{ opacity: 0.5, fontStyle: "italic" }}
               >
-                {Math.round(node.buyPrice * node.amount).toLocaleString()}
+                ({node.recipe.stations[0]})
               </Typography>
-              <Box
-                component="img"
-                src={getPublicUrl("/img/heartopia/stats/ouro.png")}
-                sx={{ width: 10, height: 10 }}
-              />
-              {node.shopName && (
-                <>
-                  <Divider
-                    orientation="vertical"
-                    flexItem
-                    sx={{ mx: 0.5, height: 12, alignSelf: "center" }}
-                  />
-                  <Store sx={{ fontSize: 12, opacity: 0.6 }} />
-                  <Typography variant="caption" sx={{ opacity: 0.8 }}>
-                    {node.shopName}
-                  </Typography>
-                </>
+              {node.recipe.craftTime && node.recipe.craftTime > 0 && (
+                <TimeChip seconds={node.recipe.craftTime} size="small" />
               )}
             </Stack>
-          </Tooltip>
-        )}
-
-        {node.recipe?.stations && node.recipe.stations.length > 0 && (
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Typography
-              variant="caption"
-              sx={{ opacity: 0.5, fontStyle: "italic" }}
-            >
-              ({node.recipe.stations[0]})
-            </Typography>
-            {node.recipe.craftTime && node.recipe.craftTime > 0 && (
-              <TimeChip seconds={node.recipe.craftTime} size="small" />
-            )}
-          </Stack>
-        )}
+          )}
+        </Stack>
       </Stack>
 
       {hasIngredients && (
