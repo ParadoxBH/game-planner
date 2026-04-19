@@ -14,6 +14,7 @@ interface SimplifiedEntityProps {
   mode?: "once" | "respawn";
   respawnDelay?: number;
   onExpand: () => void;
+  categoriesMap?: Record<string, string>;
 }
 
 export const SimplifiedEntity = ({
@@ -22,6 +23,7 @@ export const SimplifiedEntity = ({
   mode,
   respawnDelay,
   onExpand,
+  categoriesMap = {},
 }: SimplifiedEntityProps) => {
   const theme = useTheme();
 
@@ -65,7 +67,9 @@ export const SimplifiedEntity = ({
                 fontWeight: 600
               }}
             >
-              {(Array.isArray(entity.category) ? entity.category : [entity.category]).map(cat => `#${cat}`).join(' ')}
+              {(Array.isArray(entity.category) ? entity.category : [entity.category])
+                .map((cat) => !!cat && cat in categoriesMap ? categoriesMap[cat] : `#${cat}`)
+                .join(" ")}
             </Typography>
           </Stack>
         </Stack>

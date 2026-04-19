@@ -27,6 +27,7 @@ interface EntityDrawerContentProps {
   shop?: Shop;
   onPush: (item: { type: "entity" | "item"; id: string }) => void;
   onSelectMap: (mapId: string) => void;
+  categoriesMap?: Record<string, string>;
 }
 
 export const EntityDrawerContent = ({
@@ -38,6 +39,7 @@ export const EntityDrawerContent = ({
   shop,
   onPush,
   onSelectMap,
+  categoriesMap = {},
 }: EntityDrawerContentProps) => {
   const { gameId } = useParams();
   const navigate = useNavigate();
@@ -84,7 +86,7 @@ export const EntityDrawerContent = ({
               : [currentEntity?.category]
             )
               .filter(Boolean)
-              .map((cat) => `#${cat}`)
+              .map((cat) => !!cat && cat in categoriesMap ? categoriesMap[cat] : `#${cat}`)
               .join(" ") || "Geral"}
           </Typography>
           <Typography variant="h4" sx={{ mt: 0, lineHeight: 1.1 }}>

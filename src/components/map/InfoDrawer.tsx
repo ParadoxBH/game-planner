@@ -19,6 +19,7 @@ interface InfoDrawerProps {
   onPush: (item: NavigationItem) => void;
   onPop: () => void;
   onClose: () => void;
+  categoriesMap?: Record<string, string>;
 }
 
 export const InfoDrawer = ({
@@ -32,6 +33,7 @@ export const InfoDrawer = ({
   onPush,
   onPop,
   onClose,
+  categoriesMap = {},
 }: InfoDrawerProps) => {
   const theme = useTheme() as any;
   const navigate = useNavigate();
@@ -113,6 +115,7 @@ export const InfoDrawer = ({
           shop={currentShop}
           onPush={onPush}
           onSelectMap={onSelectMap}
+          categoriesMap={categoriesMap}
         />
       ) : (
         <ItemDrawerContent

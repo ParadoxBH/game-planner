@@ -52,6 +52,7 @@ import { entityRepository } from "../../repositories/EntityRepository";
 import { itemRepository } from "../../repositories/ItemRepository";
 import { referencePointRepository } from "../../repositories/ReferencePointRepository";
 import { shopRepository } from "../../repositories/ShopRepository";
+import { categoryRepository } from "../../repositories/CategoryRepository";
 import { getPublicUrl } from "../../utils/pathUtils";
 import { PointMarkerPanel } from "./PointMarkerPanel";
 import { MapFilterDrawer } from "./MapFilterDrawer";
@@ -97,6 +98,7 @@ interface StableMarkerProps {
   size: number;
   onExpand?: () => void;
   onDelete?: () => void;
+  categoriesMap?: Record<string, string>;
 }
 
 const StableMarker = React.memo(
@@ -107,6 +109,7 @@ const StableMarker = React.memo(
     size,
     onExpand,
     onDelete,
+    categoriesMap,
   }: StableMarkerProps) => {
     const cp = parseWKTPoint(point.geom.coordinates);
     const pos: [number, number] = [cp[1], cp[0]];
@@ -167,6 +170,7 @@ const StableMarker = React.memo(
               mode={point.mode}
               respawnDelay={point.respawnDelay}
               onExpand={onExpand || (() => {})}
+              categoriesMap={categoriesMap}
             />
           )}
         </Popup>
@@ -246,6 +250,7 @@ export const MapView = () => {
   const [shops, setShops] = useState<Shop[]>([]);
   const [maps, setMaps] = useState<MapMetadata[]>([]);
   const [items, setItems] = useState<Item[]>([]);
+  const [categoriesMap, setCategoriesMap] = useState<Record<string, string>>({});
   const [dataLoading, setDataLoading] = useState(true);
 
   const selectedMapId = urlMapId || "";
@@ -265,6 +270,7 @@ export const MapView = () => {
       shopRepository.getAll(),
       mapRepository.getAll(),
       itemRepository.getAll(),
+      categoryRepository.getAll(),
       loadGamesList(),
     ])
       .then(
@@ -274,6 +280,7 @@ export const MapView = () => {
           allShops,
           allMaps,
           allItems,
+          allCategories,
           allGames,
         ]) => {
           if (!isMounted) return;
@@ -283,6 +290,10 @@ export const MapView = () => {
           setShops(allShops);
           setMaps(allMaps);
           setItems(allItems);
+
+          const catMap: Record<string, string> = {};
+          allCategories.forEach((c) => (catMap[c.id] = c.name));
+          setCategoriesMap(catMap);
 
           const game = allGames.find((g) => g.id === gameId);
           if (game) {
@@ -728,6 +739,7 @@ export const MapView = () => {
                       onExpand={() =>
                         handlePush({ type: "entity", id: point.entityId })
                       }
+                      categoriesMap={categoriesMap}
                     />
                   );
                 })}
@@ -755,6 +767,7 @@ export const MapView = () => {
                         .replaceAll("{{SIZE}}", sizeMarker.toString())
                         .replaceAll("{{IMAGE_STYLE}}", "opacity: 0.8;")}
                       onDelete={() => handleDeleteSessionPoint(point.id)}
+                      categoriesMap={categoriesMap}
                     />
                   );
                 })}
@@ -803,6 +816,7 @@ export const MapView = () => {
           onPush={handlePush}
           onPop={() => setNavigationStack((s) => s.slice(0, -1))}
           onClose={() => setNavigationStack([])}
+          categoriesMap={categoriesMap}
         />
       )}
       {viewMode === "map" && (

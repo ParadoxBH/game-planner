@@ -57,9 +57,9 @@ export const PointMarkerPanel = ({
         elevation={8}
         sx={{
           position: "absolute",
-          top: 12,
-          right: 80, // Offset from toolbox
-          width: 320,
+          top: { xs: 8, sm: 12 },
+          right: { xs: 8, sm: 80 },
+          width: { xs: "calc(100% - 16px)", sm: 320 },
           maxHeight: "calc(100% - 24px)",
           zIndex: 1100,
           backgroundColor: "designTokens.colors.glassBg",

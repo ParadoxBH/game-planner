@@ -12,6 +12,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import type { ReactNode } from "react";
 import { theme } from "../theme/theme";
+import { usePlatform } from "../hooks/usePlatform";
 
 interface BaseDrawerProps {
   title: string;
@@ -32,13 +33,15 @@ export const BaseDrawer = ({
   children,
   footerActions,
 }: BaseDrawerProps) => {
+  const { isMobile } = usePlatform();
   return (
     <Box
       sx={{
         position: "absolute",
         top: 0,
         right: 0,
-        width: 380,
+        width: { xs: "100%", sm: 380 },
+        maxWidth: "100%",
         height: "100%",
         zIndex: 1300,
         backgroundColor: theme.designTokens.colors.glassBg,
@@ -136,7 +139,7 @@ export const BaseDrawer = ({
                 </Button>
               )}
               <Button fullWidth variant="contained" size="small" onClick={onClose}>
-                Fechar Tudo
+              {isMobile ? "Voltar para o Mapa" : "Fechar Tudo"}
               </Button>
             </>
           )}
