@@ -11,21 +11,24 @@
         "maxQuant": 6
       }
     ],
-    "icon": "/img/heartopia/coletaveis/arbusto_flores.png"
+    "icon": "/img/heartopia/recursos/galho_arbusto.png",
+    "image": "/img/heartopia/coletaveis/arbusto_flores.png"
   },
   {
     "id": "arbusto_framboesa",
     "name": "Arbusto de Framboesa",
     "category": "resource",
     "drops": [],
-    "icon": "/img/heartopia/coletaveis/arbusto_framboesa.png"
+    "icon": "/img/heartopia/recursos/framboesa.png",
+    "image": "/img/heartopia/coletaveis/arbusto_framboesa.png"
   },
   {
     "id": "arbusto_lavanda",
     "name": "Arbusto de Lavanda",
     "category": "resource",
     "drops": [],
-    "icon": "/img/heartopia/coletaveis/arbusto_lavanda.png"
+    "icon": "/img/heartopia/recursos/galho_arbusto.png",
+    "image": "/img/heartopia/coletaveis/arbusto_lavanda.png"
   },
   {
     "id": "arbusto_mirtilo",
@@ -43,7 +46,8 @@
         "quant": 3
       }
     ],
-    "icon": "/img/heartopia/coletaveis/arbusto_mirtilo.png"
+    "icon": "/img/heartopia/recursos/mirtilo.png",
+    "image": "/img/heartopia/coletaveis/arbusto_mirtilo.png"
   },
   {
     "id": "arvore",
@@ -71,7 +75,8 @@
         "quant": 2
       }
     ],
-    "icon": "/img/heartopia/coletaveis/arvore.png"
+    "icon": "/img/heartopia/recursos/madeira.png",
+    "image": "/img/heartopia/coletaveis/arvore.png"
   },
   {
     "id": "arvore_abeto",
@@ -94,14 +99,16 @@
         "quant": 3
       }
     ],
-    "icon": "/img/heartopia/coletaveis/arvore_abeto.png"
+    "icon": "/img/heartopia/recursos/madeira.png",
+    "image": "/img/heartopia/coletaveis/arvore_abeto.png"
   },
   {
     "id": "arvore_grande",
     "name": "Árvore Grande",
     "category": "resource",
     "drops": [],
-    "icon": "/img/heartopia/coletaveis/arvore_grande.png"
+    "icon": "/img/heartopia/recursos/madeira_rara.png",
+    "image": "/img/heartopia/coletaveis/arvore_grande.png"
   },
   {
     "id": "arvore_maca",
@@ -129,7 +136,8 @@
         "quant": 2
       }
     ],
-    "icon": "/img/heartopia/coletaveis/arvore_maca.png"
+    "icon": "/img/heartopia/recursos/maca.png",
+    "image": "/img/heartopia/coletaveis/arvore_maca.png"
   },
   {
     "id": "arvore_pinheiro",
@@ -157,56 +165,64 @@
         "quant": 1
       }
     ],
-    "icon": "/img/heartopia/coletaveis/arvore_pinheiro.png"
+    "icon": "/img/heartopia/recursos/madeira_qualidade.png",
+    "image": "/img/heartopia/coletaveis/arvore_pinheiro.png"
   },
   {
     "id": "arvore_tangerina",
     "name": "Tangerineira",
     "category": "resource",
     "drops": [],
-    "icon": "/img/heartopia/coletaveis/arvore_tangerina.png"
+    "icon": "/img/heartopia/recursos/tangerina.png",
+    "image": "/img/heartopia/coletaveis/arvore_tangerina.png"
   },
   {
     "id": "bambu_coletavel",
     "name": "Bambu",
     "category": "resource",
     "drops": [],
-    "icon": "/img/heartopia/coletaveis/bambu.png"
+    "icon": "/img/heartopia/recursos/bambu.png",
+    "image": "/img/heartopia/coletaveis/bambu.png"
   },
   {
     "id": "carvalho_andarilho",
     "name": "Carvalho Andarilho",
     "category": "resource",
     "drops": [],
-    "icon": "/img/heartopia/coletaveis/carvalho_andarilho.png"
+    "icon": "/img/heartopia/recursos/carvalho_delicado.png",
+    "image": "/img/heartopia/coletaveis/carvalho_andarilho.png"
   },
   {
     "id": "champignon_coletavel",
     "name": "Champignon",
     "category": "resource",
     "drops": [],
-    "icon": "/img/heartopia/coletaveis/champignon.png"
+    "icon": "/img/heartopia/recursos/champignon.png",
+    "image": "/img/heartopia/coletaveis/champignon.png"
   },
   {
     "id": "minerio",
     "name": "Minério",
     "category": "resource",
     "drops": [],
-    "icon": "/img/heartopia/coletaveis/minerio.png"
+    "icon": "/img/heartopia/recursos/minerio.png",
+    "image": "/img/heartopia/coletaveis/minerio.png"
   },
   {
     "id": "minerio_fluorita",
     "name": "Minério de Fluorita",
     "category": "resource",
     "drops": [],
-    "icon": "/img/heartopia/coletaveis/minerio_fluorita.png"
+    "icon": "/img/heartopia/recursos/fluorita_pura.png",
+    "image": "/img/heartopia/coletaveis/minerio_fluorita.png"
   },
   {
     "id": "pedra",
     "name": "Pedra",
     "category": "resource",
     "drops": [],
-    "icon": "/img/heartopia/coletaveis/pedra.png"
+    "icon": "/img/heartopia/recursos/pedra.png",
+    "image": "/img/heartopia/coletaveis/pedra.png"
   },
   {
     "id": "trufa_negra_coletavel",
@@ -219,84 +235,19 @@
         "quant": 3
       }
     ],
-    "icon": "/img/heartopia/coletaveis/trufa_negra.png"
+    "icon": "/img/heartopia/recursos/trufa_negra.png",
+    "image": "/img/heartopia/coletaveis/trufa_negra.png"
   },
   {
-    "id": "albert_jr",
-    "name": "Albert Jr.",
-    "category": "npc",
-    "icon": "/img/heartopia/npc/albert_jr.png"
+    "id": "pink_bubble",
+    "name": "Bolha Rosa",
+    "category": "colection",
+    "icon": "/img/heartopia/coletaveis/pink_bubble.png"
   },
   {
-    "id": "andrew",
-    "name": "Andrew",
-    "category": "npc",
-    "icon": "/img/heartopia/npc/andrew.png"
-  },
-  {
-    "id": "annie",
-    "name": "Annie",
-    "category": "npc",
-    "icon": "/img/heartopia/npc/annie.png"
-  },
-  {
-    "id": "azure",
-    "name": "Azure",
-    "category": "npc",
-    "icon": "/img/heartopia/npc/azure.png"
-  },
-  {
-    "id": "bailey_j",
-    "name": "Bailey J.",
-    "category": "npc",
-    "icon": "/img/heartopia/npc/bailey_j.png"
-  },
-  {
-    "id": "blanc",
-    "name": "Blanc",
-    "category": "npc",
-    "icon": "/img/heartopia/npc/blanc.png"
-  },
-  {
-    "id": "colecionador",
-    "name": "Colecionador",
-    "category": "npc",
-    "icon": "/img/heartopia/npc/colecionador.png"
-  },
-  {
-    "id": "dorothee",
-    "name": "Dorothee",
-    "category": "npc",
-    "icon": "/img/heartopia/npc/dorothee.png"
-  },
-  {
-    "id": "ka_ching",
-    "name": "Ka-ching",
-    "category": "npc",
-    "icon": "/img/heartopia/npc/ka_ching.png"
-  },
-  {
-    "id": "massimo",
-    "name": "Massimo",
-    "category": "npc",
-    "icon": "/img/heartopia/npc/massimo.png"
-  },
-  {
-    "id": "naniwa",
-    "name": "Naniwa",
-    "category": "npc",
-    "icon": "/img/heartopia/npc/naniwa.png"
-  },
-  {
-    "id": "vanya",
-    "name": "Vanya",
-    "category": "npc",
-    "icon": "/img/heartopia/npc/vanya.png"
-  },
-  {
-    "id": "sra_joan",
-    "name": "Sr. Joan",
-    "category": "npc",
-    "icon": "/img/heartopia/npc/sra_joan.png"
+    "id": "gold_bubble",
+    "name": "Bolha Dourada",
+    "category": "colection",
+    "icon": "/img/heartopia/coletaveis/gold_bubble.png"
   }
 ]

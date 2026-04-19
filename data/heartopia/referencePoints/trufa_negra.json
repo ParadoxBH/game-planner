@@ -82,5 +82,16 @@
             "coordinates": "POINT(725 215)"
         },
         "respawnDelay": 15
+    },
+    {
+        "id": "truffle_8",
+        "type": "spawn",
+        "entityId": "trufa_negra_coletavel",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(712 238)"
+        },
+        "mapId": "main",
+        "respawnDelay": 15
     }
 ]

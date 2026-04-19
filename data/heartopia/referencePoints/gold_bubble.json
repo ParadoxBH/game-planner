@@ -1,0 +1,43 @@
+﻿
+  [
+  {
+    "id": "point_1776507787617",
+    "type": "spawn",
+    "entityId": "gold_bubble",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(174.48126953125 131.6329931640625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1776507823371",
+    "type": "spawn",
+    "entityId": "gold_bubble",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-180.2715771484375 -162.51463378906251)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1776507842471",
+    "type": "spawn",
+    "entityId": "gold_bubble",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-35.899907226562505 -282.9530322265625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1776507854256",
+    "type": "spawn",
+    "entityId": "gold_bubble",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(179.11351562500002 -323.485185546875)"
+    },
+    "mapId": "main"
+  }
+]

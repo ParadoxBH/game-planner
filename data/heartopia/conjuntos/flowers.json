@@ -154,25 +154,5 @@
             "rosa_arrebol",
             "rosa_luminosa"
         ]
-    },
-    {
-        "id": "set_dente_leao",
-        "name": "Dente-de-leão",
-        "category": "flowers",
-        "event": [
-            "gala_cinema"
-        ],
-        "items": [
-            "dente_leao_vermelho",
-            "dente_leao_amarelo",
-            "dente_leao_branco",
-            "dente_leao_laranja",
-            "dente_leao_rosa",
-            "dente_leao_preto",
-            "dente_leao_pessego",
-            "dente_leao_roxo",
-            "dente_leao_azul",
-            "dente_leao_luminoso"
-        ]
     }
 ]
