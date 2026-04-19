@@ -35,22 +35,37 @@
     },
     {
         "id": "gloria_manha",
-        "name": "Gloria da Manha",
+        "name": "Flor Gloria da Manha",
         "icon": "/img/heartopia/agricultura/flores/gloria_manha_branca.png"
     },
     {
         "id": "margatida",
-        "name": "Margaridas",
+        "name": "Flor Margaridas",
         "icon": "/img/heartopia/agricultura/flores/margarida_branca.png"
     },
     {
         "id": "papoula",
-        "name": "Papoula",
+        "name": "Flor Papoula",
         "icon": "/img/heartopia/agricultura/flores/papoula_branca.png"
     },
     {
         "id": "margarida",
-        "name": "Margaridas",
+        "name": "Flor Margaridas",
         "icon": "/img/heartopia/agricultura/flores/margarida_branca.png"
+    },
+    {
+        "id": "lirio",
+        "name": "Flor Lirios",
+        "icon": "/img/heartopia/agricultura/flores/lirio_branco.png"
+    },
+    {
+        "id": "rosa",
+        "name": "Flor Rosas",
+        "icon": "/img/heartopia/agricultura/flores/rosa_rosa.png"
+    },
+    {
+        "id": "tulipa",
+        "name": "Flor Tulipas",
+        "icon": "/img/heartopia/agricultura/flores/tulipa_branca.png"
     }
 ]

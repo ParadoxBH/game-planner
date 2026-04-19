@@ -2,19 +2,18 @@
     {
         "id": "set_dente_leao",
         "name": "Dente de Leão",
-        "category": "flowers",
+        "category": "luz_sombra",
         "event": [
             "luz_sombra"
         ],
         "items": [
-            "dente_leao_vermelha",
-            "dente_leao_amarela",
-            "dente_leao_branca",
+            "dente_leao_vermelho",
+            "dente_leao_amarelo",
+            "dente_leao_branco",
             "dente_leao_rosa",
             "dente_leao_laranja",
-            "dente_leao_preta",
+            "dente_leao_preto",
             "dente_leao_pessego",
-            "dente_leao_verde",
             "dente_leao_azul",
             "dente_leao_roxo",
             "dente_leao_luminoso"
