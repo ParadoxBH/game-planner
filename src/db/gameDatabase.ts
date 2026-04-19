@@ -25,6 +25,7 @@ export class GameDatabase extends Dexie {
   gameInfo!: Table<GameInfo, string>;
   maps!: Table<MapMetadata, string>;
   categories!: Table<Category, string>;
+  settings!: Table<{ key: string; value: any }, string>;
 
   constructor() {
     super('GamePlannerDB');
@@ -32,7 +33,7 @@ export class GameDatabase extends Dexie {
     // Schema definition
     // The first field is the primary key. 
     // Other fields are indexed for faster searching.
-    this.version(2).stores({
+    this.version(3).stores({
       items: 'id, name, *category, *event',
       recipes: 'id, name, itemId, *stations, *event',
       entities: 'id, name, *category, parentId, *event',
@@ -43,7 +44,8 @@ export class GameDatabase extends Dexie {
       conjuntos: 'id, name, category, *event',
       gameInfo: 'id, name',
       maps: 'id, name, type',
-      categories: 'id, name'
+      categories: 'id, name',
+      settings: 'key'
     });
   }
 

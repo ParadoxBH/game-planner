@@ -9,6 +9,25 @@ const cacheDir = path.join(rootDir, 'node_modules', '.cache', 'gh-pages');
 
 console.log('--- Gh-Pages Custom Deployer ---');
 
+// 0. Update version.json
+const versionFilePath = path.join(rootDir, 'public', 'data', 'version.json');
+const distVersionFilePath = path.join(rootDir, 'dist', 'data', 'version.json');
+const newVersion = {
+  version: '1.0.' + Math.floor(Date.now() / 1000),
+  timestamp: new Date().toISOString()
+};
+
+console.log(`Updating version to: ${newVersion.timestamp}`);
+fs.writeFileSync(versionFilePath, JSON.stringify(newVersion, null, 2));
+
+// Also update dist if it exists (since build might have already run)
+if (fs.existsSync(path.join(rootDir, 'dist'))) {
+  if (!fs.existsSync(path.join(rootDir, 'dist', 'data'))) {
+    fs.mkdirSync(path.join(rootDir, 'dist', 'data'), { recursive: true });
+  }
+  fs.writeFileSync(distVersionFilePath, JSON.stringify(newVersion, null, 2));
+}
+
 // 1. Clear the deployment cache to ensure a fresh starting point.
 // This is important on Windows because it prevents gh-pages from trying to 
 // remove thousands of cached files individually, which causes ENAMETOOLONG.

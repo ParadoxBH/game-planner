@@ -1,5 +1,5 @@
 import { db } from '../db/gameDatabase';
-import { loadGameData, loadGamesList, loadGameMaps } from './dataLoader';
+import { loadGameData, loadGamesList, loadGameMaps, loadVersion } from './dataLoader';
 import { itemRepository } from '../repositories/ItemRepository';
 import { recipeRepository } from '../repositories/RecipeRepository';
 import { entityRepository } from '../repositories/EntityRepository';
@@ -92,6 +92,11 @@ export class DbService {
           if (maps.length) await mapRepository.bulkAdd(clean(maps, 'id', 'Maps'));
           bug = "Populando Categorias";
           if (categories.length) await categoryRepository.bulkAdd(clean(categories, 'id', 'Categories'));
+
+          // Store the remote version we just downloaded
+          bug = "Salvando versão do banco";
+          const remoteVersion = await loadVersion();
+          await db.settings.put({ key: 'db_version', value: remoteVersion.timestamp || remoteVersion.version });
         });
 
         console.log(`[DbService] Database reconstruction complete for ${gameId}`);
@@ -140,9 +145,30 @@ export class DbService {
     const gameInfo = await gameInfoRepository.getById(gameId);
     if (!gameInfo) return false;
 
-    // Also check if we have any items, to ensure it wasn't a partial load
-    const itemCount = await itemRepository.getAll();
-    return itemCount.length > 0;
+    // Check if we have any items
+    const items = await itemRepository.getAll();
+    if (items.length === 0) return false;
+
+    // Version check
+    try {
+      const localVer = await db.settings.get('db_version');
+      const remoteVer = await loadVersion();
+      const remoteVal = remoteVer.timestamp || remoteVer.version;
+
+      if (localVer && localVer.value !== remoteVal) {
+        console.log(`[DbService] Outdated database version detected (Local: ${localVer.value}, Remote: ${remoteVal}). Force reconstruction.`);
+        return false;
+      }
+      
+      // If no local version but items exist, we should probably set it now or force reload
+      if (!localVer) {
+        await db.settings.put({ key: 'db_version', value: remoteVal });
+      }
+    } catch (err) {
+      console.warn('[DbService] Failed to check version, continuing with local data.', err);
+    }
+
+    return true;
   }
 }
 

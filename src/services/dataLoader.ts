@@ -4,18 +4,36 @@ import { getPublicUrl } from "../utils/pathUtils";
 const missingManifests = new Set<string>();
 
 /**
- * Helper to fetch data with cache-busting in development
+ * Helper to fetch data with cache-busting
  */
 async function fetchData(url: string) {
   const isDev = import.meta.env.DEV || localStorage.getItem("showDev") === "true";
   
+  // Enforce cache-busting for JSON data files
+  const separator = url.includes('?') ? '&' : '?';
+  
   if (isDev) {
-    const separator = url.includes('?') ? '&' : '?';
     const bustedUrl = `${url}${separator}t=${Date.now()}`;
     return fetch(bustedUrl, { cache: 'no-store' });
   }
+
+  // In production, we use a slightly more stable bust (every minute)
+  // to avoid hammer the CDN too hard while still bypassing long-term caches.
+  const prodBust = Math.floor(Date.now() / 60000); 
+  const bustedUrl = `${url}${separator}v=${prodBust}`;
   
-  return fetch(url);
+  return fetch(bustedUrl, { cache: 'reload' });
+}
+
+export async function loadVersion(): Promise<{ version: string; timestamp: string }> {
+  try {
+    const response = await fetchData(getPublicUrl('data/version.json'));
+    if (!response.ok) return { version: '0.0.0', timestamp: '' };
+    return await response.json();
+  } catch (err) {
+    console.error('[DataLoader] Failed to load version:', err);
+    return { version: '0.0.0', timestamp: '' };
+  }
 }
 
 export async function loadGameData<T>(
