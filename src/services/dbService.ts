@@ -160,9 +160,9 @@ export class DbService {
         return false;
       }
       
-      // If no local version but items exist, we should probably set it now or force reload
       if (!localVer) {
-        await db.settings.put({ key: 'db_version', value: remoteVal });
+        console.log(`[DbService] No local version found. Force initial reconstruction to sync with remote.`);
+        return false;
       }
     } catch (err) {
       console.warn('[DbService] Failed to check version, continuing with local data.', err);
