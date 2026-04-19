@@ -148,5 +148,115 @@
             "coordinates": "POINT(-279.0928271484375 602.1919921875001)"
         },
         "mapId": "main"
+    },
+    {
+        "id": "point_1776561019615",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(58.67511718750001 -175.253310546875)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776561021805",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(-16.98490234375 -84.92451171875001)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776561036496",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(491.0180859375 84.92451171875001)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776561037759",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(553.5534082031251 58.67511718750001)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776561043561",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(619.9489355468751 -274.84660156250004)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776561053112",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(141.6695263671875 430.79888671875)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776561058494",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(262.4939453125 379.072138671875)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776561075745",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(-11.580615234375001 428.48276367187503)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776561082065",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(-528.0760546875 247.05312500000002)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776561093196",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(-463.224609375 -148.6178955078125)"
+        },
+        "mapId": "main"
+    },
+    {
+        "id": "point_1776561102518",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+            "type": "Point",
+            "coordinates": "POINT(-484.8417578125 -374.82591308593754)"
+        },
+        "mapId": "main"
     }
 ]
