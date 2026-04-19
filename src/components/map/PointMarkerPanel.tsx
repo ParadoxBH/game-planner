@@ -5,8 +5,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import PlaceIcon from "@mui/icons-material/Place";
 import InfoIcon from "@mui/icons-material/Info";
-import type { Entity, ReferencePoints, Item } from "../types/gameModels";
-import { getPublicUrl } from "../utils/pathUtils";
+import type { Entity, ReferencePoints, Item } from "../../types/gameModels";
+import { getPublicUrl } from "../../utils/pathUtils";
 
 interface PointMarkerPanelProps {
   open: boolean;

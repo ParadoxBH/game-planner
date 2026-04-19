@@ -5,6 +5,7 @@ import { DataCard } from "../common/DataCard";
 import type { Theme } from "@mui/material/styles";
 
 import type { Entity, Item } from "../../types/gameModels";
+import { getPublicUrl } from "../../utils/pathUtils";
 
 interface ItemDrawerContentProps {
   itemId: string;
@@ -36,7 +37,7 @@ export const ItemDrawerContent = ({
         >
           {currentItemData?.icon ? (
             <img
-              src={currentItemData.icon}
+              src={getPublicUrl(currentItemData.icon)}
               alt={currentItemData.name}
               style={{
                 width: "85%",
@@ -139,7 +140,7 @@ export const ItemDrawerContent = ({
                 >
                   {entity.icon ? (
                     <img
-                      src={entity.icon}
+                      src={getPublicUrl(entity.icon)}
                       style={{
                         width: "85%",
                         height: "85%",

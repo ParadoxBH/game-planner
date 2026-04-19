@@ -11,23 +11,23 @@ import {
 } from "@mui/material";
 import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Entity, Item, ReferencePoints, Shop, MapMetadata } from "../types/gameModels";
-import { useApi } from "../hooks/useApi";
+import type { Entity, Item, ReferencePoints, Shop, MapMetadata } from "../../types/gameModels";
+import { useApi } from "../../hooks/useApi";
 import { useTheme } from "@mui/material/styles";
 import MapIcon from "@mui/icons-material/Map";
 import GroupsIcon from "@mui/icons-material/Groups";
 import ExploreIcon from "@mui/icons-material/Explore";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import InventoryIcon from "@mui/icons-material/Inventory";
-import { StyledContainer } from "./common/StyledContainer";
-import { DataCard } from "./common/DataCard";
-import { DataChip } from "./common/DataChip";
-import { itemRepository } from "../repositories/ItemRepository";
-import { entityRepository } from "../repositories/EntityRepository";
-import { shopRepository } from "../repositories/ShopRepository";
-import { mapRepository } from "../repositories/MapRepository";
-import { referencePointRepository } from "../repositories/ReferencePointRepository";
-import { getPublicUrl } from "../utils/pathUtils";
+import { StyledContainer } from "../common/StyledContainer";
+import { DataCard } from "../common/DataCard";
+import { DataChip } from "../common/DataChip";
+import { itemRepository } from "../../repositories/ItemRepository";
+import { entityRepository } from "../../repositories/EntityRepository";
+import { shopRepository } from "../../repositories/ShopRepository";
+import { mapRepository } from "../../repositories/MapRepository";
+import { referencePointRepository } from "../../repositories/ReferencePointRepository";
+import { getPublicUrl } from "../../utils/pathUtils";
 
 interface MapDashboardProps {
   gameId: string;

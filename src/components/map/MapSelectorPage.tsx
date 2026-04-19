@@ -1,12 +1,12 @@
 import { Box, Typography, Card, CardContent, Grid, Stack, Button, CardActionArea, CardMedia } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { loadGamesList, loadGameMaps } from "../services/dataLoader";
+import { loadGamesList, loadGameMaps } from "../../services/dataLoader";
 import MapIcon from "@mui/icons-material/Map";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import type { GameInfo, MapMetadata } from "../types/gameModels";
-import { getPublicUrl } from "../utils/pathUtils";
-import { StyledContainer } from "./common/StyledContainer";
+import type { GameInfo, MapMetadata } from "../../types/gameModels";
+import { getPublicUrl } from "../../utils/pathUtils";
+import { StyledContainer } from "../common/StyledContainer";
 
 export const MapSelectorPage = () => {
   const { gameId } = useParams();

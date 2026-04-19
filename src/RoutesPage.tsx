@@ -1,9 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { MapView } from "./components/MapView";
+import { MapView } from "./components/map/MapView";
 import { Home } from "./components/Home";
 import { MainLayout } from "./layouts/MainLayout";
 import { GameDashboard } from "./components/GameDashboard";
-import { MapSelectorPage } from "./components/MapSelectorPage";
+import { MapSelectorPage } from "./components/map/MapSelectorPage";
 import { ItemsPage } from "./components/item/ItemsPage";
 import { RecipesPage } from "./components/recipe/RecipesPage";
 import { EntityPage } from "./components/entity/EntityPage";

@@ -15,6 +15,7 @@ declare module "@mui/material/styles" {
         fieldLabel: string;
         fieldValue: string;
         glassBg: string;
+        glassFilter: string;
         glassBorder: string;
       };
       borderRadius: number;
@@ -39,6 +40,7 @@ declare module "@mui/material/styles" {
         fieldLabel?: string;
         fieldValue?: string;
         glassBg?: string;
+        glassFilter?: string;
         glassBorder?: string;
       };
       borderRadius?: number;
@@ -94,6 +96,7 @@ export const theme = createTheme({
       fieldLabel: "rgba(255, 255, 255, 0.5)",
       fieldValue: "#ffffff",
       glassBg: "rgba(11, 11, 11, 0.8)",
+      glassFilter: "blur(16px)",
       glassBorder: "rgba(255, 255, 255, 0.1)",
     },
     borderRadius: 1,

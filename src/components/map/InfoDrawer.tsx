@@ -1,14 +1,14 @@
 import { useTheme } from "@mui/material";
 import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import type { NavigationItem } from "../MapView";
+import type { NavigationItem } from "./MapView";
 import { BaseDrawer } from "../BaseDrawer";
-import { EntityDrawerContent } from "./EntityDrawerContent";
+import { EntityDrawerContent } from "../entity/EntityDrawerContent";
 import { ItemDrawerContent } from "../item/ItemDrawerContent";
 
 import type { Entity, Item, ReferencePoints, MapMetadata, Shop } from "../../types/gameModels";
 
-interface EntityDrawerProps {
+interface InfoDrawerProps {
   stack: NavigationItem[];
   entities: Entity[];
   items: Item[];
@@ -21,7 +21,7 @@ interface EntityDrawerProps {
   onClose: () => void;
 }
 
-export const EntityDrawer = ({
+export const InfoDrawer = ({
   stack,
   entities,
   items,
@@ -32,7 +32,7 @@ export const EntityDrawer = ({
   onPush,
   onPop,
   onClose,
-}: EntityDrawerProps) => {
+}: InfoDrawerProps) => {
   const theme = useTheme() as any;
   const navigate = useNavigate();
   const { gameId } = useParams();

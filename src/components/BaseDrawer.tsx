@@ -11,6 +11,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import type { ReactNode } from "react";
+import { theme } from "../theme/theme";
 
 interface BaseDrawerProps {
   title: string;
@@ -34,14 +35,20 @@ export const BaseDrawer = ({
   return (
     <Box
       sx={{
+        position: "absolute",
+        top: 0,
+        right: 0,
         width: 380,
         height: "100%",
-        bgcolor: "background.paper",
+        zIndex: 1300,
+        backgroundColor: theme.designTokens.colors.glassBg,
+        backdropFilter: theme.designTokens.colors.glassFilter,
         borderLeft: 1,
         borderColor: "divider",
         display: "flex",
         flexDirection: "column",
         color: "text.primary",
+        boxShadow: "-8px 0 32px rgba(0,0,0,0.5)",
         animation: "slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         "@keyframes slideIn": {
           from: { transform: "translateX(100%)" },

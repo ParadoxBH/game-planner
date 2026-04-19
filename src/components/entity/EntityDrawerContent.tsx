@@ -9,6 +9,7 @@ import type { Theme } from "@mui/material/styles";
 import { useNavigate, useParams } from "react-router-dom";
 
 import type { Entity, Item, Shop } from "../../types/gameModels";
+import { getPublicUrl } from "../../utils/pathUtils";
 
 interface MapOccurrence {
   id: string;
@@ -56,7 +57,7 @@ export const EntityDrawerContent = ({
         >
           {currentEntity?.icon ? (
             <img
-              src={currentEntity.icon}
+              src={getPublicUrl(currentEntity.icon)}
               alt={currentEntity.name}
               style={{
                 width: "85%",
@@ -172,7 +173,7 @@ export const EntityDrawerContent = ({
                     >
                       {itemData?.icon ? (
                         <img
-                          src={itemData.icon}
+                          src={getPublicUrl(itemData.icon)}
                           style={{
                             width: "100%",
                             height: "100%",
@@ -233,7 +234,7 @@ export const EntityDrawerContent = ({
                     >
                       {itemData?.icon ? (
                         <img
-                          src={itemData.icon}
+                          src={getPublicUrl(itemData.icon)}
                           style={{
                             width: "100%",
                             height: "100%",
@@ -310,7 +311,7 @@ export const EntityDrawerContent = ({
                   >
                     {occurrence.thumbnail ? (
                       <img
-                        src={occurrence.thumbnail}
+                        src={getPublicUrl(occurrence.thumbnail)}
                         style={{
                           width: "100%",
                           height: "100%",

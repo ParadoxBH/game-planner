@@ -5,6 +5,8 @@ import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import InventoryIcon from "@mui/icons-material/Inventory";
 
 import type { Entity } from "../../types/gameModels";
+import { getPublicUrl } from "../../utils/pathUtils";
+import { isDev } from "../../utils/mapper";
 
 interface SimplifiedEntityProps {
   entity: Entity;
@@ -39,7 +41,7 @@ export const SimplifiedEntity = ({
           >
             {entity.icon ? (
               <img
-                src={entity.icon}
+                src={getPublicUrl(entity.icon)}
                 alt={entity.name}
                 style={{ width: "85%", height: "85%", objectFit: "contain" }}
               />
@@ -71,10 +73,10 @@ export const SimplifiedEntity = ({
         <Divider />
 
         {/* Details Section */}
-        <OutputField 
+        {isDev() && <OutputField 
           label="Coordenadas" 
           values={[`X: ${position[1].toFixed(1)}`, `Y: ${position[0].toFixed(1)}`]}
-        />
+        />}
 
         {mode === "respawn" && respawnDelay && (
           <OutputField 
@@ -95,7 +97,7 @@ export const SimplifiedEntity = ({
             py: 0.6,
           }}
         >
-          Ver Detalhes Completos
+          Detalhar
         </Button>
       </Stack>
     </Box>
