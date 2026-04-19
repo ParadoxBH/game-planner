@@ -166,5 +166,12 @@
     "category": "npc",
     "icon": "/img/heartopia/npc/head/cassie.png",
     "image": "/img/heartopia/npc/cassie.png"
+  },
+  {
+    "id": "reporter_moda",
+    "name": "Repórter da Moda",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/reporter_moda.png",
+    "image": "/img/heartopia/npc/reporter_moda.png"
   }
 ]

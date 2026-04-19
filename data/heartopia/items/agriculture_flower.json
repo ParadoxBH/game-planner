@@ -658,5 +658,367 @@
     "icon": "/img/heartopia/agricultura/flores/cravo_luminoso.png",
     "level": 5,
     "sellPrice": 1220
+  },
+  {
+    "id": "lirio_vermelho",
+    "name": "Lírio Vermelho",
+    "category": [
+      "agriculture",
+      "flower",
+      "lirio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/lirio_vermelho.png",
+    "level": 1
+  },
+  {
+    "id": "lirio_amarelo",
+    "name": "Lírio Amarelo",
+    "category": [
+      "agriculture",
+      "flower",
+      "lirio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/lirio_amarelo.png",
+    "level": 1
+  },
+  {
+    "id": "lirio_branco",
+    "name": "Lírio Branco",
+    "category": [
+      "agriculture",
+      "flower",
+      "lirio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/lirio_branco.png",
+    "level": 1
+  },
+  {
+    "id": "lirio_laranja",
+    "name": "Lírio Laranja",
+    "category": [
+      "agriculture",
+      "flower",
+      "lirio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/lirio_laranja.png",
+    "level": 2
+  },
+  {
+    "id": "lirio_rosa",
+    "name": "Lírio Rosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "lirio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/lirio_rosa.png",
+    "level": 3
+  },
+  {
+    "id": "lirio_preto",
+    "name": "Lírio Preto",
+    "category": [
+      "agriculture",
+      "flower",
+      "lirio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/lirio_preto.png",
+    "level": 3
+  },
+  {
+    "id": "lirio_pessego",
+    "name": "Lírio Pessego",
+    "category": [
+      "agriculture",
+      "flower",
+      "lirio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/lirio_pessego.png",
+    "level": 3
+  },
+  {
+    "id": "lirio_roxo",
+    "name": "Lírio Roxo",
+    "category": [
+      "agriculture",
+      "flower",
+      "lirio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/lirio_roxo.png",
+    "level": 4
+  },
+  {
+    "id": "lirio_verde",
+    "name": "Lírio Verde",
+    "category": [
+      "agriculture",
+      "flower",
+      "lirio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/lirio_verde.png",
+    "level": 4
+  },
+  {
+    "id": "lirio_luminoso",
+    "name": "Lírio Luminoso",
+    "category": [
+      "agriculture",
+      "flower",
+      "lirio"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/lirio_luminoso.png",
+    "level": 5
+  },
+
+
+
+
+
+  {
+    "id": "rosa_vermelha",
+    "name": "Rosa Vermelha",
+    "category": [
+      "agriculture",
+      "flower",
+      "rosa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/rosa_vermelha.png",
+    "level": 1
+  },
+  {
+    "id": "rosa_amarela",
+    "name": "Rosa Amarela",
+    "category": [
+      "agriculture",
+      "flower",
+      "rosa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/rosa_amarela.png",
+    "level": 1
+  },
+  {
+    "id": "rosa_branca",
+    "name": "Rosa Branca",
+    "category": [
+      "agriculture",
+      "flower",
+      "rosa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/rosa_branca.png",
+    "level": 1
+  },
+  {
+    "id": "rosa_laranja",
+    "name": "Rosa Laranja",
+    "category": [
+      "agriculture",
+      "flower",
+      "rosa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/rosa_laranja.png",
+    "level": 2
+  },
+  {
+    "id": "rosa_rosa",
+    "name": "Rosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "rosa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/rosa_rosa.png",
+    "level": 3
+  },
+  {
+    "id": "rosa_preta",
+    "name": "Rosa Preta",
+    "category": [
+      "agriculture",
+      "flower",
+      "rosa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/rosa_preta.png",
+    "level": 3
+  },
+  {
+    "id": "rosa_pessego",
+    "name": "Rosa Pessego",
+    "category": [
+      "agriculture",
+      "flower",
+      "rosa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/rosa_pessego.png",
+    "level": 3
+  },
+  {
+    "id": "rosa_roxa",
+    "name": "Rosa Roxa",
+    "category": [
+      "agriculture",
+      "flower",
+      "rosa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/rosa_roxa.png",
+    "level": 4
+  },
+  {
+    "id": "rosa_azul",
+    "name": "Rosa Azul",
+    "category": [
+      "agriculture",
+      "flower",
+      "rosa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/rosa_azul.png",
+    "level": 4
+  },
+  {
+    "id": "rosa_arrebol",
+    "name": "Rosa Arrebol",
+    "category": [
+      "agriculture",
+      "flower",
+      "rosa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/rosa_arrebol.png",
+    "level": 5
+  },
+  {
+    "id": "rosa_luminosa",
+    "name": "Rosa Luminosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "rosa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/rosa_luminosa.png",
+    "level": 5
+  },
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  {
+    "id": "tulipa_vermelha",
+    "name": "Tulipa Vermelha",
+    "category": [
+      "agriculture",
+      "flower",
+      "tulipa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/tulipa_vermelha.png",
+    "level": 1
+  },
+  {
+    "id": "tulipa_amarela",
+    "name": "Tulipa Amarela",
+    "category": [
+      "agriculture",
+      "flower",
+      "tulipa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/tulipa_amarela.png",
+    "level": 1
+  },
+  {
+    "id": "tulipa_branca",
+    "name": "Tulipa Branca",
+    "category": [
+      "agriculture",
+      "flower",
+      "tulipa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/tulipa_branca.png",
+    "level": 1
+  },
+  {
+    "id": "tulipa_laranja",
+    "name": "Tulipa Laranja",
+    "category": [
+      "agriculture",
+      "flower",
+      "tulipa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/tulipa_laranja.png",
+    "level": 2
+  },
+  {
+    "id": "tulipa_rosa",
+    "name": "Tulipa Rosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "tulipa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/tulipa_rosa.png",
+    "level": 2
+  },
+  {
+    "id": "tulipa_preta",
+    "name": "Tulipa Preta",
+    "category": [
+      "agriculture",
+      "flower",
+      "tulipa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/tulipa_preta.png",
+    "level": 3
+  },
+  {
+    "id": "tulipa_pessego",
+    "name": "Tulipa Pessego",
+    "category": [
+      "agriculture",
+      "flower",
+      "tulipa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/tulipa_pessego.png",
+    "level": 3
+  },
+  {
+    "id": "tulipa_roxa",
+    "name": "Tulipa Roxa",
+    "category": [
+      "agriculture",
+      "flower",
+      "tulipa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/tulipa_roxa.png",
+    "level": 4
+  },
+  {
+    "id": "tulipa_azul",
+    "name": "Tulipa Azul",
+    "category": [
+      "agriculture",
+      "flower",
+      "tulipa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/tulipa_azul.png",
+    "level": 4
+  },
+  {
+    "id": "tulipa_arrebol",
+    "name": "Tulipa Arrebol",
+    "category": [
+      "agriculture",
+      "flower",
+      "tulipa"
+    ],
+    "icon": "/img/heartopia/agricultura/flores/tulipa_arrebol.png",
+    "level": 5
   }
 ]

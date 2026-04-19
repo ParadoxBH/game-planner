@@ -10,7 +10,8 @@
         "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_vermelho.webp",
-        "sellPrice": 125
+        "sellPrice": 125,
+        "level": 1
     },
     {
         "id": "dente_leao_amarelo",
@@ -23,7 +24,8 @@
         "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_amarelo.webp",
-        "sellPrice": 125
+        "sellPrice": 125,
+        "level": 1
     },
     {
         "id": "dente_leao_branco",
@@ -36,7 +38,8 @@
         "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_branco.webp",
-        "sellPrice": 125
+        "sellPrice": 125,
+        "level": 1
     },
     {
         "id": "dente_leao_laranja",
@@ -49,7 +52,8 @@
         "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_laranja.webp",
-        "sellPrice": 190
+        "sellPrice": 190,
+        "level": 2
     },
     {
         "id": "dente_leao_rosa",
@@ -62,7 +66,8 @@
         "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_rosa.webp",
-        "sellPrice": 190
+        "sellPrice": 190,
+        "level": 2
     },
     {
         "id": "dente_leao_preto",
@@ -75,7 +80,8 @@
         "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_preto.webp",
-        "sellPrice": 250
+        "sellPrice": 250,
+        "level": 3
     },
     {
         "id": "dente_leao_pessego",
@@ -88,7 +94,8 @@
         "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_pessego.webp",
-        "sellPrice": 250
+        "sellPrice": 250,
+        "level": 3
     },
     {
         "id": "dente_leao_roxo",
@@ -101,7 +108,8 @@
         "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_roxo.webp",
-        "sellPrice": 315
+        "sellPrice": 315,
+        "level": 4
     },
     {
         "id": "dente_leao_azul",
@@ -114,7 +122,8 @@
         "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_azul.webp",
-        "sellPrice": 315
+        "sellPrice": 315,
+        "level": 4
     },
     {
         "id": "dente_leao_luminoso",
@@ -127,7 +136,8 @@
         "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_luminoso.webp",
-        "sellPrice": 500
+        "sellPrice": 500,
+        "level": 5
     },
     
     {
@@ -141,7 +151,8 @@
         "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_vermelho.webp",
-        "buyPrice": 30
+        "buyPrice": 30,
+        "level": 1
     },
     {
         "id": "semente_dente_leao_amarelo",
@@ -154,7 +165,8 @@
         "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_amarelo.webp",
-        "buyPrice": 30
+        "buyPrice": 30,
+        "level": 1
     },
     {
         "id": "semente_dente_leao_branco",
@@ -167,7 +179,8 @@
         "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_branco.webp",
-        "buyPrice": 30
+        "buyPrice": 30,
+        "level": 1
     },
     {
         "id": "semente_dente_leao_laranja",
@@ -179,7 +192,8 @@
         "event": [
         "luz_sombra"
         ],
-        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_laranja.webp"
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_laranja.webp",
+        "level": 2
     },
     {
         "id": "semente_dente_leao_rosa",
@@ -191,7 +205,8 @@
         "event": [
         "luz_sombra"
         ],
-        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_rosa.webp"
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_rosa.webp",
+        "level": 2
     },
     {
         "id": "semente_dente_leao_preto",
@@ -203,7 +218,8 @@
         "event": [
         "luz_sombra"
         ],
-        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_preto.webp"
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_preto.webp",
+        "level": 3
     },
     {
         "id": "semente_dente_leao_pessego",
@@ -215,7 +231,8 @@
         "event": [
         "luz_sombra"
         ],
-        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_pessego.webp"
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_pessego.webp",
+        "level": 3
     },
     {
         "id": "semente_dente_leao_roxo",
@@ -227,7 +244,8 @@
         "event": [
         "luz_sombra"
         ],
-        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_roxo.webp"
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_roxo.webp",
+        "level": 4
     },
     {
         "id": "semente_dente_leao_azul",
@@ -239,7 +257,8 @@
         "event": [
         "luz_sombra"
         ],
-        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_azul.webp"
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_azul.webp",
+        "level": 4
     },
     {
         "id": "semente_dente_leao_luminoso",
@@ -251,6 +270,7 @@
         "event": [
         "luz_sombra"
         ],
-        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_luminoso.webp"
+        "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_luminoso.webp",
+        "level": 5
     }
 ]
