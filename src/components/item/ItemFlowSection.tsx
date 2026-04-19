@@ -232,10 +232,14 @@ export function ItemFlowSection({
         position: { x: -horizontalSpacing, y: currentLeftY },
         data: { 
           type: 'shop', 
-          shopData,
+          shopData: {
+            ...shopData,
+            npc: entitiesMap.get(shopData.shop.npcId),
+            currencyItem: itemsMap.get(shopData.shopItem.currency || "ouro")
+          },
           itemsMap,
           entitiesMap,
-          eventsMap
+          eventsMap: new Map(Array.from(eventsMap.entries()).map(([k, v]) => [k, { name: v }]))
         },
       });
       edges.push({

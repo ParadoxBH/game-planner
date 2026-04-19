@@ -3,10 +3,10 @@ import {
   Typography,
   Card,
   CardContent,
-  CardActionArea,
   Chip,
   Stack,
   Tooltip,
+  type SxProps,
 } from "@mui/material";
 import { Inventory, Sell, ShoppingCart } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
@@ -19,9 +19,10 @@ interface ItemCardProps {
   gameId: string;
   showPrices?: boolean;
   variant?: "default" | "compact";
+  sx?: SxProps;
 }
 
-export function ItemCard({ item, gameId, showPrices, variant = "default" }: ItemCardProps) {
+export function ItemCard({ item, gameId, showPrices, variant = "default", sx }: ItemCardProps) {
   const navigate = useNavigate();
 
   return (
@@ -42,15 +43,16 @@ export function ItemCard({ item, gameId, showPrices, variant = "default" }: Item
           borderColor: "rgba(255, 255, 255, 0.15)",
           boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
         },
+        ...sx
       }}
     >
-      <CardActionArea
-        onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
+      <Stack
         sx={{
           flexGrow: 1,
           display: "flex",
           flexDirection: "column",
           alignItems: "stretch",
+          cursor: "auto",
         }}
       >
         {variant === "compact" ? (
@@ -77,7 +79,9 @@ export function ItemCard({ item, gameId, showPrices, variant = "default" }: Item
                 alignItems: "center",
                 overflow: "hidden",
                 position: "relative",
+                cursor: "pointer",
               }}
+              onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
             >
               {item.icon ? (
                 <img
@@ -144,7 +148,9 @@ export function ItemCard({ item, gameId, showPrices, variant = "default" }: Item
                 position: "relative",
                 alignItems: "center",
                 gap: 2,
+                cursor: "pointer",
               }}
+              onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
             >
               <Box
                 sx={{
@@ -239,7 +245,7 @@ export function ItemCard({ item, gameId, showPrices, variant = "default" }: Item
                 </Typography>
               </Box>
             </Box>
-            <CardContent sx={{ pt: 0, flexGrow: 1 }}>
+            <Stack>
               <Typography
                 variant="body2"
                 sx={{
@@ -331,10 +337,10 @@ export function ItemCard({ item, gameId, showPrices, variant = "default" }: Item
                     </Stack>
                   )}
               </Stack>
-            </CardContent>
+            </Stack>
           </>
         )}
-      </CardActionArea>
+      </Stack>
     </Card>
   );
 }

@@ -16,6 +16,7 @@ import {
 } from "@mui/icons-material";
 import { ItemChip } from "../common/ItemChip";
 import type { ShopItem } from "../../types/gameModels";
+import { getPublicUrl } from "../../utils/pathUtils";
 
 interface ItemShopCardProps {
   shop: {
@@ -83,7 +84,7 @@ export function ItemShopCard({
               overflow: 'hidden'
             }}>
               {npc?.icon ? (
-                <img src={npc.icon} alt={npc.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={getPublicUrl(npc.image || npc.icon)} alt={npc.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <Storefront sx={{ fontSize: 24, color: 'text.disabled' }} />
               )}
@@ -116,7 +117,7 @@ export function ItemShopCard({
                         key={i}
                         id={ex.id}
                         name={exData?.name}
-                        icon={exData?.icon}
+                        icon={exData?.image || exData?.icon}
                         amount={ex.amount}
                         level={exData?.level}
                         size="small"
