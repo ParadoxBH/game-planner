@@ -10,7 +10,6 @@ import {
   Chip,
   List,
   ListItem,
-  ListItemText,
   Slide,
   Paper,
   Collapse,

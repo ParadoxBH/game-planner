@@ -135,7 +135,7 @@ export function RemmaperObj() {
             overflow: "hidden",
           }}
         >
-          <Tabs value={tab} onChange={(e, value) => handleTab(value)}>
+          <Tabs value={tab} onChange={(_, value) => handleTab(value)}>
             <Tab label="Object Remapper" value={TAB_OBJECT_REMAPPER} />
             <Tab label="Spawners Reposition" value={TAB_SPAWNERS_REPOSITION} />
           </Tabs>

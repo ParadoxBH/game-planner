@@ -28,7 +28,7 @@ interface RecipeCardProps {
   ingredients: RecipeItem[];
   products: RecipeItem[];
   unlock?: RecipeUnlock[];
-  getSourceData: (type: GameDataTypes | undefined, id: string) => { name: string; icon?: string; type: GameDataTypes; level?: number } | undefined;
+  getSourceData: (type: GameDataTypes | undefined, id: string) => { name: string; icon?: string; image?: string; type: GameDataTypes; level?: number } | undefined;
   eventsMap: Map<string, string>;
   craftTime?: number;
   variant?: "default" | "compact";

@@ -11,6 +11,7 @@ export interface Item {
   level?: number;
   variants?: Partial<Item>[];
   event?: string[];
+  image?: string;
 }
 
 export interface EntityDrop {
@@ -58,6 +59,7 @@ export interface Category {
   description?: string;
   banner?: string;
   type?: "item" | "entity" | "both";
+  image?: string;
 }
 
 export type GameDataTypes = "entity" | "item" | "recipe" | "reference_point" | "event" | "skill" | "category" | "conjunto";
@@ -192,6 +194,7 @@ export interface ReferencePoints {
   mapId?: string;
   respawnDelay?: number;
   data?: Record<string, any>;
+  image?: string;
 }
 
 export interface RedemptionCode {
@@ -213,4 +216,5 @@ export interface Conjunto {
   items?: string[]; // Array of Item IDs
   entitys?: string[]; // Array of Entity IDs
   event?: string[];
+  image?: string;
 }

@@ -1,9 +1,7 @@
 import {
   Box,
   Typography,
-  Paper,
   Stack,
-  Collapse,
   Snackbar,
   Alert,
   ToggleButton,
@@ -29,7 +27,6 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useTheme } from "@mui/material/styles";
 import { SimplifiedEntity } from "../entity/SimplifiedEntity";
 import { InfoDrawer } from "./InfoDrawer";
-import { OutputField } from "../common/OutputField";
 import { loadGamesList } from "../../services/dataLoader";
 import { useApi } from "../../hooks/useApi";
 import type {
