@@ -12,7 +12,7 @@
       }
     ],
     "icon": "/img/heartopia/recursos/galho_arbusto.png",
-    "thumbnail": "/img/heartopia/coletaveis/arbusto_flores.png"
+    "image": "/img/heartopia/coletaveis/arbusto_flores.png"
   },
   {
     "id": "arbusto_framboesa",
@@ -20,7 +20,7 @@
     "category": "resource",
     "drops": [],
     "icon": "/img/heartopia/recursos/framboesa.png",
-    "thumbnail": "/img/heartopia/coletaveis/arbusto_framboesa.png"
+    "image": "/img/heartopia/coletaveis/arbusto_framboesa.png"
   },
   {
     "id": "arbusto_lavanda",
@@ -28,7 +28,7 @@
     "category": "resource",
     "drops": [],
     "icon": "/img/heartopia/recursos/galho_arbusto.png",
-    "thumbnail": "/img/heartopia/coletaveis/arbusto_lavanda.png"
+    "image": "/img/heartopia/coletaveis/arbusto_lavanda.png"
   },
   {
     "id": "arbusto_mirtilo",
@@ -47,7 +47,7 @@
       }
     ],
     "icon": "/img/heartopia/recursos/mirtilo.png",
-    "thumbnail": "/img/heartopia/coletaveis/arbusto_mirtilo.png"
+    "image": "/img/heartopia/coletaveis/arbusto_mirtilo.png"
   },
   {
     "id": "arvore",
@@ -76,7 +76,7 @@
       }
     ],
     "icon": "/img/heartopia/recursos/madeira.png",
-    "thumbnail": "/img/heartopia/coletaveis/arvore.png"
+    "image": "/img/heartopia/coletaveis/arvore.png"
   },
   {
     "id": "arvore_abeto",
@@ -100,15 +100,15 @@
       }
     ],
     "icon": "/img/heartopia/recursos/madeira.png",
-    "thumbnail": "/img/heartopia/coletaveis/arvore_abeto.png"
+    "image": "/img/heartopia/coletaveis/arvore_abeto.png"
   },
   {
     "id": "arvore_grande",
     "name": "Árvore Grande",
     "category": "resource",
     "drops": [],
-    "icon": "/img/heartopia/coletaveis/arvore_grande.png",
-    "thumbnail": "/img/heartopia/coletaveis/arvore_grande.png"
+    "icon": "/img/heartopia/recursos/madeira_rara.png",
+    "image": "/img/heartopia/coletaveis/arvore_grande.png"
   },
   {
     "id": "arvore_maca",
@@ -137,7 +137,7 @@
       }
     ],
     "icon": "/img/heartopia/recursos/maca.png",
-    "thumbnail": "/img/heartopia/coletaveis/arvore_maca.png"
+    "image": "/img/heartopia/coletaveis/arvore_maca.png"
   },
   {
     "id": "arvore_pinheiro",
@@ -166,7 +166,7 @@
       }
     ],
     "icon": "/img/heartopia/recursos/madeira_qualidade.png",
-    "thumbnail": "/img/heartopia/coletaveis/arvore_pinheiro.png"
+    "image": "/img/heartopia/coletaveis/arvore_pinheiro.png"
   },
   {
     "id": "arvore_tangerina",
@@ -174,7 +174,7 @@
     "category": "resource",
     "drops": [],
     "icon": "/img/heartopia/recursos/tangerina.png",
-    "thumbnail": "/img/heartopia/coletaveis/arvore_tangerina.png"
+    "image": "/img/heartopia/coletaveis/arvore_tangerina.png"
   },
   {
     "id": "bambu_coletavel",
@@ -182,7 +182,7 @@
     "category": "resource",
     "drops": [],
     "icon": "/img/heartopia/recursos/bambu.png",
-    "thumbnail": "/img/heartopia/coletaveis/bambu.png"
+    "image": "/img/heartopia/coletaveis/bambu.png"
   },
   {
     "id": "carvalho_andarilho",
@@ -190,7 +190,7 @@
     "category": "resource",
     "drops": [],
     "icon": "/img/heartopia/recursos/carvalho_delicado.png",
-    "thumbnail": "/img/heartopia/coletaveis/carvalho_andarilho.png"
+    "image": "/img/heartopia/coletaveis/carvalho_andarilho.png"
   },
   {
     "id": "champignon_coletavel",
@@ -198,7 +198,7 @@
     "category": "resource",
     "drops": [],
     "icon": "/img/heartopia/recursos/champignon.png",
-    "thumbnail": "/img/heartopia/coletaveis/champignon.png"
+    "image": "/img/heartopia/coletaveis/champignon.png"
   },
   {
     "id": "minerio",
@@ -206,7 +206,7 @@
     "category": "resource",
     "drops": [],
     "icon": "/img/heartopia/recursos/minerio.png",
-    "thumbnail": "/img/heartopia/coletaveis/minerio.png"
+    "image": "/img/heartopia/coletaveis/minerio.png"
   },
   {
     "id": "minerio_fluorita",
@@ -214,7 +214,7 @@
     "category": "resource",
     "drops": [],
     "icon": "/img/heartopia/recursos/fluorita_pura.png",
-    "thumbnail": "/img/heartopia/coletaveis/minerio_fluorita.png"
+    "image": "/img/heartopia/coletaveis/minerio_fluorita.png"
   },
   {
     "id": "pedra",
@@ -222,7 +222,7 @@
     "category": "resource",
     "drops": [],
     "icon": "/img/heartopia/recursos/pedra.png",
-    "thumbnail": "/img/heartopia/coletaveis/pedra.png"
+    "image": "/img/heartopia/coletaveis/pedra.png"
   },
   {
     "id": "trufa_negra_coletavel",
@@ -236,7 +236,7 @@
       }
     ],
     "icon": "/img/heartopia/recursos/trufa_negra.png",
-    "thumbnail": "/img/heartopia/coletaveis/trufa_negra.png"
+    "image": "/img/heartopia/coletaveis/trufa_negra.png"
   },
   {
     "id": "pink_bubble",

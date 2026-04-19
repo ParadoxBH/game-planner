@@ -162,33 +162,6 @@
     ]
   },
   {
-    "id": "semente_dente_leao_azul",
-    "stations": [
-      "hibridacao"
-    ],
-    "ingredients": [
-      {
-        "type": "item",
-        "id": "dente_leao_preto",
-        "amount": 1,
-        "notConsume": true
-      },
-      {
-        "type": "item",
-        "id": "dente_leao_pessego",
-        "amount": 1,
-        "notConsume": true
-      }
-    ],
-    "products": [
-      {
-        "type": "item",
-        "id": "semente_dente_leao_azul",
-        "amount": 1
-      }
-    ]
-  },
-  {
     "id": "semente_dente_leao_luminoso",
     "stations": [
       "hibridacao"
