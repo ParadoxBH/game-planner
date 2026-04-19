@@ -249,7 +249,26 @@
     },
     "mapId": "main",
     "event": "luz_sombra"
+  },
+  {
+    "id": "point_1776628043032",
+    "type": "spawn",
+    "entityId": "reporter_moda",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-343.17223144531255 62.9213427734375)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1776628073461",
+    "type": "spawn",
+    "entityId": "naniwa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-447.011748046875 108.85778320312501)"
+    },
+    "mapId": "main",
+    "event": "luz_sombra"
   }
-
-
 ]
