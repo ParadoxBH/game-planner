@@ -42,7 +42,8 @@ export class DbService {
             })
           ) as Promise<any>[]),
           loadGamesList(),
-          loadGameMaps(gameId)
+          loadGameMaps(gameId),
+          loadVersion()
         ]);
         bug = "Mapeando informações em variaveis";
         const [
@@ -56,7 +57,8 @@ export class DbService {
           conjuntos, 
           categories,
           games, 
-          maps = []
+          maps = [],
+          version
         ] = results as any[];
 
         bug = "Procurando informação de jogo";
@@ -95,8 +97,7 @@ export class DbService {
 
           // Store the remote version we just downloaded
           bug = "Salvando versão do banco";
-          const remoteVersion = await loadVersion();
-          await db.settings.put({ key: 'db_version', value: remoteVersion.timestamp || remoteVersion.version });
+          await db.settings.put({ key: 'db_version', value: version.timestamp || version.version });
         });
 
         console.log(`[DbService] Database reconstruction complete for ${gameId}`);
