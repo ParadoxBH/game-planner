@@ -27,10 +27,11 @@ interface ItemShopCardProps {
   npc?: {
     name: string;
     icon?: string;
+    image?: string;
   };
   currencyItem?: { name: string; icon?: string };
-  itemsMap: Map<string, { name: string; icon?: string; buyPrice?: number; sellPrice?: number; level?: number }>;
-  entitiesMap: Map<string, { name: string; icon?: string; buyPrice?: number; sellPrice?: number; level?: number }>;
+  itemsMap: Map<string, { name: string; icon?: string; image?: string; buyPrice?: number; sellPrice?: number; level?: number }>;
+  entitiesMap: Map<string, { name: string; icon?: string; image?: string; buyPrice?: number; sellPrice?: number; level?: number }>;
   eventsMap: Map<string, { name: string }>;
   onClick: () => void;
 }

@@ -2,7 +2,6 @@ import {
   Box,
   Typography,
   Card,
-  CardContent,
   Chip,
   Stack,
   Tooltip,
