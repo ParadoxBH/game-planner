@@ -55,9 +55,9 @@ export const EntityDrawerContent = ({
             backgroundColor: "rgba(0,0,0,0.2)",
           }}
         >
-          {currentEntity?.icon ? (
+          {currentEntity?.image || currentEntity?.icon ? (
             <img
-              src={getPublicUrl(currentEntity.icon)}
+              src={getPublicUrl(currentEntity.image || currentEntity.icon!)}
               alt={currentEntity.name}
               style={{
                 width: "85%",

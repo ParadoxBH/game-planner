@@ -322,7 +322,7 @@ export function RecipeDetailsPage() {
               >
                 {products[0]?.data?.icon ? (
                   <img
-                    src={getPublicUrl(products[0].data.icon)}
+                    src={getPublicUrl(products[0].data.image || products[0].data.icon!)}
                     alt={recipe.normalizedName}
                     style={{
                       width: "80%",
@@ -398,10 +398,10 @@ export function RecipeDetailsPage() {
                             },
                           }}
                         >
-                          {firstEntity?.icon && (
+                          {firstEntity?.image || firstEntity?.icon && (
                             <Box
                               component="img"
-                              src={getPublicUrl(firstEntity.icon)}
+                              src={getPublicUrl(firstEntity.image || firstEntity.icon!)}
                               sx={{
                                 width: 18,
                                 height: 18,
@@ -551,7 +551,7 @@ export function RecipeDetailsPage() {
                               >
                                 <ItemChip
                                   id={choiceId || ing.id}
-                                  icon={selectedItem?.icon || ing.data?.icon}
+                                  icon={selectedItem?.image || selectedItem?.icon || ing.data?.image || ing.data?.icon}
                                   amount={ing.amount}
                                   type={
                                     choiceId
@@ -690,7 +690,7 @@ export function RecipeDetailsPage() {
                           >
                             <ItemChip
                               id={p.id}
-                              icon={p.data?.icon}
+                              icon={p.data?.image || p.data?.icon}
                               amount={p.amount}
                               type={p.type}
                             />

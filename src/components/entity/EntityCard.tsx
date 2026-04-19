@@ -79,9 +79,9 @@ export function EntityCard({ entity, showPrices, hasShop, onClick, variant = "de
               position: "relative",
             }}
           >
-            {entity.icon ? (
+            {entity.image || entity.icon ? (
               <img
-                src={getPublicUrl(entity.icon)}
+                src={getPublicUrl(entity.image || entity.icon!)}
                 alt={entity.name}
                 style={{
                   width: "80%",
@@ -164,8 +164,8 @@ export function EntityCard({ entity, showPrices, hasShop, onClick, variant = "de
               overflow: 'hidden',
               flexShrink: 0
             }}>
-              {entity.icon ? (
-                <img src={getPublicUrl(entity.icon)} alt={entity.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+              {entity.image || entity.icon ? (
+                <img src={getPublicUrl(entity.image || entity.icon!)} alt={entity.name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
               ) : (
                 <CategoryIcon sx={{ fontSize: 32, color: 'rgba(255, 255, 255, 0.2)' }} />
               )}

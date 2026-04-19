@@ -108,7 +108,7 @@ export function RecipeCard({
               
               return productData?.icon ? (
                 <img
-                  src={getPublicUrl(productData.icon)}
+                  src={getPublicUrl(productData.image || productData.icon!)}
                   alt={name}
                   style={{
                     width: "80%",
@@ -194,7 +194,7 @@ export function RecipeCard({
 
                     if (isSingle && firstEntity) {
                       displayName = firstEntity.name;
-                      displayIcon = firstEntity.icon;
+                      displayIcon = firstEntity.image || firstEntity.icon;
                       entityId = firstEntity.id;
                     } else {
                       const cat = categories.find(c => c.id.toLowerCase() === normalizedStation);
@@ -256,7 +256,7 @@ export function RecipeCard({
                       key={idx} 
                       id={ing.id}
                       name={source?.name}
-                      icon={source?.icon}
+                      icon={source?.image || source?.icon}
                       amount={ing.amount} 
                       level={source?.level}
                       type={ing.type} 
@@ -278,7 +278,7 @@ export function RecipeCard({
                       key={idx} 
                       id={prod.id}
                       name={source?.name}
-                      icon={source?.icon}
+                      icon={source?.image || source?.icon}
                       amount={prod.amount} 
                       level={source?.level}
                       type={prod.type} 

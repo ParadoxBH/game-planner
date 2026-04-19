@@ -259,9 +259,9 @@ export function EntityPage() {
                   flexShrink: 0,
                 }}
               >
-                {entity.icon ? (
+                {entity.image || entity.icon ? (
                   <img
-                    src={getPublicUrl(entity.icon)}
+                    src={getPublicUrl(entity.image || entity.icon!)}
                     alt={entity.name}
                     style={{
                       width: "80%",
@@ -328,9 +328,9 @@ export function EntityPage() {
                   p: 1,
                 }}
               >
-                {entity.icon ? (
+                {entity.image || entity.icon ? (
                   <img
-                    src={getPublicUrl(entity.icon)}
+                    src={getPublicUrl(entity.image || entity.icon!)}
                     alt={entity.name}
                     style={{
                       width: "100%",

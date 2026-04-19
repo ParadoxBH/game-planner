@@ -138,9 +138,9 @@ export const ItemDrawerContent = ({
                     flexShrink: 0,
                   }}
                 >
-                  {entity.icon ? (
+                  {entity.image || entity.icon ? (
                     <img
-                      src={getPublicUrl(entity.icon)}
+                      src={getPublicUrl(entity.image || entity.icon!)}
                       style={{
                         width: "85%",
                         height: "85%",

@@ -368,7 +368,7 @@ export function EntityDetailsPage() {
                       icon={
                         <Box
                           component="img"
-                          src={getPublicUrl(v.icon || entity.icon)}
+                          src={getPublicUrl(v.image || v.icon || entity.image || entity.icon!)}
                           sx={{ width: 20, height: 20, objectFit: "contain" }}
                         />
                       }
@@ -416,7 +416,7 @@ export function EntityDetailsPage() {
                   )}
                   {currentEntityData?.icon ? (
                     <img
-                      src={getPublicUrl(currentEntityData.icon)}
+                      src={getPublicUrl(currentEntityData.image || currentEntityData.icon!)}
                       alt={currentEntityData.name}
                       style={{
                         width: "80%",

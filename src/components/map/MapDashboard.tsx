@@ -296,9 +296,9 @@ export const MapDashboard = ({
                 .map((region) => (
                   <Grid size={{ xs: 12, md: 6, lg: 4 }} key={region.id}>
                     {(() => {
-                      const rawBg = region.thumb || region.icon;
+                      const rawBg = region.image || region.thumb || region.icon;
                       const bgImage = getPublicUrl(rawBg);
-                      const hasIcon = Boolean(region.icon);
+                      const hasIcon = Boolean(region.image || region.icon);
                       
                       return (
                         <DataCard
@@ -330,7 +330,7 @@ export const MapDashboard = ({
                               >
                                 {hasIcon && (
                                   <Avatar
-                                    src={getPublicUrl(region.icon)}
+                                    src={getPublicUrl(region.image || region.icon!)}
                                     variant="rounded"
                                     sx={{
                                       width: 48,
@@ -503,7 +503,7 @@ export const MapDashboard = ({
                                 filter: "grayscale(1) brightness(1.5)",
                                 zIndex: 0,
                                 pointerEvents: "none",
-                                backgroundImage: `url(${getPublicUrl(entity.icon)})`,
+                                backgroundImage: `url(${getPublicUrl(entity.image || entity.icon!)})`,
                                 backgroundSize: "contain",
                                 backgroundRepeat: "no-repeat",
                               }}
@@ -516,7 +516,7 @@ export const MapDashboard = ({
                               sx={{ zIndex: 1, width: "100%" }}
                             >
                               <Avatar
-                                src={getPublicUrl(entity.icon)}
+                                src={getPublicUrl(entity.image || entity.icon!)}
                                 variant="rounded"
                                 sx={{
                                   width: 40,

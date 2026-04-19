@@ -27,6 +27,7 @@ export interface Entity {
   category?: string | string[];
   description?: string;
   icon?: string;
+  image?: string;
   buyPrice?: number;
   sellPrice?: number;
   parentId?: string; // Para hierarquia (ex: Cripta dentro de Pântano)
