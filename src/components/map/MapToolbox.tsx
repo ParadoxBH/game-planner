@@ -4,6 +4,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import CancelIcon from "@mui/icons-material/Cancel";
 import PlaceIcon from "@mui/icons-material/Place";
+import { usePlatform } from "../../hooks/usePlatform";
 
 interface MapToolboxProps {
   activeTool: 'point' | 'polygon' | null;
@@ -28,6 +29,11 @@ export const MapToolbox = ({
   isPanelOpen = false,
   onTogglePanel,
 }: MapToolboxProps) => {
+
+  const { isMobile } = usePlatform();
+
+  if(isMobile)
+    return <></>
 
   return (
     <Paper

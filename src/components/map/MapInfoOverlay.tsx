@@ -4,6 +4,7 @@ import { getPublicUrl } from "../../utils/pathUtils";
 import { OutputField } from "../common/OutputField";
 import type { MapMetadata } from "../../types/gameModels";
 import { theme } from "../../theme/theme";
+import { usePlatform } from "../../hooks/usePlatform";
 
 interface MapInfoOverlayProps {
   gameName?: string;
@@ -24,14 +25,16 @@ export const MapInfoOverlay = ({
 }: MapInfoOverlayProps) => {
   const [expanded, setExpanded] = useState(false);
   const currentMap = maps.find(m => m.id === selectedMapId);
+  const { isMobile } = usePlatform();
 
   return (
     <Paper
       elevation={0}
       sx={{
         position: "absolute",
-        bottom: 12,
-        left: 12,
+        bottom: isMobile ? 6 : 12,
+        left: isMobile ? 6 : 12,
+        right: isMobile ? 6 : undefined,
         zIndex: 1000,
         backgroundColor: theme.designTokens.colors.glassBg,
         backdropFilter: theme.designTokens.colors.glassFilter,
@@ -42,11 +45,11 @@ export const MapInfoOverlay = ({
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        width: "400px",
+        width: isMobile? "auto" : "400px",
         transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
       }}
     >
-      <Stack m={2.5} spacing={2}>
+      <Stack m={isMobile ? 2 : 2.5} spacing={isMobile ? 0 : 2}>
         <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
           <Stack alignItems={"start"}>
             <Typography variant="subtitle2" sx={{ color: "designTokens.colors.fieldLabel", fontSize: "0.65rem" }}>
@@ -78,10 +81,10 @@ export const MapInfoOverlay = ({
             </Stack>
           </Box>
         </Stack>
-        <Collapse in={expanded}>
-          <Stack spacing={1} sx={{ mt: 1, mb: 1 }}>
-            <Typography variant="subtitle2" sx={{ color: "designTokens.colors.fieldLabel", mb: 1, display: "block", fontSize: "0.65rem" }}>SELECIONAR MAPA</Typography>
-            <Stack direction="row" spacing={1} sx={{ overflowX: "auto", pb: 1 }}>
+        <Collapse in={expanded} sx={{p: 0, m: 0}}>
+          <Stack spacing={1}>
+            <Typography variant="subtitle2" sx={{ color: "designTokens.colors.fieldLabel", display: "block", fontSize: "0.65rem" }}>SELECIONAR MAPA</Typography>
+            <Stack direction="row" spacing={1} sx={{ overflowX: "auto" }}>
               {maps.map((map) => (
                 <Box
                   key={map.id}
@@ -102,10 +105,10 @@ export const MapInfoOverlay = ({
             </Stack>
           </Stack>
         </Collapse>
-        <Stack direction={"row"} spacing={1.5}>
+        {!isMobile && <Stack direction={"row"} spacing={1.5}>
           <OutputField label="Região" values={[region]} flex={1} />
           <OutputField label="Coordenadas" values={[`X: ${coords[1].toFixed(1)}`, `Y: ${coords[0].toFixed(1)}`]} flex={1.5} />
-        </Stack>
+        </Stack>}
       </Stack>
     </Paper>
   );

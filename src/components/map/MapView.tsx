@@ -525,106 +525,108 @@ export const MapView = () => {
           },
         }}
       >
-        {availableViews.length > 1 && (
-          <Box
-            sx={{
-              position: "absolute",
-              top: 12,
-              left: "50%",
-              transform: "translateX(-50%)",
-              zIndex: 1100,
-              bgcolor: "designTokens.colors.glassBg",
-              backdropFilter: "blur(12px)",
-              borderRadius: 2,
-              p: 0.5,
-              border: 1,
-              borderColor: "divider",
-            }}
-          >
-            <ToggleButtonGroup
-              value={viewMode}
-              exclusive
-              onChange={(_, v) => v && setViewMode(v)}
-              size="small"
-            >
-              {availableViews.includes("map") && (
-                <ToggleButton value="map" sx={{ px: 2 }}>
-                  <MapIcon sx={{ mr: 1, fontSize: 18 }} /> MAPA
-                </ToggleButton>
-              )}
-              {availableViews.includes("dashboard") && (
-                <ToggleButton value="dashboard" sx={{ px: 2 }}>
-                  <DashboardIcon sx={{ mr: 1, fontSize: 18 }} /> DASHBOARD
-                </ToggleButton>
-              )}
-            </ToggleButtonGroup>
-          </Box>
-        )}
-
         {viewMode === "map" ? (
-          <MapContainer
-            key={`${gameId}-${selectedMapId}`}
-            ref={mapRef}
-            crs={customCRS}
-            bounds={selectedMap.bounds as LatLngBoundsExpression}
-            center={mapCenter}
-            zoom={selectedMap.minZoom}
-            maxZoom={selectedMap.maxZoom}
-            style={{
-              height: "100%",
-              width: "100%",
-              cursor: activeTool ? "crosshair" : "grab",
-            }}
-          >
-            <CursorTracker onMouseMove={setCursorCoords} />
-            <MapEventsHandler onClick={handleMapClick} />
-            {activeTool && (
-              <CircleMarker
-                center={cursorCoords}
-                radius={activeTool === "point" ? 6 : 4}
-                pathOptions={{
-                  color: "white",
-                  fillColor:
-                    activeTool === "point"
-                      ? theme.palette.success.main
-                      : theme.palette.primary.main,
-                  fillOpacity: 1,
-                  weight: 2,
+          <>
+            {availableViews.length > 1 && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 12,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  zIndex: 1100,
+                  bgcolor: "designTokens.colors.glassBg",
+                  backdropFilter: "blur(12px)",
+                  borderRadius: 2,
+                  p: 0.5,
+                  border: 1,
+                  borderColor: "divider",
                 }}
-                interactive={false}
-              />
+              >
+                <ToggleButtonGroup
+                  value={viewMode}
+                  exclusive
+                  onChange={(_, v) => v && setViewMode(v)}
+                  size="small"
+                >
+                  {availableViews.includes("map") && (
+                    <ToggleButton value="map" sx={{ px: 2 }}>
+                      <MapIcon sx={{ mr: 1, fontSize: 18 }} /> MAPA
+                    </ToggleButton>
+                  )}
+                  {availableViews.includes("dashboard") && (
+                    <ToggleButton value="dashboard" sx={{ px: 2 }}>
+                      <DashboardIcon sx={{ mr: 1, fontSize: 18 }} /> DASHBOARD
+                    </ToggleButton>
+                  )}
+                </ToggleButtonGroup>
+              </Box>
             )}
-            {activeTool === "polygon" && currentPoints.length > 0 && (
-              <>
-                <Polygon
-                  positions={currentPoints}
+            <MapContainer
+              key={`${gameId}-${selectedMapId}`}
+              ref={mapRef}
+              crs={customCRS}
+              bounds={selectedMap.bounds as LatLngBoundsExpression}
+              center={mapCenter}
+              zoom={selectedMap.minZoom}
+              maxZoom={selectedMap.maxZoom}
+              style={{
+                height: "100%",
+                width: "100%",
+                cursor: activeTool ? "crosshair" : "grab",
+              }}
+            >
+              <CursorTracker onMouseMove={setCursorCoords} />
+              <MapEventsHandler onClick={handleMapClick} />
+              {activeTool && (
+                <CircleMarker
+                  center={cursorCoords}
+                  radius={activeTool === "point" ? 6 : 4}
                   pathOptions={{
-                    color: theme.palette.primary.main,
-                    fillColor: theme.palette.primary.main,
-                    fillOpacity: 0.1,
+                    color: "white",
+                    fillColor:
+                      activeTool === "point"
+                        ? theme.palette.success.main
+                        : theme.palette.primary.main,
+                    fillOpacity: 1,
                     weight: 2,
-                    dashArray: "5, 5",
-                  }}
-                />
-                <Polyline
-                  positions={[
-                    currentPoints[currentPoints.length - 1],
-                    cursorCoords,
-                  ]}
-                  pathOptions={{
-                    color: theme.palette.primary.main,
-                    weight: 2,
-                    dashArray: "5, 5",
-                    opacity: 0.8,
                   }}
                   interactive={false}
                 />
-              </>
-            )}
-            {selectedMap.type === "layered" &&
-              selectedMap.urlPattern &&
-              Array.from({ length: selectedMap.layers || 1 }, (_, i) => i).map(
-                (l) => (
+              )}
+              {activeTool === "polygon" && currentPoints.length > 0 && (
+                <>
+                  <Polygon
+                    positions={currentPoints}
+                    pathOptions={{
+                      color: theme.palette.primary.main,
+                      fillColor: theme.palette.primary.main,
+                      fillOpacity: 0.1,
+                      weight: 2,
+                      dashArray: "5, 5",
+                    }}
+                  />
+                  <Polyline
+                    positions={[
+                      currentPoints[currentPoints.length - 1],
+                      cursorCoords,
+                    ]}
+                    pathOptions={{
+                      color: theme.palette.primary.main,
+                      weight: 2,
+                      dashArray: "5, 5",
+                      opacity: 0.8,
+                    }}
+                    interactive={false}
+                  />
+                </>
+              )}
+              {selectedMap.type === "layered" &&
+                selectedMap.urlPattern &&
+                Array.from(
+                  { length: selectedMap.layers || 1 },
+                  (_, i) => i,
+                ).map((l) => (
                   <ImageOverlay
                     key={l}
                     zIndex={l}
@@ -633,126 +635,142 @@ export const MapView = () => {
                     )}
                     bounds={selectedMap.bounds as LatLngBoundsExpression}
                   />
-                ),
+                ))}
+              {selectedMap.type === "single" && selectedMap.url && (
+                <ImageOverlay
+                  url={getPublicUrl(selectedMap.url)}
+                  bounds={selectedMap.bounds as LatLngBoundsExpression}
+                />
               )}
-            {selectedMap.type === "single" && selectedMap.url && (
-              <ImageOverlay
-                url={getPublicUrl(selectedMap.url)}
-                bounds={selectedMap.bounds as LatLngBoundsExpression}
-              />
-            )}
-            {selectedMap.type === "tile" && selectedMap.url && (
-              <TileLayer
-                url={getPublicUrl(selectedMap.url)}
-                minZoom={selectedMap.minZoom}
-                maxZoom={selectedMap.maxZoom}
-                minNativeZoom={selectedMap.tileMinZoom ?? 4}
-                maxNativeZoom={selectedMap.tileMaxZoom ?? 4}
-                noWrap={true}
-              />
-            )}
+              {selectedMap.type === "tile" && selectedMap.url && (
+                <TileLayer
+                  url={getPublicUrl(selectedMap.url)}
+                  minZoom={selectedMap.minZoom}
+                  maxZoom={selectedMap.maxZoom}
+                  minNativeZoom={selectedMap.tileMinZoom ?? 4}
+                  maxNativeZoom={selectedMap.tileMaxZoom ?? 4}
+                  noWrap={true}
+                />
+              )}
 
-            {pointsOnCurrentMap
-              .filter((point) => {
-                if (!visibleTypes.includes(point.type)) return false;
-                if (!visibleEntities.includes(point.entityId)) return false;
+              {pointsOnCurrentMap
+                .filter((point) => {
+                  if (!visibleTypes.includes(point.type)) return false;
+                  if (!visibleEntities.includes(point.entityId)) return false;
 
-                const entity =
-                  entityLookup[point.entityId] ||
-                  items.find((i) => i.id === point.entityId);
-                const category = entity?.category
-                  ? Array.isArray(entity.category)
-                    ? entity.category[0]
-                    : entity.category
-                  : "desconhecido";
-                if (!visibleCategories.includes(category)) return false;
+                  const entity =
+                    entityLookup[point.entityId] ||
+                    items.find((i) => i.id === point.entityId);
+                  const category = entity?.category
+                    ? Array.isArray(entity.category)
+                      ? entity.category[0]
+                      : entity.category
+                    : "desconhecido";
+                  if (!visibleCategories.includes(category)) return false;
 
-                return true;
-              })
-              .map((point) => {
-                if (point.geom.type === "Polygon") {
-                  const coords = parseWKTPolygon(point.geom.coordinates);
-                  return (
-                    <Polygon
-                      key={point.id}
-                      positions={coords.map((c) => [c[1], c[0]])}
-                      pathOptions={{
-                        color:
-                          point.type === "biome"
-                            ? theme.palette.success.main
-                            : theme.palette.primary.main,
-                        fillOpacity: 0.1,
-                        weight: 2,
-                      }}
-                    >
-                      <Popup>
-                        <Typography variant="subtitle2">
-                          {point.name || point.id}
-                        </Typography>
-                        {point.description && (
-                          <Typography variant="caption">
-                            {point.description}
+                  return true;
+                })
+                .map((point) => {
+                  if (point.geom.type === "Polygon") {
+                    const coords = parseWKTPolygon(point.geom.coordinates);
+                    return (
+                      <Polygon
+                        key={point.id}
+                        positions={coords.map((c) => [c[1], c[0]])}
+                        pathOptions={{
+                          color:
+                            point.type === "biome"
+                              ? theme.palette.success.main
+                              : theme.palette.primary.main,
+                          fillOpacity: 0.1,
+                          weight: 2,
+                        }}
+                      >
+                        <Popup>
+                          <Typography variant="subtitle2">
+                            {point.name || point.id}
                           </Typography>
-                        )}
-                      </Popup>
-                    </Polygon>
+                          {point.description && (
+                            <Typography variant="caption">
+                              {point.description}
+                            </Typography>
+                          )}
+                        </Popup>
+                      </Polygon>
+                    );
+                  }
+
+                  const entity =
+                    entityLookup[point.entityId] ||
+                    items.find((i) => i.id === point.entityId);
+                  return (
+                    <StableMarker
+                      key={point.id}
+                      point={point}
+                      size={sizeMarker}
+                      entity={
+                        entityLookup[point.entityId] ||
+                        items.find((i) => i.id === point.entityId)
+                      }
+                      iconHtml={markerTemplate
+                        .replaceAll(
+                          "{{ICON_URL}}",
+                          getPublicUrl(
+                            point.icon ||
+                              entity?.icon ||
+                              "/img/placeholder.png",
+                          ),
+                        )
+                        .replaceAll("{{CLASS_NAME}}", "custom-entity-icon")
+                        .replaceAll("{{COLOR}}", "white")
+                        .replaceAll("{{SIZE}}", sizeMarker.toString())
+                        .replaceAll("{{IMAGE_STYLE}}", "")}
+                      onExpand={() =>
+                        handlePush({ type: "entity", id: point.entityId })
+                      }
+                    />
                   );
-                }
+                })}
 
-                const entity =
-                  entityLookup[point.entityId] ||
-                  items.find((i) => i.id === point.entityId);
-                return (
-                  <StableMarker
-                    key={point.id}
-                    point={point}
-                    size={sizeMarker}
-                    entity={
-                      entityLookup[point.entityId] ||
-                      items.find((i) => i.id === point.entityId)
-                    }
-                    iconHtml={markerTemplate
-                      .replaceAll(
-                        "{{ICON_URL}}",
-                        getPublicUrl(
-                          point.icon || entity?.icon || "/img/placeholder.png",
-                        ),
-                      )
-                      .replaceAll("{{CLASS_NAME}}", "custom-entity-icon")
-                      .replaceAll("{{COLOR}}", "white")
-                      .replaceAll("{{SIZE}}", sizeMarker.toString())
-                      .replaceAll("{{IMAGE_STYLE}}", "")}
-                    onExpand={() =>
-                      handlePush({ type: "entity", id: point.entityId })
-                    }
-                  />
-                );
-              })}
-
-            {/* Session Points */}
-            {sessionPoints
-              .filter((p) => p.mapId === selectedMapId)
-              .map((point) => {
-                return (
-                  <StableMarker
-                    key={point.id}
-                    point={point}
-                    size={sizeMarker}
-                    entity={
-                      entityLookup[point.entityId] ||
-                      items.find((i) => i.id === point.entityId)
-                    }
-                    iconHtml={markerTemplate
-                      .replaceAll("{{ICON_URL}}", getPublicUrl("/img/add.png"))
-                      .replaceAll("{{CLASS_NAME}}", "session-point-icon")
-                      .replaceAll("{{COLOR}}", theme.palette.primary.main)
-                      .replaceAll("{{SIZE}}", sizeMarker.toString())
-                      .replaceAll("{{IMAGE_STYLE}}", "opacity: 0.8;")}
-                    onDelete={() => handleDeleteSessionPoint(point.id)}
-                  />
-                );
-              })}
-          </MapContainer>
+              {/* Session Points */}
+              {sessionPoints
+                .filter((p) => p.mapId === selectedMapId)
+                .map((point) => {
+                  return (
+                    <StableMarker
+                      key={point.id}
+                      point={point}
+                      size={sizeMarker}
+                      entity={
+                        entityLookup[point.entityId] ||
+                        items.find((i) => i.id === point.entityId)
+                      }
+                      iconHtml={markerTemplate
+                        .replaceAll(
+                          "{{ICON_URL}}",
+                          getPublicUrl("/img/add.png"),
+                        )
+                        .replaceAll("{{CLASS_NAME}}", "session-point-icon")
+                        .replaceAll("{{COLOR}}", theme.palette.primary.main)
+                        .replaceAll("{{SIZE}}", sizeMarker.toString())
+                        .replaceAll("{{IMAGE_STYLE}}", "opacity: 0.8;")}
+                      onDelete={() => handleDeleteSessionPoint(point.id)}
+                    />
+                  );
+                })}
+            </MapContainer>
+            <MapFilterDrawer
+              referencePoints={pointsOnCurrentMap}
+              entities={entities}
+              items={items}
+              visibleTypes={visibleTypes}
+              setVisibleTypes={setVisibleTypes}
+              visibleCategories={visibleCategories}
+              setVisibleCategories={setVisibleCategories}
+              visibleEntities={visibleEntities}
+              setVisibleEntities={setVisibleEntities}
+            />
+          </>
         ) : (
           <MapDashboard
             gameId={gameId!}
@@ -771,18 +789,6 @@ export const MapView = () => {
             onSelectMap={setSelectedMapId}
           />
         )}
-
-        <MapFilterDrawer
-          referencePoints={pointsOnCurrentMap}
-          entities={entities}
-          items={items}
-          visibleTypes={visibleTypes}
-          setVisibleTypes={setVisibleTypes}
-          visibleCategories={visibleCategories}
-          setVisibleCategories={setVisibleCategories}
-          visibleEntities={visibleEntities}
-          setVisibleEntities={setVisibleEntities}
-        />
       </Box>
 
       {navigationStack.length > 0 && (
