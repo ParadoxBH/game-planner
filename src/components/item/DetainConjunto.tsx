@@ -14,6 +14,8 @@ export function DetainConjunto({ itens }: DetainConjuntoProps) {
     gameId: string;
   }>();
   const navigate = useNavigate();
+  if(itens.length < 1)
+    return <></>
   return (
     <DetainItem
       label="Parte de Conjuntos"

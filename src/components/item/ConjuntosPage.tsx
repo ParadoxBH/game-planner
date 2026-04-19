@@ -7,8 +7,18 @@ import {
   Stack,
   Chip,
   CircularProgress,
+  alpha,
+  Switch,
+  FormControlLabel,
+  Button,
 } from "@mui/material";
-import { AutoAwesomeMosaic, Layers, ArrowBack, CheckCircle, CheckCircleOutline } from "@mui/icons-material";
+import {
+  AutoAwesomeMosaic,
+  Layers,
+  ArrowBack,
+  CheckCircle,
+  CheckCircleOutline,
+} from "@mui/icons-material";
 import { ItemCard } from "./ItemCard";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
@@ -21,6 +31,7 @@ import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
 import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
 import { usePlatform } from "../../hooks/usePlatform";
+import { theme } from "../../theme/theme";
 
 export function ConjuntosPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -30,14 +41,15 @@ export function ConjuntosPage() {
   const navigate = useNavigate();
 
   const { loading: dbLoading } = useApi(gameId);
-  
+
   const [conjuntos, setConjuntos] = useState<Conjunto[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [entities, setEntities] = useState<Entity[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
-  
+
   const [searchTerm, setSearchTerm] = useState("");
   const [collectedIds, setCollectedIds] = useState<Set<string>>(new Set());
+  const [hideCompleted, setHideCompleted] = useState(false);
   const { isMobile } = usePlatform();
 
   // Load data
@@ -50,19 +62,23 @@ export function ConjuntosPage() {
     Promise.all([
       conjuntoRepository.getAll(),
       itemRepository.getAll(),
-      entityRepository.getAll()
-    ]).then(([allConjuntos, allItems, allEntities]) => {
-      if (!isMounted) return;
-      setConjuntos(allConjuntos);
-      setItems(allItems);
-      setEntities(allEntities);
-      setDataLoading(false);
-    }).catch(err => {
-      console.error("Error fetching conjuntos data:", err);
-      if (isMounted) setDataLoading(false);
-    });
+      entityRepository.getAll(),
+    ])
+      .then(([allConjuntos, allItems, allEntities]) => {
+        if (!isMounted) return;
+        setConjuntos(allConjuntos);
+        setItems(allItems);
+        setEntities(allEntities);
+        setDataLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching conjuntos data:", err);
+        if (isMounted) setDataLoading(false);
+      });
 
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, [dbLoading]);
 
   // Load collected IDs from localStorage
@@ -78,6 +94,22 @@ export function ConjuntosPage() {
     }
   }, [gameId]);
 
+  // Load filter preference from localStorage
+  useEffect(() => {
+    if (!gameId) return;
+    const saved = localStorage.getItem(`gp_hide_completed_${gameId}`);
+    if (saved) {
+      setHideCompleted(saved === "true");
+    }
+  }, [gameId]);
+
+  // Save filter preference to localStorage
+  const toggleHideCompleted = () => {
+    const newVal = !hideCompleted;
+    setHideCompleted(newVal);
+    localStorage.setItem(`gp_hide_completed_${gameId}`, String(newVal));
+  };
+
   // Save to localStorage whenever collectedIds changes
   const toggleCollected = (id: string) => {
     setCollectedIds((prev) => {
@@ -87,7 +119,10 @@ export function ConjuntosPage() {
       } else {
         next.add(id);
       }
-      localStorage.setItem(`gp_collected_${gameId}`, JSON.stringify(Array.from(next)));
+      localStorage.setItem(
+        `gp_collected_${gameId}`,
+        JSON.stringify(Array.from(next)),
+      );
       return next;
     });
   };
@@ -128,12 +163,35 @@ export function ConjuntosPage() {
       );
     }
 
+    if (hideCompleted) {
+      list = list.filter((conjunto) => {
+        const items = conjunto.items || [];
+        const entities = conjunto.entitys || [];
+        const totalCount = items.length + entities.length;
+        if (totalCount === 0) return true; // Keep empty sets? Or hide them? Usually keep them if they are work in progress.
+
+        const collectedCount = [...items, ...entities].filter((id) =>
+          collectedIds.has(id),
+        ).length;
+
+        return collectedCount < totalCount;
+      });
+    }
+
     return list;
-  }, [conjuntos, urlCategory, searchTerm]);
+  }, [conjuntos, urlCategory, searchTerm, hideCompleted, collectedIds]);
 
   if (dbLoading || dataLoading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+          width: "100%",
+        }}
+      >
         <CircularProgress color="primary" />
       </Box>
     );
@@ -165,15 +223,18 @@ export function ConjuntosPage() {
             >
               <Stack alignItems={"center"} textAlign={"center"} spacing={1}>
                 <Layers sx={{ fontSize: 48, color: "primary.main" }} />
-                <Typography variant={"subtitle2"} fontSize={isMobile ? undefined : 24} sx={{ fontWeight: 800 }}>
+                <Typography
+                  variant={"subtitle2"}
+                  fontSize={isMobile ? undefined : 24}
+                  sx={{ fontWeight: 800 }}
+                >
                   {cat}
                 </Typography>
                 <Typography
                   variant={"subtitle2"}
                   sx={{ color: "text.secondary" }}
                 >
-                  {conjuntos.filter((c) => c.category === cat).length}{" "}
-                  conjuntos
+                  {conjuntos.filter((c) => c.category === cat).length} conjuntos
                 </Typography>
               </Stack>
             </CardActionArea>
@@ -186,22 +247,32 @@ export function ConjuntosPage() {
   const renderConjuntosList = () => (
     <Stack spacing={isMobile ? 1 : 2}>
       {filteredConjuntos.map((conjunto) => {
-        const totalCount = (conjunto.items?.length || 0) + (conjunto.entitys?.length || 0);
+        const totalCount =
+          (conjunto.items?.length || 0) + (conjunto.entitys?.length || 0);
         const collectedCount = [
           ...(conjunto.items || []),
-          ...(conjunto.entitys || [])
-        ].filter(id => collectedIds.has(id)).length;
+          ...(conjunto.entitys || []),
+        ].filter((id) => collectedIds.has(id)).length;
 
         return (
           <Stack key={conjunto.id} spacing={isMobile ? 0.5 : 1}>
-            <Stack direction="row" alignItems="center" spacing={1} justifyContent={"space-between"}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={1}
+              justifyContent={"space-between"}
+            >
               <Typography
                 variant={isMobile ? "h6" : "h5"}
-                sx={{ fontWeight: 900, color: "text.primary", textAlign: "start" }}
+                sx={{
+                  fontWeight: 900,
+                  color: "text.primary",
+                  textAlign: "start",
+                }}
               >
                 {conjunto.name}
               </Typography>
-              <Chip 
+              <Chip
                 label={`${collectedCount} / ${totalCount}`}
                 color={collectedCount === totalCount ? "success" : "primary"}
                 variant={collectedCount === totalCount ? "filled" : "outlined"}
@@ -219,13 +290,21 @@ export function ConjuntosPage() {
               {conjunto.items?.map((itemId) => {
                 const item = itemMap.get(itemId);
                 const isCollected = collectedIds.has(itemId);
-                
+
                 if (!item)
                   return (
                     <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={itemId}>
-                      <Card sx={{p: 1}}>
-                        <Stack flex={1} spacing={1} direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
-                          <Typography variant="subtitle2">{itemId.replaceAll('_', ' ')}</Typography>
+                      <Card sx={{ p: 1 }}>
+                        <Stack
+                          flex={1}
+                          spacing={1}
+                          direction={"row"}
+                          alignItems={"center"}
+                          justifyContent={"space-between"}
+                        >
+                          <Typography variant="subtitle2">
+                            {itemId.replaceAll("_", " ")}
+                          </Typography>
                           <Checkbox
                             checked={isCollected}
                             onChange={() => toggleCollected(itemId)}
@@ -237,12 +316,22 @@ export function ConjuntosPage() {
 
                 return (
                   <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={itemId}>
-                    <Box sx={{ position: 'relative', height: '100%' }}>
+                    <Box sx={{ position: "relative", height: "100%" }}>
                       <ItemCard
                         key={item.id}
                         item={item}
                         gameId={gameId || ""}
                         variant="compact"
+                        sx={
+                          isCollected
+                            ? {
+                                background: alpha(
+                                  theme.palette.success.light,
+                                  0.1,
+                                ),
+                              }
+                            : undefined
+                        }
                       />
                       <Checkbox
                         icon={<CheckCircleOutline />}
@@ -252,21 +341,23 @@ export function ConjuntosPage() {
                           e.stopPropagation();
                           toggleCollected(itemId);
                         }}
-                        sx={{ 
-                          position: 'absolute', 
-                          top: 4, 
-                          right: 4, 
+                        sx={{
+                          position: "absolute",
+                          top: 4,
+                          right: 4,
                           zIndex: 10,
-                          color: isCollected ? 'success.main' : 'rgba(255,255,255,0.2)',
-                          '&.Mui-checked': {
-                            color: 'success.main',
+                          color: isCollected
+                            ? "success.main"
+                            : "rgba(255,255,255,0.2)",
+                          "&.Mui-checked": {
+                            color: "success.main",
                           },
-                          backgroundColor: 'rgba(0,0,0,0.3)',
-                          backdropFilter: 'blur(4px)',
-                          padding: '4px',
-                          '&:hover': {
-                            backgroundColor: 'rgba(0,0,0,0.5)',
-                          }
+                          backgroundColor: "rgba(0,0,0,0.3)",
+                          backdropFilter: "blur(4px)",
+                          padding: "4px",
+                          "&:hover": {
+                            backgroundColor: "rgba(0,0,0,0.5)",
+                          },
                         }}
                       />
                     </Box>
@@ -281,12 +372,12 @@ export function ConjuntosPage() {
                 if (!entity)
                   return (
                     <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={entityId}>
-                       <Box sx={{ position: 'relative' }}>
+                      <Box sx={{ position: "relative" }}>
                         <Typography>{entityId}</Typography>
                         <Checkbox
                           checked={isCollected}
                           onChange={() => toggleCollected(entityId)}
-                          sx={{ position: 'absolute', top: 0, right: 0 }}
+                          sx={{ position: "absolute", top: 0, right: 0 }}
                         />
                       </Box>
                     </Grid>
@@ -294,12 +385,14 @@ export function ConjuntosPage() {
 
                 return (
                   <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={entityId}>
-                    <Box sx={{ position: 'relative', height: '100%' }}>
+                    <Box sx={{ position: "relative", height: "100%" }}>
                       <EntityCard
                         key={entity.id}
                         entity={entity}
                         variant="compact"
-                        onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
+                        onClick={() =>
+                          navigate(`/game/${gameId}/entity/view/${entity.id}`)
+                        }
                       />
                       <Checkbox
                         icon={<CheckCircleOutline />}
@@ -309,21 +402,23 @@ export function ConjuntosPage() {
                           e.stopPropagation();
                           toggleCollected(entityId);
                         }}
-                        sx={{ 
-                          position: 'absolute', 
-                          top: 4, 
-                          right: 4, 
+                        sx={{
+                          position: "absolute",
+                          top: 4,
+                          right: 4,
                           zIndex: 10,
-                          color: isCollected ? 'success.main' : 'rgba(255,255,255,0.2)',
-                          '&.Mui-checked': {
-                            color: 'success.main',
+                          color: isCollected
+                            ? "success.main"
+                            : "rgba(255,255,255,0.2)",
+                          "&.Mui-checked": {
+                            color: "success.main",
                           },
-                          backgroundColor: 'rgba(0,0,0,0.3)',
-                          backdropFilter: 'blur(4px)',
-                          padding: '4px',
-                          '&:hover': {
-                            backgroundColor: 'rgba(0,0,0,0.5)',
-                          }
+                          backgroundColor: "rgba(0,0,0,0.3)",
+                          backdropFilter: "blur(4px)",
+                          padding: "4px",
+                          "&:hover": {
+                            backgroundColor: "rgba(0,0,0,0.5)",
+                          },
                         }}
                       />
                     </Box>
@@ -348,26 +443,44 @@ export function ConjuntosPage() {
       searchValue={searchTerm}
       onChangeSearch={setSearchTerm}
       search={{ placeholder: "Pesquisar conjuntos..." }}
-      actionsEnd={
-        (urlCategory && !isMobile) ? (
-          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-            <CardActionArea
-              onClick={() => navigate(`/game/${gameId}/conjuntos`)}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                width: "auto",
-                p: 1,
-                borderRadius: 1,
-              }}
+      actionsStart={
+        <Stack
+          alignItems={"center"}
+          spacing={1}
+          flex={1}
+          direction={"row"}
+          justifyContent={"space-between"}
+        >
+          <Stack alignItems={"center"} spacing={1} direction={"row"}>
+            <Switch
+              size="small"
+              checked={hideCompleted}
+              onChange={toggleHideCompleted}
+            />
+
+            <Typography
+              variant="body2"
+              sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
             >
-              <ArrowBack sx={{ mr: 1, fontSize: 20 }} />
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                VOLTAR PARA CATEGORIAS
-              </Typography>
-            </CardActionArea>
-          </Box>
-        ) : undefined
+              Esconder Completos
+            </Typography>
+          </Stack>
+          {!!urlCategory && (
+            <Button
+              sx={{ minWidth: "auto" }}
+              startIcon={
+                !isMobile ? <ArrowBack sx={{ fontSize: 20 }} /> : undefined
+              }
+            >
+              {isMobile && <ArrowBack sx={{ fontSize: 20 }} />}
+              {!isMobile && (
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  Voltar
+                </Typography>
+              )}
+            </Button>
+          )}
+        </Stack>
       }
     >
       {urlCategory ? renderConjuntosList() : renderCategorySelection()}

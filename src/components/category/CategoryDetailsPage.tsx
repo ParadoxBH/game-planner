@@ -162,7 +162,7 @@ export function CategoryDetailsPage() {
           <Grid container spacing={2}>
             {items.map((item) => (
               <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }} key={item.id}>
-                <ItemCard item={item} gameId={gameId!} />
+                <ItemCard item={item} gameId={gameId!} variant="compact"/>
               </Grid>
             ))}
           </Grid>
