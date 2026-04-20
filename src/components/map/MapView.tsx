@@ -138,30 +138,7 @@ const StableMarker = React.memo(
             backdropFilter: theme.designTokens.colors.glassFilter,
           }}
         >
-          {point.id.startsWith("point_") ? (
-            <>
-              <Typography variant="subtitle2" color="success.main">
-                Ponto na Sessão
-              </Typography>
-              <Typography variant="body2">
-                {entity?.name || point.entityId}
-              </Typography>
-              <Typography variant="caption" display="block">
-                {point.type}
-              </Typography>
-              {onDelete && (
-                <Button
-                  size="small"
-                  color="error"
-                  onClick={onDelete}
-                  sx={{ mt: 1 }}
-                >
-                  Remover
-                </Button>
-              )}
-            </>
-          ) : (
-            <SimplifiedEntity
+          <SimplifiedEntity
               entity={
                 entity || {
                   id: point.entityId,
@@ -176,7 +153,6 @@ const StableMarker = React.memo(
               onExpand={onExpand || (() => {})}
               categoriesMap={categoriesMap}
             />
-          )}
         </Popup>
       </Marker>
     );

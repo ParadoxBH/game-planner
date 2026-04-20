@@ -64,7 +64,7 @@ export const InfoDrawer = ({
 
   const handleViewDetails = () => {
     if (currentItem.type === "entity") {
-      navigate(`/game/${gameId}/entities/view/${currentItem.id}`);
+      navigate(`/game/${gameId}/entity/view/${currentItem.id}`);
     } else {
       navigate(`/game/${gameId}/items/view/${currentItem.id}`);
     }
