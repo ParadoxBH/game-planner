@@ -21,6 +21,8 @@ import {
   Polygon,
   Polyline,
   CircleMarker,
+  Tooltip,
+  Pane,
 } from "react-leaflet";
 import { divIcon } from "leaflet";
 import React, { useState, useEffect, useMemo, useRef } from "react";
@@ -99,6 +101,7 @@ interface StableMarkerProps {
   onExpand?: () => void;
   onDelete?: () => void;
   categoriesMap?: Record<string, string>;
+  interactive?: boolean;
 }
 
 const StableMarker = React.memo(
@@ -110,6 +113,7 @@ const StableMarker = React.memo(
     onExpand,
     onDelete,
     categoriesMap,
+    interactive = true,
   }: StableMarkerProps) => {
     const cp = parseWKTPoint(point.geom.coordinates);
     const pos: [number, number] = [cp[1], cp[0]];
@@ -127,7 +131,7 @@ const StableMarker = React.memo(
     );
 
     return (
-      <Marker position={pos} icon={icon}>
+      <Marker position={pos} icon={icon} interactive={interactive}>
         <Popup
           sx={{
             backgroundColor: theme.designTokens.colors.glassBg,
@@ -587,6 +591,7 @@ export const MapView = () => {
                 cursor: activeTool ? "crosshair" : "grab",
               }}
             >
+              <Pane name="locationLabels" style={{ zIndex: 500 }} />
               <CursorTracker onMouseMove={setCursorCoords} />
               <MapEventsHandler onClick={handleMapClick} />
               {activeTool && (
@@ -696,6 +701,7 @@ export const MapView = () => {
                           fillOpacity: 0.1,
                           weight: 2,
                         }}
+                        interactive={!activeTool && point.type !== "location"}
                       >
                         <Popup>
                           <Typography variant="subtitle2">
@@ -707,6 +713,16 @@ export const MapView = () => {
                             </Typography>
                           )}
                         </Popup>
+                        {point.type === "location" && (
+                          <Tooltip
+                            permanent
+                            direction="center"
+                            className="location-label"
+                            pane="locationLabels"
+                          >
+                            {point.name || point.id}
+                          </Tooltip>
+                        )}
                       </Polygon>
                     );
                   }
@@ -740,6 +756,7 @@ export const MapView = () => {
                         handlePush({ type: "entity", id: point.entityId })
                       }
                       categoriesMap={categoriesMap}
+                      interactive={!activeTool && point.type !== "location"}
                     />
                   );
                 })}
@@ -768,6 +785,7 @@ export const MapView = () => {
                         .replaceAll("{{IMAGE_STYLE}}", "opacity: 0.8;")}
                       onDelete={() => handleDeleteSessionPoint(point.id)}
                       categoriesMap={categoriesMap}
+                      interactive={!activeTool}
                     />
                   );
                 })}

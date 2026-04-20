@@ -83,3 +83,28 @@ export function parseWKTPolygon(wkt: string): [number, number][] {
     return [coords[0], coords[1]] as [number, number];
   });
 }
+
+/**
+ * Calculates the centroid of a polygon provided as [x, y] coordinates.
+ * @param points Array of [x, y] coordinates
+ * @returns Centroid as [lat, lng] for Leaflet
+ */
+export function getPolygonCentroid(points: [number, number][]): [number, number] {
+  if (!points || points.length === 0) return [0, 0];
+  
+  let x = 0;
+  let y = 0;
+  let n = points.length;
+  
+  // For centroid, if the first and last points are the same, we ignore the duplicate last point
+  const isClosed = points[0][0] === points[n-1][0] && points[0][1] === points[n-1][1];
+  const count = isClosed && n > 1 ? n - 1 : n;
+
+  for (let i = 0; i < count; i++) {
+    x += points[i][0];
+    y += points[i][1];
+  }
+  
+  // Map back to Leaflet [lat, lng] which is [y, x]
+  return [y / count, x / count];
+}
