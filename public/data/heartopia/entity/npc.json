@@ -173,5 +173,19 @@
     "category": "npc",
     "icon": "/img/heartopia/npc/head/reporter_moda.png",
     "image": "/img/heartopia/npc/reporter_moda.png"
+  },
+  {
+    "id": "doris_meteor",
+    "name": "Doris",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/doris_meteor.png",
+    "image": "/img/heartopia/npc/doris_meteor.png"
+  },
+  {
+    "id": "doris_rain",
+    "name": "Doris",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/doris_rain.png",
+    "image": "/img/heartopia/npc/doris_rain.png"
   }
 ]

@@ -5,5 +5,8 @@
     "npcs.json",
     "pink_bubble.json",
     "gold_bubble.json",
-    "zones.json"
+    "zones.json",
+    "meteor_shower_nort.json",
+    "meteor_shower_sul.json",
+    "shower.json"
 ]

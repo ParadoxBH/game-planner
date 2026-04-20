@@ -249,5 +249,12 @@
     "name": "Bolha Dourada",
     "category": "colection",
     "icon": "/img/heartopia/coletaveis/gold_bubble.png"
+  },
+  {
+    "id": "meteoro",
+    "name": "Meteoro",
+    "category": "colection",
+    "icon": "/img/heartopia/recursos/meteoro_cinza.png",
+    "image": "/img/heartopia/coletaveis/meteoro.png"
   }
 ]
