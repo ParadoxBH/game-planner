@@ -1,0 +1,12 @@
+﻿[
+  {
+    "id": "carrinho_movel_pipoca",
+    "name": "Carrinho Móvel de Pipoca",
+    "event": "luz_sombra",
+    "category": [
+      "station",
+      "carrinho_movel_pipoca"
+    ],
+    "icon": "/img/heartopia/events/luz_sombra/furniture/carrinho_movel_pipoca.png"
+  }
+]

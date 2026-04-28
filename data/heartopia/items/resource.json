@@ -243,16 +243,18 @@
       "resource",
       "doce"
     ],
-    "icon": "/img/heartopia/recursos/doce_vermelho.png"
+    "icon": "/img/heartopia/recursos/doce_vermelho.png",
+    "buyPrice": 150
   },
   {
-    "id": "doce_Laranja",
+    "id": "doce_laranja",
     "name": "Doce Laranja",
     "category": [
       "resource",
       "doce"
     ],
-    "icon": "/img/heartopia/recursos/doce_laranja.png"
+    "icon": "/img/heartopia/recursos/doce_laranja.png",
+    "buyPrice": 150
   },
   {
     "id": "doce_amarelo",
@@ -261,7 +263,8 @@
       "resource",
       "doce"
     ],
-    "icon": "/img/heartopia/recursos/doce_amarelo.png"
+    "icon": "/img/heartopia/recursos/doce_amarelo.png",
+    "buyPrice": 150
   },
   {
     "id": "doce_verde",
@@ -270,7 +273,8 @@
       "resource",
       "doce"
     ],
-    "icon": "/img/heartopia/recursos/doce_verde.png"
+    "icon": "/img/heartopia/recursos/doce_verde.png",
+    "buyPrice": 150
   },
   {
     "id": "doce_turquesa",
@@ -279,7 +283,8 @@
       "resource",
       "doce"
     ],
-    "icon": "/img/heartopia/recursos/doce_turquesa.png"
+    "icon": "/img/heartopia/recursos/doce_turquesa.png",
+    "buyPrice": 150
   },
   {
     "id": "doce_azul",
@@ -288,7 +293,8 @@
       "resource",
       "doce"
     ],
-    "icon": "/img/heartopia/recursos/doce_azul.png"
+    "icon": "/img/heartopia/recursos/doce_azul.png",
+    "buyPrice": 150
   },
   {
     "id": "doce_roxo",
@@ -297,7 +303,8 @@
       "resource",
       "doce"
     ],
-    "icon": "/img/heartopia/recursos/doce_roxo.png"
+    "icon": "/img/heartopia/recursos/doce_roxo.png",
+    "buyPrice": 150
   },
   {
     "id": "cha_preto",

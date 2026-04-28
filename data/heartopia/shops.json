@@ -278,6 +278,33 @@
         ]
       },
       {
+        "name": "Exclusivo da Luz e Sombra Onírica",
+        "items": [
+          {
+            "id": "saco_primaveril_acucar_mascavo",
+            "amount": 50,
+            "conditions": [
+              {
+                "type": "event",
+                "id": "luz_sombra",
+                "description": ""
+              }
+            ]
+          },
+          {
+            "id": "molho_salsa",
+            "amount": 50,
+            "conditions": [
+              {
+                "type": "event",
+                "id": "luz_sombra",
+                "description": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
         "name": "Ingrediente",
         "items": [
           {
@@ -592,6 +619,63 @@
             "id": "apito_automatico",
             "amount": 10,
             "resetType": "semanal"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "loja_sorte",
+    "npcId": "doris_rain",
+    "name": "Loja da Sorte",
+    "groups": [
+      {
+        "name": "Ingrediente",
+        "items": [
+          {
+            "id": "doce_vermelho",
+            "amount": 20
+          },
+          {
+            "id": "doce_laranja",
+            "amount": 20
+          },
+          {
+            "id": "doce_amarelo",
+            "amount": 20
+          },
+          {
+            "id": "doce_verde",
+            "amount": 20
+          },
+          {
+            "id": "doce_turquesa",
+            "amount": 20
+          },
+          {
+            "id": "doce_azul",
+            "amount": 20
+          },
+          {
+            "id": "doce_roxo",
+            "amount": 20
+          }
+        ]
+      },
+      {
+        "name": "Cartão Postal",
+        "items": [
+          {
+            "id": "cartao_postal_nuvem_sorte",
+            "amount": 5
+          }
+        ]
+      },
+      {
+        "name": "Guarda-chuva",
+        "items": [
+          {
+            "id": "guarda_chuva_longo_unicolor_amarelo"
           }
         ]
       }

@@ -387,8 +387,7 @@
     "name": "Açúcar em Pó",
     "category": [
       "resource",
-      "ingredient",
-      "vegetable"
+      "ingredient"
     ],
     "event": [
       "gala_neve"

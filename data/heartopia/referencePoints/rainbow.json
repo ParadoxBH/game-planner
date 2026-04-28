@@ -1,0 +1,46 @@
+﻿[
+  {
+    "id": "rainbow_north_npc_1",
+    "type": "spawn",
+    "entityId": "doris_rain",
+    "event": "rainbow",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-37.74655698278584 593.5292171289918)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "rainbow_sul_npc_1",
+    "type": "spawn",
+    "entityId": "doris_rain",
+    "event": "rainbow",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-195.25311938710556 -412.79352222895386)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "rainbow_north_bubble_1",
+    "type": "spawn",
+    "entityId": "rainbow_bubble",
+    "event": "rainbow",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(69.0976708984375 470.94501953125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "rainbow_north_bubble_2",
+    "type": "spawn",
+    "entityId": "rainbow_bubble",
+    "event": "rainbow",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-74.5019580078125 464.38267089843754)"
+    },
+    "mapId": "main"
+  }
+]

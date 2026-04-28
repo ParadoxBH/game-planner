@@ -421,5 +421,675 @@
         "amount": 1
       }
     ]
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {
+    "id": "carrinho_movel_pipoca",
+    "stations": [
+      "mesa_artesao"
+    ],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "madeira_qualidade",
+        "amount": 15
+      },
+      {
+        "type": "item",
+        "id": "galho_arbusto",
+        "amount": 6
+      },
+      {
+        "type": "item",
+        "id": "kit_materiais_luz_sombra",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "entity",
+        "id": "carrinho_movel_pipoca",
+        "amount": 1
+      }
+    ]
+  },
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  {
+    "id": "balde_pipoca_salgada",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "milho",
+        "amount": 1
+      },
+      {
+        "type": "category",
+        "id": "mushroom",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "manteiga",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "balde_pipoca_salgada",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "balde_pipoca_caramelizada",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "milho",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "saco_primaveril_acucar_mascavo",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "manteiga",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "balde_pipoca_caramelizada",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "batatas_chips_onduladas_molho_salsa",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "batata",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "molho_salsa",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "batatas_chips_onduladas_molho_salsa",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "balde_combo_salgado",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "balde_pipoca_salgada",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "batatas_chips_onduladas_molho_salsa",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "balde_combo_salgado",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "balde_combo_doce",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "balde_pipoca_caramelizada",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "batatas_chips_onduladas_molho_salsa",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "balde_combo_doce",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "taco_alface_romana",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "alface_romana",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "molho_salsa",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "ovo",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "taco_alface_romana",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "taco_alface_vegetais_silvestres",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "category",
+        "id": "vegetal_silvestre",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "taco_alface_romana",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "taco_alface_vegetais_silvestres",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "taco_alface_samambaia_selvagem",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "samambaia_selvagem",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "taco_alface_romana",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "taco_alface_samambaia_selvagem",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "taco_alface_alho_mostarda_selvagem",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "alho_mostarda_selvagem",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "taco_alface_romana",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "taco_alface_alho_mostarda_selvagem",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "taco_alface_barbana_selvagem",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "barbana_selvagem",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "taco_alface_romana",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "taco_alface_barbana_selvagem",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "taco_alface_mostarda_selvagem",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "mostarda_selvagem",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "taco_alface_romana",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "taco_alface_mostarda_selvagem",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "cha_preto_fruta_primaveril",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "cha_preto",
+        "amount": 1
+      },
+      {
+        "type": "category",
+        "id": "fruit",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "saco_primaveril_acucar_mascavo",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cha_preto_fruta_primaveril",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "cha_preto_maca_primaveril",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "cha_preto",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "maca",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "saco_primaveril_acucar_mascavo",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cha_preto_maca_primaveril",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "cha_preto_tangerina_primaveril",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "cha_preto",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "tangerina",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "saco_primaveril_acucar_mascavo",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cha_preto_tangerina_primaveril",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "cha_preto_mirtilo_primaveril",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "cha_preto",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "mirtilo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "saco_primaveril_acucar_mascavo",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cha_preto_mirtilo_primaveril",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "cha_preto_framboesa_primaveril",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "cha_preto",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "framboesa",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "saco_primaveril_acucar_mascavo",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cha_preto_framboesa_primaveril",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "cha_preto_morango_primaveril",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "cha_preto",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "morango",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "saco_primaveril_acucar_mascavo",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cha_preto_morango_primaveril",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "cha_preto_uva_primaveril",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "cha_preto",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "uva",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "saco_primaveril_acucar_mascavo",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cha_preto_uva_primaveril",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "cha_preto_abacaxi_primaveril",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "cha_preto",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "abacaxi",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "saco_primaveril_acucar_mascavo",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "cha_preto_abacaxi_primaveril",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "combo_cinema_premium",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "category",
+        "id": "cha_preto_fruta_primaveril",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "balde_combo_doce",
+        "amount": 1
+      },
+      {
+        "type": "category",
+        "id": "taco_alface_vegetais_silvestres",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "combo_cinema_premium",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "combo_cinema_supremo",
+    "stations": [
+      "carrinho_movel_pipoca"
+    ],
+    "event": "luz_sombra",
+    "ingredients": [
+      {
+        "type": "category",
+        "id": "cha_preto_fruta_primaveril",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "balde_combo_salgado",
+        "amount": 1
+      },
+      {
+        "type": "category",
+        "id": "taco_alface_vegetais_silvestres",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "combo_cinema_supremo",
+        "amount": 1
+      }
+    ]
   }
 ]

@@ -106,5 +106,12 @@
     "name": "Tubo de Fogos Primaveris",
     "category": ["social", "firework"],
     "icon": "/img/heartopia/outros/tubo_fogos_primaveris.png"
+  },
+  {
+    "id": "cartao_postal_nuvem_sorte",
+    "name": "Cartão Postal: Nuvem da Sorte",
+    "category": ["social", "cartao_postal"],
+    "icon": "/img/heartopia/outros/cartao_postal_nuvem_sorte.png",
+    "buyPrice": 200
   }
 ]

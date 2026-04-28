@@ -1,0 +1,13 @@
+﻿[
+  {
+    "id": "point_1776662143338",
+    "type": "spawn",
+    "entityId": "doris_rain",
+    "event": "shower",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-137.31764873598078 -16.757700275517273)"
+    },
+    "mapId": "main"
+  }
+]

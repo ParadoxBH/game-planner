@@ -1,5 +1,36 @@
 [
     {
+        "id": "receitas",
+        "name": "Receitas",
+        "category": "luz_sombra",
+        "event": [
+            "luz_sombra"
+        ],
+        "items": [
+            "balde_pipoca_salgada",
+            "balde_pipoca_caramelizada",
+            "batatas_chips_onduladas_molho_salsa",
+            "balde_combo_salgado",
+            "balde_combo_doce",
+            "taco_alface_romana",
+            "taco_alface_vegetais_silvestres",
+            "taco_alface_samambaia",
+            "taco_alface_alho_mostarda",
+            "taco_alface_bardana_selvagem",
+            "taco_alface_mostarda_selvagem",
+            "cha_preto_fruta_primaveril",
+            "cha_preto_maca_primaveril",
+            "cha_preto_tangerina_primaveril",
+            "cha_preto_mirtilo_primaveril",
+            "cha_preto_framboesa_primaveril",
+            "cha_preto_morango_primaveril",
+            "cha_preto_uva_primaveril",
+            "cha_preto_abacaxi_primaveril",
+            "combo_cinema_premium",
+            "combo_cinema_supremo"
+        ]
+    },
+    {
         "id": "set_dente_leao",
         "name": "Dente de Leão",
         "category": "luz_sombra",
@@ -27,7 +58,9 @@
             "luz_sombra"
         ],
         "items": [
-            "alface_americano"
+            "alface_americano",
+            "saco_primaveril_acucar_mascavo",
+            "molho_salsa"
         ]
     },
     {

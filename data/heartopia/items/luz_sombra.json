@@ -3,11 +3,11 @@
         "id": "dente_leao_vermelho",
         "name": "Dente-de-leão Vermelho",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_vermelho.webp",
         "sellPrice": 125,
@@ -17,11 +17,11 @@
         "id": "dente_leao_amarelo",
         "name": "Dente-de-leão Amarelo",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_amarelo.webp",
         "sellPrice": 125,
@@ -31,11 +31,11 @@
         "id": "dente_leao_branco",
         "name": "Dente-de-leão Branco",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_branco.webp",
         "sellPrice": 125,
@@ -45,11 +45,11 @@
         "id": "dente_leao_laranja",
         "name": "Dente-de-leão Laranja",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_laranja.webp",
         "sellPrice": 190,
@@ -59,11 +59,11 @@
         "id": "dente_leao_rosa",
         "name": "Dente-de-leão Rosa",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_rosa.webp",
         "sellPrice": 190,
@@ -73,11 +73,11 @@
         "id": "dente_leao_preto",
         "name": "Dente-de-leão Preto",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_preto.webp",
         "sellPrice": 250,
@@ -87,11 +87,11 @@
         "id": "dente_leao_pessego",
         "name": "Dente-de-leão Pessego",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_pessego.webp",
         "sellPrice": 250,
@@ -101,11 +101,11 @@
         "id": "dente_leao_roxo",
         "name": "Dente-de-leão Roxo",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_roxo.webp",
         "sellPrice": 315,
@@ -115,11 +115,11 @@
         "id": "dente_leao_azul",
         "name": "Dente-de-leão Azul",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_azul.webp",
         "sellPrice": 315,
@@ -129,26 +129,25 @@
         "id": "dente_leao_luminoso",
         "name": "Dente-de-leão Luminoso",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/flores/dente_leao_luminoso.webp",
         "sellPrice": 500,
         "level": 5
     },
-    
     {
         "id": "semente_dente_leao_vermelho",
         "name": "Semente de Dente-de-leão Vermelho",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_vermelho.webp",
         "buyPrice": 30,
@@ -158,11 +157,11 @@
         "id": "semente_dente_leao_amarelo",
         "name": "Semente de Dente-de-leão Amarelo",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_amarelo.webp",
         "buyPrice": 30,
@@ -172,11 +171,11 @@
         "id": "semente_dente_leao_branco",
         "name": "Semente de Dente-de-leão Branco",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_branco.webp",
         "buyPrice": 30,
@@ -186,11 +185,11 @@
         "id": "semente_dente_leao_laranja",
         "name": "Semente de Dente-de-leão Laranja",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_laranja.webp",
         "level": 2
@@ -199,11 +198,11 @@
         "id": "semente_dente_leao_rosa",
         "name": "Semente de Dente-de-leão Rosa",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_rosa.webp",
         "level": 2
@@ -212,11 +211,11 @@
         "id": "semente_dente_leao_preto",
         "name": "Semente de Dente-de-leão Preto",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_preto.webp",
         "level": 3
@@ -225,11 +224,11 @@
         "id": "semente_dente_leao_pessego",
         "name": "Semente de Dente-de-leão Pessego",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_pessego.webp",
         "level": 3
@@ -238,11 +237,11 @@
         "id": "semente_dente_leao_roxo",
         "name": "Semente de Dente-de-leão Roxo",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_roxo.webp",
         "level": 4
@@ -251,11 +250,11 @@
         "id": "semente_dente_leao_azul",
         "name": "Semente de Dente-de-leão Azul",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_azul.webp",
         "level": 4
@@ -264,13 +263,305 @@
         "id": "semente_dente_leao_luminoso",
         "name": "Semente de Dente-de-leão Luminoso",
         "category": [
-        "agriculture",
-        "flower"
+            "agriculture",
+            "flower"
         ],
         "event": [
-        "luz_sombra"
+            "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/sementes_flores/semente_dente_leao_luminoso.webp",
         "level": 5
+    },
+    {
+        "id": "balde_pipoca_salgada",
+        "name": "Balde de Pipoca Salgada",
+        "category": [
+            "foods"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/balde_pipoca_salgada.png"
+    },
+    {
+        "id": "balde_pipoca_caramelizada",
+        "name": "Balde de Pipoca Caramelizada",
+        "category": [
+            "foods"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/balde_pipoca_caramelizada.png"
+    },
+    {
+        "id": "batatas_chips_onduladas_molho_salsa",
+        "name": "Batatas Chips Onduladas com Molho Salsa",
+        "category": [
+            "foods"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/batatas_chips_onduladas_molho_salsa.png"
+    },
+    {
+        "id": "balde_combo_salgado",
+        "name": "Balde de Combo Salgado",
+        "category": [
+            "foods",
+            "combo_de_pipoca_batata"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/balde_combo_salgado.png"
+    },
+    {
+        "id": "balde_combo_doce",
+        "name": "Balde de Combo Doce",
+        "category": [
+            "foods",
+            "combo_de_pipoca_batata"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/balde_combo_doce.png"
+    },
+    {
+        "id": "taco_alface_romana",
+        "name": "Taco com Alface Romana",
+        "category": [
+            "foods"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/taco_alface_romana.png"
+    },
+    {
+        "id": "taco_alface_vegetais_silvestres",
+        "name": "Taco com Alface e Vegetais Silvestres",
+        "category": [
+            "foods",
+            "taco_alface_vegetais_silvestres"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/taco_alface_vegetais_silvestres.png"
+    },
+    {
+        "id": "taco_alface_samambaia",
+        "name": "Taco com Alface e Samambaia Selvagem",
+        "category": [
+            "foods",
+            "taco_alface_vegetais_silvestres"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/taco_alface_samambaia.png"
+    },
+    {
+        "id": "taco_alface_alho_mostarda",
+        "name": "Taco com Alface e Alho-Mostarda",
+        "category": [
+            "foods",
+            "taco_alface_vegetais_silvestres"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/taco_alface_alho_mostarda.png"
+    },
+    {
+        "id": "taco_alface_bardana_selvagem",
+        "name": "Taco com Alface e Bardana Selvagem",
+        "category": [
+            "foods",
+            "taco_alface_vegetais_silvestres"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/taco_alface_bardana_selvagem.png"
+    },
+    {
+        "id": "taco_alface_mostarda_selvagem",
+        "name": "Taco com Alface e Mostarda Selvagem",
+        "category": [
+            "foods",
+            "taco_alface_vegetais_silvestres"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/taco_alface_mostarda_selvagem.png"
+    },
+    {
+        "id": "cha_preto_fruta_primaveril",
+        "name": "Chá Preto de Fruta Primaveril",
+        "category": [
+            "drinks",
+            "cha_preto_fruta_primaveril"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/cha_preto_fruta_primaveril.png"
+    },
+    {
+        "id": "cha_preto_maca_primaveril",
+        "name": "Chá Preto de Maça Primaveril",
+        "category": [
+            "drinks",
+            "cha_preto_fruta_primaveril"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/cha_preto_maca_primaveril.png"
+    },
+    {
+        "id": "cha_preto_tangerina_primaveril",
+        "name": "Chá Preto de Tangerina Primaveril",
+        "category": [
+            "drinks",
+            "cha_preto_fruta_primaveril"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/cha_preto_tangerina_primaveril.png"
+    },
+    {
+        "id": "cha_preto_mirtilo_primaveril",
+        "name": "Chá Preto de Mirtilo Primaveril",
+        "category": [
+            "drinks",
+            "cha_preto_fruta_primaveril"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/cha_preto_mirtilo_primaveril.png"
+    },
+    {
+        "id": "cha_preto_framboesa_primaveril",
+        "name": "Chá Preto de Framboesa Primaveril",
+        "category": [
+            "drinks",
+            "cha_preto_fruta_primaveril"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/cha_preto_framboesa_primaveril.png"
+    },
+    {
+        "id": "cha_preto_morango_primaveril",
+        "name": "Chá Preto de Morango Primaveril",
+        "category": [
+            "drinks",
+            "cha_preto_fruta_primaveril"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/cha_preto_morango_primaveril.png"
+    },
+    {
+        "id": "cha_preto_uva_primaveril",
+        "name": "Chá Preto de Uva Primaveril",
+        "category": [
+            "drinks",
+            "cha_preto_fruta_primaveril"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/cha_preto_uva_primaveril.png"
+    },
+    {
+        "id": "cha_preto_abacaxi_primaveril",
+        "name": "Chá Preto de Abacaxi Primaveril",
+        "category": [
+            "drinks",
+            "cha_preto_fruta_primaveril"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/cha_preto_abacaxi_primaveril.png"
+    },
+    {
+        "id": "combo_cinema_premium",
+        "name": "Combo de Cinema Premium",
+        "category": [
+            "foods"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/combo_cinema_premium.png"
+    },
+    {
+        "id": "combo_cinema_supremo",
+        "name": "Combo de Cinema Supremo",
+        "category": [
+            "foods"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/foods/combo_cinema_supremo.png"
+    },
+    {
+        "id": "saco_primaveril_acucar_mascavo",
+        "name": "Saco Primaveril de Açúcar Mascavo",
+        "category": [
+            "resource",
+            "ingredient"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/itens/saco_primaveril_acucar_mascavo.png"
+    },
+    {
+        "id": "molho_salsa",
+        "name": "Molho Salsa",
+        "category": [
+            "resource",
+            "ingredient"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/itens/molho_salsa.png"
+    },
+    {
+        "id": "kit_materiais_luz_sombra",
+        "name": "Kit de Materiais de Luz e Sombra",
+        "category": [
+            "wallet"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/itens/kit_materiais_luz_sombra.png"
+    },
+    {
+        "id": "token_festivo_luz_sombra",
+        "name": "Token Festivo",
+        "category": [
+            "wallet"
+        ],
+        "event": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/itens/token_festivo_luz_sombra.png"
     }
 ]

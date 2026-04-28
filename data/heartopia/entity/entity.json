@@ -249,5 +249,18 @@
     "name": "Bolha Dourada",
     "category": "colection",
     "icon": "/img/heartopia/coletaveis/gold_bubble.png"
+  },
+  {
+    "id": "rainbow_bubble",
+    "name": "Bolha Arco-iris",
+    "category": "colection",
+    "icon": "/img/heartopia/coletaveis/rainbow_bubble.png"
+  },
+  {
+    "id": "meteoro",
+    "name": "Meteoro",
+    "category": "colection",
+    "icon": "/img/heartopia/recursos/meteoro_cinza.png",
+    "image": "/img/heartopia/coletaveis/meteoro.png"
   }
 ]
