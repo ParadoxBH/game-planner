@@ -278,6 +278,33 @@
         ]
       },
       {
+        "name": "Exclusivo da Luz e Sombra Onírica",
+        "items": [
+          {
+            "id": "saco_primaveril_acucar_mascavo",
+            "amount": 50,
+            "conditions": [
+              {
+                "type": "event",
+                "id": "luz_sombra",
+                "description": ""
+              }
+            ]
+          },
+          {
+            "id": "molho_salsa",
+            "amount": 50,
+            "conditions": [
+              {
+                "type": "event",
+                "id": "luz_sombra",
+                "description": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
         "name": "Ingrediente",
         "items": [
           {

@@ -1,0 +1,12 @@
+﻿[
+    {
+        "id": "cha_preto_fruta_primaveril",
+        "name": "Chá Preto de Fruta Primaveril",
+        "icon": "/img/heartopia/events/luz_sombra/foods/cha_preto_fruta_primaveril.png"
+    },
+    {
+        "id": "taco_alface_vegetais_silvestres",
+        "name": "Taco com Alface e Vegetais Silvestres",
+        "icon": "/img/heartopia/events/luz_sombra/foods/taco_alface_vegetais_silvestres.png"
+    }
+]
