@@ -176,6 +176,8 @@ export interface GameInfo {
   disabled?: boolean;
 }
 
+export type ReferencePointsRespawnMode = "once" | "respawn" | "weekly" | "daily";
+
 export interface ReferencePoints {
   id: string;
   type: "spawn" | "poi" | "location" | "biome" | "rule";
@@ -186,7 +188,7 @@ export interface ReferencePoints {
   thumb?: string;
   locationId?: string; // ID da Região/Mapa onde spawna (legado ou para regras)
   parentId?: string; // Para hierarquia (ex: POI dentro de Biome)
-  mode?: "once" | "respawn" | "weekly" | "daily";
+  mode?: ReferencePointsRespawnMode;
   conditions?: Record<string, any>;
   chance?: number;
   quantity?: string;

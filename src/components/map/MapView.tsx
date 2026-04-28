@@ -7,7 +7,6 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   CircularProgress,
-  Button,
 } from "@mui/material";
 import { CRS, type LatLngBoundsExpression, Transformation } from "leaflet";
 import { useParams, useNavigate } from "react-router-dom";
@@ -99,7 +98,6 @@ interface StableMarkerProps {
   iconHtml: string;
   size: number;
   onExpand?: () => void;
-  onDelete?: () => void;
   categoriesMap?: Record<string, string>;
   interactive?: boolean;
   isCollected?: boolean;
@@ -113,7 +111,6 @@ const StableMarker = React.memo(
     iconHtml,
     size,
     onExpand,
-    onDelete,
     categoriesMap,
     interactive = true,
     isCollected,
@@ -795,7 +792,6 @@ export const MapView = () => {
                         .replaceAll("{{COLOR}}", theme.palette.primary.main)
                         .replaceAll("{{SIZE}}", sizeMarker.toString())
                         .replaceAll("{{IMAGE_STYLE}}", "opacity: 0.8;")}
-                      onDelete={() => handleDeleteSessionPoint(point.id)}
                       categoriesMap={categoriesMap}
                       interactive={!activeTool}
                     />

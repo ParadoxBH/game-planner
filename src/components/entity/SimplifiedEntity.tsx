@@ -4,14 +4,14 @@ import { OutputField } from "../common/OutputField";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import InventoryIcon from "@mui/icons-material/Inventory";
 
-import type { Entity } from "../../types/gameModels";
+import type { Entity, ReferencePointsRespawnMode } from "../../types/gameModels";
 import { getPublicUrl } from "../../utils/pathUtils";
 import { isDev } from "../../utils/mapper";
 
 interface SimplifiedEntityProps {
   entity: Entity;
   position: [number, number];
-  mode?: "once" | "respawn";
+  mode?: ReferencePointsRespawnMode;
   respawnDelay?: number;
   isCollected?: boolean;
   onToggleCollected?: () => void;
