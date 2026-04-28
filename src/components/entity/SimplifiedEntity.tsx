@@ -13,8 +13,11 @@ interface SimplifiedEntityProps {
   position: [number, number];
   mode?: "once" | "respawn";
   respawnDelay?: number;
+  isCollected?: boolean;
+  onToggleCollected?: () => void;
   onExpand: () => void;
   categoriesMap?: Record<string, string>;
+  pointImage?: string;
 }
 
 export const SimplifiedEntity = ({
@@ -22,8 +25,11 @@ export const SimplifiedEntity = ({
   position,
   mode,
   respawnDelay,
+  isCollected,
+  onToggleCollected,
   onExpand,
   categoriesMap = {},
+  pointImage,
 }: SimplifiedEntityProps) => {
   const theme = useTheme();
 
@@ -76,6 +82,12 @@ export const SimplifiedEntity = ({
 
         <Divider />
 
+        {pointImage && (
+          <Box sx={{ mt: 1, mb: 1, borderRadius: 1, overflow: 'hidden' }}>
+            <img src={getPublicUrl(pointImage)} alt="Local" style={{ width: '100%', height: 'auto', display: 'block' }} />
+          </Box>
+        )}
+
         {/* Details Section */}
         {isDev() && <OutputField 
           label="Coordenadas" 
@@ -87,6 +99,23 @@ export const SimplifiedEntity = ({
             label="Respawn" 
             values={[`${respawnDelay} min`]}
           />
+        )}
+
+        {onToggleCollected && (
+          <Button
+            variant={isCollected ? "outlined" : "contained"}
+            color={isCollected ? "secondary" : "success"}
+            size="small"
+            fullWidth
+            onClick={onToggleCollected}
+            sx={{
+              mt: 0.5,
+              fontSize: "0.75rem",
+              py: 0.6,
+            }}
+          >
+            {isCollected ? "Desmarcar Coletado" : "Marcar como Coletado"}
+          </Button>
         )}
 
         <Button

@@ -36,6 +36,8 @@ interface MapFilterDrawerProps {
   setVisibleCategories: (categories: string[]) => void;
   visibleEntities: string[];
   setVisibleEntities: (entities: string[]) => void;
+  hideCollected: boolean;
+  setHideCollected: (hide: boolean) => void;
 }
 
 export const MapFilterDrawer = ({
@@ -48,6 +50,8 @@ export const MapFilterDrawer = ({
   setVisibleCategories,
   visibleEntities,
   setVisibleEntities,
+  hideCollected,
+  setHideCollected,
 }: MapFilterDrawerProps) => {
   const [open, setOpen] = useState<boolean>();
 
@@ -280,6 +284,26 @@ export const MapFilterDrawer = ({
               Nenhum
             </Button>
           </Stack>
+
+          <Divider />
+
+          {/* Special Filters */}
+          <Box sx={{ px: 2, py: 1.5 }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  size="small"
+                  checked={hideCollected}
+                  onChange={(e) => setHideCollected(e.target.checked)}
+                />
+              }
+              label={
+                <Typography variant="body2" sx={{ fontSize: "0.85rem" }}>
+                  Ocultar Coletados
+                </Typography>
+              }
+            />
+          </Box>
 
           <Divider />
 

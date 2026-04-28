@@ -102,6 +102,8 @@ interface StableMarkerProps {
   onDelete?: () => void;
   categoriesMap?: Record<string, string>;
   interactive?: boolean;
+  isCollected?: boolean;
+  onToggleCollected?: () => void;
 }
 
 const StableMarker = React.memo(
@@ -114,6 +116,8 @@ const StableMarker = React.memo(
     onDelete,
     categoriesMap,
     interactive = true,
+    isCollected,
+    onToggleCollected,
   }: StableMarkerProps) => {
     const cp = parseWKTPoint(point.geom.coordinates);
     const pos: [number, number] = [cp[1], cp[0]];
@@ -152,6 +156,9 @@ const StableMarker = React.memo(
               respawnDelay={point.respawnDelay}
               onExpand={onExpand || (() => {})}
               categoriesMap={categoriesMap}
+              pointImage={point.image}
+              isCollected={isCollected}
+              onToggleCollected={onToggleCollected}
             />
         </Popup>
       </Marker>
@@ -224,6 +231,8 @@ export const MapView = () => {
   const [visibleCategories, setVisibleCategories] = useState<string[]>([]);
   const [visibleEntities, setVisibleEntities] = useState<string[]>([]);
   const [hasInitializedFilters, setHasInitializedFilters] = useState(false);
+  const [hideCollected, setHideCollected] = useState(false);
+  const [collectedPoints, setCollectedPoints] = useState<Record<string, number>>({});
 
   const [entities, setEntities] = useState<Entity[]>([]);
   const [referencePoints, setReferencePoints] = useState<ReferencePoints[]>([]);
@@ -373,6 +382,30 @@ export const MapView = () => {
       localStorage.removeItem(`session_points_${gameId}`);
     }
   }, [sessionPoints, gameId]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem(`collected_points_${gameId}`);
+    if (saved) {
+      try {
+        setCollectedPoints(JSON.parse(saved));
+      } catch (e) {
+        console.error("Error loading collected points", e);
+      }
+    }
+  }, [gameId]);
+
+  const handleToggleCollected = (pointId: string, isCollected: boolean) => {
+    setCollectedPoints(prev => {
+      const next = { ...prev };
+      if (isCollected) {
+        delete next[pointId];
+      } else {
+        next[pointId] = Date.now();
+      }
+      localStorage.setItem(`collected_points_${gameId}`, JSON.stringify(next));
+      return next;
+    });
+  };
 
   const selectedMap = useMemo(
     () => maps.find((m) => m.id === selectedMapId),
@@ -647,6 +680,7 @@ export const MapView = () => {
 
               {pointsOnCurrentMap
                 .filter((point) => {
+                  if (hideCollected && collectedPoints[point.id]) return false;
                   if (!visibleTypes.includes(point.type)) return false;
                   if (!visibleEntities.includes(point.entityId)) return false;
 
@@ -727,12 +761,14 @@ export const MapView = () => {
                         .replaceAll("{{CLASS_NAME}}", "custom-entity-icon")
                         .replaceAll("{{COLOR}}", "white")
                         .replaceAll("{{SIZE}}", sizeMarker.toString())
-                        .replaceAll("{{IMAGE_STYLE}}", "")}
+                        .replaceAll("{{IMAGE_STYLE}}", collectedPoints[point.id] ? "opacity: 0.4; filter: grayscale(100%);" : "")}
                       onExpand={() =>
                         handlePush({ type: "entity", id: point.entityId })
                       }
                       categoriesMap={categoriesMap}
                       interactive={!activeTool && point.type !== "location"}
+                      isCollected={!!collectedPoints[point.id]}
+                      onToggleCollected={() => handleToggleCollected(point.id, !!collectedPoints[point.id])}
                     />
                   );
                 })}
@@ -776,6 +812,8 @@ export const MapView = () => {
               setVisibleCategories={setVisibleCategories}
               visibleEntities={visibleEntities}
               setVisibleEntities={setVisibleEntities}
+              hideCollected={hideCollected}
+              setHideCollected={setHideCollected}
             />
           </>
         ) : (
