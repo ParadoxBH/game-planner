@@ -8,6 +8,7 @@
       "type": "Point",
       "coordinates": "POINT(239.49123402139924 -332.0768531703162)"
     },
+    "image": "/img/heartopia/referencePoints/meteor_sul/meteor_7.jpg",
     "mapId": "main"
   },
   {
@@ -19,6 +20,7 @@
       "type": "Point",
       "coordinates": "POINT(176.556489471013 -335.1642627772718)"
     },
+    "image": "/img/heartopia/referencePoints/meteor_sul/meteor_6.jpg",
     "mapId": "main"
   },
   {
@@ -41,6 +43,7 @@
       "type": "Point",
       "coordinates": "POINT(112.84953946602091 -300.81683089989167)"
     },
+    "image": "/img/heartopia/referencePoints/meteor_sul/meteor_9.jpg",
     "mapId": "main"
   },
   {
@@ -63,6 +66,7 @@
       "type": "Point",
       "coordinates": "POINT(12.462830367245763 -310.0790597207582)"
     },
+    "image": "/img/heartopia/referencePoints/meteor_sul/meteor_5.jpg",
     "mapId": "main"
   },
   {
@@ -74,6 +78,7 @@
       "type": "Point",
       "coordinates": "POINT(64.97280128045128 -220.15825491817856)"
     },
+    "image": "/img/heartopia/referencePoints/meteor_sul/meteor_8.jpg",
     "mapId": "main"
   },
   {
@@ -85,6 +90,19 @@
       "type": "Point",
       "coordinates": "POINT(-23.830825999234612 -217.07084531122314)"
     },
+    "image": "/img/heartopia/referencePoints/meteor_sul/meteor_11.jpg",
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777346521302",
+    "type": "spawn",
+    "entityId": "meteoro",
+    "event": "meteor_shower",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-89.09660551011918 -324.0291607359761)"
+    },
+    "image": "/img/heartopia/referencePoints/meteor_sul/meteor_12.jpg",
     "mapId": "main"
   },
   {
@@ -96,6 +114,19 @@
       "type": "Point",
       "coordinates": "POINT(-160.1250887371872 -281.5205208564196)"
     },
+    "image": "/img/heartopia/referencePoints/meteor_sul/meteor_3.jpg",
+    "mapId": "main"
+  },
+  {
+    "id": "point_1776995448491",
+    "type": "spawn",
+    "entityId": "meteoro",
+    "event": "meteor_shower",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(29.54152013549027 -268.9379031308752)"
+    },
+    "image": "/img/heartopia/referencePoints/meteor_sul/meteor_4.jpg",
     "mapId": "main"
   },
   {
@@ -107,6 +138,7 @@
       "type": "Point",
       "coordinates": "POINT(-176.34140328391243 -353.30279421813543)"
     },
+    "image": "/img/heartopia/referencePoints/meteor_sul/meteor_2.jpg",
     "mapId": "main"
   },
   {
@@ -129,6 +161,7 @@
       "type": "Point",
       "coordinates": "POINT(-182.51904692076022 -464.4495400685343)"
     },
+    "image": "/img/heartopia/referencePoints/meteor_sul/meteor_13.jpg",
     "mapId": "main"
   },
   {
@@ -151,6 +184,7 @@
       "type": "Point",
       "coordinates": "POINT(-257.0303779504876 -455.58125353869724)"
     },
+    "image": "/img/heartopia/referencePoints/meteor_sul/meteor_1.jpg",
     "mapId": "main"
   },
   {
@@ -184,6 +218,7 @@
       "type": "Point",
       "coordinates": "POINT(130.58494131888972 -453.2643760362778)"
     },
+    "image": "/img/heartopia/referencePoints/meteor_sul/meteor_10.jpg",
     "mapId": "main"
   },
   {

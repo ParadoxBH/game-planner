@@ -9,27 +9,5 @@
       "coordinates": "POINT(-137.31764873598078 -16.757700275517273)"
     },
     "mapId": "main"
-  },
-  {
-    "id": "point_1776662202400",
-    "type": "spawn",
-    "entityId": "doris_rain",
-    "event": "rainbow",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(-37.74655698278584 593.5292171289918)"
-    },
-    "mapId": "main"
-  },
-  {
-    "id": "point_1776662219691",
-    "type": "spawn",
-    "entityId": "doris_rain",
-    "event": "rainbow",
-    "geom": {
-      "type": "Point",
-      "coordinates": "POINT(-195.25311938710556 -412.79352222895386)"
-    },
-    "mapId": "main"
   }
 ]

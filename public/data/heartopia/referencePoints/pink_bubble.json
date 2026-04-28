@@ -7,6 +7,7 @@
             "type": "Point",
             "coordinates": "POINT(79.90624511718751 -445.467666015625)"
         },
+        "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_1.jpg",
         "mapId": "main"
     },
     {
@@ -25,8 +26,9 @@
         "entityId": "pink_bubble",
         "geom": {
             "type": "Point",
-            "coordinates": "POINT(270.21435546875 -344.7163134765625)"
+            "coordinates": "POINT(253.21435546875 -344.7163134765625)"
         },
+        "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_2.jpg",
         "mapId": "main"
     },
     {

@@ -1,0 +1,10 @@
+﻿[
+    {
+    "id": "guarda_chuva_longo_unicolor_amarelo",
+    "name": "Guarda Chuva Longo Unicolor Amarelo",
+    "category": ["outfit", "guarda_chuva"],
+    "icon": "/img/heartopia/outfit/guarda_chuva_longo_unicolor_amarelo.png",
+    "buyPrice": 80,
+    "buyCoin": "estrela_desejavel"
+  }
+]
