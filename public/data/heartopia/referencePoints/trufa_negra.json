@@ -8,8 +8,7 @@
         "geom": {
             "type": "Point",
             "coordinates": "POINT(630 200)"
-        },
-        "respawnDelay": 15
+        }
     },
     {
         "id": "truffle_2",
@@ -20,8 +19,7 @@
         "geom": {
             "type": "Point",
             "coordinates": "POINT(660 210)"
-        },
-        "respawnDelay": 15
+        }
     },
     {
         "id": "truffle_3",
@@ -32,8 +30,7 @@
         "geom": {
             "type": "Point",
             "coordinates": "POINT(650 245)"
-        },
-        "respawnDelay": 15
+        }
     },
     {
         "id": "truffle_4",
@@ -44,8 +41,7 @@
         "geom": {
             "type": "Point",
             "coordinates": "POINT(675 240)"
-        },
-        "respawnDelay": 15
+        }
     },
     {
         "id": "truffle_5",
@@ -56,8 +52,7 @@
         "geom": {
             "type": "Point",
             "coordinates": "POINT(680 270)"
-        },
-        "respawnDelay": 15
+        }
     },
     {
         "id": "truffle_6",
@@ -68,8 +63,7 @@
         "geom": {
             "type": "Point",
             "coordinates": "POINT(700 285)"
-        },
-        "respawnDelay": 15
+        }
     },
     {
         "id": "truffle_7",
@@ -80,8 +74,7 @@
         "geom": {
             "type": "Point",
             "coordinates": "POINT(725 215)"
-        },
-        "respawnDelay": 15
+        }
     },
     {
         "id": "truffle_8",
@@ -91,7 +84,6 @@
             "type": "Point",
             "coordinates": "POINT(712 238)"
         },
-        "mapId": "main",
-        "respawnDelay": 15
+        "mapId": "main"
     }
 ]

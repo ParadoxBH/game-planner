@@ -1,0 +1,272 @@
+﻿[
+  {
+    "id": "point_1777517835347",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-119.666357421875 267.12619140625003)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777517848927",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-136.651259765625 272.1444580078125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777517861921",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-139.3534033203125 322.71314453125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777517884556",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-68.71165039062501 250.14128906250002)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777517913159",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-60.219199218750006 370.1936669921875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777517944276",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-199.958623046875 384.47642578125004)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777517971151",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-251.2993505859375 291.83150390625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777517989802",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-205.36291015625002 266.7401708984375)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518002486",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-175.253310546875 270.986396484375)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518027470",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-289.1293603515625 168.30494140625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518037486",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-289.90140136718753 149.003916015625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518061970",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-281.4089501953125 77.2041015625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518075317",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-356.68294921875 62.535322265625005)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518089665",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-405.321533203125 75.66001953125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518117833",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-396.82908203125004 6.176328125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518150196",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-280.25088867187503 -41.3041943359375)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518158212",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-266.354150390625 -28.9515380859375)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518174429",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-274.84660156250004 43.234296875000005)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518200202",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-272.9164990234375 -69.48369140625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518219511",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-270.60037597656253 -82.99440917968751)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518235025",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-262.1079248046875 -137.03728027343752)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518245135",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-311.132529296875 -169.46300292968752)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518255823",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-368.263564453125 -170.2350439453125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518283434",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-312.2905908203125 -270.21435546875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518312284",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-207.67903320312502 -243.96496093750002)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518322420",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-203.818828125 -227.75209960937502)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777518342257",
+    "type": "spawn",
+    "entityId": "arvore_tangerina",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-234.70046875000003 -174.8672900390625)"
+    },
+    "mapId": "main"
+  }
+]
