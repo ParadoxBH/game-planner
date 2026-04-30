@@ -1,0 +1,212 @@
+﻿[
+  {
+    "id": "point_1777524593087",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-290.60842840254935 383.5155120695764)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524609499",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-285.2027537996931 402.42469009576104)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524616666",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-304.50873452417966 402.0387885033899)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524639938",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-300.6475383792823 493.1115643029732)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524659429",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-271.3024476780628 494.26926908008653)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524668951",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-264.3522946172477 514.7220534757555)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524676705",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-271.3024476780628 529.3863139858579)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524683900",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-283.6582753417343 534.0171330943114)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524694288",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-302.1920168372413 520.5105773613224)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524704469",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-322.6563564051969 496.58467863431315)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524712519",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-334.2399448398889 510.4771359596733)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524719057",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-322.2702367907072 523.2118885079201)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524739790",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-279.0248399678575 560.2584413755472)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524746836",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-261.2633377013298 568.3623748153407)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524754833",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-282.88603611275477 583.4125369178141)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524803895",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-296.01410300540556 661.7505601691506)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524822403",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-321.4979975617278 649.0158076209037)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524871861",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-380.1881789641668 425.1928840456568)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524879407",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-363.9711551555982 429.0518999693679)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777524885785",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-357.02100209478306 408.98501716607)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525134060",
+    "type": "spawn",
+    "entityId": "alho_mostarda_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-291.365306096558 632.098687078743)"
+    },
+    "mapId": "main"
+  }
+]

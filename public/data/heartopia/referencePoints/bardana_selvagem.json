@@ -1,0 +1,212 @@
+﻿[
+  {
+    "id": "point_1777525426622",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-457.383757352425 42.371488402468664)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525435805",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-440.7806139293666 44.300996364324234)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525442569",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-448.5030062191612 60.508863243911044)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525453575",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-457.383757352425 78.26033649298243)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525461493",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-436.1471785554898 97.55541611153814)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525468885",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-453.136441593038 116.85049573009393)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525483058",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-480.16481460731904 159.68557248328773)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525490104",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-483.25377152323694 142.70590241895866)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525501440",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-500.62915417527483 155.05475337483435)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525512514",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-496.76795803037754 104.1157431818471)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525517674",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-499.85691494629543 87.52197470988921)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525523625",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-514.9155799113948 95.24000655731149)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525532965",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-532.2909625634327 77.87443490061126)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525538830",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-529.5881252620046 59.73706005916889)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525548325",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-551.2108236734296 61.280666428653376)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525554221",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-563.1805317226111 45.45870114143765)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525564812",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-559.3193355777139 26.54952311525294)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525570948",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-538.0827567807786 21.91870400679955)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525607056",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-445.8001689177331 166.63180114596784)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525613473",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-422.24687243385955 177.4370457323591)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777525621639",
+    "type": "spawn",
+    "entityId": "bardana_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-450.4336042916098 203.29245242122377)"
+    },
+    "mapId": "main"
+  }
+]

@@ -1,0 +1,212 @@
+﻿[
+  {
+    "id": "point_1777521977971",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(475.9632861328125 242.8068994140625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777521987019",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(472.10308105468755 231.9983251953125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777521995064",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(466.6987939453125 218.10158691406252)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522001820",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(475.9632861328125 205.7489306640625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522007786",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(485.9998193359375 216.5575048828125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522111091",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(453.188076171875 205.7489306640625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522118266",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(441.60746093750004 215.399443359375)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522131514",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(455.8902197265625 187.9919873046875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522151599",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(444.695625 109.24380371093751)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522167622",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(475.1912451171875 99.20727050781251)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522175210",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(461.68052734375004 82.608388671875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522239663",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(392.968876953125 218.10158691406252)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522251905",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(378.30009765625005 246.28108398437502)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522260993",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(396.05704101562503 236.63057128906252)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522383680",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(521.5137060546875 120.05237792968751)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522392148",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(538.4986083984376 112.71798828125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522399434",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(532.70830078125 132.7910546875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522429737",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(469.40093750000005 325.02926757812503)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522438684",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(459.364404296875 303.02609863281253)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522445892",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(440.4493994140625 309.588447265625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777522511524",
+    "type": "spawn",
+    "entityId": "samambaia_selvagem",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(466.6987939453125 243.96496093750002)"
+    },
+    "mapId": "main"
+  }
+]
