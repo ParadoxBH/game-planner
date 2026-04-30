@@ -731,7 +731,7 @@
     ]
   },
   {
-    "id": "taco_alface_barbana_selvagem",
+    "id": "taco_alface_bardana_selvagem",
     "stations": [
       "carrinho_movel_pipoca"
     ],
@@ -739,7 +739,7 @@
     "ingredients": [
       {
         "type": "item",
-        "id": "barbana_selvagem",
+        "id": "bardana_selvagem",
         "amount": 2
       },
       {
@@ -751,7 +751,7 @@
     "products": [
       {
         "type": "item",
-        "id": "taco_alface_barbana_selvagem",
+        "id": "taco_alface_bardana_selvagem",
         "amount": 1
       }
     ]

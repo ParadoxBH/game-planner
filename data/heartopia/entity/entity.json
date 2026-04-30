@@ -140,6 +140,35 @@
     "image": "/img/heartopia/coletaveis/arvore_maca.png"
   },
   {
+    "id": "arvore_tangerina",
+    "name": "Tangerineira",
+    "category": "resource",
+    "requirements": [
+      {
+        "itemId": "energia",
+        "quant": 3
+      },
+      {
+        "itemId": "machado",
+        "quant": 1
+      }
+    ],
+    "drops": [
+      {
+        "itemId": "tangerina",
+        "chance": 1,
+        "quant": 1
+      },
+      {
+        "itemId": "madeira",
+        "chance": 1,
+        "quant": 2
+      }
+    ],
+    "icon": "/img/heartopia/recursos/tangerina.png",
+    "image": "/img/heartopia/coletaveis/arvore_tangerina.png"
+  },
+  {
     "id": "arvore_pinheiro",
     "name": "Pinheiro",
     "category": "resource",
@@ -236,7 +265,8 @@
       }
     ],
     "icon": "/img/heartopia/recursos/trufa_negra.png",
-    "image": "/img/heartopia/coletaveis/trufa_negra.png"
+    "image": "/img/heartopia/coletaveis/trufa_negra.png",
+    "respawnDelay": 13
   },
   {
     "id": "pink_bubble",
@@ -262,5 +292,69 @@
     "category": "colection",
     "icon": "/img/heartopia/recursos/meteoro_cinza.png",
     "image": "/img/heartopia/coletaveis/meteoro.png"
+  },
+  {
+    "id": "samambaia_selvagem",
+    "name": "Samambaia Selvagem",
+    "category": "resource",
+    "drops": [
+      {
+        "itemId": "samambaia_selvagem",
+        "chance": 1,
+        "quant": 3,
+        "maxQuant": 6
+      }
+    ],
+    "icon": "/img/heartopia/recursos/samambaia_selvagem.png",
+    "image": "/img/heartopia/coletaveis/samambaia_selvagem.png",
+    "respawnDelay": 1.5
+  },
+  {
+    "id": "bardana_selvagem",
+    "name": "Bardana Selvagem",
+    "category": "resource",
+    "drops": [
+      {
+        "itemId": "bardana_selvagem",
+        "chance": 1,
+        "quant": 3,
+        "maxQuant": 6
+      }
+    ],
+    "icon": "/img/heartopia/recursos/bardana_selvagem.png",
+    "image": "/img/heartopia/coletaveis/bardana_selvagem.png",
+    "respawnDelay": 1.5
+  },
+  {
+    "id": "mostarda_selvagem",
+    "name": "Mostarda Selvagem",
+    "category": "resource",
+    "drops": [
+      {
+        "itemId": "mostarda_selvagem",
+        "chance": 1,
+        "quant": 3,
+        "maxQuant": 6
+      }
+    ],
+    "icon": "/img/heartopia/recursos/mostarda_selvagem.png",
+    "image": "/img/heartopia/coletaveis/mostarda_selvagem.png",
+    "respawnDelay": 1.5
+  },
+  {
+    "id": "alho_mostarda_selvagem",
+    "name": "Alho-Mostarda Selvagem",
+    "category": "resource",
+    "drops": [
+      {
+        "itemId": "alho_mostarda_selvagem",
+        "chance": 1,
+        "quant": 3,
+        "maxQuant": 6
+      }
+    ],
+    "icon": "/img/heartopia/recursos/alho_mostarda_selvagem.png",
+    "image": "/img/heartopia/coletaveis/alho_mostarda_selvagem.png",
+    "respawnDelay": 1.5
   }
 ]

@@ -42,5 +42,685 @@
       "type": "Point",
       "coordinates": "POINT(-289 53)"
     }
+  },
+  {
+    "id": "point_1777515571729",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(196.870458984375 -229.296181640625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515590508",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(194.94035644531252 -198.80056152343752)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515599454",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(211.53923828125002 -166.76085937500002)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515606932",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(237.78863281250003 -151.7060595703125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515616687",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(285.65517578125 -166.76085937500002)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515631177",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(321.1690625 -211.15321777343752)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515642094",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(302.640078125 -284.49711425781254)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515661074",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(321.941103515625 -148.6178955078125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515685084",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(235.472509765625 -118.50829589843751)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515695730",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(233.15638671875 -79.90624511718751)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515704896",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(242.42087890625 -62.9213427734375)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515731566",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(278.32078613281254 -42.8482763671875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515744671",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(318.0808984375 -23.161230468750002)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515759049",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(371.35172851562504 -82.608388671875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515788438",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(356.2969287109375 6.948369140625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515800504",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(350.1206005859375 42.8482763671875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515813100",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(313.8346728515625 89.1707373046875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515827358",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(258.24771972656254 85.3105322265625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515840856",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(242.8068994140625 62.1493017578125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515851443",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(249.75526855468752 23.161230468750002)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515860108",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(254.00149414062503 -3.8602050781250004)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515870654",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(273.30251953125 -13.89673828125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515890753",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(247.05312500000002 108.0857421875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515905313",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(247.43914550781253 145.915751953125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515915659",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(249.36924804687501 181.81565917968751)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515925646",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(307.27232421875004 192.23821289062502)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515934554",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(344.33029296875003 188.37800781250002)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515948216",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(354.75284667968754 148.6178955078125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777515988256",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(173.709228515625 208.83709472656253)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516002828",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(200.7306640625 213.4693408203125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516010305",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(209.223115234375 240.87679687500003)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516024205",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(202.27474609375003 312.2905908203125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516041708",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(125.45666503906251 323.8712060546875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516054376",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(92.64492187500001 292.9895654296875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516069025",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(108.0857421875 225.8219970703125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516080993",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(131.24697265625 211.92525878906253)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516094342",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(65.623486328125 217.32954589843752)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516109198",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(34.741845703125 212.6972998046875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516117393",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(0 220.41770996093751)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516126321",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-15.440820312500001 237.40261230468752)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516142653",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-28.565517578125 320.0110009765625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516152752",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(48.2525634765625 337.7679443359375)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516164899",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(84.53849121093751 331.205595703125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516180008",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-37.443989257812504 358.99907226562505)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516214580",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-92.64492187500001 378.30009765625005)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516228564",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-142.055546875 334.67978027343753)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516242221",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-141.283505859375 279.8648681640625)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516252046",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-119.2803369140625 264.03802734375)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516268136",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-75.27399902343751 254.00149414062503)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516280499",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-48.638583984375 259.40578125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516294377",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-172.55116699218752 274.07456054687503)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516319922",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-207.67903320312502 265.582109375)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516330815",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-243.19291992187502 275.2326220703125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516339501",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-254.00149414062503 294.91966796875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516352899",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-260.5638427734375 341.62814941406253)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516366810",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-221.18975097656252 380.616220703125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516378388",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-177.56943359375 364.0173388671875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516412139",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-296.84977050781254 169.07698242187502)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516423994",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-294.91966796875 143.98564941406252)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516433781",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-297.62181152343754 99.20727050781251)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516531291",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-274.07456054687503 -75.66001953125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516538884",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-266.354150390625 -94.961044921875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516549742",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-262.8799658203125 -121.59645996093751)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516560665",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-264.42404785156253 -145.5297314453125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516567991",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-243.19291992187502 -167.9189208984375)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516582346",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-220.031689453125 -187.605966796875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516591414",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-202.6607666015625 -209.6091357421875)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777516604190",
+    "type": "spawn",
+    "entityId": "arbusto_mirtilo",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-201.11668457031251 -241.648837890625)"
+    },
+    "mapId": "main"
   }
 ]
