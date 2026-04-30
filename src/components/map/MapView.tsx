@@ -150,7 +150,7 @@ const StableMarker = React.memo(
               }
               position={pos}
               mode={point.mode}
-              respawnDelay={point.respawnDelay}
+              respawnDelay={point.respawnDelay ?? entity?.respawnDelay}
               onExpand={onExpand || (() => {})}
               categoriesMap={categoriesMap}
               pointImage={point.image}
@@ -238,6 +238,12 @@ export const MapView = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [categoriesMap, setCategoriesMap] = useState<Record<string, string>>({});
   const [dataLoading, setDataLoading] = useState(true);
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(Date.now()), 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   const selectedMapId = urlMapId || "";
 
@@ -677,13 +683,24 @@ export const MapView = () => {
 
               {pointsOnCurrentMap
                 .filter((point) => {
-                  if (hideCollected && collectedPoints[point.id]) return false;
-                  if (!visibleTypes.includes(point.type)) return false;
-                  if (!visibleEntities.includes(point.entityId)) return false;
-
                   const entity =
                     entityLookup[point.entityId] ||
                     items.find((i) => i.id === point.entityId);
+
+                  if (hideCollected && collectedPoints[point.id]) {
+                    const respawnDelay = point.respawnDelay ?? entity?.respawnDelay;
+                    if (point.type === "spawn" && respawnDelay && (point.mode || "respawn") === "respawn") {
+                      const elapsedMs = now - collectedPoints[point.id];
+                      const totalMs = respawnDelay * 60 * 1000;
+                      if (elapsedMs < totalMs) return false;
+                    } else {
+                      return false;
+                    }
+                  }
+
+                  if (!visibleTypes.includes(point.type)) return false;
+                  if (!visibleEntities.includes(point.entityId)) return false;
+
                   const category = entity?.category
                     ? Array.isArray(entity.category)
                       ? entity.category[0]
@@ -737,6 +754,30 @@ export const MapView = () => {
                   const entity =
                     entityLookup[point.entityId] ||
                     items.find((i) => i.id === point.entityId);
+
+                  const isCollectedInState = !!collectedPoints[point.id];
+                  const collectionTime = collectedPoints[point.id];
+                  const respawnDelay = point.respawnDelay ?? entity?.respawnDelay;
+                  
+                  let isCollected = isCollectedInState;
+                  let backgroundStyle = `background: white;`;
+                  let innerColor = `white`;
+                  let borderWidth = 0;
+
+                  if (isCollectedInState && point.type === "spawn" && respawnDelay && (point.mode || "respawn") === "respawn") {
+                    const elapsedMs = now - collectionTime;
+                    const totalMs = respawnDelay * 60 * 1000;
+                    
+                    if (elapsedMs >= totalMs) {
+                      isCollected = false;
+                    } else {
+                      const percentage = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
+                      backgroundStyle = `background: conic-gradient(#4caf50 ${percentage}%, #e0e0e0 ${percentage}%);`;
+                      innerColor = "white"; 
+                      borderWidth = 6; 
+                    }
+                  }
+
                   return (
                     <StableMarker
                       key={point.id}
@@ -756,16 +797,18 @@ export const MapView = () => {
                           ),
                         )
                         .replaceAll("{{CLASS_NAME}}", "custom-entity-icon")
-                        .replaceAll("{{COLOR}}", "white")
+                        .replaceAll("{{BACKGROUND_STYLE}}", backgroundStyle)
+                        .replaceAll("{{INNER_COLOR}}", innerColor)
+                        .replaceAll("{{BORDER_WIDTH}}", borderWidth.toString())
                         .replaceAll("{{SIZE}}", sizeMarker.toString())
-                        .replaceAll("{{IMAGE_STYLE}}", collectedPoints[point.id] ? "opacity: 0.4; filter: grayscale(100%);" : "")}
+                        .replaceAll("{{IMAGE_STYLE}}", isCollected ? "opacity: 0.4; filter: grayscale(100%);" : "")}
                       onExpand={() =>
                         handlePush({ type: "entity", id: point.entityId })
                       }
                       categoriesMap={categoriesMap}
                       interactive={!activeTool && point.type !== "location"}
-                      isCollected={!!collectedPoints[point.id]}
-                      onToggleCollected={() => handleToggleCollected(point.id, !!collectedPoints[point.id])}
+                      isCollected={isCollected}
+                      onToggleCollected={() => handleToggleCollected(point.id, isCollected)}
                     />
                   );
                 })}
@@ -789,7 +832,9 @@ export const MapView = () => {
                           getPublicUrl("/img/add.png"),
                         )
                         .replaceAll("{{CLASS_NAME}}", "session-point-icon")
-                        .replaceAll("{{COLOR}}", theme.palette.primary.main)
+                        .replaceAll("{{BACKGROUND_STYLE}}", `background: ${theme.palette.primary.main};`)
+                        .replaceAll("{{INNER_COLOR}}", theme.palette.primary.main)
+                        .replaceAll("{{BORDER_WIDTH}}", "0")
                         .replaceAll("{{SIZE}}", sizeMarker.toString())
                         .replaceAll("{{IMAGE_STYLE}}", "opacity: 0.8;")}
                       categoriesMap={categoriesMap}

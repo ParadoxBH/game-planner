@@ -31,6 +31,7 @@ export interface Entity {
   image?: string;
   buyPrice?: number;
   sellPrice?: number;
+  respawnDelay?: number;
   parentId?: string; // Para hierarquia (ex: Cripta dentro de Pântano)
   potentialSpawns?: {
     entityId: string;
