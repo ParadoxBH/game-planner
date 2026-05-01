@@ -12,6 +12,7 @@ export interface Item {
   variants?: Partial<Item>[];
   event?: string[];
   image?: string;
+  rarity?: string;
 }
 
 export interface EntityDrop {
@@ -51,6 +52,7 @@ export interface Entity {
   drops?: EntityDrop[];
   variants?: Partial<Entity>[];
   event?: string[];
+  rarity?: string;
 }
 
 export interface Category {
@@ -116,6 +118,7 @@ export interface ShopItem {
   resetType?: "diario" | "semanal" | "unique";
   exchange?: ShopExchange[];
   conditions?: ShopCondition[];
+  rarity?: string;
 }
 
 export interface ShopGroup {
@@ -169,12 +172,16 @@ export interface MapMetadata {
   description?: string;
 }
 
+export type GameRarityDefinitionMap = {[key: string]: GameRarityDefinition};
+export type GameRarityDefinition = { name: string, color: string };
+
 export interface GameInfo {
   id: string;
   name: string;
   description: string;
   thumbnail?: string;
   disabled?: boolean;
+  rarity?: GameRarityDefinitionMap;
 }
 
 export type ReferencePointsRespawnMode = "once" | "respawn" | "weekly" | "daily";

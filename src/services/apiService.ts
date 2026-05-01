@@ -7,6 +7,7 @@ import type {
   Shop,
   GameEvent,
   GameDataTypes,
+  GameInfo,
 } from "../types/gameModels";
 import type {
   NormalizedRecipe,
@@ -32,6 +33,7 @@ import { eventRepository } from "../repositories/EventRepository";
 import { conjuntoRepository } from "../repositories/ConjuntoRepository";
 import { referencePointRepository } from "../repositories/ReferencePointRepository";
 import { categoryRepository } from "../repositories/CategoryRepository";
+import { gameInfoRepository } from "../repositories/GameInfoRepository";
 
 export class ApiService {
   private lookupCache: Map<string, "item" | "entity"> = new Map();
@@ -76,6 +78,11 @@ export class ApiService {
         if (criteria.tradeStatus === "Comercializados" && (item.buyPrice === undefined && item.sellPrice === undefined)) return false;
       }
 
+      // 4. Rarity
+      if (criteria.rarity && criteria.rarity !== "all") {
+        if (item.rarity !== criteria.rarity) return false;
+      }
+
       return true;
     };
 
@@ -108,6 +115,11 @@ export class ApiService {
 
         // Fail if ANY inclusion is defined but NONE match
         if (included.length > 0 && !included.some(cat => cat && catsLower.includes(cat))) return false;
+      }
+
+      // 3. Rarity
+      if (criteria.rarity && criteria.rarity !== "all") {
+        if (entity.rarity !== criteria.rarity) return false;
       }
 
       return true;
@@ -182,6 +194,10 @@ export class ApiService {
 
   public async getAllConjuntos(): Promise<Conjunto[]> {
     return conjuntoRepository.getAll();
+  }
+
+  public async getGameInfo(gameId: string): Promise<GameInfo | undefined> {
+    return gameInfoRepository.getById(gameId);
   }
 
   public async getItemCategories(): Promise<(Category & { isPrimary: boolean })[]> {

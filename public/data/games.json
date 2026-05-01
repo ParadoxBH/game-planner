@@ -25,6 +25,13 @@
   {
     "id": "windrose",
     "name": "Windrose",
-    "description": "Embark on a PvE survival adventure in the Age of Piracy. Fight on land and sea, solo or with friends. Build, craft, and explore a vast world filled with dark secrets."
+    "description": "Embark on a PvE survival adventure in the Age of Piracy. Fight on land and sea, solo or with friends. Build, craft, and explore a vast world filled with dark secrets.",
+    "rarity": {
+      "common": { "name": "Common", "color": "#CAC2AD" },
+      "uncommon": { "name": "Uncommon", "color": "#99CA7E" },
+      "rare": { "name": "Rare", "color": "#53A9EF" },
+      "epic": { "name": "Epic", "color": "#CA8DFF" },
+      "legendary": { "name": "Legendary", "color": "#EFC653" }
+    }
   }
 ]

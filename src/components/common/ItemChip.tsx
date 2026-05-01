@@ -28,6 +28,7 @@ export interface ItemChipProps {
   size?: 'small' | 'medium' | 'large' | 'extraLarge';
   disableLink?: boolean;
   isBest?: boolean;
+  rarityColor?: string;
 }
 
 const SIZES = {
@@ -83,7 +84,8 @@ export function ItemChip({
   size = 'large',
   disableLink = false,
   isBest = false,
-  level
+  level,
+  rarityColor
 }: ItemChipProps) {
   const navigate = useNavigate();
   const { gameId } = useParams<{ gameId: string }>();
@@ -168,18 +170,20 @@ export function ItemChip({
           alignItems: 'center', 
           justifyContent: 'center', 
           p: config.p,
-          backgroundColor: 'rgba(0,0,0,0.2)',
-          borderColor: type === 'category' ? 'warning.dark' : 
+          backgroundColor: rarityColor ? `${rarityColor}11` : 'rgba(0,0,0,0.2)',
+          background: rarityColor ? `radial-gradient(circle, ${rarityColor}22 0%, rgba(0,0,0,0.2) 100%)` : undefined,
+          borderColor: rarityColor ? rarityColor : (
+                       type === 'category' ? 'warning.dark' : 
                        type === 'entity' ? 'secondary.dark' : 
                        type === 'skill' ? 'warning.main' :
-                       isProduct ? 'primary.dark' : 'divider',
+                       isProduct ? 'primary.dark' : 'divider'),
           borderRadius: 1,
           overflow: 'hidden',
           transition: 'transform 0.2s',
           '&:hover': {
             transform: (!disableLink && (type === 'item' || type === 'entity' || type === 'category')) ? 'scale(1.1)' : 'scale(1.05)',
-            borderColor: 'primary.main',
-            boxShadow: (!disableLink && (type === 'item' || type === 'entity' || type === 'category')) ? '0 0 15px rgba(255, 68, 0, 0.3)' : 'none'
+            borderColor: rarityColor || 'primary.main',
+            boxShadow: (!disableLink && (type === 'item' || type === 'entity' || type === 'category')) ? `0 0 15px ${rarityColor ? `${rarityColor}44` : 'rgba(255, 68, 0, 0.3)'}` : 'none'
           }
         }}>
           {renderIcon()}

@@ -16,7 +16,7 @@ import { PickSelector } from "../common/PickSelector";
 import { TriplePickSelector } from "../common/TriplePickSelector";
 import type { TripleState } from "../common/TriplePickSelector";
 import { Build, Science } from "@mui/icons-material";
-import type { GameDataTypes, Item, Entity, GameEvent } from "../../types/gameModels";
+import type { GameDataTypes, Item, Entity, GameEvent, Category, GameInfo } from "../../types/gameModels";
 import type { NormalizedRecipe, PaginatedResponse } from "../../types/apiModels";
 import { ListingDataView } from "../common/ListingDataView";
 import { TimeChip } from "../common/TimeChip";
@@ -28,7 +28,6 @@ import { eventRepository } from "../../repositories/EventRepository";
 import { categoryRepository } from "../../repositories/CategoryRepository";
 import { usePagination } from "../../hooks/usePagination";
 import type { RecipeCriteria } from "../../types/filterTypes";
-import type { Category } from "../../types/gameModels";
 import { usePlatform } from "../../hooks/usePlatform";
 
 export function RecipesPage() {
@@ -39,7 +38,8 @@ export function RecipesPage() {
     loading: dbLoading, 
     error: errorApi, 
     getRecipesList, 
-    getRecipeStations 
+    getRecipeStations,
+    getGameInfo
   } = useApi(gameId);
 
   const [recipesResponse, setRecipesResponse] = useState<PaginatedResponse<NormalizedRecipe> | null>(null);
@@ -47,6 +47,7 @@ export function RecipesPage() {
   const [entities, setEntities] = useState<Entity[]>([]);
   const [events, setEvents] = useState<GameEvent[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [dataLoading, setDataLoading] = useState(false);
   const [viewMode, setViewMode] = useViewMode("recipes");
   const [allStations, setAllStations] = useState<string[]>([]);
@@ -73,7 +74,8 @@ export function RecipesPage() {
     eventRepository.getAll().then(setEvents);
     categoryRepository.getAll().then(setCategories);
     getRecipeStations().then(setAllStations);
-  }, [dbLoading, getRecipeStations]);
+    if (gameId) getGameInfo(gameId).then(info => { if (info) setGameInfo(info); });
+  }, [dbLoading, getRecipeStations, gameId, getGameInfo]);
 
   // Load paginated recipes
   useEffect(() => {
@@ -254,22 +256,35 @@ export function RecipesPage() {
             { label: "Desbloqueio", align: "right" as const, width: "15%" },
           ]}
           emptyMessage="Nenhuma receita encontrada com estes filtros."
-          renderCard={(recipe: any, variant) => (
-            <RecipeCard
-              id={recipe.id}
-              name={recipe.normalizedName}
-              stations={recipe.normalizedStations}
-              ingredients={recipe.normalizedIngredients}
-              products={recipe.normalizedProducts}
-              unlock={recipe.unlock}
-              getSourceData={getSourceData}
-              eventsMap={eventsMap}
-              craftTime={recipe.craftTime}
-              variant={variant}
-              entities={entities}
-              categories={categories}
-            />
-          )}
+          getRowColor={(recipe: any) => {
+            const mainProduct = recipe.normalizedProducts[0];
+            const productData = mainProduct ? getSourceData(mainProduct.type, mainProduct.id) : null;
+            return productData?.rarity && gameInfo?.rarity?.[productData.rarity]?.color;
+          }}
+          renderCard={(recipe: any, variant) => {
+            const mainProduct = recipe.normalizedProducts[0];
+            const productData = mainProduct ? getSourceData(mainProduct.type, mainProduct.id) : null;
+            const rarityColor = productData?.rarity && gameInfo?.rarity?.[productData.rarity]?.color;
+            
+            return (
+              <RecipeCard
+                id={recipe.id}
+                name={recipe.normalizedName}
+                stations={recipe.normalizedStations}
+                ingredients={recipe.normalizedIngredients}
+                products={recipe.normalizedProducts}
+                unlock={recipe.unlock}
+                getSourceData={getSourceData}
+                eventsMap={eventsMap}
+                craftTime={recipe.craftTime}
+                variant={variant}
+                entities={entities}
+                categories={categories}
+                rarityColor={rarityColor}
+                gameInfo={gameInfo || undefined}
+              />
+            );
+          }}
           renderListItem={(recipe: any) => {
             const mainProduct = recipe.normalizedProducts[0];
             const productData = mainProduct ? getSourceData(mainProduct.type, mainProduct.id) : null;
@@ -287,7 +302,20 @@ export function RecipesPage() {
                     <Science sx={{ fontSize: 16, color: 'rgba(255, 255, 255, 0.2)' }} />
                   )}
                 </Box>
-                <Typography variant="body2" sx={{ fontWeight: 700 }}>{recipe.normalizedName}</Typography>
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    fontWeight: 700,
+                    color: productData?.rarity && gameInfo?.rarity?.[productData.rarity]?.color ? gameInfo?.rarity?.[productData.rarity]?.color : "text.primary",
+                    transition: "all 0.2s",
+                    "&:hover": {
+                      color: productData?.rarity && gameInfo?.rarity?.[productData.rarity]?.color ? gameInfo?.rarity?.[productData.rarity]?.color : "primary.main",
+                      textShadow: productData?.rarity && gameInfo?.rarity?.[productData.rarity]?.color ? `0 0 8px ${gameInfo?.rarity?.[productData.rarity]?.color}88` : "none"
+                    }
+                  }}
+                >
+                  {recipe.normalizedName}
+                </Typography>
               </Box>,
 
               <Box key={`recipe_ing_${recipe.id}`} sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>

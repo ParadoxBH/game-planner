@@ -21,7 +21,7 @@ import { ViewModeSelector } from "../common/ViewModeSelector";
 import { useViewMode } from "../../hooks/useViewMode";
 import { TriplePickSelector } from "../common/TriplePickSelector";
 import type { TripleState } from "../common/TriplePickSelector";
-import type { Item, Category } from "../../types/gameModels";
+import type { Item, Category, GameInfo } from "../../types/gameModels";
 import type { ItemCriteria } from "../../types/filterTypes";
 import type { PaginatedResponse } from "../../types/apiModels";
 import { usePagination } from "../../hooks/usePagination";
@@ -38,8 +38,9 @@ export function ItemsPage() {
   const subCategoryParam = searchParams.get("subCategory");
   const { isMobile } = usePlatform();
 
-  const { loading: dbLoading, error, getItemsList, getItemCategories, getItemSubCategories } = useApi(gameId);
+  const { loading: dbLoading, error, getItemsList, getItemCategories, getItemSubCategories, getGameInfo } = useApi(gameId);
   const [itemsResponse, setItemsResponse] = useState<PaginatedResponse<Item> | null>(null);
+  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [dataLoading, setDataLoading] = useState(false);
   
   const pages = usePagination<ItemCriteria>({
@@ -74,7 +75,8 @@ export function ItemsPage() {
   useEffect(() => {
     if (dbLoading) return;
     getItemCategories().then(setAllCategories);
-  }, [dbLoading, getItemCategories]);
+    if (gameId) getGameInfo(gameId).then(info => { if (info) setGameInfo(info); });
+  }, [dbLoading, getItemCategories, gameId, getGameInfo]);
 
   // Load items when filter or db changes
   useEffect(() => {
@@ -177,6 +179,18 @@ export function ItemsPage() {
             icon={<SwapHoriz sx={{ fontSize: 18 }} />}
             fullWidth={isMobile}
           />
+          {gameInfo?.rarity && Object.keys(gameInfo.rarity).length > 0 && (
+            <PickSelector
+              label="Raridade"
+              value={pages.info.criteria.rarity || null}
+              options={Object.entries(gameInfo.rarity).map(([id, r]) => ({
+                value: id,
+                label: r.name,
+              }))}
+              onChange={(val) => pages.setCriteria({ rarity: val })}
+              fullWidth={isMobile}
+            />
+          )}
         </>
       }
       actionsEnd={
@@ -234,8 +248,9 @@ export function ItemsPage() {
             },
           ]}
           emptyMessage="Nenhum item encontrado com estes filtros."
+          getRowColor={(item: any) => item.rarity && gameInfo?.rarity?.[item.rarity]?.color}
           renderCard={(item: any, variant) => (
-            <ItemCard item={item} gameId={gameId || ""} showPrices={showPrices} variant={variant} />
+            <ItemCard item={item} gameId={gameId || ""} showPrices={showPrices} variant={variant} rarityColor={item.rarity && gameInfo?.rarity?.[item.rarity]?.color} />
           )}
           renderListItem={(item: any) => [
             <Box
@@ -301,7 +316,18 @@ export function ItemsPage() {
                   </Box>
                 )}
               </Box>
-              <Typography variant="body2" sx={{ fontWeight: 700 }}>
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  fontWeight: 700,
+                  color: item.rarity && gameInfo?.rarity?.[item.rarity]?.color ? gameInfo?.rarity?.[item.rarity]?.color : "text.primary",
+                  transition: "all 0.2s",
+                  "&:hover": {
+                    color: item.rarity && gameInfo?.rarity?.[item.rarity]?.color ? gameInfo?.rarity?.[item.rarity]?.color : "primary.main",
+                    textShadow: item.rarity && gameInfo?.rarity?.[item.rarity]?.color ? `0 0 8px ${gameInfo?.rarity?.[item.rarity]?.color}88` : "none"
+                  }
+                }}
+              >
                 {item.name}
               </Typography>
             </Box>,

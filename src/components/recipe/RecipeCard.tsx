@@ -19,7 +19,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ItemChip } from "../common/ItemChip";
 import { TimeChip } from "../common/TimeChip";
 
-import type { GameDataTypes, RecipeItem, RecipeUnlock, Entity, Category } from "../../types/gameModels";
+import type { GameDataTypes, RecipeItem, RecipeUnlock, Entity, Category, GameInfo } from "../../types/gameModels";
 
 interface RecipeCardProps {
   id: string;
@@ -34,6 +34,8 @@ interface RecipeCardProps {
   variant?: "default" | "compact";
   entities?: Entity[];
   categories?: Category[];
+  rarityColor?: string;
+  gameInfo?: GameInfo;
 }
 
 
@@ -50,7 +52,9 @@ export function RecipeCard({
   craftTime,
   variant = "default",
   entities = [],
-  categories = []
+  categories = [],
+  rarityColor,
+  gameInfo
 }: RecipeCardProps) {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
@@ -60,22 +64,23 @@ export function RecipeCard({
       onClick={() => navigate(`/game/${gameId}/recipes/view/${id}`)}
       sx={{ 
         cursor: 'pointer',
-        backgroundColor: 'rgba(255, 255, 255, 0.02)', 
-      backdropFilter: 'blur(16px)',
-      borderRadius: 1,
-      border: 1,
-      borderColor: 'divider',
-      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      '&:hover': {
-        backgroundColor: 'rgba(255, 255, 255, 0.04)',
-        borderColor: 'rgba(255, 255, 255, 0.15)',
-        transform: variant === "compact" ? "translateY(-6px)" : "none",
-        boxShadow: variant === "compact" ? "0 8px 32px rgba(0,0,0,0.4)" : "none",
-      }
-    }}>
+        backgroundColor: rarityColor ? `${rarityColor}11` : 'rgba(255, 255, 255, 0.02)', 
+        background: rarityColor ? `linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, ${rarityColor}22 100%)` : undefined,
+        backdropFilter: 'blur(16px)',
+        borderRadius: 1,
+        border: 1,
+        borderColor: rarityColor || 'divider',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        '&:hover': {
+          backgroundColor: rarityColor ? `${rarityColor}22` : 'rgba(255, 255, 255, 0.04)',
+          borderColor: rarityColor || 'rgba(255, 255, 255, 0.15)',
+          transform: variant === "compact" ? "translateY(-6px)" : "none",
+          boxShadow: variant === "compact" ? (rarityColor ? `0 8px 32px ${rarityColor}44` : "0 8px 32px rgba(0,0,0,0.4)") : "none",
+        }
+      }}>
       {variant === "compact" ? (
          <Box
           sx={{
@@ -155,7 +160,7 @@ export function RecipeCard({
           <Typography
             variant="subtitle2"
             sx={{
-              color: "text.primary",
+              color: rarityColor || "text.primary",
               fontWeight: 700,
               lineHeight: 1.2,
               height: "2.4em",
@@ -240,7 +245,7 @@ export function RecipeCard({
                   )}
                 </Stack>
               </Stack>
-              <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: 700, lineHeight: 1.2 }}>
+              <Typography variant="h6" sx={{ color: rarityColor || 'text.primary', fontWeight: 700, lineHeight: 1.2 }}>
                 {name}
               </Typography>
             </Stack>
@@ -260,6 +265,7 @@ export function RecipeCard({
                       amount={ing.amount} 
                       level={source?.level}
                       type={ing.type} 
+                      rarityColor={source?.rarity && gameInfo?.rarity?.[source.rarity]?.color}
                     />
                   );
                 })}
@@ -283,6 +289,7 @@ export function RecipeCard({
                       level={source?.level}
                       type={prod.type} 
                       isProduct 
+                      rarityColor={source?.rarity && gameInfo?.rarity?.[source.rarity]?.color}
                     />
                   );
                 })}

@@ -19,28 +19,30 @@ interface ItemCardProps {
   showPrices?: boolean;
   variant?: "default" | "compact";
   sx?: SxProps;
+  rarityColor?: string;
 }
 
-export function ItemCard({ item, gameId, showPrices, variant = "default", sx }: ItemCardProps) {
+export function ItemCard({ item, gameId, showPrices, variant = "default", sx, rarityColor }: ItemCardProps) {
   const navigate = useNavigate();
 
   return (
     <Card
       sx={{
-        backgroundColor: "rgba(255, 255, 255, 0.02)",
+        backgroundColor: rarityColor ? `${rarityColor}11` : "rgba(255, 255, 255, 0.02)",
+        background: rarityColor ? `linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, ${rarityColor}22 100%)` : undefined,
         backdropFilter: "blur(16px)",
         borderRadius: 1,
         border: 1,
-        borderColor: "divider",
+        borderColor: rarityColor || "divider",
         transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         height: "100%",
         display: "flex",
         flexDirection: "column",
         "&:hover": {
           transform: "translateY(-6px)",
-          backgroundColor: "rgba(255, 255, 255, 0.04)",
-          borderColor: "rgba(255, 255, 255, 0.15)",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+          backgroundColor: rarityColor ? `${rarityColor}22` : "rgba(255, 255, 255, 0.04)",
+          borderColor: rarityColor ? rarityColor : "rgba(255, 255, 255, 0.15)",
+          boxShadow: rarityColor ? `0 8px 32px ${rarityColor}44` : "0 8px 32px rgba(0,0,0,0.4)",
         },
         ...sx
       }}
@@ -125,7 +127,7 @@ export function ItemCard({ item, gameId, showPrices, variant = "default", sx }: 
             <Typography
               variant="subtitle2"
               sx={{
-                color: "text.primary",
+                color: rarityColor || "text.primary",
                 fontWeight: 700,
                 lineHeight: 1.2,
                 height: "2.4em",

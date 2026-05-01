@@ -29,6 +29,7 @@ import type {
   GameEvent,
   Item,
   Entity,
+  GameInfo,
 } from "../../types/gameModels";
 import type { ItemDetails } from "../../types/apiModels";
 import { eventRepository } from "../../repositories/EventRepository";
@@ -48,8 +49,9 @@ export function ItemDetailsPage() {
   }>();
   const navigate = useNavigate();
 
-  const { loading: dbLoading, getItemDetails } = useApi(gameId);
+  const { loading: dbLoading, getItemDetails, getGameInfo } = useApi(gameId);
   const [itemDetails, setItemDetails] = useState<ItemDetails | null>(null);
+  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [dataLoading, setDataLoading] = useState(true);
 
   const [events, setEvents] = useState<GameEvent[]>([]);
@@ -79,6 +81,7 @@ export function ItemDetailsPage() {
         setItems(allItems);
         setEntities(allEntities);
         setItemConjuntos(allConjuntos.filter((c) => c.items?.includes(itemId)));
+        if (gameId) getGameInfo(gameId).then(info => { if (info) setGameInfo(info); });
 
         setDataLoading(false);
       })
@@ -312,6 +315,7 @@ export function ItemDetailsPage() {
                       unlock={recipe.unlock}
                       getSourceData={getSourceData}
                       eventsMap={eventsMap}
+                      gameInfo={gameInfo || undefined}
                     />
                   </Grid>
                 ))}
@@ -337,6 +341,7 @@ export function ItemDetailsPage() {
                       unlock={recipe.unlock}
                       getSourceData={getSourceData}
                       eventsMap={eventsMap}
+                      gameInfo={gameInfo || undefined}
                     />
                   </Grid>
                 ))}

@@ -38,6 +38,7 @@ interface DataViewProps<T> {
   listHeader?: ListDataHeader[];
   actions?: ReactNode;
   variant?: 'default' | 'compact';
+  getRowColor?: (item: T) => string | undefined;
 }
 
 export function ListingDataView<T>({ 
@@ -52,7 +53,8 @@ export function ListingDataView<T>({
   gridProps = { spacing: 2 },
   listHeader,
   actions,
-  variant = "default"
+  variant = "default",
+  getRowColor
 }: DataViewProps<T>) {
   const theme = useTheme();
   const { isMobile } = usePlatform();
@@ -170,13 +172,16 @@ export function ListingDataView<T>({
                   ? rawCells.filter((_, i) => !listHeader[i]?.hidden)
                   : rawCells;
 
+                const rowColor = getRowColor?.(item);
+
                 return (
                   <TableRow 
                     key={index}
                     sx={{ 
-                      '&:hover': { backgroundColor: alpha(theme.palette.background.paper, 0.08) },
+                      '&:hover': { backgroundColor: rowColor ? `${rowColor}22` : alpha(theme.palette.background.paper, 0.08) },
                       '&:last-child td': { borderBottom: 0 },
-                      transition: 'background-color 0.2s'
+                      transition: 'background-color 0.2s',
+                      backgroundColor: rowColor ? `${rowColor}11` : undefined
                     }}
                   >
                     {cells.map((cell, cellIndex) => {
@@ -188,6 +193,7 @@ export function ListingDataView<T>({
                           align={headerInfo?.align || 'left'}
                           sx={{ 
                             borderBottom: `1px solid ${alpha(theme.palette.divider, 0.05)}`,
+                            borderLeft: (rowColor && cellIndex === 0) ? `4px solid ${rowColor}` : undefined,
                             py: isMobile ? 0.5 : 1.5,
                             px: isMobile ? 1 : 2,
                             color: 'text.primary'
@@ -211,27 +217,29 @@ export function ListingDataView<T>({
           gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', 
           gap: isMobile ? 1 : 2 
         }}>
-          {data.map((item, index) => (
+          {data.map((item, index) => {
+            const rowColor = getRowColor?.(item);
+            return (
             <Box key={index} sx={{ 
               aspectRatio: '1/1',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: alpha(theme.palette.background.paper, 0.05),
+              backgroundColor: rowColor ? `${rowColor}11` : alpha(theme.palette.background.paper, 0.05),
               borderRadius: 1,
-              border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+              border: `1px solid ${rowColor || alpha(theme.palette.divider, 0.1)}`,
               cursor: 'pointer',
               transition: 'all 0.2s',
               '&:hover': {
                 transform: 'scale(1.05)',
-                backgroundColor: alpha(theme.palette.background.paper, 0.1),
-                borderColor: theme.palette.primary.main,
-                boxShadow: `0 0 15px ${alpha(theme.palette.primary.main, 0.2)}`
+                backgroundColor: rowColor ? `${rowColor}22` : alpha(theme.palette.background.paper, 0.1),
+                borderColor: rowColor || theme.palette.primary.main,
+                boxShadow: rowColor ? `0 0 15px ${rowColor}44` : `0 0 15px ${alpha(theme.palette.primary.main, 0.2)}`
               }
             }}>
               {renderIconItem ? renderIconItem(item) : renderCard(item, "compact")}
             </Box>
-          ))}
+          )})}
         </Box>
       )}
     </>

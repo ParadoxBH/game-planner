@@ -31,7 +31,7 @@ import { CraftingTreeCard } from "./CraftingTreeCard";
 import { GameDataSelector } from "../common/GameDataSelector";
 import { StyledDialog } from "../common/StyledDialog";
 import { getCraftingTree } from "../../utils/craftingTree";
-import type { Item, Entity, Recipe } from "../../types/gameModels";
+import type { Item, Entity, Recipe, GameInfo } from "../../types/gameModels";
 import type { RecipeDetails } from "../../types/apiModels";
 import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
@@ -49,12 +49,13 @@ export function RecipeDetailsPage() {
     recipeId: string;
   }>();
 
-  const { loading: dbLoading, getRecipeDetails } = useApi(gameId);
+  const { loading: dbLoading, getRecipeDetails, getGameInfo } = useApi(gameId);
 
   const [activeTab, setActiveTab] = useState(0);
   const [recipeDetails, setRecipeDetails] = useState<RecipeDetails | null>(
     null,
   );
+  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [dataLoading, setDataLoading] = useState(true);
 
   const [items, setItems] = useState<Item[]>([]);
@@ -98,6 +99,7 @@ export function RecipeDetailsPage() {
         ([details, allItems, allEntities, allRecipes, allShops, allEvents]) => {
           if (!isMounted) return;
           setRecipeDetails(details);
+          if (gameId) getGameInfo(gameId).then(info => { if (info) setGameInfo(info); });
           setItems(allItems);
           setEntities(allEntities);
           setRecipes(allRecipes);
@@ -514,53 +516,55 @@ export function RecipeDetailsPage() {
                           ? treeOptions?.itemMap.get(choiceId)
                           : null;
 
-                        return (
-                          <Grid size={{ xs: 12, sm: 6 }} key={idx}>
-                            <Box
-                              sx={{
-                                p: 1,
-                                backgroundColor: "rgba(255,255,255,0.02)",
-                                borderRadius: 1,
-                                border: "1px solid rgba(255,255,255,0.05)",
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: 1,
-                                cursor:
-                                  ing.type === "category"
-                                    ? "pointer"
-                                    : "default",
-                                "&:hover":
-                                  ing.type === "category"
-                                    ? {
-                                        backgroundColor:
-                                          "rgba(255,255,255,0.05)",
+                              const ingRarityColor = (choiceId ? selectedItem?.rarity : ing.data?.rarity) && gameInfo?.rarity?.[choiceId ? selectedItem?.rarity : ing.data?.rarity]?.color;
+                              
+                              return (
+                                <Grid size={{ xs: 12, sm: 6 }} key={idx}>
+                                  <Box
+                                    sx={{
+                                      p: 1,
+                                      backgroundColor: ingRarityColor ? `${ingRarityColor}11` : "rgba(255,255,255,0.02)",
+                                      borderRadius: 1,
+                                      border: `1px solid ${ingRarityColor ? `${ingRarityColor}44` : "rgba(255,255,255,0.05)"}`,
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      gap: 1,
+                                      cursor:
+                                        ing.type === "category"
+                                          ? "pointer"
+                                          : "default",
+                                      "&:hover":
+                                        ing.type === "category"
+                                          ? {
+                                              backgroundColor: ingRarityColor ? `${ingRarityColor}22` : "rgba(255,255,255,0.05)",
+                                            }
+                                          : {},
+                                    }}
+                                    onClick={() => {
+                                      if (ing.type === "category") {
+                                        setActiveCategorySelection(ing.id);
+                                        setIsDialogOpen(true);
                                       }
-                                    : {},
-                              }}
-                              onClick={() => {
-                                if (ing.type === "category") {
-                                  setActiveCategorySelection(ing.id);
-                                  setIsDialogOpen(true);
-                                }
-                              }}
-                            >
-                              <Stack
-                                direction="row"
-                                alignItems="center"
-                                gap={2}
-                              >
-                                <ItemChip
-                                  id={choiceId || ing.id}
-                                  icon={selectedItem?.image || selectedItem?.icon || ing.data?.image || ing.data?.icon}
-                                  amount={ing.amount}
-                                  type={
-                                    choiceId
-                                      ? treeOptions?.entityMap.has(choiceId)
-                                        ? "entity"
-                                        : "item"
-                                      : ing.type
-                                  }
-                                />
+                                    }}
+                                  >
+                                    <Stack
+                                      direction="row"
+                                      alignItems="center"
+                                      gap={2}
+                                    >
+                                      <ItemChip
+                                        id={choiceId || ing.id}
+                                        icon={selectedItem?.image || selectedItem?.icon || ing.data?.image || ing.data?.icon}
+                                        amount={ing.amount}
+                                        type={
+                                          choiceId
+                                            ? treeOptions?.entityMap.has(choiceId)
+                                              ? "entity"
+                                              : "item"
+                                            : ing.type
+                                        }
+                                        rarityColor={ingRarityColor}
+                                      />
                                 <Box sx={{ flexGrow: 1, minWidth: 0 }}>
                                   {ing.type !== "category" ? (
                                     <Link
@@ -574,8 +578,13 @@ export function RecipeDetailsPage() {
                                         variant="body2"
                                         fontWeight={700}
                                         sx={{
+                                          color: ingRarityColor || "text.primary",
                                           lineHeight: 1.2,
-                                          "&:hover": { color: "primary.main" },
+                                          transition: "all 0.2s",
+                                          "&:hover": { 
+                                            color: ingRarityColor || "primary.main",
+                                            textShadow: ingRarityColor ? `0 0 8px ${ingRarityColor}88` : "none"
+                                          },
                                         }}
                                       >
                                         {ing.name || ing.data?.name || ing.id}
@@ -586,7 +595,10 @@ export function RecipeDetailsPage() {
                                       <Typography
                                         variant="body2"
                                         fontWeight={700}
-                                        sx={{ lineHeight: 1.2 }}
+                                        sx={{ 
+                                          lineHeight: 1.2,
+                                          color: ingRarityColor || "text.primary" 
+                                        }}
                                       >
                                         {selectedItem
                                           ? selectedItem.name
@@ -675,25 +687,28 @@ export function RecipeDetailsPage() {
                       </Typography>
                     </Stack>
                     <Grid container spacing={1}>
-                      {products.map((p: any, idx: number) => (
-                        <Grid size={{ xs: 12, sm: 6 }} key={idx}>
-                          <Box
-                            sx={{
-                              p: 1.5,
-                              backgroundColor: "rgba(255,255,255,0.02)",
-                              borderRadius: 2,
-                              border: "1px solid rgba(255,255,255,0.05)",
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 2,
-                            }}
-                          >
-                            <ItemChip
-                              id={p.id}
-                              icon={p.data?.image || p.data?.icon}
-                              amount={p.amount}
-                              type={p.type}
-                            />
+                      {products.map((p: any, idx: number) => {
+                        const prodRarityColor = p.data?.rarity && gameInfo?.rarity?.[p.data.rarity]?.color;
+                        return (
+                          <Grid size={{ xs: 12, sm: 6 }} key={idx}>
+                            <Box
+                              sx={{
+                                p: 1.5,
+                                backgroundColor: prodRarityColor ? `${prodRarityColor}11` : "rgba(255,255,255,0.02)",
+                                borderRadius: 2,
+                                border: `1px solid ${prodRarityColor ? `${prodRarityColor}44` : "rgba(255,255,255,0.05)"}`,
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 2,
+                              }}
+                            >
+                              <ItemChip
+                                id={p.id}
+                                icon={p.data?.image || p.data?.icon}
+                                amount={p.amount}
+                                type={p.type}
+                                rarityColor={prodRarityColor}
+                              />
                             <Box sx={{ flexGrow: 1, minWidth: 0 }}>
                               <Link
                                 to={`/game/${gameId}/${p.type === "entity" ? "entity" : "items"}/view/${p.id}`}
@@ -706,8 +721,13 @@ export function RecipeDetailsPage() {
                                   variant="body2"
                                   fontWeight={700}
                                   sx={{
+                                    color: prodRarityColor || "text.primary",
                                     lineHeight: 1.2,
-                                    "&:hover": { color: "primary.main" },
+                                    transition: "all 0.2s",
+                                    "&:hover": { 
+                                      color: prodRarityColor || "primary.main",
+                                      textShadow: prodRarityColor ? `0 0 8px ${prodRarityColor}88` : "none"
+                                    },
                                   }}
                                 >
                                   {p.name || p.data?.name || p.id}
@@ -766,8 +786,8 @@ export function RecipeDetailsPage() {
                               </Stack>
                             </Box>
                           )}
-                        </Grid>
-                      ))}
+                        </Grid>)
+                      })}
                     </Grid>
                   </Stack>
                 </Paper>

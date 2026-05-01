@@ -26,19 +26,21 @@ interface EntityCardProps {
   hasShop?: boolean;
   onClick: () => void;
   variant?: "default" | "compact";
+  rarityColor?: string;
 }
 
-export function EntityCard({ entity, showPrices, hasShop, onClick, variant = "default" }: EntityCardProps) {
+export function EntityCard({ entity, showPrices, hasShop, onClick, variant = "default", rarityColor }: EntityCardProps) {
   const navigate = useNavigate();
   const { gameId } = useParams<{ gameId: string }>();
 
   return (
     <Card sx={{ 
-      backgroundColor: 'rgba(255, 255, 255, 0.02)', 
+      backgroundColor: rarityColor ? `${rarityColor}11` : 'rgba(255, 255, 255, 0.02)', 
+      background: rarityColor ? `linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, ${rarityColor}22 100%)` : undefined,
       backdropFilter: 'blur(16px)',
       borderRadius: 1,
       border: 1,
-      borderColor: 'divider',
+      borderColor: rarityColor || 'divider',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       height: '100%',
       display: 'flex',
@@ -46,9 +48,9 @@ export function EntityCard({ entity, showPrices, hasShop, onClick, variant = "de
       cursor: 'pointer',
       '&:hover': {
         transform: 'translateY(-6px)',
-        backgroundColor: 'rgba(255, 255, 255, 0.04)',
-        borderColor: 'rgba(255, 255, 255, 0.15)',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.4)'
+        backgroundColor: rarityColor ? `${rarityColor}22` : 'rgba(255, 255, 255, 0.04)',
+        borderColor: rarityColor || 'rgba(255, 255, 255, 0.15)',
+        boxShadow: rarityColor ? `0 8px 32px ${rarityColor}44` : '0 8px 32px rgba(0,0,0,0.4)'
       }
     }}
     onClick={onClick}

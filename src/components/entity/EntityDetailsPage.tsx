@@ -35,6 +35,7 @@ import type {
   Item,
   Conjunto,
   Category,
+  GameInfo,
 } from "../../types/gameModels";
 import type { EntityDetails, NormalizedRecipe } from "../../types/apiModels";
 import { MiniMap } from "../common/MiniMap";
@@ -63,10 +64,10 @@ export function EntityDetailsPage() {
     loading: dbLoading,
     getEntityDetails,
     getRecipesList,
+    getGameInfo,
   } = useApi(gameId);
-  const [entityDetails, setEntityDetails] = useState<EntityDetails | null>(
-    null,
-  );
+  const [entityDetails, setEntityDetails] = useState<EntityDetails | null>(null);
+  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [producedRecipes, setProducedRecipes] = useState<NormalizedRecipe[]>(
     [],
   );
@@ -154,6 +155,7 @@ export function EntityDetailsPage() {
           setEntityConjuntos(
             allConjuntos.filter((c) => c.entitys?.includes(entityId)),
           );
+          if (gameId) getGameInfo(gameId).then(info => { if (info) setGameInfo(info); });
 
           // Filter recipes produced at this entity
           if (details) {
@@ -615,19 +617,23 @@ export function EntityDetailsPage() {
                 </Typography>
               </Stack>
               <Stack spacing={1}>
-                {entity.requirements.map((req, idx) => (
-                  <Box
-                    key={idx}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      p: 1,
-                      borderRadius: 1,
-                      bgcolor: "rgba(255,255,255,0.02)",
-                    }}
-                  >
-                    <ItemChip id={req.itemId} size="small" />
+                {entity.requirements.map((req, idx) => {
+                  const reqItem = getSourceData(undefined, req.itemId);
+                  const reqRarityColor = reqItem?.rarity && gameInfo?.rarity?.[reqItem.rarity]?.color;
+                  return (
+                    <Box
+                      key={idx}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        p: 1,
+                        borderRadius: 1,
+                        bgcolor: reqRarityColor ? `${reqRarityColor}11` : "rgba(255,255,255,0.02)",
+                        border: `1px solid ${reqRarityColor ? `${reqRarityColor}44` : "transparent"}`,
+                      }}
+                    >
+                      <ItemChip id={req.itemId} size="small" rarityColor={reqRarityColor} />
                     <Typography
                       variant="body2"
                       fontWeight={800}
@@ -635,8 +641,9 @@ export function EntityDetailsPage() {
                     >
                       x{req.quant}
                     </Typography>
-                  </Box>
-                ))}
+                    </Box>
+                  );
+                })}
               </Stack>
             </Paper>
           )}
@@ -651,34 +658,44 @@ export function EntityDetailsPage() {
           <DetainItem startIcon={<Inventory color="primary" />} label="Drops">
             {drops && drops.length > 0 && (
               <Grid container spacing={2}>
-                {drops.map((drop, idx) => (
-                  <Grid size={{ xs: 12, sm: 6, md: 4 }} key={idx}>
-                    <Box
-                      sx={{
-                        p: 1.5,
-                        backgroundColor: "rgba(255,255,255,0.02)",
-                        borderRadius: 2,
-                        border: "1px solid rgba(255,255,255,0.05)",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1.5,
-                      }}
-                    >
-                      <ItemChip
-                        id={drop.item?.id || ""}
-                        icon={drop.item?.icon}
-                        size="medium"
-                      />
-                      <Box sx={{ flexGrow: 1 }}>
-                        <Typography
-                          variant="body2"
-                          fontWeight={700}
-                          sx={{ lineHeight: 1.2 }}
-                        >
-                          {drop.item?.name ||
-                            drop.item?.id ||
-                            "Item Desconhecido"}
-                        </Typography>
+                {drops.map((drop, idx) => {
+                  const dropRarityColor = drop.item?.rarity && gameInfo?.rarity?.[drop.item.rarity]?.color;
+                  return (
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={idx}>
+                      <Box
+                        sx={{
+                          p: 1.5,
+                          backgroundColor: dropRarityColor ? `${dropRarityColor}11` : "rgba(255,255,255,0.02)",
+                          borderRadius: 2,
+                          border: `1px solid ${dropRarityColor ? `${dropRarityColor}44` : "rgba(255,255,255,0.05)"}`,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1.5,
+                        }}
+                      >
+                        <ItemChip
+                          id={drop.item?.id || ""}
+                          icon={drop.item?.icon}
+                          size="medium"
+                          rarityColor={dropRarityColor}
+                        />
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography
+                            variant="body2"
+                            fontWeight={700}
+                            sx={{ 
+                              color: dropRarityColor || "text.primary",
+                              lineHeight: 1.2,
+                              transition: "all 0.2s",
+                              "&:hover": {
+                                textShadow: dropRarityColor ? `0 0 8px ${dropRarityColor}88` : "none"
+                              }
+                            }}
+                          >
+                            {drop.item?.name ||
+                              drop.item?.id ||
+                              "Item Desconhecido"}
+                          </Typography>
                         <Stack direction="row" spacing={1} alignItems="center">
                           <Typography
                             variant="caption"
@@ -699,9 +716,10 @@ export function EntityDetailsPage() {
                           </Typography>
                         </Stack>
                       </Box>
-                    </Box>
-                  </Grid>
-                ))}
+                      </Box>
+                    </Grid>
+                  );
+                })}
               </Grid>
             )}
           </DetainItem>
@@ -723,6 +741,7 @@ export function EntityDetailsPage() {
                       unlock={recipe.unlock}
                       getSourceData={getSourceData}
                       eventsMap={eventsMap}
+                      gameInfo={gameInfo || undefined}
                     />
                   </Grid>
                 ))}
@@ -820,6 +839,7 @@ export function EntityDetailsPage() {
                             getSourceData={getSourceData}
                             eventsMap={eventsMap}
                             variant="compact"
+                            gameInfo={gameInfo || undefined}
                           />
                         </Grid>
                       ))}

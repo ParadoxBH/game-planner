@@ -146,9 +146,14 @@ export function useApi(gameId: string | undefined) {
     return apiService.getCategory(categoryId);
   }, []);
 
+  const getGameInfo = useCallback(async (gameId: string) => {
+    return apiService.getGameInfo(gameId);
+  }, []);
+
   return {
     loading,
     error,
+    getGameInfo,
     getItemDetails,
     getItemCategories,
     getEntityDetails,

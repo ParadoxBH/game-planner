@@ -16,7 +16,7 @@ import { TriplePickSelector } from "../common/TriplePickSelector";
 import type { TripleState } from "../common/TriplePickSelector";
 import { FilterList, BugReport, ShoppingCart, Sell, Storefront } from "@mui/icons-material";
 import { useApi } from "../../hooks/useApi";
-import type { Entity, Shop, Category } from "../../types/gameModels";
+import type { Entity, Shop, Category, GameInfo } from "../../types/gameModels";
 import { ListingDataView } from "../common/ListingDataView";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { useViewMode } from "../../hooks/useViewMode";
@@ -43,9 +43,11 @@ export function EntityPage() {
     getEntityList,
     getEntityCategories,
     getEntitySubCategories,
+    getGameInfo,
   } = useApi(gameId);
   
   const [entitiesResponse, setEntitiesResponse] = useState<PaginatedResponse<Entity> | null>(null);
+  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [shops, setShops] = useState<Shop[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
   const [viewMode, setViewMode] = useViewMode("entities");
@@ -81,7 +83,8 @@ export function EntityPage() {
     if (dbLoading) return;
     shopRepository.getAll().then(setShops);
     getEntityCategories().then(setAllCategories);
-  }, [dbLoading, getEntityCategories]);
+    if (gameId) getGameInfo(gameId).then(info => { if (info) setGameInfo(info); });
+  }, [dbLoading, getEntityCategories, gameId, getGameInfo]);
 
   // Load paginated entities
   useEffect(() => {
@@ -175,6 +178,19 @@ export function EntityPage() {
               fullWidth={isMobile}
             />
           )}
+          {gameInfo?.rarity && Object.keys(gameInfo.rarity).length > 0 && (
+            <PickSelector
+              label="Raridade"
+              value={pages.info.criteria.rarity || null}
+              options={Object.entries(gameInfo.rarity).map(([id, r]) => ({
+                value: id,
+                label: r.name,
+              }))}
+              onChange={(val) => pages.setCriteria({ rarity: val })}
+              icon={<FilterList sx={{ fontSize: 18 }} />}
+              fullWidth={isMobile}
+            />
+          )}
         </>
       }
       actionsEnd={
@@ -226,6 +242,7 @@ export function EntityPage() {
             { label: "Preços", align: "right" as const, width: "30%", hidden: !showPrices },
           ]}
           emptyMessage="Nenhuma entidade encontrada neste filtro."
+          getRowColor={(entity: any) => entity.rarity && gameInfo?.rarity?.[entity.rarity]?.color}
           renderCard={(entity: any, variant) => (
             <EntityCard
               key={entity.id}
@@ -234,6 +251,7 @@ export function EntityPage() {
               hasShop={shopNPCIds.has(entity.id.toLowerCase())}
               onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
               variant={variant}
+              rarityColor={entity.rarity && gameInfo?.rarity?.[entity.rarity]?.color}
             />
           )}
           renderListItem={(entity: any) => [
@@ -275,7 +293,21 @@ export function EntityPage() {
                   />
                 )}
               </Box>
-              <Typography variant="body2" sx={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  fontWeight: 700, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 1,
+                  color: entity.rarity && gameInfo?.rarity?.[entity.rarity]?.color ? gameInfo?.rarity?.[entity.rarity]?.color : "text.primary",
+                  transition: "all 0.2s",
+                  "&:hover": {
+                    color: entity.rarity && gameInfo?.rarity?.[entity.rarity]?.color ? gameInfo?.rarity?.[entity.rarity]?.color : "primary.main",
+                    textShadow: entity.rarity && gameInfo?.rarity?.[entity.rarity]?.color ? `0 0 8px ${gameInfo?.rarity?.[entity.rarity]?.color}88` : "none"
+                  }
+                }}
+              >
                 {entity.name}
                 {shopNPCIds.has(entity.id.toLowerCase()) && (
                   <Tooltip title="NPC com Loja">
