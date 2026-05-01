@@ -19,6 +19,12 @@
   {
     "id": "valheim",
     "name": "Valheim",
-    "description": "Um brutal jogo de exploração e sobrevivência para 1 a 10 jogadores, ambientado em um purgatório gerado de forma procedural, inspirado na cultura viking. Batalhe, construa e conquiste glória em uma saga digna da benção de Odin!"
+    "description": "Um brutal jogo de exploração e sobrevivência para 1 a 10 jogadores, ambientado em um purgatório gerado de forma procedural, inspirado na cultura viking. Batalhe, construa e conquiste glória em uma saga digna da benção de Odin!",
+    "disabled": true
+  },
+  {
+    "id": "windrose",
+    "name": "Windrose",
+    "description": "Embark on a PvE survival adventure in the Age of Piracy. Fight on land and sea, solo or with friends. Build, craft, and explore a vast world filled with dark secrets."
   }
 ]

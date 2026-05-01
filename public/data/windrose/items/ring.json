@@ -1,0 +1,16 @@
+﻿[
+  {
+    "id": "knight_ring",
+    "name": "Knight's Ring",
+    "category": ["ring"],
+    "icon": "/img/windrose/items/ring/knight_ring.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "minor_capricorn_ring",
+    "name": "Minor Capricorn Ring",
+    "category": ["ring"],
+    "icon": "/img/windrose/items/ring/minor_capricorn_ring.png",
+    "rarity": "uncommon"
+  }
+]

@@ -1,0 +1,86 @@
+﻿[
+  {
+    "id": "alchemy_table",
+    "name": "Alchemy Table",
+    "category": ["station", "alchemy_table"],
+    "drops": [],
+    "icon": "/img/windrose/building/alchemy_table.png"
+  },
+  {
+    "id": "armor_clothing_workshop",
+    "name": "Armor Clothing Workshop",
+    "category": ["station", "armor_clothing_workshop"],
+    "drops": [],
+    "icon": "/img/windrose/building/armor_clothing_workshop.png"
+  },
+  {
+    "id": "charcoal_kiln",
+    "name": "Charcoal Kiln",
+    "category": ["station", "charcoal_kiln"],
+    "drops": [],
+    "icon": "/img/windrose/building/charcoal_kiln.png"
+  },
+  {
+    "id": "cooking_fire",
+    "name": "Cooking Fire",
+    "category": ["station", "cooking_fire"],
+    "drops": [],
+    "icon": "/img/windrose/building/cooking_fire.png"
+  },
+  {
+    "id": "jewelery_table",
+    "name": "Jewelery Table",
+    "category": ["station", "jewelery_table"],
+    "drops": [],
+    "icon": "/img/windrose/building/jewelery_table.png"
+  },
+  {
+    "id": "millstones",
+    "name": "Millstones",
+    "category": ["station", "millstones"],
+    "drops": [],
+    "icon": "/img/windrose/building/millstones.png"
+  },
+  {
+    "id": "shipwright_workshop",
+    "name": "Shipwright's Workshop",
+    "category": ["station", "shipwright_workshop"],
+    "drops": [],
+    "icon": "/img/windrose/building/shipwright_workshop.png"
+  },
+  {
+    "id": "smelting_furnace",
+    "name": "Smelting Furnace",
+    "category": ["station", "smelting_furnace"],
+    "drops": [],
+    "icon": "/img/windrose/building/smelting_furnace.png"
+  },
+  {
+    "id": "spinning_wheel",
+    "name": "Spinning Wheel",
+    "category": ["station", "spinning_wheel"],
+    "drops": [],
+    "icon": "/img/windrose/building/spinning_wheel.png"
+  },
+  {
+    "id": "tanning_rack",
+    "name": "Tanning Rack",
+    "category": ["station", "tanning_rack"],
+    "drops": [],
+    "icon": "/img/windrose/building/tanning_rack.png"
+  },
+  {
+    "id": "weaponsmith_workshop",
+    "name": "Weaponsmith Workshop",
+    "category": ["station", "weaponsmith_workshop"],
+    "drops": [],
+    "icon": "/img/windrose/building/weaponsmith_workshop.png"
+  },
+  {
+    "id": "workbench",
+    "name": "Workbench",
+    "category": ["station", "workbench"],
+    "drops": [],
+    "icon": "/img/windrose/building/workbench.png"
+  }
+]

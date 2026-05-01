@@ -1,0 +1,16 @@
+﻿[
+  {
+    "id": "healing_potion",
+    "name": "Healing Potion",
+    "category": ["medicine"],
+    "icon": "/img/windrose/items/medicine/healing_potion.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "minor_healing_potion",
+    "name": "Minor Healing Potion",
+    "category": ["medicine"],
+    "icon": "/img/windrose/items/medicine/minor_healing_potion.png",
+    "rarity": "uncommon"
+  }
+]

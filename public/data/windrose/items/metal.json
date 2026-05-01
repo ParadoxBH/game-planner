@@ -1,0 +1,16 @@
+﻿[
+  {
+    "id": "copper_ingot",
+    "name": "Copper Ingot",
+    "category": ["metal"],
+    "icon": "/img/windrose/items/metal/copper_ingot.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "foothills_iron_ingot",
+    "name": "Foothills Iron Ingot",
+    "category": ["metal"],
+    "icon": "/img/windrose/items/metal/foothills_iron_ingot.png",
+    "rarity": "uncommon"
+  }
+]

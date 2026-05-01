@@ -1,0 +1,9 @@
+﻿[
+  {
+    "id": "tiny_necklace_strength",
+    "name": "Tiny Necklace Strength",
+    "category": ["necklace"],
+    "icon": "/img/windrose/items/necklace/tiny_necklace_strength.png",
+    "rarity": "common"
+  }
+]

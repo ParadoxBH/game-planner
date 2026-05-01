@@ -1,0 +1,205 @@
+﻿[
+  {
+    "id": "alchemical_base",
+    "name": "Alchemical Base",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/alchemical_base.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "aloe_leaf",
+    "name": "Aloe Leaf",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/aloe_leaf.png",
+    "rarity": "common"
+  },
+  {
+    "id": "ash",
+    "name": "Ash",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/ash.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "bezoar",
+    "name": "Bezoar",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/bezoar.png",
+    "rarity": "common"
+  },
+  {
+    "id": "boar_tusk",
+    "name": "Boar Tusk",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/boar_tusk.png",
+    "rarity": "common"
+  },
+  {
+    "id": "brandy",
+    "name": "Brandy",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/brandy.png",
+    "rarity": "epic"
+  },
+  {
+    "id": "charcoal",
+    "name": "Charcoal",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/charcoal.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "clay",
+    "name": "Clay",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/clay.png",
+    "rarity": "common"
+  },
+  {
+    "id": "coffee_beans",
+    "name": "Coffee Beans",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/coffee_beans.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "clay_bottle",
+    "name": "Clay Bottle",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/clay_bottle.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "copper_ore",
+    "name": "Copper Ore",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/copper_ore.png",
+    "rarity": "common"
+  },
+  {
+    "id": "cornmeal",
+    "name": "Cornmeal",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/cornmeal.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "feather",
+    "name": "Feather",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/feather.png",
+    "rarity": "common"
+  },
+  {
+    "id": "flax_fiber",
+    "name": "Flax Fiber",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/flax_fiber.png",
+    "rarity": "common"
+  },
+  {
+    "id": "foothills_iron_ore",
+    "name": "Foothills Iron Ore",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/foothills_iron_ore.png",
+    "rarity": "common"
+  },
+  {
+    "id": "gold_ingot",
+    "name": "Gold Ingot",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/gold_ingot.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "healing_herbs",
+    "name": "Healing Herbs",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/healing_herbs.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "linen_fabric",
+    "name": "Linen Fabric",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/linen_fabric.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "madeira",
+    "name": "Madeira",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/madeira.png",
+    "rarity": "epic"
+  },
+  {
+    "id": "misty_orchid",
+    "name": "Misty Orchid",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/misty_orchid.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "mountain_goat_horn",
+    "name": "Mountain Goat Horn",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/mountain_goat_horn.png",
+    "rarity": "common"
+  },
+  {
+    "id": "rough_hide",
+    "name": "Rough Hide",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/rough_hide.png",
+    "rarity": "common"
+  },
+  {
+    "id": "silver_ingot",
+    "name": "Silver Ingot",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/silver_ingot.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "sulfur",
+    "name": "Sulfur",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/sulfur.png",
+    "rarity": "common"
+  },
+  {
+    "id": "tanned_leather",
+    "name": "Tanned Leather",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/tanned_leather.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "tannin",
+    "name": "Tannin",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/tannin.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "tree_bark",
+    "name": "Tree Bark",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/tree_bark.png",
+    "rarity": "common"
+  },
+  {
+    "id": "whiskey",
+    "name": "Whiskey",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/whiskey.png",
+    "rarity": "epic"
+  },
+  {
+    "id": "wolf_fang",
+    "name": "Wolf Fang",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/wolf_fang.png",
+    "rarity": "common"
+  }
+]

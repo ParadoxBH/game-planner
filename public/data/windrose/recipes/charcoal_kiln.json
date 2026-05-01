@@ -1,0 +1,52 @@
+﻿[
+    {
+        "id": "charcoal_wood",
+        "stations": [
+            "charcoal_kiln"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "charcoal",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "ash",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "charcoal_hardwood",
+        "stations": [
+            "charcoal_kiln"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "hardwood",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "charcoal",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "ash",
+                "amount": 1
+            }
+        ]
+    }
+]

@@ -1,0 +1,448 @@
+﻿[
+    {
+        "id": "clay_bottle",
+        "stations": [
+            "alchemy_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "clay",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "clay_bottle",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "tannin",
+        "stations": [
+            "alchemy_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "clay_bottle",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "tree_bark",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "tannin",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "alchemical_base",
+        "stations": [
+            "alchemy_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "clay_bottle",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "misty_orchid",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "alchemical_base",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "healing_potion_herbs",
+        "stations": [
+            "alchemy_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "alchemical_base",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "healing_herbs",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "healing_potion",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "healing_potion_undead",
+        "stations": [
+            "alchemy_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "alchemical_base",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "undead_essence",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "healing_potion",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "minor_healing_potion",
+        "stations": [
+            "alchemy_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "alchemical_base",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "minor_healing_potion",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "homeward_journey",
+        "stations": [
+            "alchemy_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "alchemical_base",
+                "amount": 3
+            },
+            {
+                "type": "item",
+                "id": "rum_bottle",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "feather",
+                "amount": 5
+            },
+            {
+                "type": "item",
+                "id": "undead_essence",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "homeward_journey",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "elixir_precision",
+        "stations": [
+            "alchemy_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "alchemical_base",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "mountain_goat_horn",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "wolf_fang",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "elixir_precision",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 3
+            }
+        ]
+    },
+    {
+        "id": "elixir_concentration",
+        "stations": [
+            "alchemy_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "alchemical_base",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "bezoar",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "aloe_leaf",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "elixir_concentration",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 3
+            }
+        ]
+    },
+    {
+        "id": "elixir_cruelty",
+        "stations": [
+            "alchemy_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "alchemical_base",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "boar_tusk",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "pearl",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "elixir_cruelty",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "hard_grog",
+        "stations": [
+            "alchemy_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "rum_bottle",
+                "amount": 4
+            },
+            {
+                "type": "item",
+                "id": "brandy",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "lime",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "hard_grog",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "deadeye_grog",
+        "stations": [
+            "alchemy_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "rum_bottle",
+                "amount": 4
+            },
+            {
+                "type": "item",
+                "id": "madeira",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "coffee_beans",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "deadeye_grog",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "gunroom_grog",
+        "stations": [
+            "alchemy_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "rum_bottle",
+                "amount": 4
+            },
+            {
+                "type": "item",
+                "id": "whiskey",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "cayenne_pepper",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "gunroom_grog",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    }
+]
