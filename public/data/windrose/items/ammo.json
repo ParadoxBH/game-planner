@@ -7,6 +7,13 @@
     "rarity": "uncommon"
   },
   {
+    "id": "iron_bullet",
+    "name": "Iron Bullet",
+    "category": ["ammo"],
+    "icon": "/img/windrose/items/ammo/iron_bullet.png",
+    "rarity": "uncommon"
+  },
+  {
     "id": "pearl",
     "name": "Pearl",
     "category": ["ammo"],

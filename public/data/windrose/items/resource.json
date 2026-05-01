@@ -112,6 +112,13 @@
     "rarity": "rare"
   },
   {
+    "id": "hardwood",
+    "name": "Hardwood",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/hardwood.png",
+    "rarity": "common"
+  },
+  {
     "id": "healing_herbs",
     "name": "Healing Herbs",
     "category": ["resource"],
@@ -147,6 +154,13 @@
     "rarity": "common"
   },
   {
+    "id": "plant_fiber",
+    "name": "Plant Fiber",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/plant_fiber.png",
+    "rarity": "common"
+  },
+  {
     "id": "rough_hide",
     "name": "Rough Hide",
     "category": ["resource"],
@@ -161,10 +175,24 @@
     "rarity": "rare"
   },
   {
+    "id": "stone",
+    "name": "Stone",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/stone.png",
+    "rarity": "common"
+  },
+  {
     "id": "sulfur",
     "name": "Sulfur",
     "category": ["resource"],
     "icon": "/img/windrose/items/resource/sulfur.png",
+    "rarity": "common"
+  },
+  {
+    "id": "sweet_potato",
+    "name": "Sweet Potato",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/sweet_potato.png",
     "rarity": "common"
   },
   {
@@ -182,11 +210,25 @@
     "rarity": "uncommon"
   },
   {
+    "id": "timber",
+    "name": "Timber",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/timber.png",
+    "rarity": "uncommon"
+  },
+  {
     "id": "tree_bark",
     "name": "Tree Bark",
     "category": ["resource"],
     "icon": "/img/windrose/items/resource/tree_bark.png",
     "rarity": "common"
+  },
+  {
+    "id": "tumbaga_ingot",
+    "name": "Tumbaga Ingot",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/tumbaga_ingot.png",
+    "rarity": "rare"
   },
   {
     "id": "whiskey",
@@ -200,6 +242,13 @@
     "name": "Wolf Fang",
     "category": ["resource"],
     "icon": "/img/windrose/items/resource/wolf_fang.png",
+    "rarity": "common"
+  },
+  {
+    "id": "wood",
+    "name": "Wood",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/wood.png",
     "rarity": "common"
   }
 ]

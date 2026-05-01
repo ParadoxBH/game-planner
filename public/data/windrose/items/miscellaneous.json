@@ -1,0 +1,47 @@
+﻿[
+    {
+        "id": "clay_vase",
+        "name": "Clay Vase",
+        "category": [
+            "micellaneous"
+        ],
+        "icon": "/img/windrose/items/micellaneous/clay_vase.png",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "medicine",
+        "name": "Medicine",
+        "category": [
+            "micellaneous"
+        ],
+        "icon": "/img/windrose/items/micellaneous/medicine.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "munitions",
+        "name": "Munitions",
+        "category": [
+            "micellaneous"
+        ],
+        "icon": "/img/windrose/items/micellaneous/munitions.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "naval_supplies",
+        "name": "Naval Supplies",
+        "category": [
+            "micellaneous"
+        ],
+        "icon": "/img/windrose/items/micellaneous/naval_supplies.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "provisions",
+        "name": "Provisions",
+        "category": [
+            "micellaneous"
+        ],
+        "icon": "/img/windrose/items/micellaneous/provisions.png",
+        "rarity": "uncommon"
+    }
+]

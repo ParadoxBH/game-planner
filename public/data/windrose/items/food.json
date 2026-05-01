@@ -1,9 +1,23 @@
 ﻿[
   {
+    "id": "banana",
+    "name": "Banana",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/banana.png",
+    "rarity": "common"
+  },
+  {
     "id": "cayenne_pepper",
     "name": "Cayenne Pepper",
     "category": ["food"],
     "icon": "/img/windrose/items/food/cayenne_pepper.png",
+    "rarity": "common"
+  },
+  {
+    "id": "coconut",
+    "name": "Coconut",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/coconut.png",
     "rarity": "common"
   },
   {
@@ -26,5 +40,12 @@
     "category": ["food"],
     "icon": "/img/windrose/items/food/rum_bottle.png",
     "rarity": "rare"
+  },
+  {
+    "id": "tomato",
+    "name": "Tomato",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/tomato.png",
+    "rarity": "common"
   }
 ]
