@@ -2,7 +2,7 @@
   {
     "id": "rainbow_north_npc_1",
     "type": "spawn",
-    "entityId": "doris_rain",
+    "entityId": "doris_rainbow",
     "event": "rainbow",
     "geom": {
       "type": "Point",
@@ -13,7 +13,7 @@
   {
     "id": "rainbow_sul_npc_1",
     "type": "spawn",
-    "entityId": "doris_rain",
+    "entityId": "doris_rainbow",
     "event": "rainbow",
     "geom": {
       "type": "Point",
@@ -30,6 +30,7 @@
       "type": "Point",
       "coordinates": "POINT(69.0976708984375 470.94501953125)"
     },
+    "mode": "daily",
     "mapId": "main"
   },
   {
@@ -40,6 +41,79 @@
     "geom": {
       "type": "Point",
       "coordinates": "POINT(-74.5019580078125 464.38267089843754)"
+    },
+    "mode": "daily",
+    "mapId": "main"
+  },
+  {
+    "id": "rainbow_lest_npc_1",
+    "type": "spawn",
+    "entityId": "doris_rainbow",
+    "event": "rainbow",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(552.9073317742598 120.6778801463968)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "rainbow_lest_bubble_1",
+    "type": "spawn",
+    "entityId": "rainbow_bubble",
+    "event": "rainbow",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(690.7512412936759 256.13266870101705)"
+    },
+    "image": "/img/heartopia/referencePoints/rainbow/rainbow_lest_bubble_1.jpg",
+    "mode": "daily",
+    "mapId": "main"
+  },
+  {
+    "id": "rainbow_lest_bubble_2",
+    "type": "spawn",
+    "entityId": "rainbow_bubble",
+    "event": "rainbow",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(422.0216029565148 40.82859552563253)"
+    },
+    "image": "/img/heartopia/referencePoints/rainbow/rainbow_lest_bubble_2.jpg",
+    "mode": "daily",
+    "mapId": "main"
+  },
+  {
+    "id": "rainbow_oeste_bubble_1",
+    "type": "spawn",
+    "entityId": "rainbow_bubble",
+    "event": "rainbow",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-462.0749719191271 -158.7472177303474)"
+    },
+    "mapId": "main",
+    "mode": "daily"
+  },
+  {
+    "id": "rainbow_oeste_bubble_2",
+    "type": "spawn",
+    "entityId": "rainbow_bubble",
+    "event": "rainbow",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-470.1834838234114 -67.67444193076416)"
+    },
+    "mapId": "main",
+    "mode": "daily"
+  },
+  {
+    "id": "rainbow_oeste_npc_1",
+    "type": "spawn",
+    "entityId": "doris_rainbow",
+    "event": "rainbow",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-413.3269741630897 -207.7568388769204)"
     },
     "mapId": "main"
   }

@@ -187,5 +187,12 @@
     "category": "npc",
     "icon": "/img/heartopia/npc/head/doris_rain.png",
     "image": "/img/heartopia/npc/doris_rain.png"
+  },
+  {
+    "id": "doris_rainbow",
+    "name": "Doris",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/doris_meteor.png",
+    "image": "/img/heartopia/npc/doris_meteor.png"
   }
 ]
