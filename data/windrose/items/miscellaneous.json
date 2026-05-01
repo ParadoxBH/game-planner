@@ -9,6 +9,24 @@
         "rarity": "uncommon"
     },
     {
+        "id": "fast_travel_bell",
+        "name": "Fast Travel Bell",
+        "category": [
+            "miscellaneous"
+        ],
+        "icon": "/img/windrose/items/miscellaneous/fast_travel_bell.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "lamp",
+        "name": "Lamp",
+        "category": [
+            "miscellaneous"
+        ],
+        "icon": "/img/windrose/items/miscellaneous/lamp.png",
+        "rarity": "rare"
+    },
+    {
         "id": "medicine",
         "name": "Medicine",
         "category": [

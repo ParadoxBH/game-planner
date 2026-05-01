@@ -1,5 +1,12 @@
 ﻿[
   {
+    "id": "combat_repair_kit",
+    "name": "Combat Repair Kit",
+    "category": ["item"],
+    "icon": "/img/windrose/items/item/combat_repair_kit.png",
+    "rarity": "rare"
+  },
+  {
     "id": "deadeye_grog",
     "name": "Deadeye Grog",
     "category": ["item"],
@@ -19,5 +26,19 @@
     "category": ["item"],
     "icon": "/img/windrose/items/item/hard_grog.png",
     "rarity": "rare"
+  },
+  {
+    "id": "master_combat_repair_kit",
+    "name": "Master Combat Repair Kit",
+    "category": ["item"],
+    "icon": "/img/windrose/items/item/master_combat_repair_kit.png",
+    "rarity": "epic"
+  },
+  {
+    "id": "repair_kit",
+    "name": "Repair Kit",
+    "category": ["item"],
+    "icon": "/img/windrose/items/item/repair_kit.png",
+    "rarity": "uncommon"
   }
 ]

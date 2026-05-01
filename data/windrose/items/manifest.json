@@ -1,6 +1,7 @@
 ﻿[
     "alchemy.json",
     "ammo.json",
+    "backpack.json",
     "food.json",
     "item.json",
     "medice.json",
@@ -8,5 +9,6 @@
     "miscellaneous.json",
     "necklace.json",
     "resource.json",
-    "ring.json"
+    "ring.json",
+    "tool.json"
 ]

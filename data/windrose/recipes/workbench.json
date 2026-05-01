@@ -1,46 +1,124 @@
 ﻿[
     {
-        "id": "bonfire",
-        "ingredients": [
-            {
-                "type": "item",
-                "id": "wood",
-                "amount": 5
-            }
+        "id": "coarse_fabric",
+        "stations": [
+            "workbench"
         ],
-        "products": [
-            {
-                "type": "entity",
-                "id": "bonfire",
-                "amount": 1
-            }
-        ]
-    },
-    {
-        "id": "workbench",
         "ingredients": [
             {
                 "type": "item",
-                "id": "wood",
-                "amount": 5
-            }
-        ],
-        "products": [
-            {
-                "type": "entity",
-                "id": "workbench",
-                "amount": 1
-            }
-        ]
-    },
-    {
-        "id": "cooking_fire",
-        "ingredients": [
-            {
-                "type": "item",
-                "id": "wood",
+                "id": "plant_fiber",
                 "amount": 3
-            },
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "rope",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "plant_fiber",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "rope",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "bandage",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "bandage",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "iron_bullet",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "foothills_iron_ingot",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "iron_bullet",
+                "amount": 5
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "copper_bullet",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "copper_bullet",
+                "amount": 5
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "stone_bullet",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
             {
                 "type": "item",
                 "id": "stone",
@@ -49,113 +127,358 @@
         ],
         "products": [
             {
-                "type": "entity",
-                "id": "cooking_fire",
-                "amount": 1
+                "type": "item",
+                "id": "stone_bullet",
+                "amount": 5
             }
         ]
     },
     {
-        "id": "armor_clothing_workshop",
+        "id": "master_combat_repair_kit",
+        "stations": [
+            "workbench"
+        ],
         "ingredients": [
             {
                 "type": "item",
-                "id": "wood",
+                "id": "timber",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "rum_bottle",
                 "amount": 5
             },
             {
                 "type": "item",
-                "id": "coarse_fabric",
+                "id": "steel_nails",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "master_combat_repair_kit",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "combat_repair_kit",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wooden_plank",
+                "amount": 5
+            },
+            {
+                "type": "item",
+                "id": "rum_bottle",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "steel_nails",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "combat_repair_kit",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "repair_kit",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
                 "amount": 10
             }
         ],
         "products": [
             {
-                "type": "entity",
-                "id": "armor_clothing_workshop",
+                "type": "item",
+                "id": "repair_kit",
                 "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
             }
         ]
     },
     {
-        "id": "weaponsmith_workshop",
+        "id": "fast_travel_bell",
+        "stations": [
+            "workbench"
+        ],
         "ingredients": [
-            {
-                "type": "item",
-                "id": "wood",
-                "amount": 10
-            },
             {
                 "type": "item",
                 "id": "copper_ingot",
-                "amount": 5
-            }
-        ],
-        "products": [
-            {
-                "type": "entity",
-                "id": "weaponsmith_workshop",
-                "amount": 1
-            }
-        ]
-    },
-    {
-        "id": "shipwright_workshop",
-        "ingredients": [
-            {
-                "type": "item",
-                "id": "wood",
-                "amount": 15
-            },
-            {
-                "type": "item",
-                "id": "coarse_fabric",
                 "amount": 10
             },
             {
                 "type": "item",
-                "id": "copper_ingot",
-                "amount": 5
+                "id": "rope",
+                "amount": 3
             }
         ],
         "products": [
             {
-                "type": "entity",
-                "id": "shipwright_workshop",
+                "type": "item",
+                "id": "fast_travel_bell",
                 "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
             }
         ]
     },
     {
-        "id": "alchemy_table",
+        "id": "nails_copper",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "nails",
+                "amount": 5
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "nails_iron",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "foothills_iron_ingot",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "nails",
+                "amount": 10
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "timber",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "hardwood",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "timber",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 3
+            }
+        ]
+    },
+    {
+        "id": "wooden_plank",
+        "stations": [
+            "workbench"
+        ],
         "ingredients": [
             {
                 "type": "item",
                 "id": "wood",
-                "amount": 5
-            },
-            {
-                "type": "item",
-                "id": "clay_pot",
                 "amount": 2
             }
         ],
         "products": [
             {
-                "type": "entity",
-                "id": "alchemy_table",
+                "type": "item",
+                "id": "wooden_plank",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "bosun_backpack",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "sailor_backpack",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "tanned_leather",
+                "amount": 5
+            },
+            {
+                "type": "item",
+                "id": "foothills_iron_ingot",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "bosun_backpack",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 3
+            }
+        ]
+    },
+    {
+        "id": "sailor_backpack",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "torn_sailcloth_bag",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 5
+            },
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "sailor_backpack",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "torn_sailcloth_bag",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "rope",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "torn_sailcloth_bag",
                 "amount": 1
             }
         ]
     },
     {
-        "id": "jewelery_table",
+        "id": "iron_axe",
+        "stations": [
+            "workbench"
+        ],
         "ingredients": [
-            {
-                "type": "item",
-                "id": "wood",
-                "amount": 10
-            },
             {
                 "type": "item",
                 "id": "foothills_iron_ingot",
@@ -163,125 +486,404 @@
             },
             {
                 "type": "item",
-                "id": "silver_ingot",
+                "id": "wood",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "iron_axe",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "iron_pickaxe",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "foothills_iron_ingot",
+                "amount": 5
+            },
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "iron_pickaxe",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "copper_axe",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 5
+            },
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "copper_axe",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "copper_pickaxe",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 5
+            },
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "copper_pickaxe",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "stone_axe",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "stone",
+                "amount": 3
+            },
+            {
+                "type": "item",
+                "id": "wood",
                 "amount": 3
             }
         ],
         "products": [
             {
-                "type": "entity",
-                "id": "jewelery_table",
+                "type": "item",
+                "id": "stone_axe",
                 "amount": 1
             }
         ]
     },
     {
-        "id": "charcoal_kiln",
+        "id": "stone_pickaxe",
+        "stations": [
+            "workbench"
+        ],
         "ingredients": [
             {
                 "type": "item",
-                "id": "wood",
-                "amount": 25
+                "id": "stone",
+                "amount": 3
             },
             {
                 "type": "item",
-                "id": "clay",
-                "amount": 20
+                "id": "wood",
+                "amount": 3
             }
         ],
         "products": [
             {
-                "type": "entity",
-                "id": "charcoal_kiln",
+                "type": "item",
+                "id": "stone_pickaxe",
                 "amount": 1
             }
         ]
     },
     {
-        "id": "smelting_furnace",
+        "id": "simple_fishing_rod",
+        "stations": [
+            "workbench"
+        ],
         "ingredients": [
             {
                 "type": "item",
-                "id": "clay",
-                "amount": 15
+                "id": "hardwood",
+                "amount": 5
             },
             {
                 "type": "item",
-                "id": "stone",
+                "id": "rope",
+                "amount": 3
+            },
+            {
+                "type": "item",
+                "id": "foothills_iron_ingot",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "simple_fishing_rod",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "shovel",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 3
+            },
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 10
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "shovel",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "anvil",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "foothills_iron_ingot",
                 "amount": 30
             }
         ],
         "products": [
             {
-                "type": "entity",
-                "id": "smelting_furnace",
+                "type": "item",
+                "id": "anvil",
                 "amount": 1
-            }
-        ]
-    },
-    {
-        "id": "spinning_wheel",
-        "ingredients": [
-            {
-                "type": "item",
-                "id": "wood",
-                "amount": 10
-            },
-            {
-                "type": "item",
-                "id": "rope",
-                "amount": 5
             }
         ],
-        "products": [
+        "unlock": [
             {
-                "type": "entity",
-                "id": "spinning_wheel",
-                "amount": 1
+                "id": "level",
+                "type": "station",
+                "value": 2
             }
         ]
     },
     {
-        "id": "tanning_rack",
-        "ingredients": [
-            {
-                "type": "item",
-                "id": "wood",
-                "amount": 10
-            },
-            {
-                "type": "item",
-                "id": "rope",
-                "amount": 5
-            }
+        "id": "millstone_parts",
+        "stations": [
+            "workbench"
         ],
-        "products": [
-            {
-                "type": "entity",
-                "id": "tanning_rack",
-                "amount": 1
-            }
-        ]
-    },
-    {
-        "id": "millstones",
         "ingredients": [
             {
                 "type": "item",
-                "id": "wood",
+                "id": "stone",
                 "amount": 15
-            },
+            }
+        ],
+        "products": [
             {
                 "type": "item",
                 "id": "millstone_parts",
                 "amount": 1
             }
         ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "ironware",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "foothills_iron_ingot",
+                "amount": 5
+            }
+        ],
         "products": [
             {
-                "type": "entity",
-                "id": "millstones",
+                "type": "item",
+                "id": "ironware",
                 "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "copper_pot",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "copper_pot",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "clay_pot",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "clay",
+                "amount": 6
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "clay_pot",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "lamp",
+        "stations": [
+            "workbench"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 4
+            },
+            {
+                "type": "item",
+                "id": "rope",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "lamp",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
             }
         ]
     }

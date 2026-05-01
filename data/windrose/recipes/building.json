@@ -1,0 +1,288 @@
+﻿[
+    {
+        "id": "bonfire",
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "entity",
+                "id": "bonfire",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "workbench",
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "entity",
+                "id": "workbench",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "cooking_fire",
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 3
+            },
+            {
+                "type": "item",
+                "id": "stone",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "entity",
+                "id": "cooking_fire",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "armor_clothing_workshop",
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 5
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 10
+            }
+        ],
+        "products": [
+            {
+                "type": "entity",
+                "id": "armor_clothing_workshop",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "weaponsmith_workshop",
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "entity",
+                "id": "weaponsmith_workshop",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "shipwright_workshop",
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 15
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "entity",
+                "id": "shipwright_workshop",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "alchemy_table",
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 5
+            },
+            {
+                "type": "item",
+                "id": "clay_pot",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "entity",
+                "id": "alchemy_table",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "jewelery_table",
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "foothills_iron_ingot",
+                "amount": 5
+            },
+            {
+                "type": "item",
+                "id": "silver_ingot",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "entity",
+                "id": "jewelery_table",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "charcoal_kiln",
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 25
+            },
+            {
+                "type": "item",
+                "id": "clay",
+                "amount": 20
+            }
+        ],
+        "products": [
+            {
+                "type": "entity",
+                "id": "charcoal_kiln",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "smelting_furnace",
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "clay",
+                "amount": 15
+            },
+            {
+                "type": "item",
+                "id": "stone",
+                "amount": 30
+            }
+        ],
+        "products": [
+            {
+                "type": "entity",
+                "id": "smelting_furnace",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "spinning_wheel",
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "rope",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "entity",
+                "id": "spinning_wheel",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "tanning_rack",
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "rope",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "entity",
+                "id": "tanning_rack",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "millstones",
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 15
+            },
+            {
+                "type": "item",
+                "id": "millstone_parts",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "entity",
+                "id": "millstones",
+                "amount": 1
+            }
+        ]
+    }
+]

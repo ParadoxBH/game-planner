@@ -1,0 +1,23 @@
+﻿[
+  {
+    "id": "bosun_backpack",
+    "name": "Bosun Backpack",
+    "category": ["backpack"],
+    "icon": "/img/windrose/items/backpack/bosun_backpack.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "sailor_backpack",
+    "name": "Sailor Backpack",
+    "category": ["backpack"],
+    "icon": "/img/windrose/items/backpack/sailor_backpack.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "torn_sailcloth_bag",
+    "name": "Torn Sailcloth Bag",
+    "category": ["backpack"],
+    "icon": "/img/windrose/items/backpack/torn_sailcloth_bag.png",
+    "rarity": "uncommon"
+  }
+]
