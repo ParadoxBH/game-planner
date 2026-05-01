@@ -8,7 +8,8 @@
             "coordinates": "POINT(79.90624511718751 -445.467666015625)"
         },
         "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_1.jpg",
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776507198060",
@@ -18,7 +19,8 @@
             "type": "Point",
             "coordinates": "POINT(306.1142626953125 -393.74091796875)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776507199304",
@@ -29,7 +31,8 @@
             "coordinates": "POINT(253.21435546875 -344.7163134765625)"
         },
         "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_2.jpg",
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776507201694",
@@ -39,7 +42,8 @@
             "type": "Point",
             "coordinates": "POINT(191.85219238281252 -267.89823242187504)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776507208766",
@@ -49,7 +53,8 @@
             "type": "Point",
             "coordinates": "POINT(436.20317382812505 -229.296181640625)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776507214647",
@@ -59,7 +64,8 @@
             "type": "Point",
             "coordinates": "POINT(-91.872880859375 -379.072138671875)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776507219189",
@@ -69,7 +75,8 @@
             "type": "Point",
             "coordinates": "POINT(-233.54240722656252 -347.0324365234375)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776507228291",
@@ -79,7 +86,8 @@
             "type": "Point",
             "coordinates": "POINT(-395.285 -181.429638671875)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776507231803",
@@ -89,7 +97,8 @@
             "type": "Point",
             "coordinates": "POINT(-424.62255859375 -68.71165039062501)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776507238404",
@@ -99,7 +108,8 @@
             "type": "Point",
             "coordinates": "POINT(-340.470087890625 194.1683154296875)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776507241397",
@@ -109,7 +119,8 @@
             "type": "Point",
             "coordinates": "POINT(-308.4303857421875 263.265986328125)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776507247088",
@@ -119,7 +130,8 @@
             "type": "Point",
             "coordinates": "POINT(14.2827587890625 100.75135253906251)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776507252600",
@@ -129,7 +141,8 @@
             "type": "Point",
             "coordinates": "POINT(94.57502441406251 17.756943359375)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776507265642",
@@ -139,7 +152,8 @@
             "type": "Point",
             "coordinates": "POINT(215.399443359375 467.08481445312503)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776507275603",
@@ -150,7 +164,8 @@
             "coordinates": "POINT(-279.0928271484375 602.1919921875001)"
         },
         "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_6.jpg",
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776561019615",
@@ -160,7 +175,8 @@
             "type": "Point",
             "coordinates": "POINT(58.67511718750001 -175.253310546875)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776561021805",
@@ -170,7 +186,8 @@
             "type": "Point",
             "coordinates": "POINT(-16.98490234375 -84.92451171875001)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776561036496",
@@ -180,7 +197,8 @@
             "type": "Point",
             "coordinates": "POINT(491.0180859375 84.92451171875001)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776561037759",
@@ -190,7 +208,8 @@
             "type": "Point",
             "coordinates": "POINT(553.5534082031251 58.67511718750001)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776561043561",
@@ -200,7 +219,8 @@
             "type": "Point",
             "coordinates": "POINT(619.9489355468751 -274.84660156250004)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776561053112",
@@ -210,7 +230,8 @@
             "type": "Point",
             "coordinates": "POINT(141.6695263671875 430.79888671875)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776561058494",
@@ -220,7 +241,8 @@
             "type": "Point",
             "coordinates": "POINT(262.4939453125 379.072138671875)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776561075745",
@@ -230,7 +252,8 @@
             "type": "Point",
             "coordinates": "POINT(-11.580615234375001 428.48276367187503)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776561082065",
@@ -240,7 +263,8 @@
             "type": "Point",
             "coordinates": "POINT(-528.0760546875 247.05312500000002)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776561093196",
@@ -250,7 +274,8 @@
             "type": "Point",
             "coordinates": "POINT(-463.224609375 -148.6178955078125)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1776561102518",
@@ -260,7 +285,8 @@
             "type": "Point",
             "coordinates": "POINT(-484.8417578125 -374.82591308593754)"
         },
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1777520370032",
@@ -271,7 +297,8 @@
         "coordinates": "POINT(597.7575630215019 196.6844402589196)"
         },
         "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_3.jpg",
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1777525021808",
@@ -282,7 +309,8 @@
         "coordinates": "POINT(-179.7860535366856 565.6294321613345)"
         },
         "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_4.jpg",
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
     },
     {
         "id": "point_1777524983055",
@@ -293,6 +321,20 @@
         "coordinates": "POINT(-407.98274570011637 483.8182945786581)"
         },
         "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_5.jpg",
-        "mapId": "main"
+        "mapId": "main",
+        "mode": "weekly"
+    },
+    {
+        "id": "point_1777652303381",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+        "type": "Point",
+        "coordinates": "POINT(-172.16514648437501 475.1912451171875)"
+        },
+        "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_7.jpg",
+        "description": "Em volta do lago existem vários buracos com água dentro; a bolha fica subindo e descendo por eles, sequencialmente, em sentido anti-horário.",
+        "mapId": "main",
+        "mode": "weekly"
     }
 ]
