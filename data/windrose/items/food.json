@@ -1,10 +1,38 @@
 ﻿[
   {
+    "id": "bacon_eggs",
+    "name": "Bacon and Eggs",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/bacon_eggs.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "banana_muffin",
+    "name": "Banana Muffin",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/banana_muffin.png",
+    "rarity": "rare"
+  },
+  {
     "id": "banana",
     "name": "Banana",
     "category": ["food"],
     "icon": "/img/windrose/items/food/banana.png",
     "rarity": "common"
+  },
+  {
+    "id": "boiled_crab",
+    "name": "Boiled Crab",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/boiled_crab.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "burrito",
+    "name": "Burrito",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/burrito.png",
+    "rarity": "rare"
   },
   {
     "id": "cayenne_pepper",
@@ -14,11 +42,46 @@
     "rarity": "common"
   },
   {
+    "id": "chowder",
+    "name": "Chowder",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/chowder.png",
+    "rarity": "rare"
+  },
+  {
     "id": "coconut",
     "name": "Coconut",
     "category": ["food"],
     "icon": "/img/windrose/items/food/coconut.png",
     "rarity": "common"
+  },
+  {
+    "id": "coconut_milk_bananas",
+    "name": "Coconut Milk With Bananas",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/coconut_milk_bananas.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "coconut_soup",
+    "name": "Coconut Soup",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/coconut_soup.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "coconut",
+    "name": "Coconut",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/coconut.png",
+    "rarity": "common"
+  },
+  {
+    "id": "coffee",
+    "name": "Coffee",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/coffee.png",
+    "rarity": "epic"
   },
   {
     "id": "corn",
@@ -28,11 +91,60 @@
     "rarity": "common"
   },
   {
+    "id": "crab_soup_diced_tomatoes",
+    "name": "Crab Soup with Diced Tomatoes",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/crab_soup_diced_tomatoes.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "dodo_broth",
+    "name": "Dodo Broth",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/dodo_broth.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "fish_tostones",
+    "name": "Fish and Tostones",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/fish_tostones.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "hearty_egg_broth",
+    "name": "Hearty Egg Broth",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/hearty_egg_broth.png",
+    "rarity": "rare"
+  },
+  {
     "id": "lime",
     "name": "Lime",
     "category": ["food"],
     "icon": "/img/windrose/items/food/lime.png",
     "rarity": "common"
+  },
+  {
+    "id": "meat_salad",
+    "name": "Meat Salad",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/meat_salad.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "pastechi",
+    "name": "Pastechi",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/pastechi.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "refreshing_tomato_juice",
+    "name": "Refreshing Tomato Juice",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/refreshing_tomato_juice.png",
+    "rarity": "uncommon"
   },
   {
     "id": "rum_bottle",
@@ -42,10 +154,80 @@
     "rarity": "rare"
   },
   {
+    "id": "seafood_platter",
+    "name": "Seafood Platter",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/seafood_platter.png",
+    "rarity": "epic"
+  },
+  {
+    "id": "seafood_skewer",
+    "name": "Seafood Skewer",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/seafood_skewer.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "skewered_meat",
+    "name": "Skewered Meat",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/skewered_meat.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "spicy_breaded_kebab",
+    "name": "Spicy Breaded Kebab",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/spicy_breaded_kebab.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "spicy_skewered_crab",
+    "name": "Spicy Skewered Crab",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/spicy_skewered_crab.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "spicy_sweet_potato",
+    "name": "Spicy \"Chicken\" with Sweet Potato",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/spicy_sweet_potato.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "sunmilk_tonic",
+    "name": "Sunmilk Tonic",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/sunmilk_tonic.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "sweet_lime_juice",
+    "name": "Sweet Lime Juice",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/sweet_lime_juice.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "tangy_nut_roll",
+    "name": "Tangy Nut Roll",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/tangy_nut_roll.png",
+    "rarity": "uncommon"
+  },
+  {
     "id": "tomato",
     "name": "Tomato",
     "category": ["food"],
     "icon": "/img/windrose/items/food/tomato.png",
     "rarity": "common"
+  },
+  {
+    "id": "tortilla",
+    "name": "Tortilla",
+    "category": ["food"],
+    "icon": "/img/windrose/items/food/tortilla.png",
+    "rarity": "uncommon"
   }
 ]

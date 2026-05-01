@@ -1,3 +1,809 @@
 ﻿[
-    
+    {
+        "id": "burrito",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "cornmeal",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "meat",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "salt",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "burrito",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "tortilla",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "cornmeal",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "tortilla",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "pastechi",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "meat",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "cornmeal",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "pastechi",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "coffee",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "coffee_beans",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "cane_sugar",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "coffee",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 3
+            }
+        ]
+    },
+    {
+        "id": "sunmilk_tonic",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "coconut",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "aloe_leaf",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "nuts",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "sunmilk_tonic",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "coconut_milk_bananas",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "coconut",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "banana",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "coconut_milk_bananas",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "refreshing_tomato_juice",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "tomato",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "lime",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "refreshing_tomato_juice",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "sweet_lime_juice",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "lime",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "cane_sugar",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "sweet_lime_juice",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "seafood_platter",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "crab_meat",
+                "amount": 3
+            },
+            {
+                "type": "item",
+                "id": "lime",
+                "amount": 4
+            },
+            {
+                "type": "item",
+                "id": "fish_fillet",
+                "amount": 7
+            },
+            {
+                "type": "item",
+                "id": "salt",
+                "amount": 4
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "seafood_platter",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 3
+            }
+        ]
+    },
+    {
+        "id": "fish_tostones",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "fish_fillet",
+                "amount": 3
+            },
+            {
+                "type": "item",
+                "id": "nuts",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "banana",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "fish_tostones",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "spicy_sweet_potato",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "bird_meat",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "cayenne_pepper",
+                "amount": 5
+            },
+            {
+                "type": "item",
+                "id": "sweet_potato",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "spicy_sweet_potato",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "bacon_eggs",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "meat",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "dodo_egg",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "bacon_eggs",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "boiled_crab",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "crab_meat",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "boiled_crab",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "meat_salad",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "meat",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "tomato",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "meat_salad",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "spicy_breaded_kebab",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "bird_meat",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "dodo_egg",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "cayenne_pepper",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "spicy_breaded_kebab",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "skewered_meat",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "meat",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "skewered_meat",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "seafood_skewer",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "crab_meat",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "fish_fillet",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "seafood_skewer",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "spicy_skewered_crab",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "crab_meat",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "cayenne_pepper",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "spicy_skewered_crab",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "hearty_egg_broth",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "sweet_potato",
+                "amount": 3
+            },
+            {
+                "type": "item",
+                "id": "dodo_egg",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "meat",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "hearty_egg_broth",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "chowder",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "fish_fillet",
+                "amount": 3
+            },
+            {
+                "type": "item",
+                "id": "sweet_potato",
+                "amount": 3
+            },
+            {
+                "type": "item",
+                "id": "salt",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "chowder",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "dodo_broth",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "bird_meat",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "dodo_broth",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "coconut_soup",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "coconut",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "sweet_potato",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "meat",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "coconut_soup",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "crab_soup_diced_tomatoes",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "crab_meat",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "tomato",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "crab_soup_diced_tomatoes",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "banana_muffin",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "banana",
+                "amount": 4
+            },
+            {
+                "type": "item",
+                "id": "cornmeal",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "nuts",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "banana_muffin",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "id": "tangy_nut_roll",
+        "stations": [
+            "cooking_fire"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "cornmeal",
+                "amount": 4
+            },
+            {
+                "type": "item",
+                "id": "nuts",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "tangy_nut_roll",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    }
 ]

@@ -28,6 +28,13 @@
     "rarity": "common"
   },
   {
+    "id": "bird_meat",
+    "name": "Bird Meat",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/bird_meat.png",
+    "rarity": "common"
+  },
+  {
     "id": "boar_tusk",
     "name": "Boar Tusk",
     "category": ["resource"],
@@ -40,6 +47,13 @@
     "category": ["resource"],
     "icon": "/img/windrose/items/resource/brandy.png",
     "rarity": "epic"
+  },
+  {
+    "id": "cane_sugar",
+    "name": "Cane Sugar",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/cane_sugar.png",
+    "rarity": "rare"
   },
   {
     "id": "charcoal",
@@ -84,10 +98,31 @@
     "rarity": "uncommon"
   },
   {
+    "id": "crab_meat",
+    "name": "Crab Meat",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/crab_meat.png",
+    "rarity": "common"
+  },
+  {
+    "id": "dodo_egg",
+    "name": "Dodo Egg",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/dodo_egg.png",
+    "rarity": "common"
+  },
+  {
     "id": "feather",
     "name": "Feather",
     "category": ["resource"],
     "icon": "/img/windrose/items/resource/feather.png",
+    "rarity": "common"
+  },
+  {
+    "id": "fish_fillet",
+    "name": "Fish Fillet",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/fish_fillet.png",
     "rarity": "common"
   },
   {
@@ -140,6 +175,13 @@
     "rarity": "epic"
   },
   {
+    "id": "meat",
+    "name": "Meat",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/meat.png",
+    "rarity": "common"
+  },
+  {
     "id": "misty_orchid",
     "name": "Misty Orchid",
     "category": ["resource"],
@@ -151,6 +193,13 @@
     "name": "Mountain Goat Horn",
     "category": ["resource"],
     "icon": "/img/windrose/items/resource/mountain_goat_horn.png",
+    "rarity": "common"
+  },
+  {
+    "id": "nuts",
+    "name": "Nuts",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/nuts.png",
     "rarity": "common"
   },
   {
@@ -166,6 +215,13 @@
     "category": ["resource"],
     "icon": "/img/windrose/items/resource/rough_hide.png",
     "rarity": "common"
+  },
+  {
+    "id": "salt",
+    "name": "Salt",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/salt.png",
+    "rarity": "rare"
   },
   {
     "id": "silver_ingot",
