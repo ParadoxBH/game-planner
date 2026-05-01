@@ -1,0 +1,23 @@
+﻿[
+  {
+    "id": "homemade_gunpowder",
+    "name": "Homemade Gunpowder",
+    "category": ["ammo"],
+    "icon": "/img/windrose/items/ammo/homemade_gunpowder.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "iron_bullet",
+    "name": "Iron Bullet",
+    "category": ["ammo"],
+    "icon": "/img/windrose/items/ammo/iron_bullet.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "pearl",
+    "name": "Pearl",
+    "category": ["ammo"],
+    "icon": "/img/windrose/items/ammo/pearl.png",
+    "rarity": "common"
+  }
+]

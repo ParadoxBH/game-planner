@@ -1,0 +1,67 @@
+﻿[
+    {
+        "id": "cornmeal",
+        "stations": [
+            "millstones"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "corn",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "cornmeal",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "homemade_gunpowder",
+        "stations": [
+            "millstones"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "sulfur",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "ash",
+                "amount": 20
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "homemade_gunpowder",
+                "amount": 10
+            }
+        ]
+    },
+    {
+        "id": "ash",
+        "stations": [
+            "millstones"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "charcoal",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "ash",
+                "amount": 6
+            }
+        ]
+    }
+]

@@ -1,0 +1,52 @@
+﻿[
+    {
+        "id": "copper_ingot",
+        "stations": [
+            "smelting_furnace"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ore",
+                "amount": 4
+            },
+            {
+                "type": "item",
+                "id": "charcoal",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "foothills_iron_ingot",
+        "stations": [
+            "smelting_furnace"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "foothills_iron_ore",
+                "amount": 3
+            },
+            {
+                "type": "item",
+                "id": "charcoal",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "foothills_iron_ingot",
+                "amount": 1
+            }
+        ]
+    }
+]

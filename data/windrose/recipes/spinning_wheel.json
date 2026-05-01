@@ -1,0 +1,22 @@
+﻿[
+    {
+        "id": "linen_fabric",
+        "stations": [
+            "spinning_wheel"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "flax_fiber",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "linen_fabric",
+                "amount": 1
+            }
+        ]
+    }
+]

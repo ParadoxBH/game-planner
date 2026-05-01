@@ -1,0 +1,27 @@
+﻿[
+    {
+        "id": "tanned_leather",
+        "stations": [
+            "tanning_rack"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 3
+            },
+            {
+                "type": "item",
+                "id": "tannin",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "tanned_leather",
+                "amount": 1
+            }
+        ]
+    }
+]

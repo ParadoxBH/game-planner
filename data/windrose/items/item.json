@@ -1,0 +1,23 @@
+﻿[
+  {
+    "id": "deadeye_grog",
+    "name": "Deadeye Grog",
+    "category": ["item"],
+    "icon": "/img/windrose/items/item/deadeye_grog.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "gunroom_grog",
+    "name": "Gunroom Grog",
+    "category": ["item"],
+    "icon": "/img/windrose/items/item/gunroom_grog.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "hard_grog",
+    "name": "Hard Grog",
+    "category": ["item"],
+    "icon": "/img/windrose/items/item/hard_grog.png",
+    "rarity": "rare"
+  }
+]

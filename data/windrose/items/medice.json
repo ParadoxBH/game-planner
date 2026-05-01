@@ -1,0 +1,30 @@
+﻿[
+  {
+    "id": "bandage",
+    "name": "Bandage",
+    "category": ["medicine"],
+    "icon": "/img/windrose/items/medicine/bandage.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "great_healing_potion",
+    "name": "Great Healing Potion",
+    "category": ["medicine"],
+    "icon": "/img/windrose/items/medicine/great_healing_potion.png",
+    "rarity": "epic"
+  },
+  {
+    "id": "healing_potion",
+    "name": "Healing Potion",
+    "category": ["medicine"],
+    "icon": "/img/windrose/items/medicine/healing_potion.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "minor_healing_potion",
+    "name": "Minor Healing Potion",
+    "category": ["medicine"],
+    "icon": "/img/windrose/items/medicine/minor_healing_potion.png",
+    "rarity": "uncommon"
+  }
+]

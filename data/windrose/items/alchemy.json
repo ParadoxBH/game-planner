@@ -1,0 +1,37 @@
+﻿[
+  {
+    "id": "elixir_concentration",
+    "name": "Elixir Concentration",
+    "category": ["alchemy"],
+    "icon": "/img/windrose/items/alchemy/elixir_concentration.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "elixir_cruelty",
+    "name": "Elixir Cruelty",
+    "category": ["alchemy"],
+    "icon": "/img/windrose/items/alchemy/elixir_cruelty.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "elixir_precision",
+    "name": "Elixir Precision",
+    "category": ["alchemy"],
+    "icon": "/img/windrose/items/alchemy/elixir_precision.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "homeward_journey",
+    "name": "Homeward Journey",
+    "category": ["alchemy"],
+    "icon": "/img/windrose/items/alchemy/homeward_journey.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "undead_essence",
+    "name": "Undead Essence",
+    "category": ["alchemy"],
+    "icon": "/img/windrose/items/alchemy/undead_essence.png",
+    "rarity": "common"
+  }
+]

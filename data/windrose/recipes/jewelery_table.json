@@ -1,0 +1,88 @@
+﻿[
+    {
+        "id": "tiny_necklace_strength",
+        "stations": [
+            "jewelery_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "silver_ingot",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "tiny_necklace_strength",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "minor_capricorn_ring",
+        "stations": [
+            "jewelery_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "silver_ingot",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "minor_capricorn_ring",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "knight_ring",
+        "stations": [
+            "jewelery_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "silver_ingot",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "gold_ingot",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "knight_ring",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 2
+            }
+        ]
+    }
+]
