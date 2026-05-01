@@ -1,0 +1,58 @@
+﻿[
+  {
+    "id": "copper_axe",
+    "name": "Copper Axe",
+    "category": ["tool"],
+    "icon": "/img/windrose/items/tool/copper_axe.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "copper_pickaxe",
+    "name": "Copper Pickaxe",
+    "category": ["tool"],
+    "icon": "/img/windrose/items/tool/copper_pickaxe.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "iron_axe",
+    "name": "Iron Axe",
+    "category": ["tool"],
+    "icon": "/img/windrose/items/tool/iron_axe.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "iron_pickaxe",
+    "name": "Iron Pickaxe",
+    "category": ["tool"],
+    "icon": "/img/windrose/items/tool/iron_pickaxe.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "shovel",
+    "name": "Shovel",
+    "category": ["tool"],
+    "icon": "/img/windrose/items/tool/shovel.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "simple_fishing_rod",
+    "name": "Simple Fishing Rod",
+    "category": ["tool"],
+    "icon": "/img/windrose/items/tool/simple_fishing_rod.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "stone_axe",
+    "name": "Stone Axe",
+    "category": ["tool"],
+    "icon": "/img/windrose/items/tool/stone_axe.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "stone_pickaxe",
+    "name": "Stone Pickaxe",
+    "category": ["tool"],
+    "icon": "/img/windrose/items/tool/stone_pickaxe.png",
+    "rarity": "uncommon"
+  }
+]

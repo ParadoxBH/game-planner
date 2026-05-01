@@ -1,5 +1,12 @@
 ﻿[
   {
+    "id": "copper_bullet",
+    "name": "Copper Bullet",
+    "category": ["ammo"],
+    "icon": "/img/windrose/items/ammo/copper_bullet.png",
+    "rarity": "uncommon"
+  },
+  {
     "id": "homemade_gunpowder",
     "name": "Homemade Gunpowder",
     "category": ["ammo"],
@@ -19,5 +26,12 @@
     "category": ["ammo"],
     "icon": "/img/windrose/items/ammo/pearl.png",
     "rarity": "common"
+  },
+  {
+    "id": "stone_bullet",
+    "name": "Stone Bullet",
+    "category": ["ammo"],
+    "icon": "/img/windrose/items/ammo/stone_bullet.png",
+    "rarity": "uncommon"
   }
 ]

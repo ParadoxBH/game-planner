@@ -14,6 +14,13 @@
     "rarity": "common"
   },
   {
+    "id": "anvil",
+    "name": "Anvil",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/anvil.png",
+    "rarity": "common"
+  },
+  {
     "id": "ash",
     "name": "Ash",
     "category": ["resource"],
@@ -63,11 +70,32 @@
     "rarity": "uncommon"
   },
   {
+    "id": "clay_bottle",
+    "name": "Clay Bottle",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/clay_bottle.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "clay_pot",
+    "name": "Clay Pot",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/clay_pot.png",
+    "rarity": "common"
+  },
+  {
     "id": "clay",
     "name": "Clay",
     "category": ["resource"],
     "icon": "/img/windrose/items/resource/clay.png",
     "rarity": "common"
+  },
+  {
+    "id": "coarse_fabric",
+    "name": "Coarse Fabric",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/coarse_fabric.png",
+    "rarity": "uncommon"
   },
   {
     "id": "coffee_beans",
@@ -77,18 +105,18 @@
     "rarity": "rare"
   },
   {
-    "id": "clay_bottle",
-    "name": "Clay Bottle",
-    "category": ["resource"],
-    "icon": "/img/windrose/items/resource/clay_bottle.png",
-    "rarity": "uncommon"
-  },
-  {
     "id": "copper_ore",
     "name": "Copper Ore",
     "category": ["resource"],
     "icon": "/img/windrose/items/resource/copper_ore.png",
     "rarity": "common"
+  },
+  {
+    "id": "copper_pot",
+    "name": "Copper Pot",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/copper_pot.png",
+    "rarity": "uncommon"
   },
   {
     "id": "cornmeal",
@@ -161,6 +189,13 @@
     "rarity": "rare"
   },
   {
+    "id": "ironware",
+    "name": "Ironware",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/ironware.png",
+    "rarity": "uncommon"
+  },
+  {
     "id": "linen_fabric",
     "name": "Linen Fabric",
     "category": ["resource"],
@@ -182,6 +217,13 @@
     "rarity": "common"
   },
   {
+    "id": "millstone_parts",
+    "name": "Millstone Parts",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/millstone_parts.png",
+    "rarity": "uncommon"
+  },
+  {
     "id": "misty_orchid",
     "name": "Misty Orchid",
     "category": ["resource"],
@@ -196,6 +238,13 @@
     "rarity": "common"
   },
   {
+    "id": "nails",
+    "name": "Nails",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/nails.png",
+    "rarity": "uncommon"
+  },
+  {
     "id": "nuts",
     "name": "Nuts",
     "category": ["resource"],
@@ -208,6 +257,13 @@
     "category": ["resource"],
     "icon": "/img/windrose/items/resource/plant_fiber.png",
     "rarity": "common"
+  },
+  {
+    "id": "rope",
+    "name": "Rope",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/rope.png",
+    "rarity": "uncommon"
   },
   {
     "id": "rough_hide",
@@ -306,5 +362,12 @@
     "category": ["resource"],
     "icon": "/img/windrose/items/resource/wood.png",
     "rarity": "common"
+  },
+  {
+    "id": "wooden_plank",
+    "name": "Wooden Plank",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/wooden_plank.png",
+    "rarity": "uncommon"
   }
 ]

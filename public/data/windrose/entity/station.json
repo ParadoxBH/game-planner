@@ -16,7 +16,7 @@
   {
     "id": "charcoal_kiln",
     "name": "Charcoal Kiln",
-    "category": ["station", "charcoal_kiln"],
+    "category": ["station", "charcoal_kiln", "refining"],
     "drops": [],
     "icon": "/img/windrose/building/charcoal_kiln.png"
   },
@@ -37,7 +37,7 @@
   {
     "id": "millstones",
     "name": "Millstones",
-    "category": ["station", "millstones"],
+    "category": ["station", "millstones", "refining"],
     "drops": [],
     "icon": "/img/windrose/building/millstones.png"
   },
@@ -51,21 +51,21 @@
   {
     "id": "smelting_furnace",
     "name": "Smelting Furnace",
-    "category": ["station", "smelting_furnace"],
+    "category": ["station", "smelting_furnace", "refining"],
     "drops": [],
     "icon": "/img/windrose/building/smelting_furnace.png"
   },
   {
     "id": "spinning_wheel",
     "name": "Spinning Wheel",
-    "category": ["station", "spinning_wheel"],
+    "category": ["station", "spinning_wheel", "refining"],
     "drops": [],
     "icon": "/img/windrose/building/spinning_wheel.png"
   },
   {
     "id": "tanning_rack",
     "name": "Tanning Rack",
-    "category": ["station", "tanning_rack"],
+    "category": ["station", "tanning_rack", "refining"],
     "drops": [],
     "icon": "/img/windrose/building/tanning_rack.png"
   },
