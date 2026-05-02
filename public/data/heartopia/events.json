@@ -22,5 +22,12 @@
       "start": "21/03/2026",
       "end": "02/05/2026"
     }
+  },
+  {
+    "id": "rainbow",
+    "name": "Arco-iris",
+    "type": "clima",
+    "icon": "/img/heartopia/events/rainbow/icon.png",
+    "banner": "/img/heartopia/events/rainbow/banner.png"
   }
 ]
