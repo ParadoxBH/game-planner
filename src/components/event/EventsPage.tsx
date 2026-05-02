@@ -14,6 +14,7 @@ import { StyledContainer } from "../common/StyledContainer";
 import { EventCard } from "./EventCard";
 import type { GameEvent } from "../../types/gameModels";
 import { eventRepository } from "../../repositories/EventRepository";
+import { usePlatform } from "../../hooks/usePlatform";
 
 export function EventsPage() {
   const { gameId } = useParams<{ gameId: string }>();
@@ -21,6 +22,7 @@ export function EventsPage() {
   const [events, setEvents] = useState<GameEvent[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
   const [tabValue, setTabValue] = useState(0);
+  const { isMobile } = usePlatform();
 
   useEffect(() => {
     if (dbLoading) return;
@@ -65,7 +67,7 @@ export function EventsPage() {
   return (
     <StyledContainer
       title={`Eventos de ${gameId}`}
-      label="Central de eventos climáticos, temporadas e atividades especiais."
+      label={isMobile ? undefined : "Central de eventos climáticos, temporadas e atividades especiais."}
       actionsStart={
         <Tabs 
           value={tabValue} 
@@ -94,7 +96,7 @@ export function EventsPage() {
         </Tabs>
       }
     >
-      <Grid container spacing={3}>
+      <Grid container spacing={isMobile ? 1 : 2}>
         {filteredEvents.map((event) => (
           <Grid size={{ xs: 12, md: 6 }} key={event.id}>
             <EventCard event={event} />

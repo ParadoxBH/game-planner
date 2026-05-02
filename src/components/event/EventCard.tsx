@@ -20,6 +20,7 @@ import {
 } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import type { GameEvent } from "../../types/gameModels";
+import { usePlatform } from "../../hooks/usePlatform";
 
 const typeMap = {
   clima: { label: "Clima", icon: <Cloud />, color: "#4fc3f7" },
@@ -35,7 +36,8 @@ interface EventCardProps {
 export function EventCard({ event }: EventCardProps) {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
-  const typeInfo = typeMap[event.type];
+  const typeInfo = (typeMap[event.type as keyof typeof typeMap] || typeMap.event);
+  const { isMobile } = usePlatform();
   
   return (
     <Card 
@@ -43,7 +45,7 @@ export function EventCard({ event }: EventCardProps) {
       sx={{ 
       height: '100%',
       cursor: 'pointer',
-      borderRadius: 4,
+      borderRadius: isMobile ? 1 : 2,
       backgroundColor: 'rgba(255, 255, 255, 0.03)',
       border: '1px solid rgba(255, 255, 255, 0.05)',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -59,7 +61,7 @@ export function EventCard({ event }: EventCardProps) {
         }
       }
     }}>
-      {event.banner && (
+      {!isMobile && event.banner && (
         <Box sx={{ height: 160, overflow: 'hidden', position: 'relative' }}>
           <img 
             src={getPublicUrl(event.banner)} 
@@ -75,60 +77,66 @@ export function EventCard({ event }: EventCardProps) {
         </Box>
       )}
 
-      <CardContent sx={{ p: 3 }}>
-        <Stack direction="row" spacing={2} alignItems="flex-start" sx={{ mb: 2 }}>
-          <Avatar 
-            src={getPublicUrl(event.icon)} 
-            sx={{ 
-              width: 64, 
-              height: 64, 
-              border: '2px solid rgba(255,255,255,0.1)',
-              bgcolor: 'rgba(255,255,255,0.05)',
-              mt: event.banner ? -5 : 0,
-              zIndex: 2,
-              boxShadow: '0 4px 20px rgba(0,0,0,0.3)'
-            }}
-          />
-          <Box sx={{ pt: event.banner ? 1 : 0 }}>
-            <Typography variant="h5" sx={{ fontWeight: 800, color: 'white', mb: 0.5 }}>
-              {event.name}
-            </Typography>
-            <Chip 
-              size="small" 
-              icon={typeInfo.icon}
-              label={typeInfo.label}
+      <Stack spacing={isMobile ? 1 : 2} sx={{ p: isMobile ? 1 : 3 }}>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Avatar 
+              src={getPublicUrl(event.icon)} 
               sx={{ 
-                backgroundColor: `${typeInfo.color}20`, 
-                color: typeInfo.color,
-                border: `1px solid ${typeInfo.color}40`,
-                fontWeight: 600,
-                '& .MuiChip-icon': { color: 'inherit' }
+                width: 64, 
+                height: 64, 
+                border: '2px solid rgba(255,255,255,0.1)',
+                bgcolor: 'rgba(255,255,255,0.05)',
+                mt: event.banner ? -5 : 0,
+                zIndex: 2,
+                boxShadow: '0 4px 20px rgba(0,0,0,0.3)'
               }}
             />
-          </Box>
-        </Stack>
-
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 3, minHeight: 40, lineHeight: 1.6 }}>
-          {event.description}
-        </Typography>
-
-        <Divider sx={{ mb: 2, borderColor: 'rgba(255,255,255,0.05)' }} />
-
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Stack direction="row" spacing={1} alignItems="center">
-            <AccessTime sx={{ color: 'secondary.main', fontSize: '1rem' }} />
-            <Typography variant="caption" sx={{ color: 'white', fontWeight: 700 }}>
-              {event.period.start} {event.period.end ? `— ${event.period.end}` : ''}
-            </Typography>
-          </Stack>
-          
-          <Tooltip title="Mais informações em breve">
-            <Box sx={{ color: 'rgba(255,255,255,0.2)' }}>
-              <Info sx={{ fontSize: '1.2rem' }} />
+            <Box sx={{ pt: event.banner ? 1 : 0 }} flex={1}>
+              <Typography variant="h5" sx={{ fontWeight: 800, color: 'white' }}>
+                {event.name}
+              </Typography>
+              <Chip 
+                size="small" 
+                icon={typeInfo.icon}
+                label={typeInfo.label}
+                sx={{ 
+                  backgroundColor: `${typeInfo.color}20`, 
+                  color: typeInfo.color,
+                  border: `1px solid ${typeInfo.color}40`,
+                  fontWeight: 600,
+                  '& .MuiChip-icon': { color: 'inherit' }
+                }}
+              />
             </Box>
-          </Tooltip>
+          </Stack>
+
+          <Typography variant="subtitle2" sx={{ minHeight: 40, lineHeight: 1.6 }}>
+            {event.description || "Sem descrição disponível."}
+          </Typography>
+
+          <Divider sx={{ borderColor: 'rgba(255,255,255,0.05)' }} />
+
+          <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack direction="row" spacing={1} alignItems="center">
+              <AccessTime sx={{ color: 'secondary.main', fontSize: '1rem' }} />
+              <Typography variant="caption" sx={{ color: 'white', fontWeight: 700 }}>
+                {event.period?.start ? (
+                  <>
+                    {event.period.start} {event.period.end ? `— ${event.period.end}` : ''}
+                  </>
+                ) : (
+                  "Evento Ocasional"
+                )}
+              </Typography>
+            </Stack>
+            
+            <Tooltip title="Mais informações em breve">
+              <Box sx={{ color: 'rgba(255,255,255,0.2)' }}>
+                <Info sx={{ fontSize: '1.2rem' }} />
+              </Box>
+            </Tooltip>
+          </Stack>
         </Stack>
-      </CardContent>
     </Card>
   );
 }

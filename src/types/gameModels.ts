@@ -138,11 +138,11 @@ export interface Shop {
 export interface GameEvent {
   id: string;
   name: string;
-  type: "clima" | "season" | "mapa" | "event";
-  description: string;
+  type: "clima" | "season" | "mapa" | "event" | string;
+  description?: string;
   icon: string;
   banner?: string;
-  period: {
+  period?: {
     start?: string;
     end?: string;
   };

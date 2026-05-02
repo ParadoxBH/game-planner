@@ -585,12 +585,15 @@ export class ApiService {
     const conjuntosRes = await this.getConjuntos(filterBase({}), [eventId], true);
     const conjuntos = conjuntosRes.data;
 
+    const referencePoints = await referencePointRepository.getByEventId(eventId);
+
     return {
       event,
       items,
       recipes,
       entities,
       conjuntos,
+      referencePoints,
     };
   }
 

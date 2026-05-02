@@ -37,11 +37,11 @@ const SetBounds = ({ markers, bounds }: { markers: any[], bounds: [[number, numb
         if (markers.length === 1) {
           map.setView(latlngs[0], Math.max(map.getZoom(), 2), { animate: false });
         } else {
-          map.fitBounds(markerBounds.pad(0.5), { animate: false });
+          map.fitBounds(markerBounds, { padding: [30, 30], animate: false });
         }
       }
     } else {
-      map.fitBounds(bounds as any, { animate: false });
+      map.fitBounds(bounds as any, { padding: [30, 30], animate: false });
     }
   }, [markers, bounds, map]);
 

@@ -1,4 +1,4 @@
-﻿import { Grid, Paper, Stack, Typography, type SxProps } from "@mui/material";
+import { Grid, Paper, Stack, Typography, type SxProps } from "@mui/material";
 import type { ReactNode } from "react";
 import { DataChip } from "./DataChip";
 import { TablePaginator } from "./TablePaginator";
@@ -8,7 +8,7 @@ import { usePlatform } from "../../hooks/usePlatform";
 interface DetainItemProps {
   startIcon?: ReactNode;
   children?: ReactNode;
-  size?: number;
+  size?: any;
   label: string;
   count?: number;
   actions?: ReactNode;

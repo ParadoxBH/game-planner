@@ -18,6 +18,10 @@ export class ReferencePointRepository extends BaseRepository<ReferencePoints, st
   async getByMapId(mapId: string): Promise<ReferencePoints[]> {
     return this.table.where('mapId').equals(mapId).toArray();
   }
+  
+  async getByEventId(eventId: string): Promise<ReferencePoints[]> {
+    return this.table.where('event').equals(eventId).toArray();
+  }
 }
 
 export const referencePointRepository = new ReferencePointRepository();

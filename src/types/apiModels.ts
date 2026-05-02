@@ -111,6 +111,7 @@ export interface EventDetails {
   recipes: NormalizedRecipe[];
   entities: Entity[];
   conjuntos: Conjunto[];
+  referencePoints: ReferencePoints[];
 }
 
 export interface PaginatedResponse<T> {

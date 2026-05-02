@@ -33,13 +33,13 @@ export class GameDatabase extends Dexie {
     // Schema definition
     // The first field is the primary key. 
     // Other fields are indexed for faster searching.
-    this.version(3).stores({
+    this.version(4).stores({
       items: 'id, name, *category, *event',
       recipes: 'id, name, itemId, *stations, *event',
       entities: 'id, name, *category, parentId, *event',
       shops: 'id, name, npcId',
       events: 'id, name, type',
-      referencePoints: 'id, entityId, locationId, parentId, mapId, type',
+      referencePoints: 'id, entityId, locationId, parentId, mapId, type, *event',
       codes: 'code',
       conjuntos: 'id, name, category, *event',
       gameInfo: 'id, name',

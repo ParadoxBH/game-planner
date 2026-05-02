@@ -242,7 +242,7 @@ export function GlobalEventFilter() {
                           </>
                         )}
                         <Typography variant="caption" color="primary.main" sx={{ display: 'block', mt: 0.5 }}>
-                          Período: {event.period?.start || "?"} até {event.period?.end || "?"}
+                          {event.period ? `Período: ${event.period.start || "?"} até ${event.period.end || "?"}` : "Evento Ocasional"}
                         </Typography>
                       </Box>
                     }
@@ -278,7 +278,7 @@ export function GlobalEventFilter() {
                           variant: 'body2', 
                           fontWeight: activeEventIds.includes(event.id) ? 700 : 400 
                         }} 
-                        secondary={timeRemaining || (event.period?.start ? `${event.period.start} - ${event.period.end || '?'}` : undefined)}
+                        secondary={timeRemaining || (event.period?.start ? `${event.period.start} - ${event.period.end || '?'}` : "Ocasional")}
                         secondaryTypographyProps={{ 
                           variant: 'caption', 
                           sx: { 
