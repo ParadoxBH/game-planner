@@ -1,0 +1,362 @@
+﻿[
+  {
+    "id": "point_1777702115410",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(195.00200079854986 -209.70894077263904)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702139945",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(325.1243108815891 -266.050573258822)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702184860",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(213.53574229405692 -171.8905847202698)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702200667",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(235.54456031997154 -101.65649490872676)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702213385",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(236.70291916344087 -55.73420541656406)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702233746",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(371.4586646203566 -82.36141529017105)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702254769",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(356.01388004076745 38.425783121988154)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702271550",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(247.12814875466344 14.499884394978979)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702282136",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(244.03919183874555 55.79135477868829)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702293686",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(245.96978991119428 108.6598729335311)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702304162",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(244.42531145323545 156.89757197992054)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702320181",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(354.0832819683189 136.8306891766225)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702358305",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(178.3988573754914 207.83658217290778)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702373487",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(130.90614479325453 214.39690924321675)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702388074",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(176.46825930304283 319.7480439605312)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702407978",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(58.70177688367491 333.2545996935202)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702425601",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(51.75162382285974 226.74576019909242)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702437428",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-3.0773614346818894 239.48051274733925)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702450298",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-64.08426052405926 258.0037891811527)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702464904",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-108.48801619037823 269.58083695228623)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702480213",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-93.81547083976848 381.8782003322808)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702512166",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-246.33271856321204 374.16016848485845)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702541207",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-214.28479056056437 261.86280510486387)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702561323",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-181.850742943427 268.4231321751729)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702583265",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-299.61722536279484 146.86413057827153)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702600573",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-290.73647422953104 84.34807261415085)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702625256",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-398.0777270576761 98.24052993951092)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702669342",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-403.0972820460426 -21.388963695534787)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702690633",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-278.3806465658597 23.375621019514583)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702702219",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-280.6973642527981 -28.721093950586077)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702720027",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-278.3806465658597 -61.90863089450185)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702767383",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-376.84114826074097 -115.548952234087)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702782492",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-264.8664600587191 -123.65288567388045)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702826944",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-328.96231606401443 -247.91319841737962)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702842082",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-238.61032627341746 -169.57517516604315)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777702856153",
+    "type": "poi",
+    "entityId": "pedra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-209.65135518668765 -204.3063184794434)"
+    },
+    "mapId": "main"
+  }
+]

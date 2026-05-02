@@ -1,0 +1,212 @@
+﻿[
+  {
+    "id": "point_1777701374834",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-346.5705003008665 -220.54308181128675)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701388712",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-301.39450540556805 -185.42603690551533)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701415934",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-385.18246174983955 -121.75227416428125)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701431796",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-321.85884497352373 -56.920806645933844)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701447317",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-406.8051601612645 4.4375465410735035)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701499254",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-328.8089980343389 53.44704877220518)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701518961",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-403.3300836308569 154.9391675658085)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701552064",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-215.28983137435816 386.4801229884777)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701564389",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-158.144128429878 348.27586534373734)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701582485",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-50.802875601733 365.6414370004375)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701596890",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-32.65525372071566 309.29980451425473)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701614184",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(83.95286985518294 333.22570324126383)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701626712",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(93.21974060293655 294.63554400415234)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701644111",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(211.372342636794 301.58177266683236)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701685063",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(353.0479145112925 172.29260984748757)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701699869",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(311.7331157608914 93.56868500377999)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701881520",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(361.1564264155768 49.57590347347286)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701895415",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(332.197455328847 -24.131300669410322)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701922213",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(360.7703068010871 -111.7309621376534)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701937970",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(286.24922120456915 -170.00210258569186)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701956700",
+    "type": "spawn",
+    "entityId": "minerio",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(293.19937426538434 -273.0378277487795)"
+    },
+    "mapId": "main"
+  }
+]
