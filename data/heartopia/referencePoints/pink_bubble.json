@@ -42,6 +42,7 @@
             "type": "Point",
             "coordinates": "POINT(191.85219238281252 -267.89823242187504)"
         },
+        "image":"/img/heartopia/referencePoints/pink_bubble/pink_bubble_10.jpg",
         "mapId": "main",
         "mode": "weekly"
     },
@@ -51,8 +52,33 @@
         "entityId": "pink_bubble",
         "geom": {
             "type": "Point",
-            "coordinates": "POINT(436.20317382812505 -229.296181640625)"
+            "coordinates": "POINT(413.20317382812505 -229.296181640625)"
         },
+        "image":"/img/heartopia/referencePoints/pink_bubble/pink_bubble_12.jpg",
+        "mapId": "main",
+        "mode": "weekly"
+    },
+    {
+        "id": "point_1777748097348",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+        "type": "Point",
+        "coordinates": "POINT(28.246889610829204 460.344771175754)"
+        },
+        "image":"/img/heartopia/referencePoints/pink_bubble/pink_bubble_13.jpg",
+        "mapId": "main",
+        "mode": "weekly"
+    },
+    {
+        "id": "point_1777750592408",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+        "type": "Point",
+        "coordinates": "POINT(-434.90646206324215 63.1526193168787)"
+        },
+        "image":"/img/heartopia/referencePoints/pink_bubble/pink_bubble_14.jpg",
         "mapId": "main",
         "mode": "weekly"
     },
@@ -128,8 +154,9 @@
         "entityId": "pink_bubble",
         "geom": {
             "type": "Point",
-            "coordinates": "POINT(14.2827587890625 100.75135253906251)"
+            "coordinates": "POINT(0 95)"
         },
+        "image":"/img/heartopia/referencePoints/pink_bubble/pink_bubble_9.jpg",
         "mapId": "main",
         "mode": "weekly"
     },
@@ -207,8 +234,9 @@
         "entityId": "pink_bubble",
         "geom": {
             "type": "Point",
-            "coordinates": "POINT(553.5534082031251 58.67511718750001)"
+            "coordinates": "POINT(536 70)"
         },
+        "image":"/img/heartopia/referencePoints/pink_bubble/pink_bubble_11.jpg",
         "mapId": "main",
         "mode": "weekly"
     },
