@@ -58,6 +58,7 @@ import { getPublicUrl } from "../../utils/pathUtils";
 import { PointMarkerPanel } from "./PointMarkerPanel";
 import { MapFilterDrawer } from "./MapFilterDrawer";
 import markerTemplate from "./marker-icon.html?raw";
+import { useEventFilter } from "../../context/EventFilterContext";
 
 export interface NavigationItem {
   type: "entity" | "item";
@@ -201,6 +202,7 @@ export const MapView = () => {
   const theme = useTheme() as any;
   const { gameId, mapId: urlMapId, view: urlView } = useParams();
   const navigate = useNavigate();
+  const { activeEventIds } = useEventFilter();
   const sizeMarker = 32;
 
   const [cursorCoords, setCursorCoords] = useState<[number, number]>([0, 0]);
@@ -707,6 +709,14 @@ export const MapView = () => {
                       : entity.category
                     : "desconhecido";
                   if (!visibleCategories.includes(category)) return false;
+
+                  // 3. Event Filter
+                  const pointEvent = point.event;
+                  if (pointEvent) {
+                    const eventArray = Array.isArray(pointEvent) ? pointEvent : [pointEvent];
+                    const isAnyEventActive = eventArray.some(e => activeEventIds.includes(e));
+                    if (!isAnyEventActive) return false;
+                  }
 
                   return true;
                 })

@@ -52,6 +52,7 @@ import { getPublicUrl } from "../../utils/pathUtils";
 import { DetainContainer } from "../common/DetainContainer";
 import { DetainItem } from "../common/DetainItem";
 import { DetainConjunto } from "../item/DetainConjunto";
+import { useEventFilter } from "../../context/EventFilterContext";
 
 export function EntityDetailsPage() {
   const { gameId, entityId = "" } = useParams<{
@@ -66,6 +67,7 @@ export function EntityDetailsPage() {
     getRecipesList,
     getGameInfo,
   } = useApi(gameId);
+  const { activeEventIds } = useEventFilter();
   const [entityDetails, setEntityDetails] = useState<EntityDetails | null>(null);
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [producedRecipes, setProducedRecipes] = useState<NormalizedRecipe[]>(
@@ -247,12 +249,19 @@ export function EntityDetailsPage() {
       return new Map<string, ReferencePoints[]>();
     const map = new Map<string, ReferencePoints[]>();
     entityDetails.referencePoints.forEach((s: any) => {
+      // Event Filter
+      if (s.event) {
+        const eventArray = Array.isArray(s.event) ? s.event : [s.event];
+        const isAnyEventActive = eventArray.some((e: string) => activeEventIds.includes(e));
+        if (!isAnyEventActive) return;
+      }
+
       const mapId = s.mapId || "Mundo Aberto";
       if (!map.has(mapId)) map.set(mapId, []);
       map.get(mapId)!.push(s);
     });
     return map;
-  }, [entityDetails?.referencePoints]);
+  }, [entityDetails?.referencePoints, activeEventIds]);
 
   const getMapMetadata = (mapId: string): MapMetadata | undefined => {
     return maps.find((m) => m.id === mapId);

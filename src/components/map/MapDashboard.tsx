@@ -36,6 +36,7 @@ import { categoryRepository } from "../../repositories/CategoryRepository";
 import { getPublicUrl } from "../../utils/pathUtils";
 import { usePlatform } from "../../hooks/usePlatform";
 import { DetainItem } from "../common/DetainItem";
+import { useEventFilter } from "../../context/EventFilterContext";
 
 interface MapDashboardProps {
   gameId: string;
@@ -55,6 +56,7 @@ export const MapDashboard = ({
   const navigate = useNavigate();
   const theme = useTheme();
   const { loading: dbLoading } = useApi(gameId);
+  const { activeEventIds } = useEventFilter();
 
   const [entities, setEntities] = useState<Entity[]>([]);
   const [referencePoints, setReferencePoints] = useState<ReferencePoints[]>([]);
@@ -112,6 +114,16 @@ export const MapDashboard = ({
     return lookup;
   }, [items]);
 
+  const filteredReferencePoints = useMemo(() => {
+    return referencePoints.filter(s => {
+      if (s.event) {
+        const eventArray = Array.isArray(s.event) ? s.event : [s.event];
+        return eventArray.some(e => activeEventIds.includes(e));
+      }
+      return true;
+    });
+  }, [referencePoints, activeEventIds]);
+
   const currentMap = useMemo(
     () => maps.find((m) => m.id === selectedMapId),
     [maps, selectedMapId],
@@ -119,8 +131,8 @@ export const MapDashboard = ({
 
   // Filtro de Pontos deste mapa
   const mapPoints = useMemo(() => {
-    return referencePoints.filter((s) => !s.mapId || s.mapId === selectedMapId);
-  }, [referencePoints, selectedMapId]);
+    return filteredReferencePoints.filter((s) => !s.mapId || s.mapId === selectedMapId);
+  }, [filteredReferencePoints, selectedMapId]);
 
   // Contagem de Ocorrências por Entidade
   const entityCounts = useMemo(() => {
@@ -133,12 +145,12 @@ export const MapDashboard = ({
 
   // Regiões (Biomas, POIs, Zonas)
   const regions = useMemo(() => {
-    return referencePoints.filter((p) => {
+    return filteredReferencePoints.filter((p) => {
       return ["location", "biome", "poi", "zone", "region"].includes(
         p.type?.toLowerCase() || "",
       );
     });
-  }, [referencePoints]);
+  }, [filteredReferencePoints]);
 
   // Entidades presentes no mapa (através de spawns)
   const mapEntities = useMemo(() => {

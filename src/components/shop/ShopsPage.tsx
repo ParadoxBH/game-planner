@@ -37,6 +37,7 @@ import { mapRepository } from "../../repositories/MapRepository";
 import { usePlatform } from "../../hooks/usePlatform";
 import { ShopsDetailsPage } from "./ShopsDetailsPage";
 import { PickSelector } from "../common/PickSelector";
+import { useEventFilter } from "../../context/EventFilterContext";
 
 export function ShopsPage() {
   const { gameId, category: urlShopId } = useParams<{
@@ -46,6 +47,7 @@ export function ShopsPage() {
   const navigate = useNavigate();
   const { isMobile } = usePlatform();
   const { loading: dbLoading, getShopDetails } = useApi(gameId);
+  const { activeEventIds } = useEventFilter();
   const [shops, setShops] = useState<Shop[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [entities, setEntities] = useState<Entity[]>([]);
@@ -123,6 +125,16 @@ export function ShopsPage() {
     items.forEach((item) => map.set(item.id, item));
     return map;
   }, [items]);
+
+  const filteredReferencePoints = useMemo(() => {
+    return referencePoints.filter(s => {
+      if (s.event) {
+        const eventArray = Array.isArray(s.event) ? s.event : [s.event];
+        return eventArray.some(e => activeEventIds.includes(e));
+      }
+      return true;
+    });
+  }, [referencePoints, activeEventIds]);
 
   const entitiesMap = useMemo(() => {
     const map = new Map<string, any>();
@@ -356,7 +368,7 @@ export function ShopsPage() {
             itemsMap={itemsMap}
             entitiesMap={entitiesMap}
             eventsMap={eventsMap}
-            referencePoints={referencePoints}
+            referencePoints={filteredReferencePoints}
             maps={maps}
             itemsViewMode={itemsViewMode}
           />

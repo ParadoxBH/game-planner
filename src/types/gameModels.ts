@@ -205,6 +205,7 @@ export interface ReferencePoints {
   respawnDelay?: number;
   data?: Record<string, any>;
   image?: string;
+  event?: string | string[];
 }
 
 export interface RedemptionCode {
