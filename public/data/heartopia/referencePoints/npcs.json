@@ -270,5 +270,75 @@
     },
     "mapId": "main",
     "event": "luz_sombra"
+  },
+  {
+    "id": "point_1777750223754",
+    "type": "spawn",
+    "entityId": "zhen_li",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(72.64915867698964 -201.9897197708029)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777750229067",
+    "type": "spawn",
+    "entityId": "mochileiro",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(341.7745299763318 -26.40449524194539)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777750805216",
+    "type": "spawn",
+    "entityId": "garota_empolgada",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-476.6818095427331 -85.43566624602892)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777751384432",
+    "type": "spawn",
+    "entityId": "naughty",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-102.14974775478369 545.119330522918)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777752517315",
+    "type": "spawn",
+    "entityId": "alu",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-194.84372743501288 530.5748178622899)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777752824974",
+    "type": "spawn",
+    "entityId": "gourmet_viajante",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-19.985356996901096 311.74197792899736)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777753394680",
+    "type": "spawn",
+    "entityId": "fa_aves",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(493.88722424332076 16.407036253854233)"
+    },
+    "mapId": "main"
   }
 ]

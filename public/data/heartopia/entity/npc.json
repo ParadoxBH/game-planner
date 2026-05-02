@@ -194,5 +194,54 @@
     "category": "npc",
     "icon": "/img/heartopia/npc/head/doris_meteor.png",
     "image": "/img/heartopia/npc/doris_meteor.png"
+  },
+  {
+    "id": "mochileiro",
+    "name": "Mochileiro",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/mochileiro.png",
+    "image": "/img/heartopia/npc/mochileiro.png"
+  },
+  {
+    "id": "zhen_li",
+    "name": "Zhen Li",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/zhen_li.png",
+    "image": "/img/heartopia/npc/zhen_li.png"
+  },
+  {
+    "id": "garota_empolgada",
+    "name": "Garota Empolgada",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/garota_empolgada.png",
+    "image": "/img/heartopia/npc/garota_empolgada.png"
+  },
+  {
+    "id": "naughty",
+    "name": "Naughty",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/naughty.png",
+    "image": "/img/heartopia/npc/naughty.png"
+  },
+  {
+    "id": "alu",
+    "name": "Alu",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/alu.png",
+    "image": "/img/heartopia/npc/alu.png"
+  },
+  {
+    "id": "gourmet_viajante",
+    "name": "Gourmet Viajante",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/gourmet_viajante.png",
+    "image": "/img/heartopia/npc/gourmet_viajante.png"
+  },
+  {
+    "id": "fa_aves",
+    "name": "Fã de Aves",
+    "category": "npc",
+    "icon": "/img/heartopia/npc/head/fa_aves.png",
+    "image": "/img/heartopia/npc/fa_aves.png"
   }
 ]
