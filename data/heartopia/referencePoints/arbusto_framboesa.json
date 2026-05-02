@@ -1,0 +1,182 @@
+﻿[
+  {
+    "id": "point_1777700780437",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-374.3780442065628 176.19581907108468)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777700796285",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-403.33701529329255 143.39418371953988)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777700808934",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-410.67328796859744 85.12304327150144)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777700824192",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-376.3086422790114 62.35484932160568)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777700857741",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-447.3546513451218 77.019109831708)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777700915859",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-438.8600198263478 7.170921612536124)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777700927289",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-407.97045066716936 11.029937536247266)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777700940812",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-405.2676133657412 -30.647434439833123)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777700959181",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-467.4328712985879 -64.22087297612023)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777700987230",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-345.41907311983294 -52.25792361261565)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701001901",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-388.2783503281931 -117.47529272333405)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701014969",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-374.3780442065628 -164.16938540023907)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701034789",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-304.8765135984113 -192.34020164333057)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701048198",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-334.6077239141205 -237.4906879507511)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701060745",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-370.5168480616655 -252.15494846085332)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701085788",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-458.9382397798137 -185.39397298065043)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701113777",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-280.5509778855583 -288.4296981437383)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1777701124403",
+    "type": "spawn",
+    "entityId": "arbusto_framboesa",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-238.07782029168797 -268.74871693281136)"
+    },
+    "mapId": "main"
+  }
+]

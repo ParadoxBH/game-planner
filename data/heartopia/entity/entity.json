@@ -20,7 +20,8 @@
     "category": "resource",
     "drops": [],
     "icon": "/img/heartopia/recursos/framboesa.png",
-    "image": "/img/heartopia/coletaveis/arbusto_framboesa.png"
+    "image": "/img/heartopia/coletaveis/arbusto_framboesa.png",
+    "respawnDelay": 2
   },
   {
     "id": "arbusto_lavanda",
