@@ -29,5 +29,26 @@
     "type": "clima",
     "icon": "/img/heartopia/events/rainbow/icon.png",
     "banner": "/img/heartopia/events/rainbow/banner.png"
+  },
+  {
+    "id": "rainy",
+    "name": "Chuva",
+    "type": "clima",
+    "icon": "/img/heartopia/events/rainy/icon.png",
+    "banner": "/img/heartopia/events/rainy/banner.png"
+  },
+  {
+    "id": "meteor_shower",
+    "name": "Chuva de Meteoro",
+    "type": "clima",
+    "icon": "/img/heartopia/events/meteor/icon.png",
+    "banner": "/img/heartopia/events/meteor/banner.png"
+  },
+  {
+    "id": "petal_rain",
+    "name": "Chuva de Petalas",
+    "type": "clima",
+    "icon": "/img/heartopia/events/petal_rain/icon.png",
+    "banner": "/img/heartopia/events/petal_rain/banner.png"
   }
 ]
