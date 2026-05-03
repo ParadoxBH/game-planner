@@ -365,5 +365,41 @@
         "description": "Em volta do lago existem vários buracos com água dentro; a bolha fica subindo e descendo por eles, sequencialmente, em sentido anti-horário.",
         "mapId": "main",
         "mode": "weekly"
+    },
+    {
+        "id": "point_1777829148473",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+        "type": "Point",
+        "coordinates": "POINT(-172.85718793576115 224.44674110954114)"
+        },
+        "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_15.jpg",
+        "mapId": "main",
+        "mode": "weekly"
+    },
+    {
+        "id": "point_1777829150136",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+        "type": "Point",
+        "coordinates": "POINT(-197.95386521045495 29.93993587134324)"
+        },
+        "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_16.jpg",
+        "mapId": "main",
+        "mode": "weekly"
+    },
+    {
+        "id": "point_1777829440128",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+        "type": "Point",
+        "coordinates": "POINT(-102.5772007641939 101.7744552795143)"
+        },
+        "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_17.jpg",
+        "mapId": "main",
+        "mode": "weekly"
     }
 ]
