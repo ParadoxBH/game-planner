@@ -98,7 +98,7 @@ export function EventsPage() {
     >
       <Grid container spacing={isMobile ? 1 : 2}>
         {filteredEvents.map((event) => (
-          <Grid size={{ xs: 12, md: 6 }} key={event.id}>
+          <Grid size={{ xs: 12, md: 4 }} key={event.id}>
             <EventCard event={event} />
           </Grid>
         ))}
