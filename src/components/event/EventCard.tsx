@@ -2,8 +2,7 @@ import { getPublicUrl } from "../../utils/pathUtils";
 import { 
   Box, 
   Typography, 
-  Card, 
-  CardContent, 
+  Card,
   Chip, 
   Stack,
   Divider,
