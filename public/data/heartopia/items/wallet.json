@@ -24,6 +24,30 @@
     "icon": "/img/heartopia/stats/tinta_estampa.png"
   },
   {
+    "id": "creditos_gala_moda",
+    "name": "Créditos de Gala de Moda",
+    "category": [
+      "wallet"
+    ],
+    "icon": "/img/heartopia/stats/creditos_gala_moda.png"
+  },
+  {
+    "id": "passe_show_neve",
+    "name": "Passe de Show",
+    "category": [
+      "wallet"
+    ],
+    "icon": "/img/heartopia/stats/passe_show.png"
+  },
+  {
+    "id": "passe_show_temporario_neve",
+    "name": "Passe de Show Temporário",
+    "category": [
+      "wallet"
+    ],
+    "icon": "/img/heartopia/stats/passe_show_temporario.png"
+  },
+  {
     "id": "kit_reparo",
     "name": "Kit de Reparo",
     "category": [

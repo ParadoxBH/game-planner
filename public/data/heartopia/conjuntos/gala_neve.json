@@ -2,7 +2,7 @@
     {
         "id": "set_papoula_himalaia",
         "name": "Papoula do Himalaia",
-        "category": "flowers",
+        "category": "gala_neve",
         "event": [
             "gala_neve"
         ],
@@ -46,26 +46,6 @@
         ]
     },
     {
-        "id": "set_gala_neve_flores",
-        "name": "Flores",
-        "category": "gala_neve",
-        "event": [
-            "gala_neve"
-        ],
-        "items": [
-            "papoula_himalaia_vermelha",
-            "papoula_himalaia_amarela",
-            "papoula_himalaia_branca",
-            "papoula_himalaia_rosa",
-            "papoula_himalaia_laranja",
-            "papoula_himalaia_preta",
-            "papoula_himalaia_pessego",
-            "papoula_himalaia_verde",
-            "papoula_himalaia_azul",
-            "papoula_himalaia_luminosa"
-        ]
-    },
-    {
         "id": "set_gala_neve_cooking",
         "name": "Receitas",
         "category": "gala_neve",
@@ -83,17 +63,6 @@
             "panqueca_acucar_po_maca",
             "panqueca_acucar_po_tangerina",
             "banquete_aurora"
-        ]
-    },
-    {
-        "id": "set_gala_neve_other",
-        "name": "Outros",
-        "category": "gala_neve",
-        "event": [
-            "gala_neve"
-        ],
-        "items": [
-            "creditos_gala_moda"
         ]
     }
 ]

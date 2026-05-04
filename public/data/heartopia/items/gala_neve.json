@@ -19,8 +19,7 @@
     "category": [
       "agriculture",
       "flower",
-      "papoula_himalaia",
-      "vegetable"
+      "papoula_himalaia"
     ],
     "event": [
       "gala_neve"
@@ -35,8 +34,7 @@
     "category": [
       "agriculture",
       "flower",
-      "papoula_himalaia",
-      "vegetable"
+      "papoula_himalaia"
     ],
     "event": [
       "gala_neve"
@@ -51,8 +49,7 @@
     "category": [
       "agriculture",
       "flower",
-      "papoula_himalaia",
-      "vegetable"
+      "papoula_himalaia"
     ],
     "event": [
       "gala_neve"
@@ -67,8 +64,7 @@
     "category": [
       "agriculture",
       "flower",
-      "papoula_himalaia",
-      "vegetable"
+      "papoula_himalaia"
     ],
     "event": [
       "gala_neve"
@@ -83,8 +79,7 @@
     "category": [
       "agriculture",
       "flower",
-      "papoula_himalaia",
-      "vegetable"
+      "papoula_himalaia"
     ],
     "event": [
       "gala_neve"
@@ -99,8 +94,7 @@
     "category": [
       "agriculture",
       "flower",
-      "papoula_himalaia",
-      "vegetable"
+      "papoula_himalaia"
     ],
     "event": [
       "gala_neve"
@@ -115,8 +109,7 @@
     "category": [
       "agriculture",
       "flower",
-      "papoula_himalaia",
-      "vegetable"
+      "papoula_himalaia"
     ],
     "event": [
       "gala_neve"
@@ -131,8 +124,7 @@
     "category": [
       "agriculture",
       "flower",
-      "papoula_himalaia",
-      "vegetable"
+      "papoula_himalaia"
     ],
     "event": [
       "gala_neve"
@@ -147,8 +139,7 @@
     "category": [
       "agriculture",
       "flower",
-      "papoula_himalaia",
-      "vegetable"
+      "papoula_himalaia"
     ],
     "event": [
       "gala_neve"
@@ -163,8 +154,7 @@
     "category": [
       "agriculture",
       "flower",
-      "papoula_himalaia",
-      "vegetable"
+      "papoula_himalaia"
     ],
     "event": [
       "gala_neve"
@@ -177,9 +167,8 @@
     "id": "cafe_gelado",
     "name": "Café Gelado",
     "category": [
-      "food",
-      "cafe_gelado",
-      "vegetable"
+      "drink",
+      "cafe_gelado"
     ],
     "event": [
       "gala_neve"
@@ -191,9 +180,8 @@
     "id": "latte_gelado",
     "name": "Latte Gelado",
     "category": [
-      "food",
-      "cafe_gelado",
-      "vegetable"
+      "drink",
+      "cafe_gelado"
     ],
     "event": [
       "gala_neve"
@@ -205,8 +193,7 @@
     "id": "carne_pure_nabo",
     "name": "Carne com Purê de Nabo",
     "category": [
-      "food",
-      "vegetable"
+      "food"
     ],
     "event": [
       "gala_neve"
@@ -218,8 +205,7 @@
     "id": "caldo_cremoso_nabo",
     "name": "Caldo Cremoso de Nabo",
     "category": [
-      "food",
-      "vegetable"
+      "food"
     ],
     "event": [
       "gala_neve"
@@ -232,8 +218,7 @@
     "name": "Panqueca com Açúcar de Pó",
     "category": [
       "food",
-      "panqueca_acucar_po",
-      "vegetable"
+      "panqueca_acucar_po"
     ],
     "event": [
       "gala_neve"
@@ -246,8 +231,7 @@
     "name": "Panqueca com Açúcar e Mirtilo",
     "category": [
       "food",
-      "panqueca_acucar_po",
-      "vegetable"
+      "panqueca_acucar_po"
     ],
     "event": [
       "gala_neve"
@@ -260,8 +244,7 @@
     "name": "Panqueca com Açúcar e Framboesa",
     "category": [
       "food",
-      "panqueca_acucar_po",
-      "vegetable"
+      "panqueca_acucar_po"
     ],
     "event": [
       "gala_neve"
@@ -275,8 +258,7 @@
     "name": "Panqueca com Açúcar e Maçã",
     "category": [
       "food",
-      "panqueca_acucar_po",
-      "vegetable"
+      "panqueca_acucar_po"
     ],
     "event": [
       "gala_neve"
@@ -289,8 +271,7 @@
     "name": "Panqueca com Açúcar e Tangerina",
     "category": [
       "food",
-      "panqueca_acucar_po",
-      "vegetable"
+      "panqueca_acucar_po"
     ],
     "event": [
       "gala_neve"
@@ -302,8 +283,7 @@
     "id": "banquete_aurora",
     "name": "Banquete Aurora",
     "category": [
-      "food",
-      "vegetable"
+      "banquet"
     ],
     "event": [
       "gala_neve"
@@ -316,7 +296,6 @@
     "name": "Semente de Nabo",
     "category": [
       "seed",
-      "vegetable",
       "vegetable"
     ],
     "event": [
@@ -331,8 +310,7 @@
     "category": [
       "seed",
       "flower",
-      "papoula_himalaia",
-      "vegetable"
+      "papoula_himalaia"
     ],
     "event": [
       "gala_neve"
@@ -372,17 +350,6 @@
     "sellPrice": 15
   },
   {
-    "id": "creditos_gala_moda",
-    "name": "Créditos de Gala de Moda",
-    "category": [
-      "wallet"
-    ],
-    "event": [
-      "gala_neve"
-    ],
-    "icon": "/img/heartopia/events/gala_neve/itens/creditos_gala_moda.png"
-  },
-  {
     "id": "acucar_po",
     "name": "Açúcar em Pó",
     "category": [
@@ -397,25 +364,14 @@
     "buyPrice": 50
   },
   {
-    "id": "passe_show_neve",
-    "name": "Passe de Show",
+    "id": "kit_materiais_pinguim",
+    "name": "Kit de Materiais Pinguim",
     "category": [
-      "wallet"
+      "resource"
     ],
     "event": [
       "gala_neve"
     ],
-    "icon": "/img/heartopia/stats/passe_show.png"
-  },
-  {
-    "id": "passe_show_temporario_neve",
-    "name": "Passe de Show Temporário",
-    "category": [
-      "wallet"
-    ],
-    "event": [
-      "gala_neve"
-    ],
-    "icon": "/img/heartopia/stats/passe_show_temporario.png"
+    "icon": "/img/heartopia/events/gala_neve/itens/kit_materiais_pinguim.png"
   }
 ]
