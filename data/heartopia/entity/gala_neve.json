@@ -6,6 +6,7 @@
       "station",
       "cooking_pinguim"
     ],
+    "event": ["gala_neve"],
     "icon": "/img/heartopia/eletrodomestico/fogao_pinguim.png"
   }
 ]
