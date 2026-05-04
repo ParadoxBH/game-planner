@@ -31,7 +31,7 @@ export const SimplifiedEntity = ({
   categoriesMap = {},
   pointImage,
 }: SimplifiedEntityProps) => {
-  const theme = useTheme();
+  const theme = useTheme() as any;
 
   return (
     <Box sx={{ minWidth: 220 }}>
@@ -98,6 +98,18 @@ export const SimplifiedEntity = ({
           <OutputField 
             label="Respawn" 
             values={[`${respawnDelay} min`]}
+          />
+        )}
+        {mode === "daily" && (
+          <OutputField 
+            label="Respawn" 
+            values={["Diário"]}
+          />
+        )}
+        {mode === "weekly" && (
+          <OutputField 
+            label="Respawn" 
+            values={["Semanal"]}
           />
         )}
 

@@ -54,7 +54,6 @@ import { itemRepository } from "../../repositories/ItemRepository";
 import { referencePointRepository } from "../../repositories/ReferencePointRepository";
 import { shopRepository } from "../../repositories/ShopRepository";
 import { categoryRepository } from "../../repositories/CategoryRepository";
-import { getPublicUrl } from "../../utils/pathUtils";
 import { PointMarkerPanel } from "./PointMarkerPanel";
 import { MapFilterDrawer } from "./MapFilterDrawer";
 import markerTemplate from "./marker-icon.html?raw";
@@ -166,6 +165,8 @@ const StableMarker = React.memo(
 
 import { MapInfoOverlay } from "./MapInfoOverlay";
 import { theme } from "../../theme/theme";
+import { getPublicUrl } from "../../utils/pathUtils";
+import { getDailyResetTimes, getWeeklyResetTimes } from "../../utils/timeUtils";
 
 const createCustomCRS = (
   bounds: [[number, number], [number, number]],
@@ -691,10 +692,23 @@ export const MapView = () => {
 
                   if (hideCollected && collectedPoints[point.id]) {
                     const respawnDelay = point.respawnDelay ?? entity?.respawnDelay;
-                    if (point.type === "spawn" && respawnDelay && (point.mode || "respawn") === "respawn") {
-                      const elapsedMs = now - collectedPoints[point.id];
-                      const totalMs = respawnDelay * 60 * 1000;
-                      if (elapsedMs < totalMs) return false;
+                    const mode = point.mode || "respawn";
+                    const collectionTime = collectedPoints[point.id];
+
+                    if (point.type === "spawn") {
+                      if (mode === "respawn" && respawnDelay) {
+                        const elapsedMs = now - collectionTime;
+                        const totalMs = respawnDelay * 60 * 1000;
+                        if (elapsedMs < totalMs) return false;
+                      } else if (mode === "daily") {
+                        const { lastReset } = getDailyResetTimes(now, gameInfo?.dailyResetTime);
+                        if (collectionTime >= lastReset) return false;
+                      } else if (mode === "weekly") {
+                        const { lastReset } = getWeeklyResetTimes(now, gameInfo?.dailyResetTime, gameInfo?.weeklyResetDay);
+                        if (collectionTime >= lastReset) return false;
+                      } else {
+                        return false;
+                      }
                     } else {
                       return false;
                     }
@@ -774,17 +788,45 @@ export const MapView = () => {
                   let innerColor = `white`;
                   let borderWidth = 0;
 
-                  if (isCollectedInState && point.type === "spawn" && respawnDelay && (point.mode || "respawn") === "respawn") {
-                    const elapsedMs = now - collectionTime;
-                    const totalMs = respawnDelay * 60 * 1000;
+                  if (isCollectedInState && point.type === "spawn") {
+                    const mode = point.mode || "respawn";
                     
-                    if (elapsedMs >= totalMs) {
-                      isCollected = false;
-                    } else {
-                      const percentage = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
-                      backgroundStyle = `background: conic-gradient(#4caf50 ${percentage}%, #e0e0e0 ${percentage}%);`;
-                      innerColor = "white"; 
-                      borderWidth = 6; 
+                    if (mode === "respawn" && respawnDelay) {
+                      const elapsedMs = now - collectionTime;
+                      const totalMs = respawnDelay * 60 * 1000;
+                      
+                      if (elapsedMs >= totalMs) {
+                        isCollected = false;
+                      } else {
+                        const percentage = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
+                        backgroundStyle = `background: conic-gradient(#4caf50 ${percentage}%, #e0e0e0 ${percentage}%);`;
+                        innerColor = "white"; 
+                        borderWidth = 6; 
+                      }
+                    } else if (mode === "daily") {
+                      const { lastReset, nextReset } = getDailyResetTimes(now, gameInfo?.dailyResetTime);
+                      if (collectionTime < lastReset) {
+                        isCollected = false;
+                      } else {
+                        const totalMs = nextReset - lastReset;
+                        const elapsedMs = now - lastReset;
+                        const percentage = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
+                        backgroundStyle = `background: conic-gradient(#4caf50 ${percentage}%, #e0e0e0 ${percentage}%);`;
+                        innerColor = "white"; 
+                        borderWidth = 6; 
+                      }
+                    } else if (mode === "weekly") {
+                      const { lastReset, nextReset } = getWeeklyResetTimes(now, gameInfo?.dailyResetTime, gameInfo?.weeklyResetDay);
+                      if (collectionTime < lastReset) {
+                        isCollected = false;
+                      } else {
+                        const totalMs = nextReset - lastReset;
+                        const elapsedMs = now - lastReset;
+                        const percentage = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
+                        backgroundStyle = `background: conic-gradient(#4caf50 ${percentage}%, #e0e0e0 ${percentage}%);`;
+                        innerColor = "white"; 
+                        borderWidth = 6; 
+                      }
                     }
                   }
 

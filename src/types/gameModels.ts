@@ -182,6 +182,8 @@ export interface GameInfo {
   thumbnail?: string;
   disabled?: boolean;
   rarity?: GameRarityDefinitionMap;
+  dailyResetTime?: string; // HH:mm
+  weeklyResetDay?: number; // 0-6 (Sunday-Saturday)
 }
 
 export type ReferencePointsRespawnMode = "once" | "respawn" | "weekly" | "daily";
