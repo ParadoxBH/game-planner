@@ -1,0 +1,25 @@
+﻿[
+  {
+    "id": "point_1777913394756",
+    "type": "spawn",
+    "entityId": "minerio_fluorita",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-262.4939453125 431.95694824218754)"
+    },
+    "mapId": "main",
+    "mode": "daily"
+  },
+  {
+    "id": "point_1777913513770",
+    "type": "spawn",
+    "entityId": "carvalho_andarilho",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(440.06337890625 -64.8514453125)"
+    },
+    "mapId": "main",
+    "mode": "daily",
+    "image": "img/heartopia/referencePoints/others/carvalho_andarilho.jpg"
+  }
+]
