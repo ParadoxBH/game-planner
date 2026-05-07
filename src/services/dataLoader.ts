@@ -92,7 +92,7 @@ export async function loadGamesList(): Promise<GameInfo[]> {
       throw new Error(`Failed to load games list`);
     }
     const games: GameInfo[] = await response.json();
-    return games.filter(j => !j.disabled);
+    return games;
   } catch (error) {
     console.error(`Error loading games list:`, error);
     throw error;

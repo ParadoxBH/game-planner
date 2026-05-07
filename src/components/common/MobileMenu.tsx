@@ -20,10 +20,11 @@ import {
   ArrowBack,
 } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import type { NavigationItem } from "../../hooks/useNavigation";
 import { loadGamesList } from "../../services/dataLoader";
 import type { GameInfo } from "../../types/gameModels";
+import { isDev } from "../../utils/mapper";
 
 interface MobileMenuProps {
   open: boolean;
@@ -58,6 +59,22 @@ export function MobileMenu({
     e.stopPropagation();
     setOpenDropdowns((prev) => ({ ...prev, [id]: !prev[id] }));
   };
+
+  const accessLog = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem('gameAccessLog') || '{}');
+    } catch {
+      return {};
+    }
+  }, [open]);
+
+  const sortedGames = useMemo(() => {
+    const available = games
+      .filter((g) => !g.comingSoon)
+      .sort((a, b) => (accessLog[b.id] || 0) - (accessLog[a.id] || 0));
+    const comingSoon = games.filter((g) => g.comingSoon);
+    return { available, comingSoon };
+  }, [games, accessLog]);
 
 
 
@@ -144,16 +161,60 @@ export function MobileMenu({
                 Carregando jogos...
               </Typography>
             ) : (
-              games.map((game) => (
-                <ListItem key={game.id} disablePadding>
-                  <ListItemButton component={Link} to={`/game/${game.id}`}>
-                    <ListItemIcon sx={{ minWidth: 40 }}>
-                      <Gamepad />
-                    </ListItemIcon>
-                    <ListItemText primary={game.name} />
-                  </ListItemButton>
-                </ListItem>
-              ))
+              <>
+                {sortedGames.available.map((game) => (
+                  <ListItem key={game.id} disablePadding>
+                    <ListItemButton
+                      component={Link}
+                      to={`/game/${game.id}`}
+                      onClick={() => {
+                        // Update access log on click
+                        try {
+                          const log = JSON.parse(localStorage.getItem('gameAccessLog') || '{}');
+                          log[game.id] = Date.now();
+                          localStorage.setItem('gameAccessLog', JSON.stringify(log));
+                        } catch(e){}
+                        onClose();
+                      }}
+                    >
+                      <ListItemIcon sx={{ minWidth: 40 }}>
+                        <Gamepad />
+                      </ListItemIcon>
+                      <ListItemText primary={game.name} />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+
+                {sortedGames.comingSoon.length > 0 && (
+                  <>
+                    <Divider sx={{ my: 1, opacity: 0.05 }} />
+                    <Typography
+                      variant="overline"
+                      sx={{ px: 2, color: "text.disabled", fontWeight: 700 }}
+                    >
+                      Em Breve
+                    </Typography>
+                    {sortedGames.comingSoon.map((game) => (
+                      <ListItem key={game.id} disablePadding>
+                        <ListItemButton
+                          component={Link}
+                          to={`/game/${game.id}`}
+                          disabled={!isDev()}
+                          onClick={onClose}
+                        >
+                          <ListItemIcon sx={{ minWidth: 40 }}>
+                            <Gamepad sx={{ opacity: 0.3 }} />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={game.name}
+                            primaryTypographyProps={{ opacity: 0.5 }}
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                    ))}
+                  </>
+                )}
+              </>
             )}
           </>
         ) : (

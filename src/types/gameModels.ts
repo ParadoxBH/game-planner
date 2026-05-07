@@ -180,7 +180,7 @@ export interface GameInfo {
   name: string;
   description: string;
   thumbnail?: string;
-  disabled?: boolean;
+  comingSoon?: boolean;
   rarity?: GameRarityDefinitionMap;
   dailyResetTime?: string; // HH:mm
   weeklyResetDay?: number; // 0-6 (Sunday-Saturday)
