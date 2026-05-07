@@ -276,6 +276,12 @@
     "icon": "/img/heartopia/coletaveis/pink_bubble.png"
   },
   {
+    "id": "blue_bubble",
+    "name": "Bolha Azul",
+    "category": "colection",
+    "icon": "/img/heartopia/coletaveis/blue_bubble.png"
+  },
+  {
     "id": "gold_bubble",
     "name": "Bolha Dourada",
     "category": "colection",

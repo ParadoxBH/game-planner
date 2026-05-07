@@ -1,0 +1,35 @@
+﻿[
+    {
+        "name": "Tesouro de Alu",
+        "label": "Encontre o tesouro encondido",
+        "entityId": "naughty",
+        "colection": [
+            {
+                "id": "point_1778171179980",
+                "type": "spawn",
+                "entityId": "blue_bubble",
+                "geom": {
+                    "type": "Point",
+                    "coordinates": "POINT(-268.67027343750004 449.32787109375005)"
+                },
+                "image": "/img/heartopia/referencePoints/blue_bubble/blue_bubble_1.jpg",
+                "mapId": "main",
+                "mode": "once",
+                "unlock": [
+                    {
+                        "type": "quest",
+                        "subject": "naughty",
+                        "value": "Tesouro de Alu"
+                    }
+                ],
+                "drops": [
+                    {
+                        "itemId": "brincos_lua_estrela",
+                        "chance": 1,
+                        "quant": 1
+                    }
+                ]
+            }
+        ]
+    }
+]
