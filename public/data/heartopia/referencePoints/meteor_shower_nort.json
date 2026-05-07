@@ -8,7 +8,8 @@
       "type": "Point",
       "coordinates": "POINT(-331.0326058951511 704.5510950393124)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776660363648",
@@ -19,7 +20,8 @@
       "type": "Point",
       "coordinates": "POINT(-245.80626642684206 548.0032227053694)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776660372109",
@@ -30,7 +32,8 @@
       "type": "Point",
       "coordinates": "POINT(-339.6292291614667 457.31056550105086)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776660377600",
@@ -41,7 +44,8 @@
       "type": "Point",
       "coordinates": "POINT(-179.01049460342617 420.2616502175846)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776660384042",
@@ -52,7 +56,8 @@
       "type": "Point",
       "coordinates": "POINT(-25.34160913683938 474.67724454017565)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776660389888",
@@ -63,7 +68,8 @@
       "type": "Point",
       "coordinates": "POINT(21.762923594124302 565.3699017444942)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776660394670",
@@ -74,7 +80,8 @@
       "type": "Point",
       "coordinates": "POINT(132.9605090573833 379.7393991262934)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776660399992",
@@ -85,7 +92,8 @@
       "type": "Point",
       "coordinates": "POINT(230.2160533001365 434.5249817763768)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776660403783",
@@ -96,7 +104,8 @@
       "type": "Point",
       "coordinates": "POINT(295.43871961216223 386.27307844841573)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776660444373",
@@ -107,7 +116,8 @@
       "type": "Point",
       "coordinates": "POINT(-338.78590384759383 362.594829580476)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776660453006",
@@ -118,7 +128,8 @@
       "type": "Point",
       "coordinates": "POINT(-177.39496383494745 399.64374486394223)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776660461117",
@@ -129,7 +140,8 @@
       "type": "Point",
       "coordinates": "POINT(23.654136314188904 539.8856638220258)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776660465359",
@@ -140,7 +152,8 @@
       "type": "Point",
       "coordinates": "POINT(126.74356450408527 454.981899630749)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776660470321",
@@ -151,7 +164,8 @@
       "type": "Point",
       "coordinates": "POINT(120.95202359454042 361.9736852212138)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776660474983",
@@ -162,7 +176,8 @@
       "type": "Point",
       "coordinates": "POINT(236.01063633082907 356.95664460991105)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776660665291",
