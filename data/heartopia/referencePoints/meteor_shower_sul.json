@@ -9,7 +9,8 @@
       "coordinates": "POINT(239.49123402139924 -332.0768531703162)"
     },
     "image": "/img/heartopia/referencePoints/meteor_sul/meteor_7.jpg",
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659727644",
@@ -21,7 +22,8 @@
       "coordinates": "POINT(176.556489471013 -335.1642627772718)"
     },
     "image": "/img/heartopia/referencePoints/meteor_sul/meteor_6.jpg",
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659730076",
@@ -32,7 +34,8 @@
       "type": "Point",
       "coordinates": "POINT(165.3595103792266 -308.9212811181499)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659733013",
@@ -44,7 +47,8 @@
       "coordinates": "POINT(112.84953946602091 -300.81683089989167)"
     },
     "image": "/img/heartopia/referencePoints/meteor_sul/meteor_9.jpg",
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659735699",
@@ -55,7 +59,8 @@
       "type": "Point",
       "coordinates": "POINT(83.89183491829736 -340.9531557903135)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659738601",
@@ -67,7 +72,8 @@
       "coordinates": "POINT(12.462830367245763 -310.0790597207582)"
     },
     "image": "/img/heartopia/referencePoints/meteor_sul/meteor_5.jpg",
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659742823",
@@ -79,7 +85,8 @@
       "coordinates": "POINT(64.97280128045128 -220.15825491817856)"
     },
     "image": "/img/heartopia/referencePoints/meteor_sul/meteor_8.jpg",
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659745575",
@@ -91,7 +98,8 @@
       "coordinates": "POINT(-23.830825999234612 -217.07084531122314)"
     },
     "image": "/img/heartopia/referencePoints/meteor_sul/meteor_11.jpg",
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1777346521302",
@@ -103,7 +111,8 @@
       "coordinates": "POINT(-89.09660551011918 -324.0291607359761)"
     },
     "image": "/img/heartopia/referencePoints/meteor_sul/meteor_12.jpg",
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659748627",
@@ -115,7 +124,8 @@
       "coordinates": "POINT(-160.1250887371872 -281.5205208564196)"
     },
     "image": "/img/heartopia/referencePoints/meteor_sul/meteor_3.jpg",
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776995448491",
@@ -127,7 +137,8 @@
       "coordinates": "POINT(29.54152013549027 -268.9379031308752)"
     },
     "image": "/img/heartopia/referencePoints/meteor_sul/meteor_4.jpg",
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659754309",
@@ -139,7 +150,8 @@
       "coordinates": "POINT(-176.34140328391243 -353.30279421813543)"
     },
     "image": "/img/heartopia/referencePoints/meteor_sul/meteor_2.jpg",
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659757080",
@@ -150,7 +162,8 @@
       "type": "Point",
       "coordinates": "POINT(-128.07856237103968 -394.5968977111657)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659759663",
@@ -162,7 +175,8 @@
       "coordinates": "POINT(-182.51904692076022 -464.4495400685343)"
     },
     "image": "/img/heartopia/referencePoints/meteor_sul/meteor_13.jpg",
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659762414",
@@ -173,7 +187,8 @@
       "type": "Point",
       "coordinates": "POINT(-246.22599692575213 -397.6843073181211)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659790424",
@@ -185,7 +200,8 @@
       "coordinates": "POINT(-257.0303779504876 -455.58125353869724)"
     },
     "image": "/img/heartopia/referencePoints/meteor_sul/meteor_1.jpg",
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659823968",
@@ -196,7 +212,8 @@
       "type": "Point",
       "coordinates": "POINT(-208.41325325312843 -423.1621323684615)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659831189",
@@ -207,7 +224,8 @@
       "type": "Point",
       "coordinates": "POINT(-101.07669506289938 -374.14950485804263)"
     },
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "point_1776659843771",
@@ -219,7 +237,8 @@
       "coordinates": "POINT(130.58494131888972 -453.2643760362778)"
     },
     "image": "/img/heartopia/referencePoints/meteor_sul/meteor_10.jpg",
-    "mapId": "main"
+    "mapId": "main",
+    "mode": "daily"
   },
   {
     "id": "npc_doris_sul",

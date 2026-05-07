@@ -8,7 +8,9 @@
   {
     "id": "heartopia",
     "name": "Heartopia",
-    "description": "Um simulador de vida feito para quem busca criatividade, liberdade e tranquilidade. Construa a casa dos seus sonhos, descubra hobbies variados e fortaleça laços especiais com amigos em uma vila vibrante repleta de infinitas possibilidades."
+    "description": "Um simulador de vida feito para quem busca criatividade, liberdade e tranquilidade. Construa a casa dos seus sonhos, descubra hobbies variados e fortaleça laços especiais com amigos em uma vila vibrante repleta de infinitas possibilidades.",
+    "dailyResetTime": "08:00",
+    "weeklyResetDay": 6
   },
   {
     "id": "satisfactory",
