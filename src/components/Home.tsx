@@ -75,7 +75,7 @@ export function Home() {
   }, [filteredGames]);
 
   const renderGameCard = (game: GameInfo) => (
-    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={game.id}>
+    <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2.4 }} key={game.id}>
       <Card
         sx={{
           height: "100%",
@@ -83,28 +83,32 @@ export function Home() {
           flexDirection: "column",
           transition: "transform 0.2s ease-in-out, box-shadow 0.2s",
           "&:hover": {
-            transform: "translateY(-4px)",
-            boxShadow: 10,
+            transform: "scale(1.05)",
+            boxShadow: 20,
+            zIndex: 1,
           },
           backgroundColor: "rgba(255, 255, 255, 0.02)",
-          backdropFilter: "blur(10px)",
           borderRadius: 2,
-          border: "1px solid rgba(255, 255, 255, 0.05)"
+          border: "1px solid rgba(255, 255, 255, 0.05)",
+          overflow: 'hidden',
+          aspectRatio: '2 / 3'
         }}
       >
         <CardActionArea
           onClick={() => handleGameClick(game.id)}
-          sx={{ flexGrow: 1 }}
+          sx={{ height: '100%' }}
           disabled={game.comingSoon && !isDev()}
         >
-          <Box sx={{ position: 'relative' }}>
+          <Box sx={{ position: 'relative', height: '100%' }}>
             <CardMedia
               component="img"
-              height="200"
-              image={game.thumbnail || getPublicUrl(`img/${game.id}/logo.png`)}
-              alt={`Thumbnail of ${game.name}`}
+              image={game.capsule || game.thumbnail || getPublicUrl(`img/${game.id}/logo.png`)}
+              alt={`Capsule of ${game.name}`}
               sx={{ 
-                filter: game.comingSoon ? "brightness(0.3) grayscale(1)" : "brightness(0.7)",
+                height: '100%',
+                width: '100%',
+                objectFit: 'cover',
+                filter: game.comingSoon ? "brightness(0.3) grayscale(1)" : "brightness(0.9)",
                 transition: 'filter 0.3s'
               }}
             />
@@ -123,17 +127,18 @@ export function Home() {
                 }}
               >
                 <Typography
-                  variant="h6"
+                  variant="button"
                   sx={{
                     fontWeight: 900,
                     color: 'white',
                     textTransform: 'uppercase',
-                    letterSpacing: 2,
-                    backgroundColor: 'rgba(0,0,0,0.6)',
-                    px: 2,
-                    py: 1,
+                    letterSpacing: 1,
+                    backgroundColor: 'rgba(0,0,0,0.7)',
+                    px: 1.5,
+                    py: 0.5,
                     borderRadius: 1,
-                    border: '2px solid rgba(255,255,255,0.2)'
+                    fontSize: { xs: '0.6rem', sm: '0.8rem' },
+                    border: '1px solid rgba(255,255,255,0.2)'
                   }}
                 >
                   Em Breve
@@ -141,14 +146,6 @@ export function Home() {
               </Box>
             )}
           </Box>
-          <CardContent sx={{ flexGrow: 1, p: 3, opacity: game.comingSoon ? 0.5 : 1 }}>
-            <Typography gutterBottom variant="h5" component="h2" sx={{ fontWeight: 800, color: 'primary.main' }}>
-              {game.name}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
-              {game.description}
-            </Typography>
-          </CardContent>
         </CardActionArea>
       </Card>
     </Grid>

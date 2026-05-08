@@ -3,26 +3,38 @@
     "id": "apogea",
     "name": "Apogea",
     "description": "Apogea é um jogo de RPG online massivo de fantasia medieval.",
-    "comingSoon": true
+    "comingSoon": true,
+    "thumbnail": "img/apogea/logo.png",
+    "capsule": "img/apogea/capsule.jpg",
+    "icon": "img/apogea/icon.jpg"
   },
   {
     "id": "heartopia",
     "name": "Heartopia",
     "description": "Um simulador de vida feito para quem busca criatividade, liberdade e tranquilidade. Construa a casa dos seus sonhos, descubra hobbies variados e fortaleça laços especiais com amigos em uma vila vibrante repleta de infinitas possibilidades.",
     "dailyResetTime": "08:00",
-    "weeklyResetDay": 6
+    "weeklyResetDay": 6,
+    "thumbnail": "img/heartopia/logo.png",
+    "capsule": "img/heartopia/capsule.jpg",
+    "icon": "img/heartopia/icon.jpg"
   },
   {
     "id": "satisfactory",
     "name": "Satisfactory",
     "description": "Satisfactory é um jogo de construção de fábricas em primeira pessoa num mundo aberto, com traços de exploração e combate. Jogue sozinho ou com amigos, explore um planeta alienígena, crie fábricas de vários andares e entre no paraíso das correias transportadoras!",
-    "comingSoon": true
+    "comingSoon": true,
+    "thumbnail": "img/satisfactory/logo.png",
+    "capsule": "img/satisfactory/capsule.jpg",
+    "icon": "img/satisfactory/icon.jpg"
   },
   {
     "id": "valheim",
     "name": "Valheim",
     "description": "Um brutal jogo de exploração e sobrevivência para 1 a 10 jogadores, ambientado em um purgatório gerado de forma procedural, inspirado na cultura viking. Batalhe, construa e conquiste glória em uma saga digna da benção de Odin!",
-    "comingSoon": true
+    "comingSoon": true,
+    "thumbnail": "img/valheim/logo.png",
+    "capsule": "img/valheim/capsule.jpg",
+    "icon": "img/valheim/icon.jpg"
   },
   {
     "id": "windrose",
@@ -49,18 +61,27 @@
         "name": "Legendary",
         "color": "#EFC653"
       }
-    }
+    },
+    "thumbnail": "img/windrose/logo.png",
+    "capsule": "img/windrose/capsule.jpg",
+    "icon": "img/windrose/icon.jpg"
   },
   {
     "id": "terraria",
     "name": "Terraria",
     "description": "Dig, fight, explore, build! Nothing is impossible in this action-packed adventure game. Four Pack also available!",
-    "comingSoon": true
+    "comingSoon": true,
+    "thumbnail": "img/terraria/logo.png",
+    "capsule": "img/terraria/capsule.jpg",
+    "icon": "img/terraria/icon.jpg"
   },
   {
     "id": "stardewValley",
     "name": "Stardew Valley",
     "description": "You've inherited your grandfather's old farm plot in Stardew Valley. Armed with hand-me-down tools and a few coins, you set out to begin your new life.",
-    "comingSoon": true
+    "comingSoon": true,
+    "thumbnail": "img/stardewValley/logo.png",
+    "capsule": "img/stardewValley/capsule.jpg",
+    "icon": "img/stardewValley/icon.jpg"
   }
 ]

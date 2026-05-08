@@ -180,6 +180,8 @@ export interface GameInfo {
   name: string;
   description: string;
   thumbnail?: string;
+  capsule?: string;
+  icon?: string;
   comingSoon?: boolean;
   rarity?: GameRarityDefinitionMap;
   dailyResetTime?: string; // HH:mm

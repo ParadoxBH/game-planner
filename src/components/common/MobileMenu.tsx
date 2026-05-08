@@ -25,6 +25,7 @@ import type { NavigationItem } from "../../hooks/useNavigation";
 import { loadGamesList } from "../../services/dataLoader";
 import type { GameInfo } from "../../types/gameModels";
 import { isDev } from "../../utils/mapper";
+import { getPublicUrl } from "../../utils/pathUtils";
 
 interface MobileMenuProps {
   open: boolean;
@@ -178,7 +179,11 @@ export function MobileMenu({
                       }}
                     >
                       <ListItemIcon sx={{ minWidth: 40 }}>
-                        <Gamepad />
+                        {game.icon ? (
+                          <Box component="img" src={getPublicUrl(game.icon)} sx={{ width: 24, height: 24, objectFit: 'contain' }} />
+                        ) : (
+                          <Gamepad />
+                        )}
                       </ListItemIcon>
                       <ListItemText primary={game.name} />
                     </ListItemButton>
@@ -203,7 +208,11 @@ export function MobileMenu({
                           onClick={onClose}
                         >
                           <ListItemIcon sx={{ minWidth: 40 }}>
-                            <Gamepad sx={{ opacity: 0.3 }} />
+                            {game.icon ? (
+                              <Box component="img" src={getPublicUrl(game.icon)} sx={{ width: 24, height: 24, objectFit: 'contain', opacity: 0.3 }} />
+                            ) : (
+                              <Gamepad sx={{ opacity: 0.3 }} />
+                            )}
                           </ListItemIcon>
                           <ListItemText
                             primary={game.name}
