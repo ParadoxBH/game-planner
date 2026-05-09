@@ -33,17 +33,19 @@ export function GlobalEventFilter() {
   } = useEventFilter();
   const { getEventsList } = useApi(gameId);
   const [events, setEvents] = useState<GameEvent[]>([]);
+  const [loadedGameId, setLoadedGameId] = useState<string | null>(null);
   const { isMobile } = usePlatform();
 
   useEffect(() => {
-    if (gameId && !events.length) {
+    if (gameId && loadedGameId !== gameId) {
       getEventsList().then(evs => {
         setEvents(evs);
+        setLoadedGameId(gameId);
         // Smart activation for new events
         initializeNewEvents(evs);
       });
     }
-  }, [gameId, getEventsList, events.length, initializeNewEvents]);
+  }, [gameId, loadedGameId, getEventsList, initializeNewEvents]);
   
   // const loading = apiLoading || localLoading;
   

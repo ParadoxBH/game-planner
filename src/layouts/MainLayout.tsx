@@ -14,7 +14,7 @@ export function MainLayout() {
     if (gameId) {
       setLoading(true);
       loadGamesList().then(games => {
-        const game = games.find(g => g.id === gameId);
+        const game = games.find(g => g.id.toLowerCase() === gameId.toLowerCase());
         if (game?.comingSoon && !isDev()) {
           setIsAllowed(false);
         } else {

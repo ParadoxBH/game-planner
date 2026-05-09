@@ -64,36 +64,35 @@ export class DbService {
         bug = "Procurando informação de jogo";
         const gameInfo = games.find((g: any) => g.id === gameId);
 
-        // 2. Clear and populating in a transaction for atomicity (optional but recommended)
+        // 2. Clear and populating in a transaction for atomicity
         bug = "Limpando Base de dados";
         await db.transaction('rw', db.tables, async () => {
-          bug = "Limpando Base de dados";
           await db.clearAll();
 
           const clean = <T>(data: T[], key: keyof T, name: string) => this.cleanDuplicates(data, key, name);
 
           bug = "Populando Itens";
-          if (items.length) await itemRepository.bulkAdd(clean(items, 'id', 'Items'));
+          if (items?.length) await itemRepository.bulkAdd(clean(items, 'id', 'Items'));
           bug = "Populando Receitas";
-          if (recipes.length) await recipeRepository.bulkAdd(clean(recipes, 'id', 'Recipes'));
+          if (recipes?.length) await recipeRepository.bulkAdd(clean(recipes, 'id', 'Recipes'));
           bug = "Populando Entidades";
-          if (entities.length) await entityRepository.bulkAdd(clean(entities, 'id', 'Entities'));
+          if (entities?.length) await entityRepository.bulkAdd(clean(entities, 'id', 'Entities'));
           bug = "Populando Lojas";
-          if (shops.length) await shopRepository.bulkAdd(clean(shops, 'id', 'Shops'));
+          if (shops?.length) await shopRepository.bulkAdd(clean(shops, 'id', 'Shops'));
           bug = "Populando Eventos";
-          if (events.length) await eventRepository.bulkAdd(clean(events, 'id', 'Events'));
+          if (events?.length) await eventRepository.bulkAdd(clean(events, 'id', 'Events'));
           bug = "Populando Pontos de Referência";
-          if (referencePoints.length) await referencePointRepository.bulkAdd(clean(referencePoints, 'id', 'ReferencePoints'));
+          if (referencePoints?.length) await referencePointRepository.bulkAdd(clean(referencePoints, 'id', 'ReferencePoints'));
           bug = "Populando Códigos";
-          if (codes.length) await codeRepository.bulkAdd(clean(codes, 'code', 'Codes'));
+          if (codes?.length) await codeRepository.bulkAdd(clean(codes, 'code', 'Codes'));
           bug = "Populando Conjuntos";
-          if (conjuntos.length) await conjuntoRepository.bulkAdd(clean(conjuntos, 'id', 'Conjuntos'));
+          if (conjuntos?.length) await conjuntoRepository.bulkAdd(clean(conjuntos, 'id', 'Conjuntos'));
           bug = "Populando Informações do Jogo";
           if (gameInfo) await gameInfoRepository.bulkAdd([gameInfo]);
           bug = "Populando Mapas";
-          if (maps.length) await mapRepository.bulkAdd(clean(maps, 'id', 'Maps'));
+          if (maps?.length) await mapRepository.bulkAdd(clean(maps, 'id', 'Maps'));
           bug = "Populando Categorias";
-          if (categories.length) await categoryRepository.bulkAdd(clean(categories, 'id', 'Categories'));
+          if (categories?.length) await categoryRepository.bulkAdd(clean(categories, 'id', 'Categories'));
 
           // Store the remote version we just downloaded
           bug = "Salvando versão do banco";
@@ -102,7 +101,7 @@ export class DbService {
 
         console.log(`[DbService] Database reconstruction complete for ${gameId}`);
       } catch (error) {
-        console.error(`[DbService] Error reconstructing database: ${bug}`, bug, error);
+        console.error(`[DbService] Error during stage "${bug}" for game ${gameId}:`, error);
         throw error;
       } finally {
         this.reconstructionPromise = null;
@@ -122,7 +121,12 @@ export class DbService {
     const duplicates: any[] = [];
 
     for (const item of data) {
+      if (!item) continue;
       const val = item[keyField];
+      if (val === undefined || val === null) {
+        console.warn(`[DbService] Item missing key "${String(keyField)}" in dataset "${datasetName}":`, item);
+        continue;
+      }
       if (seen.has(val)) {
         duplicates.push(val);
       } else {

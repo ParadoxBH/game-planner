@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
 
 interface EventUserPreference {
   active: boolean;
@@ -62,7 +62,7 @@ export function EventFilterProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("seenEventIds", JSON.stringify(seenEventIds));
   }, [seenEventIds]);
 
-  const toggleEvent = (eventId: string) => {
+  const toggleEvent = useCallback((eventId: string) => {
     setUserPreferences((prev) => {
       const currentPref = prev[eventId];
       const isCurrentlyActive = currentPref ? currentPref.active : activeEventIds.includes(eventId);
@@ -82,37 +82,37 @@ export function EventFilterProvider({ children }: { children: ReactNode }) {
 
       return newPrefs;
     });
-  };
+  }, [activeEventIds]);
 
-  const setAllEvents = (eventIds: string[]) => {
+  const setAllEvents = useCallback((eventIds: string[]) => {
     const newPrefs = { ...userPreferences };
     eventIds.forEach(id => {
       newPrefs[id] = { active: true, timestamp: Date.now() };
     });
     setUserPreferences(newPrefs);
     setActiveEventIds(eventIds);
-  };
+  }, [userPreferences]);
 
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     const newPrefs = { ...userPreferences };
     Object.keys(newPrefs).forEach(id => {
       newPrefs[id] = { ...newPrefs[id], active: false, timestamp: Date.now() };
     });
     setUserPreferences(newPrefs);
     setActiveEventIds([]);
-  };
+  }, [userPreferences]);
 
   const isEventActive = (eventId: string) => {
     return activeEventIds.includes(eventId);
   };
 
-  const markEventsAsSeen = (eventIds: string[]) => {
+  const markEventsAsSeen = useCallback((eventIds: string[]) => {
     setSeenEventIds(prev => {
       const newIds = eventIds.filter(id => !prev.includes(id));
       if (newIds.length === 0) return prev;
       return [...prev, ...newIds];
     });
-  };
+  }, []);
 
   const parseEventDate = (d: string) => {
     if (!d) return null;
@@ -131,7 +131,7 @@ export function EventFilterProvider({ children }: { children: ReactNode }) {
     return isEventLiveAt(event, new Date());
   };
 
-  const initializeNewEvents = (events: any[]) => {
+  const initializeNewEvents = useCallback((events: any[]) => {
     const newSeenIds: string[] = [];
     const updatedPreferences = { ...userPreferences };
     let hasChanges = false;
@@ -174,9 +174,9 @@ export function EventFilterProvider({ children }: { children: ReactNode }) {
       .map(e => e.id);
     
     setActiveEventIds(activeIds);
-  };
+  }, [seenEventIds, userPreferences]);
 
-  const restoreDefaults = (events: any[]) => {
+  const restoreDefaults = useCallback((events: any[]) => {
     const newPrefs = { ...userPreferences };
     const liveIds: string[] = [];
 
@@ -188,7 +188,7 @@ export function EventFilterProvider({ children }: { children: ReactNode }) {
 
     setUserPreferences(newPrefs);
     setActiveEventIds(liveIds);
-  };
+  }, [userPreferences]);
 
   return (
     <EventFilterContext.Provider
