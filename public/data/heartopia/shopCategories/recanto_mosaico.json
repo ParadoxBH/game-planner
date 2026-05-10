@@ -1,0 +1,76 @@
+﻿[
+    {
+        "id": "blanc_recanto_mosaico",
+        "shopId": "blanc_shop",
+        "name": "Exclusivo do Recanto Mosaico",
+        "events": [
+            "recanto_mosaico"
+        ],
+        "items": [
+            {
+                "id": "semente_flor_blocos_vermelha"
+            },
+            {
+                "id": "semente_flor_blocos_amarela"
+            },
+            {
+                "id": "semente_flor_blocos_branca"
+            },
+            {
+                "id": "semente_lucia_lima"
+            }
+        ]
+    },
+    {
+        "id": "massimo_shop_recanto_mosaico_ingrediente",
+        "shopId": "massimo_shop",
+        "name": "Ingrediente Exclusivo do Recanto Mosaico",
+        "events": [
+            "recanto_mosaico"
+        ],
+        "items": [
+            {
+                "id": "leite_condensado",
+                "amount": 50
+            },
+            {
+                "id": "gelo_blocos",
+                "amount": 50
+            },
+            {
+                "id": "hamburguer_blocos",
+                "amount": 50
+            }
+        ]
+    },
+    {
+        "id": "massimo_shop_recanto_mosaico_receita",
+        "shopId": "massimo_shop",
+        "name": "Receita Exclusivo do Recanto Mosaico",
+        "events": [
+            "recanto_mosaico"
+        ],
+        "items": [
+            {
+                "type": "recipe",
+                "id": "raspadinha_frutas_tigela_blocos",
+                "price": 1000
+            },
+            {
+                "type": "recipe",
+                "id": "torta_frutas_verbena",
+                "price": 1000
+            },
+            {
+                "type": "recipe",
+                "id": "hamburguer_blocos_cogumelos",
+                "price": 1000
+            },
+            {
+                "type": "recipe",
+                "id": "combo_divertido_blocos",
+                "price": 1500
+            }
+        ]
+    }
+]
