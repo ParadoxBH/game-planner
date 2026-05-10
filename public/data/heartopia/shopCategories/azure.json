@@ -1,0 +1,29 @@
+﻿[
+    {
+        "id": "hobby_moda_shop_escultura",
+        "shopId": "hobby_moda_shop",
+        "name": "Escultura de Neve",
+        "items": [
+            {
+                "id": "escultura_neve",
+                "type": "ability",
+                "price": 100,
+                "currency": "estrela_desejavel",
+                "resetType": "unique"
+            },
+            {
+                "id": "vale_hobby_aprimorado_escultura_neve",
+                "amount": 10,
+                "price": 50,
+                "currency": "estrela_desejavel",
+                "resetType": "unique"
+            },
+            {
+                "id": "bancada_bola_neve",
+                "type": "entity",
+                "amount": 2,
+                "resetType": "unique"
+            }
+        ]
+    }
+]

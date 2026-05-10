@@ -1,0 +1,9 @@
+[
+    {
+        "id": "maquina_maltese",
+        "name": "Loja Maltese",
+        "events": [
+            "maltese"
+        ]
+    }
+]

@@ -1,0 +1,54 @@
+﻿[
+  {
+    "id": "loja_maquina_gacha_maltese",
+    "shopId": "maquina_maltese",
+    "name": "Loja da Máquina de Gacha Maltese",
+    "events": [
+      "maltese"
+    ],
+    "items": [
+      {
+        "type": "recipe",
+        "price": 15,
+        "currency": "moeda_troca_maltese",
+        "id": "bolo_veludo_azul_cachorros"
+      },
+      {
+        "type": "recipe",
+        "price": 10,
+        "currency": "moeda_troca_maltese",
+        "id": "canele_maltese"
+      },
+      {
+        "type": "recipe",
+        "price": 10,
+        "currency": "moeda_troca_maltese",
+        "id": "canele_golden_retriever"
+      },
+      {
+        "type": "recipe",
+        "price": 10,
+        "currency": "moeda_troca_maltese",
+        "id": "bolo_veludo_azul_golden_retriever"
+      },
+      {
+        "type": "recipe",
+        "price": 10,
+        "currency": "moeda_troca_maltese",
+        "id": "bolo_veludo_azul_maltese"
+      },
+      {
+        "id": "cartao_postal_maltese_alegre"
+      },
+      {
+        "id": "cartao_postal_maltese_sonhador"
+      },
+      {
+        "id": "cartao_postal_maltese_noturno"
+      },
+      {
+        "id": "moeda_troca_maltese"
+      }
+    ]
+  }
+]

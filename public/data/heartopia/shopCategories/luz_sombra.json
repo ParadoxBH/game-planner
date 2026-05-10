@@ -1,0 +1,80 @@
+[
+    {
+        "id": "blanc_luz_sombra",
+        "shopId": "blanc_shop",
+        "name": "Exclusivo da Luz e Sombra",
+        "events": [
+            "luz_sombra"
+        ],
+        "items": [
+            {
+                "id": "semente_dente_leao_vermelho",
+                "conditions": [
+                    {
+                        "type": "event",
+                        "id": "luz_sombra"
+                    }
+                ]
+            },
+            {
+                "id": "semente_dente_leao_amarelo",
+                "conditions": [
+                    {
+                        "type": "event",
+                        "id": "luz_sombra"
+                    }
+                ]
+            },
+            {
+                "id": "semente_dente_leao_branco",
+                "conditions": [
+                    {
+                        "type": "event",
+                        "id": "luz_sombra"
+                    }
+                ]
+            },
+            {
+                "id": "semente_alface_americano",
+                "conditions": [
+                    {
+                        "type": "event",
+                        "id": "luz_sombra"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "massimo_shop_luz_sombra",
+        "shopId": "massimo_shop",
+        "name": "Exclusivo da Luz e Sombra Onírica",
+        "events": [
+            "luz_sombra"
+        ],
+        "items": [
+            {
+                "id": "saco_primaveril_acucar_mascavo",
+                "amount": 50,
+                "conditions": [
+                    {
+                        "type": "event",
+                        "id": "luz_sombra",
+                        "description": ""
+                    }
+                ]
+            },
+            {
+                "id": "molho_salsa",
+                "amount": 50,
+                "conditions": [
+                    {
+                        "type": "event",
+                        "id": "luz_sombra",
+                        "description": ""
+                    }
+                ]
+            }
+        ]
+    }
+]

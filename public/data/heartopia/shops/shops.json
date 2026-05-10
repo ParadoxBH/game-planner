@@ -1,0 +1,50 @@
+﻿[
+  {
+    "id": "blanc_shop",
+    "npcId": "blanc",
+    "resetType": "diario",
+    "name": "Loja de Jardinagem"
+  },
+  {
+    "id": "massimo_shop",
+    "npcId": "massimo",
+    "resetType": "diario",
+    "name": "Loja de Receitas"
+  },
+  {
+    "id": "ka_ching_shop",
+    "npcId": "ka_ching",
+    "resetType": "diario",
+    "name": "Vendedora de Miudezas"
+  },
+  {
+    "id": "vanya_shop",
+    "npcId": "vanya",
+    "name": "Loja de Pesca"
+  },
+  {
+    "id": "hobby_moda_shop",
+    "npcId": "azure",
+    "name": "Hobby da Moda"
+  },
+  {
+    "id": "pet_shop",
+    "npcId": "sra_joan",
+    "name": "Loja de Pet"
+  },
+  {
+    "id": "caca_insetos",
+    "npcId": "naniwa",
+    "name": "Loja de Bicho"
+  },
+  {
+    "id": "loja_aves",
+    "npcId": "bailey_j",
+    "name": "Loja de Bicho"
+  },
+  {
+    "id": "loja_sorte",
+    "npcId": "doris_rain",
+    "name": "Loja da Sorte"
+  }
+]
