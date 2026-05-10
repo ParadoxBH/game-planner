@@ -1,0 +1,12 @@
+﻿[
+  {
+    "id": "point_1778390903721",
+    "type": "spawn",
+    "entityId": "maltese",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(665.8009365598377 255.17380710739897)"
+    },
+    "mapId": "main"
+  }
+]

@@ -62,5 +62,17 @@
     "type": "clima",
     "icon": "/img/heartopia/events/petal_rain/icon.png",
     "banner": "/img/heartopia/events/petal_rain/banner.png"
+  },
+  {
+    "id": "maltese",
+    "name": "Maltese",
+    "type": "colab",
+    "description": "Camp with puppies and good vibes!",
+    "icon": "/img/heartopia/events/maltese/icon.png",
+    "banner": "/img/heartopia/events/maltese/banner.png",
+    "period": {
+      "start": "30/04/2026",
+      "end": "26/05/2026"
+    }
   }
 ]

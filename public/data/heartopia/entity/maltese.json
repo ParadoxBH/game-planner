@@ -1,0 +1,20 @@
+﻿[
+  {
+    "id": "maltese",
+    "event": "maltese",
+    "name": "Maltese",
+    "category": "animal",
+    "icon": "/img/heartopia/events/maltese/entity/maltese_marom_head.png",
+    "image": "/img/heartopia/events/maltese/entity/maltese_marom.png",
+    "variants": [
+        {
+            "icon": "/img/heartopia/events/maltese/entity/maltese_branco_head.png",
+            "image": "/img/heartopia/events/maltese/entity/maltese_branco.png"
+        },
+        {
+            "name": "Comedouro Maltese",
+            "image": "/img/heartopia/events/maltese/entity/maltese_food.png"
+        }
+    ]
+  }
+]
