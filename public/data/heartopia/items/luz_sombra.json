@@ -618,5 +618,59 @@
             "luz_sombra"
         ],
         "icon": "/img/heartopia/events/luz_sombra/itens/token_festivo_luz_sombra.png"
+    },
+    {
+        "id": "emoji_luz_sombra_bom_filme",
+        "name": "Emoji: Bom Filme",
+        "event": ["luz_sombra"],
+        "category": [
+        "emoji"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/emoji/emoji_luz_sombra_bom_filme.png"
+    },
+    {
+        "id": "emoji_luz_sombra_colher_vegetais_silvestres",
+        "name": "Emoji: Colher Vegetais Silvestres",
+        "event": ["luz_sombra"],
+        "category": [
+        "emoji"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/emoji/emoji_luz_sombra_colher_vegetais_silvestres.png"
+    },
+    {
+        "id": "emoji_luz_sombra_mantenha_silencio",
+        "name": "Emoji: Mantenha o Silencio",
+        "event": ["luz_sombra"],
+        "category": [
+        "emoji"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/emoji/emoji_luz_sombra_mantenha_silencio.png"
+    },
+    {
+        "id": "emoji_luz_sombra_melhor_premio",
+        "name": "Emoji: Melhor Premio",
+        "event": ["luz_sombra"],
+        "category": [
+        "emoji"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/emoji/emoji_luz_sombra_melhor_premio.png"
+    },
+    {
+        "id": "emoji_luz_sombra_pipocas_caramelizadas",
+        "name": "Emoji: Pipocas Caramelizadas",
+        "event": ["luz_sombra"],
+        "category": [
+        "emoji"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/emoji/emoji_luz_sombra_pipocas_caramelizadas.png"
+    },
+    {
+        "id": "emoji_luz_sombra_pipocas_salgadas",
+        "name": "Emoji: Pipocas Salgadas",
+        "event": ["luz_sombra"],
+        "category": [
+        "emoji"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/emoji/emoji_luz_sombra_pipocas_salgadas.png"
     }
 ]

@@ -86,5 +86,32 @@
     "icon": "/img/heartopia/events/maltese/items/cartao_postal_maltese_sonhador.png",
     "buyPrice": 5,
     "buyCoin": "moeda_troca_maltese"
+  },
+  {
+    "id": "emoji_maltese_curtir",
+    "name": "Emoji: Curtir",
+    "event": ["maltese"],
+    "category": [
+      "emoji"
+    ],
+    "icon": "/img/heartopia/events/maltese/emoji/emoji_maltese_curtir.png"
+  },
+  {
+    "id": "emoji_maltese_forca",
+    "name": "Emoji: Força",
+    "event": ["maltese"],
+    "category": [
+      "emoji"
+    ],
+    "icon": "/img/heartopia/events/maltese/emoji/emoji_maltese_forca.png"
+  },
+  {
+    "id": "emoji_maltese_coracao",
+    "name": "Emoji: Coracao",
+    "event": ["maltese"],
+    "category": [
+      "emoji"
+    ],
+    "icon": "/img/heartopia/events/maltese/emoji/emoji_maltese_coracao.png"
   }
 ]

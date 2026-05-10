@@ -451,5 +451,38 @@
             "banquet"
         ],
         "icon": "/img/heartopia/events/recanto_mosaico/foods/combo_divertido_blocos.png"
+    },
+    {
+        "id": "combo_divertido_blocos",
+        "name": "Combo Divertido de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "banquet"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/combo_divertido_blocos.png"
+    },
+    {
+        "id": "emoji_em_obras",
+        "name": "Emoji: Em Obras",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "emoji"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/emoji/emoji_em_obras.png"
+    },
+    {
+        "id": "emoji_raspadinha_deliciosa",
+        "name": "Emoji: Raspadinha Deliciosa",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "emoji"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/emoji/emoji_raspadinha_deliciosa.png"
     }
 ]
