@@ -27,6 +27,7 @@ import type { EntityCriteria } from "../../types/filterTypes";
 import type { PaginatedResponse } from "../../types/apiModels";
 import { getPublicUrl } from "../../utils/pathUtils";
 import { usePlatform } from "../../hooks/usePlatform";
+import { isDev } from "../../utils/mapper";
 
 export function EntityPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -182,10 +183,13 @@ export function EntityPage() {
             <PickSelector
               label="Raridade"
               value={pages.info.criteria.rarity || null}
-              options={Object.entries(gameInfo.rarity).map(([id, r]) => ({
-                value: id,
-                label: r.name,
-              }))}
+              options={[
+                ...(isDev() ? [{ value: "none", label: "Não Informado" }] : []),
+                ...Object.entries(gameInfo.rarity).map(([id, r]) => ({
+                  value: id,
+                  label: r.name,
+                }))
+              ]}
               onChange={(val) => pages.setCriteria({ rarity: val })}
               icon={<FilterList sx={{ fontSize: 18 }} />}
               fullWidth={isMobile}

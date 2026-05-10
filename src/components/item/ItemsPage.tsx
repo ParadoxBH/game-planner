@@ -27,6 +27,7 @@ import type { PaginatedResponse } from "../../types/apiModels";
 import { usePagination } from "../../hooks/usePagination";
 import { getPublicUrl } from "../../utils/pathUtils";
 import { usePlatform } from "../../hooks/usePlatform";
+import { isDev } from "../../utils/mapper";
 
 export function ItemsPage() {
   const { gameId, category: urlCategory } = useParams<{
@@ -183,10 +184,13 @@ export function ItemsPage() {
             <PickSelector
               label="Raridade"
               value={pages.info.criteria.rarity || null}
-              options={Object.entries(gameInfo.rarity).map(([id, r]) => ({
-                value: id,
-                label: r.name,
-              }))}
+              options={[
+                ...(isDev() ? [{ value: "none", label: "Não Informado" }] : []),
+                ...Object.entries(gameInfo.rarity).map(([id, r]) => ({
+                  value: id,
+                  label: r.name,
+                }))
+              ]}
               onChange={(val) => pages.setCriteria({ rarity: val })}
               fullWidth={isMobile}
             />

@@ -80,7 +80,11 @@ export class ApiService {
 
       // 4. Rarity
       if (criteria.rarity && criteria.rarity !== "all") {
-        if (item.rarity !== criteria.rarity) return false;
+        if (criteria.rarity === "none") {
+          if (item.rarity) return false;
+        } else if (item.rarity !== criteria.rarity) {
+          return false;
+        }
       }
 
       return true;
@@ -119,7 +123,11 @@ export class ApiService {
 
       // 3. Rarity
       if (criteria.rarity && criteria.rarity !== "all") {
-        if (entity.rarity !== criteria.rarity) return false;
+        if (criteria.rarity === "none") {
+          if (entity.rarity) return false;
+        } else if (entity.rarity !== criteria.rarity) {
+          return false;
+        }
       }
 
       return true;
