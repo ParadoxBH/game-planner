@@ -273,7 +273,17 @@
     "id": "pink_bubble",
     "name": "Bolha Rosa",
     "category": "colection",
-    "icon": "/img/heartopia/coletaveis/pink_bubble.png"
+    "icon": "/img/heartopia/coletaveis/pink_bubble.png",
+    "drops": [
+      {
+        "itemId": "ouro",
+        "quant": 300
+      },
+      {
+        "itemId": "fluorita_pura",
+        "quant": 3
+      }
+    ]
   },
   {
     "id": "blue_bubble",
