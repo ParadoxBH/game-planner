@@ -1,0 +1,37 @@
+[
+  {
+    "id": "banana",
+    "name": "Banana",
+    "category": ["resource"],
+    "drops": [],
+    "icon": "/img/windrose/resources/banana.png"
+  },
+  {
+    "id": "cayenne_pepper",
+    "name": "Cayenne Pepper",
+    "category": ["resource"],
+    "drops": [],
+    "icon": "/img/windrose/resources/cayenne_pepper.png"
+  },
+  {
+    "id": "clay",
+    "name": "Clay",
+    "category": ["resource"],
+    "drops": [],
+    "icon": "/img/windrose/resources/clay.png"
+  },
+  {
+    "id": "copper",
+    "name": "Copper",
+    "category": ["resource"],
+    "drops": [],
+    "icon": "/img/windrose/resources/copper.png"
+  },
+  {
+    "id": "misty_orchid",
+    "name": "Misty Orchid",
+    "category": ["resource"],
+    "drops": [],
+    "icon": "/img/windrose/resources/misty_orchid.png"
+  }
+]
