@@ -560,45 +560,5 @@
     "sellPrice": 50,
     "buyPrice": 100,
     "icon": "/img/heartopia/culinaria/ovo_pasteurizado.png"
-  },
-  {
-    "id": "samambaia_selvagem",
-    "name": "Samambaia Selvagem",
-    "category": [
-      "resource",
-      "ingredient"
-    ],
-    "icon": "/img/heartopia/recursos/samambaia_selvagem.png",
-    "sellPrice": 5
-  },
-  {
-    "id": "bardana_selvagem",
-    "name": "Bardana Selvagem",
-    "category": [
-      "resource",
-      "ingredient"
-    ],
-    "icon": "/img/heartopia/recursos/bardana_selvagem.png",
-    "sellPrice": 5
-  },
-  {
-    "id": "mostarda_selvagem",
-    "name": "Mostarda Selvagem",
-    "category": [
-      "resource",
-      "ingredient"
-    ],
-    "icon": "/img/heartopia/recursos/mostarda_selvagem.png",
-    "sellPrice": 5
-  },
-  {
-    "id": "alho_mostarda_selvagem",
-    "name": "Alho-Mostarda Selvagem",
-    "category": [
-      "resource",
-      "ingredient"
-    ],
-    "icon": "/img/heartopia/recursos/alho_mostarda_selvagem.png",
-    "sellPrice": 5
   }
 ]

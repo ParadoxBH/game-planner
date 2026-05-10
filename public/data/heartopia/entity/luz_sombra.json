@@ -8,5 +8,73 @@
       "carrinho_movel_pipoca"
     ],
     "icon": "/img/heartopia/events/luz_sombra/furniture/carrinho_movel_pipoca.png"
+  },
+  {
+    "id": "samambaia_selvagem",
+    "event": "luz_sombra",
+    "name": "Samambaia Selvagem",
+    "category": "resource",
+    "drops": [
+      {
+        "itemId": "samambaia_selvagem",
+        "chance": 1,
+        "quant": 3,
+        "maxQuant": 6
+      }
+    ],
+    "icon": "/img/heartopia/recursos/samambaia_selvagem.png",
+    "image": "/img/heartopia/coletaveis/samambaia_selvagem.png",
+    "respawnDelay": 1.5
+  },
+  {
+    "id": "bardana_selvagem",
+    "event": "luz_sombra",
+    "name": "Bardana Selvagem",
+    "category": "resource",
+    "drops": [
+      {
+        "itemId": "bardana_selvagem",
+        "chance": 1,
+        "quant": 3,
+        "maxQuant": 6
+      }
+    ],
+    "icon": "/img/heartopia/recursos/bardana_selvagem.png",
+    "image": "/img/heartopia/coletaveis/bardana_selvagem.png",
+    "respawnDelay": 1.5
+  },
+  {
+    "id": "mostarda_selvagem",
+    "event": "luz_sombra",
+    "name": "Mostarda Selvagem",
+    "category": "resource",
+    "drops": [
+      {
+        "itemId": "mostarda_selvagem",
+        "chance": 1,
+        "quant": 3,
+        "maxQuant": 6
+      }
+    ],
+    "icon": "/img/heartopia/recursos/mostarda_selvagem.png",
+    "image": "/img/heartopia/coletaveis/mostarda_selvagem.png",
+    "respawnDelay": 1.5
+  },
+  {
+    "id": "alho_mostarda_selvagem",
+    "event": "luz_sombra",
+    "name": "Alho-Mostarda Selvagem",
+    "category": "resource",
+    "drops": [
+      {
+        "itemId": "alho_mostarda_selvagem",
+        "chance": 1,
+        "quant": 3,
+        "maxQuant": 6
+      }
+    ],
+    "icon": "/img/heartopia/recursos/alho_mostarda_selvagem.png",
+    "image": "/img/heartopia/coletaveis/alho_mostarda_selvagem.png",
+    "respawnDelay": 1.5
   }
 ]

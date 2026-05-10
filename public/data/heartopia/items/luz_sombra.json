@@ -1,6 +1,61 @@
 ﻿[
     {
+        "id": "samambaia_selvagem",
+        "event": [
+            "luz_sombra"
+        ],
+        "name": "Samambaia Selvagem",
+        "category": [
+        "resource",
+        "ingredient"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/itens/samambaia_selvagem.png",
+        "sellPrice": 5
+    },
+    {
+        "id": "bardana_selvagem",
+        "event": [
+            "luz_sombra"
+        ],
+        "name": "Bardana Selvagem",
+        "category": [
+        "resource",
+        "ingredient"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/itens/bardana_selvagem.png",
+        "sellPrice": 5
+    },
+    {
+        "id": "mostarda_selvagem",
+        "event": [
+            "luz_sombra"
+        ],
+        "name": "Mostarda Selvagem",
+        "category": [
+        "resource",
+        "ingredient"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/itens/mostarda_selvagem.png",
+        "sellPrice": 5
+    },
+    {
+        "id": "alho_mostarda_selvagem",
+        "event": [
+            "luz_sombra"
+        ],
+        "name": "Alho-Mostarda Selvagem",
+        "category": [
+        "resource",
+        "ingredient"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/itens/alho_mostarda_selvagem.png",
+        "sellPrice": 5
+    },
+    {
         "id": "dente_leao_vermelho",
+        "event": [
+            "luz_sombra"
+        ],
         "name": "Dente-de-leão Vermelho",
         "category": [
             "agriculture",
