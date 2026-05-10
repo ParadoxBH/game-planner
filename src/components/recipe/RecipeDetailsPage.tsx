@@ -30,6 +30,7 @@ import { ProductionFlow } from "../flow/ProductionFlow";
 import { CraftingTreeCard } from "./CraftingTreeCard";
 import { GameDataSelector } from "../common/GameDataSelector";
 import { StyledDialog } from "../common/StyledDialog";
+import { ItemShopCard } from "../shop/ItemShopCard";
 import { getCraftingTree } from "../../utils/craftingTree";
 import type { Item, Entity, Recipe, GameInfo } from "../../types/gameModels";
 import type { RecipeDetails } from "../../types/apiModels";
@@ -208,6 +209,24 @@ export function RecipeDetailsPage() {
     dataLoading,
   ]);
 
+  const recipesMap = useMemo(() => {
+    const map = new Map<string, any>();
+    recipes.forEach((r) => map.set(r.id, r));
+    return map;
+  }, [recipes]);
+
+  const itemsMap = useMemo(() => {
+    const map = new Map<string, any>();
+    items.forEach((i) => map.set(i.id, i));
+    return map;
+  }, [items]);
+
+  const entitiesMap = useMemo(() => {
+    const map = new Map<string, any>();
+    entities.forEach((e) => map.set(e.id, e));
+    return map;
+  }, [entities]);
+
   const eventsMap = useMemo(() => {
     const map = new Map<string, string>();
     events.forEach((e) => map.set(e.id, e.name));
@@ -252,7 +271,7 @@ export function RecipeDetailsPage() {
     );
   }
 
-  const { recipe, ingredients, products } = recipeDetails;
+  const { recipe, ingredients, products, soldIn = [] } = recipeDetails;
 
   return (
     <StyledContainer
@@ -490,6 +509,40 @@ export function RecipeDetailsPage() {
                           <Typography variant="body2">{u.value}</Typography>
                         )}
                       </Box>
+                    ))}
+                  </Stack>
+                </Box>
+              )}
+
+              {soldIn && soldIn.length > 0 && (
+                <Box textAlign="left" sx={{ width: "100%" }}>
+                  <Typography
+                    variant="subtitle2"
+                    color="rgba(255,255,255,0.5)"
+                    gutterBottom
+                  >
+                    VENDIDO EM
+                  </Typography>
+                  <Stack spacing={1}>
+                    {soldIn.map((s, idx) => (
+                      <ItemShopCard
+                        key={`${s.shop.id}-${idx}`}
+                        shop={s.shop}
+                        shopItem={s.shopItem}
+                        npc={entitiesMap.get(s.shop.npcId || "")}
+                        currencyItem={itemsMap.get(s.shopItem.currency || "ouro")}
+                        itemsMap={itemsMap}
+                        entitiesMap={entitiesMap}
+                        recipesMap={recipesMap}
+                        eventsMap={
+                          new Map(
+                            events?.map((e) => [e.id, { name: e.name }]) || [],
+                          )
+                        }
+                        onClick={() =>
+                          navigate(`/game/${gameId}/shops/list/${s.shop.id}`)
+                        }
+                      />
                     ))}
                   </Stack>
                 </Box>

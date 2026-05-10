@@ -63,6 +63,9 @@ export interface Category {
   banner?: string;
   type?: "item" | "entity" | "both";
   image?: string;
+  event?: string[];
+  shopId?: string;
+  items?: ShopItem[];
 }
 
 export type GameDataTypes = "entity" | "item" | "recipe" | "reference_point" | "event" | "skill" | "category" | "conjunto";
@@ -125,14 +128,19 @@ export interface ShopGroup {
   name: string;
   resetType?: "diario" | "semanal" | "unique";
   items: ShopItem[];
+  event?: string[];
 }
 
 export interface Shop {
   id: string;
   name: string;
-  npcId: string;
+  npcId?: string;
+  icon?: string;
+  banner?: string;
   groups: ShopGroup[];
   conditional?: ShopCondition[];
+  event?: string[];
+  category?: string | string[];
 }
 
 export interface GameEvent {

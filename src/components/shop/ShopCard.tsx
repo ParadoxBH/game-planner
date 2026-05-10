@@ -53,8 +53,8 @@ export const ShopCard = ({ shop, npc, onClick, variant = "default" }: ShopCardPr
               overflow: 'hidden',
               position: 'relative'
             }}>
-              {npc?.icon ? (
-                <img src={getPublicUrl(npc.icon)} alt={npc.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              {npc?.icon || shop.icon ? (
+                <img src={getPublicUrl(npc?.icon || shop.icon)} alt={shop.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <Storefront sx={{ fontSize: 40, color: 'text.disabled' }} />
               )}
@@ -78,8 +78,8 @@ export const ShopCard = ({ shop, npc, onClick, variant = "default" }: ShopCardPr
               overflow: 'hidden',
               position: 'relative'
             }}>
-              {npc?.icon ? (
-                <img src={getPublicUrl(npc.icon)} alt={npc.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              {npc?.icon || shop.icon ? (
+                <img src={getPublicUrl(npc?.icon || shop.icon)} alt={shop.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <Storefront sx={{ fontSize: 50, color: 'text.disabled' }} />
               )}
@@ -97,10 +97,10 @@ export const ShopCard = ({ shop, npc, onClick, variant = "default" }: ShopCardPr
                 color: 'text.secondary', 
                 fontWeight: 600, 
                 mb: 2,
-                '&:hover': { color: 'primary.main', cursor: 'pointer' }
+                '&:hover': { color: npc?.id ? 'primary.main' : 'text.secondary', cursor: npc?.id ? 'pointer' : 'default' }
               }}
             >
-              NPC: {npc?.name || "Desconhecido"}
+              {npc ? `NPC: ${npc.name}` : "Loja Global"}
             </Typography>
             <Box sx={{ 
               display: 'flex', 

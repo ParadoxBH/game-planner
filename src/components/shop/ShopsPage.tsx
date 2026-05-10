@@ -22,6 +22,7 @@ import type {
   GameEvent,
   ReferencePoints,
   MapMetadata,
+  Recipe,
 } from "../../types/gameModels";
 import type { ShopDetails } from "../../types/apiModels";
 import { ListingDataView } from "../common/ListingDataView";
@@ -33,6 +34,7 @@ import { entityRepository } from "../../repositories/EntityRepository";
 import { itemRepository } from "../../repositories/ItemRepository";
 import { eventRepository } from "../../repositories/EventRepository";
 import { referencePointRepository } from "../../repositories/ReferencePointRepository";
+import { recipeRepository } from "../../repositories/RecipeRepository";
 import { mapRepository } from "../../repositories/MapRepository";
 import { usePlatform } from "../../hooks/usePlatform";
 import { ShopsDetailsPage } from "./ShopsDetailsPage";
@@ -53,6 +55,7 @@ export function ShopsPage() {
   const [entities, setEntities] = useState<Entity[]>([]);
   const [events, setEvents] = useState<GameEvent[]>([]);
   const [referencePoints, setReferencePoints] = useState<ReferencePoints[]>([]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [maps, setMaps] = useState<MapMetadata[]>([]);
 
   const [shopDetails, setShopDetails] = useState<ShopDetails | null>(null);
@@ -74,6 +77,7 @@ export function ShopsPage() {
       entityRepository.getAll(),
       eventRepository.getAll(),
       referencePointRepository.getAll(),
+      recipeRepository.getAll(),
       mapRepository.getAll(),
     ];
 
@@ -89,6 +93,7 @@ export function ShopsPage() {
           allEntities,
           allEvents,
           allRefPoints,
+          allRecipes,
           allMaps,
           details,
         ]) => {
@@ -99,6 +104,7 @@ export function ShopsPage() {
           setEntities(allEntities);
           setEvents(allEvents);
           setReferencePoints(allRefPoints);
+          setRecipes(allRecipes);
           setMaps(allMaps);
 
           if (details) {
@@ -135,6 +141,16 @@ export function ShopsPage() {
       return true;
     });
   }, [referencePoints, activeEventIds]);
+  
+  const filteredShops = useMemo(() => {
+    return shops.filter(s => {
+      if (s.event) {
+        const eventArray = Array.isArray(s.event) ? s.event : [s.event];
+        return eventArray.some(e => activeEventIds.includes(e));
+      }
+      return true;
+    });
+  }, [shops, activeEventIds]);
 
   const entitiesMap = useMemo(() => {
     const map = new Map<string, any>();
@@ -147,6 +163,12 @@ export function ShopsPage() {
     events.forEach((event) => map.set(event.id, event));
     return map;
   }, [events]);
+
+  const recipesMap = useMemo(() => {
+    const map = new Map<string, any>();
+    recipes.forEach((recipe) => map.set(recipe.id, recipe));
+    return map;
+  }, [recipes]);
 
   const currentShop = shopDetails?.shop;
 
@@ -207,12 +229,12 @@ export function ShopsPage() {
           <PickSelector
             label={"Loja"}
             value={urlShopId || ""}
-            options={shops.map((shop) => {
-              const npc = entitiesMap.get(shop.npcId);
+            options={filteredShops.map((shop) => {
+              const npc = shop.npcId ? entitiesMap.get(shop.npcId) : null;
               return {
                 value: shop.id,
-                label: shop.name || npc?.name || shop.npcId,
-                icon: npc.icon,
+                label: shop.name || npc?.name || shop.npcId || shop.id,
+                icon: npc?.icon || shop.icon,
               };
             })}
             onChange={(value: string | null) => {
@@ -233,7 +255,7 @@ export function ShopsPage() {
     >
       {isOverview ? (
         <ListingDataView
-          data={shops}
+          data={filteredShops}
           viewMode={viewMode}
           variant="compact"
           cardMinWidth={200}
@@ -247,13 +269,14 @@ export function ShopsPage() {
             <ShopCard
               key={shop.id}
               shop={shop}
-              npc={entitiesMap.get(shop.npcId)}
+              npc={shop.npcId ? entitiesMap.get(shop.npcId) : undefined}
               onClick={() => navigate(`/game/${gameId}/shops/list/${shop.id}`)}
               variant={variant}
             />
           )}
           renderListItem={(shop) => {
-            const npc = entitiesMap.get(shop.npcId);
+            const npc = shop.npcId ? entitiesMap.get(shop.npcId) : null;
+            const displayIcon = npc?.icon || shop.icon;
             return [
               <Box
                 key={`shop_list_${shop.id}`}
@@ -279,9 +302,9 @@ export function ShopsPage() {
                     flexShrink: 0,
                   }}
                 >
-                  {npc?.icon ? (
+                  {displayIcon ? (
                     <img
-                      src={getPublicUrl(npc.icon)}
+                      src={getPublicUrl(displayIcon)}
                       alt={shop.name}
                       style={{
                         width: "80%",
@@ -321,11 +344,12 @@ export function ShopsPage() {
             ];
           }}
           renderIconItem={(shop) => {
-            const npc = entitiesMap.get(shop.npcId);
+            const npc = shop.npcId ? entitiesMap.get(shop.npcId) : null;
+            const displayIcon = npc?.icon || shop.icon;
             return (
               <Tooltip
                 key={`shop_icon_${shop.id}`}
-                title={`${shop.name || npc?.name || shop.npcId} (${shop.id})`}
+                title={`${shop.name || npc?.name || shop.npcId || shop.id} (${shop.id})`}
               >
                 <Box
                   onClick={() =>
@@ -340,9 +364,9 @@ export function ShopsPage() {
                     p: 1,
                   }}
                 >
-                  {npc?.icon ? (
+                  {displayIcon ? (
                     <img
-                      src={getPublicUrl(npc.icon)}
+                      src={getPublicUrl(displayIcon)}
                       alt={shop.name}
                       style={{
                         width: "80%",
@@ -367,6 +391,7 @@ export function ShopsPage() {
             shopDetails={shopDetails}
             itemsMap={itemsMap}
             entitiesMap={entitiesMap}
+            recipesMap={recipesMap}
             eventsMap={eventsMap}
             referencePoints={filteredReferencePoints}
             maps={maps}

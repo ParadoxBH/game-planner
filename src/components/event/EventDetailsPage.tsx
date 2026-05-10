@@ -163,6 +163,8 @@ export function EventDetailsPage() {
     entities: eventEntities = [],
     conjuntos: eventConjuntos = [],
     referencePoints: eventReferencePoints = [],
+    shops: eventShops = [],
+    categories: eventCategories = [],
   } = eventDetails || {};
 
   const pointsGroupedByEntity = useMemo(() => {
@@ -632,6 +634,91 @@ export function EventDetailsPage() {
                 </Grid>
               ))}
             </Grid>}
+          </DetainItem>
+
+          <DetainItem
+            size={{ xs: 12, lg: 6 }}
+            label="Lojas do Evento"
+            startIcon={<Explore color="primary" />}
+            count={eventShops.length}
+          >
+            {eventShops.length > 0 && (
+              <Stack spacing={1} sx={{ mt: 2 }}>
+                {eventShops.map((shop) => (
+                  <Paper
+                    key={shop.id}
+                    sx={{
+                      p: 2,
+                      backgroundColor: "rgba(255,255,255,0.03)",
+                      border: "1px solid rgba(255,255,255,0.05)",
+                      borderRadius: 2,
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                      "&:hover": {
+                        borderColor: "primary.main",
+                        backgroundColor: "rgba(255,255,255,0.05)",
+                        transform: "translateY(-2px)",
+                      },
+                    }}
+                    onClick={() => navigate(`/game/${gameId}/shops/list/${shop.id}`)}
+                  >
+                    <Stack direction="row" spacing={2} alignItems="center">
+                      <Avatar
+                        src={getPublicUrl(shop.icon)}
+                        variant="rounded"
+                        sx={{ width: 48, height: 48 }}
+                      />
+                      <Box>
+                        <Typography variant="subtitle1" fontWeight={700}>
+                          {shop.name}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {shop.npcId ? `NPC: ${entitiesMap.get(shop.npcId)?.name || shop.npcId}` : "Loja Global"}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </Paper>
+                ))}
+              </Stack>
+            )}
+          </DetainItem>
+          
+          <DetainItem
+            size={{ xs: 12, lg: 6 }}
+            label="Categorias Vinculadas"
+            startIcon={<Category color="primary" />}
+            count={eventCategories.length}
+          >
+            {eventCategories.length > 0 && (
+              <Grid container spacing={1} sx={{ mt: 1 }}>
+                {eventCategories.map((cat) => (
+                  <Grid size={{ xs: 6, sm: 4 }} key={cat.id}>
+                    <Box
+                      sx={{
+                        p: 1.5,
+                        borderRadius: 2,
+                        backgroundColor: "rgba(255,255,255,0.03)",
+                        border: "1px solid rgba(255,255,255,0.05)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1.5,
+                        cursor: "pointer",
+                        "&:hover": {
+                          borderColor: "primary.main",
+                          backgroundColor: "rgba(255,255,255,0.05)",
+                        },
+                      }}
+                      onClick={() => navigate(`/game/${gameId}/categories/view/${cat.id}`)}
+                    >
+                      <ItemChip id={cat.id} type="category" size="small" icon={cat.icon} />
+                      <Typography variant="caption" fontWeight={700} noWrap>
+                        {cat.name}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
+            )}
           </DetainItem>
 
           <DetainItem

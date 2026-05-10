@@ -22,16 +22,19 @@ import type {
   GameEvent,
   ReferencePoints,
   MapMetadata,
+  Recipe,
 } from "../../types/gameModels";
 import type { ShopDetails } from "../../types/apiModels";
 import { DetainItem } from "../common/DetainItem";
 import { DetainContainer } from "../common/DetainContainer";
+import { useEventFilter } from "../../context/EventFilterContext";
 
 interface ShopsDetailsPageProps {
   gameId: string;
   shopDetails: ShopDetails;
   itemsMap: Map<string, Item>;
   entitiesMap: Map<string, Entity>;
+  recipesMap: Map<string, Recipe>;
   eventsMap: Map<string, GameEvent>;
   referencePoints: ReferencePoints[];
   maps: MapMetadata[];
@@ -43,6 +46,7 @@ export function ShopsDetailsPage({
   shopDetails,
   itemsMap,
   entitiesMap,
+  recipesMap,
   eventsMap,
   referencePoints,
   maps,
@@ -52,6 +56,18 @@ export function ShopsDetailsPage({
 
   const currentShop = shopDetails.shop;
   const currentNpc = shopDetails.npc;
+  const { activeEventIds } = useEventFilter();
+
+  const filteredGroups = useMemo(() => {
+    if (!currentShop?.groups) return [];
+    return currentShop.groups.filter((group) => {
+      if (group.event) {
+        const eventArray = Array.isArray(group.event) ? group.event : [group.event];
+        return eventArray.some((e) => activeEventIds.includes(e));
+      }
+      return true;
+    });
+  }, [currentShop.groups, activeEventIds]);
 
   const npcLocation = useMemo(() => {
     if (!currentNpc || !referencePoints) return null;
@@ -95,12 +111,12 @@ export function ShopsDetailsPage({
               },
               background:
                 "linear-gradient(135deg, rgba(255, 68, 0, 0.05), rgba(255, 136, 0, 0.05))",
-              backgroundImage: `url(${getPublicUrl(currentNpc?.icon)})`,
+              backgroundImage: `url(${getPublicUrl(currentNpc?.icon || currentShop.banner || currentShop.icon)})`,
               backgroundPosition: "top center",
               backgroundSize: "cover",
             }}
           >
-            {!currentNpc?.icon && (
+            {(!currentNpc?.icon && !currentShop.icon && !currentShop.banner) && (
               <Storefront sx={{ fontSize: 80, color: "text.disabled" }} />
             )}
             <Box
@@ -143,7 +159,7 @@ export function ShopsDetailsPage({
                 "&:hover": { color: "primary.main" },
               }}
             >
-              {currentShop.name || currentNpc?.name || currentShop.npcId}
+              {currentShop.name || currentNpc?.name || currentShop.npcId || currentShop.id}
             </Typography>
 
             {currentShop.conditional && currentShop.conditional.length > 0 && (
@@ -229,7 +245,7 @@ export function ShopsDetailsPage({
       </>
       {/* Groups and Items List */}
       <>
-        {currentShop.groups.map((group, idx) => (
+        {filteredGroups.map((group, idx) => (
           <DetainItem
             key={`group-${idx}`}
             label={group.name}
@@ -279,18 +295,21 @@ export function ShopsDetailsPage({
                   shopItem={shopItem}
                   baseItem={itemsMap.get(shopItem.id)}
                   baseEntity={entitiesMap.get(shopItem.id)}
+                  baseRecipe={recipesMap.get(shopItem.id)}
                   currencyItem={itemsMap.get(shopItem.currency || "ouro")}
                   eventsMap={eventsMap}
                   itemsMap={itemsMap}
                   entitiesMap={entitiesMap}
+                  recipesMap={recipesMap}
                   variant={variant}
                 />
               )}
               renderListItem={(shopItem: ShopItem) => {
                 const baseItem = itemsMap.get(shopItem.id);
                 const baseEntity = entitiesMap.get(shopItem.id);
+                const baseRecipe = recipesMap.get(shopItem.id);
                 const currencyItem = itemsMap.get(shopItem.currency || "ouro");
-                const target = baseItem || baseEntity;
+                const target: any = baseItem || baseEntity || baseRecipe;
                 const displayPrice =
                   shopItem.price ?? (baseItem?.buyPrice || baseItem?.sellPrice);
 
@@ -398,7 +417,8 @@ export function ShopsDetailsPage({
               renderIconItem={(shopItem: ShopItem) => {
                 const baseItem = itemsMap.get(shopItem.id);
                 const baseEntity = entitiesMap.get(shopItem.id);
-                const target = baseItem || baseEntity;
+                const baseRecipe = recipesMap.get(shopItem.id);
+                const target: any = baseItem || baseEntity || baseRecipe;
                 const currencyItem = itemsMap.get(shopItem.currency || "ouro");
                 const displayPrice =
                   shopItem.price ?? (baseItem?.buyPrice || baseItem?.sellPrice);

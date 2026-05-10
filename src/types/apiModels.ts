@@ -77,6 +77,18 @@ export interface RecipeDetails {
     data?: Item | Entity;
     dataOptions?: (Item | Entity)[];
   }[];
+  soldIn: {
+    shop: Shop;
+    shopItem: {
+      id: string;
+      price?: number;
+      currency?: string;
+      amount?: number;
+      size?: "small" | "medium" | "large" | "extraLarge";
+      disableLink?: boolean;
+      isBest?: boolean;
+    };
+  }[];
 }
 
 export interface GameDataPayload {
@@ -112,6 +124,8 @@ export interface EventDetails {
   entities: Entity[];
   conjuntos: Conjunto[];
   referencePoints: ReferencePoints[];
+  shops: Shop[];
+  categories: Category[];
 }
 
 export interface PaginatedResponse<T> {

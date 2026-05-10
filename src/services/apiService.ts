@@ -184,8 +184,17 @@ export class ApiService {
     return recipeRepository.getAll();
   }
 
-  public async getAllShops(): Promise<Shop[]> {
-    return shopRepository.getAll();
+  public async getAllShops(activeEventIds?: string[], strictEventFilter?: boolean): Promise<Shop[]> {
+    const shops = await shopRepository.getAll();
+    if (!activeEventIds) return shops;
+
+    return shops.filter(shop => {
+      if (shop.event) {
+        const eventArray = Array.isArray(shop.event) ? shop.event : [shop.event];
+        return eventArray.some(e => activeEventIds.includes(e));
+      }
+      return !strictEventFilter;
+    });
   }
 
   public async getEvents(): Promise<GameEvent[]> {
@@ -422,9 +431,25 @@ export class ApiService {
     if (!shop) return null;
 
     const npc = shop.npcId ? await entityRepository.getById(shop.npcId) : undefined;
+    
+    // Fetch categories that belong to this shop and have items
+    const allCategories = await categoryRepository.getAll();
+    const shopGroupsFromCategories = allCategories
+      .filter(c => c.shopId === shopId && c.items && c.items.length > 0)
+      .map(c => ({
+        name: c.name,
+        items: c.items || [],
+        event: c.event,
+      }));
+
+    // Merge groups
+    const mergedShop = {
+      ...shop,
+      groups: [...(shop.groups || []), ...shopGroupsFromCategories]
+    };
 
     return {
-      shop,
+      shop: mergedShop,
       npc,
     };
   }
@@ -555,10 +580,30 @@ export class ApiService {
       };
     }));
 
+    const soldIn: RecipeDetails["soldIn"] = [];
+    shops.forEach((s) => {
+      s.groups.forEach((g) => {
+        g.items.forEach((i) => {
+          if (i.id === recipeId) {
+            soldIn.push({
+              shop: s,
+              shopItem: {
+                id: i.id as string,
+                price: i.price,
+                currency: i.currency,
+                amount: i.amount,
+              },
+            });
+          }
+        });
+      });
+    });
+
     return {
       recipe,
       ingredients: ingredients as any,
       products: products as any,
+      soldIn,
     };
   }
 
@@ -586,6 +631,13 @@ export class ApiService {
     const conjuntos = conjuntosRes.data;
 
     const referencePoints = await referencePointRepository.getByEventId(eventId);
+    
+    const shops = await this.getAllShops([eventId], true);
+    const categories = (await categoryRepository.getAll()).filter(c => {
+      if (!c.event) return false;
+      const eventArray = Array.isArray(c.event) ? c.event : [c.event];
+      return eventArray.includes(eventId);
+    });
 
     return {
       event,
@@ -594,6 +646,8 @@ export class ApiService {
       entities,
       conjuntos,
       referencePoints,
+      shops,
+      categories,
     };
   }
 

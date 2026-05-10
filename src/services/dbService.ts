@@ -30,7 +30,7 @@ export class DbService {
       console.log(`[DbService] Reconstructing database for game: ${gameId}`);
       
       // 3. Fetch all data in parallel
-      const datasets = ["items", "recipes", "entity", "shops", "events", "referencePoints", "codes", "conjuntos", "categories"];
+      const datasets = ["items", "recipes", "entity", "shops", "events", "referencePoints", "codes", "conjuntos", "categories", "shopCategories"];
       let bug = "Iniciando...";
       try {
         bug = "Carregando dados";
@@ -56,6 +56,7 @@ export class DbService {
           codes, 
           conjuntos, 
           categories,
+          shopCategories,
           games, 
           maps = [],
           version
@@ -78,11 +79,23 @@ export class DbService {
           bug = "Populando Entidades";
           if (entities?.length) await entityRepository.bulkAdd(clean(entities, 'id', 'Entities'));
           bug = "Populando Lojas";
-          if (shops?.length) await shopRepository.bulkAdd(clean(shops, 'id', 'Shops'));
+          if (shops?.length) {
+            const normalizedShops = shops.map((s: any) => ({
+              ...s,
+              event: s.event || s.events || undefined
+            }));
+            await shopRepository.bulkAdd(clean(normalizedShops, 'id', 'Shops'));
+          }
           bug = "Populando Eventos";
           if (events?.length) await eventRepository.bulkAdd(clean(events, 'id', 'Events'));
           bug = "Populando Pontos de Referência";
-          if (referencePoints?.length) await referencePointRepository.bulkAdd(clean(referencePoints, 'id', 'ReferencePoints'));
+          if (referencePoints?.length) {
+            const normalizedPoints = referencePoints.map((p: any) => ({
+              ...p,
+              event: p.event || p.events || undefined
+            }));
+            await referencePointRepository.bulkAdd(clean(normalizedPoints, 'id', 'ReferencePoints'));
+          }
           bug = "Populando Códigos";
           if (codes?.length) await codeRepository.bulkAdd(clean(codes, 'code', 'Codes'));
           bug = "Populando Conjuntos";
@@ -92,7 +105,13 @@ export class DbService {
           bug = "Populando Mapas";
           if (maps?.length) await mapRepository.bulkAdd(clean(maps, 'id', 'Maps'));
           bug = "Populando Categorias";
-          if (categories?.length) await categoryRepository.bulkAdd(clean(categories, 'id', 'Categories'));
+          if (categories?.length || shopCategories?.length) {
+            const allCategories = [...(categories || []), ...(shopCategories || [])].map((c: any) => ({
+              ...c,
+              event: c.event || c.events || undefined
+            }));
+            await categoryRepository.bulkAdd(clean(allCategories, 'id', 'Categories'));
+          }
 
           // Store the remote version we just downloaded
           bug = "Salvando versão do banco";

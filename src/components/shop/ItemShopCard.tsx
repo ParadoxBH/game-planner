@@ -32,6 +32,7 @@ interface ItemShopCardProps {
   currencyItem?: { name: string; icon?: string };
   itemsMap: Map<string, { name: string; icon?: string; image?: string; buyPrice?: number; sellPrice?: number; level?: number }>;
   entitiesMap: Map<string, { name: string; icon?: string; image?: string; buyPrice?: number; sellPrice?: number; level?: number }>;
+  recipesMap: Map<string, { id: string; name?: string; products?: any[]; itemId?: string }>;
   eventsMap: Map<string, { name: string }>;
   onClick: () => void;
 }
@@ -43,11 +44,33 @@ export function ItemShopCard({
   currencyItem, 
   itemsMap, 
   entitiesMap, 
+  recipesMap,
   eventsMap,
   onClick 
 }: ItemShopCardProps) {
   const isEntity = shopItem.type === 'entity';
-  const baseData = isEntity ? entitiesMap.get(shopItem.id) : itemsMap.get(shopItem.id);
+  const isRecipe = shopItem.type === 'recipe';
+  
+  const getRecipeData = () => {
+    const baseRecipe = recipesMap.get(shopItem.id);
+    if (!baseRecipe) return undefined;
+    
+    const productId = baseRecipe.itemId || baseRecipe.products?.[0]?.id;
+    const productData = productId ? (itemsMap.get(productId) || entitiesMap.get(productId)) : undefined;
+    
+    return {
+      name: baseRecipe.name || productData?.name || baseRecipe.id,
+      icon: productData?.icon,
+      image: productData?.image,
+      buyPrice: undefined,
+      sellPrice: undefined,
+      level: undefined
+    };
+  };
+
+  const baseData = isEntity 
+    ? entitiesMap.get(shopItem.id) 
+    : (isRecipe ? getRecipeData() : itemsMap.get(shopItem.id));
   
   const currency = shopItem.currency || 'ouro';
   const price = shopItem.price ?? 

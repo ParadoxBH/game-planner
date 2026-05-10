@@ -22,10 +22,12 @@ interface ShopItemCardProps {
   shopItem: ShopItem;
   baseItem?: { name: string; icon?: string; buyPrice?: number; sellPrice?: number };
   baseEntity?: { name: string; icon?: string; buyPrice?: number; sellPrice?: number };
+  baseRecipe?: { id: string; name?: string; products?: any[]; itemId?: string };
   currencyItem?: { name: string; icon?: string };
   eventsMap: Map<string, { name: string }>;
   itemsMap: Map<string, { name: string; icon?: string }>;
   entitiesMap: Map<string, { name: string; icon?: string }>;
+  recipesMap: Map<string, { id: string; name?: string; products?: any[]; itemId?: string }>;
   variant?: "compact" | "default";
 }
 
@@ -33,15 +35,33 @@ export function ShopItemCard({
   shopItem, 
   baseItem, 
   baseEntity,
+  baseRecipe,
   currencyItem, 
   eventsMap, 
   itemsMap,
   entitiesMap,
+  recipesMap,
   variant = "default"
 }: ShopItemCardProps) {
   const isEntity = shopItem.type === 'entity';
-  const name = isEntity ? baseEntity?.name : baseItem?.name;
-  const icon = isEntity ? baseEntity?.icon : baseItem?.icon;
+  const isRecipe = shopItem.type === 'recipe';
+  
+  const getRecipeName = () => {
+    if (!baseRecipe) return undefined;
+    if (baseRecipe.name) return baseRecipe.name;
+    const productId = baseRecipe.itemId || baseRecipe.products?.[0]?.id;
+    if (productId) return itemsMap.get(productId)?.name || entitiesMap.get(productId)?.name;
+    return undefined;
+  };
+
+  const getRecipeIcon = () => {
+    const productId = baseRecipe?.itemId || baseRecipe?.products?.[0]?.id;
+    if (productId) return itemsMap.get(productId)?.icon || entitiesMap.get(productId)?.icon;
+    return undefined;
+  };
+
+  const name = isEntity ? baseEntity?.name : (isRecipe ? getRecipeName() : baseItem?.name);
+  const icon = isEntity ? baseEntity?.icon : (isRecipe ? getRecipeIcon() : baseItem?.icon);
   
   const price = shopItem.price ?? 
                 (isEntity 
