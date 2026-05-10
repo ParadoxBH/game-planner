@@ -309,5 +309,12 @@
     "category": "colection",
     "icon": "/img/heartopia/recursos/meteoro_cinza.png",
     "image": "/img/heartopia/coletaveis/meteoro.png"
+  },
+  {
+    "id": "porcino",
+    "name": "Porcino",
+    "category": "colection",
+    "icon": "/img/heartopia/recursos/porcino.png",
+    "image": "/img/heartopia/coletaveis/porcino.png"
   }
 ]
