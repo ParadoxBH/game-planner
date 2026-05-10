@@ -1,0 +1,58 @@
+﻿[
+    {
+        "id": "blocos_multicoloridos",
+        "name": "Blocos Multicoloridos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "wallet"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/items/blocos_multicoloridos.png"
+    },
+    {
+        "id": "token_festivo_recanto_mosaico",
+        "name": "Token Festivo",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "wallet"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/items/token_festivo.png"
+    },
+    {
+        "id": "moeda_troca_especial_recanto_mosaico",
+        "name": "Moeda de Troca Especial Recanto Mosaico",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "wallet"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/items/moeda_troca_especial_recanto_mosaico.png"
+    },
+    {
+        "id": "kit_materiais_blocos_mosaico",
+        "name": "Kit de Materiais de Blocos Mosaico",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "resource"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/items/kit_materiais_blocos_mosaico.png"
+    },
+    {
+        "id": "gacha_recanto_mosaico",
+        "name": "Gacha Recanto Mosaico",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "wallet",
+            "gacha"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/items/gacha_recanto_mosaico.png"
+    }
+]

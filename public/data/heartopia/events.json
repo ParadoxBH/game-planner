@@ -24,6 +24,18 @@
     }
   },
   {
+    "id": "recanto_mosaico",
+    "name": "Recanto Mosaico",
+    "type": "season",
+    "description": "Grab your friends and dive into the fun of brick bazaar!",
+    "icon": "/img/heartopia/events/recanto_mosaico/icon.png",
+    "banner": "/img/heartopia/events/recanto_mosaico/banner.png",
+    "period": {
+      "start": "09/05/2026",
+      "end": "27/06/2026"
+    }
+  },
+  {
     "id": "rainbow",
     "name": "Arco-iris",
     "type": "clima",

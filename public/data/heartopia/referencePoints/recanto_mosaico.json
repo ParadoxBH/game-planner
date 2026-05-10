@@ -1,0 +1,28 @@
+﻿[
+  {
+    "id": "point_1777206438684",
+    "type": "spawn",
+    "event": "recanto_mosaico",
+    "entityId": "brick_bubble",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-32.32952585238617 17.208332134260267)"
+    },
+    "image": "/img/heartopia/events/recanto_mosaico/referencePoints/brick_bubble_1.jpg",
+    "mapId": "main",
+    "mode": "once"
+  },
+  {
+    "id": "point_1778382141446",
+    "type": "spawn",
+    "event": "recanto_mosaico",
+    "entityId": "brick_bubble",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-10.321670396116186 78.18467187163179)"
+    },
+    "image": "/img/heartopia/events/recanto_mosaico/referencePoints/brick_bubble_2.jpg",
+    "mapId": "main",
+    "mode": "once"
+  }
+]
