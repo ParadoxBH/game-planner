@@ -5,7 +5,8 @@
         "category": [
             "miscellaneous"
         ],
-        "icon": "/img/windrose/items/miscellaneous/ancient_chalice.png"
+        "icon": "/img/windrose/items/miscellaneous/ancient_chalice.png",
+        "rarity": "rare"
     },
     {
         "id": "bone_beads",
@@ -13,7 +14,8 @@
         "category": [
             "miscellaneous"
         ],
-        "icon": "/img/windrose/items/miscellaneous/bone_beads.png"
+        "icon": "/img/windrose/items/miscellaneous/bone_beads.png",
+        "rarity": "uncommon"
     },
     {
         "id": "clay_vase",
@@ -91,7 +93,8 @@
         "category": [
             "miscellaneous"
         ],
-        "icon": "/img/windrose/items/miscellaneous/pot_golden_horn.png"
+        "icon": "/img/windrose/items/miscellaneous/pot_golden_horn.png",
+        "rarity": "rare"
     },
     {
         "id": "provisions",

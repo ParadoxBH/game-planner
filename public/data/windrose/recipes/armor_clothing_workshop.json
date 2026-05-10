@@ -198,6 +198,39 @@
         ]
     },
     {
+        "id": "conquistador_boots",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "conquistador_boots",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
         "id": "conquistador_helmet",
         "stations": [
             "armor_clothing_workshop"
@@ -218,6 +251,105 @@
             {
                 "type": "item",
                 "id": "conquistador_helmet",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "marksman_gloves",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 4
+            },
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "marksman_gloves",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "marksman_tricorne",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 5
+            },
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "marksman_tricorne",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "pikeman_gloves",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "pikeman_gloves",
                 "amount": 1,
                 "level": 1
             }

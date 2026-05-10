@@ -84,5 +84,86 @@
                 "value": 2
             }
         ]
+    },
+    {
+        "id": "minor_jaguar_ring",
+        "stations": [
+            "jewelery_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "silver_ingot",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "minor_jaguar_ring",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "minor_ring_bravery",
+        "stations": [
+            "jewelery_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "silver_ingot",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "minor_ring_bravery",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "minor_spear_thrower_ring",
+        "stations": [
+            "jewelery_table"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "silver_ingot",
+                "amount": 3
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "minor_spear_thrower_ring",
+                "amount": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
     }
 ]

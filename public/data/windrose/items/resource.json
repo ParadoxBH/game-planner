@@ -14,6 +14,13 @@
     "rarity": "common"
   },
   {
+    "id": "aloe_seeds",
+    "name": "Aloe Seeds",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/aloe_seeds.png",
+    "rarity": "common"
+  },
+  {
     "id": "anvil",
     "name": "Anvil",
     "category": ["resource"],
@@ -61,6 +68,13 @@
     "category": ["resource"],
     "icon": "/img/windrose/items/resource/cane_sugar.png",
     "rarity": "rare"
+  },
+  {
+    "id": "cayenne_pepper_seeds",
+    "name": "Cayenne Pepper Seeds",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/cayenne_pepper_seeds.png",
+    "rarity": "common"
   },
   {
     "id": "charcoal",
@@ -112,6 +126,13 @@
     "rarity": "common"
   },
   {
+    "id": "corn_seeds",
+    "name": "Corn Seeds",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/corn_seeds.png",
+    "rarity": "common"
+  },
+  {
     "id": "copper_pot",
     "name": "Copper Pot",
     "category": ["resource"],
@@ -140,6 +161,13 @@
     "rarity": "common"
   },
   {
+    "id": "dodo_head",
+    "name": "Dodo Head",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/dodo_head.png",
+    "rarity": "uncommon"
+  },
+  {
     "id": "feather",
     "name": "Feather",
     "category": ["resource"],
@@ -161,6 +189,13 @@
     "rarity": "common"
   },
   {
+    "id": "flax_seeds",
+    "name": "Flax Seeds",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/flax_seeds.png",
+    "rarity": "common"
+  },
+  {
     "id": "foothills_iron_ore",
     "name": "Foothills Iron Ore",
     "category": ["resource"],
@@ -172,6 +207,13 @@
     "name": "Gold Ingot",
     "category": ["resource"],
     "icon": "/img/windrose/items/resource/gold_ingot.png",
+    "rarity": "rare"
+  },
+  {
+    "id": "guinea",
+    "name": "Guinea",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/guinea.png",
     "rarity": "rare"
   },
   {
@@ -194,6 +236,13 @@
     "category": ["resource"],
     "icon": "/img/windrose/items/resource/ironware.png",
     "rarity": "uncommon"
+  },
+  {
+    "id": "lime_seeds",
+    "name": "Lime Seeds",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/lime_seeds.png",
+    "rarity": "common"
   },
   {
     "id": "linen_fabric",
@@ -252,6 +301,13 @@
     "rarity": "common"
   },
   {
+    "id": "shrub_seeds",
+    "name": "Shrub Seeds",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/shrub_seeds.png",
+    "rarity": "common"
+  },
+  {
     "id": "plant_fiber",
     "name": "Plant Fiber",
     "category": ["resource"],
@@ -301,6 +357,13 @@
     "rarity": "common"
   },
   {
+    "id": "sweet_potato_seeds",
+    "name": "Sweet Potato Seeds",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/sweet_potato_seeds.png",
+    "rarity": "common"
+  },
+  {
     "id": "sweet_potato",
     "name": "Sweet Potato",
     "category": ["resource"],
@@ -327,6 +390,13 @@
     "category": ["resource"],
     "icon": "/img/windrose/items/resource/timber.png",
     "rarity": "uncommon"
+  },
+  {
+    "id": "tomato",
+    "name": "Tomato",
+    "category": ["resource"],
+    "icon": "/img/windrose/items/resource/tomato.png",
+    "rarity": "common"
   },
   {
     "id": "tree_bark",

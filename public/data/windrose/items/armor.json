@@ -1,5 +1,16 @@
 ﻿[
     {
+        "id": "conquistador_boots",
+        "name": "Conquistador's Boots",
+        "category": [
+            "armor",
+            "boots",
+            "set_conquistador"
+        ],
+        "icon": "/img/windrose/items/armor/conquistador_boots.png",
+        "rarity": "rare"
+    },
+    {
         "id": "conquistador_helmet",
         "name": "Conquistador's Helmet",
         "category": [
@@ -8,6 +19,17 @@
             "set_conquistador"
         ],
         "icon": "/img/windrose/items/armor/conquistador_helmet.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "conquistador_boots",
+        "name": "Conquistador's Boots",
+        "category": [
+            "armor",
+            "boots",
+            "set_conquistador"
+        ],
+        "icon": "/img/windrose/items/armor/conquistador_boots.png",
         "rarity": "rare"
     },
     {
@@ -55,25 +77,36 @@
         "rarity": "common"
     },
     {
-        "id": "privateer_boots",
-        "name": "Privateer Boots",
+        "id": "marksman_gloves",
+        "name": "Marksman's Gloves",
         "category": [
             "armor",
-            "boots",
-            "set_privateer"
+            "gloves",
+            "set_marksman"
         ],
-        "icon": "/img/windrose/items/armor/privateer_boots.png",
+        "icon": "/img/windrose/items/armor/marksman_gloves.png",
         "rarity": "rare"
     },
     {
-        "id": "privateer_bandana",
-        "name": "Privateer Bandana",
+        "id": "marksman_tricorne",
+        "name": "Marksman's Tricorne",
         "category": [
             "armor",
             "hat",
-            "set_privateer"
+            "set_marksman"
         ],
-        "icon": "/img/windrose/items/armor/privateer_bandana.png",
+        "icon": "/img/windrose/items/armor/marksman_tricorne.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "pikeman_gloves",
+        "name": "Pikeman's Gloves",
+        "category": [
+            "armor",
+            "gloves",
+            "set_pikeman"
+        ],
+        "icon": "/img/windrose/items/armor/pikeman_gloves.png",
         "rarity": "rare"
     },
     {
