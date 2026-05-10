@@ -1,13 +1,16 @@
 ﻿[
     "alchemy.json",
     "ammo.json",
+    "armor.json",
     "backpack.json",
     "food.json",
     "item.json",
     "medice.json",
+    "melee_weapon.json",
     "metal.json",
     "miscellaneous.json",
     "necklace.json",
+    "ranged_weapon.json",
     "resource.json",
     "ring.json",
     "tool.json"

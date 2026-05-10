@@ -1,0 +1,72 @@
+﻿[
+    {
+        "id": "blunderbuss",
+        "name": "Blunderbuss",
+        "category": [
+            "ranged_weapon",
+            "pierce"
+        ],
+        "icon": "/img/windrose/items/ranged_weapon/blunderbuss.png",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "buccaneer_friend",
+        "name": "Buccaneer's Friend",
+        "category": [
+            "ranged_weapon",
+            "pierce"
+        ],
+        "icon": "/img/windrose/items/ranged_weapon/buccaneer_friend.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "drake_double_barreled_pistol",
+        "name": "Drake's Double-Barreled Pistol",
+        "category": [
+            "ranged_weapon",
+            "pierce"
+        ],
+        "icon": "/img/windrose/items/ranged_weapon/drake_double_barreled_pistol.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "infantry_musket",
+        "name": "Infantry Musket",
+        "category": [
+            "ranged_weapon",
+            "pierce"
+        ],
+        "icon": "/img/windrose/items/ranged_weapon/infantry_musket.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "musket",
+        "name": "Musket",
+        "category": [
+            "ranged_weapon",
+            "pierce"
+        ],
+        "icon": "/img/windrose/items/ranged_weapon/musket.png",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "pistol",
+        "name": "Pistol",
+        "category": [
+            "ranged_weapon",
+            "pierce"
+        ],
+        "icon": "/img/windrose/items/ranged_weapon/pistol.png",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "worn_out_pistol",
+        "name": "Worn Out Pistol",
+        "category": [
+            "ranged_weapon",
+            "pierce"
+        ],
+        "icon": "/img/windrose/items/ranged_weapon/worn_out_pistol.png",
+        "rarity": "common"
+    }
+]

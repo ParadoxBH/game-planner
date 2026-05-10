@@ -1,0 +1,497 @@
+﻿[
+    {
+        "id": "bonebreaker",
+        "stations": [
+            "weaponsmith_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "bonebreaker",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "sturdy_mace",
+        "stations": [
+            "weaponsmith_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "sturdy_mace",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "cutlass",
+        "stations": [
+            "weaponsmith_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 7
+            },
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "cutlass",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "sturdy_saber",
+        "stations": [
+            "weaponsmith_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 7
+            },
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "sturdy_saber",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "infantry_musket",
+        "stations": [
+            "weaponsmith_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 7
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "infantry_musket",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "buccaneer_friend",
+        "stations": [
+            "weaponsmith_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 7
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "buccaneer_friend",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "drake_double_barreled_pistol",
+        "stations": [
+            "weaponsmith_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "drake_double_barreled_pistol",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "club",
+        "stations": [
+            "weaponsmith_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "club",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "two_handed_sword",
+        "stations": [
+            "weaponsmith_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "two_handed_sword",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "halberd",
+        "stations": [
+            "weaponsmith_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 7
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "halberd",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "rapier",
+        "stations": [
+            "weaponsmith_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 7
+            },
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "rapier",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "saber",
+        "stations": [
+            "weaponsmith_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 7
+            },
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "saber",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "blunderbuss",
+        "stations": [
+            "weaponsmith_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 7
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "blunderbuss",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "musket",
+        "stations": [
+            "weaponsmith_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 7
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "musket",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "pistol",
+        "stations": [
+            "weaponsmith_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "wood",
+                "amount": 10
+            },
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 5
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "pistol",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    }
+]

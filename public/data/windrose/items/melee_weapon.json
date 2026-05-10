@@ -1,0 +1,102 @@
+﻿[
+    {
+        "id": "bonebreaker",
+        "name": "Bonebreaker",
+        "category": [
+            "melee_weapon",
+            "crude"
+        ],
+        "icon": "/img/windrose/items/melee_weapon/bonebreaker.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "broken_blade",
+        "name": "Broken Blade",
+        "category": [
+            "melee_weapon",
+            "slash"
+        ],
+        "icon": "/img/windrose/items/melee_weapon/broken_blade.png",
+        "rarity": "common"
+    },
+    {
+        "id": "club",
+        "name": "Club",
+        "category": [
+            "melee_weapon",
+            "crude"
+        ],
+        "icon": "/img/windrose/items/melee_weapon/club.png",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "cutlass",
+        "name": "Cutlass",
+        "category": [
+            "melee_weapon",
+            "slash"
+        ],
+        "icon": "/img/windrose/items/melee_weapon/cutlass.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "halberd",
+        "name": "Halberd",
+        "category": [
+            "melee_weapon",
+            "crude"
+        ],
+        "icon": "/img/windrose/items/melee_weapon/halberd.png",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "rapier",
+        "name": "Rapier",
+        "category": [
+            "melee_weapon",
+            "pierce"
+        ],
+        "icon": "/img/windrose/items/melee_weapon/rapier.png",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "saber",
+        "name": "Saber",
+        "category": [
+            "melee_weapon",
+            "slash"
+        ],
+        "icon": "/img/windrose/items/melee_weapon/saber.png",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "sturdy_mace",
+        "name": "Sturdy Mace",
+        "category": [
+            "melee_weapon",
+            "crude"
+        ],
+        "icon": "/img/windrose/items/melee_weapon/sturdy_mace.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "sturdy_saber",
+        "name": "Sturdy Saber",
+        "category": [
+            "melee_weapon",
+            "slash"
+        ],
+        "icon": "/img/windrose/items/melee_weapon/sturdy_saber.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "two_handed_sword",
+        "name": "Two-Handed Sword",
+        "category": [
+            "melee_weapon",
+            "slash"
+        ],
+        "icon": "/img/windrose/items/melee_weapon/two_handed_sword.png",
+        "rarity": "rare"
+    }
+]
