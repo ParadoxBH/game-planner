@@ -282,6 +282,14 @@
       {
         "itemId": "fluorita_pura",
         "quant": 3
+      },
+      {
+        "itemId": "estrela_desejavel",
+        "quant": 5
+      },
+      {
+        "itemId": "estrela_desejavel",
+        "quant": 10
       }
     ]
   },
