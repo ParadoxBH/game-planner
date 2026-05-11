@@ -1,0 +1,152 @@
+﻿[
+  {
+    "id": "point_1778457271209",
+    "type": "spawn",
+    "entityId": "champignon_coletavel",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-378.2089195131981 -279.02604563556116)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778457295608",
+    "type": "spawn",
+    "entityId": "champignon_coletavel",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-385.97392767420166 -307.4283762529764)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778457310663",
+    "type": "spawn",
+    "entityId": "champignon_coletavel",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-367.0540665642049 -328.6529638333878)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778457327191",
+    "type": "spawn",
+    "entityId": "champignon_coletavel",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-405.27990839868824 -335.21329090369676)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778457338507",
+    "type": "spawn",
+    "entityId": "champignon_coletavel",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-432.6944010274591 -317.4618176546255)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778457352952",
+    "type": "spawn",
+    "entityId": "champignon_coletavel",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-460.88113288520947 -311.2873921766877)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778457441206",
+    "type": "spawn",
+    "entityId": "champignon_coletavel",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-409.91334377256504 -196.28871765009532)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778457476986",
+    "type": "spawn",
+    "entityId": "champignon_coletavel",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-428.0609656535823 -158.0844600053549)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778457493179",
+    "type": "spawn",
+    "entityId": "champignon_coletavel",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-406.43826724215745 -130.68544694700577)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778457516429",
+    "type": "spawn",
+    "entityId": "champignon_coletavel",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-412.2300614595034 -85.53496063958524)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778457547252",
+    "type": "spawn",
+    "entityId": "champignon_coletavel",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-477.48427630826785 25.604697963296037)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778457557631",
+    "type": "spawn",
+    "entityId": "champignon_coletavel",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-506.44324739499757 0.9069960515447032)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778457584472",
+    "type": "spawn",
+    "entityId": "champignon_coletavel",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-434.62499909990777 77.31551134102553)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778457599412",
+    "type": "spawn",
+    "entityId": "champignon_coletavel",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-473.6230801633705 135.2007501966928)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778457612462",
+    "type": "spawn",
+    "entityId": "champignon_coletavel",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-504.1265297080592 151.02271548390854)"
+    },
+    "mapId": "main"
+  }
+]

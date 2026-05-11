@@ -108,5 +108,55 @@
       "coordinates": "POINT(500.83499874388247 26.883815406063157)"
     },
     "mapId": "main"
+  },
+  {
+    "id": "point_1778458325212",
+    "type": "spawn",
+    "entityId": "porcino",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(412.8140971084223 -220.58636703195086)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778458397570",
+    "type": "spawn",
+    "entityId": "porcino",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(468.02920198045376 -173.5063727626747)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778458403233",
+    "type": "spawn",
+    "entityId": "porcino",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(449.4954604849467 -178.52309346349932)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778458411891",
+    "type": "spawn",
+    "entityId": "porcino",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(467.2569627514743 -206.30800811421946)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778458425917",
+    "type": "spawn",
+    "entityId": "porcino",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(451.81217817188514 -229.46210365648648)"
+    },
+    "mapId": "main"
   }
 ]

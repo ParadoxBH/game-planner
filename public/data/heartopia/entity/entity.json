@@ -322,7 +322,42 @@
     "id": "porcino",
     "name": "Porcino",
     "category": "colection",
+    "drops": [
+      {
+        "itemId": "porcino",
+        "chance": 1,
+        "quant": 3
+      }
+    ],
     "icon": "/img/heartopia/recursos/porcino.png",
     "image": "/img/heartopia/coletaveis/porcino.png"
+  },
+  {
+    "id": "shiitake",
+    "name": "Shiitake",
+    "category": "colection",
+    "drops": [
+      {
+        "itemId": "shiitake",
+        "chance": 1,
+        "quant": 3
+      }
+    ],
+    "icon": "/img/heartopia/recursos/shiitake.png",
+    "image": "/img/heartopia/coletaveis/shiitake.png"
+  },
+  {
+    "id": "cogumelo_ostra",
+    "name": "Cogumelo_ostra",
+    "category": "colection",
+    "drops": [
+      {
+        "itemId": "cogumelo_ostra",
+        "chance": 1,
+        "quant": 3
+      }
+    ],
+    "icon": "/img/heartopia/recursos/cogumelo_ostra.png",
+    "image": "/img/heartopia/coletaveis/cogumelo_ostra.png"
   }
 ]

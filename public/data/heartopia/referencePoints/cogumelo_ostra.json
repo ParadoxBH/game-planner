@@ -1,0 +1,142 @@
+﻿[
+  {
+    "id": "point_1778459026200",
+    "type": "spawn",
+    "entityId": "cogumelo_ostra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(40.63720639817673 481.5600833517374)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778459059862",
+    "type": "spawn",
+    "entityId": "cogumelo_ostra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-44.30910878956392 462.2650037331816)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778459075712",
+    "type": "spawn",
+    "entityId": "cogumelo_ostra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-117.67183554261268 481.9459849441085)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778459108195",
+    "type": "spawn",
+    "entityId": "cogumelo_ostra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-123.46362975995872 454.5469718857593)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778459132064",
+    "type": "spawn",
+    "entityId": "cogumelo_ostra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-227.3298060576962 468.82533080349054)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778459148654",
+    "type": "spawn",
+    "entityId": "cogumelo_ostra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-170.18410311321605 518.2207346269934)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778459204382",
+    "type": "spawn",
+    "entityId": "cogumelo_ostra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(12.836594154916071 528.2541760286423)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778459218206",
+    "type": "spawn",
+    "entityId": "cogumelo_ostra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(49.131837916950744 522.0797505507045)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778459246043",
+    "type": "spawn",
+    "entityId": "cogumelo_ostra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(25.964661047566977 463.4227085102949)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778459403179",
+    "type": "spawn",
+    "entityId": "cogumelo_ostra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-321.5429919931904 500.08335978555095)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778459415199",
+    "type": "spawn",
+    "entityId": "cogumelo_ostra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-318.84015469176234 534.8145030989513)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778459424006",
+    "type": "spawn",
+    "entityId": "cogumelo_ostra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-314.20671931788553 561.4417129725583)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778459535097",
+    "type": "spawn",
+    "entityId": "cogumelo_ostra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(27.12301989103611 429.4633683816368)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778459557364",
+    "type": "spawn",
+    "entityId": "cogumelo_ostra",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(96.23843088469805 489.66401679153074)"
+    },
+    "mapId": "main"
+  }
+]
