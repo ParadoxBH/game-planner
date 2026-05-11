@@ -406,8 +406,8 @@
         "icon": "/img/heartopia/events/recanto_mosaico/foods/hamburguer_blocos_champignon.png"
     },
     {
-        "id": "hamburguer_blocos_porcini",
-        "name": "Hambúrguer de Blocos com Porcini",
+        "id": "hamburguer_blocos_porcinio",
+        "name": "Hambúrguer de Blocos com Porcinio",
         "event": [
             "recanto_mosaico"
         ],
@@ -415,7 +415,7 @@
             "food",
             "hamburguer_blocos_cogumelos"
         ],
-        "icon": "/img/heartopia/events/recanto_mosaico/foods/hamburguer_blocos_porcini.png"
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/hamburguer_blocos_porcinio.png"
     },
     {
         "id": "hamburguer_blocos_trufa_negra",
