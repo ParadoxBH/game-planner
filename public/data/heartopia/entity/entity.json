@@ -348,8 +348,8 @@
   },
   {
     "id": "cogumelo_ostra",
-    "name": "Cogumelo_ostra",
-    "category": "colection",
+    "name": "Cogumelo Ostra",
+    "category": ["colection", "cogumelo_ostra"],
     "drops": [
       {
         "itemId": "cogumelo_ostra",
@@ -359,5 +359,19 @@
     ],
     "icon": "/img/heartopia/recursos/cogumelo_ostra.png",
     "image": "/img/heartopia/coletaveis/cogumelo_ostra.png"
+  },
+  {
+    "id": "cogumelo_ostra_estranho_laranja",
+    "name": "Cogumelo Ostra Estranho Laranja",
+    "category": ["colection", "cogumelo_ostra"],
+    "drops": [
+      {
+        "itemId": "cogumelo_ostra_estranho_laranja",
+        "chance": 1,
+        "quant": 3
+      }
+    ],
+    "icon": "/img/heartopia/recursos/cogumelo_ostra_estranho_laranja.png",
+    "image": "/img/heartopia/coletaveis/cogumelo_ostra_estranho_laranja.png"
   }
 ]

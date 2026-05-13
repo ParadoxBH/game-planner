@@ -158,5 +158,15 @@
       "coordinates": "POINT(451.81217817188514 -229.46210365648648)"
     },
     "mapId": "main"
+  },
+  {
+    "id": "point_1778708892098",
+    "type": "spawn",
+    "entityId": "porcino",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(472.2026832653041 38.08316675028101)"
+    },
+    "mapId": "main"
   }
 ]

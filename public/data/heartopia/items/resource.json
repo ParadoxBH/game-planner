@@ -414,14 +414,14 @@
     "icon": "/img/heartopia/recursos/matsutake.png"
   },
   {
-    "id": "cogumelo_ostra_estranho_amarelo",
-    "name": "Cogumelo Ostra Estranho Amarelo",
+    "id": "cogumelo_ostra_estranho_laranja",
+    "name": "Cogumelo Ostra Estranho Laranja",
     "category": [
       "resource",
       "mushroom",
       "cogumelo_ostra"
     ],
-    "icon": "/img/heartopia/recursos/cogumelo_ostra_estranho_amarelo.png"
+    "icon": "/img/heartopia/recursos/cogumelo_ostra_estranho_laranja.png"
   },
   {
     "id": "cogumelo_ostra_estranho_rosa",
@@ -560,5 +560,13 @@
     "sellPrice": 50,
     "buyPrice": 100,
     "icon": "/img/heartopia/culinaria/ovo_pasteurizado.png"
+  },
+  {
+    "id": "peca_ouro",
+    "name": "Peça de Ouro",
+    "category": [
+      "resource"
+    ],
+    "icon": "/img/heartopia/outros/peca_ouro.png"
   }
 ]
