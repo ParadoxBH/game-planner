@@ -22,6 +22,32 @@
     "mapId": "main"
   },
   {
+    "id": "point_1778647128177",
+    "type": "spawn",
+    "entityId": "rainbow_bubble",
+    "event": "rainbow",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-211.15321777343752 -414.586025390625)"
+    },
+    "mode": "daily",
+    "image": "/img/heartopia/referencePoints/rainbow/rainbow_sul_bubble_2.jpg",
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778647131080",
+    "type": "spawn",
+    "entityId": "rainbow_bubble",
+    "event": "rainbow",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-143.59962890625002 -458.20634277343754)"
+    },
+    "mode": "daily",
+    "image": "/img/heartopia/referencePoints/rainbow/rainbow_sul_bubble_1.jpg",
+    "mapId": "main"
+  },
+  {
     "id": "rainbow_north_bubble_1",
     "type": "spawn",
     "entityId": "rainbow_bubble",
