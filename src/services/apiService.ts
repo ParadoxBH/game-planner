@@ -338,8 +338,8 @@ export class ApiService {
     const shops = await shopRepository.getAll();
     const soldIn: ItemDetails["soldIn"] = [];
     shops.forEach((s) => {
-      s.groups.forEach((g) => {
-        g.items.forEach((i) => {
+      s.groups?.forEach((g) => {
+        g.items?.forEach((i) => {
           if (i.id === itemId) {
             soldIn.push({
               shop: s,
@@ -482,8 +482,8 @@ export class ApiService {
     const shops = await shopRepository.getAll();
     const itemToShopIdMap = new Map<string, string>();
     shops.forEach((shop) => {
-      shop.groups.forEach((group) => {
-        group.items.forEach((shopItem) => {
+      shop.groups?.forEach((group) => {
+        group.items?.forEach((shopItem) => {
           itemToShopIdMap.set(shopItem.id, shop.id);
         });
       });
@@ -600,8 +600,8 @@ export class ApiService {
 
     const soldIn: RecipeDetails["soldIn"] = [];
     shops.forEach((s) => {
-      s.groups.forEach((g) => {
-        g.items.forEach((i) => {
+      s.groups?.forEach((g) => {
+        g.items?.forEach((i) => {
           if (i.id === recipeId) {
             soldIn.push({
               shop: s,
