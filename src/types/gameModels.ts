@@ -66,12 +66,6 @@ export interface Category {
   event?: string[];
   shopId?: string;
   items?: ShopItem[];
-}
-
-export type GameDataTypes = "entity" | "item" | "recipe" | "reference_point" | "event" | "skill" | "category" | "conjunto";
-
-
-export interface RecipeItem {
   id: string;
   name?: string;
   amount: number;
@@ -230,14 +224,23 @@ export interface RedemptionCode {
   expiresAt: string;
 }
 
-export interface Conjunto {
+export interface ConjuntoGroup {
   id: string;
   name: string;
-  category: string;
   description?: string;
   icon?: string;
   items?: string[]; // Array of Item IDs
   entitys?: string[]; // Array of Entity IDs
+  event?: string[];
+  image?: string;
+  conjuntoIds?: string[]; // Array of Conjunto IDs
+}
+
+export interface Conjunto {
+  id: string;
+  name: string;
+  description?: string;
+  icon?: string;
   event?: string[];
   image?: string;
 }

@@ -2,7 +2,7 @@
     {
         "id": "set_escultura_neve",
         "name": "Escultura de Neve",
-        "category": "escultura_neve",
+        "conjuntoIds": ["escultura_neve"],
         "entitys": [
             "bloco_neve_geometrico",
             "bloco_iglu",

@@ -8,6 +8,7 @@ import type {
   ReferencePoints, 
   RedemptionCode, 
   Conjunto,
+  ConjuntoGroup,
   GameInfo,
   MapMetadata,
   Category
@@ -22,6 +23,7 @@ export class GameDatabase extends Dexie {
   referencePoints!: Table<ReferencePoints, string>;
   codes!: Table<RedemptionCode, string>;
   conjuntos!: Table<Conjunto, string>;
+  conjuntoGroups!: Table<ConjuntoGroup, string>;
   gameInfo!: Table<GameInfo, string>;
   maps!: Table<MapMetadata, string>;
   categories!: Table<Category, string>;
@@ -33,7 +35,7 @@ export class GameDatabase extends Dexie {
     // Schema definition
     // The first field is the primary key. 
     // Other fields are indexed for faster searching.
-    this.version(5).stores({
+    this.version(6).stores({
       items: 'id, name, *category, *event',
       recipes: 'id, name, itemId, *stations, *event',
       entities: 'id, name, *category, parentId, *event',
@@ -41,7 +43,8 @@ export class GameDatabase extends Dexie {
       events: 'id, name, type',
       referencePoints: 'id, entityId, locationId, parentId, mapId, type, *event',
       codes: 'code',
-      conjuntos: 'id, name, category, *event',
+      conjuntos: 'id, name, *event',
+      conjuntoGroups: 'id, name, *event, *conjuntoIds',
       gameInfo: 'id, name',
       maps: 'id, name, type',
       categories: 'id, name, *event',

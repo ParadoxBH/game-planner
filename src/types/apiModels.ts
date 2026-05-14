@@ -1,4 +1,4 @@
-import type { Item, Recipe, Entity, Shop, GameEvent, RedemptionCode, GameDataTypes, ReferencePoints, MapMetadata, GameInfo, Conjunto, Category } from "./gameModels";
+import type { Item, Recipe, Entity, Shop, GameEvent, RedemptionCode, GameDataTypes, ReferencePoints, MapMetadata, GameInfo, Conjunto, ConjuntoGroup, Category } from "./gameModels";
 
 export interface CategoryDetails {
   category: Category;
@@ -100,6 +100,7 @@ export interface GameDataPayload {
   referencePoints: ReferencePoints[];
   codes: RedemptionCode[];
   conjuntos: Conjunto[];
+  conjuntoGroups: ConjuntoGroup[];
   gameInfo?: GameInfo;
   maps: MapMetadata[];
 }
@@ -123,6 +124,7 @@ export interface EventDetails {
   recipes: NormalizedRecipe[];
   entities: Entity[];
   conjuntos: Conjunto[];
+  conjuntoGroups: ConjuntoGroup[];
   referencePoints: ReferencePoints[];
   shops: Shop[];
   categories: Category[];

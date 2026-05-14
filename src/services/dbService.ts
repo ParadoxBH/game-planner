@@ -8,6 +8,7 @@ import { eventRepository } from '../repositories/EventRepository';
 import { referencePointRepository } from '../repositories/ReferencePointRepository';
 import { codeRepository } from '../repositories/CodeRepository';
 import { conjuntoRepository } from '../repositories/ConjuntoRepository';
+import { conjuntoGroupRepository } from '../repositories/ConjuntoGroupRepository';
 import { gameInfoRepository } from '../repositories/GameInfoRepository';
 import { mapRepository } from '../repositories/MapRepository';
 import { categoryRepository } from '../repositories/CategoryRepository';
@@ -30,7 +31,7 @@ export class DbService {
       console.log(`[DbService] Reconstructing database for game: ${gameId}`);
       
       // 3. Fetch all data in parallel
-      const datasets = ["items", "recipes", "entity", "shops", "events", "referencePoints", "codes", "conjuntos", "categories", "shopCategories"];
+      const datasets = ["items", "recipes", "entity", "shops", "events", "referencePoints", "codes", "conjuntos", "conjuntoGroups", "categories", "shopCategories"];
       let bug = "Iniciando...";
       try {
         bug = "Carregando dados";
@@ -55,6 +56,7 @@ export class DbService {
           referencePoints, 
           codes, 
           conjuntos, 
+          conjuntoGroups,
           categories,
           shopCategories,
           games, 
@@ -100,6 +102,8 @@ export class DbService {
           if (codes?.length) await codeRepository.bulkAdd(clean(codes, 'code', 'Codes'));
           bug = "Populando Conjuntos";
           if (conjuntos?.length) await conjuntoRepository.bulkAdd(clean(conjuntos, 'id', 'Conjuntos'));
+          bug = "Populando Grupos de Conjuntos";
+          if (conjuntoGroups?.length) await conjuntoGroupRepository.bulkAdd(clean(conjuntoGroups, 'id', 'ConjuntoGroups'));
           bug = "Populando Informações do Jogo";
           if (gameInfo) await gameInfoRepository.bulkAdd([gameInfo]);
           bug = "Populando Mapas";

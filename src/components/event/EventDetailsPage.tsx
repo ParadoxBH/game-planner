@@ -145,7 +145,7 @@ export function EventDetailsPage() {
 
   const handleConjuntoClick = useCallback(
     (conjunto: any) => {
-      navigate(`/game/${gameId}/conjuntos/${conjunto.category || ""}`);
+      navigate(`/game/${gameId}/conjuntos/${conjunto.id}`);
     },
     [navigate, gameId],
   );

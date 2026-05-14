@@ -2,7 +2,7 @@
     {
         "id": "maltese_foods",
         "name": "Comidas Exclusivas Maltese",
-        "category": "maltese",
+        "conjuntoIds": ["maltese", "cooking"],
         "event": [
             "maltese"
         ],

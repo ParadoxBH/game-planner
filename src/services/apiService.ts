@@ -3,6 +3,7 @@ import type {
   Recipe,
   Entity,
   Conjunto,
+  ConjuntoGroup,
   Category,
   Shop,
   GameEvent,
@@ -31,6 +32,7 @@ import { entityRepository } from "../repositories/EntityRepository";
 import { shopRepository } from "../repositories/ShopRepository";
 import { eventRepository } from "../repositories/EventRepository";
 import { conjuntoRepository } from "../repositories/ConjuntoRepository";
+import { conjuntoGroupRepository } from "../repositories/ConjuntoGroupRepository";
 import { referencePointRepository } from "../repositories/ReferencePointRepository";
 import { categoryRepository } from "../repositories/CategoryRepository";
 import { gameInfoRepository } from "../repositories/GameInfoRepository";
@@ -180,6 +182,10 @@ export class ApiService {
     return conjuntoRepository.search(filter, undefined, activeEventIds, strictEventFilter);
   }
 
+  public async getConjuntosGroups(filter: GenericFilter<any>, activeEventIds?: string[], strictEventFilter?: boolean): Promise<PaginatedResponse<ConjuntoGroup>> {
+    return conjuntoGroupRepository.search(filter, undefined, activeEventIds, strictEventFilter);
+  }
+
   public async getAllItems(): Promise<Item[]> {
     return itemRepository.getAll();
   }
@@ -211,6 +217,10 @@ export class ApiService {
 
   public async getAllConjuntos(): Promise<Conjunto[]> {
     return conjuntoRepository.getAll();
+  }
+
+  public async getAllConjuntosGroups(): Promise<ConjuntoGroup[]> {
+    return conjuntoGroupRepository.getAll();
   }
 
   public async getGameInfo(gameId: string): Promise<GameInfo | undefined> {
@@ -638,6 +648,9 @@ export class ApiService {
     const conjuntosRes = await this.getConjuntos(filterBase({}), [eventId], true);
     const conjuntos = conjuntosRes.data;
 
+    const conjuntoGroupsRes = await this.getConjuntosGroups(filterBase({}), [eventId], true);
+    const conjuntoGroups = conjuntoGroupsRes.data;
+
     const referencePoints = await referencePointRepository.getByEventId(eventId);
     
     const shops = await this.getAllShops([eventId], true);
@@ -653,6 +666,7 @@ export class ApiService {
       recipes,
       entities,
       conjuntos,
+      conjuntoGroups,
       referencePoints,
       shops,
       categories,

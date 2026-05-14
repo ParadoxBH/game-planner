@@ -25,10 +25,11 @@ import { ItemFlowSection } from "./ItemFlowSection";
 import { useMemo, useState, useEffect } from "react";
 import type {
   GameDataTypes,
+  Entity,
   Conjunto,
+  ConjuntoGroup,
   GameEvent,
   Item,
-  Entity,
   GameInfo,
 } from "../../types/gameModels";
 import type { ItemDetails } from "../../types/apiModels";
@@ -36,6 +37,7 @@ import { eventRepository } from "../../repositories/EventRepository";
 import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
 import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
+import { conjuntoGroupRepository } from "../../repositories/ConjuntoGroupRepository";
 import { getPublicUrl } from "../../utils/pathUtils";
 import { DetainContainer } from "../common/DetainContainer";
 import { DetainItem } from "../common/DetainItem";
@@ -72,15 +74,23 @@ export function ItemDetailsPage() {
       itemRepository.getAll(),
       entityRepository.getAll(),
       conjuntoRepository.getAll(),
+      conjuntoGroupRepository.getAll(),
     ])
-      .then(([details, allEvents, allItems, allEntities, allConjuntos]) => {
+      .then(([details, allEvents, allItems, allEntities, allConjuntos, allGroups]) => {
         if (!isMounted) return;
 
         setItemDetails(details);
         setEvents(allEvents);
         setItems(allItems);
         setEntities(allEntities);
-        setItemConjuntos(allConjuntos.filter((c) => c.items?.includes(itemId)));
+        
+        // Find sets (conjuntos) that contain this item via groups
+        const groupsWithItem = allGroups.filter(g => g.items?.includes(itemId));
+        const relevantConjuntoIds = new Set<string>();
+        groupsWithItem.forEach(g => g.conjuntoIds?.forEach(cid => relevantConjuntoIds.add(cid)));
+        
+        setItemConjuntos(allConjuntos.filter((c) => relevantConjuntoIds.has(c.id)));
+        
         if (gameId) getGameInfo(gameId).then(info => { if (info) setGameInfo(info); });
 
         setDataLoading(false);

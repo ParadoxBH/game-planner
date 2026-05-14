@@ -2,7 +2,7 @@
     {
         "id": "set_margarida",
         "name": "Margaridas",
-        "category": "flowers",
+        "conjuntoIds": ["flower"],
         "items": [
             "margarida_vermelha",
             "margarida_branca",
@@ -15,7 +15,7 @@
     {
         "id": "set_amor_perfeito",
         "name": "Amores-perfeitos",
-        "category": "flowers",
+        "conjuntoIds": ["flower"],
         "items": [
             "amor_perfeito_vermelho",
             "amor_perfeito_amarelo",
@@ -28,7 +28,7 @@
     {
         "id": "set_anturio",
         "name": "Antúrios",
-        "category": "flowers",
+        "conjuntoIds": ["flower"],
         "items": [
             "anturio_vermelho",
             "anturio_amarelo",
@@ -43,7 +43,7 @@
     {
         "id": "set_papoula",
         "name": "Papoulas",
-        "category": "flowers",
+        "conjuntoIds": ["flower"],
         "items": [
             "papoula_vermelha",
             "papoula_amarela",
@@ -58,7 +58,7 @@
     {
         "id": "set_copo_leite",
         "name": "Copos-de-leite",
-        "category": "flowers",
+        "conjuntoIds": ["flower"],
         "items": [
             "copo_leite_vermelha",
             "copo_leite_amarela",
@@ -74,7 +74,7 @@
     {
         "id": "set_gloria_manha",
         "name": "Glórias-da-manhã",
-        "category": "flowers",
+        "conjuntoIds": ["flower"],
         "items": [
             "gloria_manha_vermelha",
             "gloria_manha_amarela",
@@ -90,7 +90,7 @@
     {
         "id": "set_cravo",
         "name": "Cravos",
-        "category": "flowers",
+        "conjuntoIds": ["flower"],
         "items": [
             "cravo_vermelho",
             "cravo_amarelo",
@@ -106,7 +106,7 @@
     {
         "id": "set_tulipa",
         "name": "Tulipas",
-        "category": "flowers",
+        "conjuntoIds": ["flower"],
         "items": [
             "tulipa_vermelha",
             "tulipa_amarela",
@@ -123,7 +123,7 @@
     {
         "id": "set_lirio",
         "name": "Lírios",
-        "category": "flowers",
+        "conjuntoIds": ["flower"],
         "items": [
             "lirio_vermelho",
             "lirio_amarelo",
@@ -140,7 +140,7 @@
     {
         "id": "set_rosa",
         "name": "Rosa",
-        "category": "flowers",
+        "conjuntoIds": ["flower"],
         "items": [
             "rosa_vermelha",
             "rosa_amarela",

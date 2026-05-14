@@ -5,45 +5,33 @@ import {
   CardActionArea,
   Grid,
   Stack,
-  Chip,
   CircularProgress,
-  alpha,
   Switch,
-  Button,
 } from "@mui/material";
 import {
   AutoAwesomeMosaic,
   Layers,
-  ArrowBack,
-  CheckCircle,
-  CheckCircleOutline,
 } from "@mui/icons-material";
-import { ItemCard } from "./ItemCard";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
 import { useState, useMemo, useEffect } from "react";
-import { Checkbox } from "@mui/material";
 import { StyledContainer } from "../common/StyledContainer";
-import type { Conjunto, Item, Entity } from "../../types/gameModels";
-import { EntityCard } from "../entity/EntityCard";
+import type { Conjunto, ConjuntoGroup } from "../../types/gameModels";
 import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
-import { itemRepository } from "../../repositories/ItemRepository";
-import { entityRepository } from "../../repositories/EntityRepository";
+import { conjuntoGroupRepository } from "../../repositories/ConjuntoGroupRepository";
 import { usePlatform } from "../../hooks/usePlatform";
-import { theme } from "../../theme/theme";
+import { getPublicUrl } from "../../utils/pathUtils";
 
 export function ConjuntosPage() {
-  const { gameId, category: urlCategory } = useParams<{
+  const { gameId } = useParams<{
     gameId: string;
-    category?: string;
   }>();
   const navigate = useNavigate();
 
-  const { loading: dbLoading } = useApi(gameId);
+  const { loading: dbLoading, activeEventIds } = useApi(gameId);
 
   const [conjuntos, setConjuntos] = useState<Conjunto[]>([]);
-  const [items, setItems] = useState<Item[]>([]);
-  const [entities, setEntities] = useState<Entity[]>([]);
+  const [conjuntoGroups, setConjuntoGroups] = useState<ConjuntoGroup[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -60,14 +48,12 @@ export function ConjuntosPage() {
 
     Promise.all([
       conjuntoRepository.getAll(),
-      itemRepository.getAll(),
-      entityRepository.getAll(),
+      conjuntoGroupRepository.getAll(),
     ])
-      .then(([allConjuntos, allItems, allEntities]) => {
+      .then(([allConjuntos, allGroups]) => {
         if (!isMounted) return;
         setConjuntos(allConjuntos);
-        setItems(allItems);
-        setEntities(allEntities);
+        setConjuntoGroups(allGroups);
         setDataLoading(false);
       })
       .catch((err) => {
@@ -109,76 +95,65 @@ export function ConjuntosPage() {
     localStorage.setItem(`gp_hide_completed_${gameId}`, String(newVal));
   };
 
-  // Save to localStorage whenever collectedIds changes
-  const toggleCollected = (id: string) => {
-    setCollectedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      localStorage.setItem(
-        `gp_collected_${gameId}`,
-        JSON.stringify(Array.from(next)),
-      );
-      return next;
-    });
-  };
-
-  const itemMap = useMemo(() => {
-    const map = new Map<string, Item>();
-    items.forEach((item) => map.set(item.id, item));
-    return map;
-  }, [items]);
-
-  const entityMap = useMemo(() => {
-    const map = new Map<string, Entity>();
-    entities.forEach((entity) => map.set(entity.id, entity));
-    return map;
-  }, [entities]);
-
-  const categories = useMemo(() => {
-    const cats = new Set<string>();
-    conjuntos.forEach((c) => {
-      if (c.category) cats.add(c.category);
-    });
-    return Array.from(cats).sort();
-  }, [conjuntos]);
-
   const filteredConjuntos = useMemo(() => {
-    let list = [...conjuntos];
-
-    if (urlCategory) {
-      list = list.filter((c) => c.category === urlCategory);
-    }
-
-    if (searchTerm) {
-      const lower = searchTerm.toLowerCase();
-      list = list.filter(
-        (c) =>
-          c.name.toLowerCase().includes(lower) ||
-          c.description?.toLowerCase().includes(lower),
+    return conjuntos.filter((conjunto) => {
+      // Get all groups for this set
+      const groups = conjuntoGroups.filter((g) =>
+        g.conjuntoIds?.includes(conjunto.id),
       );
-    }
 
-    if (hideCompleted) {
-      list = list.filter((conjunto) => {
-        const items = conjunto.items || [];
-        const entities = conjunto.entitys || [];
-        const totalCount = items.length + entities.length;
-        if (totalCount === 0) return true; // Keep empty sets? Or hide them? Usually keep them if they are work in progress.
+      // 1. Search Filter (Set name OR any Group name)
+      if (searchTerm) {
+        const lower = searchTerm.toLowerCase();
+        const matchesSetName =
+          conjunto.name.toLowerCase().includes(lower) ||
+          conjunto.description?.toLowerCase().includes(lower);
+        const matchesGroupName = groups.some((g) =>
+          g.name.toLowerCase().includes(lower),
+        );
 
-        const collectedCount = [...items, ...entities].filter((id) =>
-          collectedIds.has(id),
-        ).length;
+        if (!matchesSetName && !matchesGroupName) return false;
+      }
 
-        return collectedCount < totalCount;
-      });
-    }
+      // 2. Event Filter (Set must have at least one group matching active events)
+      if (activeEventIds && activeEventIds.length > 0) {
+        const matchesEvent = groups.some((group) => {
+          if (!group.event) return true;
+          const eventArray = Array.isArray(group.event)
+            ? group.event
+            : [group.event];
+          return eventArray.some((e) => activeEventIds.includes(e));
+        });
+        if (!matchesEvent) return false;
+      }
 
-    return list;
-  }, [conjuntos, urlCategory, searchTerm, hideCompleted, collectedIds]);
+      // 3. Hide Completed Filter
+      if (hideCompleted) {
+        let totalCount = 0;
+        let collectedCount = 0;
+
+        groups.forEach((group) => {
+          const gItems = group.items || [];
+          const gEntities = group.entitys || [];
+          totalCount += gItems.length + gEntities.length;
+          collectedCount += [...gItems, ...gEntities].filter((id) =>
+            collectedIds.has(id),
+          ).length;
+        });
+
+        if (totalCount > 0 && collectedCount === totalCount) return false;
+      }
+
+      return true;
+    });
+  }, [
+    conjuntos,
+    searchTerm,
+    hideCompleted,
+    collectedIds,
+    activeEventIds,
+    conjuntoGroups,
+  ]);
 
   if (dbLoading || dataLoading) {
     return (
@@ -196,10 +171,10 @@ export function ConjuntosPage() {
     );
   }
 
-  const renderCategorySelection = () => (
+  const renderConjuntoSelection = () => (
     <Grid container spacing={isMobile ? 1 : 2}>
-      {categories.map((cat) => (
-        <Grid size={{ xs: 6, sm: 6, md: 4, lg: 3 }} key={cat}>
+      {filteredConjuntos.map((conjunto) => (
+        <Grid size={{ xs: 6, sm: 6, md: 4, lg: 3 }} key={conjunto.id}>
           <Card
             sx={{
               backgroundColor: "rgba(255, 255, 255, 0.02)",
@@ -217,23 +192,33 @@ export function ConjuntosPage() {
             }}
           >
             <CardActionArea
-              onClick={() => navigate(`/game/${gameId}/conjuntos/${cat}`)}
+              onClick={() => navigate(`/game/${gameId}/conjuntos/${conjunto.id}`)}
               sx={{ p: isMobile ? 2 : 4 }}
             >
               <Stack alignItems={"center"} textAlign={"center"} spacing={1}>
-                <Layers sx={{ fontSize: 48, color: "primary.main" }} />
+                {conjunto.icon ? (
+                  <Box sx={{ width: 48, height: 48, mb: 1 }}>
+                    <img 
+                      src={getPublicUrl(gameId || "", conjunto.icon)} 
+                      alt="" 
+                      style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                    />
+                  </Box>
+                ) : (
+                  <Layers sx={{ fontSize: 48, color: "primary.main" }} />
+                )}
                 <Typography
                   variant={"subtitle2"}
-                  fontSize={isMobile ? undefined : 24}
+                  fontSize={isMobile ? undefined : 20}
                   sx={{ fontWeight: 800 }}
                 >
-                  {cat}
+                  {conjunto.name}
                 </Typography>
                 <Typography
-                  variant={"subtitle2"}
+                  variant={"caption"}
                   sx={{ color: "text.secondary" }}
                 >
-                  {conjuntos.filter((c) => c.category === cat).length} conjuntos
+                  {conjunto.id}
                 </Typography>
               </Stack>
             </CardActionArea>
@@ -243,246 +228,31 @@ export function ConjuntosPage() {
     </Grid>
   );
 
-  const renderConjuntosList = () => (
-    <Stack spacing={isMobile ? 1 : 2}>
-      {filteredConjuntos.map((conjunto) => {
-        const totalCount =
-          (conjunto.items?.length || 0) + (conjunto.entitys?.length || 0);
-        const collectedCount = [
-          ...(conjunto.items || []),
-          ...(conjunto.entitys || []),
-        ].filter((id) => collectedIds.has(id)).length;
-
-        return (
-          <Stack key={conjunto.id} spacing={isMobile ? 0.5 : 1}>
-            <Stack
-              direction="row"
-              alignItems="center"
-              spacing={1}
-              justifyContent={"space-between"}
-            >
-              <Typography
-                variant={isMobile ? "h6" : "h5"}
-                sx={{
-                  fontWeight: 900,
-                  color: "text.primary",
-                  textAlign: "start",
-                }}
-              >
-                {conjunto.name}
-              </Typography>
-              <Chip
-                label={`${collectedCount} / ${totalCount}`}
-                color={collectedCount === totalCount ? "success" : "primary"}
-                variant={collectedCount === totalCount ? "filled" : "outlined"}
-                sx={{ fontWeight: 800, borderRadius: 1 }}
-              />
-            </Stack>
-            <Typography
-              variant="body1"
-              sx={{ color: "text.secondary", maxWidth: 800, mb: 1 }}
-            >
-              {conjunto.description}
-            </Typography>
-
-            <Grid container spacing={1}>
-              {conjunto.items?.map((itemId) => {
-                const item = itemMap.get(itemId);
-                const isCollected = collectedIds.has(itemId);
-
-                if (!item)
-                  return (
-                    <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={itemId}>
-                      <Card sx={{ p: 1 }}>
-                        <Stack
-                          flex={1}
-                          spacing={1}
-                          direction={"row"}
-                          alignItems={"center"}
-                          justifyContent={"space-between"}
-                        >
-                          <Typography variant="subtitle2">
-                            {itemId.replaceAll("_", " ")}
-                          </Typography>
-                          <Checkbox
-                            checked={isCollected}
-                            onChange={() => toggleCollected(itemId)}
-                          />
-                        </Stack>
-                      </Card>
-                    </Grid>
-                  );
-
-                return (
-                  <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={itemId}>
-                    <Box sx={{ position: "relative", height: "100%" }}>
-                      <ItemCard
-                        key={item.id}
-                        item={item}
-                        gameId={gameId || ""}
-                        variant="compact"
-                        sx={
-                          isCollected
-                            ? {
-                                background: alpha(
-                                  theme.palette.success.light,
-                                  0.1,
-                                ),
-                              }
-                            : undefined
-                        }
-                      />
-                      <Checkbox
-                        icon={<CheckCircleOutline />}
-                        checkedIcon={<CheckCircle />}
-                        checked={isCollected}
-                        onChange={(e) => {
-                          e.stopPropagation();
-                          toggleCollected(itemId);
-                        }}
-                        sx={{
-                          position: "absolute",
-                          top: 4,
-                          right: 4,
-                          zIndex: 10,
-                          color: isCollected
-                            ? "success.main"
-                            : "rgba(255,255,255,0.2)",
-                          "&.Mui-checked": {
-                            color: "success.main",
-                          },
-                          backgroundColor: "rgba(0,0,0,0.3)",
-                          backdropFilter: "blur(4px)",
-                          padding: "4px",
-                          "&:hover": {
-                            backgroundColor: "rgba(0,0,0,0.5)",
-                          },
-                        }}
-                      />
-                    </Box>
-                  </Grid>
-                );
-              })}
-
-              {conjunto.entitys?.map((entityId) => {
-                const entity = entityMap.get(entityId);
-                const isCollected = collectedIds.has(entityId);
-
-                if (!entity)
-                  return (
-                    <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={entityId}>
-                      <Box sx={{ position: "relative" }}>
-                        <Typography>{entityId}</Typography>
-                        <Checkbox
-                          checked={isCollected}
-                          onChange={() => toggleCollected(entityId)}
-                          sx={{ position: "absolute", top: 0, right: 0 }}
-                        />
-                      </Box>
-                    </Grid>
-                  );
-
-                return (
-                  <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={entityId}>
-                    <Box sx={{ position: "relative", height: "100%" }}>
-                      <EntityCard
-                        key={entity.id}
-                        entity={entity}
-                        variant="compact"
-                        onClick={() =>
-                          navigate(`/game/${gameId}/entity/view/${entity.id}`)
-                        }
-                      />
-                      <Checkbox
-                        icon={<CheckCircleOutline />}
-                        checkedIcon={<CheckCircle />}
-                        checked={isCollected}
-                        onChange={(e) => {
-                          e.stopPropagation();
-                          toggleCollected(entityId);
-                        }}
-                        sx={{
-                          position: "absolute",
-                          top: 4,
-                          right: 4,
-                          zIndex: 10,
-                          color: isCollected
-                            ? "success.main"
-                            : "rgba(255,255,255,0.2)",
-                          "&.Mui-checked": {
-                            color: "success.main",
-                          },
-                          backgroundColor: "rgba(0,0,0,0.3)",
-                          backdropFilter: "blur(4px)",
-                          padding: "4px",
-                          "&:hover": {
-                            backgroundColor: "rgba(0,0,0,0.5)",
-                          },
-                        }}
-                      />
-                    </Box>
-                  </Grid>
-                );
-              })}
-            </Grid>
-          </Stack>
-        );
-      })}
-    </Stack>
-  );
-
   return (
     <StyledContainer
-      title={urlCategory ? `Conjuntos: ${urlCategory}` : "Conjuntos"}
-      label={
-        urlCategory
-          ? `Explorando conjuntos de ${urlCategory}.`
-          : "Explore coleções e conjuntos de itens temáticos."
-      }
+      title="Conjuntos"
+      label="Explore coleções e conjuntos de itens temáticos."
       searchValue={searchTerm}
       onChangeSearch={setSearchTerm}
       search={{ placeholder: "Pesquisar conjuntos..." }}
       actionsStart={
-        <Stack
-          alignItems={"center"}
-          spacing={1}
-          flex={1}
-          direction={"row"}
-          justifyContent={"space-between"}
-        >
-          <Stack alignItems={"center"} spacing={1} direction={"row"}>
-            <Switch
-              size="small"
-              checked={hideCompleted}
-              onChange={toggleHideCompleted}
-            />
+        <Stack alignItems={"center"} spacing={1} direction={"row"}>
+          <Switch
+            size="small"
+            checked={hideCompleted}
+            onChange={toggleHideCompleted}
+          />
 
-            <Typography
-              variant="body2"
-              sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
-            >
-              Esconder Completos
-            </Typography>
-          </Stack>
-          {!!urlCategory && (
-            <Button
-              sx={{ minWidth: "auto" }}
-              startIcon={
-                !isMobile ? <ArrowBack sx={{ fontSize: 20 }} /> : undefined
-              }
-            >
-              {isMobile && <ArrowBack sx={{ fontSize: 20 }} />}
-              {!isMobile && (
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                  Voltar
-                </Typography>
-              )}
-            </Button>
-          )}
+          <Typography
+            variant="body2"
+            sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
+          >
+            Esconder Completos
+          </Typography>
         </Stack>
       }
     >
-      {urlCategory ? renderConjuntosList() : renderCategorySelection()}
+      {renderConjuntoSelection()}
 
       {filteredConjuntos.length === 0 && (
         <Box sx={{ textAlign: "center", py: 8 }}>

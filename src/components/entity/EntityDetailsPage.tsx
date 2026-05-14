@@ -29,7 +29,6 @@ import { useMemo, useState, useEffect } from "react";
 import type {
   MapMetadata,
   ReferencePoints,
-  GameDataTypes,
   Entity,
   GameEvent,
   Item,
@@ -46,6 +45,7 @@ import { eventRepository } from "../../repositories/EventRepository";
 import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
 import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
+import { conjuntoGroupRepository } from "../../repositories/ConjuntoGroupRepository";
 import { mapRepository } from "../../repositories/MapRepository";
 import { categoryRepository } from "../../repositories/CategoryRepository";
 import { getPublicUrl } from "../../utils/pathUtils";
@@ -127,6 +127,7 @@ export function EntityDetailsPage() {
       itemRepository.getAll(),
       entityRepository.getAll(),
       conjuntoRepository.getAll(),
+      conjuntoGroupRepository.getAll(),
       categoryRepository.getAll(),
       getRecipesList({
         pagination: { pageSize: 1000, page: 1 },
@@ -143,6 +144,7 @@ export function EntityDetailsPage() {
           allItems,
           allEntities,
           allConjuntos,
+          allGroups,
           allCategories,
           allRecipes,
         ]) => {
@@ -154,8 +156,14 @@ export function EntityDetailsPage() {
           setItems(allItems);
           setEntities(allEntities);
           setCategories(allCategories);
+          
+          // Find sets (conjuntos) that contain this entity via groups
+          const groupsWithEntity = allGroups.filter(g => g.entitys?.includes(entityId));
+          const relevantConjuntoIds = new Set<string>();
+          groupsWithEntity.forEach(g => g.conjuntoIds?.forEach(cid => relevantConjuntoIds.add(cid)));
+
           setEntityConjuntos(
-            allConjuntos.filter((c) => c.entitys?.includes(entityId)),
+            allConjuntos.filter((c) => relevantConjuntoIds.has(c.id)),
           );
           if (gameId) getGameInfo(gameId).then(info => { if (info) setGameInfo(info); });
 

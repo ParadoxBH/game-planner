@@ -27,7 +27,7 @@ export function DetainConjunto({ itens }: DetainConjuntoProps) {
           <DataCard
             key={conjunto.id}
             onClick={() =>
-              navigate(`/game/${gameId}/conjuntos/${conjunto.category}`)
+              navigate(`/game/${gameId}/conjuntos/${conjunto.id}`)
             }
             sx={{
               p: 1.5,
@@ -42,9 +42,6 @@ export function DetainConjunto({ itens }: DetainConjuntoProps) {
                 sx={{ fontWeight: 700, lineHeight: 1.2 }}
               >
                 {conjunto.name}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {conjunto.category}
               </Typography>
             </Stack>
           </DataCard>
