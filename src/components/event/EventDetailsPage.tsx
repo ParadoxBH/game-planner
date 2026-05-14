@@ -623,11 +623,6 @@ export function EventDetailsPage() {
                         <Typography variant="subtitle1" fontWeight={700}>
                           {conjunto.name}
                         </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          {(conjunto.items?.length || 0) +
-                            (conjunto.entitys?.length || 0)}{" "}
-                          itens colecionáveis
-                        </Typography>
                       </Stack>
                     </Stack>
                   </Paper>

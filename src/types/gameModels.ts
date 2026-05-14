@@ -1,5 +1,7 @@
 import type { WktGeometry } from "./geoJsonGeometry";
 
+export type GameDataTypes = "item" | "entity" | "recipe" | "shop" | "event" | "conjunto" | "category" | "skill";
+
 export interface Item {
   id: string;
   name: string;
@@ -66,6 +68,9 @@ export interface Category {
   event?: string[];
   shopId?: string;
   items?: ShopItem[];
+}
+
+export interface RecipeItem {
   id: string;
   name?: string;
   amount: number;

@@ -171,7 +171,7 @@ export const MapDashboard = ({
         .map((e) => e.id),
     );
 
-    return shops.filter((s) => mapNpcIds.has(s.npcId));
+    return shops.filter((s) => s.npcId && mapNpcIds.has(s.npcId));
   }, [shops, mapEntities]);
 
   // Agrupamento Global (para Visão Plana)

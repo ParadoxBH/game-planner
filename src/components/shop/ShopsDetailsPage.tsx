@@ -300,7 +300,6 @@ export function ShopsDetailsPage({
                   eventsMap={eventsMap}
                   itemsMap={itemsMap}
                   entitiesMap={entitiesMap}
-                  recipesMap={recipesMap}
                   variant={variant}
                 />
               )}

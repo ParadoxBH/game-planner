@@ -216,7 +216,7 @@ export function MobileMenu({
                           </ListItemIcon>
                           <ListItemText
                             primary={game.name}
-                            primaryTypographyProps={{ opacity: 0.5 }}
+                            primaryTypographyProps={{ sx: { opacity: 0.5 } }}
                           />
                         </ListItemButton>
                       </ListItem>

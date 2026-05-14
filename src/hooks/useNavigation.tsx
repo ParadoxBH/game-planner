@@ -113,9 +113,9 @@ export function useNavigation(gameId: string | null) {
     if (!shops || !entities) return [];
     const entityMap = new Map<string, Entity>(entities.map((e: Entity) => [e.id, e]));
     return shops.map((shop: Shop) => {
-      const npc = entityMap.get(shop.npcId);
+      const npc = shop.npcId ? entityMap.get(shop.npcId) : undefined;
       return {
-        label: shop.name || npc?.name || shop.npcId,
+        label: shop.name || npc?.name || shop.npcId || "Loja",
         path: `/game/${gameId}/shops/list/${shop.id}`,
       };
     });

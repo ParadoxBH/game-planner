@@ -35,6 +35,7 @@ import type {
   Conjunto,
   Category,
   GameInfo,
+  GameDataTypes,
 } from "../../types/gameModels";
 import type { EntityDetails, NormalizedRecipe } from "../../types/apiModels";
 import { MiniMap } from "../common/MiniMap";

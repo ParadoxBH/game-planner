@@ -178,5 +178,6 @@ export function useApi(gameId: string | undefined) {
     getAllRecipes,
     getAllShops,
     getAllConjuntos,
+    activeEventIds,
   };
 }

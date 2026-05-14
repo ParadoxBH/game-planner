@@ -35,7 +35,6 @@ import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
 import { usePlatform } from "../../hooks/usePlatform";
 import { theme } from "../../theme/theme";
-import { getPublicUrl } from "../../utils/pathUtils";
 
 export function ConjuntosDetain() {
   const { gameId, conjuntoId } = useParams<{

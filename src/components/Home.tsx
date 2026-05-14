@@ -2,7 +2,6 @@ import {
   Box,
   Card,
   CardActionArea,
-  CardContent,
   CardMedia,
   CircularProgress,
   Typography,

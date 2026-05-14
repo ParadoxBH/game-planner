@@ -27,7 +27,6 @@ import type {
   GameDataTypes,
   Entity,
   Conjunto,
-  ConjuntoGroup,
   GameEvent,
   Item,
   GameInfo,
@@ -39,6 +38,7 @@ import { entityRepository } from "../../repositories/EntityRepository";
 import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
 import { conjuntoGroupRepository } from "../../repositories/ConjuntoGroupRepository";
 import { getPublicUrl } from "../../utils/pathUtils";
+import { recipeRepository } from "../../repositories/RecipeRepository";
 import { DetainContainer } from "../common/DetainContainer";
 import { DetainItem } from "../common/DetainItem";
 import { usePlatform } from "../../hooks/usePlatform";
@@ -59,6 +59,7 @@ export function ItemDetailsPage() {
   const [events, setEvents] = useState<GameEvent[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [entities, setEntities] = useState<Entity[]>([]);
+  const [recipes, setRecipes] = useState<any[]>([]);
   const [itemConjuntos, setItemConjuntos] = useState<Conjunto[]>([]);
   const { isMobile } = usePlatform();
 
@@ -75,14 +76,16 @@ export function ItemDetailsPage() {
       entityRepository.getAll(),
       conjuntoRepository.getAll(),
       conjuntoGroupRepository.getAll(),
+      recipeRepository.getAll(),
     ])
-      .then(([details, allEvents, allItems, allEntities, allConjuntos, allGroups]) => {
+      .then(([details, allEvents, allItems, allEntities, allConjuntos, allGroups, allRecipes]) => {
         if (!isMounted) return;
 
         setItemDetails(details);
         setEvents(allEvents);
         setItems(allItems);
         setEntities(allEntities);
+        setRecipes(allRecipes);
         
         // Find sets (conjuntos) that contain this item via groups
         const groupsWithItem = allGroups.filter(g => g.items?.includes(itemId));
@@ -122,6 +125,12 @@ export function ItemDetailsPage() {
     entities.forEach((e) => map.set(e.id, e));
     return map;
   }, [entities]);
+
+  const recipesMap = useMemo(() => {
+    const map = new Map<string, any>();
+    recipes.forEach((r) => map.set(r.id, r));
+    return map;
+  }, [recipes]);
 
   const getSourceData = (type: GameDataTypes | undefined, id: string): any => {
     if (type === "entity") return entitiesMap.get(id);
@@ -425,10 +434,11 @@ export function ItemDetailsPage() {
                     <ItemShopCard
                       shop={s.shop}
                       shopItem={s.shopItem}
-                      npc={entitiesMap.get(s.shop.npcId)}
+                      npc={s.shop.npcId ? entitiesMap.get(s.shop.npcId) : undefined}
                       currencyItem={itemsMap.get(s.shopItem.currency || "ouro")}
                       itemsMap={itemsMap}
                       entitiesMap={entitiesMap}
+                      recipesMap={recipesMap}
                       eventsMap={
                         new Map(
                           events?.map((e) => [e.id, { name: e.name }]) || [],

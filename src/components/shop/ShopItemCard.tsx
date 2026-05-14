@@ -27,7 +27,6 @@ interface ShopItemCardProps {
   eventsMap: Map<string, { name: string }>;
   itemsMap: Map<string, { name: string; icon?: string }>;
   entitiesMap: Map<string, { name: string; icon?: string }>;
-  recipesMap: Map<string, { id: string; name?: string; products?: any[]; itemId?: string }>;
   variant?: "compact" | "default";
 }
 
@@ -40,7 +39,6 @@ export function ShopItemCard({
   eventsMap, 
   itemsMap,
   entitiesMap,
-  recipesMap,
   variant = "default"
 }: ShopItemCardProps) {
   const isEntity = shopItem.type === 'entity';

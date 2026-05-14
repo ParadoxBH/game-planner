@@ -199,7 +199,7 @@ export function ConjuntosPage() {
                 {conjunto.icon ? (
                   <Box sx={{ width: 48, height: 48, mb: 1 }}>
                     <img 
-                      src={getPublicUrl(gameId || "", conjunto.icon)} 
+                      src={getPublicUrl(conjunto.icon)} 
                       alt="" 
                       style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
                     />

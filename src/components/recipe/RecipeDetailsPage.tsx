@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -49,6 +49,7 @@ export function RecipeDetailsPage() {
     gameId: string;
     recipeId: string;
   }>();
+  const navigate = useNavigate();
 
   const { loading: dbLoading, getRecipeDetails, getGameInfo } = useApi(gameId);
 
