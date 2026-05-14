@@ -1,0 +1,58 @@
+﻿[
+    {
+        "id": "loja_sorte_ingredientes",
+        "shopId": "loja_sorte",
+        "name": "Ingrediente",
+        "items": [
+            {
+                "id": "doce_vermelho",
+                "amount": 20
+            },
+            {
+                "id": "doce_laranja",
+                "amount": 20
+            },
+            {
+                "id": "doce_amarelo",
+                "amount": 20
+            },
+            {
+                "id": "doce_verde",
+                "amount": 20
+            },
+            {
+                "id": "doce_turquesa",
+                "amount": 20
+            },
+            {
+                "id": "doce_azul",
+                "amount": 20
+            },
+            {
+                "id": "doce_roxo",
+                "amount": 20
+            }
+        ]
+    },
+    {
+        "id": "loja_sorte_cartoes",
+        "shopId": "loja_sorte",
+        "name": "Cartão Postal",
+        "items": [
+            {
+                "id": "cartao_postal_nuvem_sorte",
+                "amount": 5
+            }
+        ]
+    },
+    {
+        "id": "loja_sorte_guarda_chuvas",
+        "shopId": "loja_sorte",
+        "name": "Guarda-chuva",
+        "items": [
+            {
+                "id": "guarda_chuva_longo_unicolor_amarelo"
+            }
+        ]
+    }
+]

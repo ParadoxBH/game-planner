@@ -1,0 +1,9 @@
+[
+  {
+    "id": "lair_sow",
+    "name": "Lair Sow",
+    "category": ["structure"],
+    "drops": [],
+    "icon": "/img/windrose/structures/lair_sow.png"
+  }
+]

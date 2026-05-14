@@ -1,0 +1,71 @@
+[
+    {
+        "id": "massimo_shop_gala_neve",
+        "shopId": "massimo_shop",
+        "name": "Exclusivo da Gala da Neve",
+        "events": [ "gala_neve" ],
+        "items": [
+            {
+                "id": "acucar_po",
+                "amount": 50,
+                "conditions": [
+                    {
+                        "type": "event",
+                        "id": "gala_neve",
+                        "description": ""
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "blanc_gala_neve",
+        "shopId": "blanc_shop",
+        "name": "Exclusivo da Gala da Neve",
+        "events": [
+            "gala_neve"
+        ],
+        "items": [
+            {
+                "id": "semente_papoula_himalaia_vermelha",
+                "conditions": [
+                    {
+                        "type": "event",
+                        "id": "gala_neve",
+                        "description": ""
+                    }
+                ]
+            },
+            {
+                "id": "semente_papoula_himalaia_amarela",
+                "conditions": [
+                    {
+                        "type": "event",
+                        "id": "gala_neve",
+                        "description": ""
+                    }
+                ]
+            },
+            {
+                "id": "semente_papoula_himalaia_branca",
+                "conditions": [
+                    {
+                        "type": "event",
+                        "id": "gala_neve",
+                        "description": ""
+                    }
+                ]
+            },
+            {
+                "id": "semente_nabo",
+                "conditions": [
+                    {
+                        "type": "event",
+                        "id": "gala_neve",
+                        "description": ""
+                    }
+                ]
+            }
+        ]
+    }
+]

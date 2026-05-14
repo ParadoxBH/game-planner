@@ -273,7 +273,31 @@
     "id": "pink_bubble",
     "name": "Bolha Rosa",
     "category": "colection",
-    "icon": "/img/heartopia/coletaveis/pink_bubble.png"
+    "icon": "/img/heartopia/coletaveis/pink_bubble.png",
+    "drops": [
+      {
+        "itemId": "ouro",
+        "quant": 300
+      },
+      {
+        "itemId": "fluorita_pura",
+        "quant": 3
+      },
+      {
+        "itemId": "estrela_desejavel",
+        "quant": 5
+      },
+      {
+        "itemId": "estrela_desejavel",
+        "quant": 10
+      }
+    ]
+  },
+  {
+    "id": "blue_bubble",
+    "name": "Bolha Azul",
+    "category": "colection",
+    "icon": "/img/heartopia/coletaveis/blue_bubble.png"
   },
   {
     "id": "gold_bubble",
@@ -295,67 +319,59 @@
     "image": "/img/heartopia/coletaveis/meteoro.png"
   },
   {
-    "id": "samambaia_selvagem",
-    "name": "Samambaia Selvagem",
-    "category": "resource",
+    "id": "porcino",
+    "name": "Porcino",
+    "category": "colection",
     "drops": [
       {
-        "itemId": "samambaia_selvagem",
+        "itemId": "porcino",
         "chance": 1,
-        "quant": 3,
-        "maxQuant": 6
+        "quant": 3
       }
     ],
-    "icon": "/img/heartopia/recursos/samambaia_selvagem.png",
-    "image": "/img/heartopia/coletaveis/samambaia_selvagem.png",
-    "respawnDelay": 1.5
+    "icon": "/img/heartopia/recursos/porcino.png",
+    "image": "/img/heartopia/coletaveis/porcino.png"
   },
   {
-    "id": "bardana_selvagem",
-    "name": "Bardana Selvagem",
-    "category": "resource",
+    "id": "shiitake",
+    "name": "Shiitake",
+    "category": "colection",
     "drops": [
       {
-        "itemId": "bardana_selvagem",
+        "itemId": "shiitake",
         "chance": 1,
-        "quant": 3,
-        "maxQuant": 6
+        "quant": 3
       }
     ],
-    "icon": "/img/heartopia/recursos/bardana_selvagem.png",
-    "image": "/img/heartopia/coletaveis/bardana_selvagem.png",
-    "respawnDelay": 1.5
+    "icon": "/img/heartopia/recursos/shiitake.png",
+    "image": "/img/heartopia/coletaveis/shiitake.png"
   },
   {
-    "id": "mostarda_selvagem",
-    "name": "Mostarda Selvagem",
-    "category": "resource",
+    "id": "cogumelo_ostra",
+    "name": "Cogumelo Ostra",
+    "category": ["colection", "cogumelo_ostra"],
     "drops": [
       {
-        "itemId": "mostarda_selvagem",
+        "itemId": "cogumelo_ostra",
         "chance": 1,
-        "quant": 3,
-        "maxQuant": 6
+        "quant": 3
       }
     ],
-    "icon": "/img/heartopia/recursos/mostarda_selvagem.png",
-    "image": "/img/heartopia/coletaveis/mostarda_selvagem.png",
-    "respawnDelay": 1.5
+    "icon": "/img/heartopia/recursos/cogumelo_ostra.png",
+    "image": "/img/heartopia/coletaveis/cogumelo_ostra.png"
   },
   {
-    "id": "alho_mostarda_selvagem",
-    "name": "Alho-Mostarda Selvagem",
-    "category": "resource",
+    "id": "cogumelo_ostra_estranho_laranja",
+    "name": "Cogumelo Ostra Estranho Laranja",
+    "category": ["colection", "cogumelo_ostra"],
     "drops": [
       {
-        "itemId": "alho_mostarda_selvagem",
+        "itemId": "cogumelo_ostra_estranho_laranja",
         "chance": 1,
-        "quant": 3,
-        "maxQuant": 6
+        "quant": 3
       }
     ],
-    "icon": "/img/heartopia/recursos/alho_mostarda_selvagem.png",
-    "image": "/img/heartopia/coletaveis/alho_mostarda_selvagem.png",
-    "respawnDelay": 1.5
+    "icon": "/img/heartopia/recursos/cogumelo_ostra_estranho_laranja.png",
+    "image": "/img/heartopia/coletaveis/cogumelo_ostra_estranho_laranja.png"
   }
 ]

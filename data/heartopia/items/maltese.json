@@ -1,0 +1,117 @@
+﻿[
+  {
+    "id": "bolo_veludo_azul_cachorros",
+    "name": "Bolo Veludo Azul Cachorros",
+    "event": ["maltese"],
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/events/maltese/foods/bolo_veludo_azul_cachorros.png"
+  },
+  {
+    "id": "bolo_veludo_azul_golden_retriever",
+    "name": "Bolo Veludo Azul Golden Retriever",
+    "event": ["maltese"],
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/events/maltese/foods/bolo_veludo_azul_golden_retriever.png"
+  },
+  {
+    "id": "bolo_veludo_azul_maltese",
+    "name": "Bolo Veludo Azul Maltese",
+    "event": ["maltese"],
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/events/maltese/foods/bolo_veludo_azul_maltese.png"
+  },
+  {
+    "id": "canele_golden_retriever",
+    "name": "Canele Golden Retriever",
+    "event": ["maltese"],
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/events/maltese/foods/canele_golden_retriever.png"
+  },
+  {
+    "id": "canele_maltese",
+    "name": "Canele Maltese",
+    "event": ["maltese"],
+    "category": [
+      "food"
+    ],
+    "icon": "/img/heartopia/events/maltese/foods/canele_maltese.png"
+  },
+  {
+    "id": "moeda_troca_maltese",
+    "name": "Moeda de Troca Maltese",
+    "event": ["maltese"],
+    "category": [
+      "wallet"
+    ],
+    "icon": "/img/heartopia/events/maltese/items/moeda_troca_maltese.png",
+    "sellPrice": 50
+  },
+  {
+    "id": "cartao_postal_maltese_alegre",
+    "name": "Cartão Postal Maltese Alegre",
+    "event": ["maltese"],
+    "category": [
+      "social", "cartao_postal"
+    ],
+    "icon": "/img/heartopia/events/maltese/items/cartao_postal_maltese_alegre.png",
+    "buyPrice": 5,
+    "buyCoin": "moeda_troca_maltese"
+  },
+  {
+    "id": "cartao_postal_maltese_noturno",
+    "name": "Cartão Postal Maltese Noturno",
+    "event": ["maltese"],
+    "category": [
+      "social", "cartao_postal"
+    ],
+    "icon": "/img/heartopia/events/maltese/items/cartao_postal_maltese_noturno.png",
+    "buyPrice": 5,
+    "buyCoin": "moeda_troca_maltese"
+  },
+  {
+    "id": "cartao_postal_maltese_sonhador",
+    "name": "Cartão Postal Maltese Sonhador",
+    "event": ["maltese"],
+    "category": [
+      "social", "cartao_postal"
+    ],
+    "icon": "/img/heartopia/events/maltese/items/cartao_postal_maltese_sonhador.png",
+    "buyPrice": 5,
+    "buyCoin": "moeda_troca_maltese"
+  },
+  {
+    "id": "emoji_maltese_curtir",
+    "name": "Emoji: Curtir",
+    "event": ["maltese"],
+    "category": [
+      "emoji"
+    ],
+    "icon": "/img/heartopia/events/maltese/emoji/emoji_maltese_curtir.png"
+  },
+  {
+    "id": "emoji_maltese_forca",
+    "name": "Emoji: Força",
+    "event": ["maltese"],
+    "category": [
+      "emoji"
+    ],
+    "icon": "/img/heartopia/events/maltese/emoji/emoji_maltese_forca.png"
+  },
+  {
+    "id": "emoji_maltese_coracao",
+    "name": "Emoji: Coracao",
+    "event": ["maltese"],
+    "category": [
+      "emoji"
+    ],
+    "icon": "/img/heartopia/events/maltese/emoji/emoji_maltese_coracao.png"
+  }
+]

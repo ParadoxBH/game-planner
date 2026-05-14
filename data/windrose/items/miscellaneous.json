@@ -1,5 +1,23 @@
 ﻿[
     {
+        "id": "ancient_chalice",
+        "name": "Ancient Chalice",
+        "category": [
+            "miscellaneous"
+        ],
+        "icon": "/img/windrose/items/miscellaneous/ancient_chalice.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "bone_beads",
+        "name": "Bone beads",
+        "category": [
+            "miscellaneous"
+        ],
+        "icon": "/img/windrose/items/miscellaneous/bone_beads.png",
+        "rarity": "uncommon"
+    },
+    {
         "id": "clay_vase",
         "name": "Clay Vase",
         "category": [
@@ -7,6 +25,14 @@
         ],
         "icon": "/img/windrose/items/miscellaneous/clay_vase.png",
         "rarity": "uncommon"
+    },
+    {
+        "id": "deckhand_insignia",
+        "name": "Deckhand Insignia",
+        "category": [
+            "miscellaneous"
+        ],
+        "icon": "/img/windrose/items/miscellaneous/deckhand_insignia.png"
     },
     {
         "id": "fast_travel_bell",
@@ -54,6 +80,23 @@
         "rarity": "rare"
     },
     {
+        "id": "newhand_insignia",
+        "name": "Newhand Insignia",
+        "category": [
+            "miscellaneous"
+        ],
+        "icon": "/img/windrose/items/miscellaneous/newhand_insignia.png"
+    },
+    {
+        "id": "pot_golden_horn",
+        "name": "Pot With Golden Horn",
+        "category": [
+            "miscellaneous"
+        ],
+        "icon": "/img/windrose/items/miscellaneous/pot_golden_horn.png",
+        "rarity": "rare"
+    },
+    {
         "id": "provisions",
         "name": "Provisions",
         "category": [
@@ -61,5 +104,29 @@
         ],
         "icon": "/img/windrose/items/miscellaneous/provisions.png",
         "rarity": "uncommon"
+    },
+    {
+        "id": "silver_button",
+        "name": "Silver Button",
+        "category": [
+            "miscellaneous"
+        ],
+        "icon": "/img/windrose/items/miscellaneous/silver_button.png"
+    },
+    {
+        "id": "silver_spoon",
+        "name": "Silver Spoon",
+        "category": [
+            "miscellaneous"
+        ],
+        "icon": "/img/windrose/items/miscellaneous/silver_spoon.png"
+    },
+    {
+        "id": "wooden_talisman",
+        "name": "Wooden Talisman",
+        "category": [
+            "miscellaneous"
+        ],
+        "icon": "/img/windrose/items/miscellaneous/wooden_talisman.png"
     }
 ]

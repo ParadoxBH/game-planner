@@ -1,0 +1,39 @@
+﻿[
+      {
+        "id": "pet_shop_foods",
+        "shopId": "pet_shop",
+        "name": "Alimento",
+        "items": [
+          {
+            "id": "racao_gato"
+          },
+          {
+            "id": "racao_cao"
+          },
+          {
+            "id": "alimento_universal_animais"
+          }
+        ]
+      },
+      {
+        "name": "Ferramenta Especial",
+        "items": [
+          {
+            "id": "peixinho_seco_ativo",
+            "currency": "estrela_desejavel",
+            "price": 1
+          },
+          {
+            "id": "peixinho_seco_ativo"
+          },
+          {
+            "id": "racao_cao_ativo",
+            "currency": "estrela_desejavel",
+            "price": 1
+          },
+          {
+            "id": "racao_cao_ativo"
+          }
+        ]
+      }
+    ]

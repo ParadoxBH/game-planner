@@ -1,7 +1,7 @@
 ﻿[
   {
     "id": "point_1777702115410",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -11,7 +11,7 @@
   },
   {
     "id": "point_1777702139945",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -21,7 +21,7 @@
   },
   {
     "id": "point_1777702184860",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -31,7 +31,7 @@
   },
   {
     "id": "point_1777702200667",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -41,7 +41,7 @@
   },
   {
     "id": "point_1777702213385",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -51,7 +51,7 @@
   },
   {
     "id": "point_1777702233746",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -61,7 +61,7 @@
   },
   {
     "id": "point_1777702254769",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -71,7 +71,7 @@
   },
   {
     "id": "point_1777702271550",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -81,7 +81,7 @@
   },
   {
     "id": "point_1777702282136",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -91,7 +91,7 @@
   },
   {
     "id": "point_1777702293686",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -101,7 +101,7 @@
   },
   {
     "id": "point_1777702304162",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -111,7 +111,7 @@
   },
   {
     "id": "point_1777702320181",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -121,7 +121,7 @@
   },
   {
     "id": "point_1777702358305",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -131,7 +131,7 @@
   },
   {
     "id": "point_1777702373487",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -141,7 +141,7 @@
   },
   {
     "id": "point_1777702388074",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -151,7 +151,7 @@
   },
   {
     "id": "point_1777702407978",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -161,7 +161,7 @@
   },
   {
     "id": "point_1777702425601",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -171,7 +171,7 @@
   },
   {
     "id": "point_1777702437428",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -181,7 +181,7 @@
   },
   {
     "id": "point_1777702450298",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -191,7 +191,7 @@
   },
   {
     "id": "point_1777702464904",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -201,7 +201,7 @@
   },
   {
     "id": "point_1777702480213",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -211,7 +211,7 @@
   },
   {
     "id": "point_1777702512166",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -221,7 +221,7 @@
   },
   {
     "id": "point_1777702541207",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -231,7 +231,7 @@
   },
   {
     "id": "point_1777702561323",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -241,7 +241,7 @@
   },
   {
     "id": "point_1777702583265",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -251,7 +251,7 @@
   },
   {
     "id": "point_1777702600573",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -261,7 +261,7 @@
   },
   {
     "id": "point_1777702625256",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -271,7 +271,7 @@
   },
   {
     "id": "point_1777702669342",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -281,7 +281,7 @@
   },
   {
     "id": "point_1777702690633",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -291,7 +291,7 @@
   },
   {
     "id": "point_1777702702219",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -301,7 +301,7 @@
   },
   {
     "id": "point_1777702720027",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -311,7 +311,7 @@
   },
   {
     "id": "point_1777702767383",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -321,7 +321,7 @@
   },
   {
     "id": "point_1777702782492",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -331,7 +331,7 @@
   },
   {
     "id": "point_1777702826944",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -341,7 +341,7 @@
   },
   {
     "id": "point_1777702842082",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",
@@ -351,7 +351,7 @@
   },
   {
     "id": "point_1777702856153",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "pedra",
     "geom": {
       "type": "Point",

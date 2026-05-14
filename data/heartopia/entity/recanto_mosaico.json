@@ -1,0 +1,23 @@
+﻿[
+  {
+    "id": "brick_bubble",
+    "event": [
+      "recanto_mosaico"
+    ],
+    "name": "Bolha de Bloquinho",
+    "category": "colection",
+    "icon": "/img/heartopia/events/recanto_mosaico/coletavel/brick_bubble.png"
+  },
+  {
+    "id": "carrinho_movel_blocos",
+    "name": "Carrinho Móvel de Blocos",
+    "event": [
+      "recanto_mosaico"
+    ],
+    "category": [
+      "station",
+      "carrinho_movel_blocos"
+    ],
+    "icon": "/img/heartopia/events/recanto_mosaico/furniture/carrinho_movel_blocos.png"
+  }
+]

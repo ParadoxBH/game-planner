@@ -1,0 +1,57 @@
+﻿[
+    {
+        "id": "massimo_shop_ingrediente",
+        "shopId": "massimo_shop",
+        "name": "Ingrediente",
+        "items": [
+            {
+                "id": "carne",
+                "amount": 50
+            },
+            {
+                "id": "ovo",
+                "amount": 50
+            },
+            {
+                "id": "leite",
+                "amount": 50
+            },
+            {
+                "id": "queijo",
+                "amount": 50
+            },
+            {
+                "id": "manteiga",
+                "amount": 50
+            },
+            {
+                "id": "graos_cafe",
+                "amount": 50
+            },
+            {
+                "id": "cha_preto",
+                "amount": 50
+            },
+            {
+                "id": "po_matcha",
+                "amount": 50
+            },
+            {
+                "id": "macarrao_arroz",
+                "amount": 50
+            },
+            {
+                "id": "feijao_azuki",
+                "amount": 50
+            },
+            {
+                "id": "oleo",
+                "amount": 50
+            },
+            {
+                "id": "ovo_pasteurizado",
+                "amount": 50
+            }
+        ]
+    }
+]

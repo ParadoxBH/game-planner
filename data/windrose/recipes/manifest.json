@@ -1,6 +1,6 @@
 ﻿[
     "alchemy_table.json",
-    "armor_clothin_workshop.json",
+    "armor_clothing_workshop.json",
     "building.json",
     "charcoal_kiln.json",
     "cooking_fire.json",
@@ -10,5 +10,6 @@
     "smelting_furnace.json",
     "spinning_wheel.json",
     "tanning_rack.json",
+    "weaponsmith_workshop.json",
     "workbench.json"
 ]

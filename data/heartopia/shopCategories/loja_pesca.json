@@ -1,0 +1,30 @@
+﻿[
+    {
+        "id": "vanya_shop_isca",
+        "shopId": "vanya_shop",
+        "name": "Isca",
+        "items": [
+            {
+                "id": "isca",
+                "amount": 50
+            }
+        ]
+    },
+    {
+        "id": "vanya_shop_tools",
+        "shopId": "vanya_shop",
+        "name": "Ferramenta Especial",
+        "items": [
+            {
+                "id": "atrativo_sereia",
+                "amount": 100,
+                "price": 1,
+                "currency": "estrela_desejavel"
+            },
+            {
+                "id": "atrativo_sereia",
+                "amount": 10
+            }
+        ]
+    }
+]

@@ -12,5 +12,26 @@
     "category": ["ring"],
     "icon": "/img/windrose/items/ring/minor_capricorn_ring.png",
     "rarity": "uncommon"
+  },
+  {
+    "id": "minor_spear_thrower_ring",
+    "name": "Minor Spear Thrower Ring",
+    "category": ["ring"],
+    "icon": "/img/windrose/items/ring/minor_spear_thrower_ring.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "minor_jaguar_ring",
+    "name": "Minor Jaguar Ring",
+    "category": ["ring"],
+    "icon": "/img/windrose/items/ring/minor_jaguar_ring.png",
+    "rarity": "uncommon"
+  },
+  {
+    "id": "minor_ring_bravery",
+    "name": "Minor Ring Bravery",
+    "category": ["ring"],
+    "icon": "/img/windrose/items/ring/minor_ring_bravery.png",
+    "rarity": "uncommon"
   }
 ]

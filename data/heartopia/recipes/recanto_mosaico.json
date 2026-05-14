@@ -1,0 +1,762 @@
+﻿[
+    {
+        "id": "carrinho_movel_blocos",
+        "stations": [
+            "mesa_artesao"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "pedra",
+                "amount": 8
+            },
+            {
+                "type": "item",
+                "id": "madeira_rara",
+                "amount": 5
+            },
+            {
+                "type": "item",
+                "id": "kit_materiais_blocos_mosaico",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "entity",
+                "id": "carrinho_movel_blocos",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "raspadinha_frutas_tigela_blocos",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "leite_condensado",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "gelo_blocos",
+                "amount": 1
+            },
+            {
+                "type": "category",
+                "id": "fruit",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "raspadinha_frutas_tigela_blocos",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "raspadinha_maca_tigela_blocos",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "leite_condensado",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "gelo_blocos",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "maca",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "raspadinha_maca_tigela_blocos",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "raspadinha_tangerina_tigela_blocos",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "leite_condensado",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "gelo_blocos",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "tangerina",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "raspadinha_tangerina_tigela_blocos",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "raspadinha_mirtilo_tigela_blocos",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "leite_condensado",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "gelo_blocos",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "mirtilo",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "raspadinha_mirtilo_tigela_blocos",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "raspadinha_framboesa_tigela_blocos",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "leite_condensado",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "gelo_blocos",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "framboesa",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "raspadinha_framboesa_tigela_blocos",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "raspadinha_morango_tigela_blocos",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "leite_condensado",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "gelo_blocos",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "morango",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "raspadinha_morango_tigela_blocos",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "raspadinha_uva_tigela_blocos",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "leite_condensado",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "gelo_blocos",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "uva",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "raspadinha_uva_tigela_blocos",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "raspadinha_abacaxi_tigela_blocos",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "leite_condensado",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "gelo_blocos",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "abacaxi",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "raspadinha_abacaxi_tigela_blocos",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "torta_frutas_verbena",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "manteiga",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "ovo",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "lucia_lima",
+                "amount": 1
+            },
+            {
+                "type": "category",
+                "id": "fruit",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "torta_frutas_verbena",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "torta_maca_verbena",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "manteiga",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "ovo",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "lucia_lima",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "maca",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "torta_maca_verbena",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "torta_tangerina_verbena",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "manteiga",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "ovo",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "lucia_lima",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "tangerina",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "torta_tangerina_verbena",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "torta_mirtilo_verbena",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "manteiga",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "ovo",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "lucia_lima",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "mirtilo",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "torta_mirtilo_verbena",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "torta_framboesa_verbena",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "manteiga",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "ovo",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "lucia_lima",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "framboesa",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "torta_framboesa_verbena",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "torta_morango_verbena",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "manteiga",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "ovo",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "lucia_lima",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "morango",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "torta_morango_verbena",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "torta_uva_verbena",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "manteiga",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "ovo",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "lucia_lima",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "uva",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "torta_uva_verbena",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "torta_abacaxi_verbena",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "manteiga",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "ovo",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "lucia_lima",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "abacaxi",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "torta_abacaxi_verbena",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "hamburguer_blocos_cogumelos",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "trigo",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "hamburguer_blocos",
+                "amount": 1
+            },
+            {
+                "type": "category",
+                "id": "mushroom",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "hamburguer_blocos_cogumelos",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "hamburguer_blocos_cogumelo_ostra",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "trigo",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "hamburguer_blocos",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "cogumelo_ostra",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "hamburguer_blocos_cogumelo_ostra",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "hamburguer_blocos_shiitake",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "trigo",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "hamburguer_blocos",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "shiitake",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "hamburguer_blocos_shiitake",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "hamburguer_blocos_champignon",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "trigo",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "hamburguer_blocos",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "champignon",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "hamburguer_blocos_champignon",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "hamburguer_blocos_porcinio",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "trigo",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "hamburguer_blocos",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "porcinio",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "hamburguer_blocos_porcinio",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "hamburguer_blocos_trufa_negra",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "trigo",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "hamburguer_blocos",
+                "amount": 1
+            },
+            {
+                "type": "item",
+                "id": "porcinio",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "hamburguer_blocos_trufa_negra",
+                "amount": 1
+            }
+        ]
+    },
+    {
+        "id": "combo_divertido_blocos",
+        "stations": [
+            "carrinho_movel_blocos"
+        ],
+        "ingredients": [
+            {
+                "type": "category",
+                "id": "raspadinha_frutas_tigela_blocos",
+                "amount": 1
+            },
+            {
+                "type": "category",
+                "id": "torta_frutas_verbena",
+                "amount": 1
+            },
+            {
+                "type": "category",
+                "id": "hamburguer_blocos_cogumelos",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "combo_divertido_blocos",
+                "amount": 1
+            }
+        ]
+    }
+]

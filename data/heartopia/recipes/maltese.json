@@ -1,0 +1,157 @@
+﻿[
+  {
+    "id": "canele_maltese",
+    "stations": [
+      "cooking_station"
+    ],
+    "events": ["maltese"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "ovo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "milho",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "morango",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "canele_maltese",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "canele_golden_retriever",
+    "stations": [
+      "cooking_station"
+    ],
+    "events": ["maltese"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "ovo",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "milho",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "cafe",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "canele_golden_retriever",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "bolo_veludo_azul_maltese",
+    "stations": [
+      "cooking_station"
+    ],
+    "events": ["maltese"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 3
+      },
+      {
+        "type": "item",
+        "id": "cafe",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "bolo_veludo_azul_maltese",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "bolo_veludo_azul_golden_retriever",
+    "stations": [
+      "cooking_station"
+    ],
+    "events": ["maltese"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "graos_cafe",
+        "amount": 1
+      },
+      {
+        "type": "item",
+        "id": "cafe",
+        "amount": 1
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "bolo_veludo_azul_golden_retriever",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "bolo_veludo_azul_cachorros",
+    "stations": [
+      "cooking_station"
+    ],
+    "events": ["maltese"],
+    "ingredients": [
+      {
+        "type": "item",
+        "id": "leite",
+        "amount": 2
+      },
+      {
+        "type": "item",
+        "id": "cafe",
+        "amount": 2
+      }
+    ],
+    "products": [
+      {
+        "type": "item",
+        "id": "bolo_veludo_azul_cachorros",
+        "amount": 1
+      }
+    ]
+  }
+]

@@ -1,0 +1,22 @@
+﻿[
+    {
+        "id": "loja_aves_tools",
+        "shopId": "loja_aves",
+        "name": "Ferramenta Especial",
+        "resetType": "semanal",
+        "items": [
+            {
+                "id": "apito_automatico",
+                "price": 1,
+                "amount": 100,
+                "currency": "estrela_desejavel",
+                "resetType": "semanal"
+            },
+            {
+                "id": "apito_automatico",
+                "amount": 10,
+                "resetType": "semanal"
+            }
+        ]
+    }
+]

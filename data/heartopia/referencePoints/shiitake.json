@@ -1,0 +1,162 @@
+﻿[
+  {
+    "id": "point_1778455953759",
+    "type": "poi",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-48.62982650041706 -252.58952348403375)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778455971584",
+    "type": "poi",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-17.74025734123862 -245.6432948213538)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778455988101",
+    "type": "poi",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-58.6689364771501 -229.4354279417669)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778456051953",
+    "type": "poi",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(2.3379626122273627 -312.0183687091855)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778456092355",
+    "type": "poi",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(65.27545977405356 -351.76623272341044)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778456107072",
+    "type": "poi",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(38.63320637426204 -317.42099100238113)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778456124485",
+    "type": "poi",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(64.88934015956367 -298.12591138382544)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778456131863",
+    "type": "poi",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(74.54233052180699 -288.8642731669187)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778456148584",
+    "type": "poi",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(77.24516782323498 -336.3301690285659)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778456163957",
+    "type": "poi",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(118.17384695914654 -327.06853081165906)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778456198169",
+    "type": "poi",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(150.60789457628374 -334.4006610667102)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778456267297",
+    "type": "poi",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(82.6508424260913 -348.2931183920704)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778456901378",
+    "type": "spawn",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-126.19054998395374 -325.51188239947163)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778456951619",
+    "type": "spawn",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-143.17981302150196 -419.2859693456527)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778456978121",
+    "type": "spawn",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-140.8630953345635 -384.16892443988127)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1778456988736",
+    "type": "spawn",
+    "entityId": "shiitake",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-126.19054998395374 -378.38040055431446)"
+    },
+    "mapId": "main"
+  }
+]

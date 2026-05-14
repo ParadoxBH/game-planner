@@ -1,0 +1,172 @@
+[
+    {
+        "id": "blanc_caixas_plantas",
+        "shopId": "blanc_shop",
+        "name": "Caixa de Plantas",
+        "items": [
+            {
+                "id": "caixa_planta",
+                "amount": 10,
+                "type": "entity",
+                "resetType": "unique"
+            },
+            {
+                "id": "caixa_planta",
+                "amount": 10,
+                "type": "entity",
+                "resetType": "unique"
+            },
+            {
+                "id": "caixa_planta",
+                "amount": 10,
+                "price": 500,
+                "type": "entity",
+                "resetType": "unique"
+            },
+            {
+                "id": "caixa_planta",
+                "amount": 10,
+                "price": 1700,
+                "type": "entity",
+                "resetType": "unique"
+            }
+        ]
+    },
+    {
+        "id": "blanc_sementes_cultivo",
+        "shopId": "blanc_shop",
+        "name": "Semente de Cultivo",
+        "items": [
+            {
+                "id": "semente_tomate"
+            },
+            {
+                "id": "semente_batata"
+            },
+            {
+                "id": "semente_trigo"
+            },
+            {
+                "id": "semente_alface_americano"
+            },
+            {
+                "id": "semente_abacaxi"
+            },
+            {
+                "id": "semente_cenoura"
+            },
+            {
+                "id": "semente_morango"
+            },
+            {
+                "id": "semente_milho"
+            },
+            {
+                "id": "semente_uva"
+            }
+        ]
+    },
+    {
+        "id": "blanc_sementes_flor",
+        "shopId": "blanc_shop",
+        "name": "Semente de Flor",
+        "items": [
+            {
+                "id": "semente_margarida_vermelha"
+            },
+            {
+                "id": "semente_margarida_branca"
+            },
+            {
+                "id": "semente_amor_perfeito_vermelho"
+            },
+            {
+                "id": "semente_amor_perfeito_amarelo"
+            },
+            {
+                "id": "semente_papoula_vermelha"
+            },
+            {
+                "id": "semente_papoula_amarela"
+            },
+            {
+                "id": "semente_papoula_branca"
+            },
+            {
+                "id": "semente_anturio_vermelho"
+            },
+            {
+                "id": "semente_anturio_amarelo"
+            },
+            {
+                "id": "semente_anturio_branco"
+            },
+            {
+                "id": "semente_copo_leite_vermelha"
+            },
+            {
+                "id": "semente_copo_leite_amarela"
+            },
+            {
+                "id": "semente_copo_leite_branca"
+            },
+            {
+                "id": "semente_gloria_manha_vermelha"
+            },
+            {
+                "id": "semente_gloria_manha_amarela"
+            },
+            {
+                "id": "semente_gloria_manha_branca"
+            },
+            {
+                "id": "semente_cravo_vermelha"
+            },
+            {
+                "id": "semente_cravo_amarela"
+            },
+            {
+                "id": "semente_cravo_branca"
+            }
+        ]
+    },
+    {
+        "id": "blanc_ferramentas_especiais",
+        "shopId": "blanc_shop",
+        "name": "Ferramenta Especial",
+        "items": [
+            {
+                "id": "fertilizante",
+                "amount": 25,
+                "resetType": "semanal"
+            },
+            {
+                "id": "fertilizante_qualidade",
+                "amount": 12,
+                "resetType": "semanal"
+            },
+            {
+                "id": "po_cultivo_arco_iris",
+                "amount": 100,
+                "resetType": "semanal",
+                "price": 2,
+                "currency": "estrela_desejavel"
+            },
+            {
+                "id": "po_cultivo_arco_iris",
+                "amount": 10,
+                "resetType": "semanal"
+            },
+            {
+                "id": "elixir",
+                "amount": 8,
+                "resetType": "semanal"
+            },
+            {
+                "id": "elixir_qualidade",
+                "amount": 5,
+                "resetType": "semanal"
+            }
+        ]
+    }
+]

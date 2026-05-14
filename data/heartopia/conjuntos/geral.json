@@ -1,0 +1,40 @@
+﻿[
+    {
+        "id": "flower",
+        "name": "Flores e Hibridações"
+    },
+    {
+        "id": "vegetable",
+        "name": "Vegetais e Agricultura"
+    },
+    {
+        "id": "cooking",
+        "name": "Vida com Iguarias"
+    },
+    {
+        "id": "fish",
+        "name": "Observação de Peixes"
+    },
+    {
+        "id": "escultura_neve",
+        "name": "Moda de Escultura de Neve"
+    },
+    {
+        "id": "gala_neve",
+        "name": "Exclusivos da Gala da Neve",
+        "events": ["gala_neve"],
+        "image": "/img/heartopia/events/gala_neve/banner.webp"
+    },
+    {
+        "id": "luz_sombra",
+        "name": "Exclusivos de Luz e Sombra",
+        "events": ["luz_sombra"],
+        "image": "/img/heartopia/events/luz_sombra/banner.webp"
+    },
+    {
+        "id": "recanto_mosaico",
+        "events": ["recanto_mosaico"],
+        "name": "Exclusivos do Recanto Mosaico",
+        "image": "/img/heartopia/events/recanto_mosaico/banner.png"
+    }
+]

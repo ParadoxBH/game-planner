@@ -1,6 +1,7 @@
-[
-    "flowers.json",
-    "escultura_neve.json",
+﻿[
+    "geral.json",
+    
     "gala_neve.json",
-    "luz_sombra.json"
+    "luz_sombra.json",
+    "recanto_mosaico.json"
 ]

@@ -1,0 +1,17 @@
+﻿[
+    {
+        "id": "maltese_foods",
+        "name": "Comidas Exclusivas Maltese",
+        "conjuntoIds": ["maltese", "cooking"],
+        "event": [
+            "maltese"
+        ],
+        "items": [
+            "bolo_veludo_azul_cachorros",
+            "bolo_veludo_azul_golden_retriever",
+            "bolo_veludo_azul_maltese",
+            "canele_golden_retriever",
+            "canele_maltese"
+        ]
+    }
+]

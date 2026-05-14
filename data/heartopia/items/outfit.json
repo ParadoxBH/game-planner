@@ -6,5 +6,11 @@
     "icon": "/img/heartopia/outfit/guarda_chuva_longo_unicolor_amarelo.png",
     "buyPrice": 80,
     "buyCoin": "estrela_desejavel"
+  },
+  {
+    "id": "brincos_lua_estrela",
+    "name": "Brincos Lua & Estrela",
+    "category": ["outfit", "outfit_faciais", "vestido_de_festa_meia_noite"],
+    "icon": "/img/heartopia/outfit/vestido_de_festa_meia_noite/brincos_lua_estrela.png"
   }
 ]

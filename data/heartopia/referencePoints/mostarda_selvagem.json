@@ -2,6 +2,7 @@
   {
     "id": "point_1777523823768",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -12,6 +13,7 @@
   {
     "id": "point_1777523826069",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -22,6 +24,7 @@
   {
     "id": "point_1777523834124",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -32,6 +35,7 @@
   {
     "id": "point_1777523849424",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -42,6 +46,7 @@
   {
     "id": "point_1777523855910",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -52,6 +57,7 @@
   {
     "id": "point_1777523861005",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -62,6 +68,7 @@
   {
     "id": "point_1777523874295",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -72,6 +79,7 @@
   {
     "id": "point_1777523882531",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -82,6 +90,7 @@
   {
     "id": "point_1777523889986",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -92,6 +101,7 @@
   {
     "id": "point_1777523896623",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -102,6 +112,7 @@
   {
     "id": "point_1777523903398",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -112,6 +123,7 @@
   {
     "id": "point_1777523910914",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -122,6 +134,7 @@
   {
     "id": "point_1777523920423",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -132,6 +145,7 @@
   {
     "id": "point_1777523927401",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -142,6 +156,7 @@
   {
     "id": "point_1777523936900",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -152,6 +167,7 @@
   {
     "id": "point_1777523949902",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -162,6 +178,7 @@
   {
     "id": "point_1777523955818",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -172,6 +189,7 @@
   {
     "id": "point_1777523962590",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -182,6 +200,7 @@
   {
     "id": "point_1777523977125",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -192,6 +211,7 @@
   {
     "id": "point_1777523982250",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",
@@ -202,6 +222,7 @@
   {
     "id": "point_1777523987917",
     "type": "spawn",
+    "event": "luz_sombra",
     "entityId": "mostarda_selvagem",
     "geom": {
       "type": "Point",

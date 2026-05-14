@@ -414,14 +414,14 @@
     "icon": "/img/heartopia/recursos/matsutake.png"
   },
   {
-    "id": "cogumelo_ostra_estranho_amarelo",
-    "name": "Cogumelo Ostra Estranho Amarelo",
+    "id": "cogumelo_ostra_estranho_laranja",
+    "name": "Cogumelo Ostra Estranho Laranja",
     "category": [
       "resource",
       "mushroom",
       "cogumelo_ostra"
     ],
-    "icon": "/img/heartopia/recursos/cogumelo_ostra_estranho_amarelo.png"
+    "icon": "/img/heartopia/recursos/cogumelo_ostra_estranho_laranja.png"
   },
   {
     "id": "cogumelo_ostra_estranho_rosa",
@@ -562,43 +562,11 @@
     "icon": "/img/heartopia/culinaria/ovo_pasteurizado.png"
   },
   {
-    "id": "samambaia_selvagem",
-    "name": "Samambaia Selvagem",
+    "id": "peca_ouro",
+    "name": "Peça de Ouro",
     "category": [
-      "resource",
-      "ingredient"
+      "resource"
     ],
-    "icon": "/img/heartopia/recursos/samambaia_selvagem.png",
-    "sellPrice": 5
-  },
-  {
-    "id": "bardana_selvagem",
-    "name": "Bardana Selvagem",
-    "category": [
-      "resource",
-      "ingredient"
-    ],
-    "icon": "/img/heartopia/recursos/bardana_selvagem.png",
-    "sellPrice": 5
-  },
-  {
-    "id": "mostarda_selvagem",
-    "name": "Mostarda Selvagem",
-    "category": [
-      "resource",
-      "ingredient"
-    ],
-    "icon": "/img/heartopia/recursos/mostarda_selvagem.png",
-    "sellPrice": 5
-  },
-  {
-    "id": "alho_mostarda_selvagem",
-    "name": "Alho-Mostarda Selvagem",
-    "category": [
-      "resource",
-      "ingredient"
-    ],
-    "icon": "/img/heartopia/recursos/alho_mostarda_selvagem.png",
-    "sellPrice": 5
+    "icon": "/img/heartopia/outros/peca_ouro.png"
   }
 ]

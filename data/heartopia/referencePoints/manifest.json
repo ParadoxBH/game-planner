@@ -2,6 +2,7 @@
     "arbusto_framboesa.json",
     "arbusto_mirtilo.json",
     "trufa_negra.json",
+    "champignon.json",
     "stations.json",
     "npcs.json",
     "pedra.json",
@@ -17,9 +18,15 @@
     "shower.json",
     "rainbow.json",
     "others.json",
+    "porcino.json",
+    "shiitake.json",
+    "cogumelo_ostra.json",
     
     "mostarda_selvagem.json",
     "samambaia_selvagem.json",
     "alho_mostarda_selvagem.json",
-    "bardana_selvagem.json"
+    "bardana_selvagem.json",
+
+    "maltese.json",
+    "recanto_mosaico.json"
 ]

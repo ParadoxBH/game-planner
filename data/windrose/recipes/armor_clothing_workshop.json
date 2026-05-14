@@ -1,0 +1,563 @@
+﻿[
+    {
+        "id": "tracker_boots",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "tracker_boots",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "survivor_boots",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "survivor_boots",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "survivor_pants",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "survivor_pants",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "survivor_gloves",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "survivor_gloves",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "survivor_bandana",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "survivor_bandana",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "survivor_jacket",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "survivor_jacket",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "conquistador_boots",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 1
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "conquistador_boots",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "conquistador_helmet",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 3
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "conquistador_helmet",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "marksman_gloves",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 4
+            },
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "marksman_gloves",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "marksman_tricorne",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 5
+            },
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "marksman_tricorne",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "pikeman_gloves",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "copper_ingot",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "pikeman_gloves",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "privateer_boots",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 4
+            },
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "privateer_boots",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "privateer_gloves",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 4
+            },
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "privateer_gloves",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "privateer_tricorne",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 5
+            },
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "privateer_tricorne",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "flibustier_boots",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "flibustier_boots",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "flibustier_gloves",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "flibustier_gloves",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "id": "flibustier_hat",
+        "stations": [
+            "armor_clothing_workshop"
+        ],
+        "ingredients": [
+            {
+                "type": "item",
+                "id": "rough_hide",
+                "amount": 2
+            },
+            {
+                "type": "item",
+                "id": "coarse_fabric",
+                "amount": 2
+            }
+        ],
+        "products": [
+            {
+                "type": "item",
+                "id": "flibustier_hat",
+                "amount": 1,
+                "level": 1
+            }
+        ],
+        "unlock": [
+            {
+                "id": "level",
+                "type": "station",
+                "value": 1
+            }
+        ]
+    }
+]

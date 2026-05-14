@@ -1,0 +1,266 @@
+﻿[
+    {
+        "id": "conquistador_boots",
+        "name": "Conquistador's Boots",
+        "category": [
+            "armor",
+            "boots",
+            "set_conquistador"
+        ],
+        "icon": "/img/windrose/items/armor/conquistador_boots.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "conquistador_helmet",
+        "name": "Conquistador's Helmet",
+        "category": [
+            "armor",
+            "hat",
+            "set_conquistador"
+        ],
+        "icon": "/img/windrose/items/armor/conquistador_helmet.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "conquistador_boots",
+        "name": "Conquistador's Boots",
+        "category": [
+            "armor",
+            "boots",
+            "set_conquistador"
+        ],
+        "icon": "/img/windrose/items/armor/conquistador_boots.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "flibustier_boots",
+        "name": "Flibustier's Boots",
+        "category": [
+            "armor",
+            "boots",
+            "set_flibustier"
+        ],
+        "icon": "/img/windrose/items/armor/flibustier_boots.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "flibustier_gloves",
+        "name": "Flibustier's Gloves",
+        "category": [
+            "armor",
+            "gloves",
+            "set_flibustier"
+        ],
+        "icon": "/img/windrose/items/armor/flibustier_gloves.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "flibustier_hat",
+        "name": "Flibustier's Hat",
+        "category": [
+            "armor",
+            "hat",
+            "set_flibustier"
+        ],
+        "icon": "/img/windrose/items/armor/flibustier_hat.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "headband",
+        "name": "Headband",
+        "category": [
+            "armor",
+            "hat",
+            "set_torn"
+        ],
+        "icon": "/img/windrose/items/armor/headband.png",
+        "rarity": "common"
+    },
+    {
+        "id": "marksman_gloves",
+        "name": "Marksman's Gloves",
+        "category": [
+            "armor",
+            "gloves",
+            "set_marksman"
+        ],
+        "icon": "/img/windrose/items/armor/marksman_gloves.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "marksman_tricorne",
+        "name": "Marksman's Tricorne",
+        "category": [
+            "armor",
+            "hat",
+            "set_marksman"
+        ],
+        "icon": "/img/windrose/items/armor/marksman_tricorne.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "pikeman_gloves",
+        "name": "Pikeman's Gloves",
+        "category": [
+            "armor",
+            "gloves",
+            "set_pikeman"
+        ],
+        "icon": "/img/windrose/items/armor/pikeman_gloves.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "privateer_boots",
+        "name": "Privateer Boots",
+        "category": [
+            "armor",
+            "boots",
+            "set_privateer"
+        ],
+        "icon": "/img/windrose/items/armor/privateer_boots.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "privateer_gloves",
+        "name": "Privateer Gloves",
+        "category": [
+            "armor",
+            "gloves",
+            "set_privateer"
+        ],
+        "icon": "/img/windrose/items/armor/privateer_gloves.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "privateer_tricorne",
+        "name": "Privateer Tricorne",
+        "category": [
+            "armor",
+            "hat",
+            "set_privateer"
+        ],
+        "icon": "/img/windrose/items/armor/privateer_tricorne.png",
+        "rarity": "rare"
+    },
+    {
+        "id": "survivor_bandana",
+        "name": "Survivor Bandana",
+        "category": [
+            "armor",
+            "hat",
+            "set_survivor"
+        ],
+        "icon": "/img/windrose/items/armor/survivor_bandana.png",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "survivor_boots",
+        "name": "Survivor Boots",
+        "category": [
+            "armor",
+            "boots",
+            "set_survivor"
+        ],
+        "icon": "/img/windrose/items/armor/survivor_boots.png",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "survivor_gloves",
+        "name": "Survivor Gloves",
+        "category": [
+            "armor",
+            "gloves",
+            "set_survivor"
+        ],
+        "icon": "/img/windrose/items/armor/survivor_gloves.png",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "survivor_jacket",
+        "name": "Survivor Jacket",
+        "category": [
+            "armor",
+            "chest",
+            "set_survivor"
+        ],
+        "icon": "/img/windrose/items/armor/survivor_jacket.png",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "survivor_pants",
+        "name": "Survivor Pants",
+        "category": [
+            "armor",
+            "pants",
+            "set_survivor"
+        ],
+        "icon": "/img/windrose/items/armor/survivor_pants.png",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "torn_boots",
+        "name": "Torn Boots",
+        "category": [
+            "armor",
+            "boots",
+            "set_torn"
+        ],
+        "icon": "/img/windrose/items/armor/torn_boots.png",
+        "rarity": "common"
+    },
+    {
+        "id": "torn_doublet",
+        "name": "Torn Doublet",
+        "category": [
+            "armor",
+            "chest",
+            "set_torn"
+        ],
+        "icon": "/img/windrose/items/armor/torn_doublet.png",
+        "rarity": "common"
+    },
+    {
+        "id": "torn_gloves",
+        "name": "Torn Gloves",
+        "category": [
+            "armor",
+            "gloves",
+            "set_torn"
+        ],
+        "icon": "/img/windrose/items/armor/torn_gloves.png",
+        "rarity": "common"
+    },
+    {
+        "id": "torn_pants",
+        "name": "Torn Pants",
+        "category": [
+            "armor",
+            "pants",
+            "set_torn"
+        ],
+        "icon": "/img/windrose/items/armor/torn_pants.png",
+        "rarity": "common"
+    },
+    {
+        "id": "torn_boots",
+        "name": "Torn Boots",
+        "category": [
+            "armor",
+            "boots",
+            "set_torn"
+        ],
+        "icon": "/img/windrose/items/armor/torn_boots.png",
+        "rarity": "common"
+    },
+    {
+        "id": "tracker_boots",
+        "name": "Tracker Boots",
+        "category": [
+            "armor",
+            "boots",
+            "set_torn"
+        ],
+        "icon": "/img/windrose/items/armor/tracker_boots.png",
+        "rarity": "rare"
+    }
+]

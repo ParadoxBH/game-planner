@@ -1,0 +1,8 @@
+﻿[
+  {
+    "id": "map",
+    "name": "Map",
+    "category": ["curios"],
+    "icon": "/img/windrose/items/curios/map.png"
+  }
+]

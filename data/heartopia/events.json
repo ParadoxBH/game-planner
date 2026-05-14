@@ -24,6 +24,18 @@
     }
   },
   {
+    "id": "recanto_mosaico",
+    "name": "Recanto Mosaico",
+    "type": "season",
+    "description": "Grab your friends and dive into the fun of brick bazaar!",
+    "icon": "/img/heartopia/events/recanto_mosaico/icon.png",
+    "banner": "/img/heartopia/events/recanto_mosaico/banner.png",
+    "period": {
+      "start": "09/05/2026",
+      "end": "27/06/2026"
+    }
+  },
+  {
     "id": "rainbow",
     "name": "Arco-iris",
     "type": "clima",
@@ -50,5 +62,17 @@
     "type": "clima",
     "icon": "/img/heartopia/events/petal_rain/icon.png",
     "banner": "/img/heartopia/events/petal_rain/banner.png"
+  },
+  {
+    "id": "maltese",
+    "name": "Maltese",
+    "type": "colab",
+    "description": "Camp with puppies and good vibes!",
+    "icon": "/img/heartopia/events/maltese/icon.png",
+    "banner": "/img/heartopia/events/maltese/banner.png",
+    "period": {
+      "start": "30/04/2026",
+      "end": "26/05/2026"
+    }
   }
 ]

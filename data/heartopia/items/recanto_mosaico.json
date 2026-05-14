@@ -1,0 +1,488 @@
+﻿[
+    {
+        "id": "blocos_multicoloridos",
+        "name": "Blocos Multicoloridos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "wallet"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/items/blocos_multicoloridos.png"
+    },
+    {
+        "id": "token_festivo_recanto_mosaico",
+        "name": "Token Festivo",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "wallet"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/items/token_festivo.png"
+    },
+    {
+        "id": "moeda_troca_especial_recanto_mosaico",
+        "name": "Moeda de Troca Especial Recanto Mosaico",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "wallet"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/items/moeda_troca_especial_recanto_mosaico.png"
+    },
+    {
+        "id": "kit_materiais_blocos_mosaico",
+        "name": "Kit de Materiais de Blocos Mosaico",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "resource"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/items/kit_materiais_blocos_mosaico.png"
+    },
+    {
+        "id": "gacha_recanto_mosaico",
+        "name": "Gacha Recanto Mosaico",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "wallet",
+            "gacha"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/items/gacha_recanto_mosaico.png"
+    },
+    {
+        "id": "donzelinha_vermelha_grande_blocos_azul",
+        "name": "Donzelinha-Vermelha-Grande de Blocos Azul",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "insect",
+            "dragon_fly"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/insects/donzelinha_vermelha_grande_blocos_azul.png"
+    },
+    {
+        "id": "donzelinha_vermelha_grande_blocos_roxa",
+        "name": "Donzelinha-Vermelha-Grande de Blocos Roxa",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "insect",
+            "dragon_fly"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/insects/donzelinha_vermelha_grande_blocos_roxa.png"
+    },
+    {
+        "id": "donzelinha_vermelha_grande_blocos_rosa",
+        "name": "Donzelinha-Vermelha-Grande de Blocos Rosa",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "insect",
+            "dragon_fly"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/insects/donzelinha_vermelha_grande_blocos_rosa.png"
+    },
+    {
+        "id": "donzelinha_vermelha_grande_blocos_amarela",
+        "name": "Donzelinha-Vermelha-Grande de Blocos Amarela",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "insect",
+            "dragon_fly"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/insects/donzelinha_vermelha_grande_blocos_amarela.png"
+    },
+    {
+        "id": "donzelinha_vermelha_grande_blocos_colorida",
+        "name": "Donzelinha-Vermelha-Grande de Blocos Colorida",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "insect",
+            "dragon_fly"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/insects/donzelinha_vermelha_grande_blocos_colorida.png"
+    },
+    {
+        "id": "peixe_palhaco_blocos_azul",
+        "name": "Peixe-Palhaço de Blocos Azul",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "fish",
+            "sea_fish"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/fishs/peixe_palhaco_blocos_azul.png"
+    },
+    {
+        "id": "peixe_palhaco_blocos_vermelho",
+        "name": "Peixe-Palhaço de Blocos Vermelho",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "fish",
+            "sea_fish"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/fishs/peixe_palhaco_blocos_vermelho.png"
+    },
+    {
+        "id": "peixe_palhaco_blocos_verde",
+        "name": "Peixe-Palhaço de Blocos Verde",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "fish",
+            "sea_fish"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/fishs/peixe_palhaco_blocos_verde.png"
+    },
+    {
+        "id": "peixe_palhaco_blocos_roxo",
+        "name": "Peixe-Palhaço de Blocos Roxo",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "fish",
+            "sea_fish"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/fishs/peixe_palhaco_blocos_roxo.png"
+    },
+    {
+        "id": "peixe_palhaco_blocos_colorido",
+        "name": "Peixe-Palhaço de Blocos Colorido",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "fish",
+            "sea_fish"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/fishs/peixe_palhaco_blocos_colorido.png"
+    },
+
+
+    {
+        "id": "raspadinha_frutas_tigela_blocos",
+        "name": "Raspadinha de Frutas na Tigela de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "drink",
+            "raspadinha_frutas_tigela_blocos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/raspadinha_frutas_tigela_blocos.png"
+    },
+    {
+        "id": "raspadinha_maca_tigela_blocos",
+        "name": "Raspadinha de Maca na Tigela de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "drink",
+            "raspadinha_frutas_tigela_blocos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/raspadinha_maca_tigela_blocos.png"
+    },
+    {
+        "id": "raspadinha_tangerina_tigela_blocos",
+        "name": "Raspadinha de Tangerina na Tigela de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "drink",
+            "raspadinha_frutas_tigela_blocos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/raspadinha_tangerina_tigela_blocos.png"
+    },
+    {
+        "id": "raspadinha_mirtilo_tigela_blocos",
+        "name": "Raspadinha de Mirtilo na Tigela de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "drink",
+            "raspadinha_frutas_tigela_blocos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/raspadinha_mirtilo_tigela_blocos.png"
+    },
+    {
+        "id": "raspadinha_framboesa_tigela_blocos",
+        "name": "Raspadinha de Framboesa na Tigela de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "drink",
+            "raspadinha_frutas_tigela_blocos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/raspadinha_framboesa_tigela_blocos.png"
+    },
+    {
+        "id": "raspadinha_morango_tigela_blocos",
+        "name": "Raspadinha de Morango na Tigela de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "drink",
+            "raspadinha_frutas_tigela_blocos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/raspadinha_morango_tigela_blocos.png"
+    },
+    {
+        "id": "raspadinha_uva_tigela_blocos",
+        "name": "Raspadinha de Uva na Tigela de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "drink",
+            "raspadinha_frutas_tigela_blocos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/raspadinha_uva_tigela_blocos.png"
+    },
+    {
+        "id": "raspadinha_abacaxi_tigela_blocos",
+        "name": "Raspadinha de Abacaxi na Tigela de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "drink",
+            "raspadinha_frutas_tigela_blocos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/raspadinha_abacaxi_tigela_blocos.png"
+    },
+    {
+        "id": "torta_frutas_verbena",
+        "name": "Torta de Frutas com Verbena",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "food",
+            "torta_frutas_verbena"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/torta_frutas_verbena.png"
+    },
+    {
+        "id": "torta_maca_verbena",
+        "name": "Torta de Maca com Verbena",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "food",
+            "torta_frutas_verbena"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/torta_maca_verbena.png"
+    },
+    {
+        "id": "torta_morango_verbena",
+        "name": "Torta de Morango com Verbena",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "food",
+            "torta_frutas_verbena"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/torta_morango_verbena.png"
+    },
+    {
+        "id": "torta_uva_verbena",
+        "name": "Torta de Uva com Verbena",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "food",
+            "torta_frutas_verbena"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/torta_uva_verbena.png"
+    },
+    {
+        "id": "torta_abacaxi_verbena",
+        "name": "Torta de Abacaxi com Verbena",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "food",
+            "torta_frutas_verbena"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/torta_abacaxi_verbena.png"
+    },
+    {
+        "id": "torta_tangerina_verbena",
+        "name": "Torta de Tangerina com Verbena",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "food",
+            "torta_frutas_verbena"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/torta_tangerina_verbena.png"
+    },
+    {
+        "id": "torta_mirtilo_verbena",
+        "name": "Torta de Mirtilo com Verbena",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "food",
+            "torta_frutas_verbena"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/torta_mirtilo_verbena.png"
+    },
+    {
+        "id": "torta_framboesa_verbena",
+        "name": "Torta de Framboesa com Verbena",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "food",
+            "torta_frutas_verbena"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/torta_framboesa_verbena.png"
+    },
+    {
+        "id": "hamburguer_blocos_cogumelos",
+        "name": "Hambúrguer de Blocos com Cogumelos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "food",
+            "hamburguer_blocos_cogumelos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/hamburguer_blocos_cogumelos.png"
+    },
+    {
+        "id": "hamburguer_blocos_shiitake",
+        "name": "Hambúrguer de Blocos com Shiitake",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "food",
+            "hamburguer_blocos_cogumelos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/hamburguer_blocos_shiitake.png"
+    },
+    {
+        "id": "hamburguer_blocos_champignon",
+        "name": "Hambúrguer de Blocos com Champignon",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "food",
+            "hamburguer_blocos_cogumelos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/hamburguer_blocos_champignon.png"
+    },
+    {
+        "id": "hamburguer_blocos_porcinio",
+        "name": "Hambúrguer de Blocos com Porcinio",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "food",
+            "hamburguer_blocos_cogumelos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/hamburguer_blocos_porcinio.png"
+    },
+    {
+        "id": "hamburguer_blocos_trufa_negra",
+        "name": "Hambúrguer de Blocos com Trufa-Negra",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "food",
+            "hamburguer_blocos_cogumelos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/hamburguer_blocos_trufa_negra.png"
+    },
+    {
+        "id": "hamburguer_blocos_cogumelo_ostra",
+        "name": "Hambúrguer de Blocos com Cogumelo-Ostra",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "food",
+            "hamburguer_blocos_cogumelos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/hamburguer_blocos_cogumelo_ostra.png"
+    },
+    {
+        "id": "combo_divertido_blocos",
+        "name": "Combo Divertido de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "banquet"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/combo_divertido_blocos.png"
+    },
+    {
+        "id": "combo_divertido_blocos",
+        "name": "Combo Divertido de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "banquet"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/foods/combo_divertido_blocos.png"
+    },
+    {
+        "id": "emoji_em_obras",
+        "name": "Emoji: Em Obras",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "emoji"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/emoji/emoji_em_obras.png"
+    },
+    {
+        "id": "emoji_raspadinha_deliciosa",
+        "name": "Emoji: Raspadinha Deliciosa",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "emoji"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/emoji/emoji_raspadinha_deliciosa.png"
+    }
+]
