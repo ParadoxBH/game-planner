@@ -37,7 +37,10 @@ import type {
   MapMetadata,
   Item,
   Shop,
+  GameEvent,
 } from "../../types/gameModels";
+import { eventRepository } from "../../repositories/EventRepository";
+import { MapWeatherPanel } from "./MapWeatherPanel";
 import {
   parseWKTPoint,
   parseWKTPolygon,
@@ -203,7 +206,7 @@ export const MapView = () => {
   const theme = useTheme() as any;
   const { gameId, mapId: urlMapId, view: urlView } = useParams();
   const navigate = useNavigate();
-  const { activeEventIds } = useEventFilter();
+  const { activeEventIds, toggleEvent } = useEventFilter();
   const sizeMarker = 32;
 
   const [cursorCoords, setCursorCoords] = useState<[number, number]>([0, 0]);
@@ -246,6 +249,7 @@ export const MapView = () => {
   const [shops, setShops] = useState<Shop[]>([]);
   const [maps, setMaps] = useState<MapMetadata[]>([]);
   const [items, setItems] = useState<Item[]>([]);
+  const [events, setEvents] = useState<GameEvent[]>([]);
   const [categoriesMap, setCategoriesMap] = useState<Record<string, string>>({});
   const [dataLoading, setDataLoading] = useState(true);
   const [now, setNow] = useState(Date.now());
@@ -278,6 +282,7 @@ export const MapView = () => {
       mapRepository.getAll(),
       itemRepository.getAll(),
       categoryRepository.getAll(),
+      eventRepository.getAll(),
       loadGamesList(),
     ])
       .then(
@@ -288,6 +293,7 @@ export const MapView = () => {
           allMaps,
           allItems,
           allCategories,
+          allEvents,
           allGames,
         ]) => {
           if (!isMounted) return;
@@ -297,6 +303,7 @@ export const MapView = () => {
           setShops(allShops);
           setMaps(allMaps);
           setItems(allItems);
+          setEvents(allEvents);
 
           const catMap: Record<string, string> = {};
           allCategories.forEach((c) => (catMap[c.id] = c.name));
@@ -970,39 +977,63 @@ export const MapView = () => {
         />
       )}
       {viewMode === "map" && (
-        <MapToolbox
-          activeTool={activeTool}
-          hasPoints={currentPoints.length > 0}
-          onSelectTool={handleSelectTool}
-          onConfirm={() => {
-            const newZone: ReferencePoints = {
-              id: `zone_${Date.now()}`,
-              type: (pointConfig.type as any) || "biome",
-              entityId: pointConfig.entityId,
-              geom: {
-                type: "Polygon",
-                coordinates: formatWKTPolygon(
-                  currentPoints.map((p) => [p[1], p[0]]),
-                ),
-              },
-              mapId: selectedMapId,
-            };
-            setSessionPoints((prev) => [...prev, newZone]);
-            setSnackbarMessage("Zona adicionada à lista!");
-            setSnackbarOpen(true);
-            setActiveTool(null);
-            setCurrentPoints([]);
-          }}
-          onClear={() => setCurrentPoints([])}
-          onCancel={() => {
-            setActiveTool(null);
-            setCurrentPoints([]);
-          }}
-          sessionCount={sessionPoints.length}
-          isPanelOpen={isMarkerPanelOpen}
-          onTogglePanel={() => setIsMarkerPanelOpen(!isMarkerPanelOpen)}
-        />
+        <Box sx={{ position: "absolute", top: 12, right: 12, zIndex: 1100, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1 }}>
+          <MapWeatherPanel
+            availableWeathers={events.filter(e => e.type === "clima" && selectedMap?.availableWeathers?.includes(e.id))}
+            activeWeatherIds={activeEventIds.filter(id => {
+              const event = events.find(e => e.id === id);
+              return event?.type === "clima" && selectedMap?.availableWeathers?.includes(id);
+            })}
+            onToggleWeather={(weatherId) => {
+              toggleEvent(weatherId);
+            }}
+            onClearWeathers={() => {
+              // Deactivate all clima events that are available for this map and currently active
+              const mapWeatherIds = selectedMap?.availableWeathers || [];
+              const activeMapWeathers = mapWeatherIds.filter(id => activeEventIds.includes(id));
+              
+              activeMapWeathers.forEach(id => {
+                toggleEvent(id);
+              });
+            }}
+          />
+
+          <MapToolbox
+            activeTool={activeTool}
+            hasPoints={currentPoints.length > 0}
+            onSelectTool={handleSelectTool}
+            onConfirm={() => {
+              const newZone: ReferencePoints = {
+                id: `zone_${Date.now()}`,
+                type: (pointConfig.type as any) || "biome",
+                entityId: pointConfig.entityId,
+                geom: {
+                  type: "Polygon",
+                  coordinates: formatWKTPolygon(
+                    currentPoints.map((p) => [p[1], p[0]]),
+                  ),
+                },
+                mapId: selectedMapId,
+              };
+              setSessionPoints((prev) => [...prev, newZone]);
+              setSnackbarMessage("Zona adicionada à lista!");
+              setSnackbarOpen(true);
+              setActiveTool(null);
+              setCurrentPoints([]);
+            }}
+            onClear={() => setCurrentPoints([])}
+            onCancel={() => {
+              setActiveTool(null);
+              setCurrentPoints([]);
+            }}
+            sessionCount={sessionPoints.length}
+            isPanelOpen={isMarkerPanelOpen}
+            onTogglePanel={() => setIsMarkerPanelOpen(!isMarkerPanelOpen)}
+          />
+        </Box>
       )}
+
+
       <PointMarkerPanel
         open={isMarkerPanelOpen}
         onClose={() => setIsMarkerPanelOpen(false)}

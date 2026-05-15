@@ -71,7 +71,7 @@ export const PointMarkerPanel = ({
         elevation={8}
         sx={{
           position: "absolute",
-          top: { xs: 8, sm: 72 },
+          bottom: { xs: 8, sm: 12 },
           right: { xs: 8, sm: 12 },
           width: { xs: "calc(100% - 16px)", sm: 320 },
           maxHeight: "calc(100% - 24px)",

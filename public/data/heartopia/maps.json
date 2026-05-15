@@ -31,6 +31,12 @@
         "animal",
         "station"
       ]
-    }
+    },
+    "availableWeathers": [
+      "rainbow",
+      "rainy",
+      "meteor_shower",
+      "petal_rain"
+    ]
   }
 ]

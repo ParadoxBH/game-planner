@@ -40,10 +40,6 @@ export const MapToolbox = ({
     <Paper
       elevation={4}
       sx={{
-        position: "absolute",
-        top: 12,
-        right: 12,
-        zIndex: 1000,
         backgroundColor: "designTokens.colors.glassBg",
         backdropFilter: "blur(16px)",
         borderRadius: 2,

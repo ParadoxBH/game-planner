@@ -182,6 +182,7 @@ export interface MapMetadata {
     categories?: string[];
     entities?: string[];
   };
+  availableWeathers?: string[]; // IDs de eventos/climas disponíveis para este mapa
 }
 
 export type GameRarityDefinitionMap = {[key: string]: GameRarityDefinition};
