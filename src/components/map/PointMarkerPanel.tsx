@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Box, Paper, Stack, Typography, IconButton, TextField, Autocomplete, MenuItem, Select, FormControl, InputLabel, Button, Divider, Tooltip, List, ListItem, ListItemText, ListItemSecondaryAction, Slide } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -44,10 +45,23 @@ export const PointMarkerPanel = ({
   entities,
   items,
 }: PointMarkerPanelProps) => {
-  const allOptions = [
-    ...entities.map(e => ({ id: e.id, name: e.name, icon: e.icon, type: 'entity' })),
-    ...items.map(i => ({ id: i.id, name: i.name, icon: i.icon, type: 'item' }))
-  ];
+  const allOptions = useMemo(() => {
+    const map = new Map<string, { id: string; name: string; icon?: string; type: string }>();
+    
+    // Add entities first
+    entities.forEach(e => {
+      map.set(e.id, { id: e.id, name: e.name, icon: e.icon, type: 'entity' });
+    });
+    
+    // Add items only if not already present (avoid duplicates)
+    items.forEach(i => {
+      if (!map.has(i.id)) {
+        map.set(i.id, { id: i.id, name: i.name, icon: i.icon, type: 'item' });
+      }
+    });
+    
+    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+  }, [entities, items]);
 
   const selectedOption = allOptions.find(o => o.id === pointConfig.entityId) || null;
 
@@ -57,8 +71,8 @@ export const PointMarkerPanel = ({
         elevation={8}
         sx={{
           position: "absolute",
-          top: { xs: 8, sm: 12 },
-          right: { xs: 8, sm: 80 },
+          top: { xs: 8, sm: 72 },
+          right: { xs: 8, sm: 12 },
           width: { xs: "calc(100% - 16px)", sm: 320 },
           maxHeight: "calc(100% - 24px)",
           zIndex: 1100,
@@ -151,16 +165,48 @@ export const PointMarkerPanel = ({
             ) : (
               sessionPoints.slice().reverse().map((point) => {
                 const entity = allOptions.find(o => o.id === point.entityId);
+                const isPolygon = point.geom.type === "Polygon";
+                
                 return (
-                  <ListItem key={point.id} sx={{ borderRadius: 1, mb: 0.5, "&:hover": { bgcolor: "rgba(255,255,255,0.05)" } }}>
+                  <ListItem 
+                    key={point.id} 
+                    sx={{ 
+                      borderRadius: 1.5, 
+                      mb: 0.5, 
+                      border: 1,
+                      borderColor: "rgba(255,255,255,0.05)",
+                      "&:hover": { 
+                        bgcolor: "rgba(255,255,255,0.08)",
+                        borderColor: "primary.main"
+                      } 
+                    }}
+                  >
+                    <Box 
+                      sx={{ 
+                        width: 32, 
+                        height: 32, 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center',
+                        mr: 1.5,
+                        bgcolor: isPolygon ? 'rgba(33, 150, 243, 0.1)' : 'rgba(255,255,255,0.03)',
+                        borderRadius: 1
+                      }}
+                    >
+                      <img 
+                        src={getPublicUrl(point.icon || entity?.icon || (isPolygon ? "/img/zone.png" : "/img/placeholder.png"))} 
+                        alt="" 
+                        style={{ width: 24, height: 24, objectFit: "contain" }} 
+                      />
+                    </Box>
                     <ListItemText
-                      primary={entity?.name || point.entityId}
-                      secondary={`${point.type} - [${point.geom.coordinates}]`}
-                      primaryTypographyProps={{ variant: "body2", sx: { fontSize: "0.8rem", fontWeight: 600 } }}
-                      secondaryTypographyProps={{ variant: "caption", sx: { display: "block", fontSize: "0.6rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" } }}
+                      primary={entity?.name || point.name || point.entityId}
+                      secondary={isPolygon ? `Zona (${point.geom.coordinates.split(',').length} pontos)` : `${point.type} - [${point.geom.coordinates}]`}
+                      primaryTypographyProps={{ variant: "body2", sx: { fontSize: "0.8rem", fontWeight: 600, color: "text.primary" } }}
+                      secondaryTypographyProps={{ variant: "caption", sx: { display: "block", fontSize: "0.65rem", opacity: 0.7, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" } }}
                     />
                     <ListItemSecondaryAction>
-                      <IconButton edge="end" size="small" onClick={() => onDeletePoint(point.id)}>
+                      <IconButton edge="end" size="small" onClick={() => onDeletePoint(point.id)} sx={{ color: "error.main", opacity: 0.5, "&:hover": { opacity: 1 } }}>
                         <DeleteIcon fontSize="inherit" />
                       </IconButton>
                     </ListItemSecondaryAction>

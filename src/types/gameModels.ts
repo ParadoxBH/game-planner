@@ -177,6 +177,11 @@ export interface MapMetadata {
   };
   thumbnail?: string;
   description?: string;
+  defaultFilters?: {
+    types?: string[];
+    categories?: string[];
+    entities?: string[];
+  };
 }
 
 export type GameRarityDefinitionMap = {[key: string]: GameRarityDefinition};

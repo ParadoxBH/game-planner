@@ -221,16 +221,23 @@ export const MapView = () => {
   // Improved Point Marker States
   const [sessionPoints, setSessionPoints] = useState<ReferencePoints[]>([]);
   const [pointConfig, setPointConfig] = useState({
-    type: "poi",
+    type: "spawn",
     entityId: "TODO",
   });
   const [isMarkerPanelOpen, setIsMarkerPanelOpen] = useState(false);
+  const handleSelectTool = (tool: "point" | "polygon" | null) => {
+    setActiveTool(tool);
+    if (tool !== null) {
+      setIsMarkerPanelOpen(true);
+    }
+  };
 
   // Filter States
   const [visibleTypes, setVisibleTypes] = useState<string[]>([]);
   const [visibleCategories, setVisibleCategories] = useState<string[]>([]);
   const [visibleEntities, setVisibleEntities] = useState<string[]>([]);
   const [hasInitializedFilters, setHasInitializedFilters] = useState(false);
+  
   const [hideCollected, setHideCollected] = useState(false);
   const [collectedPoints, setCollectedPoints] = useState<Record<string, number>>({});
 
@@ -249,6 +256,11 @@ export const MapView = () => {
   }, []);
 
   const selectedMapId = urlMapId || "";
+
+  // Reset filters initialization when map changes
+  useEffect(() => {
+    setHasInitializedFilters(false);
+  }, [selectedMapId]);
 
   const { loading: dbLoading } = useApi(gameId);
 
@@ -333,30 +345,49 @@ export const MapView = () => {
     return lookup;
   }, [entities]);
 
+  const selectedMap = useMemo(
+    () => maps.find((m) => m.id === selectedMapId),
+    [maps, selectedMapId],
+  );
+
+  const availableViews = useMemo(
+    () => selectedMap?.availableViews || ["map", "dashboard"],
+    [selectedMap],
+  );
+  const defaultView = selectedMap?.defaultView || availableViews[0] || "map";
+  const viewMode = (urlView as "map" | "dashboard") || defaultView;
+
   // Initialize filters once data is loaded
   useEffect(() => {
     if (dataLoading || hasInitializedFilters || pointsOnCurrentMap.length === 0)
       return;
 
-    const types = Array.from(new Set(pointsOnCurrentMap.map((p) => p.type)));
-    const categories: string[] = [];
-    const entityIds: string[] = [];
+    const initialTypes = selectedMap?.defaultFilters?.types || [];
+    const initialCategories = selectedMap?.defaultFilters?.categories || [];
+    const initialEntities = [...(selectedMap?.defaultFilters?.entities || [])];
 
-    pointsOnCurrentMap.forEach((p) => {
-      entityIds.push(p.entityId);
-      const entity =
-        entityLookup[p.entityId] || items.find((i) => i.id === p.entityId);
-      const category = entity?.category
-        ? Array.isArray(entity.category)
-          ? entity.category[0]
-          : entity.category
-        : "desconhecido";
-      categories.push(category);
-    });
+    // Se houver categorias padrão, ativa automaticamente as entidades pertencentes a elas
+    if (initialCategories.length > 0) {
+      pointsOnCurrentMap.forEach((p) => {
+        const entity =
+          entityLookup[p.entityId] || items.find((i) => i.id === p.entityId);
+        const category = entity?.category
+          ? Array.isArray(entity.category)
+            ? entity.category[0]
+            : entity.category
+          : "desconhecido";
 
-    setVisibleTypes(types);
-    setVisibleCategories(Array.from(new Set(categories)));
-    setVisibleEntities(Array.from(new Set(entityIds)));
+        if (initialCategories.includes(category)) {
+          if (!initialEntities.includes(p.entityId)) {
+            initialEntities.push(p.entityId);
+          }
+        }
+      });
+    }
+
+    setVisibleTypes(initialTypes);
+    setVisibleCategories(initialCategories);
+    setVisibleEntities(initialEntities);
     setHasInitializedFilters(true);
   }, [
     dataLoading,
@@ -364,6 +395,7 @@ export const MapView = () => {
     entityLookup,
     items,
     hasInitializedFilters,
+    selectedMap,
   ]);
 
   // Load/Save session points
@@ -413,17 +445,6 @@ export const MapView = () => {
     });
   };
 
-  const selectedMap = useMemo(
-    () => maps.find((m) => m.id === selectedMapId),
-    [maps, selectedMapId],
-  );
-
-  const availableViews = useMemo(
-    () => selectedMap?.availableViews || ["map", "dashboard"],
-    [selectedMap],
-  );
-  const defaultView = selectedMap?.defaultView || availableViews[0] || "map";
-  const viewMode = (urlView as "map" | "dashboard") || defaultView;
 
   // Redirecionar se a view atual não estiver disponível para o mapa selecionado
   useEffect(() => {
@@ -715,14 +736,18 @@ export const MapView = () => {
                   }
 
                   if (!visibleTypes.includes(point.type)) return false;
-                  if (!visibleEntities.includes(point.entityId)) return false;
+                  
+                  // Locations are only filtered by type, skipping entity/category checks
+                  if (point.type !== "location") {
+                    if (!visibleEntities.includes(point.entityId)) return false;
 
-                  const category = entity?.category
-                    ? Array.isArray(entity.category)
-                      ? entity.category[0]
-                      : entity.category
-                    : "desconhecido";
-                  if (!visibleCategories.includes(category)) return false;
+                    const category = entity?.category
+                      ? Array.isArray(entity.category)
+                        ? entity.category[0]
+                        : entity.category
+                      : "desconhecido";
+                    if (!visibleCategories.includes(category)) return false;
+                  }
 
                   // 3. Event Filter
                   const pointEvent = point.event;
@@ -948,25 +973,22 @@ export const MapView = () => {
         <MapToolbox
           activeTool={activeTool}
           hasPoints={currentPoints.length > 0}
-          onSelectTool={setActiveTool}
+          onSelectTool={handleSelectTool}
           onConfirm={() => {
-            navigator.clipboard.writeText(
-              JSON.stringify(
-                {
-                  id: `zone_${Date.now()}`,
-                  geom: {
-                    type: "Polygon",
-                    coordinates: formatWKTPolygon(
-                      currentPoints.map((p) => [p[1], p[0]]),
-                    ),
-                  },
-                  mapId: selectedMapId,
-                },
-                null,
-                2,
-              ),
-            );
-            setSnackbarMessage("Zona copiada!");
+            const newZone: ReferencePoints = {
+              id: `zone_${Date.now()}`,
+              type: (pointConfig.type as any) || "biome",
+              entityId: pointConfig.entityId,
+              geom: {
+                type: "Polygon",
+                coordinates: formatWKTPolygon(
+                  currentPoints.map((p) => [p[1], p[0]]),
+                ),
+              },
+              mapId: selectedMapId,
+            };
+            setSessionPoints((prev) => [...prev, newZone]);
+            setSnackbarMessage("Zona adicionada à lista!");
             setSnackbarOpen(true);
             setActiveTool(null);
             setCurrentPoints([]);

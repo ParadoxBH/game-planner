@@ -83,7 +83,9 @@ export const MapFilterDrawer = ({
       // Count types
       typeCount[p.type] = (typeCount[p.type] || 0) + 1;
 
-      // Hierarchical grouping
+      // Hierarchical grouping - skip for locations as requested
+      if (p.type === "location") return;
+
       const entity = entityLookup[p.entityId];
       const category = entity?.category
         ? Array.isArray(entity.category)

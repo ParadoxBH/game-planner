@@ -4,6 +4,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import CancelIcon from "@mui/icons-material/Cancel";
 import PlaceIcon from "@mui/icons-material/Place";
+import ListIcon from "@mui/icons-material/List";
 import { usePlatform } from "../../hooks/usePlatform";
 
 interface MapToolboxProps {
@@ -107,13 +108,13 @@ export const MapToolbox = ({
           </>
         )}
 
-        {(sessionCount > 0 || isPanelOpen) && (
+        {(sessionCount > 0 || isPanelOpen || activeTool !== null) && (
           <>
             <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
             <Tooltip title="Lista de Pontos" placement="left">
               <IconButton onClick={onTogglePanel} color={isPanelOpen ? "primary" : "default"} size="medium">
                 <Badge badgeContent={sessionCount} color="primary" sx={{ "& .MuiBadge-badge": { fontSize: '0.6rem', height: 16, minWidth: 16 } }}>
-                  <PlaceIcon />
+                  <ListIcon />
                 </Badge>
               </IconButton>
             </Tooltip>
