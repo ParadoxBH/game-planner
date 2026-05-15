@@ -5,12 +5,38 @@
     "type": "single",
     "url": "/map/heartopia/map.png",
     "bounds": [
-      [-790.57, -790.57],
-      [790.57, 790.57]
+      [
+        -790.57,
+        -790.57
+      ],
+      [
+        790.57,
+        790.57
+      ]
     ],
     "minZoom": 2,
     "maxZoom": 4,
     "thumbnail": "/map/heartopia/map.png",
-    "availableViews": ["map", "dashboard"]
+    "availableViews": [
+      "map",
+      "dashboard"
+    ],
+    "defaultFilters": {
+      "types": [
+        "spawn",
+        "location"
+      ],
+      "categories": [
+        "npc",
+        "animal",
+        "station"
+      ]
+    },
+    "availableWeathers": [
+      "rainbow",
+      "rainy",
+      "meteor_shower",
+      "petal_rain"
+    ]
   }
 ]

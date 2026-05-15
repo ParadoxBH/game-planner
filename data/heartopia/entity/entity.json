@@ -315,7 +315,7 @@
     "id": "meteoro",
     "name": "Meteoro",
     "category": "colection",
-    "icon": "/img/heartopia/recursos/meteoro_cinza.png",
+    "icon": "/img/heartopia/recursos/meteoro_rosa.png",
     "image": "/img/heartopia/coletaveis/meteoro.png"
   },
   {
@@ -333,6 +333,20 @@
     "image": "/img/heartopia/coletaveis/porcino.png"
   },
   {
+    "id": "porcino_estranho_amarelo",
+    "name": "Porcino Estranho Amarelo",
+    "category": "colection",
+    "drops": [
+      {
+        "itemId": "porcino_estranho_amarelo",
+        "chance": 1,
+        "quant": 3
+      }
+    ],
+    "icon": "/img/heartopia/recursos/porcino_estranho_amarelo.png",
+    "image": "/img/heartopia/coletaveis/porcino_estranho_amarelo.png"
+  },
+  {
     "id": "shiitake",
     "name": "Shiitake",
     "category": "colection",
@@ -345,6 +359,20 @@
     ],
     "icon": "/img/heartopia/recursos/shiitake.png",
     "image": "/img/heartopia/coletaveis/shiitake.png"
+  },
+  {
+    "id": "shiitake_estranho_vermelho",
+    "name": "Shiitake Estranho Vermelho",
+    "category": "colection",
+    "drops": [
+      {
+        "itemId": "shiitake_estranho_vermelho",
+        "chance": 1,
+        "quant": 3
+      }
+    ],
+    "icon": "/img/heartopia/recursos/shiitake_estranho_vermelho.png",
+    "image": "/img/heartopia/coletaveis/shiitake_estranho_vermelho.png"
   },
   {
     "id": "cogumelo_ostra",

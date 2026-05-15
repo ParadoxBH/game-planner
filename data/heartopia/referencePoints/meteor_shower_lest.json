@@ -126,5 +126,96 @@
     "image": "/img/heartopia/referencePoints/meteor_lest/meteor_9.jpg",
     "mapId": "main",
     "mode": "daily"
+  },
+  {
+    "id": "point_1778816414928",
+    "event": "meteor_shower",
+    "type": "spawn",
+    "entityId": "meteoro",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(447.5106510600529 -212.12090966527012)"
+    },
+    "image": "/img/heartopia/referencePoints/meteor_lest/meteor_10.jpg",
+    "mapId": "main",
+    "mode": "daily"
+  },
+  {
+    "id": "point_1778816703681",
+    "event": "meteor_shower",
+    "type": "spawn",
+    "entityId": "meteoro",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(503.4979951610639 -285.442212215782)"
+    },
+    "image": "/img/heartopia/referencePoints/meteor_lest/meteor_11.jpg",
+    "mapId": "main",
+    "mode": "daily"
+  },
+  {
+    "id": "point_1778816899531",
+    "event": "meteor_shower",
+    "type": "spawn",
+    "entityId": "meteoro",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(537.477314089578 -33.76742459631517)"
+    },
+    "image": "/img/heartopia/referencePoints/meteor_lest/meteor_12.jpg",
+    "mapId": "main",
+    "mode": "daily"
+  },
+  {
+    "id": "point_177881689952231",
+    "event": "meteor_shower",
+    "type": "spawn",
+    "entityId": "meteoro",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(731.3093605634227 305.0541735055241)"
+    },
+    "image": "/img/heartopia/referencePoints/meteor_lest/meteor_13.jpg",
+    "mapId": "main",
+    "mode": "daily"
+  },
+  {
+    "id": "point_17788171921225",
+    "event": "meteor_shower",
+    "type": "spawn",
+    "entityId": "meteoro",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(447.51144391347077 312.77220535294634)"
+    },
+    "image": "/img/heartopia/referencePoints/meteor_lest/meteor_14.jpg",
+    "mapId": "main",
+    "mode": "daily"
+  },
+  {
+    "id": "point_1778817292151",
+    "event": "meteor_shower",
+    "type": "spawn",
+    "entityId": "meteoro",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(371.0597602445041 299.2656496199573)"
+    },
+    "image": "/img/heartopia/referencePoints/meteor_lest/meteor_15.jpg",
+    "mapId": "main",
+    "mode": "daily"
+  },
+  {
+    "id": "point_1778817478215",
+    "event": "meteor_shower",
+    "type": "spawn",
+    "entityId": "meteoro",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(426.27486511653575 244.85352509562998)"
+    },
+    "image": "/img/heartopia/referencePoints/meteor_lest/meteor_16.jpg",
+    "mapId": "main",
+    "mode": "daily"
   }
 ]

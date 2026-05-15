@@ -75,33 +75,43 @@
     "sellPrice": 7
   },
   {
-    "id": "meteoro_cinza",
-    "name": "Meteoro Cinza",
+    "id": "meteoro_branco",
+    "name": "Meteoro Branco",
     "category": [
       "resource",
       "meteor"
     ],
-    "icon": "/img/heartopia/recursos/meteoro_cinza.png",
+    "icon": "/img/heartopia/recursos/meteoro_branco.png",
     "sellPrice": 150
   },
   {
-    "id": "meteoro_laranja",
-    "name": "Meteoro Laranja",
+    "id": "meteoro_rosa",
+    "name": "Meteoro Rosa",
     "category": [
       "resource",
       "meteor"
     ],
-    "icon": "/img/heartopia/recursos/meteoro_laranja.png",
+    "icon": "/img/heartopia/recursos/meteoro_rosa.png",
     "sellPrice": 150
   },
   {
-    "id": "meteoro_ciano",
-    "name": "Meteoro Ciano",
+    "id": "meteoro_amarelo",
+    "name": "Meteoro Amarelo",
     "category": [
       "resource",
       "meteor"
     ],
-    "icon": "/img/heartopia/recursos/meteoro_ciano.png",
+    "icon": "/img/heartopia/recursos/meteoro_amarelo.png",
+    "sellPrice": 150
+  },
+  {
+    "id": "meteoro_azul",
+    "name": "Meteoro Azul",
+    "category": [
+      "resource",
+      "meteor"
+    ],
+    "icon": "/img/heartopia/recursos/meteoro_azul.png",
     "sellPrice": 150
   },
   {
