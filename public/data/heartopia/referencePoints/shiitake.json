@@ -1,7 +1,7 @@
 ﻿[
   {
     "id": "point_1778455953759",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "shiitake",
     "geom": {
       "type": "Point",
@@ -11,7 +11,7 @@
   },
   {
     "id": "point_1778455971584",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "shiitake",
     "geom": {
       "type": "Point",
@@ -21,7 +21,7 @@
   },
   {
     "id": "point_1778455988101",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "shiitake",
     "geom": {
       "type": "Point",
@@ -31,7 +31,7 @@
   },
   {
     "id": "point_1778456051953",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "shiitake",
     "geom": {
       "type": "Point",
@@ -41,7 +41,7 @@
   },
   {
     "id": "point_1778456092355",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "shiitake",
     "geom": {
       "type": "Point",
@@ -51,7 +51,7 @@
   },
   {
     "id": "point_1778456107072",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "shiitake",
     "geom": {
       "type": "Point",
@@ -61,7 +61,7 @@
   },
   {
     "id": "point_1778456124485",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "shiitake",
     "geom": {
       "type": "Point",
@@ -71,7 +71,7 @@
   },
   {
     "id": "point_1778456131863",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "shiitake",
     "geom": {
       "type": "Point",
@@ -81,7 +81,7 @@
   },
   {
     "id": "point_1778456148584",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "shiitake",
     "geom": {
       "type": "Point",
@@ -91,7 +91,7 @@
   },
   {
     "id": "point_1778456163957",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "shiitake",
     "geom": {
       "type": "Point",
@@ -101,7 +101,7 @@
   },
   {
     "id": "point_1778456198169",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "shiitake",
     "geom": {
       "type": "Point",
@@ -111,7 +111,7 @@
   },
   {
     "id": "point_1778456267297",
-    "type": "poi",
+    "type": "spawn",
     "entityId": "shiitake",
     "geom": {
       "type": "Point",

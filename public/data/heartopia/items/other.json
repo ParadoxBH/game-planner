@@ -3,7 +3,7 @@
     "id": "brinquedo_pet",
     "name": "Brinquedo para Pet",
     "category": ["tool", "pet"],
-    "icon": "/img/heartopia/ferramentas/brinquedo_pet.png"
+    "icon": "/img/heartopia/ferramentas/brinquedo_pet_footbag.png"
   },
   {
     "id": "bola_neve",
