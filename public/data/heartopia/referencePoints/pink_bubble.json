@@ -477,5 +477,17 @@
         "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_27.jpg",
         "mapId": "main",
         "mode": "weekly"
+    },
+    {
+        "id": "point_1778972692995",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+        "type": "Point",
+        "coordinates": "POINT(-18.9150048828125 177.9554541015625)"
+        },
+        "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_28.jpg",
+        "mapId": "main",
+        "mode": "weekly"
     }
 ]
