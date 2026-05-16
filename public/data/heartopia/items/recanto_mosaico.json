@@ -464,7 +464,7 @@
         "icon": "/img/heartopia/events/recanto_mosaico/foods/combo_divertido_blocos.png"
     },
     {
-        "id": "emoji_em_obras",
+        "id": "emoji_recanto_mosaico_em_obras",
         "name": "Emoji: Em Obras",
         "event": [
             "recanto_mosaico"
@@ -472,10 +472,10 @@
         "category": [
             "emoji"
         ],
-        "icon": "/img/heartopia/events/recanto_mosaico/emoji/emoji_em_obras.png"
+        "icon": "/img/heartopia/events/recanto_mosaico/emoji/emoji_recanto_mosaico_em_obras.png"
     },
     {
-        "id": "emoji_raspadinha_deliciosa",
+        "id": "emoji_recanto_mosaico_raspadinha_deliciosa",
         "name": "Emoji: Raspadinha Deliciosa",
         "event": [
             "recanto_mosaico"
@@ -483,6 +483,28 @@
         "category": [
             "emoji"
         ],
-        "icon": "/img/heartopia/events/recanto_mosaico/emoji/emoji_raspadinha_deliciosa.png"
+        "icon": "/img/heartopia/events/recanto_mosaico/emoji/emoji_recanto_mosaico_raspadinha_deliciosa.png"
+    },
+    {
+        "id": "emoji_recanto_mosaico_de_volta_com_tudo",
+        "name": "Emoji: De Volta com Tudo",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "emoji"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/emoji/emoji_recanto_mosaico_de_volta_com_tudo.png"
+    },
+    {
+        "id": "emoji_recanto_mosaico_duvida_gerente",
+        "name": "Emoji: Dúvida do Gerente",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "emoji"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/emoji/emoji_recanto_mosaico_duvida_gerente.png"
     }
 ]

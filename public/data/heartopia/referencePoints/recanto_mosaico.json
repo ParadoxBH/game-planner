@@ -8,6 +8,14 @@
       "type": "Point",
       "coordinates": "POINT(-32.32952585238617 17.208332134260267)"
     },
+    "customDrops": [
+      {
+        "type": "item",
+        "itemId": "emoji_recanto_mosaico_em_obras",
+        "chance": 1,
+        "quant": 1
+      }
+    ],
     "image": "/img/heartopia/events/recanto_mosaico/referencePoints/brick_bubble_1.jpg",
     "mapId": "main",
     "mode": "once"
@@ -21,7 +29,57 @@
       "type": "Point",
       "coordinates": "POINT(-10.321670396116186 78.18467187163179)"
     },
+    "customDrops": [
+      {
+        "type": "item",
+        "itemId": "emoji_recanto_mosaico_raspadinha_deliciosa",
+        "chance": 1,
+        "quant": 1
+      }
+    ],
     "image": "/img/heartopia/events/recanto_mosaico/referencePoints/brick_bubble_2.jpg",
+    "mapId": "main",
+    "mode": "once"
+  },
+  {
+    "id": "point_1778972777922",
+    "type": "spawn",
+    "event": "recanto_mosaico",
+    "entityId": "brick_bubble",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-64.079404296875 20.4590869140625)"
+    },
+    "customDrops": [
+      {
+        "type": "item",
+        "itemId": "emoji_recanto_mosaico_de_volta_com_tudo",
+        "chance": 1,
+        "quant": 1
+      }
+    ],
+    "image": "/img/heartopia/events/recanto_mosaico/referencePoints/brick_bubble_3.jpg",
+    "mapId": "main",
+    "mode": "once"
+  },
+  {
+    "id": "point_1778974652579",
+    "type": "spawn",
+    "event": "recanto_mosaico",
+    "entityId": "brick_bubble",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(3.4741845703125 33.583784179687505)"
+    },
+    "customDrops": [
+      {
+        "type": "item",
+        "itemId": "emoji_recanto_mosaico_duvida_gerente",
+        "chance": 1,
+        "quant": 1
+      }
+    ],
+    "image": "/img/heartopia/events/recanto_mosaico/referencePoints/brick_bubble_4.jpg",
     "mapId": "main",
     "mode": "once"
   }
