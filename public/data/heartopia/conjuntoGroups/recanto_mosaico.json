@@ -2,7 +2,10 @@
     {
         "id": "donzelinha_vermelha_grande_blocos",
         "name": "Insetos Exclusivos do Recanto Mosaico",
-        "conjuntoIds": ["recanto_mosaico", "insect"],
+        "conjuntoIds": [
+            "recanto_mosaico",
+            "insect"
+        ],
         "event": [
             "recanto_mosaico"
         ],
@@ -17,7 +20,10 @@
     {
         "id": "peixe_palhaco_blocos",
         "name": "Peixes Exclusivos do Recanto Mosaico",
-        "conjuntoIds": ["recanto_mosaico", "fish"],
+        "conjuntoIds": [
+            "recanto_mosaico",
+            "fish"
+        ],
         "event": [
             "recanto_mosaico"
         ],
@@ -32,7 +38,10 @@
     {
         "id": "cooking_recanto_mosaico",
         "name": "Receitas Exclusivas do Recanto Mosaico",
-        "conjuntoIds": ["recanto_mosaico", "cooking"],
+        "conjuntoIds": [
+            "recanto_mosaico",
+            "cooking"
+        ],
         "event": [
             "recanto_mosaico"
         ],
@@ -60,6 +69,24 @@
             "hamburguer_blocos_trufa_negra",
             "hamburguer_blocos_cogumelo_ostra",
             "combo_divertido_blocos"
+        ]
+    },
+    {
+        "id": "birds_recanto_mosaico",
+        "name": "Passaros Exclusivos do Recanto Mosaico",
+        "conjuntoIds": [
+            "recanto_mosaico",
+            "bird"
+        ],
+        "event": [
+            "recanto_mosaico"
+        ],
+        "items": [
+            "pardal_rosa_blocos",
+            "pardal_azul_blocos",
+            "pardal_verde_blocos",
+            "pardal_roxo_blocos",
+            "pardal_colorido_blocos"
         ]
     }
 ]

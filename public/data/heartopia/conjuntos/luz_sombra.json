@@ -1,3 +1,11 @@
 ﻿[
-    
+    {
+        "id": "luz_sombra",
+        "name": "Exclusivos de Luz e Sombra",
+        "events": [
+            "luz_sombra"
+        ],
+        "icon": "/img/heartopia/events/luz_sombra/icon.webp",
+        "image": "/img/heartopia/events/luz_sombra/banner.webp"
+    }
 ]

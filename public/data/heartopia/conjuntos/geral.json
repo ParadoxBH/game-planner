@@ -1,40 +1,32 @@
 ﻿[
     {
         "id": "flower",
+        "icon": "/img/heartopia/agricultura/flores/amor_perfeito_amarelo.png",
         "name": "Flores e Hibridações"
     },
     {
         "id": "vegetable",
+        "icon": "/img/heartopia/agricultura/vegetais/cenoura.png",
         "name": "Vegetais e Agricultura"
     },
     {
         "id": "cooking",
+        "icon": "/img/heartopia/comidas/salada_rural.png",
         "name": "Vida com Iguarias"
     },
     {
         "id": "fish",
+        "icon": "/img/heartopia/ferramentas/vara_pesca.png",
         "name": "Observação de Peixes"
     },
     {
+        "id": "bird",
+        "icon": "/img/heartopia/ferramentas/scanner_passaro.png",
+        "name": "Diário de Aves"
+    },
+    {
         "id": "escultura_neve",
+        "icon": "/img/heartopia/skill/escultura_neve/escultura_neve.png",
         "name": "Moda de Escultura de Neve"
-    },
-    {
-        "id": "gala_neve",
-        "name": "Exclusivos da Gala da Neve",
-        "events": ["gala_neve"],
-        "image": "/img/heartopia/events/gala_neve/banner.webp"
-    },
-    {
-        "id": "luz_sombra",
-        "name": "Exclusivos de Luz e Sombra",
-        "events": ["luz_sombra"],
-        "image": "/img/heartopia/events/luz_sombra/banner.webp"
-    },
-    {
-        "id": "recanto_mosaico",
-        "events": ["recanto_mosaico"],
-        "name": "Exclusivos do Recanto Mosaico",
-        "image": "/img/heartopia/events/recanto_mosaico/banner.png"
     }
 ]
