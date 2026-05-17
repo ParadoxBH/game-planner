@@ -159,6 +159,7 @@ const StableMarker = React.memo(
               pointImage={point.image}
               isCollected={isCollected}
               onToggleCollected={onToggleCollected}
+              customDrops={point.customDrops}
             />
         </Popup>
       </Marker>

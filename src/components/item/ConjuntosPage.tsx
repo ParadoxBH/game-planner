@@ -193,7 +193,7 @@ export function ConjuntosPage() {
           >
             <CardActionArea
               onClick={() => navigate(`/game/${gameId}/conjuntos/${conjunto.id}`)}
-              sx={{ p: isMobile ? 2 : 4 }}
+              sx={{ p: isMobile ? 2 : 4, height: 200 }}
             >
               <Stack alignItems={"center"} textAlign={"center"} spacing={1}>
                 {conjunto.icon ? (
@@ -213,12 +213,6 @@ export function ConjuntosPage() {
                   sx={{ fontWeight: 800 }}
                 >
                   {conjunto.name}
-                </Typography>
-                <Typography
-                  variant={"caption"}
-                  sx={{ color: "text.secondary" }}
-                >
-                  {conjunto.id}
                 </Typography>
               </Stack>
             </CardActionArea>

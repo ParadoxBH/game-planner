@@ -42,8 +42,12 @@ export const InfoDrawer = ({
 
   const currentEntity = useMemo(() => {
     if (currentItem?.type !== "entity") return undefined;
-    return entities.find((e) => e.id === currentItem.id);
-  }, [currentItem, entities]);
+    const baseEntity = entities.find((e) => e.id === currentItem.id);
+    if (!baseEntity) return undefined;
+    const customDrops = referencePoints.filter((p) => p.entityId === baseEntity.id).flatMap((p) => p.customDrops || []);
+    const combinedDrops = [...(baseEntity.drops || []), ...customDrops].filter((v, i, a) => a.findIndex(t => t.itemId === v.itemId) === i);
+    return { ...baseEntity, drops: combinedDrops };
+  }, [currentItem, entities, referencePoints]);
 
   const currentItemData = useMemo(() => {
     if (currentItem?.type !== "item") return undefined;
@@ -58,9 +62,14 @@ export const InfoDrawer = ({
   const droppedBy = useMemo(() => {
     if (currentItem?.type !== "item") return [];
     return entities.filter((e) =>
-      e.drops?.some((d) => d.itemId === currentItem.id),
-    );
-  }, [currentItem, entities]);
+      e.drops?.some((d) => d.itemId === currentItem.id) ||
+      referencePoints.some((p) => p.entityId === e.id && p.customDrops?.some((cd) => cd.itemId === currentItem.id))
+    ).map((e) => {
+      const customDrops = referencePoints.filter((p) => p.entityId === e.id).flatMap((p) => p.customDrops || []);
+      const combinedDrops = [...(e.drops || []), ...customDrops].filter((v, i, a) => a.findIndex(t => t.itemId === v.itemId) === i);
+      return { ...e, drops: combinedDrops };
+    });
+  }, [currentItem, entities, referencePoints]);
 
   const handleViewDetails = () => {
     if (currentItem.type === "entity") {

@@ -215,6 +215,7 @@ export interface ReferencePoints {
   parentId?: string; // Para hierarquia (ex: POI dentro de Biome)
   mode?: ReferencePointsRespawnMode;
   conditions?: Record<string, any>;
+  customDrops?: EntityDrop[];
   chance?: number;
   quantity?: string;
   geom: WktGeometry;

@@ -3,8 +3,9 @@ import { DataCard } from "../common/DataCard";
 import { OutputField } from "../common/OutputField";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import InventoryIcon from "@mui/icons-material/Inventory";
+import { ItemChip } from "../common/ItemChip";
 
-import type { Entity, ReferencePointsRespawnMode } from "../../types/gameModels";
+import type { Entity, ReferencePointsRespawnMode, EntityDrop } from "../../types/gameModels";
 import { getPublicUrl } from "../../utils/pathUtils";
 import { isDev } from "../../utils/mapper";
 
@@ -18,6 +19,7 @@ interface SimplifiedEntityProps {
   onExpand: () => void;
   categoriesMap?: Record<string, string>;
   pointImage?: string;
+  customDrops?: EntityDrop[];
 }
 
 export const SimplifiedEntity = ({
@@ -30,6 +32,7 @@ export const SimplifiedEntity = ({
   onExpand,
   categoriesMap = {},
   pointImage,
+  customDrops,
 }: SimplifiedEntityProps) => {
   const theme = useTheme() as any;
 
@@ -111,6 +114,19 @@ export const SimplifiedEntity = ({
             label="Respawn" 
             values={["Semanal"]}
           />
+        )}
+
+        {customDrops && customDrops.length > 0 && (
+          <Box sx={{ mt: 1 }}>
+            <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 700, display: "block", mb: 0.5 }}>
+              Drops Especiais
+            </Typography>
+            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+              {customDrops.map((drop, idx) => (
+                <ItemChip key={idx} id={drop.itemId} amount={drop.quant} size="small" />
+              ))}
+            </Stack>
+          </Box>
         )}
 
         {onToggleCollected && (

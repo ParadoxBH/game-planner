@@ -331,9 +331,15 @@ export class ApiService {
     );
 
     const dropsFrom = await entityRepository.getAll(); // Better to filter in DB if we had Drops table
+    const referencePoints = await referencePointRepository.getAll();
     const entitiesWithDrops = dropsFrom.filter((e) =>
-      e.drops?.some((d) => d.itemId === itemId)
-    );
+      e.drops?.some((d) => d.itemId === itemId) ||
+      referencePoints.some((p) => p.entityId === e.id && p.customDrops?.some((cd) => cd.itemId === itemId))
+    ).map((e) => {
+      const customDrops = referencePoints.filter((p) => p.entityId === e.id).flatMap((p) => p.customDrops || []);
+      const combinedDrops = [...(e.drops || []), ...customDrops].filter((v, i, a) => a.findIndex(t => t.itemId === v.itemId) === i);
+      return { ...e, drops: combinedDrops };
+    });
 
     const shops = await shopRepository.getAll();
     const soldIn: ItemDetails["soldIn"] = [];
@@ -409,7 +415,22 @@ export class ApiService {
     // Remove duplicates
     const uniquePotentialSpawns = potentialSpawns?.filter((v, i, a) => a.findIndex(t => t.entity.id === v.entity.id) === i);
 
-    const drops = await Promise.all((entity.drops || []).map(async (d) => ({
+    const entityReferencePoints = await referencePointRepository.getByEntityId(entityId);
+    
+    const customDropsRaw: { itemId: string; chance: number; quant: number; maxQuant?: number }[] = [];
+    entityReferencePoints.forEach((p) => {
+      if (p.customDrops && Array.isArray(p.customDrops)) {
+        p.customDrops.forEach((cd) => {
+          if (!customDropsRaw.some(x => x.itemId === cd.itemId)) {
+            customDropsRaw.push(cd);
+          }
+        });
+      }
+    });
+
+    const combinedDrops = [...(entity.drops || []), ...customDropsRaw].filter((v, i, a) => a.findIndex(t => t.itemId === v.itemId) === i);
+
+    const drops = await Promise.all(combinedDrops.map(async (d) => ({
       item: await itemRepository.getById(d.itemId),
       chance: d.chance,
       quant: d.quant,
@@ -429,7 +450,6 @@ export class ApiService {
       });
     });
 
-    const entityReferencePoints = await referencePointRepository.getByEntityId(entityId);
     const shop = await shopRepository.getByNpcId(entityId);
 
     return {
