@@ -1,0 +1,67 @@
+[
+    {
+        "id": "pardal_rosa_blocos",
+        "name": "Pardal Rosa de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "bird",
+            "pardal",
+            "pardal_blocos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/birds/pardal_rosa_blocos.png"
+    },
+    {
+        "id": "pardal_azul_blocos",
+        "name": "Pardal Azul de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "bird",
+            "pardal",
+            "pardal_blocos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/birds/pardal_azul_blocos.png"
+    },
+    {
+        "id": "pardal_verde_blocos",
+        "name": "Pardal Verde de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "bird",
+            "pardal",
+            "pardal_blocos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/birds/pardal_verde_blocos.png"
+    },
+    {
+        "id": "pardal_roxo_blocos",
+        "name": "Pardal Roxo de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "bird",
+            "pardal",
+            "pardal_blocos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/birds/pardal_roxo_blocos.png"
+    },
+    {
+        "id": "pardal_colorido_blocos",
+        "name": "Pardal Colorido de Blocos",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "bird",
+            "pardal",
+            "pardal_blocos"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/birds/pardal_colorido_blocos.png"
+    }
+]

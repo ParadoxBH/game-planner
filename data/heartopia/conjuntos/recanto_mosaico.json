@@ -1,2 +1,11 @@
 ﻿[
+    {
+        "id": "recanto_mosaico",
+        "events": [
+            "recanto_mosaico"
+        ],
+        "name": "Exclusivos do Recanto Mosaico",
+        "icon": "/img/heartopia/events/recanto_mosaico/icon.png",
+        "image": "/img/heartopia/events/recanto_mosaico/banner.png"
+    }
 ]

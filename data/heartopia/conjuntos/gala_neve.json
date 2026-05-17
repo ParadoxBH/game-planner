@@ -1,3 +1,11 @@
 ﻿[
-    
+    {
+        "id": "gala_neve",
+        "name": "Exclusivos da Gala da Neve",
+        "events": [
+            "gala_neve"
+        ],
+        "icon": "/img/heartopia/events/gala_neve/icon.png",
+        "image": "/img/heartopia/events/gala_neve/banner.webp"
+    }
 ]
