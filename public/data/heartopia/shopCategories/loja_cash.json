@@ -1,0 +1,75 @@
+﻿[
+    {
+        "id": "loja_cash_other",
+        "shopId": "loja_cash",
+        "name": "Loja de Amorita",
+        "items": [
+            {
+                "id": "passe_show",
+                "amount": 9999,
+                "price": 10,
+                "currency": "amorita"
+            },
+            {
+                "id": "cristal_luar",
+                "price": 1,
+                "currency": "amorita"
+            }
+        ]
+    },
+    {
+        "id": "loja_cash_amorita",
+        "shopId": "loja_cash",
+        "name": "Loja de RMT Brasileiro",
+        "items": [
+            {
+                "id": "amorita",
+                "quant": 20,
+                "price": 2.5,
+                "currency": "rmt_br"
+            },
+            {
+                "id": "amorita",
+                "quant": 60,
+                "price": 5.5,
+                "currency": "rmt_br"
+            },
+            {
+                "id": "amorita",
+                "quant": 300,
+                "price": 27.9,
+                "currency": "rmt_br"
+            },
+            {
+                "id": "amorita",
+                "quant": 680,
+                "price": 62.9,
+                "currency": "rmt_br"
+            },
+            {
+                "id": "amorita",
+                "quant": 1280,
+                "price": 114.9,
+                "currency": "rmt_br"
+            },
+            {
+                "id": "amorita",
+                "quant": 1980,
+                "price": 174.9,
+                "currency": "rmt_br"
+            },
+            {
+                "id": "amorita",
+                "quant": 3280,
+                "price": 284.9,
+                "currency": "rmt_br"
+            },
+            {
+                "id": "amorita",
+                "quant": 6480,
+                "price": 559.9,
+                "currency": "rmt_br"
+            }
+        ]
+    }
+]
