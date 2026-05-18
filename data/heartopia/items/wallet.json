@@ -32,7 +32,7 @@
     "icon": "/img/heartopia/stats/creditos_gala_moda.png"
   },
   {
-    "id": "passe_show_neve",
+    "id": "passe_show",
     "name": "Passe de Show",
     "category": [
       "wallet"
@@ -40,7 +40,7 @@
     "icon": "/img/heartopia/stats/passe_show.png"
   },
   {
-    "id": "passe_show_temporario_neve",
+    "id": "passe_show_temporario",
     "name": "Passe de Show Temporário",
     "category": [
       "wallet"
@@ -172,5 +172,13 @@
       "wallet"
     ],
     "icon": "/img/heartopia/stats/vale_publicacao.png"
+  },
+  {
+    "id": "rmt_br",
+    "name": "RMT Brasileiro",
+    "category": [
+      "wallet"
+    ],
+    "icon": "/img/heartopia/stats/rmt_br.png"
   }
 ]

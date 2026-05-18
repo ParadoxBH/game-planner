@@ -18,5 +18,125 @@
       "coordinates": "POINT(-19.301025390625 91.21340079135436)"
     },
     "mapId": "main"
+  },
+  {
+    "id": "point_1779143328668",
+    "type": "spawn",
+    "entityId": "thermal_stove",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(40.633143024410344 426.73375535998946)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1779143329819",
+    "type": "spawn",
+    "entityId": "thermal_stove",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(34.06910957808489 427.1196569523606)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1779143331122",
+    "type": "spawn",
+    "entityId": "thermal_stove",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(46.81105685624608 425.57605058287606)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1779143343250",
+    "type": "spawn",
+    "entityId": "thermal_stove",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(23.25776037237243 475.74325759112105)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1779143344051",
+    "type": "spawn",
+    "entityId": "thermal_stove",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(28.663434975228746 472.65604485215215)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1779143345103",
+    "type": "spawn",
+    "entityId": "thermal_stove",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(33.29687034910547 468.0252257436988)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1779143382780",
+    "type": "spawn",
+    "entityId": "thermal_stove",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-40.0658564039433 454.5186700107097)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1779143383592",
+    "type": "spawn",
+    "entityId": "thermal_stove",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-42.76869370537146 452.20326045648306)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1779143403830",
+    "type": "spawn",
+    "entityId": "thermal_stove",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-32.343464114148716 449.5019493098852)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1779143405241",
+    "type": "spawn",
+    "entityId": "thermal_stove",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-35.432421030066585 445.6429333861741)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1779143405942",
+    "type": "spawn",
+    "entityId": "thermal_stove",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-40.838095632922816 442.169819054834)"
+    },
+    "mapId": "main"
+  },
+  {
+    "id": "point_1779143407081",
+    "type": "spawn",
+    "entityId": "thermal_stove",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-47.78824869373789 442.9416222395763)"
+    },
+    "mapId": "main"
   }
 ]
