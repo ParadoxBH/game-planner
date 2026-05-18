@@ -65,5 +65,14 @@
         ],
         "buyPrice": 4000,
         "icon": "/img/heartopia/ferramentas/vitrola_clean.png"
+    },
+    {
+        "id": "thermal_stove",
+        "name": "Fogão Termal",
+        "category": [
+            "station",
+            "thermal_stove"
+        ],
+        "icon": "/img/heartopia/eletrodomestico/fogao_termal.png"
     }
 ]
