@@ -354,6 +354,7 @@ export class ApiService {
                 price: i.price,
                 currency: i.currency,
                 amount: i.amount,
+                quant: i.quant,
               },
             });
           }
@@ -469,25 +470,9 @@ export class ApiService {
     if (!shop) return null;
 
     const npc = shop.npcId ? await entityRepository.getById(shop.npcId) : undefined;
-    
-    // Fetch categories that belong to this shop and have items
-    const allCategories = await categoryRepository.getAll();
-    const shopGroupsFromCategories = allCategories
-      .filter(c => c.shopId === shopId && c.items && c.items.length > 0)
-      .map(c => ({
-        name: c.name,
-        items: c.items || [],
-        event: c.event,
-      }));
-
-    // Merge groups
-    const mergedShop = {
-      ...shop,
-      groups: [...(shop.groups || []), ...shopGroupsFromCategories]
-    };
 
     return {
-      shop: mergedShop,
+      shop,
       npc,
     };
   }
@@ -630,6 +615,7 @@ export class ApiService {
                 price: i.price,
                 currency: i.currency,
                 amount: i.amount,
+                quant: i.quant,
               },
             });
           }

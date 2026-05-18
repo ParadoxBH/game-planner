@@ -99,13 +99,15 @@ export function ItemChip({
   }, [type, id, gameId, getCategory]);
 
   const formatAmount = (num: number) => {
-    if (num < 1000) return num.toString();
+    if (num < 1000) {
+      return num % 1 === 0 ? num.toString() : Number(num.toFixed(2)).toString();
+    }
     if (num < 1000000) {
       const k = num / 1000;
-      return (k % 1 === 0 ? k : k.toFixed(1)) + 'K';
+      return (k % 1 === 0 ? k : Number(k.toFixed(2))) + 'K';
     }
     const m = num / 1000000;
-    return (m % 1 === 0 ? m : m.toFixed(1)) + 'M';
+    return (m % 1 === 0 ? m : Number(m.toFixed(2))) + 'M';
   };
 
   const displayName = type === 'category' ? (categoryData?.name || `Qualquer ${id}`) : (name || id);

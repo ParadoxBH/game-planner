@@ -106,7 +106,7 @@ const TreeNode = ({
               title={
                 node.shopName
                   ? `Vendido em: ${node.shopName}`
-                  : `Custo de compra unitário: ${node.buyPrice}`
+                  : `Custo de compra unitário: ${node.buyPrice} ${node.currency || "ouro"}`
               }
             >
               <Stack
@@ -117,15 +117,21 @@ const TreeNode = ({
               >
                 <Typography
                   variant="caption"
-                  sx={{ fontWeight: 700, color: "primary.light" }}
+                  sx={{ fontWeight: 700, color: node.currency && node.currency !== "ouro" ? "success.light" : "primary.light" }}
                 >
-                  {Math.round(node.buyPrice * node.amount).toLocaleString()}
+                  {node.currency && node.currency !== "ouro" ? (node.buyPrice * node.amount).toFixed(2) : Math.round(node.buyPrice * node.amount).toLocaleString()}
                 </Typography>
-                <Box
-                  component="img"
-                  src={getPublicUrl("/img/heartopia/stats/ouro.png")}
-                  sx={{ width: 10, height: 10 }}
-                />
+                {(!node.currency || node.currency === "ouro") ? (
+                  <Box
+                    component="img"
+                    src={getPublicUrl("/img/heartopia/stats/ouro.png")}
+                    sx={{ width: 10, height: 10 }}
+                  />
+                ) : (
+                  <Typography variant="caption" sx={{ fontWeight: 800, fontSize: '0.65rem', color: "success.main" }}>
+                    {node.currency}
+                  </Typography>
+                )}
                 {node.shopName && (
                   <>
                     <Divider

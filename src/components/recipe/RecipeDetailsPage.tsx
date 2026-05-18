@@ -181,11 +181,24 @@ export function RecipeDetailsPage() {
 
     const shopMap = new Map<string, string>();
     const shopNames = new Map<string, string>();
+    const shopItemPrices = new Map<string, { price: number; quant?: number; currency?: string; shopName?: string }>();
+
     shops.forEach((shop: any) => {
       shopNames.set(shop.id, shop.name);
-      shop.groups.forEach((group: any) => {
-        group.items.forEach((item: any) => {
-          shopMap.set(item.id, shop.id);
+      shop.groups?.forEach((group: any) => {
+        group.items?.forEach((shopItem: any) => {
+          shopMap.set(shopItem.id, shop.id);
+          const current = shopItemPrices.get(shopItem.id);
+          const quant = shopItem.quant && shopItem.quant > 1 ? shopItem.quant : 1;
+          const newUnitPrice = (shopItem.price || 0) / quant;
+          if (!current || newUnitPrice < (current.price / (current.quant && current.quant > 1 ? current.quant : 1))) {
+            shopItemPrices.set(shopItem.id, {
+              price: shopItem.price || 0,
+              quant: shopItem.quant,
+              currency: shopItem.currency || "ouro",
+              shopName: shop.name,
+            });
+          }
         });
       });
     });
@@ -197,6 +210,7 @@ export function RecipeDetailsPage() {
       allRecipesByProduct,
       shopMap,
       shopNames,
+      shopItemPrices,
       categoryChoices,
       recipeChoices,
     };

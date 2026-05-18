@@ -46,6 +46,7 @@ interface CraftProfitData {
   steps: number;
   station?: string;
   nonPurchasable: { id: string; amount: number }[];
+  shopPurchases: { id: string; amount: number; unitPrice: number; currency: string; shopName?: string }[];
 }
 
 export function ProfitabilityCalculator() {
@@ -101,16 +102,31 @@ export function ProfitabilityCalculator() {
     return map;
   }, [entities]);
 
-  const itemToShopIdMap = useMemo(() => {
-    const map = new Map<string, string>();
+  const { itemToShopIdMap, shopNames, shopItemPrices } = useMemo(() => {
+    const shopIdMap = new Map<string, string>();
+    const namesMap = new Map<string, string>();
+    const pricesMap = new Map<string, { price: number; quant?: number; currency?: string; shopName?: string }>();
+
     shops.forEach((shop) => {
-      shop.groups.forEach((group) => {
-        group.items.forEach((shopItem) => {
-          map.set(shopItem.id, shop.id);
+      namesMap.set(shop.id, shop.name);
+      shop.groups?.forEach((group) => {
+        group.items?.forEach((shopItem) => {
+          shopIdMap.set(shopItem.id, shop.id);
+          const current = pricesMap.get(shopItem.id);
+          const quant = shopItem.quant && shopItem.quant > 1 ? shopItem.quant : 1;
+          const newUnitPrice = (shopItem.price || 0) / quant;
+          if (!current || newUnitPrice < (current.price / (current.quant && current.quant > 1 ? current.quant : 1))) {
+            pricesMap.set(shopItem.id, {
+              price: shopItem.price || 0,
+              quant: shopItem.quant,
+              currency: shopItem.currency || "ouro",
+              shopName: shop.name,
+            });
+          }
         });
       });
     });
-    return map;
+    return { itemToShopIdMap: shopIdMap, shopNames: namesMap, shopItemPrices: pricesMap };
   }, [shops]);
 
   const recipeMapByProduct = useMemo(() => {
@@ -131,7 +147,9 @@ export function ProfitabilityCalculator() {
         itemMap,
         entityMap,
         recipeMapByProduct,
-        shopMap: itemToShopIdMap
+        shopMap: itemToShopIdMap,
+        shopNames,
+        shopItemPrices,
     };
 
     const cache = new Map<string, CraftingTotals>();
@@ -139,7 +157,7 @@ export function ProfitabilityCalculator() {
     return (id: string, type: string = "item") => {
         return getCraftingTotals(id, 1, type, options, cache);
     };
-  }, [itemMap, entityMap, recipeMapByProduct, itemToShopIdMap]);
+  }, [itemMap, entityMap, recipeMapByProduct, itemToShopIdMap, shopNames, shopItemPrices]);
 
   const profitData = useMemo(() => {
     if (dataLoading || !itemMap.size) return [];
@@ -159,7 +177,7 @@ export function ProfitabilityCalculator() {
         const item = itemMap.get(id);
         if (!item) return;
 
-        const { totalCost, recipeIds, shopIds, baseResources } = calculateBaseCostAndSteps(id);
+        const { totalCost, recipeIds, shopIds, baseResources, shopPurchases } = calculateBaseCostAndSteps(id);
         const sellPrice = item.sellPrice || 0;
 
         data.push({
@@ -173,13 +191,40 @@ export function ProfitabilityCalculator() {
           nonPurchasable: Array.from(baseResources.entries()).map(
             ([npId, amount]) => ({ id: npId, amount }),
           ),
+          shopPurchases: Array.from(shopPurchases.values()),
           station: recipe.stations?.[0] || recipe.ProducedIn?.[0],
         });
       });
     });
 
+    shopItemPrices.forEach((priceInfo, id) => {
+      if (processedItems.has(id)) return;
+      processedItems.add(id);
+
+      const item = itemMap.get(id) || entityMap.get(id);
+      if (!item) return;
+
+      const { totalCost, recipeIds, shopIds, baseResources, shopPurchases } = calculateBaseCostAndSteps(id);
+      const sellPrice = item.sellPrice || 0;
+
+      data.push({
+        id,
+        name: item.name,
+        icon: item.icon,
+        baseCost: totalCost,
+        sellPrice,
+        profit: sellPrice - totalCost,
+        steps: recipeIds.size + shopIds.size + 1,
+        nonPurchasable: Array.from(baseResources.entries()).map(
+          ([npId, amount]) => ({ id: npId, amount }),
+        ),
+        shopPurchases: Array.from(shopPurchases.values()),
+        station: `Loja (${priceInfo.shopName || "NPC"})`,
+      });
+    });
+
     return data;
-  }, [recipes, itemMap, calculateBaseCostAndSteps, dataLoading]);
+  }, [recipes, itemMap, entityMap, shopItemPrices, calculateBaseCostAndSteps, dataLoading]);
 
   const filteredAndSortedData = useMemo(() => {
     let result = profitData.filter((item) =>
@@ -324,7 +369,7 @@ export function ProfitabilityCalculator() {
                         return (
                           <Tooltip
                             key={np.id}
-                            title={`${npItem?.name || np.id} (x${amount})`}
+                            title={`${npItem?.name || np.id} (x${amount}) [Coletável/Mapa]`}
                           >
                             <Box>
                               <ItemChip
@@ -335,6 +380,29 @@ export function ProfitabilityCalculator() {
                                 size="small"
                                 disableLink
                               />
+                            </Box>
+                          </Tooltip>
+                        );
+                      })}
+                      {row.shopPurchases?.map((sp) => {
+                        const spItem = itemMap.get(sp.id) || entityMap.get(sp.id);
+                        const amount = Math.ceil(sp.amount);
+                        const totalCurr = (sp.unitPrice * sp.amount).toFixed(2);
+                        return (
+                          <Tooltip
+                            key={`sp-${sp.id}`}
+                            title={`${spItem?.name || sp.id} (x${amount}) - Loja: ${sp.shopName || "NPC"} [${totalCurr} ${sp.currency}]`}
+                          >
+                            <Box sx={{ position: 'relative' }}>
+                              <ItemChip
+                                key={sp.id}
+                                id={sp.id}
+                                icon={spItem?.icon}
+                                amount={amount}
+                                size="small"
+                                disableLink
+                              />
+                              <Box sx={{ position: 'absolute', bottom: 2, right: 2, width: 8, height: 8, bgcolor: sp.currency === 'BRL' ? 'success.main' : 'primary.main', borderRadius: '50%', border: '1px solid black' }} />
                             </Box>
                           </Tooltip>
                         );

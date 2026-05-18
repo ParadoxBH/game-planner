@@ -339,8 +339,13 @@ export function ShopsDetailsPage({
                         }}
                       />
                     </Box>
-                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
                       {target?.name}
+                      {shopItem.quant && shopItem.quant > 1 && (
+                        <Typography component="span" variant="caption" sx={{ color: "primary.light", fontWeight: 800, bgcolor: "rgba(25, 118, 210, 0.15)", px: 0.8, py: 0.2, borderRadius: 1 }}>
+                          Pacote c/ {shopItem.quant}
+                        </Typography>
+                      )}
                     </Typography>
                   </Box>,
 
@@ -348,8 +353,9 @@ export function ShopsDetailsPage({
                     key={`shop_item_price_${shopItem.id}`}
                     sx={{
                       display: "flex",
-                      justifyContent: "flex-end",
-                      alignItems: "center",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "flex-end",
                     }}
                   >
                     {displayPrice !== undefined && (
@@ -387,6 +393,11 @@ export function ShopsDetailsPage({
                         )}
                       </Box>
                     )}
+                    {shopItem.quant && shopItem.quant > 1 && typeof displayPrice === "number" && (
+                      <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.65rem", fontWeight: 600, mt: 0.5 }}>
+                        (~{(displayPrice / shopItem.quant).toFixed(2)}/un)
+                      </Typography>
+                    )}
                   </Box>,
 
                   <Box
@@ -398,8 +409,21 @@ export function ShopsDetailsPage({
                       gap: 1,
                     }}
                   >
+                    {shopItem.quant && shopItem.quant > 1 && (
+                      <Chip
+                        label={`${shopItem.quant}x`}
+                        size="small"
+                        sx={{
+                          height: 18,
+                          fontSize: "0.65rem",
+                          fontWeight: 800,
+                          backgroundColor: "primary.main",
+                          color: "white",
+                        }}
+                      />
+                    )}
                     <Chip
-                      label={!!shopItem.amount ? `x${shopItem.amount}` : "Ilimitado"}
+                      label={!!shopItem.amount ? `Lim: ${shopItem.amount}x` : "Ilimitado"}
                       size="small"
                       variant="outlined"
                       sx={{
@@ -425,7 +449,7 @@ export function ShopsDetailsPage({
                 return (
                   <Tooltip
                     key={`shop_item_icon_${shopItem.id}`}
-                    title={`${target?.name} - ${displayPrice} ${currencyItem?.name || "ouro"}`}
+                    title={`${target?.name}${shopItem.quant && shopItem.quant > 1 ? ` (Pacote c/ ${shopItem.quant})` : ""} - Total: ${displayPrice} ${currencyItem?.name || "ouro"}${shopItem.quant && shopItem.quant > 1 && typeof displayPrice === "number" ? ` (~${(displayPrice / shopItem.quant).toFixed(2)}/un)` : ""}${shopItem.amount ? ` | Limite: ${shopItem.amount}` : ""}`}
                   >
                     <Box
                       sx={{
@@ -448,13 +472,39 @@ export function ShopsDetailsPage({
                         }}
                       />
 
-                      {/* Top-Right: Purchase Limit / Quantity */}
-                      {shopItem.amount && (
+                      {/* Top-Right: Quantity in Package */}
+                      {shopItem.quant && shopItem.quant > 1 && (
                         <Box
                           sx={{
                             position: "absolute",
                             top: 2,
                             right: 2,
+                            backgroundColor: "primary.main",
+                            borderRadius: "4px",
+                            px: 0.5,
+                            py: 0.1,
+                            zIndex: 1,
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontSize: "0.6rem",
+                              fontWeight: 900,
+                              color: "#fff",
+                            }}
+                          >
+                            {shopItem.quant}x
+                          </Typography>
+                        </Box>
+                      )}
+
+                      {/* Top-Left: Purchase Limit */}
+                      {shopItem.amount && (
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            top: 2,
+                            left: 2,
                             backgroundColor: "rgba(0,0,0,0.6)",
                             backdropFilter: "blur(2px)",
                             borderRadius: "4px",
@@ -466,12 +516,12 @@ export function ShopsDetailsPage({
                         >
                           <Typography
                             sx={{
-                              fontSize: "0.6rem",
-                              fontWeight: 900,
-                              color: "#fff",
+                              fontSize: "0.55rem",
+                              fontWeight: 800,
+                              color: "#aaa",
                             }}
                           >
-                            x{shopItem.amount}
+                            Lim:{shopItem.amount}
                           </Typography>
                         </Box>
                       )}

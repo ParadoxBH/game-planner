@@ -127,7 +127,7 @@ export function ItemShopCard({
           <Divider sx={{ mb: 2, opacity: 0.1 }} />
 
           {/* Pricing / Exchange Info */}
-          <Stack direction={"row"} justifyContent={"space-between"} alignItems={"Start"}>
+          <Stack direction={"row"} justifyContent={"space-between"} alignItems={"flex-start"}>
             {shopItem.exchange ? (
               <Stack spacing={1}>
                 <Typography variant="caption" sx={{ color: 'secondary.main', fontWeight: 800, display: 'flex', alignItems: 'center', gap: 0.5, textTransform: 'uppercase', letterSpacing: 0.5 }}>
@@ -154,7 +154,7 @@ export function ItemShopCard({
             ) : (
               <Stack spacing={0.5}>
                 <Typography variant="caption" sx={{ color: 'primary.main', fontWeight: 800, display: 'flex', alignItems: 'center', gap: 0.5, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                  <Payments sx={{ fontSize: '0.9rem' }} /> Preço:
+                  <Payments sx={{ fontSize: '0.9rem' }} /> Preço{shopItem.quant && shopItem.quant > 1 ? ` (Pacote c/ ${shopItem.quant})` : ''}:
                 </Typography>
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ 
                   p: 0.5, 
@@ -171,47 +171,55 @@ export function ItemShopCard({
                     size="small"
                   />
                   <Typography variant="subtitle1" sx={{ fontWeight: 900 }}>{price}</Typography>
+                  {shopItem.quant && shopItem.quant > 1 && typeof price === 'number' && (
+                    <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, ml: 0.5 }}>
+                      (~{(price / shopItem.quant).toFixed(2)}/un)
+                    </Typography>
+                  )}
                 </Stack>
               </Stack>
             )}
 
-            {/* Stock / Limit Information */}
-            {shopItem.amount !== undefined && (
-              <Stack alignItems={"center"} spacing={0.5}>
-                <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 800, display: 'flex', alignItems: 'center', gap: 0.5, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                  Limite
-                </Typography>
-                 <Box sx={{ 
-                   px: 1, 
-                   py: 0.2, 
-                   borderRadius: 1, 
-                   bgcolor: 'rgba(255,255,255,0.05)', 
-                   border: '1px solid rgba(255,255,255,0.1)' 
-                 }}>
-                   <Typography variant="caption" sx={{ fontWeight: 800 }}>
-                     {shopItem.amount}x
-                   </Typography>
-                 </Box>
-                 {shopItem.resetType && (
-                   <Box sx={{ 
-                     display: 'flex', 
-                     alignItems: 'center', 
-                     gap: 0.5, 
-                     bgcolor: 'rgba(255, 68, 0, 0.08)', 
-                     color: '#ff4400', 
-                     px: 1, 
-                     py: 0.2, 
-                     borderRadius: 1,
-                     border: '1px solid rgba(255, 68, 0, 0.2)'
-                   }}>
-                     <Refresh sx={{ fontSize: '0.8rem' }} />
-                     <Typography variant="caption" sx={{ fontWeight: 800, textTransform: 'uppercase', fontSize: '0.65rem' }}>
-                       {shopItem.resetType === 'diario' ? 'Diário' : shopItem.resetType === 'semanal' ? 'Semanal' : 'Único'}
-                     </Typography>
-                   </Box>
-                 )}
-              </Stack>
-            )}
+            {/* Stock / Limit / Package Information */}
+            <Stack alignItems={"flex-end"} spacing={0.8}>
+              {shopItem.quant && shopItem.quant > 1 && (
+                <Box sx={{ px: 1, py: 0.2, borderRadius: 1, bgcolor: 'primary.main', color: 'white', display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="caption" sx={{ fontWeight: 900, fontSize: '0.7rem' }}>
+                    Pacote: {shopItem.quant}x
+                  </Typography>
+                </Box>
+              )}
+              {shopItem.amount !== undefined && (
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                    Limite
+                  </Typography>
+                  <Box sx={{ px: 1, py: 0.2, borderRadius: 1, bgcolor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                    <Typography variant="caption" sx={{ fontWeight: 800 }}>
+                      {shopItem.amount}x
+                    </Typography>
+                  </Box>
+                </Stack>
+              )}
+              {shopItem.resetType && (
+                <Box sx={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 0.5, 
+                  bgcolor: 'rgba(255, 68, 0, 0.08)', 
+                  color: '#ff4400', 
+                  px: 1, 
+                  py: 0.2, 
+                  borderRadius: 1,
+                  border: '1px solid rgba(255, 68, 0, 0.2)'
+                }}>
+                  <Refresh sx={{ fontSize: '0.8rem' }} />
+                  <Typography variant="caption" sx={{ fontWeight: 800, textTransform: 'uppercase', fontSize: '0.65rem' }}>
+                    {shopItem.resetType === 'diario' ? 'Diário' : shopItem.resetType === 'semanal' ? 'Semanal' : 'Único'}
+                  </Typography>
+                </Box>
+              )}
+            </Stack>
           </Stack>
 
           {/* Conditions */}

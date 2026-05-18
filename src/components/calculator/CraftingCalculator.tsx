@@ -30,14 +30,11 @@ import { StyledContainer } from "../common/StyledContainer";
 import { GameDataSelector } from "../common/GameDataSelector";
 import { getCraftingTotals } from "../../utils/craftingTree";
 import type { TreeOptions, CraftingTotals } from "../../utils/craftingTree";
-import type {
-  Item,
-  Entity,
-  Recipe,
-} from "../../types/gameModels";
 import { recipeRepository } from "../../repositories/RecipeRepository";
 import { itemRepository } from "../../repositories/ItemRepository";
 import { entityRepository } from "../../repositories/EntityRepository";
+import { shopRepository } from "../../repositories/ShopRepository";
+import type { Item, Entity, Recipe, Shop } from "../../types/gameModels";
 
 interface SelectedItem {
   id: string;
@@ -52,6 +49,7 @@ export function CraftingCalculator() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [entities, setEntities] = useState<Entity[]>([]);
+  const [shops, setShops] = useState<Shop[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
 
   const [selectedList, setSelectedList] = useState<SelectedItem[]>([]);
@@ -73,12 +71,14 @@ export function CraftingCalculator() {
     Promise.all([
       recipeRepository.getAll(),
       itemRepository.getAll(),
-      entityRepository.getAll()
-    ]).then(([allRecipes, allItems, allEntities]) => {
+      entityRepository.getAll(),
+      shopRepository.getAll()
+    ]).then(([allRecipes, allItems, allEntities, allShops]) => {
       if (!isMounted) return;
       setRecipes(allRecipes);
       setItems(allItems);
       setEntities(allEntities);
+      setShops(allShops);
       setDataLoading(false);
     }).catch(err => {
       console.error("Error fetching calculator data:", err);
@@ -114,27 +114,58 @@ export function CraftingCalculator() {
     return map;
   }, [recipes]);
 
-  const { totalResourcesMap, unresolvedCategories } = useMemo(() => {
+  const { itemToShopIdMap, shopNames, shopItemPrices } = useMemo(() => {
+    const shopIdMap = new Map<string, string>();
+    const namesMap = new Map<string, string>();
+    const pricesMap = new Map<string, { price: number; quant?: number; currency?: string; shopName?: string }>();
+
+    shops.forEach((shop) => {
+      namesMap.set(shop.id, shop.name);
+      shop.groups?.forEach((group) => {
+        group.items?.forEach((shopItem) => {
+          shopIdMap.set(shopItem.id, shop.id);
+          const current = pricesMap.get(shopItem.id);
+          const quant = shopItem.quant && shopItem.quant > 1 ? shopItem.quant : 1;
+          const newUnitPrice = (shopItem.price || 0) / quant;
+          if (!current || newUnitPrice < (current.price / (current.quant && current.quant > 1 ? current.quant : 1))) {
+            pricesMap.set(shopItem.id, {
+              price: shopItem.price || 0,
+              quant: shopItem.quant,
+              currency: shopItem.currency || "ouro",
+              shopName: shop.name,
+            });
+          }
+        });
+      });
+    });
+    return { itemToShopIdMap: shopIdMap, shopNames: namesMap, shopItemPrices: pricesMap };
+  }, [shops]);
+
+  const { totalResourcesMap, totalShopPurchasesMap, unresolvedCategories } = useMemo(() => {
     if (selectedList.length === 0 || !recipeMap)
       return {
         totalResourcesMap: new Map<string, number>(),
+        totalShopPurchasesMap: new Map<string, { amount: number; unitPrice: number; currency: string; shopName?: string }>(),
         unresolvedCategories: new Set<string>(),
       };
 
     const totals = new Map<string, number>();
+    const shopPurchasesTotals = new Map<string, { amount: number; unitPrice: number; currency: string; shopName?: string }>();
     const unresolved = new Set<string>();
     
     const options: TreeOptions = {
       itemMap,
       entityMap,
       recipeMapByProduct: recipeMap,
-      categoryChoices
+      categoryChoices,
+      shopMap: itemToShopIdMap,
+      shopNames,
+      shopItemPrices,
     };
 
     const cache = new Map<string, CraftingTotals>();
 
     selectedList.forEach((item) => {
-      // Check for unresolved categories first
       if (item.type === "category" && !categoryChoices[item.id]) {
         unresolved.add(item.id);
         const currentTotal = totals.get(`category:${item.id}`) || 0;
@@ -148,10 +179,18 @@ export function CraftingCalculator() {
         const current = totals.get(id) || 0;
         totals.set(id, current + amt);
       });
+      itemTotals.shopPurchases?.forEach((purchase, id) => {
+        const existing = shopPurchasesTotals.get(id);
+        if (existing) {
+          existing.amount += purchase.amount;
+        } else {
+          shopPurchasesTotals.set(id, { ...purchase });
+        }
+      });
     });
 
-    return { totalResourcesMap: totals, unresolvedCategories: unresolved };
-  }, [selectedList, itemMap, entityMap, recipeMap, categoryChoices]);
+    return { totalResourcesMap: totals, totalShopPurchasesMap: shopPurchasesTotals, unresolvedCategories: unresolved };
+  }, [selectedList, itemMap, entityMap, recipeMap, categoryChoices, itemToShopIdMap, shopNames, shopItemPrices]);
 
   const resourcesList = Array.from(totalResourcesMap.entries()).map(
     ([id, amount]) => {
@@ -167,7 +206,7 @@ export function CraftingCalculator() {
 
       return {
         id: actualId,
-        amount,
+        amount: Number(amount.toFixed(2)),
         item,
         entity,
         buyPrice,
@@ -178,9 +217,52 @@ export function CraftingCalculator() {
     },
   );
 
+  const shopPurchasesList = useMemo(() => {
+    return Array.from(totalShopPurchasesMap.entries()).map(([id, p]) => {
+      const item = itemMap.get(id);
+      const entity = entityMap.get(id);
+      const priceInfo = shopItemPrices.get(id);
+      const bundleSize = priceInfo?.quant && priceInfo.quant > 0 ? priceInfo.quant : 1;
+      const neededAmount = Number(p.amount.toFixed(2));
+      const bundles = Math.ceil(neededAmount / bundleSize);
+      const purchasedAmount = Number((bundles * bundleSize).toFixed(2));
+      const leftover = Number(Math.max(0, purchasedAmount - neededAmount).toFixed(2));
+      const totalCost = bundles * (priceInfo ? priceInfo.price : (p.unitPrice * bundleSize));
+
+      return {
+        id,
+        neededAmount,
+        amount: purchasedAmount,
+        leftover,
+        bundleSize,
+        bundles,
+        unitPrice: p.unitPrice,
+        currency: p.currency,
+        shopName: p.shopName || priceInfo?.shopName,
+        totalCost,
+        item,
+        entity,
+      };
+    });
+  }, [totalShopPurchasesMap, itemMap, entityMap, shopItemPrices]);
+
   const grandTotalCost = useMemo(() => {
-    return resourcesList.reduce((acc, res) => acc + res.totalCost, 0);
-  }, [resourcesList]);
+    const resCost = resourcesList.reduce((acc, res) => acc + res.totalCost, 0);
+    const shopGoldCost = shopPurchasesList
+      .filter(p => !p.currency || p.currency === "ouro")
+      .reduce((acc, p) => acc + p.totalCost, 0);
+    return resCost + shopGoldCost;
+  }, [resourcesList, shopPurchasesList]);
+
+  const otherCurrenciesTotals = useMemo(() => {
+    const map = new Map<string, number>();
+    shopPurchasesList.forEach(p => {
+      if (p.currency && p.currency !== "ouro") {
+        map.set(p.currency, (map.get(p.currency) || 0) + p.totalCost);
+      }
+    });
+    return Array.from(map.entries());
+  }, [shopPurchasesList]);
 
   const totalRevenue = useMemo(() => {
     return selectedList.reduce((acc, item) => {
@@ -654,11 +736,110 @@ export function CraftingCalculator() {
                       </Card>
                     </Grid>
                   ))}
+                  {shopPurchasesList.map((sp) => (
+                    <Grid
+                      size={6}
+                      key={`sp-${sp.id}`}
+                      sx={{ display: "flex" }}
+                    >
+                      <Card
+                        sx={{
+                          display: "flex",
+                          flex: 1,
+                          p: 1.5,
+                          borderRadius: 1,
+                          backgroundColor: "rgba(0, 150, 255, 0.05)",
+                          border: "1px solid",
+                          borderColor: "primary.main",
+                        }}
+                      >
+                        <Stack
+                          direction="column"
+                          spacing={1}
+                          alignItems="stretch"
+                          justifyContent={"space-between"}
+                          flex={1}
+                        >
+                          <Stack
+                            direction="row"
+                            spacing={1}
+                            alignItems="center"
+                          >
+                            <ItemChip
+                              key={sp.id}
+                              id={sp.id}
+                              icon={sp.item?.icon || sp.entity?.icon}
+                              amount={sp.amount}
+                              size="medium"
+                              disableLink
+                            />
+                            <Box sx={{ flex: 1 }}>
+                              <Typography
+                                variant="body2"
+                                fontWeight={500}
+                                sx={{ fontSize: "0.85rem" }}
+                              >
+                                {sp.item?.name || sp.entity?.name || sp.id}
+                              </Typography>
+                              <Stack direction="row" spacing={1} alignItems="center">
+                                <Typography
+                                  variant="caption"
+                                  sx={{ color: "primary.main", fontWeight: 600 }}
+                                >
+                                  Loja: {sp.shopName || "NPC"}
+                                </Typography>
+                                {sp.leftover > 0 && (
+                                  <Tooltip title={`Para obter ${sp.neededAmount} un, é preciso comprar ${sp.bundles} pacote(s) de ${sp.bundleSize} un, restando ${sp.leftover} un de sobra.`}>
+                                    <Typography
+                                      variant="caption"
+                                      sx={{ color: "warning.light", fontWeight: 700, px: 0.8, py: 0.2, backgroundColor: "warning.dark" + "44", border: "1px solid", borderColor: "warning.main", borderRadius: 1 }}
+                                    >
+                                      Sobram: {sp.leftover} un
+                                    </Typography>
+                                  </Tooltip>
+                                )}
+                              </Stack>
+                            </Box>
+                          </Stack>
+                          <Box
+                            sx={{
+                              mt: 1,
+                              pt: 1,
+                              borderTop: "1px solid rgba(255,255,255,0.05)",
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Typography variant="caption" sx={{ opacity: 0.6 }}>
+                              Custo
+                            </Typography>
+                            <Stack direction="row" spacing={0.5} alignItems="center">
+                              <Typography variant="caption" fontWeight={700} color={sp.currency === 'BRL' || sp.currency === 'rmt_br' ? 'success.main' : 'primary.main'}>
+                                {sp.currency === 'ouro' ? Math.round(sp.totalCost).toLocaleString() : sp.totalCost.toFixed(2)}
+                              </Typography>
+                              {sp.currency === 'ouro' ? (
+                                <Box component="img" src={getPublicUrl("/img/heartopia/stats/ouro.png")} sx={{ width: 14, height: 14 }} alt="Ouro" />
+                              ) : itemMap.get(sp.currency)?.icon ? (
+                                <Tooltip title={itemMap.get(sp.currency)?.name || sp.currency}>
+                                  <Box component="img" src={getPublicUrl(itemMap.get(sp.currency)!.icon)} sx={{ width: 14, height: 14, objectFit: 'contain' }} alt={sp.currency} />
+                                </Tooltip>
+                              ) : (
+                                <Typography variant="caption" sx={{ fontWeight: 800, fontSize: '0.65rem', color: sp.currency === 'BRL' || sp.currency === 'rmt_br' ? 'success.main' : 'primary.main' }}>
+                                  {sp.currency}
+                                </Typography>
+                              )}
+                            </Stack>
+                          </Box>
+                        </Stack>
+                      </Card>
+                    </Grid>
+                  ))}
                 </Grid>
               )}
             </Stack>
 
-            {totalResourcesMap.size > 0 && unresolvedCategories.size === 0 && (
+            {(totalResourcesMap.size > 0 || totalShopPurchasesMap.size > 0) && unresolvedCategories.size === 0 && (
               <Stack spacing={1}>
                 <Stack spacing={1}>
                   {grandTotalCost > 0 && (
@@ -671,7 +852,7 @@ export function CraftingCalculator() {
                       }}
                     >
                       <Typography variant="caption" fontWeight={600}>
-                        CUSTO TOTAL DE COMPRA
+                        CUSTO TOTAL DE COMPRA (OURO)
                       </Typography>
                       <Stack direction="row" spacing={0.5} alignItems="center">
                         <Typography variant="caption" fontWeight={700}>
@@ -680,12 +861,44 @@ export function CraftingCalculator() {
                         <Box
                           component="img"
                           src={getPublicUrl("/img/heartopia/stats/ouro.png")}
-                          sx={{ width: 12, height: 12 }}
+                          sx={{ width: 14, height: 14 }}
                           alt="Ouro"
                         />
                       </Stack>
                     </Box>
                   )}
+                  {otherCurrenciesTotals.map(([curr, total]) => {
+                    const currItem = itemMap.get(curr);
+                    return (
+                      <Box
+                        key={`total-${curr}`}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          opacity: 0.8,
+                        }}
+                      >
+                        <Typography variant="caption" fontWeight={600} sx={{ color: curr === 'rmt_br' || curr === 'BRL' ? 'success.light' : 'primary.light' }}>
+                          CUSTO TOTAL DE COMPRA ({currItem?.name ? currItem.name.toUpperCase() : curr.toUpperCase()})
+                        </Typography>
+                        <Stack direction="row" spacing={0.5} alignItems="center">
+                          <Typography variant="caption" fontWeight={700} sx={{ color: curr === 'rmt_br' || curr === 'BRL' ? 'success.main' : 'primary.main' }}>
+                            {total.toFixed(2)}
+                          </Typography>
+                          {currItem?.icon ? (
+                            <Tooltip title={currItem.name}>
+                              <Box component="img" src={getPublicUrl(currItem.icon)} sx={{ width: 14, height: 14, objectFit: 'contain' }} alt={curr} />
+                            </Tooltip>
+                          ) : (
+                            <Typography variant="caption" sx={{ fontWeight: 800, fontSize: '0.65rem', color: curr === 'rmt_br' || curr === 'BRL' ? 'success.main' : 'primary.main' }}>
+                              {curr}
+                            </Typography>
+                          )}
+                        </Stack>
+                      </Box>
+                    );
+                  })}
                   {totalRevenue > 0 && (
                     <Box
                       sx={{

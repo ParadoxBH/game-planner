@@ -122,6 +122,23 @@ export function ShopItemCard({
             ) : (
               <Inventory sx={{ fontSize: 32, color: "rgba(255, 255, 255, 0.2)" }} />
             )}
+            {shopItem.quant && shopItem.quant > 1 && (
+              <Box sx={{ 
+                position: 'absolute', 
+                top: 4, 
+                left: 4, 
+                backgroundColor: 'primary.main', 
+                borderRadius: '4px',
+                px: 0.6,
+                py: 0.2,
+                zIndex: 1,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.4)'
+              }}>
+                <Typography sx={{ fontSize: '0.65rem', fontWeight: 900, color: '#fff' }}>
+                  {shopItem.quant}x
+                </Typography>
+              </Box>
+            )}
             {shopItem.amount && (
               <Box sx={{ 
                 position: 'absolute', 
@@ -136,7 +153,7 @@ export function ShopItemCard({
                 zIndex: 1
               }}>
                 <Typography sx={{ fontSize: '0.6rem', fontWeight: 900, color: '#fff' }}>
-                  x{shopItem.amount}
+                  Lim: {shopItem.amount}
                 </Typography>
               </Box>
             )}
@@ -156,6 +173,11 @@ export function ShopItemCard({
           >
             {name || shopItem.id}
           </Typography>
+          {shopItem.quant && shopItem.quant > 1 && typeof price === 'number' && (
+            <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600, fontSize: '0.7rem', mt: -1 }}>
+              (~{(price / shopItem.quant).toFixed(2)} {currency}/un)
+            </Typography>
+          )}
         </Box>
       ) : (
         <>
@@ -205,7 +227,7 @@ export function ShopItemCard({
                 id={shopItem.id}
                 name={name}
                 icon={icon}
-                amount={shopItem.amount}
+                amount={shopItem.quant && shopItem.quant > 1 ? shopItem.quant : undefined}
                 isProduct={true}
                 type={shopItem.type || 'item'}
               />
@@ -213,6 +235,11 @@ export function ShopItemCard({
                 <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
                   {name || shopItem.id}
                 </Typography>
+                {shopItem.quant && shopItem.quant > 1 && (
+                  <Typography variant="caption" sx={{ color: "primary.light", fontWeight: 800, display: "block", fontSize: "0.75rem" }}>
+                    Pacote com {shopItem.quant} unidades
+                  </Typography>
+                )}
               </Box>
             </Stack>
 
@@ -260,10 +287,26 @@ export function ShopItemCard({
                       size="small"
                     />
                     <Typography sx={{ fontWeight: 800, fontSize: '1.1rem' }}>{price}</Typography>
+                    {shopItem.quant && shopItem.quant > 1 && typeof price === 'number' && (
+                      <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, ml: 0.5 }}>
+                        (~{(price / shopItem.quant).toFixed(2)}/un)
+                      </Typography>
+                    )}
                   </Stack>
                 </Stack>
               )}
             </Box>
+
+            {shopItem.amount && (
+              <Box sx={{ mt: 1.5, p: 0.8, borderRadius: 1, backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.7rem' }}>
+                  Limite de Compra:
+                </Typography>
+                <Typography variant="caption" sx={{ fontWeight: 900, color: '#ffbb00', px: 1, py: 0.2, bgcolor: 'rgba(255, 187, 0, 0.1)', borderRadius: 1 }}>
+                  {shopItem.amount}x
+                </Typography>
+              </Box>
+            )}
 
             {shopItem.conditions && shopItem.conditions.length > 0 && (
               <Box sx={{ mt: 1.5, p: 1, borderRadius: 1, backgroundColor: 'rgba(255, 187, 0, 0.05)', border: '1px dashed rgba(255, 187, 0, 0.2)' }}>

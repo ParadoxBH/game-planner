@@ -115,6 +115,7 @@ export interface ShopItem {
   id: string;
   type?: GameDataTypes;
   amount?: number;
+  quant?: number;
   price?: number;
   currency?: string;
   resetType?: "diario" | "semanal" | "unique";

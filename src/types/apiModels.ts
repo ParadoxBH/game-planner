@@ -26,6 +26,7 @@ export interface ItemDetails {
       price?: number;
       currency?: string;
       amount?: number;
+      quant?: number;
       size?: 'small' | 'medium' | 'large' | 'extraLarge';
       disableLink?: boolean;
       isBest?: boolean;
@@ -84,6 +85,7 @@ export interface RecipeDetails {
       price?: number;
       currency?: string;
       amount?: number;
+      quant?: number;
       size?: "small" | "medium" | "large" | "extraLarge";
       disableLink?: boolean;
       isBest?: boolean;

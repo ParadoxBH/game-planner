@@ -13,6 +13,7 @@ export interface CraftNode {
   sellPrice: number;
   totalCost: number;
   shopName?: string;
+  currency?: string;
   categoryId?: string; // If resolved from a category
 }
 
@@ -23,6 +24,7 @@ export interface TreeOptions {
   allRecipesByProduct?: Map<string, Recipe[]>;
   shopMap?: Map<string, string>; // item/entity id -> shop id
   shopNames?: Map<string, string>; // shop id -> shop name
+  shopItemPrices?: Map<string, { price: number; quant?: number; currency?: string; shopName?: string }>; // item/entity id -> price details
   categoryChoices?: Record<string, string>;
   recipeChoices?: Record<string, string>; // itemId -> recipeId
 }
@@ -63,11 +65,20 @@ export function getCraftingTree(
   
   const name = item?.name || entity?.name || (resolvedFromCategory ? `${id} (${actualId})` : id);
   const icon = item?.icon || entity?.icon;
-  const buyPrice = item?.buyPrice ?? entity?.buyPrice ?? 0;
-  const sellPrice = item?.sellPrice ?? entity?.sellPrice ?? 0;
 
   const shopId = options.shopMap?.get(actualId);
-  const shopName = shopId ? options.shopNames?.get(shopId) : undefined;
+  const shopPriceInfo = options.shopItemPrices?.get(actualId);
+  const shopName = shopPriceInfo?.shopName || (shopId ? options.shopNames?.get(shopId) : undefined);
+
+  let buyPrice = item?.buyPrice ?? entity?.buyPrice ?? 0;
+  let currency = "ouro";
+
+  if (shopPriceInfo && shopPriceInfo.price !== undefined) {
+    const quant = shopPriceInfo.quant && shopPriceInfo.quant > 1 ? shopPriceInfo.quant : 1;
+    buyPrice = shopPriceInfo.price / quant;
+    currency = shopPriceInfo.currency || "ouro";
+  }
+  const sellPrice = item?.sellPrice ?? entity?.sellPrice ?? 0;
 
   const node: CraftNode = {
     id: actualId,
@@ -76,15 +87,20 @@ export function getCraftingTree(
     amount,
     type: actualType,
     ingredients: [],
-    isBaseResource: !recipe,
+    isBaseResource: !recipe && (!shopId && !shopPriceInfo && buyPrice === 0),
     buyPrice,
     sellPrice,
     totalCost: buyPrice * amount,
     shopName,
+    currency,
     categoryId,
   };
 
   if (!recipe || visited.has(actualId)) {
+    if (shopPriceInfo && currency !== "ouro" && !visited.has(currency) && (options.shopItemPrices?.has(currency) || options.itemMap?.has(currency))) {
+      const ingNode = getCraftingTree(currency, buyPrice * amount, "item", options, new Set([...visited, actualId]));
+      node.ingredients.push(ingNode);
+    }
     return node;
   }
 
@@ -112,19 +128,24 @@ export function getCraftingTree(
     );
     node.ingredients.push(ingNode);
   });
-
-  // Calculate total cost recursively if not buying the item directly
-  // However, in the calculators, they often want "base cost" which means decomposing everything.
-  // We'll let the UI decide if it wants to show the sum of ingredients or the buy price.
   
   return node;
 }
 
+export interface ShopPurchase {
+  id: string;
+  amount: number;
+  unitPrice: number;
+  currency: string;
+  shopName?: string;
+}
+
 export interface CraftingTotals {
-  totalCost: number;
+  totalCost: number; // Custo em Ouro
   recipeIds: Set<string>;
   shopIds: Set<string>;
   baseResources: Map<string, number>;
+  shopPurchases: Map<string, ShopPurchase>;
 }
 
 export function getCraftingTotals(
@@ -139,12 +160,12 @@ export function getCraftingTotals(
   if (cache.has(cacheKey)) {
     const cached = cache.get(cacheKey)!;
     
-    // Scale cached results for the current amount
     return {
-      totalCost: cached.totalCost * amount, // Cache stores for amount = 1
+      totalCost: cached.totalCost * amount,
       recipeIds: new Set(cached.recipeIds),
       shopIds: new Set(cached.shopIds),
-      baseResources: new Map(Array.from(cached.baseResources.entries()).map(([k, v]) => [k, v * amount]))
+      baseResources: new Map(Array.from(cached.baseResources.entries()).map(([k, v]) => [k, v * amount])),
+      shopPurchases: new Map(Array.from(cached.shopPurchases.entries()).map(([k, v]) => [k, { ...v, amount: v.amount * amount }]))
     };
   }
 
@@ -154,11 +175,57 @@ export function getCraftingTotals(
   if (!recipe || visited.has(id)) {
     const item = itemMap.get(id);
     const entity = entityMap.get(id);
-    const buyPrice = item?.buyPrice ?? entity?.buyPrice ?? 0;
     const shopId = shopMap?.get(id);
-    
+    const shopPriceInfo = options.shopItemPrices?.get(id);
+    const shopName = shopPriceInfo?.shopName || (shopId ? options.shopNames?.get(shopId) : undefined);
+
+    let buyPrice = item?.buyPrice ?? entity?.buyPrice ?? 0;
+    let currency = "ouro";
+    let isShopItem = false;
+    let unitPrice = buyPrice;
+
+    if (shopPriceInfo && shopPriceInfo.price !== undefined) {
+      isShopItem = true;
+      const quant = shopPriceInfo.quant && shopPriceInfo.quant > 1 ? shopPriceInfo.quant : 1;
+      unitPrice = shopPriceInfo.price / quant;
+      currency = shopPriceInfo.currency || "ouro";
+      if (currency === "ouro") {
+        buyPrice = unitPrice;
+      } else {
+        buyPrice = 0; // Ouro totalCost não soma outras moedas diretamente
+      }
+    } else if (buyPrice > 0 || shopId) {
+      isShopItem = true;
+      unitPrice = buyPrice;
+    }
+
     const baseResources = new Map<string, number>();
-    if (buyPrice === 0) {
+    const shopPurchases = new Map<string, ShopPurchase>();
+
+    if (isShopItem) {
+      if (currency !== "ouro" && !visited.has(currency) && (options.shopItemPrices?.has(currency) || options.itemMap?.has(currency))) {
+        const currencyTotals = getCraftingTotals(currency, unitPrice * amount, "item", options, cache, new Set([...visited, id]));
+        currencyTotals.baseResources.forEach((amt, rid) => {
+          baseResources.set(rid, (baseResources.get(rid) || 0) + amt);
+        });
+        currencyTotals.shopPurchases.forEach((purchase, pid) => {
+          const existing = shopPurchases.get(pid);
+          if (existing) {
+            existing.amount += purchase.amount;
+          } else {
+            shopPurchases.set(pid, { ...purchase });
+          }
+        });
+      } else {
+        shopPurchases.set(id, {
+          id,
+          amount,
+          unitPrice,
+          currency,
+          shopName,
+        });
+      }
+    } else {
       baseResources.set(id, amount);
     }
 
@@ -169,7 +236,8 @@ export function getCraftingTotals(
       totalCost: buyPrice * amount,
       recipeIds: new Set(),
       shopIds,
-      baseResources
+      baseResources,
+      shopPurchases
     };
   }
 
@@ -177,7 +245,8 @@ export function getCraftingTotals(
     totalCost: 0,
     recipeIds: new Set([recipe.id]),
     shopIds: new Set(),
-    baseResources: new Map()
+    baseResources: new Map(),
+    shopPurchases: new Map()
   };
 
   const newVisited = new Set(visited);
@@ -206,14 +275,22 @@ export function getCraftingTotals(
     ingTotals.baseResources.forEach((amt, rid) => {
       result.baseResources.set(rid, (result.baseResources.get(rid) || 0) + amt);
     });
+    ingTotals.shopPurchases.forEach((purchase, pid) => {
+      const existing = result.shopPurchases.get(pid);
+      if (existing) {
+        existing.amount += purchase.amount;
+      } else {
+        result.shopPurchases.set(pid, { ...purchase });
+      }
+    });
   });
 
-  // Store in cache as unit of 1 for future scaling
   const unitResult: CraftingTotals = {
     totalCost: result.totalCost / amount,
     recipeIds: result.recipeIds,
     shopIds: result.shopIds,
-    baseResources: new Map(Array.from(result.baseResources.entries()).map(([k, v]) => [k, v / amount]))
+    baseResources: new Map(Array.from(result.baseResources.entries()).map(([k, v]) => [k, v / amount])),
+    shopPurchases: new Map(Array.from(result.shopPurchases.entries()).map(([k, v]) => [k, { ...v, amount: v.amount / amount }]))
   };
   cache.set(cacheKey, unitResult);
 
