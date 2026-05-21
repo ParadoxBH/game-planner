@@ -170,9 +170,15 @@ export function EventDetailsPage() {
   const pointsGroupedByEntity = useMemo(() => {
     const groups = new Map<string, ReferencePoints[]>();
     eventReferencePoints.forEach((rp) => {
-      const list = groups.get(rp.entityId) || [];
-      list.push(rp);
-      groups.set(rp.entityId, list);
+      const entityIds = new Set<string>();
+      if (rp.entityId) entityIds.add(rp.entityId);
+      if (rp.spawns) rp.spawns.forEach(s => entityIds.add(s.entityId));
+
+      entityIds.forEach(id => {
+        const list = groups.get(id) || [];
+        list.push(rp);
+        groups.set(id, list);
+      });
     });
     return Array.from(groups.entries());
   }, [eventReferencePoints]);

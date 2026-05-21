@@ -8,7 +8,11 @@ export class ReferencePointRepository extends BaseRepository<ReferencePoints, st
   }
 
   async getByEntityId(entityId: string): Promise<ReferencePoints[]> {
-    return this.table.where('entityId').equalsIgnoreCase(entityId).toArray();
+    return this.table.filter(p => {
+      if (p.entityId?.toLowerCase() === entityId.toLowerCase()) return true;
+      if (p.spawns && p.spawns.some(s => s.entityId.toLowerCase() === entityId.toLowerCase())) return true;
+      return false;
+    }).toArray();
   }
 
   async getByLocationId(locationId: string): Promise<ReferencePoints[]> {

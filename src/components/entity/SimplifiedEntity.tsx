@@ -16,7 +16,8 @@ interface SimplifiedEntityProps {
   respawnDelay?: number;
   isCollected?: boolean;
   onToggleCollected?: () => void;
-  onExpand: () => void;
+  onExpand: (id?: string) => void;
+  entities?: Entity[];
   categoriesMap?: Record<string, string>;
   pointImage?: string;
   customDrops?: EntityDrop[];
@@ -33,6 +34,7 @@ export const SimplifiedEntity = ({
   categoriesMap = {},
   pointImage,
   customDrops,
+  entities,
 }: SimplifiedEntityProps) => {
   const theme = useTheme() as any;
 
@@ -40,47 +42,59 @@ export const SimplifiedEntity = ({
     <Box sx={{ minWidth: 220 }}>
       <Stack spacing={theme.designTokens.spacing.itemGap}>
         {/* Header with Icon */}
-        <Stack direction="row" spacing={1.5} alignItems="center">
-          <DataCard
-            sx={{
-              width: 42,
-              height: 42,
-              p: 0,
-              justifyContent: "center",
-              flexShrink: 0,
-            }}
-          >
-            {entity.icon ? (
-              <img
-                src={getPublicUrl(entity.icon)}
-                alt={entity.name}
-                style={{ width: "85%", height: "85%", objectFit: "contain" }}
-              />
-            ) : (
-              <InventoryIcon sx={{ fontSize: 24, color: "text.disabled" }} />
-            )}
-          </DataCard>
-          <Stack spacing={0.25} alignItems="start">
-            <Typography
-              variant="subtitle2"
-              sx={{ color: "primary.main", lineHeight: 1.2, textTransform: "none", fontSize: "0.875rem" }}
-            >
-              {entity.name}
-            </Typography>
-            <Typography
-              variant="caption"
-              sx={{
-                color: "text.secondary",
-                display: "block",
-                fontSize: "0.65rem",
-                fontWeight: 600
-              }}
-            >
-              {(Array.isArray(entity.category) ? entity.category : [entity.category])
-                .map((cat) => !!cat && cat in categoriesMap ? categoriesMap[cat] : `#${cat}`)
-                .join(" ")}
-            </Typography>
-          </Stack>
+        <Stack spacing={1}>
+          {(entities && entities.length > 0 ? entities : [entity]).map((ent, idx) => (
+            <Stack key={idx} direction="row" spacing={1.5} alignItems="center">
+              <DataCard
+                sx={{
+                  width: 42,
+                  height: 42,
+                  p: 0,
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                {ent.icon ? (
+                  <img
+                    src={getPublicUrl(ent.icon)}
+                    alt={ent.name}
+                    style={{ width: "85%", height: "85%", objectFit: "contain" }}
+                  />
+                ) : (
+                  <InventoryIcon sx={{ fontSize: 24, color: "text.disabled" }} />
+                )}
+              </DataCard>
+              <Stack spacing={0.25} alignItems="start" sx={{ flexGrow: 1 }}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{ color: "primary.main", lineHeight: 1.2, textTransform: "none", fontSize: "0.875rem" }}
+                >
+                  {ent.name}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: "text.secondary",
+                    display: "block",
+                    fontSize: "0.65rem",
+                    fontWeight: 600
+                  }}
+                >
+                  {(Array.isArray(ent.category) ? ent.category : [ent.category])
+                    .map((cat) => !!cat && cat in categoriesMap ? categoriesMap[cat] : `#${cat}`)
+                    .join(" ")}
+                </Typography>
+              </Stack>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() => onExpand(ent.id)}
+                sx={{ minWidth: "auto", p: 0.5, borderRadius: 1 }}
+              >
+                <OpenInFullIcon sx={{ fontSize: "16px !important" }} />
+              </Button>
+            </Stack>
+          ))}
         </Stack>
 
         <Divider />
@@ -146,20 +160,7 @@ export const SimplifiedEntity = ({
           </Button>
         )}
 
-        <Button
-          variant="contained"
-          size="small"
-          fullWidth
-          startIcon={<OpenInFullIcon sx={{ fontSize: "14px !important" }} />}
-          onClick={onExpand}
-          sx={{
-            mt: 0.5,
-            fontSize: "0.75rem",
-            py: 0.6,
-          }}
-        >
-          Detalhar
-        </Button>
+        {/* Detalhar was moved next to each entity */}
       </Stack>
     </Box>
   );

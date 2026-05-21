@@ -138,7 +138,14 @@ export const MapDashboard = ({
   const entityCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     mapPoints.forEach((s) => {
-      counts[s.entityId] = (counts[s.entityId] || 0) + 1;
+      if (s.entityId) {
+        counts[s.entityId] = (counts[s.entityId] || 0) + 1;
+      }
+      if (s.spawns) {
+        s.spawns.forEach(sp => {
+          counts[sp.entityId] = (counts[sp.entityId] || 0) + 1;
+        });
+      }
     });
     return counts;
   }, [mapPoints]);
@@ -154,7 +161,11 @@ export const MapDashboard = ({
 
   // Entidades presentes no mapa (através de spawns)
   const mapEntities = useMemo(() => {
-    const entityIds = new Set(mapPoints.map((s) => s.entityId));
+    const entityIds = new Set<string>();
+    mapPoints.forEach(s => {
+      if (s.entityId) entityIds.add(s.entityId);
+      if (s.spawns) s.spawns.forEach(sp => entityIds.add(sp.entityId));
+    });
     return entities.filter((e) => entityIds.has(e.id));
   }, [entities, mapPoints]);
 

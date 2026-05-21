@@ -86,25 +86,31 @@ export const MapFilterDrawer = ({
       // Hierarchical grouping - skip for locations as requested
       if (p.type === "location") return;
 
-      const entity = entityLookup[p.entityId];
-      const category = entity?.category
-        ? Array.isArray(entity.category)
-          ? entity.category[0]
-          : entity.category
-        : "desconhecido";
+      const entityIds = new Set<string>();
+      if (p.entityId) entityIds.add(p.entityId);
+      if (p.spawns) p.spawns.forEach(sp => entityIds.add(sp.entityId));
 
-      if (!categoryMap[category])
-        categoryMap[category] = { count: 0, entities: {} };
-      categoryMap[category].count++;
+      entityIds.forEach(eId => {
+        const entity = entityLookup[eId];
+        const category = entity?.category
+          ? Array.isArray(entity.category)
+            ? entity.category[0]
+            : entity.category
+          : "desconhecido";
 
-      if (!categoryMap[category].entities[p.entityId]) {
-        categoryMap[category].entities[p.entityId] = {
-          count: 0,
-          name: entity?.name || p.entityId,
-          icon: entity?.icon,
-        };
-      }
-      categoryMap[category].entities[p.entityId].count++;
+        if (!categoryMap[category])
+          categoryMap[category] = { count: 0, entities: {} };
+        categoryMap[category].count++;
+
+        if (!categoryMap[category].entities[eId]) {
+          categoryMap[category].entities[eId] = {
+            count: 0,
+            name: entity?.name || eId,
+            icon: entity?.icon,
+          };
+        }
+        categoryMap[category].entities[eId].count++;
+      });
     });
 
     return {

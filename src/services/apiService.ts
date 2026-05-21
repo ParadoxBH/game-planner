@@ -334,9 +334,21 @@ export class ApiService {
     const referencePoints = await referencePointRepository.getAll();
     const entitiesWithDrops = dropsFrom.filter((e) =>
       e.drops?.some((d) => d.itemId === itemId) ||
-      referencePoints.some((p) => p.entityId === e.id && p.customDrops?.some((cd) => cd.itemId === itemId))
+      referencePoints.some((p) => 
+        (p.entityId === e.id && p.customDrops?.some((cd) => cd.itemId === itemId)) ||
+        (p.spawns && p.spawns.some(sp => sp.entityId === e.id && sp.customDrops?.some(cd => cd.itemId === itemId)))
+      )
     ).map((e) => {
-      const customDrops = referencePoints.filter((p) => p.entityId === e.id).flatMap((p) => p.customDrops || []);
+      const customDrops = referencePoints.flatMap((p) => {
+        const drops = [];
+        if (p.entityId === e.id && p.customDrops) drops.push(...p.customDrops);
+        if (p.spawns) {
+          p.spawns.forEach(sp => {
+            if (sp.entityId === e.id && sp.customDrops) drops.push(...sp.customDrops);
+          });
+        }
+        return drops;
+      });
       const combinedDrops = [...(e.drops || []), ...customDrops].filter((v, i, a) => a.findIndex(t => t.itemId === v.itemId) === i);
       return { ...e, drops: combinedDrops };
     });
@@ -381,13 +393,19 @@ export class ApiService {
 
     // Potential Spawns
     const referencePoints = await referencePointRepository.getAll();
-    const explicitSpawns = referencePoints
+    const explicitSpawnsPromises = referencePoints
       .filter(s => s.locationId === entityId || (s.type === "rule" && s.locationId === entityId))
-      .map(async s => ({
-        entity: (await entityRepository.getById(s.entityId)) || (await itemRepository.getById(s.entityId)),
-        chance: s.chance,
-        quantity: s.quantity,
-        conditions: s.conditions
+      .flatMap(s => {
+        const list = [];
+        if (s.entityId) list.push({ entityId: s.entityId, chance: s.chance, quantity: s.quantity, conditions: s.conditions });
+        if (s.spawns) list.push(...s.spawns);
+        return list;
+      })
+      .map(async sp => ({
+        entity: (await entityRepository.getById(sp.entityId)) || (await itemRepository.getById(sp.entityId)),
+        chance: sp.chance,
+        quantity: sp.quantity,
+        conditions: sp.conditions
       }));
 
     // Spatial Spawns
@@ -401,16 +419,23 @@ export class ApiService {
           return isPointInPolygon([pointCoords[0], pointCoords[1]], polygonCoords);
         });
 
-        spatialSpawnsPromises = pointsInside.map(async s => ({
-          entity: (await entityRepository.getById(s.entityId)) || (await itemRepository.getById(s.entityId)),
-          chance: s.chance,
-          quantity: s.quantity,
-          conditions: s.conditions
-        }));
+        spatialSpawnsPromises = pointsInside
+          .flatMap(s => {
+            const list = [];
+            if (s.entityId) list.push({ entityId: s.entityId, chance: s.chance, quantity: s.quantity, conditions: s.conditions });
+            if (s.spawns) list.push(...s.spawns);
+            return list;
+          })
+          .map(async sp => ({
+            entity: (await entityRepository.getById(sp.entityId)) || (await itemRepository.getById(sp.entityId)),
+            chance: sp.chance,
+            quantity: sp.quantity,
+            conditions: sp.conditions
+          }));
       }
     }
 
-    const potentialSpawnsRaw = await Promise.all([...explicitSpawns, ...spatialSpawnsPromises]);
+    const potentialSpawnsRaw = await Promise.all([...explicitSpawnsPromises, ...spatialSpawnsPromises]);
     const potentialSpawns = potentialSpawnsRaw.filter(s => s.entity) as EntityDetails["potentialSpawns"];
     
     // Remove duplicates
@@ -420,12 +445,22 @@ export class ApiService {
     
     const customDropsRaw: { itemId: string; chance: number; quant: number; maxQuant?: number }[] = [];
     entityReferencePoints.forEach((p) => {
-      if (p.customDrops && Array.isArray(p.customDrops)) {
-        p.customDrops.forEach((cd) => {
-          if (!customDropsRaw.some(x => x.itemId === cd.itemId)) {
-            customDropsRaw.push(cd);
-          }
-        });
+      const addDrops = (drops?: any[]) => {
+        if (drops && Array.isArray(drops)) {
+          drops.forEach((cd) => {
+            if (!customDropsRaw.some(x => x.itemId === cd.itemId)) {
+              customDropsRaw.push(cd);
+            }
+          });
+        }
+      };
+
+      if (p.entityId?.toLowerCase() === entityId.toLowerCase()) {
+        addDrops(p.customDrops);
+      }
+      if (p.spawns) {
+        const match = p.spawns.find(s => s.entityId.toLowerCase() === entityId.toLowerCase());
+        if (match) addDrops(match.customDrops);
       }
     });
 

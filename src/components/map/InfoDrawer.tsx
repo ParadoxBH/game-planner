@@ -44,7 +44,16 @@ export const InfoDrawer = ({
     if (currentItem?.type !== "entity") return undefined;
     const baseEntity = entities.find((e) => e.id === currentItem.id);
     if (!baseEntity) return undefined;
-    const customDrops = referencePoints.filter((p) => p.entityId === baseEntity.id).flatMap((p) => p.customDrops || []);
+    const customDrops = referencePoints.flatMap((p) => {
+      const drops = [];
+      if (p.entityId === baseEntity.id && p.customDrops) drops.push(...p.customDrops);
+      if (p.spawns) {
+        p.spawns.forEach(sp => {
+          if (sp.entityId === baseEntity.id && sp.customDrops) drops.push(...sp.customDrops);
+        });
+      }
+      return drops;
+    });
     const combinedDrops = [...(baseEntity.drops || []), ...customDrops].filter((v, i, a) => a.findIndex(t => t.itemId === v.itemId) === i);
     return { ...baseEntity, drops: combinedDrops };
   }, [currentItem, entities, referencePoints]);
@@ -63,9 +72,21 @@ export const InfoDrawer = ({
     if (currentItem?.type !== "item") return [];
     return entities.filter((e) =>
       e.drops?.some((d) => d.itemId === currentItem.id) ||
-      referencePoints.some((p) => p.entityId === e.id && p.customDrops?.some((cd) => cd.itemId === currentItem.id))
+      referencePoints.some((p) => 
+        (p.entityId === e.id && p.customDrops?.some((cd) => cd.itemId === currentItem.id)) ||
+        (p.spawns && p.spawns.some(sp => sp.entityId === e.id && sp.customDrops?.some(cd => cd.itemId === currentItem.id)))
+      )
     ).map((e) => {
-      const customDrops = referencePoints.filter((p) => p.entityId === e.id).flatMap((p) => p.customDrops || []);
+      const customDrops = referencePoints.flatMap((p) => {
+        const drops = [];
+        if (p.entityId === e.id && p.customDrops) drops.push(...p.customDrops);
+        if (p.spawns) {
+          p.spawns.forEach(sp => {
+            if (sp.entityId === e.id && sp.customDrops) drops.push(...sp.customDrops);
+          });
+        }
+        return drops;
+      });
       const combinedDrops = [...(e.drops || []), ...customDrops].filter((v, i, a) => a.findIndex(t => t.itemId === v.itemId) === i);
       return { ...e, drops: combinedDrops };
     });
@@ -82,7 +103,10 @@ export const InfoDrawer = ({
   const mapOccurrences = useMemo(() => {
     if (currentItem?.type !== "entity") return [];
 
-    const relevantPoints = referencePoints.filter((s) => s.entityId === currentItem.id);
+    const relevantPoints = referencePoints.filter((s) => 
+      s.entityId === currentItem.id || 
+      (s.spawns && s.spawns.some(sp => sp.entityId === currentItem.id))
+    );
     const counts: Record<string, number> = {};
 
     relevantPoints.forEach((s) => {

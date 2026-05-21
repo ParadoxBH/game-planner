@@ -204,10 +204,19 @@ export interface GameInfo {
 
 export type ReferencePointsRespawnMode = "once" | "respawn" | "weekly" | "daily";
 
+export interface ReferencePointSpawn {
+  entityId: string;
+  chance?: number;
+  quantity?: string;
+  conditions?: Record<string, any>;
+  customDrops?: EntityDrop[];
+}
+
 export interface ReferencePoints {
   id: string;
   type: "spawn" | "poi" | "location" | "biome" | "rule";
-  entityId: string;
+  entityId?: string;
+  spawns?: ReferencePointSpawn[];
   name?: string;
   description?: string;
   icon?: string;

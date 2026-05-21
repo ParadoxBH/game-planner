@@ -98,9 +98,10 @@ const MapEventsHandler = ({ onClick }: MapEventsHandlerProps) => {
 interface StableMarkerProps {
   point: ReferencePoints;
   entity: any;
+  entities?: any[];
   iconHtml: string;
   size: number;
-  onExpand?: () => void;
+  onExpand?: (id?: string) => void;
   categoriesMap?: Record<string, string>;
   interactive?: boolean;
   isCollected?: boolean;
@@ -111,6 +112,7 @@ const StableMarker = React.memo(
   ({
     point,
     entity,
+    entities,
     iconHtml,
     size,
     onExpand,
@@ -151,10 +153,11 @@ const StableMarker = React.memo(
                   icon: point.icon,
                 }
               }
+              entities={entities}
               position={pos}
               mode={point.mode}
               respawnDelay={point.respawnDelay ?? entity?.respawnDelay}
-              onExpand={onExpand || (() => {})}
+              onExpand={(id) => onExpand ? onExpand(id) : undefined}
               categoriesMap={categoriesMap}
               pointImage={point.image}
               isCollected={isCollected}
@@ -346,12 +349,15 @@ export const MapView = () => {
   );
 
   const entityLookup = useMemo(() => {
-    const lookup: Record<string, Entity> = {};
+    const lookup: Record<string, Entity | Item> = {};
     entities.forEach((e) => {
-      lookup[e.id] = e;
+      lookup[e.id] = e as Entity;
+    });
+    items.forEach((i) => {
+      lookup[i.id] = i as Item;
     });
     return lookup;
-  }, [entities]);
+  }, [entities, items]);
 
   const selectedMap = useMemo(
     () => maps.find((m) => m.id === selectedMapId),
@@ -377,19 +383,25 @@ export const MapView = () => {
     // Se houver categorias padrão, ativa automaticamente as entidades pertencentes a elas
     if (initialCategories.length > 0) {
       pointsOnCurrentMap.forEach((p) => {
-        const entity =
-          entityLookup[p.entityId] || items.find((i) => i.id === p.entityId);
-        const category = entity?.category
-          ? Array.isArray(entity.category)
-            ? entity.category[0]
-            : entity.category
-          : "desconhecido";
+        const entityIds = new Set<string>();
+        if (p.entityId) entityIds.add(p.entityId);
+        if (p.spawns) p.spawns.forEach(s => entityIds.add(s.entityId));
 
-        if (initialCategories.includes(category)) {
-          if (!initialEntities.includes(p.entityId)) {
-            initialEntities.push(p.entityId);
+        entityIds.forEach(eId => {
+          const entity = entityLookup[eId] || items.find((i) => i.id === eId);
+          const categories = entity?.category
+            ? Array.isArray(entity.category)
+              ? entity.category
+              : [entity.category]
+            : ["desconhecido"];
+
+          const matchesInitialCategory = categories.some(cat => initialCategories.includes(cat));
+          if (matchesInitialCategory) {
+            if (!initialEntities.includes(eId)) {
+              initialEntities.push(eId);
+            }
           }
-        }
+        });
       });
     }
 
@@ -715,12 +727,14 @@ export const MapView = () => {
 
               {pointsOnCurrentMap
                 .filter((point) => {
-                  const entity =
-                    entityLookup[point.entityId] ||
-                    items.find((i) => i.id === point.entityId);
+                  const pointEntityIds = new Set<string>();
+                  if (point.entityId) pointEntityIds.add(point.entityId);
+                  if (point.spawns) point.spawns.forEach(s => pointEntityIds.add(s.entityId));
+
+                  const pointEntities = Array.from(pointEntityIds).map(id => entityLookup[id] || items.find(i => i.id === id)).filter(Boolean);
 
                   if (hideCollected && collectedPoints[point.id]) {
-                    const respawnDelay = point.respawnDelay ?? entity?.respawnDelay;
+                    const respawnDelay = point.respawnDelay ?? (pointEntities.length > 0 ? pointEntities[0]?.respawnDelay : undefined);
                     const mode = point.mode || "respawn";
                     const collectionTime = collectedPoints[point.id];
 
@@ -747,14 +761,21 @@ export const MapView = () => {
                   
                   // Locations are only filtered by type, skipping entity/category checks
                   if (point.type !== "location") {
-                    if (!visibleEntities.includes(point.entityId)) return false;
-
-                    const category = entity?.category
-                      ? Array.isArray(entity.category)
-                        ? entity.category[0]
-                        : entity.category
-                      : "desconhecido";
-                    if (!visibleCategories.includes(category)) return false;
+                    const hasVisible = Array.from(pointEntityIds).some(eId => {
+                      if (!visibleEntities.includes(eId)) return false;
+                      const entity = entityLookup[eId];
+                      const categories = entity?.category
+                        ? Array.isArray(entity.category)
+                          ? entity.category
+                          : [entity.category]
+                        : ["desconhecido"];
+                      
+                      const hasVisibleCategory = categories.some(cat => visibleCategories.includes(cat));
+                      if (!hasVisibleCategory) return false;
+                      return true;
+                    });
+                    
+                    if (!hasVisible) return false;
                   }
 
                   // 3. Event Filter
@@ -808,9 +829,23 @@ export const MapView = () => {
                     );
                   }
 
-                  const entity =
-                    entityLookup[point.entityId] ||
-                    items.find((i) => i.id === point.entityId);
+                  const pointEntityIds = new Set<string>();
+                  if (point.entityId) pointEntityIds.add(point.entityId);
+                  if (point.spawns) point.spawns.forEach(s => pointEntityIds.add(s.entityId));
+
+                  const pointEntities = Array.from(pointEntityIds).map(id => entityLookup[id] || items.find(i => i.id === id)).filter(Boolean);
+                  
+                  const visiblePointEntities = pointEntities.filter(ent => {
+                    if (!visibleEntities.includes(ent.id)) return false;
+                    const categories = ent.category
+                      ? Array.isArray(ent.category)
+                        ? ent.category
+                        : [ent.category]
+                      : ["desconhecido"];
+                    return categories.some(cat => visibleCategories.includes(cat));
+                  });
+
+                  const entity = visiblePointEntities.length > 0 ? visiblePointEntities[0] : (pointEntities.length > 0 ? pointEntities[0] : undefined);
 
                   const isCollectedInState = !!collectedPoints[point.id];
                   const collectionTime = collectedPoints[point.id];
@@ -868,10 +903,7 @@ export const MapView = () => {
                       key={point.id}
                       point={point}
                       size={sizeMarker}
-                      entity={
-                        entityLookup[point.entityId] ||
-                        items.find((i) => i.id === point.entityId)
-                      }
+                      entity={entity}
                       iconHtml={markerTemplate
                         .replaceAll(
                           "{{ICON_URL}}",
@@ -887,9 +919,12 @@ export const MapView = () => {
                         .replaceAll("{{BORDER_WIDTH}}", borderWidth.toString())
                         .replaceAll("{{SIZE}}", sizeMarker.toString())
                         .replaceAll("{{IMAGE_STYLE}}", isCollected ? "opacity: 0.4; filter: grayscale(100%);" : "")}
-                      onExpand={() =>
-                        handlePush({ type: "entity", id: point.entityId })
-                      }
+                      onExpand={() => {
+                        const targetId = point.entityId || (point.spawns && point.spawns.length > 0 ? point.spawns[0].entityId : undefined);
+                        if (targetId) {
+                          handlePush({ type: "entity", id: targetId });
+                        }
+                      }}
                       categoriesMap={categoriesMap}
                       interactive={!activeTool && point.type !== "location"}
                       isCollected={isCollected}
