@@ -13,7 +13,7 @@
   {
     "id": "point_1778127893725",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -27,7 +27,7 @@
     "id": "point_1778128116554",
     "event": "meteor_shower",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "geom": {
       "type": "Point",
       "coordinates": "POINT(570.3347454318438 50.759650732249334)"
@@ -40,7 +40,7 @@
     "id": "point_1778128229822",
     "event": "meteor_shower",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "geom": {
       "type": "Point",
       "coordinates": "POINT(502.76381289614085 44.58522525431145)"
@@ -53,7 +53,7 @@
     "id": "point_1778128309191",
     "event": "meteor_shower",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "geom": {
       "type": "Point",
       "coordinates": "POINT(484.61619101512355 169.2314395901818)"
@@ -66,7 +66,7 @@
     "id": "point_1778128479991",
     "event": "meteor_shower",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "geom": {
       "type": "Point",
       "coordinates": "POINT(374.9582205000401 164.21471888935724)"
@@ -79,7 +79,7 @@
     "id": "point_1778128583045",
     "event": "meteor_shower",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "geom": {
       "type": "Point",
       "coordinates": "POINT(521.6836740061378 -145.66425978464846)"
@@ -92,7 +92,7 @@
     "id": "point_1778128771058",
     "event": "meteor_shower",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "geom": {
       "type": "Point",
       "coordinates": "POINT(359.5195805344393 -238.7025749248268)"
@@ -105,7 +105,7 @@
     "id": "point_1778128871420",
     "event": "meteor_shower",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "geom": {
       "type": "Point",
       "coordinates": "POINT(459.9106803017691 -358.3320685598725)"
@@ -118,7 +118,7 @@
     "id": "point_1778129162722",
     "event": "meteor_shower",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "geom": {
       "type": "Point",
       "coordinates": "POINT(642.1591383409219 239.04359643061406)"
@@ -131,7 +131,7 @@
     "id": "point_1778816414928",
     "event": "meteor_shower",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "geom": {
       "type": "Point",
       "coordinates": "POINT(447.5106510600529 -212.12090966527012)"
@@ -144,7 +144,7 @@
     "id": "point_1778816703681",
     "event": "meteor_shower",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "geom": {
       "type": "Point",
       "coordinates": "POINT(503.4979951610639 -285.442212215782)"
@@ -157,7 +157,7 @@
     "id": "point_1778816899531",
     "event": "meteor_shower",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "geom": {
       "type": "Point",
       "coordinates": "POINT(537.477314089578 -33.76742459631517)"
@@ -170,7 +170,7 @@
     "id": "point_177881689952231",
     "event": "meteor_shower",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "geom": {
       "type": "Point",
       "coordinates": "POINT(731.3093605634227 305.0541735055241)"
@@ -183,7 +183,7 @@
     "id": "point_17788171921225",
     "event": "meteor_shower",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "geom": {
       "type": "Point",
       "coordinates": "POINT(447.51144391347077 312.77220535294634)"
@@ -196,7 +196,7 @@
     "id": "point_1778817292151",
     "event": "meteor_shower",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "geom": {
       "type": "Point",
       "coordinates": "POINT(371.0597602445041 299.2656496199573)"
@@ -209,7 +209,7 @@
     "id": "point_1778817478215",
     "event": "meteor_shower",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_amarelo", "chance": 1},{"entityId": "meteoro_rosa", "chance": 1}],
     "geom": {
       "type": "Point",
       "coordinates": "POINT(426.27486511653575 244.85352509562998)"
