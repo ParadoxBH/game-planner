@@ -37,6 +37,8 @@ import { getPublicUrl } from "../../utils/pathUtils";
 import { usePlatform } from "../../hooks/usePlatform";
 import { DetainItem } from "../common/DetainItem";
 import { useEventFilter } from "../../context/EventFilterContext";
+import PlaceIcon from '@mui/icons-material/Place';
+import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 
 interface MapDashboardProps {
   gameId: string;
@@ -63,7 +65,9 @@ export const MapDashboard = ({
   const [shops, setShops] = useState<Shop[]>([]);
   const [maps, setMaps] = useState<MapMetadata[]>([]);
   const [items, setItems] = useState<Item[]>([]);
-  const [categoriesMap, setCategoriesMap] = useState<Record<string, string>>({});
+  const [categoriesMap, setCategoriesMap] = useState<Record<string, string>>(
+    {},
+  );
   const [dataLoading, setDataLoading] = useState(true);
   const { isMobile } = usePlatform();
 
@@ -84,20 +88,29 @@ export const MapDashboard = ({
       itemRepository.getAll(),
       categoryRepository.getAll(),
     ])
-      .then(([allEntities, allRefPoints, allShops, allMaps, allItems, allCategories]) => {
-        if (!isMounted) return;
-        setEntities(allEntities);
-        setReferencePoints(allRefPoints);
-        setShops(allShops);
-        setMaps(allMaps);
-        setItems(allItems);
-        
-        const catMap: Record<string, string> = {};
-        allCategories.forEach(c => catMap[c.id] = c.name);
-        setCategoriesMap(catMap);
-        
-        setDataLoading(false);
-      })
+      .then(
+        ([
+          allEntities,
+          allRefPoints,
+          allShops,
+          allMaps,
+          allItems,
+          allCategories,
+        ]) => {
+          if (!isMounted) return;
+          setEntities(allEntities);
+          setReferencePoints(allRefPoints);
+          setShops(allShops);
+          setMaps(allMaps);
+          setItems(allItems);
+
+          const catMap: Record<string, string> = {};
+          allCategories.forEach((c) => (catMap[c.id] = c.name));
+          setCategoriesMap(catMap);
+
+          setDataLoading(false);
+        },
+      )
       .catch((err) => {
         console.error("Error fetching map dashboard data:", err);
         if (isMounted) setDataLoading(false);
@@ -115,10 +128,10 @@ export const MapDashboard = ({
   }, [items]);
 
   const filteredReferencePoints = useMemo(() => {
-    return referencePoints.filter(s => {
+    return referencePoints.filter((s) => {
       if (s.event) {
         const eventArray = Array.isArray(s.event) ? s.event : [s.event];
-        return eventArray.some(e => activeEventIds.includes(e));
+        return eventArray.some((e) => activeEventIds.includes(e));
       }
       return true;
     });
@@ -131,7 +144,9 @@ export const MapDashboard = ({
 
   // Filtro de Pontos deste mapa
   const mapPoints = useMemo(() => {
-    return filteredReferencePoints.filter((s) => !s.mapId || s.mapId === selectedMapId);
+    return filteredReferencePoints.filter(
+      (s) => !s.mapId || s.mapId === selectedMapId,
+    );
   }, [filteredReferencePoints, selectedMapId]);
 
   // Contagem de Ocorrências por Entidade
@@ -142,7 +157,7 @@ export const MapDashboard = ({
         counts[s.entityId] = (counts[s.entityId] || 0) + 1;
       }
       if (s.spawns) {
-        s.spawns.forEach(sp => {
+        s.spawns.forEach((sp) => {
           counts[sp.entityId] = (counts[sp.entityId] || 0) + 1;
         });
       }
@@ -162,9 +177,9 @@ export const MapDashboard = ({
   // Entidades presentes no mapa (através de spawns)
   const mapEntities = useMemo(() => {
     const entityIds = new Set<string>();
-    mapPoints.forEach(s => {
+    mapPoints.forEach((s) => {
       if (s.entityId) entityIds.add(s.entityId);
-      if (s.spawns) s.spawns.forEach(sp => entityIds.add(sp.entityId));
+      if (s.spawns) s.spawns.forEach((sp) => entityIds.add(sp.entityId));
     });
     return entities.filter((e) => entityIds.has(e.id));
   }, [entities, mapPoints]);
@@ -234,11 +249,10 @@ export const MapDashboard = ({
       }).length,
       shops: mapShops.length,
       regions: regions.length,
+      total: mapPoints.length + mapEntities.length + mapShops.length + regions.length,
     }),
     [mapPoints, mapEntities, mapShops, regions],
   );
-
-  const hasRegions = regions.length > 0;
 
   if (dbLoading || dataLoading) {
     return (
@@ -260,9 +274,7 @@ export const MapDashboard = ({
     <StyledContainer
       title={currentMap?.name || "Dashboard"}
       label={
-        hasRegions
-          ? "Exploração detalhada por zonas geográficas e biomas."
-          : "Visão analítica completa de todos os recursos, NPCs e lojas mapeadas."
+        "Visão analítica completa de todos os recursos, NPCs e lojas mapeadas."
       }
       actionsEnd={
         availableViews.includes("map") && (
@@ -312,8 +324,20 @@ export const MapDashboard = ({
               icon: <StorefrontIcon />,
               color: "warning.main",
             },
+            {
+              label: "Pontos de Interesse",
+              value: stats.regions,
+              icon: <PlaceIcon />,
+              color: "secondary.main",
+            },
+            {
+              label: "Total",
+              value: stats.total,
+              icon: <AllInclusiveIcon />,
+              color: "error.main",
+            },
           ].map((stat, i) => (
-            <Grid size={{ xs: 6, md: 3 }} key={i}>
+            <Grid size={{ xs: 4, md: 2 }} key={i}>
               <DataCard
                 sx={{ p: dtSpacing.cardPadding, borderRadius: dtRadius }}
               >
@@ -355,12 +379,181 @@ export const MapDashboard = ({
           ))}
         </Grid>
         {/* Conteúdo Adaptativo */}
-        {hasRegions ? (
-          <Grid container spacing={dtSpacing.itemGap}>
-            {regions
-              .filter((r) => !r.parentId)
-              .map((region) => (
-                <Grid size={{ xs: 12, md: 6, lg: 4 }} key={region.id}>
+        {Object.entries(globalCategories).map(([catName, catItems]) => (
+          <DetainItem
+            size={isMobile ? undefined : 6}
+            startIcon={
+              <Avatar
+                sx={{
+                  bgcolor: "rgba(255,255,255,0.03)",
+                  width: 32,
+                  height: 32,
+                  border: 1,
+                  borderColor: "divider",
+                  color: "primary.main",
+                }}
+              >
+                {catName.includes("Loja") ? (
+                  <StorefrontIcon sx={{ fontSize: 18 }} />
+                ) : (
+                  <InventoryIcon sx={{ fontSize: 18 }} />
+                )}
+              </Avatar>
+            }
+            label={catName}
+            count={catItems.length}
+          >
+            <Grid container spacing={dtSpacing.itemGap}>
+              {catItems.map((entity) => {
+                const count = entityCounts[entity.id];
+                const isShop = catName.includes("Loja");
+
+                const handleNavigate = (e?: React.MouseEvent) => {
+                  if (e) e.stopPropagation();
+                  if (isShop) {
+                    navigate(`/game/${gameId}/shops/list/${entity.id}`);
+                  } else if (
+                    entity.category === "npc" ||
+                    (Array.isArray(entity.category) &&
+                      entity.category.includes("npc"))
+                  ) {
+                    navigate(`/game/${gameId}/entity/view/${entity.id}`);
+                  } else {
+                    const isCommonEntity = entities.some(
+                      (ent) => ent.id === entity.id,
+                    );
+                    if (isCommonEntity) {
+                      navigate(`/game/${gameId}/entity/view/${entity.id}`);
+                    } else {
+                      navigate(`/game/${gameId}/item/view/${entity.id}`);
+                    }
+                  }
+                };
+
+                return (
+                  <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={entity.id}>
+                    <DataCard
+                      hoverable
+                      onClick={() => handleNavigate()}
+                      sx={{
+                        p: dtSpacing.cardPadding,
+                        overflow: "hidden",
+                        borderRadius: dtRadius,
+                      }}
+                    >
+                      {/* Background Icon Effect */}
+                      <Stack
+                        sx={{
+                          position: "absolute",
+                          right: -10,
+                          bottom: -10,
+                          width: 80,
+                          height: 80,
+                          opacity: 0.04,
+                          filter: "grayscale(1) brightness(1.5)",
+                          zIndex: 0,
+                          pointerEvents: "none",
+                          backgroundImage: `url(${getPublicUrl(entity.icon || entity.image)})`,
+                          backgroundSize: "contain",
+                          backgroundRepeat: "no-repeat",
+                        }}
+                      />
+
+                      <Stack
+                        direction="row"
+                        spacing={1.5}
+                        alignItems="center"
+                        sx={{ zIndex: 1, width: "100%" }}
+                      >
+                        <Avatar
+                          src={getPublicUrl(entity.image || entity.icon!)}
+                          variant="rounded"
+                          sx={{
+                            width: 40,
+                            height: 40,
+                            bgcolor: "rgba(255,255,255,0.03)",
+                            border: 1,
+                            borderColor: "divider",
+                          }}
+                        />
+                        <Stack sx={{ minWidth: 0, flex: 1 }}>
+                          <Typography
+                            variant="subtitle2"
+                            noWrap
+                            fontWeight={700}
+                            textAlign={"left"}
+                            sx={{ lineHeight: 1.2 }}
+                          >
+                            {entity.name}
+                          </Typography>
+                          <Stack
+                            direction="row"
+                            spacing={1}
+                            alignItems="center"
+                          >
+                            <Typography
+                              variant="caption"
+                              sx={{ opacity: 0.5, fontWeight: 500 }}
+                            >
+                              {isShop
+                                ? "Disponível"
+                                : (() => {
+                                    const rawCat = Array.isArray(
+                                      entity.category,
+                                    )
+                                      ? entity.category[0]
+                                      : entity.category;
+                                    return (
+                                      categoriesMap[rawCat || ""] ||
+                                      rawCat ||
+                                      "Geral"
+                                    );
+                                  })()}
+                            </Typography>
+                            {count > 1 && (
+                              <Typography
+                                variant="caption"
+                                sx={{
+                                  color: "primary.main",
+                                  fontWeight: 800,
+                                }}
+                              >
+                                x{count}
+                              </Typography>
+                            )}
+                          </Stack>
+                        </Stack>
+                      </Stack>
+                    </DataCard>
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </DetainItem>
+        ))}
+        {regions.length > 0 && (
+          <DetainItem
+            size={isMobile ? undefined : 6}
+            startIcon={
+              <Avatar
+                sx={{
+                  bgcolor: "rgba(255,255,255,0.03)",
+                  width: 32,
+                  height: 32,
+                  border: 1,
+                  borderColor: "divider",
+                  color: "primary.main",
+                }}
+              >
+                <PlaceIcon sx={{ fontSize: 18 }} />
+              </Avatar>
+            }
+            label={"Pontos de Interesse"}
+            count={regions.length}
+          >
+            <Grid container spacing={dtSpacing.itemGap}>
+              {regions.map((region) => (
+                <Grid size={isMobile ? 6 : 4} key={region.id}>
                   {(() => {
                     const rawBg = region.image || region.thumb || region.icon;
                     const bgImage = getPublicUrl(rawBg);
@@ -545,157 +738,8 @@ export const MapDashboard = ({
                   })()}
                 </Grid>
               ))}
-          </Grid>
-        ) : (
-          <>
-            {Object.entries(globalCategories).map(([catName, catItems]) => (
-              <DetainItem
-                size={isMobile ? undefined : 6}
-                startIcon={
-                  <Avatar
-                    sx={{
-                      bgcolor: "rgba(255,255,255,0.03)",
-                      width: 32,
-                      height: 32,
-                      border: 1,
-                      borderColor: "divider",
-                      color: "primary.main",
-                    }}
-                  >
-                    {catName.includes("Loja") ? (
-                      <StorefrontIcon sx={{ fontSize: 18 }} />
-                    ) : (
-                      <InventoryIcon sx={{ fontSize: 18 }} />
-                    )}
-                  </Avatar>
-                }
-                label={catName}
-                count={catItems.length}
-              >
-                <Grid container spacing={dtSpacing.itemGap}>
-                  {catItems.map((entity) => {
-                    const count = entityCounts[entity.id];
-                    const isShop = catName.includes("Loja");
-
-                    const handleNavigate = (e?: React.MouseEvent) => {
-                      if (e) e.stopPropagation();
-                      if (isShop) {
-                        navigate(`/game/${gameId}/shops/list/${entity.id}`);
-                      } else if (
-                        entity.category === "npc" ||
-                        (Array.isArray(entity.category) &&
-                          entity.category.includes("npc"))
-                      ) {
-                        navigate(`/game/${gameId}/entity/view/${entity.id}`);
-                      } else {
-                        const isCommonEntity = entities.some(
-                          (ent) => ent.id === entity.id,
-                        );
-                        if (isCommonEntity) {
-                          navigate(`/game/${gameId}/entity/view/${entity.id}`);
-                        } else {
-                          navigate(`/game/${gameId}/item/view/${entity.id}`);
-                        }
-                      }
-                    };
-
-                    return (
-                      <Grid
-                        size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
-                        key={entity.id}
-                      >
-                        <DataCard
-                          hoverable
-                          onClick={() => handleNavigate()}
-                          sx={{
-                            p: dtSpacing.cardPadding,
-                            overflow: "hidden",
-                            borderRadius: dtRadius,
-                          }}
-                        >
-                          {/* Background Icon Effect */}
-                          <Stack
-                            sx={{
-                              position: "absolute",
-                              right: -10,
-                              bottom: -10,
-                              width: 80,
-                              height: 80,
-                              opacity: 0.04,
-                              filter: "grayscale(1) brightness(1.5)",
-                              zIndex: 0,
-                              pointerEvents: "none",
-                              backgroundImage: `url(${getPublicUrl(entity.icon || entity.image)})`,
-                              backgroundSize: "contain",
-                              backgroundRepeat: "no-repeat",
-                            }}
-                          />
-
-                          <Stack
-                            direction="row"
-                            spacing={1.5}
-                            alignItems="center"
-                            sx={{ zIndex: 1, width: "100%" }}
-                          >
-                            <Avatar
-                              src={getPublicUrl(entity.image || entity.icon!)}
-                              variant="rounded"
-                              sx={{
-                                width: 40,
-                                height: 40,
-                                bgcolor: "rgba(255,255,255,0.03)",
-                                border: 1,
-                                borderColor: "divider",
-                              }}
-                            />
-                            <Stack sx={{ minWidth: 0, flex: 1 }}>
-                              <Typography
-                                variant="subtitle2"
-                                noWrap
-                                fontWeight={700}
-                                textAlign={"left"}
-                                sx={{ lineHeight: 1.2 }}
-                              >
-                                {entity.name}
-                              </Typography>
-                              <Stack
-                                direction="row"
-                                spacing={1}
-                                alignItems="center"
-                              >
-                                <Typography
-                                  variant="caption"
-                                  sx={{ opacity: 0.5, fontWeight: 500 }}
-                                >
-                                  {isShop
-                                    ? "Disponível"
-                                    : (() => {
-                                        const rawCat = Array.isArray(entity.category) ? entity.category[0] : entity.category;
-                                        return categoriesMap[rawCat || ""] || rawCat || "Geral";
-                                      })()}
-                                </Typography>
-                                {count > 1 && (
-                                  <Typography
-                                    variant="caption"
-                                    sx={{
-                                      color: "primary.main",
-                                      fontWeight: 800,
-                                    }}
-                                  >
-                                    x{count}
-                                  </Typography>
-                                )}
-                              </Stack>
-                            </Stack>
-                          </Stack>
-                        </DataCard>
-                      </Grid>
-                    );
-                  })}
-                </Grid>
-              </DetainItem>
-            ))}
-          </>
+            </Grid>
+          </DetainItem>
         )}
       </Stack>
     </StyledContainer>
