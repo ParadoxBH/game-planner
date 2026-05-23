@@ -1,0 +1,142 @@
+﻿[
+  {
+    "id": "flor_blocos_vermelho",
+    "name": "Flor de Blocos Vermelho",
+    "category": [
+      "agriculture",
+      "flower",
+      "flor_blocos"
+    ],
+    "events": [
+      "recanto_mosaico"
+    ],
+    "icon": "/img/heartopia/events/recanto_mosaico/flowers/flor_blocos_vermelho.png",
+    "level": 1
+  },
+  {
+    "id": "flor_blocos_amarelo",
+    "name": "Flor de Blocos Amarelo",
+    "category": [
+      "agriculture",
+      "flower",
+      "flor_blocos"
+    ],
+    "events": [
+      "recanto_mosaico"
+    ],
+    "icon": "/img/heartopia/events/recanto_mosaico/flowers/flor_blocos_amarelo.png",
+    "level": 1
+  },
+  {
+    "id": "flor_blocos_branco",
+    "name": "Flor de Blocos Branco",
+    "category": [
+      "agriculture",
+      "flower",
+      "flor_blocos"
+    ],
+    "events": [
+      "recanto_mosaico"
+    ],
+    "icon": "/img/heartopia/events/recanto_mosaico/flowers/flor_blocos_branco.png",
+    "level": 1
+  },
+  {
+    "id": "flor_blocos_laranja",
+    "name": "Flor de Blocos Laranja",
+    "category": [
+      "agriculture",
+      "flower",
+      "flor_blocos"
+    ],
+    "events": [
+      "recanto_mosaico"
+    ],
+    "icon": "/img/heartopia/events/recanto_mosaico/flowers/flor_blocos_laranja.png",
+    "level": 2
+  },
+  {
+    "id": "flor_blocos_rosa",
+    "name": "Flor de Blocos Rosa",
+    "category": [
+      "agriculture",
+      "flower",
+      "flor_blocos"
+    ],
+    "events": [
+      "recanto_mosaico"
+    ],
+    "icon": "/img/heartopia/events/recanto_mosaico/flowers/flor_blocos_rosa.png",
+    "level": 2
+  },
+  {
+    "id": "flor_blocos_preto",
+    "name": "Flor de Blocos Preto",
+    "category": [
+      "agriculture",
+      "flower",
+      "flor_blocos"
+    ],
+    "events": [
+      "recanto_mosaico"
+    ],
+    "icon": "/img/heartopia/events/recanto_mosaico/flowers/flor_blocos_preto.png",
+    "level": 3
+  },
+  {
+    "id": "flor_blocos_pessego",
+    "name": "Flor de Blocos Pessego",
+    "category": [
+      "agriculture",
+      "flower",
+      "flor_blocos"
+    ],
+    "events": [
+      "recanto_mosaico"
+    ],
+    "icon": "/img/heartopia/events/recanto_mosaico/flowers/flor_blocos_pessego.png",
+    "level": 3
+  },
+  {
+    "id": "flor_blocos_azul",
+    "name": "Flor de Blocos Azul",
+    "category": [
+      "agriculture",
+      "flower",
+      "flor_blocos"
+    ],
+    "events": [
+      "recanto_mosaico"
+    ],
+    "icon": "/img/heartopia/events/recanto_mosaico/flowers/flor_blocos_azul.png",
+    "level": 4
+  },
+  {
+    "id": "flor_blocos_roxo",
+    "name": "Flor de Blocos Roxo",
+    "category": [
+      "agriculture",
+      "flower",
+      "flor_blocos"
+    ],
+    "events": [
+      "recanto_mosaico"
+    ],
+    "icon": "/img/heartopia/events/recanto_mosaico/flowers/flor_blocos_roxo.png",
+    "level": 4
+  },
+  {
+    "id": "flor_blocos_luminoso",
+    "name": "Flor de Blocos Luminoso",
+    "category": [
+      "agriculture",
+      "flower",
+      "flor_blocos"
+    ],
+    "events": [
+      "recanto_mosaico"
+    ],
+    "icon": "/img/heartopia/events/recanto_mosaico/flowers/flor_blocos_luminoso.png",
+    "level": 5
+  }
+]
