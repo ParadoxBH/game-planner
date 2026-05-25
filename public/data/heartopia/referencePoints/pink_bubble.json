@@ -91,6 +91,7 @@
             "type": "Point",
             "coordinates": "POINT(-91.872880859375 -379.072138671875)"
         },
+        "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_33.jpg",
         "mapId": "main",
         "mode": "weekly"
     },
@@ -523,6 +524,18 @@
         "coordinates": "POINT(200.47660583691092 38.45549224426788)"
         },
         "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_31.jpg",
+        "mapId": "main",
+        "mode": "weekly"
+    },
+    {
+        "id": "point_1779728979925",
+        "type": "spawn",
+        "entityId": "pink_bubble",
+        "geom": {
+        "type": "Point",
+        "coordinates": "POINT(-33.52795714565039 -277.3290876043997)"
+        },
+        "image": "/img/heartopia/referencePoints/pink_bubble/pink_bubble_32.jpg",
         "mapId": "main",
         "mode": "weekly"
     }
