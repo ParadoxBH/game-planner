@@ -133,7 +133,6 @@ export function GlobalEventFilter() {
         PaperProps={{
           sx: {
             width: 320,
-            maxHeight: 500,
             backgroundColor: "#1a1a1a",
             border: "1px solid rgba(255,255,255,0.1)",
             boxShadow: "0 10px 40px rgba(0,0,0,0.5)",
@@ -147,156 +146,158 @@ export function GlobalEventFilter() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <Box sx={{ p: 2, pb: 1 }}>
-          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
-            <EventAvailable color="primary" fontSize="small" />
-            <Typography variant="subtitle1" fontWeight={700}>Filtro de Eventos</Typography>
-          </Stack>
-          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
-            Itens com evento só aparecem se o evento estiver selecionado. Itens sem evento sempre aparecem.
-          </Typography>
-          <Stack direction="row" spacing={1}>
-            <Button 
-              size="small" 
-              startIcon={<DoneAll />} 
-              onClick={handleSelectAll}
-              sx={{ textTransform: 'none', fontSize: '0.75rem' }}
-            >
-              Todos
-            </Button>
-            <Button 
-              size="small" 
-              startIcon={<ClearAll />} 
-              onClick={clearFilters}
-              color="inherit"
-              sx={{ textTransform: 'none', fontSize: '0.75rem' }}
-            >
-              Limpar
-            </Button>
-            <Button 
-              size="small" 
-              startIcon={<History />} 
-              onClick={handleRestore}
-              color="info"
-              sx={{ textTransform: 'none', fontSize: '0.75rem' }}
-            >
-              Restaurar
-            </Button>
-          </Stack>
-        </Box>
-        
-        <Divider sx={{ opacity: 0.1 }} />
-        
-        <Box sx={{ maxHeight: 350, overflow: 'auto' }}>
-          {Object.entries(
-            events
-              .sort((a, b) => {
-                // Sort by: 1. isLive, 2. End date (closest first), 3. Name
-                const aLive = checkEventLive(a);
-                const bLive = checkEventLive(b);
-                if (aLive !== bLive) return aLive ? -1 : 1;
+        <Stack overflow="hidden" maxHeight={500}>
+          <Box sx={{ px: 2, py: 1 }}>
+            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+              <EventAvailable color="primary" fontSize="small" />
+              <Typography variant="subtitle1" fontWeight={700}>Filtro de Eventos</Typography>
+            </Stack>
+            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
+              Itens com evento só aparecem se o evento estiver selecionado. Itens sem evento sempre aparecem.
+            </Typography>
+            <Stack direction="row" spacing={1}>
+              <Button 
+                size="small" 
+                startIcon={<DoneAll />} 
+                onClick={handleSelectAll}
+                sx={{ textTransform: 'none', fontSize: '0.75rem' }}
+              >
+                Todos
+              </Button>
+              <Button 
+                size="small" 
+                startIcon={<ClearAll />} 
+                onClick={clearFilters}
+                color="inherit"
+                sx={{ textTransform: 'none', fontSize: '0.75rem' }}
+              >
+                Limpar
+              </Button>
+              <Button 
+                size="small" 
+                startIcon={<History />} 
+                onClick={handleRestore}
+                color="info"
+                sx={{ textTransform: 'none', fontSize: '0.75rem' }}
+              >
+                Restaurar
+              </Button>
+            </Stack>
+          </Box>
+          
+          <Divider sx={{ opacity: 0.1 }} />
+          
+          <Box sx={{ maxHeight: 350, overflow: 'auto' }}>
+            {Object.entries(
+              events
+                .sort((a, b) => {
+                  // Sort by: 1. isLive, 2. End date (closest first), 3. Name
+                  const aLive = checkEventLive(a);
+                  const bLive = checkEventLive(b);
+                  if (aLive !== bLive) return aLive ? -1 : 1;
 
-                const aEnd = parseDate(a.period?.end)?.getTime() || Infinity;
-                const bEnd = parseDate(b.period?.end)?.getTime() || Infinity;
-                if (aEnd !== bEnd) return aEnd - bEnd;
+                  const aEnd = parseDate(a.period?.end)?.getTime() || Infinity;
+                  const bEnd = parseDate(b.period?.end)?.getTime() || Infinity;
+                  if (aEnd !== bEnd) return aEnd - bEnd;
 
-                return a.name.localeCompare(b.name);
-              })
-              .reduce((acc, event) => {
-                const type = event.type || "event";
-                if (!acc[type]) acc[type] = [];
-                acc[type].push(event);
-                return acc;
-              }, {} as Record<string, GameEvent[]>)
-          ).map(([type, groupEvents]) => (
-            <Box key={type}>
-              <Box sx={{ 
-                px: 2, 
-                py: 0.5, 
-                backgroundColor: "rgba(255,255,255,0.03)", 
-                borderY: "1px solid rgba(255,255,255,0.05)" 
-              }}>
-                <Typography variant="overline" sx={{ fontWeight: 800, color: "primary.main", letterSpacing: 1.5 }}>
-                  {type}
-                </Typography>
-              </Box>
-              {groupEvents.map((event: GameEvent) => {
-                const isLive = checkEventLive(event);
-                const timeRemaining = getTimeRemaining(event);
-                
-                return (
-                  <Tooltip 
-                    key={event.id} 
-                    title={
-                      <Box sx={{ p: 1 }}>
-                        <Typography variant="caption" fontWeight={700} sx={{ display: 'block', mb: 0.5 }}>
-                          {event.name} {isLive ? "(Ao Vivo)" : "(Inativo)"}
-                        </Typography>
-                        <Typography variant="caption" sx={{ display: 'block', mb: 1 }}>
-                          {event.description}
-                        </Typography>
-                        {timeRemaining && (
-                          <>
-                            <Divider sx={{ my: 1, borderColor: "rgba(255,255,255,0.1)" }} />
-                            <Typography variant="caption" color="secondary.main" sx={{ fontWeight: 700 }}>
-                              Status: {timeRemaining}
-                            </Typography>
-                          </>
-                        )}
-                        <Typography variant="caption" color="primary.main" sx={{ display: 'block', mt: 0.5 }}>
-                          {event.period ? `Período: ${event.period.start || "?"} até ${event.period.end || "?"}` : "Evento Ocasional"}
-                        </Typography>
-                      </Box>
-                    }
-                    placement="right"
-                    arrow
-                  >
-                    <MenuItem onClick={() => toggleEvent(event.id)}>
-                      <Checkbox
-                        checked={activeEventIds.includes(event.id)}
-                        size="small"
-                        sx={{ p: 0.5, mr: 1 }}
-                      />
-                      <ListItemText 
-                        primary={
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            {event.name}
-                            <Chip 
-                              label={isLive ? "Live" : "Off"} 
-                              size="small" 
-                              color={isLive ? "success" : "default"}
-                              variant="outlined"
-                              sx={{ 
-                                height: 16, 
-                                fontSize: '10px !important', 
-                                px: 0, 
-                                opacity: isLive ? 1 : 0.5,
-                                borderColor: isLive ? 'success.main' : 'rgba(255,255,255,0.2)'
-                              }}
-                            />
-                          </Box>
-                        } 
-                        primaryTypographyProps={{ 
-                          variant: 'body2', 
-                          fontWeight: activeEventIds.includes(event.id) ? 700 : 400 
-                        }} 
-                        secondary={timeRemaining || (event.period?.start ? `${event.period.start} - ${event.period.end || '?'}` : "Ocasional")}
-                        secondaryTypographyProps={{ 
-                          variant: 'caption', 
-                          sx: { 
-                            opacity: 0.8, 
-                            color: isLive ? 'success.main' : 'text.secondary',
-                            fontWeight: isLive ? 600 : 400
+                  return a.name.localeCompare(b.name);
+                })
+                .reduce((acc, event) => {
+                  const type = event.type || "event";
+                  if (!acc[type]) acc[type] = [];
+                  acc[type].push(event);
+                  return acc;
+                }, {} as Record<string, GameEvent[]>)
+            ).map(([type, groupEvents]) => (
+              <Box key={type}>
+                <Box sx={{ 
+                  px: 2, 
+                  py: 0.5, 
+                  backgroundColor: "rgba(255,255,255,0.03)", 
+                  borderY: "1px solid rgba(255,255,255,0.05)" 
+                }}>
+                  <Typography variant="overline" sx={{ fontWeight: 800, color: "primary.main", letterSpacing: 1.5 }}>
+                    {type}
+                  </Typography>
+                </Box>
+                {groupEvents.map((event: GameEvent) => {
+                  const isLive = checkEventLive(event);
+                  const timeRemaining = getTimeRemaining(event);
+                  
+                  return (
+                    <Tooltip 
+                      key={event.id} 
+                      title={
+                        <Box sx={{ p: 1 }}>
+                          <Typography variant="caption" fontWeight={700} sx={{ display: 'block', mb: 0.5 }}>
+                            {event.name} {isLive ? "(Ao Vivo)" : "(Inativo)"}
+                          </Typography>
+                          <Typography variant="caption" sx={{ display: 'block', mb: 1 }}>
+                            {event.description}
+                          </Typography>
+                          {timeRemaining && (
+                            <>
+                              <Divider sx={{ my: 1, borderColor: "rgba(255,255,255,0.1)" }} />
+                              <Typography variant="caption" color="secondary.main" sx={{ fontWeight: 700 }}>
+                                Status: {timeRemaining}
+                              </Typography>
+                            </>
+                          )}
+                          <Typography variant="caption" color="primary.main" sx={{ display: 'block', mt: 0.5 }}>
+                            {event.period ? `Período: ${event.period.start || "?"} até ${event.period.end || "?"}` : "Evento Ocasional"}
+                          </Typography>
+                        </Box>
+                      }
+                      placement="right"
+                      arrow
+                    >
+                      <MenuItem onClick={() => toggleEvent(event.id)}>
+                        <Checkbox
+                          checked={activeEventIds.includes(event.id)}
+                          size="small"
+                          sx={{ p: 0.5, mr: 1 }}
+                        />
+                        <ListItemText 
+                          primary={
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              {event.name}
+                              <Chip 
+                                label={isLive ? "Live" : "Off"} 
+                                size="small" 
+                                color={isLive ? "success" : "default"}
+                                variant="outlined"
+                                sx={{ 
+                                  height: 16, 
+                                  fontSize: '10px !important', 
+                                  px: 0, 
+                                  opacity: isLive ? 1 : 0.5,
+                                  borderColor: isLive ? 'success.main' : 'rgba(255,255,255,0.2)'
+                                }}
+                              />
+                            </Box>
                           } 
-                        }}
-                      />
-                    </MenuItem>
-                  </Tooltip>
-                );
-              })}
-            </Box>
-          ))}
-        </Box>
+                          primaryTypographyProps={{ 
+                            variant: 'body2', 
+                            fontWeight: activeEventIds.includes(event.id) ? 700 : 400 
+                          }} 
+                          secondary={timeRemaining || (event.period?.start ? `${event.period.start} - ${event.period.end || '?'}` : "Ocasional")}
+                          secondaryTypographyProps={{ 
+                            variant: 'caption', 
+                            sx: { 
+                              opacity: 0.8, 
+                              color: isLive ? 'success.main' : 'text.secondary',
+                              fontWeight: isLive ? 600 : 400
+                            } 
+                          }}
+                        />
+                      </MenuItem>
+                    </Tooltip>
+                  );
+                })}
+              </Box>
+            ))}
+          </Box>
+        </Stack>
       </Menu>
     </>
   );
