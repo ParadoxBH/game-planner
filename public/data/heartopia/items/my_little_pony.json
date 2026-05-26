@@ -7,13 +7,13 @@
     ],
     "category": [
       "vehicle",
-      "sport_car"
+      "conversivel"
     ],
     "icon": "/img/heartopia/events/my_little_pony/vehicles/my_little_pony_car_applejack.png",
     "metadata": [
       {
         "type": "vehicle_speed",
-        "value": 30
+        "value": 35
       }
     ]
   }

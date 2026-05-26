@@ -66,6 +66,12 @@
       "vehicle",
       "conversivel"
     ],
-    "icon": "/img/heartopia/vehicles/conversivel_branco.png"
+    "icon": "/img/heartopia/vehicles/conversivel_branco.png",
+    "metadata": [
+      {
+        "type": "vehicle_speed",
+        "value": 35
+      }
+    ]
   }
 ]
