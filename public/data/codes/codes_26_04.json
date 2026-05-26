@@ -1,0 +1,160 @@
+﻿[
+  {
+    "code": "makeawish",
+    "rewards": [
+      {
+        "id": "cristal_luar",
+        "quantity": 50,
+        "type": "item"
+      }
+    ],
+    "expiresAt": "2026-04-30"
+  },
+  {
+    "code": "keepsmiling2026",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "atrativo_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "elixir",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "expiresAt": "2026-04-30"
+  },
+  {
+    "code": "heartopiaplaytime",
+    "rewards": [
+      {
+        "id": "pedra",
+        "quantity": 10,
+        "type": "item"
+      },
+      {
+        "id": "madeira_rara",
+        "quantity": 6,
+        "type": "item"
+      },
+      {
+        "id": "fluorita",
+        "quantity": 2,
+        "type": "item"
+      }
+    ],
+    "expiresAt": "2026-04-30"
+  },
+  {
+    "code": "withu2026heartopia",
+    "rewards": [
+      {
+        "id": "perfume_sereia",
+        "quantity": 2,
+        "type": "item"
+      },
+      {
+        "id": "coin",
+        "quantity": 5000,
+        "type": "item"
+      },
+      {
+        "id": "kit_reparo",
+        "quantity": 5,
+        "type": "item"
+      }
+    ],
+    "expiresAt": "2026-04-30"
+  },
+  {
+    "code": "k9a2m5q7r4",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "kit_reparo",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "elixir",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-04-27"
+  },
+  {
+    "code": "q4m8n6a3r1",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "kit_reparo",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "elixir",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-04-20"
+  },
+  {
+    "code": "r7a5k2m8q9",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "kit_reparo",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "elixir",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-13-04"
+  },
+  {
+    "code": "p6n4m9q3a2",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "kit_reparo",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "elixir",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-04-06-04"
+  }
+]
