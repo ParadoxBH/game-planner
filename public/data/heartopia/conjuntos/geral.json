@@ -28,5 +28,10 @@
         "id": "escultura_neve",
         "icon": "/img/heartopia/skill/escultura_neve/escultura_neve.png",
         "name": "Moda de Escultura de Neve"
+    },
+    {
+        "id": "vehicle",
+        "icon": "/img/heartopia/emoji/carro.png",
+        "name": "Veiculos e Locomoção"
     }
 ]
