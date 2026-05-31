@@ -734,7 +734,8 @@ export const MapView = () => {
                   const pointEntities = Array.from(pointEntityIds).map(id => entityLookup[id] || items.find(i => i.id === id)).filter(Boolean);
 
                   if (hideCollected && collectedPoints[point.id]) {
-                    const respawnDelay = point.respawnDelay ?? (pointEntities.length > 0 ? pointEntities[0]?.respawnDelay : undefined);
+                    const firstEntity = pointEntities[0];
+                    const respawnDelay = point.respawnDelay ?? (firstEntity && 'respawnDelay' in firstEntity ? (firstEntity as Entity).respawnDelay : undefined);
                     const mode = point.mode || "respawn";
                     const collectionTime = collectedPoints[point.id];
 
@@ -849,7 +850,7 @@ export const MapView = () => {
 
                   const isCollectedInState = !!collectedPoints[point.id];
                   const collectionTime = collectedPoints[point.id];
-                  const respawnDelay = point.respawnDelay ?? entity?.respawnDelay;
+                  const respawnDelay = point.respawnDelay ?? (entity && 'respawnDelay' in entity ? (entity as Entity).respawnDelay : undefined);
                   
                   let isCollected = isCollectedInState;
                   let backgroundStyle = `background: white;`;
@@ -943,8 +944,7 @@ export const MapView = () => {
                       point={point}
                       size={sizeMarker}
                       entity={
-                        entityLookup[point.entityId] ||
-                        items.find((i) => i.id === point.entityId)
+                        point.entityId ? (entityLookup[point.entityId] || items.find((i) => i.id === point.entityId)) : undefined
                       }
                       iconHtml={markerTemplate
                         .replaceAll(

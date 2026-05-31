@@ -311,6 +311,35 @@ export function ItemDetailsPage() {
                 </Stack>
               </Box>
             )}
+            {item.metadata && item.metadata.length > 0 && (
+              <Box>
+                <Typography variant="subtitle2" color="rgba(255,255,255,0.5)">
+                  METADADOS
+                </Typography>
+                <Stack spacing={0.5} sx={{ mt: 0.5 }}>
+                  {item.metadata.map((meta) => (
+                    <Box
+                      key={meta.id}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        py: 0.5,
+                        borderBottom: "1px solid rgba(255,255,255,0.05)",
+                        "&:last-child": { borderBottom: "none" }
+                      }}
+                    >
+                      <Typography variant="body2" sx={{ fontWeight: 500, color: "text.secondary" }}>
+                        {meta.id}
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                        {String(meta.value)}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Stack>
+              </Box>
+            )}
             {/* Conjuntos */}
             <DetainConjunto itens={itemConjuntos}/>
           </Stack>

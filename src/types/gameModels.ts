@@ -1,4 +1,4 @@
-import type { GeoJsonGeometry, WktGeometry } from "./geoJsonGeometry";
+import type { WktGeometry } from "./geoJsonGeometry";
 
 export type GameDataTypes = "item" | "entity" | "recipe" | "shop" | "event" | "conjunto" | "category" | "skill";
 
@@ -49,7 +49,7 @@ export interface Entity {
     quantity?: string;
     conditions?: string;
   }[];
-  geom?: GeoJsonGeometry;
+  geom?: WktGeometry;
   requirements?: {
     itemId: string;
     quant: number;

@@ -242,8 +242,9 @@ export function ItemsPage() {
           variant="compact"
           cardMinWidth={200}
           listHeader={[
-            { label: "Item", width: "60%" },
-            { label: "Categorias", width: "30%", hidden: isMobile },
+            { label: "Item", width: showPrices ? "35%" : "45%" },
+            { label: "Metadados", width: "25%", hidden: isMobile },
+            { label: "Categorias", width: showPrices ? "30%" : "30%", hidden: isMobile },
             {
               label: "Preços",
               align: "right" as const,
@@ -334,6 +335,31 @@ export function ItemsPage() {
               >
                 {item.name}
               </Typography>
+            </Box>,
+            <Box key={`list_metadata_${item.id}`}>
+              {item.metadata && item.metadata.length > 0 ? (
+                <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
+                  {item.metadata.map((meta: any) => (
+                    <Tooltip key={`${item.id}_meta_${meta.id}`} title={`${meta.id}: ${meta.value}`}>
+                      <Chip
+                        label={`${meta.id}: ${meta.value}`}
+                        size="small"
+                        sx={{
+                          fontSize: "0.7rem",
+                          height: "18px",
+                          bgcolor: "rgba(255, 255, 255, 0.05)",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
+                          "& .MuiChip-label": { px: 1 }
+                        }}
+                      />
+                    </Tooltip>
+                  ))}
+                </Stack>
+              ) : (
+                <Typography variant="caption" sx={{ color: "text.disabled", fontStyle: "italic" }}>
+                  -
+                </Typography>
+              )}
             </Box>,
             <Stack direction={"row"} spacing={1} key={`list_cats_${item.id}`}>
               {(Array.isArray(item.category) ? item.category : [item.category]).map((category: string) => (
