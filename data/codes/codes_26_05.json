@@ -1,0 +1,133 @@
+﻿[
+  {
+    "code": "r5a8m4q1n6",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "kit_reparo",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "elixir",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-05-25"
+  },
+  {
+    "code": "m2q7r6a9k3",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "kit_reparo",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "elixir",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-05-18"
+  },
+  {
+    "code": "mumlove4ever",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      },
+      {
+        "id": "maca",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-05-11"
+  },
+  {
+    "code": "m2q7r6a9k3",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "kit_reparo",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "elixir",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-05-11"
+  },
+  {
+    "code": "mayrelax",
+    "rewards": [
+      {
+        "id": "madeira",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "mirtilo",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "isca",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "estrela_desejavel",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-05-04"
+  },
+  {
+    "code": "a6r3m1q8n7",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "kit_reparo",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "elixir",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-05-04"
+  }
+]

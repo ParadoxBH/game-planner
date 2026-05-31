@@ -1,0 +1,27 @@
+﻿[
+    {
+        "id": "set_scooter",
+        "name": "Scooters",
+        "conjuntoIds": ["vehicle"],
+        "items": [
+            "scooter_verde",
+            "scooter_unicornio"
+        ]
+    },
+    {
+        "id": "set_conversivel",
+        "name": "Conversíveis",
+        "conjuntoIds": ["vehicle"],
+        "items": [
+            "conversivel_branco"
+        ]
+    },
+    {
+        "id": "set_mtb",
+        "name": "Biciletas",
+        "conjuntoIds": ["vehicle"],
+        "items": [
+            "mtb_clean"
+        ]
+    }
+]

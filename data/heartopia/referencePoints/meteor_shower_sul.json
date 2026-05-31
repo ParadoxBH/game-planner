@@ -2,7 +2,7 @@
   {
     "id": "point_1776659725072",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -15,7 +15,7 @@
   {
     "id": "point_1776659727644",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -28,7 +28,7 @@
   {
     "id": "point_1776659730076",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -40,7 +40,7 @@
   {
     "id": "point_1776659733013",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -53,7 +53,7 @@
   {
     "id": "point_1776659735699",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -65,7 +65,7 @@
   {
     "id": "point_1776659738601",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -78,7 +78,7 @@
   {
     "id": "point_1776659742823",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -91,7 +91,7 @@
   {
     "id": "point_1776659745575",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -104,7 +104,7 @@
   {
     "id": "point_1777346521302",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -117,7 +117,7 @@
   {
     "id": "point_1776659748627",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -130,7 +130,7 @@
   {
     "id": "point_1776995448491",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -143,7 +143,7 @@
   {
     "id": "point_1776659754309",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -156,7 +156,7 @@
   {
     "id": "point_1776659757080",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -168,7 +168,7 @@
   {
     "id": "point_1776659759663",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -181,7 +181,7 @@
   {
     "id": "point_1776659762414",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -193,7 +193,7 @@
   {
     "id": "point_1776659790424",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -206,7 +206,7 @@
   {
     "id": "point_1776659823968",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -218,7 +218,7 @@
   {
     "id": "point_1776659831189",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",
@@ -230,7 +230,7 @@
   {
     "id": "point_1776659843771",
     "type": "spawn",
-    "entityId": "meteoro",
+    "spawns": [{"entityId": "meteoro_branco", "chance": 1},{"entityId": "meteoro_azul", "chance": 1},{"entityId": "meteoro_verde", "chance": 1}],
     "event": "meteor_shower",
     "geom": {
       "type": "Point",

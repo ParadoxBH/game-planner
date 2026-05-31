@@ -1,0 +1,20 @@
+﻿[
+  {
+    "id": "my_little_pony_car_applejack",
+    "name": "Chapéu de Vaqueiro Turbo",
+    "event": [
+      "my_little_pony"
+    ],
+    "category": [
+      "vehicle",
+      "conversivel"
+    ],
+    "icon": "/img/heartopia/events/my_little_pony/vehicles/my_little_pony_car_applejack.png",
+    "metadata": [
+      {
+        "type": "vehicle_speed",
+        "value": 35
+      }
+    ]
+  }
+]

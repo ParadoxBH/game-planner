@@ -74,5 +74,17 @@
       "start": "30/04/2026",
       "end": "26/05/2026"
     }
+  },
+  {
+    "id": "my_little_pony",
+    "name": "My Little Pony",
+    "type": "colab",
+    "description": "A Árvore da Harmonia de My Little Pony chegou à Ilha das Nuvens e precisa ser despertada para retornar ao seu devido lugar em Equestria.",
+    "icon": "/img/heartopia/events/my_little_pony/icon.png",
+    "banner": "/img/heartopia/events/my_little_pony/banner.png",
+    "period": {
+      "start": "14/02/2026",
+      "end": "15/03/2026"
+    }
   }
 ]

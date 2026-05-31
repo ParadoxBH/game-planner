@@ -506,5 +506,27 @@
             "emoji"
         ],
         "icon": "/img/heartopia/events/recanto_mosaico/emoji/emoji_recanto_mosaico_duvida_gerente.png"
+    },
+    {
+        "id": "emoji_recanto_mosaico_blocos_edicao_nova",
+        "name": "Emoji: Blocos da Edição Nova",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "emoji"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/emoji/emoji_recanto_mosaico_blocos_edicao_nova.png"
+    },
+    {
+        "id": "emoji_recanto_mosaico_boas_vindas",
+        "name": "Emoji: Boas Vindas",
+        "event": [
+            "recanto_mosaico"
+        ],
+        "category": [
+            "emoji"
+        ],
+        "icon": "/img/heartopia/events/recanto_mosaico/emoji/emoji_recanto_mosaico_boas_vindas.png"
     }
 ]

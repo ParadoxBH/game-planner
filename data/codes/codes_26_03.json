@@ -1,0 +1,174 @@
+﻿[
+  {
+    "code": "sweetgift314u",
+    "rewards": [
+      {
+        "id": "rosa_pluma_nevada",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "varinha_magica_iridescente_rosa",
+        "quantity": 2,
+        "type": "item"
+      },
+      {
+        "id": "fumaca_fria_iridescente_rosa",
+        "quantity": 1,
+        "type": "item"
+      }
+    ],
+    "expiresAt": "2026-03-30"
+  },
+  {
+    "code": "a4k9m7q2r6",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "l7m5q2r9a8",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "m5r9q2a7k8",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-03-30"
+  },
+  {
+    "code": "tangyuan0303y",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-03-09",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "38bloom2026",
+    "rewards": [
+      {
+        "id": "perfume_sereia",
+        "quantity": 2,
+        "type": "item"
+      },
+      {
+        "id": "ouro",
+        "quantity": 10000,
+        "type": "item"
+      },
+      {
+        "id": "ovo",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-03-09",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "k9r8m2q7a5",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-03-09",
+    "expiresAt": "2026-03-31"
+  },
+  {
+    "code": "n5q7m9l2a4",
+    "rewards": [
+      {
+        "id": "estrela_desejavel",
+        "quantity": 5,
+        "type": "item"
+      },
+      {
+        "id": "perfume_sereia",
+        "quantity": 3,
+        "type": "item"
+      },
+      {
+        "id": "fertilizante",
+        "quantity": 10,
+        "type": "item"
+      }
+    ],
+    "addedAt": "2026-03-02",
+    "expiresAt": "2026-03-31"
+  }
+]

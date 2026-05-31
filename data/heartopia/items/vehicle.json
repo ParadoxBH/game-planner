@@ -1,0 +1,77 @@
+﻿[
+  {
+    "id": "sedan_white",
+    "name": "Sedan: Branco",
+    "category": [
+      "vehicle",
+      "sedan"
+    ],
+    "icon": "/img/heartopia/vehicles/sedan_branco.png",
+    "metadata": [
+      {
+        "type": "vehicle_speed",
+        "value": 24
+      }
+    ]
+  },
+  {
+    "id": "mtb_clean",
+    "name": "Bicicleta: MTB Clean",
+    "category": [
+      "vehicle",
+      "mtb"
+    ],
+    "icon": "/img/heartopia/vehicles/mtb_clean.png",
+    "metadata": [
+      {
+        "type": "vehicle_speed",
+        "value": 18
+      }
+    ]
+  },
+  {
+    "id": "scooter_verde",
+    "name": "Scooter: Verde",
+    "category": [
+      "vehicle",
+      "scooter"
+    ],
+    "icon": "/img/heartopia/vehicles/scooter_verde.png",
+    "metadata": [
+      {
+        "type": "vehicle_speed",
+        "value": 18
+      }
+    ]
+  },
+  {
+    "id": "scooter_unicornio",
+    "name": "Scooter: Unicórnio",
+    "category": [
+      "vehicle",
+      "scooter"
+    ],
+    "icon": "/img/heartopia/vehicles/scooter_unicornio.png",
+    "metadata": [
+      {
+        "type": "vehicle_speed",
+        "value": 18
+      }
+    ]
+  },
+  {
+    "id": "conversivel_branco",
+    "name": "Conversível: Branco",
+    "category": [
+      "vehicle",
+      "conversivel"
+    ],
+    "icon": "/img/heartopia/vehicles/conversivel_branco.png",
+    "metadata": [
+      {
+        "type": "vehicle_speed",
+        "value": 35
+      }
+    ]
+  }
+]

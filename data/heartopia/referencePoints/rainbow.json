@@ -56,6 +56,7 @@
       "type": "Point",
       "coordinates": "POINT(69.0976708984375 470.94501953125)"
     },
+    "image": "/img/heartopia/referencePoints/rainbow/rainbow_north_bubble_1.jpg",
     "mode": "daily",
     "mapId": "main"
   },
@@ -68,6 +69,7 @@
       "type": "Point",
       "coordinates": "POINT(-74.5019580078125 464.38267089843754)"
     },
+    "image": "/img/heartopia/referencePoints/rainbow/rainbow_north_bubble_2.jpg",
     "mode": "daily",
     "mapId": "main"
   },

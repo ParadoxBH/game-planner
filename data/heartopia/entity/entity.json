@@ -312,11 +312,91 @@
     "icon": "/img/heartopia/coletaveis/rainbow_bubble.png"
   },
   {
-    "id": "meteoro",
-    "name": "Meteoro",
-    "category": "colection",
+    "id": "meteoro_branco",
+    "name": "Meteoro Branco",
+    "category": ["colection", "meteoro"],
+    "icon": "/img/heartopia/recursos/meteoro_branco.png",
+    "image": "/img/heartopia/coletaveis/meteoro_branco.png",
+    "drops": [
+      {
+        "itemId": "meteoro_branco",
+        "chance": 1,
+        "quant": 3,
+        "maxQuant": 6
+      }
+    ]
+  },
+  {
+    "id": "meteoro_rosa",
+    "name": "Meteoro Rosa",
+    "category": ["colection", "meteoro"],
     "icon": "/img/heartopia/recursos/meteoro_rosa.png",
-    "image": "/img/heartopia/coletaveis/meteoro.png"
+    "image": "/img/heartopia/coletaveis/meteoro_rosa.png",
+    "drops": [
+      {
+        "itemId": "meteoro_roxo",
+        "chance": 1,
+        "quant": 3,
+        "maxQuant": 6
+      }
+    ]
+  },
+  {
+    "id": "meteoro_amarelo",
+    "name": "Meteoro Amarelo",
+    "category": ["colection", "meteoro"],
+    "icon": "/img/heartopia/recursos/meteoro_amarelo.png",
+    "drops": [
+      {
+        "itemId": "meteoro_amarelo",
+        "chance": 1,
+        "quant": 3,
+        "maxQuant": 6
+      }
+    ]
+  },
+  {
+    "id": "meteoro_azul",
+    "name": "Meteoro Azul",
+    "category": ["colection", "meteoro"],
+    "icon": "/img/heartopia/recursos/meteoro_azul.png",
+    "drops": [
+      {
+        "itemId": "meteoro_azul",
+        "chance": 1,
+        "quant": 3,
+        "maxQuant": 6
+      }
+    ]
+  },
+  {
+    "id": "meteoro_verde",
+    "name": "Meteoro Verde",
+    "category": ["colection", "meteoro"],
+    "icon": "/img/heartopia/recursos/meteoro_verde.png",
+    "drops": [
+      {
+        "itemId": "meteoro_verde",
+        "chance": 1,
+        "quant": 3,
+        "maxQuant": 6
+      }
+    ]
+  },
+  {
+    "id": "meteoro_roxo",
+    "name": "Meteoro Roxo",
+    "category": ["colection", "meteoro"],
+    "icon": "/img/heartopia/recursos/meteoro_roxo.png",
+    "image": "/img/heartopia/coletaveis/meteoro_roxo.png",
+    "drops": [
+      {
+        "itemId": "meteoro_roxo",
+        "chance": 1,
+        "quant": 3,
+        "maxQuant": 6
+      }
+    ]
   },
   {
     "id": "porcino",
@@ -377,7 +457,10 @@
   {
     "id": "cogumelo_ostra",
     "name": "Cogumelo Ostra",
-    "category": ["colection", "cogumelo_ostra"],
+    "category": [
+      "colection",
+      "cogumelo_ostra"
+    ],
     "drops": [
       {
         "itemId": "cogumelo_ostra",
@@ -391,7 +474,10 @@
   {
     "id": "cogumelo_ostra_estranho_laranja",
     "name": "Cogumelo Ostra Estranho Laranja",
-    "category": ["colection", "cogumelo_ostra"],
+    "category": [
+      "colection",
+      "cogumelo_ostra"
+    ],
     "drops": [
       {
         "itemId": "cogumelo_ostra_estranho_laranja",

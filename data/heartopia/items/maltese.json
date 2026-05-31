@@ -2,7 +2,9 @@
   {
     "id": "bolo_veludo_azul_cachorros",
     "name": "Bolo Veludo Azul Cachorros",
-    "event": ["maltese"],
+    "event": [
+      "maltese"
+    ],
     "category": [
       "food"
     ],
@@ -11,7 +13,9 @@
   {
     "id": "bolo_veludo_azul_golden_retriever",
     "name": "Bolo Veludo Azul Golden Retriever",
-    "event": ["maltese"],
+    "event": [
+      "maltese"
+    ],
     "category": [
       "food"
     ],
@@ -20,7 +24,9 @@
   {
     "id": "bolo_veludo_azul_maltese",
     "name": "Bolo Veludo Azul Maltese",
-    "event": ["maltese"],
+    "event": [
+      "maltese"
+    ],
     "category": [
       "food"
     ],
@@ -29,7 +35,9 @@
   {
     "id": "canele_golden_retriever",
     "name": "Canele Golden Retriever",
-    "event": ["maltese"],
+    "event": [
+      "maltese"
+    ],
     "category": [
       "food"
     ],
@@ -38,7 +46,9 @@
   {
     "id": "canele_maltese",
     "name": "Canele Maltese",
-    "event": ["maltese"],
+    "event": [
+      "maltese"
+    ],
     "category": [
       "food"
     ],
@@ -47,7 +57,9 @@
   {
     "id": "moeda_troca_maltese",
     "name": "Moeda de Troca Maltese",
-    "event": ["maltese"],
+    "event": [
+      "maltese"
+    ],
     "category": [
       "wallet"
     ],
@@ -57,9 +69,12 @@
   {
     "id": "cartao_postal_maltese_alegre",
     "name": "Cartão Postal Maltese Alegre",
-    "event": ["maltese"],
+    "event": [
+      "maltese"
+    ],
     "category": [
-      "social", "cartao_postal"
+      "social",
+      "cartao_postal"
     ],
     "icon": "/img/heartopia/events/maltese/items/cartao_postal_maltese_alegre.png",
     "buyPrice": 5,
@@ -68,9 +83,12 @@
   {
     "id": "cartao_postal_maltese_noturno",
     "name": "Cartão Postal Maltese Noturno",
-    "event": ["maltese"],
+    "event": [
+      "maltese"
+    ],
     "category": [
-      "social", "cartao_postal"
+      "social",
+      "cartao_postal"
     ],
     "icon": "/img/heartopia/events/maltese/items/cartao_postal_maltese_noturno.png",
     "buyPrice": 5,
@@ -79,9 +97,12 @@
   {
     "id": "cartao_postal_maltese_sonhador",
     "name": "Cartão Postal Maltese Sonhador",
-    "event": ["maltese"],
+    "event": [
+      "maltese"
+    ],
     "category": [
-      "social", "cartao_postal"
+      "social",
+      "cartao_postal"
     ],
     "icon": "/img/heartopia/events/maltese/items/cartao_postal_maltese_sonhador.png",
     "buyPrice": 5,
@@ -90,7 +111,9 @@
   {
     "id": "emoji_maltese_curtir",
     "name": "Emoji: Curtir",
-    "event": ["maltese"],
+    "event": [
+      "maltese"
+    ],
     "category": [
       "emoji"
     ],
@@ -99,7 +122,9 @@
   {
     "id": "emoji_maltese_forca",
     "name": "Emoji: Força",
-    "event": ["maltese"],
+    "event": [
+      "maltese"
+    ],
     "category": [
       "emoji"
     ],
@@ -108,10 +133,30 @@
   {
     "id": "emoji_maltese_coracao",
     "name": "Emoji: Coracao",
-    "event": ["maltese"],
+    "event": [
+      "maltese"
+    ],
     "category": [
       "emoji"
     ],
     "icon": "/img/heartopia/events/maltese/emoji/emoji_maltese_coracao.png"
+  },
+  {
+    "id": "sidecar_maltese",
+    "name": "Sidecar: Maltese Vai!",
+    "event": [
+      "maltese"
+    ],
+    "category": [
+      "vehicle",
+      "sidecar"
+    ],
+    "icon": "/img/heartopia/events/maltese/items/sidecar_maltese.png",
+    "metadata": [
+      {
+        "type": "vehicle_speed",
+        "value": 18
+      }
+    ]
   }
 ]

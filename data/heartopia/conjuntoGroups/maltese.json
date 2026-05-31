@@ -13,5 +13,16 @@
             "canele_golden_retriever",
             "canele_maltese"
         ]
+    },
+    {
+        "id": "maltese_vehicle",
+        "name": "Veiculos Exclusivos Maltese",
+        "conjuntoIds": ["maltese", "vehicle"],
+        "event": [
+            "maltese"
+        ],
+        "items": [
+            "sidecar_maltese"
+        ]
     }
 ]

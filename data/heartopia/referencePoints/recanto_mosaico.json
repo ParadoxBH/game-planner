@@ -82,5 +82,47 @@
     "image": "/img/heartopia/events/recanto_mosaico/referencePoints/brick_bubble_4.jpg",
     "mapId": "main",
     "mode": "once"
+  },
+  {
+    "id": "point_1779568721597",
+    "type": "spawn",
+    "event": "recanto_mosaico",
+    "entityId": "brick_bubble",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(-36.59046872712001 39.22734464600686)"
+    },
+    "customDrops": [
+      {
+        "type": "item",
+        "itemId": "emoji_recanto_mosaico_blocos_edicao_nova",
+        "chance": 1,
+        "quant": 1
+      }
+    ],
+    "image": "/img/heartopia/events/recanto_mosaico/referencePoints/brick_bubble_5.jpg",
+    "mapId": "main",
+    "mode": "once"
+  },
+  {
+    "id": "point_1779569468920",
+    "type": "spawn",
+    "event": "recanto_mosaico",
+    "entityId": "brick_bubble",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT(109.35636219340718 -67.67421299482814)"
+    },
+    "customDrops": [
+      {
+        "type": "item",
+        "itemId": "emoji_recanto_mosaico_boas_vindas",
+        "chance": 1,
+        "quant": 1
+      }
+    ],
+    "image": "/img/heartopia/events/recanto_mosaico/referencePoints/brick_bubble_6.jpg",
+    "mapId": "main",
+    "mode": "once"
   }
 ]

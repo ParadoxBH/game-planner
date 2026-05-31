@@ -1,0 +1,11 @@
+﻿[
+    {
+        "id": "my_little_pony",
+        "events": [
+            "my_little_pony"
+        ],
+        "name": "Exclusivos My Little Pony",
+        "icon": "/img/heartopia/events/my_little_pony/icon.png",
+        "image": "/img/heartopia/events/my_little_pony/banner.png"
+    }
+]

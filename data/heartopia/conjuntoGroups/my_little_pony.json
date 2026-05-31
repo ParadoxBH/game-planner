@@ -1,0 +1,16 @@
+﻿[
+    {
+        "id": "vehicles_my_little_pony",
+        "name": "Veiculos Exclusivos My Little Pony",
+        "conjuntoIds": [
+            "vehicle",
+            "my_little_pony"
+        ],
+        "event": [
+            "my_little_pony"
+        ],
+        "items": [
+            "my_little_pony_car_applejack"
+        ]
+    }
+]

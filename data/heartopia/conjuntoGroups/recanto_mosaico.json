@@ -88,5 +88,28 @@
             "pardal_roxo_blocos",
             "pardal_colorido_blocos"
         ]
+    },
+    {
+        "id": "flowers_recanto_mosaico",
+        "name": "Flores Exclusivas do Recanto Mosaico",
+        "conjuntoIds": [
+            "recanto_mosaico",
+            "flower"
+        ],
+        "event": [
+            "recanto_mosaico"
+        ],
+        "items": [
+            "flor_blocos_vermelho",
+            "flor_blocos_amarelo",
+            "flor_blocos_branco",
+            "flor_blocos_laranja",
+            "flor_blocos_rosa",
+            "flor_blocos_preto",
+            "flor_blocos_pessego",
+            "flor_blocos_azul",
+            "flor_blocos_roxo",
+            "flor_blocos_luminoso"
+        ]
     }
 ]

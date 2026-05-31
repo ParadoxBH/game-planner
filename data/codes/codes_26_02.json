@@ -1,0 +1,129 @@
+﻿[
+    {
+        "code": "p7a9k2m6r8",
+        "rewards": [
+            {
+                "id": "estrela_desejavel",
+                "quantity": 5,
+                "type": "item"
+            },
+            {
+                "id": "perfume_sereia",
+                "quantity": 3,
+                "type": "item"
+            },
+            {
+                "id": "fertilizante",
+                "quantity": 10,
+                "type": "item"
+            }
+        ],
+        "addedAt": "2026-02-23",
+        "expiresAt": "2026-03-31"
+    },
+    {
+        "code": "x8r2m9q5l7",
+        "rewards": [
+            {
+                "id": "estrela_desejavel",
+                "quantity": 5,
+                "type": "item"
+            },
+            {
+                "id": "perfume_sereia",
+                "quantity": 3,
+                "type": "item"
+            },
+            {
+                "id": "fertilizante",
+                "quantity": 10,
+                "type": "item"
+            }
+        ],
+        "addedAt": "2026-02-16",
+        "expiresAt": "2026-03-31"
+    },
+    {
+        "code": "SPRINGFEST2026",
+        "rewards": [
+            {
+                "id": "cristal_luar",
+                "quantity": 10,
+                "type": "item"
+            },
+            {
+                "id": "ouro",
+                "quantity": 8888,
+                "type": "item"
+            }
+        ],
+        "addedAt": "2026-02-16",
+        "expiresAt": "2026-03-31"
+    },
+    {
+        "code": "love214",
+        "rewards": [
+            {
+                "id": "rosa_pluma_nevada",
+                "quantity": 5,
+                "type": "item"
+            },
+            {
+                "id": "varinha_magica_iridescente_rosa",
+                "quantity": 2,
+                "type": "item"
+            },
+            {
+                "id": "fumaca_fria_iridescente_rosa",
+                "quantity": 1,
+                "type": "item"
+            }
+        ],
+        "addedAt": "2026-02-16",
+        "expiresAt": "2026-03-31"
+    },
+    {
+        "code": "q6p9m4a7k",
+        "rewards": [
+            {
+                "id": "estrela_desejavel",
+                "quantity": 5,
+                "type": "item"
+            },
+            {
+                "id": "perfume_sereia",
+                "quantity": 3,
+                "type": "item"
+            },
+            {
+                "id": "fertilizante",
+                "quantity": 10,
+                "type": "item"
+            }
+        ],
+        "addedAt": "2026-02-09",
+        "expiresAt": "2026-03-31"
+    },
+    {
+        "code": "a9l5k7m2r8",
+        "rewards": [
+            {
+                "id": "estrela_desejavel",
+                "quantity": 5,
+                "type": "item"
+            },
+            {
+                "id": "perfume_sereia",
+                "quantity": 3,
+                "type": "item"
+            },
+            {
+                "id": "fertilizante",
+                "quantity": 10,
+                "type": "item"
+            }
+        ],
+        "addedAt": "2026-02-02",
+        "expiresAt": "2026-03-31"
+    }
+]
