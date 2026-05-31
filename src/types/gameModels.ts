@@ -1,40 +1,47 @@
-import type { WktGeometry } from "./geoJsonGeometry";
+import type { GeoJsonGeometry, WktGeometry } from "./geoJsonGeometry";
 
 export type GameDataTypes = "item" | "entity" | "recipe" | "shop" | "event" | "conjunto" | "category" | "skill";
 
 export interface Item {
+  id: string;//codigo de referencia do item
+  name: string;//nome bonito do item
+  icon?: string;//path da imagem de icone com o fundo transparente presente em public/img
+  category?: string | string[];//tipo e categoria do item
+  description?: string;//descritivo ou historia do item
+  buyPrice?: number;//preco para comprar na loja o item
+  sellPrice?: number;//preco para vender o item na loja
+  level?: number;//nivel po poder do item
+  variants?: Partial<Item>[];//caso o item tenha variantes é possivel incluir aqui, uma variante sempre é uma copia do item normal, ou seja oque a variante tem que o original tambem tem não é necessaria informar
+  event?: string[];//nome dos eventos que este item pertence (normalmente usado para indicar que o item é de DLC ou temporada)
+  image?: string;//path da imagem de screenshot do item dentro do jogo presente em public/img
+  rarity?: string;//raridade do item
+  metadata?: ItemMetadata[];//informação complementar sobre o item
+}
+
+export interface ItemMetadata {
   id: string;
-  name: string;
-  icon?: string;
-  category?: string | string[];
-  description?: string;
-  buyPrice?: number;
-  sellPrice?: number;
-  level?: number;
-  variants?: Partial<Item>[];
-  event?: string[];
-  image?: string;
-  rarity?: string;
+  type?: string;
+  value?: string | number | boolean;
 }
 
 export interface EntityDrop {
-  itemId: string;
-  chance: number;
-  quant: number;
-  maxQuant?: number;
+  itemId: string;//id do drop
+  chance: number;//chance de dropar o item de 0 até 1
+  quant: number;//quantos será dropado ?
+  maxQuant?: number;//se tiver variação coloque a quantidade maxima de cair; ou seja caso seja de 1 até 3. coloque quant = 1 e maxQuant = 3
 }
 
 export interface Entity {
   id: string;
-  name: string;
-  level?: number;
-  category?: string | string[];
-  description?: string;
-  icon?: string;
-  image?: string;
-  buyPrice?: number;
-  sellPrice?: number;
-  respawnDelay?: number;
+  name: string;//nome bonito da criatura
+  level?: number;//nivel da criatura base
+  category?: string | string[];//categoria (npc, criatura, estrutura, ativador e etc)
+  description?: string;//descrição ou informação da criatura
+  icon?: string;//icone da criatura com fundo transparente (tambem usado para aparecer no mapa)
+  image?: string;//imagem de printscreen do item dentro do jogo
+  buyPrice?: number;//quando compravel qual é o preço para se obter ele
+  sellPrice?: number;//quando vendivel qual é o preço que os npc pagam por padrão
+  respawnDelay?: number;//qual é o tempo em minutos que leva para dar respawn na entidade ?
   parentId?: string; // Para hierarquia (ex: Cripta dentro de Pântano)
   potentialSpawns?: {
     entityId: string;
@@ -42,19 +49,16 @@ export interface Entity {
     quantity?: string;
     conditions?: string;
   }[];
-  geom?: {
-    type: string;
-    coordinates: string;
-  };
+  geom?: GeoJsonGeometry;
   requirements?: {
     itemId: string;
     quant: number;
     maxQuant?: number;
   }[];
-  drops?: EntityDrop[];
-  variants?: Partial<Entity>[];
-  event?: string[];
-  rarity?: string;
+  drops?: EntityDrop[]; // ao Derotar ou destruir oque será caido normalmente da entidade ?
+  variants?: Partial<Entity>[];//caso a entidade tenha variantes é possivel incluir aqui, uma variante sempre é uma copia da entidade normal, ou seja oque a variante tem que o original tambem tem não é necessaria informar
+  event?: string[];//nome dos eventos que este item pertence (normalmente usado para indicar que o item é de DLC ou temporada)
+  rarity?: string;//qual é a raridade da entidade ?
 }
 
 export interface Category {
@@ -84,19 +88,19 @@ export interface RecipeUnlock {
 }
 
 export interface Recipe {
-  id: string;
-  name?: string;
-  itemId?: string; // Legacy/Single product
-  amount?: number; // Legacy amount
-  ingredients?: RecipeItem[];
+  id: string;// id da receita
+  name?: string; // nome personalizada da receita, pois normalmente é utilizado o nome do item de saida como nome da receita quando não definido
+  itemId?: string; // item unico de saida
+  amount?: number; // quantidade da itens unico de saida
+  ingredients?: RecipeItem[];// itens necessarios para craftar
   Ingredients?: any[]; // Raw data support
-  products?: RecipeItem[];
+  products?: RecipeItem[];// quando tem multiplos itens de saida
   Products?: any[]; // Raw data support
-  stations?: string[];
+  stations?: string[];// ids das bancadas de trabalhos
   ProducedIn?: string[]; // Raw data support
-  unlock?: RecipeUnlock[];
-  craftTime?: number; // Time in seconds
-  event?: string[];
+  unlock?: RecipeUnlock[];// requisitos especiais necessarios para habilitar a receita
+  craftTime?: number; // quantos segundos leva para construir este item 
+  event?: string[]; //nome dos eventos que este item pertence (normalmente usado para indicar que o item é de DLC ou temporada)
 }
 
 export interface ShopCondition {
