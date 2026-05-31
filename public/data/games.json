@@ -83,5 +83,13 @@
     "thumbnail": "img/stardewValley/logo.png",
     "capsule": "img/stardewValley/capsule.jpg",
     "icon": "img/stardewValley/icon.jpg"
+  },
+  {
+    "id": "outward",
+    "name": "Outward",
+    "description": "No remarkable journey is achieved without great effort. In Outward, the cold of the night or an infected wound can be as dangerous as a predator lurking in the dark.",
+    "thumbnail": "img/outward/logo.jpg",
+    "capsule": "img/outward/capsule.jpg",
+    "icon": "img/outward/icon.jpg"
   }
 ]
