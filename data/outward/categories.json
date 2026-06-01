@@ -1,0 +1,303 @@
+﻿[ 
+  {
+    "id": "damagemodifier_physical",
+    "name": "Dano Fisico",
+    "icon": "/img/outward/stats/Phys.webp"
+  },
+  {
+    "id": "damagemodifier_frost",
+    "name": "Dano de Gelo",
+    "icon": "/img/outward/stats/Frost.webp"
+  },
+  {
+    "id": "damagemodifier_electric",
+    "name": "Dano Eletrico",
+    "icon": "/img/outward/stats/Lightning.webp"
+  },
+  {
+    "id": "damagemodifier_ethereal",
+    "name": "Dano Etéreo",
+    "icon": "/img/outward/stats/Ethereal.webp"
+  },
+  {
+    "id": "damagemodifier_decay",
+    "name": "Dano Decay",
+    "icon": "/img/outward/stats/Decay.webp"
+  },
+  {
+    "id": "damagemodifier_fire",
+    "name": "Dano de Fogo",
+    "icon": "/img/outward/stats/Fire.webp"
+  },
+  {
+    "id": "impactmodifier",
+    "name": "Modificador de Impacto",
+    "icon": "/img/outward/stats/Impact.webp"
+  },
+  {
+    "id": "cooldown",
+    "name": "Cooldown",
+    "icon": "/img/outward/stats/CooldownIcon.webp"
+  },
+  {
+    "id": "CounterAbsorbSkill",
+    "name": "Habilidade de Absorvição de Magia"
+  },
+  {
+    "id": "CraftStation",
+    "name": "Estação de Criação"
+  },
+  {
+    "id": "Currency",
+    "name": "Dinheiro"
+  },
+  {
+    "id": "DeployableTrap",
+    "name": "Armadilha"
+  },
+  {
+    "id": "EnchantmentRecipeItem",
+    "name": "Pergaminhos de Encantamento"
+  },
+  {
+    "id": "EnchantmentTable",
+    "name": "Mesa de Encantamento"
+  },
+  {
+    "id": "Equipament",
+    "name": "Acessorios"
+  },
+  {
+    "id": "Food",
+    "name": "Comidas"
+  },
+  {
+    "id": "FueledContainer",
+    "name": "Fogueira"
+  },
+  {
+    "id": "Gatherable",
+    "name": "Coletavel"
+  },
+  {
+    "id": "GroupContainer",
+    "name": "Item Empilhado"
+  },
+  {
+    "id": "InfuseConsumable",
+    "name": "Pergaminho de Infusão"
+  },
+  {
+    "id": "Instrument",
+    "name": "Instrumento"
+  },
+  {
+    "id": "ItemFragment",
+    "name": "Fragmento"
+  },
+  {
+    "id": "MeleeSkill",
+    "name": "Habilidade Corpo a Corpo"
+  },
+  {
+    "id": "MerchantPouch",
+    "name": "Saco do Mercante"
+  },
+  {
+    "id": "PassiveSkill",
+    "name": "Habilidades Passivas"
+  },
+  {
+    "id": "PistolSkill",
+    "name": "Habilidades de Pistola"
+  },
+  {
+    "id": "Quest",
+    "name": "Missão"
+  },
+  {
+    "id": "RangeAttackSkill",
+    "name": "Habilidades de Arquearia"
+  },
+  {
+    "id": "RecipeItem",
+    "name": "Receitas"
+  },
+  {
+    "id": "Skill",
+    "name": "Habilidades"
+  },
+  {
+    "id": "Throwable",
+    "name": "Arremessavel"
+  },
+  {
+    "id": "ThrowSkill",
+    "name": "Habilidade de Arremessar"
+  },
+  {
+    "id": "TrinketSkill",
+    "name": "Habilidade de Bugiganga"
+  },
+  {
+    "id": "WaterItem",
+    "name": "Liquidos"
+  },
+  {
+    "id": "WrittenNote",
+    "name": "Anotações"
+  },
+
+
+
+  {
+    "id": "damageprotection_physical",
+    "name": "Proteção Fisica",
+    "icon": "/img/outward/stats/Protection.webp"
+  },
+  {
+    "id": "movementpenalty",
+    "name": "Penalidade de Movimento",
+    "icon": "/img/outward/stats/Movement.webp"
+  },
+  {
+    "id": "capacity",
+    "name": "Capacidade de Armazenamento"
+  },
+
+  
+  {
+    "id": "damageresistance_physical",
+    "name": "Resistencia Fisica",
+    "icon": "/img/outward/stats/Phys.webp"
+  },
+  {
+    "id": "damageresistance_frost",
+    "name": "Resistencia de Gelo",
+    "icon": "/img/outward/stats/Frost.webp"
+  },
+  {
+    "id": "damageresistance_electric",
+    "name": "Resistencia Eletrico",
+    "icon": "/img/outward/stats/Lightning.webp"
+  },
+  {
+    "id": "damageresistance_ethereal",
+    "name": "Resistencia Etéreo",
+    "icon": "/img/outward/stats/Ethereal.webp"
+  },
+  {
+    "id": "damageresistance_decay",
+    "name": "Resistencia Decay",
+    "icon": "/img/outward/stats/Decay.webp"
+  },
+  {
+    "id": "damageresistance_fire",
+    "name": "Resistencia A Fogo",
+    "icon": "/img/outward/stats/Fire.webp"
+  },
+  
+  {
+    "id": "barrierprotection",
+    "name": "Resistencia a Efeitos",
+    "icon": "/img/outward/stats/BarrierStat.webp"
+  },
+  {
+    "id": "coldProtection",
+    "name": "Proteção contra Frio",
+    "icon": "/img/outward/stats/ColdWeather.webp"
+  },
+  {
+    "id": "content",
+    "name": "Recipiente"
+  },
+  {
+    "id": "WaterContainer",
+    "name": "Recipiente de Agua"
+  },
+  {
+    "id": "Drink",
+    "name": "Bebivel"
+  },
+
+  {
+    "id": "Ingredient",
+    "name": "Ingrediente"
+  },
+  {
+    "id": "VampiricTransmutationTable",
+    "name": "Bancada de Transmutação Vampirica"
+  },
+  {
+    "id": "pouchcapacitybonus",
+    "name": "Aumento de Bolço"
+  },
+
+  
+  {
+    "id": "stamusepenalty",
+    "name": "Custo de Estamina",
+    "icon": "/img/outward/stats/Stamina.webp"
+  },
+  {
+    "id": "impact",
+    "name": "Dano de Impacto",
+    "icon": "/img/outward/stats/Impact.webp"
+  },
+  {
+    "id": "impactresistance",
+    "name": "Resistencia a Impacto",
+    "icon": "/img/outward/stats/Impact.webp"
+  },
+  {
+    "id": "heatprotection",
+    "name": "Resistencia a Calor",
+    "icon": "/img/outward/stats/HotWeather.webp"
+  },
+  {
+    "id": "manacost",
+    "name": "Custo de Mana",
+    "icon": "/img/outward/stats/ManaCost.webp"
+  },
+  {
+    "id": "attackspeed",
+    "name": "Velocidade de Ataque"
+  },
+  {
+    "id": "cooldownreduction",
+    "name": "Redução de Cooldown",
+    "icon": "/img/outward/stats/CooldownIcon.webp"
+  },
+  {
+    "id": "max_durability",
+    "name": "Durabilidade"
+  },
+  {
+    "id": "MeleeWeapon",
+    "name": "Arma Corpo a Corpo"
+  },
+  {
+    "id": "ItemContainer",
+    "name": "Item de Armazenamento"
+  },
+  {
+    "id": "TreasureChest",
+    "name": "Bau do Tesouro"
+  },
+  {
+    "id": "DualMeleeWeapon",
+    "name": "Armas duplas"
+  },
+  {
+    "id": "ProjectileWeapon",
+    "name": "Arma a Distancia"
+  },
+  {
+    "id": "Armor",
+    "name": "Armadura"
+  },
+  {
+    "id": "Bag",
+    "name": "Mochila"
+  }
+]
