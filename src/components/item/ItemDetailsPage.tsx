@@ -30,6 +30,7 @@ import type {
   GameEvent,
   Item,
   GameInfo,
+  Category,
 } from "../../types/gameModels";
 import type { ItemDetails } from "../../types/apiModels";
 import { eventRepository } from "../../repositories/EventRepository";
@@ -51,7 +52,7 @@ export function ItemDetailsPage() {
   }>();
   const navigate = useNavigate();
 
-  const { loading: dbLoading, getItemDetails, getGameInfo } = useApi(gameId);
+  const { loading: dbLoading, getItemDetails, getGameInfo, getCategories } = useApi(gameId);
   const [itemDetails, setItemDetails] = useState<ItemDetails | null>(null);
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [dataLoading, setDataLoading] = useState(true);
@@ -60,6 +61,7 @@ export function ItemDetailsPage() {
   const [items, setItems] = useState<Item[]>([]);
   const [entities, setEntities] = useState<Entity[]>([]);
   const [recipes, setRecipes] = useState<any[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [itemConjuntos, setItemConjuntos] = useState<Conjunto[]>([]);
   const { isMobile } = usePlatform();
 
@@ -77,8 +79,9 @@ export function ItemDetailsPage() {
       conjuntoRepository.getAll(),
       conjuntoGroupRepository.getAll(),
       recipeRepository.getAll(),
+      getCategories(),
     ])
-      .then(([details, allEvents, allItems, allEntities, allConjuntos, allGroups, allRecipes]) => {
+      .then(([details, allEvents, allItems, allEntities, allConjuntos, allGroups, allRecipes, allCats]) => {
         if (!isMounted) return;
 
         setItemDetails(details);
@@ -86,6 +89,7 @@ export function ItemDetailsPage() {
         setItems(allItems);
         setEntities(allEntities);
         setRecipes(allRecipes);
+        if (allCats) setCategories(allCats);
         
         // Find sets (conjuntos) that contain this item via groups
         const groupsWithItem = allGroups.filter(g => g.items?.includes(itemId));
@@ -131,6 +135,12 @@ export function ItemDetailsPage() {
     recipes.forEach((r) => map.set(r.id, r));
     return map;
   }, [recipes]);
+
+  const categoriesMap = useMemo(() => {
+    const map = new Map<string, Category>();
+    categories.forEach((cat) => map.set(cat.id.toLowerCase(), cat));
+    return map;
+  }, [categories]);
 
   const getSourceData = (type: GameDataTypes | undefined, id: string): any => {
     if (type === "entity") return entitiesMap.get(id);
@@ -317,26 +327,53 @@ export function ItemDetailsPage() {
                   METADADOS
                 </Typography>
                 <Stack spacing={0.5} sx={{ mt: 0.5 }}>
-                  {item.metadata.map((meta) => (
-                    <Box
-                      key={meta.id}
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        py: 0.5,
-                        borderBottom: "1px solid rgba(255,255,255,0.05)",
-                        "&:last-child": { borderBottom: "none" }
-                      }}
-                    >
-                      <Typography variant="body2" sx={{ fontWeight: 500, color: "text.secondary" }}>
-                        {meta.id}
-                      </Typography>
-                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                        {String(meta.value)}
-                      </Typography>
-                    </Box>
-                  ))}
+                  {item.metadata.map((meta) => {
+                    const metaKey = (meta.type || meta.id).toLowerCase();
+                    const cat = categoriesMap.get(metaKey);
+                    const displayName = cat?.name || meta.type || meta.id;
+                    return (
+                      <Box
+                        key={meta.id}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          py: 0.5,
+                          borderBottom: "1px solid rgba(255,255,255,0.05)",
+                          "&:last-child": { borderBottom: "none" }
+                        }}
+                      >
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          {cat?.icon && (
+                            <img
+                              src={getPublicUrl(cat.icon)}
+                              alt={displayName}
+                              style={{ width: 16, height: 16, objectFit: "contain", imageRendering: "pixelated" }}
+                            />
+                          )}
+                          <Typography
+                            variant="body2"
+                            component={Link}
+                            to={`/game/${gameId}/metadado/view/${meta.type || meta.id}`}
+                            sx={{
+                              fontWeight: 500,
+                              color: "text.secondary",
+                              textDecoration: "none",
+                              "&:hover": {
+                                color: "primary.main",
+                                textDecoration: "underline",
+                              }
+                            }}
+                          >
+                            {displayName}
+                          </Typography>
+                        </Stack>
+                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                          {String(meta.value)}
+                        </Typography>
+                      </Box>
+                    );
+                  })}
                 </Stack>
               </Box>
             )}

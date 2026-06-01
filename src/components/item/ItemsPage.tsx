@@ -9,7 +9,12 @@ import {
   Switch,
 } from "@mui/material";
 import { Inventory, Sell, ShoppingCart, SwapHoriz } from "@mui/icons-material";
-import { ItemCard } from "./ItemCard";
+import {
+  ItemCard,
+  ItemList,
+  ItemIcon,
+  ItemRenderProvider,
+} from "./ItemRenderers";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
 import { useState, useMemo, useEffect } from "react";
@@ -39,7 +44,7 @@ export function ItemsPage() {
   const subCategoryParam = searchParams.get("subCategory");
   const { isMobile } = usePlatform();
 
-  const { loading: dbLoading, error, getItemsList, getItemCategories, getItemSubCategories, getGameInfo } = useApi(gameId);
+  const { loading: dbLoading, error, getItemsList, getItemCategories, getItemSubCategories, getGameInfo, getCategories } = useApi(gameId);
   const [itemsResponse, setItemsResponse] = useState<PaginatedResponse<Item> | null>(null);
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [dataLoading, setDataLoading] = useState(false);
@@ -52,6 +57,7 @@ export function ItemsPage() {
 
   const [availableSubCategories, setAvailableSubCategories] = useState<string[]>([]);
   const [allCategories, setAllCategories] = useState<(Category & { isPrimary: boolean })[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [showPrices, setShowPrices] = useState(false);
   const [viewMode, setViewMode] = useViewMode("items");
 
@@ -76,8 +82,9 @@ export function ItemsPage() {
   useEffect(() => {
     if (dbLoading) return;
     getItemCategories().then(setAllCategories);
+    getCategories().then(setCategories);
     if (gameId) getGameInfo(gameId).then(info => { if (info) setGameInfo(info); });
-  }, [dbLoading, getItemCategories, gameId, getGameInfo]);
+  }, [dbLoading, getItemCategories, getCategories, gameId, getGameInfo]);
 
   // Load items when filter or db changes
   useEffect(() => {
@@ -102,6 +109,86 @@ export function ItemsPage() {
   }, [dbLoading, getItemsList, pages.info]);
 
   const items = useMemo(() => itemsResponse?.data || [], [itemsResponse]);
+
+  const categoriesMap = useMemo(() => {
+    const map = new Map<string, any>();
+    categories.forEach(cat => {
+      map.set(cat.id.toLowerCase(), cat);
+    });
+    allCategories.forEach(cat => {
+      map.set(cat.id.toLowerCase(), cat);
+    });
+    return map;
+  }, [categories, allCategories]);
+
+  const renderMetadataChip = (meta: any) => {
+    const metaKey = (meta.type || meta.id).toLowerCase();
+    const cat = categoriesMap.get(metaKey);
+    const displayName = cat?.name || meta.type || meta.id;
+
+    if (cat?.icon) {
+      return (
+        <Tooltip key={`${meta.id}`} title={`${displayName}: ${meta.value}`}>
+          <Box
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/game/${gameId}/metadado/view/${meta.type || meta.id}`);
+            }}
+            sx={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 0.5,
+              px: 1,
+              height: "20px",
+              borderRadius: 1,
+              cursor: "pointer",
+              bgcolor: "rgba(255, 255, 255, 0.05)",
+              color: "text.primary",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              "&:hover": {
+                bgcolor: "rgba(255, 255, 255, 0.15)",
+                borderColor: "primary.main"
+              }
+            }}
+          >
+            <img
+              src={getPublicUrl(cat.icon)}
+              alt={displayName}
+              style={{ width: 14, height: 14, objectFit: "contain", imageRendering: "pixelated" }}
+            />
+            <Typography variant="caption" sx={{ fontSize: "0.7rem", fontWeight: 700 }}>
+              {meta.value}
+            </Typography>
+          </Box>
+        </Tooltip>
+      );
+    }
+
+    return (
+      <Tooltip key={`${meta.id}`} title={`Ver todos com ${displayName}`}>
+        <Chip
+          label={`${displayName}: ${meta.value}`}
+          size="small"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/game/${gameId}/metadado/view/${meta.type || meta.id}`);
+          }}
+          clickable
+          sx={{
+            fontSize: "0.7rem",
+            height: "20px",
+            bgcolor: "rgba(255, 255, 255, 0.05)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            "& .MuiChip-label": { px: 1 },
+            "&:hover": {
+              bgcolor: "rgba(255, 255, 255, 0.15)",
+              borderColor: "primary.main"
+            }
+          }}
+        />
+      </Tooltip>
+    );
+  };
 
   // Derive available sub-categories from all items based ONLY on primary category
   useEffect(() => {
@@ -236,242 +323,30 @@ export function ItemsPage() {
           </Typography>
         </Box>
       ) : (
-        <ListingDataView
-          data={items}
-          viewMode={viewMode}
-          variant="compact"
-          cardMinWidth={200}
-          listHeader={[
-            { label: "Item", width: showPrices ? "35%" : "45%" },
-            { label: "Metadados", width: "25%", hidden: isMobile },
-            { label: "Categorias", width: showPrices ? "30%" : "30%", hidden: isMobile },
-            {
-              label: "Preços",
-              align: "right" as const,
-              width: "10%",
-              hidden: !showPrices,
-            },
-          ]}
-          emptyMessage="Nenhum item encontrado com estes filtros."
-          getRowColor={(item: any) => item.rarity && gameInfo?.rarity?.[item.rarity]?.color}
-          renderCard={(item: any, variant) => (
-            <ItemCard item={item} gameId={gameId || ""} showPrices={showPrices} variant={variant} rarityColor={item.rarity && gameInfo?.rarity?.[item.rarity]?.color} />
-          )}
-          renderListItem={(item: any) => [
-            <Box
-              key={`list_item_${item.id}`}
-              onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
-              sx={{
-                display: "flex",
-                position: "relative",
-                alignItems: "center",
-                gap: 2,
-                cursor: "pointer",
-              }}
-            >
-              <Box
-                sx={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: 0.5,
-                  backgroundColor: "rgba(0,0,0,0.2)",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexShrink: 0,
-                }}
-              >
-                {item.icon ? (
-                  <img
-                    src={getPublicUrl(item.icon)}
-                    alt={item.name}
-                    style={{
-                      width: "80%",
-                      height: "80%",
-                      objectFit: "contain",
-                    }}
-                  />
-                ) : (
-                  <Inventory
-                    sx={{ fontSize: 16, color: "rgba(255, 255, 255, 0.2)" }}
-                  />
-                )}
-                {item.level !== undefined && item.level > 0 && (
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: -4,
-                      left: -4,
-                      backgroundColor: "warning.main",
-                      color: "warning.contrastText",
-                      borderRadius: "4px",
-                      px: 0.5,
-                      minWidth: 12,
-                      height: 12,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "0.55rem",
-                      fontWeight: 800,
-                      boxShadow: 1,
-                      zIndex: 1,
-                    }}
-                  >
-                    {item.level}
-                  </Box>
-                )}
-              </Box>
-              <Typography 
-                variant="body2" 
-                sx={{ 
-                  fontWeight: 700,
-                  color: item.rarity && gameInfo?.rarity?.[item.rarity]?.color ? gameInfo?.rarity?.[item.rarity]?.color : "text.primary",
-                  transition: "all 0.2s",
-                  "&:hover": {
-                    color: item.rarity && gameInfo?.rarity?.[item.rarity]?.color ? gameInfo?.rarity?.[item.rarity]?.color : "primary.main",
-                    textShadow: item.rarity && gameInfo?.rarity?.[item.rarity]?.color ? `0 0 8px ${gameInfo?.rarity?.[item.rarity]?.color}88` : "none"
-                  }
-                }}
-              >
-                {item.name}
-              </Typography>
-            </Box>,
-            <Box key={`list_metadata_${item.id}`}>
-              {item.metadata && item.metadata.length > 0 ? (
-                <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-                  {item.metadata.map((meta: any) => (
-                    <Tooltip key={`${item.id}_meta_${meta.id}`} title={`${meta.id}: ${meta.value}`}>
-                      <Chip
-                        label={`${meta.id}: ${meta.value}`}
-                        size="small"
-                        sx={{
-                          fontSize: "0.7rem",
-                          height: "18px",
-                          bgcolor: "rgba(255, 255, 255, 0.05)",
-                          border: "1px solid rgba(255, 255, 255, 0.1)",
-                          "& .MuiChip-label": { px: 1 }
-                        }}
-                      />
-                    </Tooltip>
-                  ))}
-                </Stack>
-              ) : (
-                <Typography variant="caption" sx={{ color: "text.disabled", fontStyle: "italic" }}>
-                  -
-                </Typography>
-              )}
-            </Box>,
-            <Stack direction={"row"} spacing={1} key={`list_cats_${item.id}`}>
-              {(Array.isArray(item.category) ? item.category : [item.category]).map((category: string) => (
-                <Chip key={`${item.id}_category_${category}`} label={category} />
-              ))}
-            </Stack>,
-            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }} key={`list_prices_${item.id}`}>
-              {item.buyPrice !== undefined && (
-                <Tooltip title="Compra">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 0.5,
-                      backgroundColor: "rgba(76, 175, 80, 0.1)",
-                      px: 1,
-                      borderRadius: 1,
-                      border: "1px solid rgba(76, 175, 80, 0.2)",
-                    }}
-                  >
-                    <ShoppingCart sx={{ fontSize: 12, color: "success.main" }} />
-                    <ItemChip
-                      id="ouro"
-                      amount={item.buyPrice}
-                      size="small"
-                      icon={"/img/heartopia/stats/ouro.png"}
-                    />
-                  </Box>
-                </Tooltip>
-              )}
-              {item.sellPrice !== undefined && (
-                <Tooltip title="Venda">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 0.5,
-                      backgroundColor: "rgba(255, 152, 0, 0.1)",
-                      px: 1,
-                      borderRadius: 1,
-                      border: "1px solid rgba(255, 152, 0, 0.2)",
-                    }}
-                  >
-                    <Sell sx={{ fontSize: 12, color: "warning.main" }} />
-                    <ItemChip
-                      id="ouro"
-                      amount={item.sellPrice}
-                      size="small"
-                      icon={"/img/heartopia/stats/ouro.png"}
-                    />
-                  </Box>
-                </Tooltip>
-              )}
-            </Box>,
-          ]}
-          renderIconItem={(item: any) => (
-            <Tooltip title={item.name} key={`icon_item_${item.id}`}>
-              <Box
-                onClick={() => navigate(`/game/${gameId}/items/view/${item.id}`)}
-                sx={{
-                  position: "relative",
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  p: 1,
-                }}
-              >
-                {item.icon ? (
-                  <img
-                    src={getPublicUrl(item.icon)}
-                    alt={item.name}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "contain",
-                    }}
-                  />
-                ) : (
-                  <Inventory
-                    sx={{ fontSize: 32, color: "rgba(255, 255, 255, 0.2)" }}
-                  />
-                )}
-                {item.level !== undefined && item.level > 0 && (
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: 4,
-                      left: 4,
-                      backgroundColor: "warning.main",
-                      color: "warning.contrastText",
-                      borderRadius: "4px",
-                      px: 0.5,
-                      minWidth: 16,
-                      height: 16,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "0.65rem",
-                      fontWeight: 800,
-                      boxShadow: 2,
-                      zIndex: 1,
-                    }}
-                  >
-                    {item.level}
-                  </Box>
-                )}
-              </Box>
-            </Tooltip>
-          )}
-        />
+        <ItemRenderProvider value={{ gameId: gameId || "", navigate, gameInfo, categoriesMap, showPrices }}>
+          <ListingDataView
+            data={items}
+            viewMode={viewMode}
+            variant="compact"
+            cardMinWidth={200}
+            listHeader={[
+              { label: "Item", width: showPrices ? "35%" : "45%" },
+              { label: "Metadados", width: "25%", hidden: isMobile },
+              { label: "Categorias", width: showPrices ? "30%" : "30%", hidden: isMobile },
+              {
+                label: "Preços",
+                align: "right" as const,
+                width: "10%",
+                hidden: !showPrices,
+              },
+            ]}
+            emptyMessage="Nenhum item encontrado com estes filtros."
+            getRowColor={(item: any) => item.rarity && gameInfo?.rarity?.[item.rarity]?.color}
+            renderCard={ItemCard}
+            renderListItem={ItemList}
+            renderIconItem={ItemIcon}
+          />
+        </ItemRenderProvider>
       )}
     </StyledContainer>
   );

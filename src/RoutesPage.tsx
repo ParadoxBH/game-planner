@@ -23,6 +23,7 @@ import { ConjuntosPage } from "./components/item/ConjuntosPage";
 import { ConjuntosDetain } from "./components/item/ConjuntosDetain";
 import { CategoriesPage } from "./components/category/CategoriesPage";
 import { CategoryDetailsPage } from "./components/category/CategoryDetailsPage";
+import { MetadataDetailsPage } from "./components/item/MetadataDetailsPage";
 
 export function RoutesPage() {
   return (
@@ -54,6 +55,7 @@ export function RoutesPage() {
           <Route path="events/view/:eventId" element={<EventDetailsPage />} />
           <Route path="categories" element={<CategoriesPage />} />
           <Route path="categories/view/:categoryId" element={<CategoryDetailsPage />} />
+          <Route path="metadado/view/:type" element={<MetadataDetailsPage />} />
           <Route path="codes" element={<CodesPage />} />
           <Route path="calculator">
             <Route index element={<CalculatorPage />} />

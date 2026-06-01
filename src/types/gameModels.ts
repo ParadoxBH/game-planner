@@ -209,35 +209,38 @@ export interface GameInfo {
 export type ReferencePointsRespawnMode = "once" | "respawn" | "weekly" | "daily";
 
 export interface ReferencePointSpawn {
-  entityId: string;
-  chance?: number;
-  quantity?: string;
-  conditions?: Record<string, any>;
-  customDrops?: EntityDrop[];
+  entityId: string;//id da entidade
+  chance?: number;// a chance de dar spawn de 0 até 1
+  quantity?: string;// quantos serão spawnados
+  conditions?: Record<string, any>;// aqui é a definição das condições que são necessarias para surgir a entidade
+  customDrops?: EntityDrop[];// a entidade pertecente tem um drop personalizado neste spawn (normalmente utilizado para baus e coletaveis)
 }
 
 export interface ReferencePoints {
-  id: string;
+  id: string;//codigo aleatorio guid
   type: "spawn" | "poi" | "location" | "biome" | "rule";
-  entityId?: string;
-  spawns?: ReferencePointSpawn[];
-  name?: string;
-  description?: string;
-  icon?: string;
-  thumb?: string;
+
+  //parametros para entidade unica no local
+  entityId?: string;//id da entidade fixa que surge nesta localização
+  conditions?: Record<string, any>;//condições para o spawn ser valido
+  customDrops?: EntityDrop[];//drop personalizado da entidade unica
+  chance?: number;//chance da entidade unica aparecer
+  quantity?: string;//quantas entidades unica irá aparecer
+  
+  spawns?: ReferencePointSpawn[];//caso tenha varias possibilidades de spawn neste local, deve indicara aqui em vez de utilizar as variaveis de entidade unica
+  
+  name?: string;//nome do local (normalmente utilizado quando é um type: location)
+  description?: string;// descrição do local (normalmente utilizado quando é um type: location ou quando quer colocar alguma observação no spawn)
+  icon?: string; // qual p icone usado para representar no mapa, caso não definido sera utilizado o icone da primeira entidade valida
   locationId?: string; // ID da Região/Mapa onde spawna (legado ou para regras)
   parentId?: string; // Para hierarquia (ex: POI dentro de Biome)
-  mode?: ReferencePointsRespawnMode;
-  conditions?: Record<string, any>;
-  customDrops?: EntityDrop[];
-  chance?: number;
-  quantity?: string;
-  geom: WktGeometry;
-  mapId?: string;
-  respawnDelay?: number;
-  data?: Record<string, any>;
-  image?: string;
-  event?: string | string[];
+  mode?: ReferencePointsRespawnMode;// definição da ocorrencia do respawn
+  geom: WktGeometry;//desenho geografico para exibir no mapa
+  mapId?: string;//codigo do mapa
+  respawnDelay?: number;//algumas entidades dão auto respawn depois de seremcoletadas/destruidas, indique aqui em minutos
+  data?: Record<string, any>;//informações complementares
+  image?: string;// screenshot do local, usado para auxiliar os players a encontrar/identifcar o local
+  event?: string | string[];//eventos ativos necessarios para a entidade dar spawn
 }
 
 export interface RedemptionCode {
