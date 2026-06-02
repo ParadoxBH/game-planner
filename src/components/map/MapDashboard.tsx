@@ -555,7 +555,7 @@ export const MapDashboard = ({
               {regions.map((region) => (
                 <Grid size={isMobile ? 6 : 4} key={region.id}>
                   {(() => {
-                    const rawBg = region.image || region.thumb || region.icon;
+                    const rawBg = region.image || (region as any).thumb || region.icon;
                     const bgImage = getPublicUrl(rawBg);
                     const hasIcon = Boolean(region.image || region.icon);
 

@@ -1,4 +1,4 @@
-import { Box, Typography, Stack, Chip, Tooltip, Card, type SxProps } from "@mui/material";
+import { Box, Typography, Stack, Chip, Tooltip, Card } from "@mui/material";
 import { Inventory, ShoppingCart, Sell } from "@mui/icons-material";
 import { getPublicUrl } from "../../utils/pathUtils";
 import { ItemChip } from "../common/ItemChip";
@@ -239,7 +239,7 @@ function CardComponent({ item, variant, children }: CardComponentProps) {
                     ? item.category
                     : [item.category]
                   )
-                    .filter((cat): cat is string => !!cat)
+                    .filter((cat: any): cat is string => !!cat)
                     .map((cat: string) => (
                       <Typography
                         key={cat}

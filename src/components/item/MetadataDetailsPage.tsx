@@ -7,7 +7,6 @@ import {
   Breadcrumbs,
   Link as MuiLink,
   CircularProgress,
-  Paper,
   Stack,
   Chip,
   Tooltip,
