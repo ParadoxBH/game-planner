@@ -410,12 +410,17 @@
   {
     "id": "Survival",
     "name": "Kit de Sobrevivencia",
-    "icon": "/icon/bag.png"
+    "icon": "/icon/backpack.png"
   },
   {
-    "id": "Survival",
-    "name": "Kit de Sobrevivencia",
-    "icon": "/icon/backpack.png"
+    "id": "Deployable",
+    "name": "Posicionavel",
+    "icon": "/icon/deployable.png"
+  },
+  {
+    "id": "Gem",
+    "name": "Gema",
+    "icon": "/icon/gem.png"
   },
   {
     "id": "Enchantment",
