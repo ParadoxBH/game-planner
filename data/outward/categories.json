@@ -49,19 +49,33 @@
   },
   {
     "id": "Currency",
-    "name": "Dinheiro"
+    "name": "Dinheiro",
+    "icon": "/icon/coin.png"
   },
   {
     "id": "DeployableTrap",
-    "name": "Armadilha"
+    "name": "Armadilha",
+    "icon": "/icon/trap.png"
+  },
+  {
+    "id": "blueprint",
+    "name": "Projeto",
+    "icon": "/icon/blueprint.png"
   },
   {
     "id": "EnchantmentRecipeItem",
-    "name": "Pergaminhos de Encantamento"
+    "name": "Pergaminhos de Encantamento",
+    "icon": "/icon/scroll.png"
   },
   {
     "id": "EnchantmentTable",
-    "name": "Mesa de Encantamento"
+    "name": "Mesa de Encantamento",
+    "icon": "/icon/enchantment_table.png"
+  },
+  {
+    "id": "CraftingStation",
+    "name": "Bancada de Trabalho",
+    "icon": "/icon/forging.png"
   },
   {
     "id": "Equipament",
@@ -69,31 +83,81 @@
   },
   {
     "id": "Food",
-    "name": "Comidas"
+    "name": "Comidas",
+    "icon": "/icon/food.png"
   },
   {
     "id": "FueledContainer",
-    "name": "Fogueira"
+    "name": "Fogueira",
+    "icon": "/icon/bonfire.png"
+  },
+  {
+    "id": "SingleItemContainer",
+    "name": "Coluna de Encantamento",
+    "icon": "/icon/column.png"
+  },
+  {
+    "id": "AttackSkill",
+    "name": "Habilidade de Ataque"
+  },
+  {
+    "id": "BloodLustPassiveSkill",
+    "name": "Habilidade de Sangue"
+  },
+  {
+    "id": "building",
+    "name": "Edificação",
+    "icon": "/icon/village.png"
+  },
+  {
+    "id": "NeedPassiveSkill",
+    "name": "Habilidade de Necessidade"
   },
   {
     "id": "Gatherable",
-    "name": "Coletavel"
+    "name": "Coletavel",
+    "icon": "/icon/grab.png"
+  },
+  {
+    "id": "CounterSelfSkill",
+    "name": "Habilidade de Proteção"
+  },
+  {
+    "id": "CounterSkill",
+    "name": "Habilidade de Contra Ataque"
+  },
+  {
+    "id": "LevelAttackSkill",
+    "name": "Habilidade de Ataque Estacavel"
+  },
+  {
+    "id": "LevelPassiveSkill",
+    "name": "Habilidade de Passiva Estacavel"
   },
   {
     "id": "GroupContainer",
-    "name": "Item Empilhado"
+    "name": "Item Empilhado",
+    "icon": "/icon/item.png"
   },
   {
     "id": "InfuseConsumable",
-    "name": "Pergaminho de Infusão"
+    "name": "Pergaminho de Infusão",
+    "icon": "/icon/sworld_infusion.png"
   },
   {
     "id": "Instrument",
-    "name": "Instrumento"
+    "name": "Instrumento",
+    "icon": "/icon/instrument.png"
   },
   {
     "id": "ItemFragment",
-    "name": "Fragmento"
+    "name": "Fragmento",
+    "icon": "/icon/fragment.png"
+  },
+  {
+    "id": "Ammunition",
+    "name": "Munição",
+    "icon": "/icon/quiver.png"
   },
   {
     "id": "MeleeSkill",
@@ -105,31 +169,41 @@
   },
   {
     "id": "PassiveSkill",
-    "name": "Habilidades Passivas"
+    "name": "Habilidades Passivas",
+    "icon": "/icon/skills.png"
   },
   {
     "id": "PistolSkill",
-    "name": "Habilidades de Pistola"
+    "name": "Habilidade de Pistola"
   },
   {
     "id": "Quest",
-    "name": "Missão"
+    "name": "Missão",
+    "icon": "/icon/quest.png"
   },
   {
     "id": "RangeAttackSkill",
-    "name": "Habilidades de Arquearia"
+    "name": "Habilidade de Arquearia"
+  },
+  {
+    "id": "Item",
+    "name": "Item",
+    "icon": "/icon/item.png"
   },
   {
     "id": "RecipeItem",
-    "name": "Receitas"
+    "name": "Receitas",
+    "icon": "/icon/recipe.png"
   },
   {
     "id": "Skill",
-    "name": "Habilidades"
+    "name": "Habilidades",
+    "icon": "/icon/skills.png"
   },
   {
     "id": "Throwable",
-    "name": "Arremessavel"
+    "name": "Arremessavel",
+    "icon": "/icon/throw.png"
   },
   {
     "id": "ThrowSkill",
@@ -141,15 +215,32 @@
   },
   {
     "id": "WaterItem",
-    "name": "Liquidos"
+    "name": "Liquidos",
+    "icon": "/icon/drink.png"
   },
   {
     "id": "WrittenNote",
-    "name": "Anotações"
+    "name": "Anotações",
+    "icon": "/icon/note.png"
   },
 
 
 
+  {
+    "id": "staminacost",
+    "name": "Custom de Estamina",
+    "icon": "/img/outward/stats/Stamina.webp"
+  },
+  {
+    "id": "healregen",
+    "name": "Regeneração de Vida",
+    "icon": "/img/outward/stats/Health.webp"
+  },
+  {
+    "id": "corruptionprotection",
+    "name": "Proteção Corrupção",
+    "icon": "/img/outward/stats/Decay.webp"
+  },
   {
     "id": "damageprotection_physical",
     "name": "Proteção Fisica",
@@ -209,24 +300,28 @@
   },
   {
     "id": "content",
-    "name": "Recipiente"
+    "name": "Armazenamento"
   },
   {
     "id": "WaterContainer",
-    "name": "Recipiente de Agua"
+    "name": "Recipiente de Agua",
+    "icon": "/icon/waterskin.png"
   },
   {
     "id": "Drink",
-    "name": "Bebivel"
+    "name": "Bebivel",
+    "icon": "/icon/drink.png"
   },
 
   {
     "id": "Ingredient",
-    "name": "Ingrediente"
+    "name": "Ingrediente",
+    "icon": "/icon/ingredient.png"
   },
   {
     "id": "VampiricTransmutationTable",
-    "name": "Bancada de Transmutação Vampirica"
+    "name": "Bancada de Transmutação Vampirica",
+    "icon": "/icon/vampire.png"
   },
   {
     "id": "pouchcapacitybonus",
@@ -274,30 +369,92 @@
   },
   {
     "id": "MeleeWeapon",
-    "name": "Arma Corpo a Corpo"
+    "name": "Arma Corpo a Corpo",
+    "icon": "/icon/melee.png"
   },
   {
     "id": "ItemContainer",
-    "name": "Item de Armazenamento"
+    "name": "Item de Armazenamento",
+    "icon": "/icon/chest.png"
   },
   {
     "id": "TreasureChest",
-    "name": "Bau do Tesouro"
+    "name": "Bau do Tesouro",
+    "icon": "/icon/treasure.png"
   },
   {
     "id": "DualMeleeWeapon",
-    "name": "Armas duplas"
+    "name": "Armas duplas",
+    "icon": "/icon/dual_sword.png"
   },
   {
     "id": "ProjectileWeapon",
-    "name": "Arma a Distancia"
+    "name": "Arma a Distancia",
+    "icon": "/icon/ranged.png"
   },
   {
     "id": "Armor",
-    "name": "Armadura"
+    "name": "Armadura",
+    "icon": "/icon/equip.png"
+  },
+  {
+    "id": "Equipment",
+    "name": "Acessorios",
+    "icon": "/icon/lamp.png"
+  },
+  {
+    "id": "CentralGatherable",
+    "name": "Colhivel",
+    "icon": "/icon/tree.png"
   },
   {
     "id": "Bag",
-    "name": "Mochila"
+    "name": "Mochila",
+    "icon": "/icon/backpack.png"
+  },
+  {
+    "id": "Cooking",
+    "name": "Cozinhar",
+    "icon": "/icon/cooking_pot.png"
+  },
+  {
+    "id": "Alchemy",
+    "name": "Alquimia",
+    "icon": "/icon/refinery.png"
+  },
+  {
+    "id": "Survival",
+    "name": "Kit de Sobrevivencia",
+    "icon": "/icon/backpack.png"
+  },
+  {
+    "id": "Deployable",
+    "name": "Posicionavel",
+    "icon": "/icon/deployable.png"
+  },
+  {
+    "id": "Gem",
+    "name": "Gema",
+    "icon": "/icon/gem.png"
+  },
+  {
+    "id": "Enchantment",
+    "name": "Encantamento",
+    "icon": "/icon/enchanted_sword.png"
+  },
+  {
+    "id": "Container",
+    "name": "Baus",
+    "icon": "/icon/chest.png"
+  },
+  {
+    "id": "Creature",
+    "name": "Criaturas",
+    "icon": "/icon/creature.png"
+  },
+  {
+    "id": "Npc",
+    "name": "NPC",
+    "icon": "/icon/character.png"
   }
 ]
