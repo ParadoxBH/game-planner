@@ -233,7 +233,7 @@ export class ApiService {
     
     return await Promise.all(allIds.map(async id => {
       const rich = await this.getRichCategory(id);
-      return { ...rich, isPrimary: primaryIds.includes(id) };
+      return { ...rich, isPrimary: primaryIds.some(p => p.toLowerCase() === id.toLowerCase()) };
     }));
   }
 
@@ -247,7 +247,7 @@ export class ApiService {
     
     return await Promise.all(allIds.map(async id => {
       const rich = await this.getRichCategory(id);
-      return { ...rich, isPrimary: primaryIds.includes(id) };
+      return { ...rich, isPrimary: primaryIds.some(p => p.toLowerCase() === id.toLowerCase()) };
     }));
   }
 
@@ -257,10 +257,12 @@ export class ApiService {
 
   public async getRichCategory(categoryId: string): Promise<Category> {
     // 1. Check if explicit category metadata exists
-    const category = await categoryRepository.getById(categoryId);
+    const categories = await categoryRepository.getAll();
+    const category = categories.find(c => c.id.toLowerCase() === categoryId.toLowerCase());
     
     // 2. Check if there's an entity with the exact same ID
-    const directEntity = await entityRepository.getById(categoryId);
+    const entities = await entityRepository.getAll();
+    const directEntity = entities.find(e => e.id.toLowerCase() === categoryId.toLowerCase());
     
     // 3. Check if there's exactly one entity in this category
     const entitiesInCategory = await entityRepository.getEntitiesByCategory(categoryId);

@@ -22,8 +22,10 @@ import type {
   Shop, 
   GameEvent, 
   MapMetadata, 
-  RedemptionCode 
+  RedemptionCode,
+  Category
 } from "../types/gameModels";
+import { getPublicUrl } from "../utils/pathUtils";
 
 export interface NavigationOption {
   label: string;
@@ -41,16 +43,6 @@ export interface NavigationItem {
   options?: NavigationOption[];
 }
 
-const CATEGORY_ICONS: Record<string, React.ReactElement> = {
-  resource: <Grass />,
-  recurso: <Grass />,
-  creature: <Pets />,
-  criatura: <Pets />,
-  npc: <People />,
-  structure: <Foundation />,
-  estrutura: <Foundation />,
-};
-
 export function useNavigation(gameId: string | null) {
   const theme = useTheme();
   
@@ -62,6 +54,7 @@ export function useNavigation(gameId: string | null) {
   const { data: codes } = useGameData<RedemptionCode>(gameId || "", "codes");
   const { data: maps } = useGameData<MapMetadata>(gameId || "", "maps");
   const { data: quests } = useGameData<any>(gameId || "", "quests");
+  const { data: categories } = useGameData<Category>(gameId || "", "categories");
 
   const dynamicEntityCategories = useMemo(() => {
     if (!entities) return [];
@@ -75,12 +68,20 @@ export function useNavigation(gameId: string | null) {
         }
       }
     });
-    return Array.from(sets).sort().map(cat => ({
-      label: cat.charAt(0).toUpperCase() + cat.slice(1),
-      path: `/game/${gameId}/entity/list/${cat}`,
-      icon: CATEGORY_ICONS[cat] || <Pets />
-    }));
-  }, [entities, gameId]);
+    const mapped = Array.from(sets).map(cat => {
+      const foundCategory = categories?.find(c => c.id.toLowerCase() === cat.toLowerCase());
+      const label = foundCategory?.name || (cat.charAt(0).toUpperCase() + cat.slice(1));
+      const icon = foundCategory?.icon 
+        ? <img src={getPublicUrl(foundCategory.icon)} alt={label} style={{ width: 20, height: 20, objectFit: 'contain' }} /> 
+        : undefined;
+      return {
+        label,
+        path: `/game/${gameId}/entity/list/${cat}`,
+        icon
+      };
+    });
+    return mapped.sort((a, b) => a.label.localeCompare(b.label));
+  }, [entities, gameId, categories]);
 
   const dynamicItemCategories = useMemo(() => {
     if (!items) return [];
@@ -90,11 +91,20 @@ export function useNavigation(gameId: string | null) {
       if(cats.length > 0)
         sets.add(cats[0].toLowerCase());
     });
-    return Array.from(sets).sort().map(cat => ({
-      label: cat.charAt(0).toUpperCase() + cat.slice(1),
-      path: `/game/${gameId}/items/list/${cat}`,
-    }));
-  }, [items, gameId]);
+    const mapped = Array.from(sets).map(cat => {
+      const foundCategory = categories?.find(c => c.id.toLowerCase() === cat.toLowerCase());
+      const label = foundCategory?.name || (cat.charAt(0).toUpperCase() + cat.slice(1));
+      const icon = foundCategory?.icon 
+        ? <img src={getPublicUrl(foundCategory.icon)} alt={label} style={{ width: 20, height: 20, objectFit: 'contain' }} /> 
+        : undefined;
+      return {
+        label,
+        path: `/game/${gameId}/items/list/${cat}`,
+        icon
+      };
+    });
+    return mapped.sort((a, b) => a.label.localeCompare(b.label));
+  }, [items, gameId, categories]);
 
   const dynamicRecipeStations = useMemo(() => {
     if (!recipes) return [];
@@ -103,11 +113,20 @@ export function useNavigation(gameId: string | null) {
       const stations = r.stations || r.ProducedIn || [];
       stations.forEach((s: string) => sets.add(s));
     });
-    return Array.from(sets).sort().map(station => ({
-      label: station,
-      path: `/game/${gameId}/recipes/list/${station}`,
-    }));
-  }, [recipes, gameId]);
+    const mapped = Array.from(sets).map(station => {
+      const foundCategory = categories?.find(c => c.id.toLowerCase() === station.toLowerCase());
+      const label = foundCategory?.name || station;
+      const icon = foundCategory?.icon 
+        ? <img src={getPublicUrl(foundCategory.icon)} alt={label} style={{ width: 20, height: 20, objectFit: 'contain' }} /> 
+        : undefined;
+      return {
+        label,
+        path: `/game/${gameId}/recipes/list/${station}`,
+        icon
+      };
+    });
+    return mapped.sort((a, b) => a.label.localeCompare(b.label));
+  }, [recipes, gameId, categories]);
 
   const dynamicShops = useMemo(() => {
     if (!shops || !entities) return [];

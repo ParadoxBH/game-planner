@@ -12,7 +12,8 @@ export class CategoryRepository extends BaseRepository<Category, string> {
    * com o ID como nome, para garantir que sempre tenhamos algo para exibir.
    */
   async getByIdWithFallback(id: string): Promise<Category> {
-    const cat = await this.getById(id);
+    const all = await this.getAll();
+    const cat = all.find(c => c.id.toLowerCase() === id.toLowerCase());
     if (cat) return cat;
 
     return {

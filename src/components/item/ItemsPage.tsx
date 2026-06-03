@@ -232,6 +232,7 @@ export function ItemsPage() {
             options={allCategories
               .filter(cat => cat.isPrimary)
               .map(cat => ({ value: cat.id, label: cat.name, icon: cat.icon }))
+              .sort((a, b) => a.label.localeCompare(b.label))
             }
             onChange={(cat) => {
               navigate(`/game/${gameId}/items/list/${cat || "all"}`);
@@ -243,13 +244,13 @@ export function ItemsPage() {
               label="Sub-categoria"
               states={pages.info.criteria.subCategoryStates || {}}
               options={availableSubCategories.map(subId => {
-                const catInfo = allCategories.find(c => c.id === subId);
+                const catInfo = allCategories.find(c => c.id.toLowerCase() === subId.toLowerCase());
                 return {
                   value: subId,
                   label: catInfo?.name || subId,
                   icon: catInfo?.icon
                 };
-              })}
+              }).sort((a, b) => a.label.localeCompare(b.label))}
               onChange={handleSubCategoryStateChange}
               fullWidth={isMobile}
             />

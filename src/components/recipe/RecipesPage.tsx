@@ -186,11 +186,11 @@ export function RecipesPage() {
   };
 
   const stationOptions = useMemo(() => {
-    return allStations.map(station => resolveStation(station));
+    return allStations.map(station => resolveStation(station)).sort((a, b) => a.label.localeCompare(b.label));
   }, [allStations, entities, categoriesMap]);
 
   const subStationOptions = useMemo(() => {
-    return availableSubStations.map(station => resolveStation(station));
+    return availableSubStations.map(station => resolveStation(station)).sort((a, b) => a.label.localeCompare(b.label));
   }, [availableSubStations, entities, categoriesMap]);
 
   return (
