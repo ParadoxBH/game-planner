@@ -319,7 +319,7 @@ export function RecipesPage() {
               </Box>,
 
               <Box key={`recipe_ing_${recipe.id}`} sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
-                {recipe.craftTime && recipe.craftTime > 0 && (
+                {(!!recipe.craftTime && recipe.craftTime > 0) && (
                   <TimeChip seconds={recipe.craftTime} />
                 )}
                 {recipe.normalizedIngredients.map((ing: any, i: number) => {
