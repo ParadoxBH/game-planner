@@ -1,14 +1,12 @@
 import {
   Box,
   Typography,
-  Chip,
   Stack,
   CircularProgress,
-  Tooltip,
   FormControlLabel,
   Switch,
 } from "@mui/material";
-import { Inventory, Sell, ShoppingCart, SwapHoriz } from "@mui/icons-material";
+import { SwapHoriz } from "@mui/icons-material";
 import {
   ItemCard,
   ItemList,
@@ -19,7 +17,6 @@ import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
 import { useState, useMemo, useEffect } from "react";
 import { StyledContainer } from "../common/StyledContainer";
-import { ItemChip } from "../common/ItemChip";
 import { PickSelector } from "../common/PickSelector";
 import { ListingDataView } from "../common/ListingDataView";
 import { ViewModeSelector } from "../common/ViewModeSelector";
@@ -30,7 +27,6 @@ import type { Item, Category, GameInfo } from "../../types/gameModels";
 import type { ItemCriteria } from "../../types/filterTypes";
 import type { PaginatedResponse } from "../../types/apiModels";
 import { usePagination } from "../../hooks/usePagination";
-import { getPublicUrl } from "../../utils/pathUtils";
 import { usePlatform } from "../../hooks/usePlatform";
 import { isDev } from "../../utils/mapper";
 
@@ -121,74 +117,7 @@ export function ItemsPage() {
     return map;
   }, [categories, allCategories]);
 
-  const renderMetadataChip = (meta: any) => {
-    const metaKey = (meta.type || meta.id).toLowerCase();
-    const cat = categoriesMap.get(metaKey);
-    const displayName = cat?.name || meta.type || meta.id;
 
-    if (cat?.icon) {
-      return (
-        <Tooltip key={`${meta.id}`} title={`${displayName}: ${meta.value}`}>
-          <Box
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/game/${gameId}/metadado/view/${meta.type || meta.id}`);
-            }}
-            sx={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 0.5,
-              px: 1,
-              height: "20px",
-              borderRadius: 1,
-              cursor: "pointer",
-              bgcolor: "rgba(255, 255, 255, 0.05)",
-              color: "text.primary",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              "&:hover": {
-                bgcolor: "rgba(255, 255, 255, 0.15)",
-                borderColor: "primary.main"
-              }
-            }}
-          >
-            <img
-              src={getPublicUrl(cat.icon)}
-              alt={displayName}
-              style={{ width: 14, height: 14, objectFit: "contain", imageRendering: "pixelated" }}
-            />
-            <Typography variant="caption" sx={{ fontSize: "0.7rem", fontWeight: 700 }}>
-              {meta.value}
-            </Typography>
-          </Box>
-        </Tooltip>
-      );
-    }
-
-    return (
-      <Tooltip key={`${meta.id}`} title={`Ver todos com ${displayName}`}>
-        <Chip
-          label={`${displayName}: ${meta.value}`}
-          size="small"
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate(`/game/${gameId}/metadado/view/${meta.type || meta.id}`);
-          }}
-          clickable
-          sx={{
-            fontSize: "0.7rem",
-            height: "20px",
-            bgcolor: "rgba(255, 255, 255, 0.05)",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
-            "& .MuiChip-label": { px: 1 },
-            "&:hover": {
-              bgcolor: "rgba(255, 255, 255, 0.15)",
-              borderColor: "primary.main"
-            }
-          }}
-        />
-      </Tooltip>
-    );
-  };
 
   // Derive available sub-categories from all items based ONLY on primary category
   useEffect(() => {

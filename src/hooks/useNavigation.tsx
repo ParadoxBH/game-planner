@@ -8,9 +8,6 @@ import {
   Event, 
   Redeem, 
   Calculate,
-  Grass,
-  People,
-  Foundation,
   AutoAwesomeMosaic,
 } from "@mui/icons-material";
 import { useGameData } from "./useGameData";
