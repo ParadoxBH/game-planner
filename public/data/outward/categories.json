@@ -227,6 +227,21 @@
 
 
   {
+    "id": "staminacost",
+    "name": "Custom de Estamina",
+    "icon": "/img/outward/stats/Stamina.webp"
+  },
+  {
+    "id": "healregen",
+    "name": "Regeneração de Vida",
+    "icon": "/img/outward/stats/Health.webp"
+  },
+  {
+    "id": "corruptionprotection",
+    "name": "Proteção Corrupção",
+    "icon": "/img/outward/stats/Decay.webp"
+  },
+  {
     "id": "damageprotection_physical",
     "name": "Proteção Fisica",
     "icon": "/img/outward/stats/Protection.webp"
