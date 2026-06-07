@@ -111,8 +111,8 @@ export function ItemChip({
   };
 
   const displayName = type === 'category' ? (categoryData?.name || `Qualquer ${id}`) : (name || id);
-  const tooltipTitle = (amount !== undefined || level !== undefined)
-    ? `${displayName}${level !== undefined ? ` (Lvl ${level})` : ''}${amount !== undefined ? ` ${amount.toString()}x` : ''}` 
+  const tooltipTitle = (!!amount || !!level)
+    ? `${displayName}${!!level ? ` (Lvl ${level})` : ''}${!!amount ? ` ${amount.toString()}x` : ''}` 
     : displayName;
   
   const config = SIZES[size];
@@ -194,8 +194,8 @@ export function ItemChip({
           <Box
             sx={{
               position: 'absolute',
-              top: level !== undefined && level > 0 ? -12 : -8,
-              left: level !== undefined && level > 0 ? -12 : -8,
+              top: !!level && level > 0 ? -12 : -8,
+              left: !!level && level > 0 ? -12 : -8,
               zIndex: 3,
               display: 'flex',
               filter: 'drop-shadow(0 0 2px rgba(0,0,0,0.5))'
@@ -207,7 +207,7 @@ export function ItemChip({
             }} />
           </Box>
         )}
-        {(amount !== undefined && amount != 0) && (
+        {(!!amount && amount != 0) && (
           <Box sx={{ 
             position: 'absolute', 
             bottom: config.offset, 
@@ -234,7 +234,7 @@ export function ItemChip({
             </Typography>
           </Box>
         )}
-        {(level !== undefined && level > 0) && (
+        {(!!level && level > 0) && (
           <Box sx={{ 
             position: 'absolute', 
             top: config.offset, 
@@ -251,7 +251,7 @@ export function ItemChip({
             border: '2px solid',
             borderColor: '#121212', // Match background
             boxShadow: 4,
-            zIndex: level !== undefined && level > 0 ? 4 : 1 // Above star if needed
+            zIndex: !!level && level > 0 ? 4 : 1 // Above star if needed
           }}>
             <Typography variant="caption" sx={{ 
               fontWeight: 800, 
