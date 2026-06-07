@@ -193,7 +193,7 @@ export function ConjuntosDetain() {
           g.conjuntoIds?.includes(c.id),
         );
         return groups.some((group) => {
-          if (!group.event) return true;
+          if (!group.event || (Array.isArray(group.event) && group.event.length === 0)) return true;
           const eventArray = Array.isArray(group.event)
             ? group.event
             : [group.event];
@@ -489,7 +489,7 @@ export function ConjuntosDetain() {
 
             // Filter Group by Event
             if (activeEventIds && activeEventIds.length > 0) {
-              if (!group.event) return true;
+              if (!group.event || (Array.isArray(group.event) && group.event.length === 0)) return true;
               const eventArray = Array.isArray(group.event)
                 ? group.event
                 : [group.event];

@@ -22,6 +22,10 @@ export function parseWKTPoint(wkt: string): number[] {
   const coordsStr = match[1].trim();
   const coords = coordsStr.split(/[\s,]+/).map(Number);
 
+  if (coords.length > 2) {
+    return [coords[0], coords[1]];
+  }
+
   return coords;
 }
 

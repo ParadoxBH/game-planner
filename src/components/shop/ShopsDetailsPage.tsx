@@ -61,7 +61,7 @@ export function ShopsDetailsPage({
   const filteredGroups = useMemo(() => {
     if (!currentShop?.groups) return [];
     return currentShop.groups.filter((group) => {
-      if (group.event) {
+      if (group.event && (!Array.isArray(group.event) || group.event.length > 0)) {
         const eventArray = Array.isArray(group.event) ? group.event : [group.event];
         return eventArray.some((e) => activeEventIds.includes(e));
       }

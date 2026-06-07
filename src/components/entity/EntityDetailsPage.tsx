@@ -259,7 +259,7 @@ export function EntityDetailsPage() {
     const map = new Map<string, ReferencePoints[]>();
     entityDetails.referencePoints.forEach((s: any) => {
       // Event Filter
-      if (s.event) {
+      if (s.event && (!Array.isArray(s.event) || s.event.length > 0)) {
         const eventArray = Array.isArray(s.event) ? s.event : [s.event];
         const isAnyEventActive = eventArray.some((e: string) => activeEventIds.includes(e));
         if (!isAnyEventActive) return;

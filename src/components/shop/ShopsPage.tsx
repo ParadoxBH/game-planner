@@ -134,7 +134,7 @@ export function ShopsPage() {
 
   const filteredReferencePoints = useMemo(() => {
     return referencePoints.filter(s => {
-      if (s.event) {
+      if (s.event && (!Array.isArray(s.event) || s.event.length > 0)) {
         const eventArray = Array.isArray(s.event) ? s.event : [s.event];
         return eventArray.some(e => activeEventIds.includes(e));
       }
@@ -144,7 +144,7 @@ export function ShopsPage() {
   
   const filteredShops = useMemo(() => {
     return shops.filter(s => {
-      if (s.event) {
+      if (s.event && (!Array.isArray(s.event) || s.event.length > 0)) {
         const eventArray = Array.isArray(s.event) ? s.event : [s.event];
         return eventArray.some(e => activeEventIds.includes(e));
       }

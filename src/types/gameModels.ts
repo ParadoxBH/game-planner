@@ -225,7 +225,7 @@ export interface ReferencePoints {
   conditions?: Record<string, any>;//condições para o spawn ser valido
   customDrops?: EntityDrop[];//drop personalizado da entidade unica
   chance?: number;//chance da entidade unica aparecer
-  quantity?: string;//quantas entidades unica irá aparecer
+  quantity?: number;//quantas entidades unica irá aparecer
   
   spawns?: ReferencePointSpawn[];//caso tenha varias possibilidades de spawn neste local, deve indicara aqui em vez de utilizar as variaveis de entidade unica
   

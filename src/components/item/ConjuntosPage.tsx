@@ -118,7 +118,7 @@ export function ConjuntosPage() {
       // 2. Event Filter (Set must have at least one group matching active events)
       if (activeEventIds && activeEventIds.length > 0) {
         const matchesEvent = groups.some((group) => {
-          if (!group.event) return true;
+          if (!group.event || (Array.isArray(group.event) && group.event.length === 0)) return true;
           const eventArray = Array.isArray(group.event)
             ? group.event
             : [group.event];

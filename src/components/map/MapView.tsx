@@ -376,33 +376,65 @@ export const MapView = () => {
     if (dataLoading || hasInitializedFilters || pointsOnCurrentMap.length === 0)
       return;
 
-    const initialTypes = selectedMap?.defaultFilters?.types || [];
-    const initialCategories = selectedMap?.defaultFilters?.categories || [];
-    const initialEntities = [...(selectedMap?.defaultFilters?.entities || [])];
+    let initialTypes: string[] = [];
+    let initialCategories: string[] = [];
+    let initialEntities: string[] = [];
 
-    // Se houver categorias padrão, ativa automaticamente as entidades pertencentes a elas
-    if (initialCategories.length > 0) {
+    if (!selectedMap?.defaultFilters) {
+      const typesSet = new Set<string>();
+      const categoriesSet = new Set<string>();
+      const entitiesSet = new Set<string>();
+
       pointsOnCurrentMap.forEach((p) => {
+        typesSet.add(p.type);
         const entityIds = new Set<string>();
         if (p.entityId) entityIds.add(p.entityId);
         if (p.spawns) p.spawns.forEach(s => entityIds.add(s.entityId));
 
-        entityIds.forEach(eId => {
+        entityIds.forEach((eId) => {
+          entitiesSet.add(eId);
           const entity = entityLookup[eId] || items.find((i) => i.id === eId);
           const categories = entity?.category
             ? Array.isArray(entity.category)
               ? entity.category
               : [entity.category]
             : ["desconhecido"];
-
-          const matchesInitialCategory = categories.some(cat => initialCategories.includes(cat));
-          if (matchesInitialCategory) {
-            if (!initialEntities.includes(eId)) {
-              initialEntities.push(eId);
-            }
-          }
+          categories.forEach((cat) => categoriesSet.add(cat));
         });
       });
+
+      initialTypes = Array.from(typesSet);
+      initialCategories = Array.from(categoriesSet);
+      initialEntities = Array.from(entitiesSet);
+    } else {
+      initialTypes = selectedMap.defaultFilters.types || [];
+      initialCategories = selectedMap.defaultFilters.categories || [];
+      initialEntities = [...(selectedMap.defaultFilters.entities || [])];
+
+      // Se houver categorias padrão, ativa automaticamente as entidades pertencentes a elas
+      if (initialCategories.length > 0) {
+        pointsOnCurrentMap.forEach((p) => {
+          const entityIds = new Set<string>();
+          if (p.entityId) entityIds.add(p.entityId);
+          if (p.spawns) p.spawns.forEach(s => entityIds.add(s.entityId));
+
+          entityIds.forEach(eId => {
+            const entity = entityLookup[eId] || items.find((i) => i.id === eId);
+            const categories = entity?.category
+              ? Array.isArray(entity.category)
+                ? entity.category
+                : [entity.category]
+              : ["desconhecido"];
+
+            const matchesInitialCategory = categories.some(cat => initialCategories.includes(cat));
+            if (matchesInitialCategory) {
+              if (!initialEntities.includes(eId)) {
+                initialEntities.push(eId);
+              }
+            }
+          });
+        });
+      }
     }
 
     setVisibleTypes(initialTypes);
@@ -781,7 +813,7 @@ export const MapView = () => {
 
                   // 3. Event Filter
                   const pointEvent = point.event;
-                  if (pointEvent) {
+                  if (pointEvent && (!Array.isArray(pointEvent) || pointEvent.length > 0)) {
                     const eventArray = Array.isArray(pointEvent) ? pointEvent : [pointEvent];
                     const isAnyEventActive = eventArray.some(e => activeEventIds.includes(e));
                     if (!isAnyEventActive) return false;
@@ -1015,17 +1047,17 @@ export const MapView = () => {
       {viewMode === "map" && (
         <Box sx={{ position: "absolute", top: 12, right: 12, zIndex: 1100, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1 }}>
           <MapWeatherPanel
-            availableWeathers={events.filter(e => e.type === "clima" && selectedMap?.availableWeathers?.includes(e.id))}
+            availableWeathers={events.filter(e => e.type === "clima" && (!selectedMap?.availableWeathers || selectedMap.availableWeathers.includes(e.id)))}
             activeWeatherIds={activeEventIds.filter(id => {
               const event = events.find(e => e.id === id);
-              return event?.type === "clima" && selectedMap?.availableWeathers?.includes(id);
+              return event?.type === "clima" && (!selectedMap?.availableWeathers || selectedMap.availableWeathers.includes(id));
             })}
             onToggleWeather={(weatherId) => {
               toggleEvent(weatherId);
             }}
             onClearWeathers={() => {
               // Deactivate all clima events that are available for this map and currently active
-              const mapWeatherIds = selectedMap?.availableWeathers || [];
+              const mapWeatherIds = selectedMap?.availableWeathers || events.filter(e => e.type === "clima").map(e => e.id);
               const activeMapWeathers = mapWeatherIds.filter(id => activeEventIds.includes(id));
               
               activeMapWeathers.forEach(id => {
