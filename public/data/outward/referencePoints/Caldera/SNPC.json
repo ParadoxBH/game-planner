@@ -1,0 +1,23 @@
+[
+  {
+    "id": "48ac34f3-dc40-4e3d-81bf-707bd770d4b6",
+    "type": "spawn",
+    "entityId": "HumanSNPC_CaravanTrader",
+    "conditions": null,
+    "customDrops": null,
+    "chance": null,
+    "spawns": null,
+    "name": null,
+    "description": null,
+    "icon": null,
+    "locationId": null,
+    "parentId": null,
+    "mode": "once",
+    "geom": { "type": "Point", "coordinates": "POINT Z (700.59 1557.11 28.01)" },
+    "mapId": "Caldera",
+    "respawnDelay": null,
+    "data": null,
+    "image": null,
+    "event": []
+  }
+]

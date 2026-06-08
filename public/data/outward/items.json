@@ -437,14 +437,14 @@
   {
     "id": "1001000",
     "name": "Monte de tralha",
-    "icon": null,
+    "icon": "/img/outward/colection/icon/monte_tralha.png",
+    "image": "/img/outward/colection/monte_tralha.png",
     "description": "",
     "buyPrice": 20,
     "sellPrice": 6,
     "level": null,
     "category": ["TreasureChest"],
     "event": [],
-    "image": null,
     "rarity": null,
     "variants": [],
     "metadata": []

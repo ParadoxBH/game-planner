@@ -1,0 +1,44 @@
+[
+  {
+    "id": "421bb8fb-91dc-4ab6-8bf9-743d4aa051b8",
+    "type": "spawn",
+    "entityId": "1001000",
+    "conditions": null,
+    "customDrops": null,
+    "chance": null,
+    "spawns": null,
+    "name": null,
+    "description": null,
+    
+    "locationId": null,
+    "parentId": null,
+    "mode": "once",
+    "geom": { "type": "Point", "coordinates": "POINT Z (1426.33 1608.73 9.90)" },
+    "mapId": "CierzoNewTerrain",
+    "respawnDelay": null,
+    "data": null,
+    
+    "event": []
+  },
+  {
+    "id": "55e6c33c-d4c4-479e-b112-09d784296846",
+    "type": "spawn",
+    "entityId": "1001000",
+    "conditions": null,
+    "customDrops": null,
+    "chance": null,
+    "spawns": null,
+    "name": null,
+    "description": null,
+    
+    "locationId": null,
+    "parentId": null,
+    "mode": "once",
+    "geom": { "type": "Point", "coordinates": "POINT Z (1355.35 1707.29 6.22)" },
+    "mapId": "CierzoNewTerrain",
+    "respawnDelay": null,
+    "data": null,
+    
+    "event": []
+  }
+]

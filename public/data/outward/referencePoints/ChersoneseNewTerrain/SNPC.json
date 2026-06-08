@@ -1,0 +1,23 @@
+[
+  {
+    "id": "7a2f9511-45dd-451f-8589-79140d948ee7",
+    "type": "spawn",
+    "entityId": "HumanSNPC_CaravanTrader",
+    "conditions": null,
+    "customDrops": null,
+    "chance": null,
+    "spawns": null,
+    "name": null,
+    "description": null,
+    "icon": null,
+    "locationId": null,
+    "parentId": null,
+    "mode": "once",
+    "geom": { "type": "Point", "coordinates": "POINT Z (1703.10 1757.30 8.36)" },
+    "mapId": "ChersoneseNewTerrain",
+    "respawnDelay": null,
+    "data": null,
+    "image": null,
+    "event": []
+  }
+]

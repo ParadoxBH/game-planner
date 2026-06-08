@@ -1,0 +1,686 @@
+[
+  {
+    "id": "741fc454-9bcb-4c77-8eda-ab11feeaf184",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1567.20 1646.40 16.34)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "c6ee718e-e81c-4abe-99b6-8312ac7aa797",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1433.45 1635.89 7.33)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "e532caae-acfb-43dc-a8fc-ae0d7dfa2e49",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1462.46 1733.54 6.39)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "d366c122-2d01-4434-a4e6-3dd0065e08cb",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1393.59 1664.88 5.63)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "e561b586-a94e-478b-a31d-e85d34741f42",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1484.30 1637.90 6.74)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "695ba2c4-a71b-4381-9a5c-d7cf65bc1055",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1472.40 1671.60 7.74)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "26f91039-8683-4305-b923-cdb3de51d793",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1333.12 1630.75 5.81)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "f5184358-2676-4e73-8d90-a15961485846",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1425.39 1685.43 5.63)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "b66f3347-ebe0-4cde-a73a-952ec3b3a75a",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1526.80 1651.50 12.04)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "4de6e149-db0a-4723-a577-0e4327bd996a",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1341.20 1581.66 30.61)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "017fab35-7829-465e-8818-78ed288c1d33",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1265.82 1603.53 38.14)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "df488111-fc29-48f0-a009-d146d595162c",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1336.44 1548.89 36.62)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "c0022041-f1ac-437b-878e-93131bd8e415",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1548.00 1697.10 29.34)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "43503ab8-789f-4da2-88f9-ad1255d35513",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1543.50 1615.20 10.94)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "100b67a9-253f-4d4f-bf9d-f40b58679056",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1218.85 1701.92 26.19)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "f192054b-a81b-452d-9fbe-5c96eb424330",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1422.79 1602.87 10.63)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "04cce071-41aa-45cb-b8eb-1da88b428765",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1499.00 1631.50 7.54)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "c40f913e-98fd-49b3-b2e7-f1439b93d474",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1224.49 1645.93 20.71)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "39023179-4df7-40b9-a932-e44ef9a7d018",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1466.70 1618.20 16.14)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "28d5c410-e5aa-41be-b76b-5cabf75eb29c",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1464.10 1672.30 6.84)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "c2b9695d-ace3-4a2a-86c6-f856be8ff548",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1321.86 1596.36 28.07)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "6a165abf-a366-4b2a-b958-508204956b5e",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1366.63 1630.88 5.65)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "27dfdc9f-19c6-4d7d-840f-dab39d3685a2",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1499.60 1606.80 20.14)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "cc476859-11d3-416f-9002-b51d5b213d36",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1486.83 1734.61 25.12)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "3895bc95-4cba-444e-81d2-c89d73d0aeb1",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1479.40 1631.20 10.24)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "dc0cefa6-c5d1-4fac-834f-2f319f327c1e",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1200.04 1596.31 11.56)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "512815d9-3964-4ac8-bfd4-31d1a3ea1028",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1377.56 1593.70 18.28)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "ff981a2c-6aba-46bb-a7c2-62c8cf6b63bb",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1217.43 1632.72 16.57)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "61b55442-ba9a-4678-9f65-38e7cba9d8f5",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1259.58 1602.00 38.14)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "ba1e0a7f-d192-409a-b52b-8bec09680339",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1281.16 1604.79 37.96)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "156df972-2e0c-44fc-bff8-4109ced0b218",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1554.50 1659.20 18.94)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "8c0d1411-5eb3-42c9-8f94-5a768f7484f8",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1376.82 1617.59 5.53)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "581028eb-a4b1-4823-9f49-ededf38bd013",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1493.93 1740.37 27.95)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "ca9daf7b-8742-49d8-bd47-8fc241b52816",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1422.95 1558.68 33.04)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "08216e83-6766-4df1-b15e-2508195faf65",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1310.31 1607.18 25.36)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "6c1a8a63-9b19-4e58-8ff0-322c8c9ac125",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1415.43 1629.35 7.94)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "85193a0c-98fc-4737-a75c-d795a73a91d0",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1499.14 1811.07 26.32)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "8b213a31-edf4-4241-9c44-a49e1ffdf9ea",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1508.10 1871.06 28.62)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "88ace6ca-84fd-443f-bdcf-9a338096d837",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1240.69 1657.31 26.19)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "8234bcd6-f0fa-452a-8659-da6420117a69",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1311.29 1625.92 7.35)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "b416027e-ff6d-462b-94b7-672df3c3f02d",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1429.42 1682.62 5.49)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "a157dd42-6719-4b2a-aef2-5ccaf9266658",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1458.01 1727.05 6.87)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "a1f56b2b-6b3e-4fde-9cf4-217d21a8d4b4",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1431.57 1669.99 6.23)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "254ef1fc-3d36-4608-886b-814072c5bd28",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1201.69 1656.47 11.46)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "bb2cee35-6e72-48e2-a230-b17bab3f8faf",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1343.10 1605.28 29.86)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "08e0c039-0c36-44d4-ba71-5108dea93cc7",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1405.39 1657.22 5.81)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "c6f099b0-7128-4236-8482-d266646b406a",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1545.70 1706.80 31.64)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "5a8a21ad-3726-405c-87f9-edd19d9f91f6",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1250.85 1633.60 26.18)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "61be120d-6c21-4906-91fc-89c4cf891e4a",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1577.60 1635.50 13.24)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "ff5ea450-d0e0-4dc0-b2e7-365f56cbc3c4",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1500.90 1671.80 11.04)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "33004378-4017-4fd1-8c35-2a4cb35cf001",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1538.30 1644.10 11.34)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "7d6e46d6-7a05-4376-bd03-bab72fbb3a19",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1391.42 1647.87 6.29)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "977a2bf5-baeb-496e-8591-e7033a8e67a6",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1461.62 1805.45 4.90)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "ce770444-f74b-42e1-a742-fd5cf499c69c",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1222.31 1700.26 25.75)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "6487f7d4-0c2e-470d-816a-e74fd583b700",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1270.79 1647.88 20.19)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "ba7f73a1-68d3-48cd-b490-9d9bde6c7ed9",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1227.84 1668.18 25.87)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  },
+  {
+    "id": "013e88b5-82e4-4055-8330-cad221881617",
+    "type": "spawn",
+    "entityId": "9300000",
+    "mode": "once",
+    "geom": {
+      "type": "Point",
+      "coordinates": "POINT Z (1372.86 1687.61 1.48)"
+    },
+    "mapId": "CierzoNewTerrain",
+    "event": []
+  }
+]

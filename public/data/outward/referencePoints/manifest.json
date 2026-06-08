@@ -1,0 +1,18 @@
+[
+  "Caldera/CentralGatherableAccessPoint.json",
+  "Caldera/Character.json",
+  "Caldera/Gatherable.json",
+  "Caldera/SNPC.json",
+  "Caldera/TreasureChest.json",
+
+  "ChersoneseNewTerrain/CentralGatherableAccessPoint.json",
+  "ChersoneseNewTerrain/Character.json",
+  "ChersoneseNewTerrain/Gatherable.json",
+  "ChersoneseNewTerrain/SNPC.json",
+  "ChersoneseNewTerrain/TreasureChest.json",
+
+  "CierzoNewTerrain/CentralGatherableAccessPoint.json",
+  "CierzoNewTerrain/Gatherable.json",
+  "CierzoNewTerrain/SNPC.json",
+  "CierzoNewTerrain/TreasureChest.json"
+]
