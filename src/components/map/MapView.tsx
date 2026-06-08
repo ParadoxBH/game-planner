@@ -931,27 +931,46 @@ export const MapView = () => {
                     }
                   }
 
+                  const hasIcon = !!(point.icon || entity?.icon);
+                  let finalBackgroundStyle = backgroundStyle;
+                  let finalInnerColor = innerColor;
+                  let finalBorderWidth = borderWidth;
+                  if (!hasIcon) {
+                    finalInnerColor = "#2196f3";
+                    if (borderWidth === 0) {
+                      finalBackgroundStyle = "background: #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,0.4);";
+                      finalBorderWidth = 3; // leaves a 1px white border on each side
+                    }
+                  }
+
+                  let imageStyle = "";
+                  if (!hasIcon) {
+                    imageStyle = "display: none;";
+                  } else if (isCollected) {
+                    imageStyle = "opacity: 0.4; filter: grayscale(100%);";
+                  }
+
+                  const currentMarkerSize = hasIcon ? sizeMarker : 14;
+
                   return (
                     <StableMarker
                       key={point.id}
                       point={point}
-                      size={sizeMarker}
+                      size={currentMarkerSize}
                       entity={entity}
                       iconHtml={markerTemplate
                         .replaceAll(
                           "{{ICON_URL}}",
-                          getPublicUrl(
-                            point.icon ||
-                              entity?.icon ||
-                              "/img/placeholder.png",
-                          ),
+                          hasIcon
+                            ? getPublicUrl(point.icon || entity?.icon || "")
+                            : "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'></svg>",
                         )
                         .replaceAll("{{CLASS_NAME}}", "custom-entity-icon")
-                        .replaceAll("{{BACKGROUND_STYLE}}", backgroundStyle)
-                        .replaceAll("{{INNER_COLOR}}", innerColor)
-                        .replaceAll("{{BORDER_WIDTH}}", borderWidth.toString())
-                        .replaceAll("{{SIZE}}", sizeMarker.toString())
-                        .replaceAll("{{IMAGE_STYLE}}", isCollected ? "opacity: 0.4; filter: grayscale(100%);" : "")}
+                        .replaceAll("{{BACKGROUND_STYLE}}", finalBackgroundStyle)
+                        .replaceAll("{{INNER_COLOR}}", finalInnerColor)
+                        .replaceAll("{{BORDER_WIDTH}}", finalBorderWidth.toString())
+                        .replaceAll("{{SIZE}}", currentMarkerSize.toString())
+                        .replaceAll("{{IMAGE_STYLE}}", imageStyle)}
                       onExpand={() => {
                         const targetId = point.entityId || (point.spawns && point.spawns.length > 0 ? point.spawns[0].entityId : undefined);
                         if (targetId) {
