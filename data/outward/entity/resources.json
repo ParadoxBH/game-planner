@@ -1,0 +1,115 @@
+﻿[
+  {
+    "id": "Sample_Food",
+    "name": "Amostra de Animal",
+    "category": ["caldera_sample"],
+    "icon": "/img/outward/colection/icon/sample_food.png"
+  },
+  {
+    "id": "Sample_Ore",
+    "name": "Amostra de Minerio",
+    "category": ["caldera_sample"],
+    "icon": "/img/outward/colection/icon/sample_ore.png"
+  },
+  {
+    "id": "Sample_Plants",
+    "name": "Amostra de Planta",
+    "category": ["caldera_sample"],
+    "icon": "/img/outward/colection/icon/sample_plants.png"
+  },
+  {
+    "id": "Rock_Iron",
+    "name": "Minerio de Ferro",
+    "category": ["rock"],
+    "icon": "/img/outward/colection/icon/minerio_ferro.png",
+    "image": "/img/outward/colection/minerio_ferro.png"
+  },
+  {
+    "id": "Plant_Gaberries",
+    "name": "Gabagas",
+    "category": ["vegetable"],
+    "icon": "/img/outward/colection/icon/plant_gabberies.png",
+    "image": "/img/outward/colection/plant_gabberies.png"
+  },
+  {
+    "id": "Nature_Maize",
+    "name": "Milho",
+    "category": ["vegetable"],
+    "icon": "/img/outward/colection/icon/nature_maize.png",
+    "image": "/img/outward/colection/nature_maize.png"
+  },
+  {
+    "id": "Rock_Salt",
+    "name": "Crital de Sal",
+    "category": ["rock"],
+    "icon": "/img/outward/colection/icon/rock_salt.png",
+    "image": "/img/outward/colection/rock_salt.png"
+  },
+  {
+    "id": "Plant_Turmmip",
+    "name": "Manabo",
+    "category": ["vegetable"],
+    "icon": "/img/outward/colection/icon/plant_turmmip.png",
+    "image": "/img/outward/colection/plant_turmmip.png"
+  },
+  {
+    "id": "Plant_Crabeye",
+    "name": "Olhuaçá",
+    "category": ["vegetable"],
+    "icon": "/img/outward/colection/icon/plant_crabeye.png",
+    "image": "/img/outward/colection/plant_crabeye.png"
+  },
+  {
+    "id": "FishingSpot_Fish",
+    "name": "Peixe",
+    "category": ["fish"],
+    "icon": "/img/outward/colection/icon/fishingspot_fish.png",
+    "image": "/img/outward/colection/fishingspot_fish.png"
+  },
+  {
+    "id": "Plant_Seaweed",
+    "name": "Alga Marinha",
+    "category": ["vegetable"],
+    "icon": "/img/outward/colection/icon/plant_seaweed.png",
+    "image": "/img/outward/colection/plant_seaweed.png"
+  },
+  {
+    "id": "Nature_GoldenCrescent",
+    "name": "Crescente dourada",
+    "category": ["vegetable"],
+    "icon": "/img/outward/colection/icon/nature_goldencrescent.png"
+  },
+  {
+    "id": "Nature_Ambraine",
+    "name": "Ambraina",
+    "category": ["vegetable"],
+    "icon": "/img/outward/colection/icon/nature_ambraine.png"
+  },
+  {
+    "id": "Nature_Chalcedony",
+    "name": "Calcedônia",
+    "category": ["rock"],
+    "icon": "/img/outward/colection/icon/nature_chalcedony.png"
+  },
+  {
+    "id": "Rock_IronRich",
+    "name": "Veio abundante de Ferro",
+    "category": ["rock"],
+    "icon": "/img/outward/colection/icon/rock_ironrich.png",
+    "image": "/img/outward/colection/rock_ironrich.png"
+  },
+  {
+    "id": "Rock_Oil",
+    "name": "Óleo",
+    "category": ["rock"],
+    "icon": "/img/outward/colection/icon/rock_oil.png",
+    "image": "/img/outward/colection/rock_oil.png"
+  },
+  {
+    "id": "Rock_ManaStone",
+    "name": "Pedra de Mana",
+    "category": ["rock"],
+    "icon": "/img/outward/colection/icon/rock_manastone.png",
+    "image": "/img/outward/colection/rock_manastone.png"
+  }
+]
