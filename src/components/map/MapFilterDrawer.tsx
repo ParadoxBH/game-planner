@@ -43,7 +43,6 @@ interface MapFilterDrawerProps {
 export const MapFilterDrawer = ({
   referencePoints,
   entities,
-  items,
   visibleTypes,
   setVisibleTypes,
   visibleCategories,
