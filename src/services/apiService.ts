@@ -376,11 +376,17 @@ export class ApiService {
       });
     });
 
+    const specialDropLocations = referencePoints.filter((p) => 
+      p.customDrops?.some((cd) => cd.itemId === itemId) ||
+      (p.spawns && p.spawns.some(sp => sp.customDrops?.some(cd => cd.itemId === itemId)))
+    );
+
     return {
       item,
       productionRecipes,
       usagesAsIngredient,
       dropsFrom: entitiesWithDrops,
+      specialDropLocations,
       soldIn,
     };
   }

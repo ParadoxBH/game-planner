@@ -15,6 +15,7 @@ import {
   Construction,
   Architecture,
   Bookmarks,
+  Map as MapIcon,
 } from "@mui/icons-material";
 import { useApi } from "../../hooks/useApi";
 import { StyledContainer } from "../common/StyledContainer";
@@ -31,6 +32,8 @@ import type {
   Item,
   GameInfo,
   Category,
+  MapMetadata,
+  ReferencePoints,
 } from "../../types/gameModels";
 import type { ItemDetails } from "../../types/apiModels";
 import { eventRepository } from "../../repositories/EventRepository";
@@ -44,6 +47,10 @@ import { DetainContainer } from "../common/DetainContainer";
 import { DetainItem } from "../common/DetainItem";
 import { usePlatform } from "../../hooks/usePlatform";
 import { DetainConjunto } from "./DetainConjunto";
+import { mapRepository } from "../../repositories/MapRepository";
+import { MiniMap } from "../common/MiniMap";
+import { parseWKTPoint } from "../../utils/wkt";
+import { useEventFilter } from "../../context/EventFilterContext";
 
 export function ItemDetailsPage() {
   const { gameId, itemId = "" } = useParams<{
@@ -64,6 +71,8 @@ export function ItemDetailsPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [itemConjuntos, setItemConjuntos] = useState<Conjunto[]>([]);
   const { isMobile } = usePlatform();
+  const { activeEventIds } = useEventFilter();
+  const [maps, setMaps] = useState<MapMetadata[]>([]);
 
   useEffect(() => {
     if (dbLoading) return;
@@ -80,8 +89,9 @@ export function ItemDetailsPage() {
       conjuntoGroupRepository.getAll(),
       recipeRepository.getAll(),
       getCategories(),
+      mapRepository.getAll(),
     ])
-      .then(([details, allEvents, allItems, allEntities, allConjuntos, allGroups, allRecipes, allCats]) => {
+      .then(([details, allEvents, allItems, allEntities, allConjuntos, allGroups, allRecipes, allCats, allMaps]) => {
         if (!isMounted) return;
 
         setItemDetails(details);
@@ -90,6 +100,7 @@ export function ItemDetailsPage() {
         setEntities(allEntities);
         setRecipes(allRecipes);
         if (allCats) setCategories(allCats);
+        if (allMaps) setMaps(allMaps);
         
         // Find sets (conjuntos) that contain this item via groups
         const groupsWithItem = allGroups.filter(g => g.items?.includes(itemId));
@@ -141,6 +152,29 @@ export function ItemDetailsPage() {
     categories.forEach((cat) => map.set(cat.id.toLowerCase(), cat));
     return map;
   }, [categories]);
+
+  const groupedReferencePoints = useMemo(() => {
+    if (!itemDetails?.specialDropLocations)
+      return new Map<string, ReferencePoints[]>();
+    const map = new Map<string, ReferencePoints[]>();
+    itemDetails.specialDropLocations.forEach((s: any) => {
+      // Event Filter
+      if (s.event && (!Array.isArray(s.event) || s.event.length > 0)) {
+        const eventArray = Array.isArray(s.event) ? s.event : [s.event];
+        const isAnyEventActive = eventArray.some((e: string) => activeEventIds.includes(e));
+        if (!isAnyEventActive) return;
+      }
+
+      const mapId = s.mapId || "Mundo Aberto";
+      if (!map.has(mapId)) map.set(mapId, []);
+      map.get(mapId)!.push(s);
+    });
+    return map;
+  }, [itemDetails?.specialDropLocations, activeEventIds]);
+
+  const getMapMetadata = (mapId: string): MapMetadata | undefined => {
+    return maps.find((m) => m.id === mapId);
+  };
 
   const getSourceData = (type: GameDataTypes | undefined, id: string): any => {
     if (type === "entity") return entitiesMap.get(id);
@@ -545,6 +579,124 @@ export function ItemDetailsPage() {
               />
             </Stack>
           </DetainItem>
+          {groupedReferencePoints.size > 0 && (
+            <DetainItem
+              startIcon={<MapIcon color="primary" />}
+              label="Localizações de Drops Especiais"
+            >
+              <Grid container spacing={3}>
+                {Array.from(groupedReferencePoints.entries()).map(
+                  ([mapId, mapPoints]) => {
+                    const meta = getMapMetadata(mapId);
+
+                    return (
+                      <Grid size={{ xs: 12, md: 6, lg: 4 }} key={mapId}>
+                        <Paper
+                          elevation={0}
+                          sx={{
+                            p: 2,
+                            backgroundColor: "rgba(255,255,255,0.02)",
+                            borderRadius: 2,
+                            border: "1px solid rgba(255,255,255,0.05)",
+                            overflow: "hidden",
+                          }}
+                        >
+                          <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            sx={{ mb: 1.5 }}
+                          >
+                            <Box>
+                              <Typography
+                                variant="subtitle1"
+                                fontWeight={700}
+                                color="primary.main"
+                              >
+                                {meta?.name || mapId}
+                              </Typography>
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                              >
+                                {mapPoints.length} Ocorrência(s)
+                              </Typography>
+                            </Box>
+                            <MapIcon sx={{ opacity: 0.3 }} />
+                          </Stack>
+
+                          <Box
+                            sx={{
+                              height: 200,
+                              width: "100%",
+                              borderRadius: 1,
+                              border: "1px solid rgba(255,255,255,0.1)",
+                              overflow: "hidden",
+                              position: "relative",
+                              cursor: "pointer",
+                            }}
+                            onClick={() =>
+                              navigate(
+                                `/game/${gameId}/map/${mapId}?item=${encodeURIComponent(item.id)}`,
+                              )
+                            }
+                          >
+                            <Box sx={{ flexGrow: 1 }}>
+                              {meta ? (
+                                <MiniMap
+                                  meta={meta}
+                                  markers={mapPoints.map((s) => {
+                                    let pos: [number, number] = [0, 0];
+                                    if (
+                                      s.geom?.type === "Point" &&
+                                      s.geom.coordinates
+                                    ) {
+                                      const wktCoords = parseWKTPoint(
+                                        s.geom.coordinates,
+                                      );
+                                      // WKT is [X, Y], Leaflet wants [Y, X] for Lat/Lng
+                                      pos = [wktCoords[1], wktCoords[0]];
+                                    }
+                                    return {
+                                      id: s.id,
+                                      position: pos,
+                                      color: "#ff4400",
+                                    };
+                                  })}
+                                  onClick={() =>
+                                    navigate(`/game/${gameId}/map/${mapId}?item=${encodeURIComponent(item.name)}`)
+                                  }
+                                  height={200}
+                                />
+                              ) : (
+                                <Box
+                                  sx={{
+                                    height: 200,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    bgcolor: "rgba(0,0,0,0.2)",
+                                    borderRadius: 1,
+                                  }}
+                                >
+                                  <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                  >
+                                    Mapa não encontrado
+                                  </Typography>
+                                </Box>
+                              )}
+                            </Box>
+                          </Box>
+                        </Paper>
+                      </Grid>
+                    );
+                  },
+                )}
+              </Grid>
+            </DetainItem>
+          )}
         </>
       </DetainContainer>
     </StyledContainer>

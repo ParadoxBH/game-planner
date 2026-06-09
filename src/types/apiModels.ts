@@ -19,6 +19,7 @@ export interface ItemDetails {
   productionRecipes: NormalizedRecipe[];
   usagesAsIngredient: NormalizedRecipe[];
   dropsFrom: Entity[];
+  specialDropLocations: ReferencePoints[];
   soldIn: {
     shop: Shop;
     shopItem: {

@@ -60,11 +60,10 @@ export const MapFilterDrawer = ({
   >({});
 
   const entityLookup = useMemo(() => {
-    const lookup: Record<string, Entity | Item> = {};
+    const lookup: Record<string, Entity> = {};
     entities.forEach((e) => (lookup[e.id] = e));
-    items.forEach((i) => (lookup[i.id] = i));
     return lookup;
-  }, [entities, items]);
+  }, [entities]);
 
   const stats = useMemo(() => {
     const typeCount: Record<string, number> = {};
