@@ -5,6 +5,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import CancelIcon from "@mui/icons-material/Cancel";
 import PlaceIcon from "@mui/icons-material/Place";
 import ListIcon from "@mui/icons-material/List";
+import CropIcon from "@mui/icons-material/Crop";
 import { usePlatform } from "../../hooks/usePlatform";
 
 interface MapToolboxProps {
@@ -17,6 +18,8 @@ interface MapToolboxProps {
   sessionCount?: number;
   isPanelOpen?: boolean;
   onTogglePanel?: () => void;
+  isBoundBoxEditorOpen?: boolean;
+  onToggleBoundBoxEditor?: () => void;
 }
 
 export const MapToolbox = ({
@@ -29,6 +32,8 @@ export const MapToolbox = ({
   sessionCount = 0,
   isPanelOpen = false,
   onTogglePanel,
+  isBoundBoxEditorOpen = false,
+  onToggleBoundBoxEditor,
 }: MapToolboxProps) => {
 
   const { isMobile } = usePlatform();
@@ -112,6 +117,25 @@ export const MapToolbox = ({
                 <Badge badgeContent={sessionCount} color="primary" sx={{ "& .MuiBadge-badge": { fontSize: '0.6rem', height: 16, minWidth: 16 } }}>
                   <ListIcon />
                 </Badge>
+              </IconButton>
+            </Tooltip>
+          </>
+        )}
+
+        {activeTool === null && (
+          <>
+            <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
+            <Tooltip title="Editor de BoundBox" placement="left">
+              <IconButton
+                onClick={onToggleBoundBoxEditor}
+                color={isBoundBoxEditorOpen ? "warning" : "default"}
+                size="medium"
+                sx={isBoundBoxEditorOpen ? {
+                  bgcolor: "rgba(251,191,36,0.12)",
+                  "&:hover": { bgcolor: "rgba(251,191,36,0.2)" },
+                } : {}}
+              >
+                <CropIcon />
               </IconButton>
             </Tooltip>
           </>

@@ -188,6 +188,7 @@ export interface MapMetadata {
     entities?: string[];
   };
   availableWeathers?: string[]; // IDs de eventos/climas disponíveis para este mapa
+  rotate?: number; // Indica a rotação (rotate * 90) do norte do mapa em relação ao x y z das coordenadas reais do jogo
 }
 
 export type GameRarityDefinitionMap = {[key: string]: GameRarityDefinition};

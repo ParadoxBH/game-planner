@@ -112,3 +112,35 @@ export function getPolygonCentroid(points: [number, number][]): [number, number]
   // Map back to Leaflet [lat, lng] which is [y, x]
   return [y / count, x / count];
 }
+
+/**
+ * Rotates a Leaflet coordinate [lat, lng] (i.e. [y, x]) around the center of the bounds by a given rotation factor (rotate * 90 degrees).
+ */
+export function rotateLatLng(
+  latlng: [number, number],
+  bounds: [[number, number], [number, number]],
+  rotate: number
+): [number, number] {
+  if (!rotate) return latlng;
+
+  const [min, max] = bounds;
+  const cy = (min[0] + max[0]) / 2; // Y center (lat)
+  const cx = (min[1] + max[1]) / 2; // X center (lng)
+
+  const angleDegrees = rotate * 90;
+  const angleRadians = (angleDegrees * Math.PI) / 180;
+  const cos = Math.cos(angleRadians);
+  const sin = Math.sin(angleRadians);
+
+  const dy = latlng[0] - cy; // Y relative to center
+  const dx = latlng[1] - cx; // X relative to center
+
+  // Standard 2D rotation matrix:
+  // rx = dx * cos - dy * sin
+  // ry = dx * sin + dy * cos
+  const rx = dx * cos - dy * sin;
+  const ry = dx * sin + dy * cos;
+
+  return [ry + cy, rx + cx];
+}
+

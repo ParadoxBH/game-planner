@@ -47,8 +47,10 @@ import {
   formatWKTPoint,
   formatWKTPolygon,
 } from "../../utils/wkt";
+import { rotateLatLng } from "../../utils/wkt";
 import { MapToolbox } from "./MapToolbox";
 import { MapDashboard } from "./MapDashboard";
+import { BoundBoxEditorPanel, type Bounds as BoundBoxBounds } from "./BoundBoxEditorPanel";
 import MapIcon from "@mui/icons-material/Map";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { mapRepository } from "../../repositories/MapRepository";
@@ -106,6 +108,8 @@ interface StableMarkerProps {
   interactive?: boolean;
   isCollected?: boolean;
   onToggleCollected?: () => void;
+  mapBounds: [[number, number], [number, number]];
+  rotate: number;
 }
 
 const StableMarker = React.memo(
@@ -120,9 +124,12 @@ const StableMarker = React.memo(
     interactive = true,
     isCollected,
     onToggleCollected,
+    mapBounds,
+    rotate,
   }: StableMarkerProps) => {
     const cp = parseWKTPoint(point.geom.coordinates);
-    const pos: [number, number] = [cp[1], cp[0]];
+    const rawPos: [number, number] = [cp[1], cp[0]];
+    const pos: [number, number] = rotate ? rotateLatLng(rawPos, mapBounds, rotate) : rawPos;
 
     const icon = useMemo(
       () =>
@@ -154,7 +161,7 @@ const StableMarker = React.memo(
                 }
               }
               entities={entities}
-              position={pos}
+              position={rawPos}
               mode={point.mode}
               respawnDelay={point.respawnDelay ?? entity?.respawnDelay}
               onExpand={(id) => onExpand ? onExpand(id) : undefined}
@@ -224,6 +231,8 @@ export const MapView = () => {
   );
   const [currentPoints, setCurrentPoints] = useState<[number, number][]>([]);
   const mapRef = useRef<any>(null);
+  const [isBoundBoxEditorOpen, setIsBoundBoxEditorOpen] = useState(false);
+  const [previewBounds, setPreviewBounds] = useState<BoundBoxBounds | null>(null);
 
   // Improved Point Marker States
   const [sessionPoints, setSessionPoints] = useState<ReferencePoints[]>([]);
@@ -268,6 +277,7 @@ export const MapView = () => {
   // Reset filters initialization when map changes
   useEffect(() => {
     setHasInitializedFilters(false);
+    setPreviewBounds(null); // reset preview when switching maps
   }, [selectedMapId]);
 
   const { loading: dbLoading } = useApi(gameId);
@@ -353,6 +363,7 @@ export const MapView = () => {
     entities.forEach((e) => {
       lookup[e.id] = e as Entity;
     });
+    console.log("xabu", entities);
     items.forEach((i) => {
       lookup[i.id] = i as Item;
     });
@@ -370,6 +381,9 @@ export const MapView = () => {
   );
   const defaultView = selectedMap?.defaultView || availableViews[0] || "map";
   const viewMode = (urlView as "map" | "dashboard") || defaultView;
+
+  // Rotation: each unit = 90°, 0 = north up, 1 = east up, etc.
+  const mapRotate = selectedMap?.rotate ?? 0;
 
   // Initialize filters once data is loaded
   useEffect(() => {
@@ -575,6 +589,15 @@ export const MapView = () => {
 
   const handlePush = (item: NavigationItem) =>
     setNavigationStack((prev) => [...prev, item]);
+
+  // Coords to display: always in original game space (inverse-rotate cursor position)
+  const displayCoords: [number, number] = mapRotate
+    ? rotateLatLng(
+        cursorCoords,
+        selectedMap.bounds as [[number, number], [number, number]],
+        -mapRotate,
+      )
+    : cursorCoords;
   const handleMapClick = (latlng: [number, number]) => {
     if (activeTool === "polygon") setCurrentPoints((prev) => [...prev, latlng]);
     else if (activeTool === "point") {
@@ -737,13 +760,13 @@ export const MapView = () => {
                     url={getPublicUrl(
                       selectedMap.urlPattern!.replace("{layer}", l.toString()),
                     )}
-                    bounds={selectedMap.bounds as LatLngBoundsExpression}
+                    bounds={(previewBounds ?? selectedMap.bounds) as LatLngBoundsExpression}
                   />
                 ))}
               {selectedMap.type === "single" && selectedMap.url && (
                 <ImageOverlay
                   url={getPublicUrl(selectedMap.url)}
-                  bounds={selectedMap.bounds as LatLngBoundsExpression}
+                  bounds={(previewBounds ?? selectedMap.bounds) as LatLngBoundsExpression}
                 />
               )}
               {selectedMap.type === "tile" && selectedMap.url && (
@@ -824,10 +847,14 @@ export const MapView = () => {
                 .map((point) => {
                   if (point.geom.type === "Polygon") {
                     const coords = parseWKTPolygon(point.geom.coordinates);
+                    const leafletCoords = coords.map((c): [number, number] => {
+                      const raw: [number, number] = [c[1], c[0]];
+                      return mapRotate ? rotateLatLng(raw, selectedMap.bounds as [[number,number],[number,number]], mapRotate) : raw;
+                    });
                     return (
                       <Polygon
                         key={point.id}
-                        positions={coords.map((c) => [c[1], c[0]])}
+                        positions={leafletCoords}
                         pathOptions={{
                           color:
                             point.type === "biome"
@@ -866,7 +893,9 @@ export const MapView = () => {
                   if (point.entityId) pointEntityIds.add(point.entityId);
                   if (point.spawns) point.spawns.forEach(s => pointEntityIds.add(s.entityId));
 
-                  const pointEntities = Array.from(pointEntityIds).map(id => entityLookup[id] || items.find(i => i.id === id)).filter(Boolean);
+                  const pointEntities = Array.from(pointEntityIds)
+                  .map(id => id in entityLookup ? entityLookup[id] : items.find(i => i.id === id))
+                  .filter(Boolean) as (Entity | Item)[];
                   
                   const visiblePointEntities = pointEntities.filter(ent => {
                     if (!visibleEntities.includes(ent.id)) return false;
@@ -879,7 +908,7 @@ export const MapView = () => {
                   });
 
                   const entity = visiblePointEntities.length > 0 ? visiblePointEntities[0] : (pointEntities.length > 0 ? pointEntities[0] : undefined);
-
+                  console.log("xabu", pointEntities);
                   const isCollectedInState = !!collectedPoints[point.id];
                   const collectionTime = collectedPoints[point.id];
                   const respawnDelay = point.respawnDelay ?? (entity && 'respawnDelay' in entity ? (entity as Entity).respawnDelay : undefined);
@@ -931,7 +960,7 @@ export const MapView = () => {
                     }
                   }
 
-                  const hasIcon = !!(point.icon || entity?.icon);
+                  const hasIcon = !!point.icon || !!entity?.icon;
                   let finalBackgroundStyle = backgroundStyle;
                   let finalInnerColor = innerColor;
                   let finalBorderWidth = borderWidth;
@@ -958,6 +987,8 @@ export const MapView = () => {
                       point={point}
                       size={currentMarkerSize}
                       entity={entity}
+                      mapBounds={selectedMap.bounds as [[number,number],[number,number]]}
+                      rotate={mapRotate}
                       iconHtml={markerTemplate
                         .replaceAll(
                           "{{ICON_URL}}",
@@ -994,6 +1025,8 @@ export const MapView = () => {
                       key={point.id}
                       point={point}
                       size={sizeMarker}
+                      mapBounds={selectedMap.bounds as [[number,number],[number,number]]}
+                      rotate={mapRotate}
                       entity={
                         point.entityId ? (entityLookup[point.entityId] || items.find((i) => i.id === point.entityId)) : undefined
                       }
@@ -1040,7 +1073,7 @@ export const MapView = () => {
         {viewMode === "map" && (
           <MapInfoOverlay
             gameName={gameInfo?.name || ""}
-            coords={cursorCoords}
+            coords={displayCoords}
             maps={maps}
             selectedMapId={selectedMapId}
             onSelectMap={setSelectedMapId}
@@ -1085,38 +1118,51 @@ export const MapView = () => {
             }}
           />
 
-          <MapToolbox
-            activeTool={activeTool}
-            hasPoints={currentPoints.length > 0}
-            onSelectTool={handleSelectTool}
-            onConfirm={() => {
-              const newZone: ReferencePoints = {
-                id: `zone_${Date.now()}`,
-                type: (pointConfig.type as any) || "biome",
-                entityId: pointConfig.entityId,
-                geom: {
-                  type: "Polygon",
-                  coordinates: formatWKTPolygon(
-                    currentPoints.map((p) => [p[1], p[0]]),
-                  ),
-                },
-                mapId: selectedMapId,
-              };
-              setSessionPoints((prev) => [...prev, newZone]);
-              setSnackbarMessage("Zona adicionada à lista!");
-              setSnackbarOpen(true);
-              setActiveTool(null);
-              setCurrentPoints([]);
-            }}
-            onClear={() => setCurrentPoints([])}
-            onCancel={() => {
-              setActiveTool(null);
-              setCurrentPoints([]);
-            }}
-            sessionCount={sessionPoints.length}
-            isPanelOpen={isMarkerPanelOpen}
-            onTogglePanel={() => setIsMarkerPanelOpen(!isMarkerPanelOpen)}
-          />
+          <Box sx={{ position: "relative" }}>
+            {isBoundBoxEditorOpen && (
+              <BoundBoxEditorPanel
+                selectedMap={selectedMap}
+                open={isBoundBoxEditorOpen}
+                onClose={() => setIsBoundBoxEditorOpen(false)}
+                onApply={(b) => setPreviewBounds(b)}
+                appliedBounds={previewBounds}
+              />
+            )}
+            <MapToolbox
+              activeTool={activeTool}
+              hasPoints={currentPoints.length > 0}
+              onSelectTool={handleSelectTool}
+              onConfirm={() => {
+                const newZone: ReferencePoints = {
+                  id: `zone_${Date.now()}`,
+                  type: (pointConfig.type as any) || "biome",
+                  entityId: pointConfig.entityId,
+                  geom: {
+                    type: "Polygon",
+                    coordinates: formatWKTPolygon(
+                      currentPoints.map((p) => [p[1], p[0]]),
+                    ),
+                  },
+                  mapId: selectedMapId,
+                };
+                setSessionPoints((prev) => [...prev, newZone]);
+                setSnackbarMessage("Zona adicionada à lista!");
+                setSnackbarOpen(true);
+                setActiveTool(null);
+                setCurrentPoints([]);
+              }}
+              onClear={() => setCurrentPoints([])}
+              onCancel={() => {
+                setActiveTool(null);
+                setCurrentPoints([]);
+              }}
+              sessionCount={sessionPoints.length}
+              isPanelOpen={isMarkerPanelOpen}
+              onTogglePanel={() => setIsMarkerPanelOpen(!isMarkerPanelOpen)}
+              isBoundBoxEditorOpen={isBoundBoxEditorOpen}
+              onToggleBoundBoxEditor={() => setIsBoundBoxEditorOpen(v => !v)}
+            />
+          </Box>
         </Box>
       )}
 
