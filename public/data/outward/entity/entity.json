@@ -8415,28 +8415,6 @@
     "rarity": null
   },
   {
-    "id": "9300000",
-    "name": "Árvore",
-    "icon": "/img/outward/items/6100010_Wood.png"
-  },
-  {
-    "id": "1001000_JunkPileA",
-    "name": "Monte de tralha",
-    "level": null,
-    "category": ["container"],
-    "description": null,
-    "icon": "/img/outward/colection/monte_tralha.png",
-    "image": "/img/outward/colection/icon/monte_tralha.png",
-    "buyPrice": null,
-    "sellPrice": null,
-    "respawnDelay": null,
-    "parentId": null,
-    "drops": [],
-    "variants": [],
-    "event": [],
-    "rarity": null
-  },
-  {
     "id": "1000000_ChestSimpleA",
     "name": "Baú",
     "level": null,

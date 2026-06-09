@@ -1,0 +1,82 @@
+﻿[
+  {
+    "id": "Sample_Food",
+    "name": "Amostra de Animal",
+    "category": ["caldera_sample"],
+    "icon": "/img/outward/colection/icon/sample_food.png"
+  },
+  {
+    "id": "Sample_Ore",
+    "name": "Amostra de Minerio",
+    "category": ["caldera_sample"],
+    "icon": "/img/outward/colection/icon/sample_ore.png"
+  },
+  {
+    "id": "Sample_Plants",
+    "name": "Amostra de Planta",
+    "category": ["caldera_sample"],
+    "icon": "/img/outward/colection/icon/sample_plants.png"
+  },
+  {
+    "id": "Rock_Iron",
+    "name": "Minerio de Ferro",
+    "category": ["rock"],
+    "icon": "/img/outward/colection/icon/minerio_ferro.png",
+    "image": "/img/outward/colection/minerio_ferro.png"
+  },
+  {
+    "id": "1001000_JunkPileA",
+    "name": "Monte de tralha",
+    "category": ["container"],
+    "icon": "/img/outward/colection/icon/monte_tralha.png",
+    "image": "/img/outward/colection/monte_tralha.png"
+  },
+  {
+    "id": "1000130",
+    "name": "Tronco Oco",
+    "category": ["TreasureChest"],
+    "icon": "/img/outward/colection/icon/tronco_oco.png",
+    "image": "/img/outward/colection/tronco_oco.png"
+  },
+  {
+    "id": "1000070",
+    "name": "Tronco Oco",
+    "category": ["TreasureChest"],
+    "icon": "/img/outward/colection/icon/tronco_oco.png",
+    "image": "/img/outward/colection/tronco_oco.png"
+  },
+  {
+    "id": "1000110",
+    "name": "Esconderijo de suprimentos",
+    "category": ["TreasureChest"],
+    "icon": "/img/outward/colection/icon/esconderijo_suprimentos.png",
+    "image": "/img/outward/colection/esconderijo_suprimentos.png"
+  },
+  {
+    "id": "Plant_Gaberries",
+    "name": "Gabagas",
+    "category": ["vegetation"],
+    "icon": "/img/outward/colection/icon/plant_gabberies.png",
+    "image": "/img/outward/colection/plant_gabberies.png"
+  },
+  {
+    "id": "Nature_Maize",
+    "name": "Milho",
+    "category": ["resource"],
+    "icon": "/img/outward/colection/icon/nature_maize.png",
+    "image": "/img/outward/colection/nature_maize.png"
+  },
+  {
+    "id": "Rock_Salt",
+    "name": "Crital de Sal",
+    "category": ["rock"],
+    "icon": "/img/outward/colection/icon/rock_salt.png",
+    "image": "/img/outward/colection/rock_salt.png"
+  },
+  {
+    "id": "9300000",
+    "name": "Árvore",
+    "category": ["vegetation"],
+    "icon": "/img/outward/colection/icon/tree.png"
+  }
+]

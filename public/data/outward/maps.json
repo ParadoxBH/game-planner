@@ -20,31 +20,44 @@
     "availableViews": [
       "map",
       "dashboard"
-    ]
+    ],
+    "defaultFilters": {
+      "types": [
+        "spawn"
+      ],
+      "categories": [
+        "TreasureChest",
+        "caldera_sample",
+        "resource",
+        "rock"
+      ]
+    }
   },
   {
     "id": "Caldera",
     "name": "Caldera",
     "type": "single",
     "url": "/map/outward/Caldera.webp",
-    "bounds": [
-      [
-        65.18,
-        90.74
-      ],
-      [
-        2124.89,
-        2137.84
-      ]
-    ],
+    "bounds": [[-40,-10],[1990,2040]],
     "minZoom": 2,
     "maxZoom": 4,
-    "rotate": 3,
+    "rotate": 1,
     "thumbnail": "/map/outward/Caldera_Thumb.webp",
     "availableViews": [
       "map",
       "dashboard"
-    ]
+    ],
+    "defaultFilters": {
+      "types": [
+        "spawn"
+      ],
+      "categories": [
+        "TreasureChest",
+        "caldera_sample",
+        "resource",
+        "rock"
+      ]
+    }
   },
   {
     "id": "ChersoneseNewTerrain",
@@ -67,6 +80,17 @@
     "availableViews": [
       "map",
       "dashboard"
-    ]
+    ],
+    "defaultFilters": {
+      "types": [
+        "spawn"
+      ],
+      "categories": [
+        "TreasureChest",
+        "caldera_sample",
+        "resource",
+        "rock"
+      ]
+    }
   }
 ]
