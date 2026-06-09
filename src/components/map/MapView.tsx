@@ -101,6 +101,7 @@ interface StableMarkerProps {
   point: ReferencePoints;
   entity: any;
   entities?: any[];
+  items?: any[];
   iconHtml: string;
   size: number;
   onExpand?: (id?: string) => void;
@@ -117,6 +118,7 @@ const StableMarker = React.memo(
     point,
     entity,
     entities,
+    items,
     iconHtml,
     size,
     onExpand,
@@ -161,6 +163,7 @@ const StableMarker = React.memo(
                 }
               }
               entities={entities}
+              items={items}
               position={rawPos}
               mode={point.mode}
               respawnDelay={point.respawnDelay ?? entity?.respawnDelay}
@@ -360,15 +363,18 @@ export const MapView = () => {
 
   const entityLookup = useMemo(() => {
     const lookup: Record<string, Entity | Item> = {};
-    entities.forEach((e) => {
-      lookup[e.id] = e as Entity;
-    });
-    console.log("xabu", entities);
-    items.forEach((i) => {
-      lookup[i.id] = i as Item;
-    });
+    // Items first so entities always override if IDs clash
+    items.forEach((i) => { lookup[i.id] = i as Item; });
+    entities.forEach((e) => { lookup[e.id] = e as Entity; });
     return lookup;
   }, [entities, items]);
+
+  // Lookup used for entity resolution in markers — entities only, never items
+  const entityOnlyLookup = useMemo(() => {
+    const lookup: Record<string, Entity> = {};
+    entities.forEach((e) => { lookup[e.id] = e; });
+    return lookup;
+  }, [entities]);
 
   const selectedMap = useMemo(
     () => maps.find((m) => m.id === selectedMapId),
@@ -894,7 +900,7 @@ export const MapView = () => {
                   if (point.spawns) point.spawns.forEach(s => pointEntityIds.add(s.entityId));
 
                   const pointEntities = Array.from(pointEntityIds)
-                  .map(id => id in entityLookup ? entityLookup[id] : items.find(i => i.id === id))
+                  .map(id => entityOnlyLookup[id] ?? items.find(i => i.id === id))
                   .filter(Boolean) as (Entity | Item)[];
                   
                   const visiblePointEntities = pointEntities.filter(ent => {
@@ -1009,6 +1015,7 @@ export const MapView = () => {
                         }
                       }}
                       categoriesMap={categoriesMap}
+                      items={items}
                       interactive={!activeTool && point.type !== "location"}
                       isCollected={isCollected}
                       onToggleCollected={() => handleToggleCollected(point.id, isCollected)}
@@ -1028,7 +1035,7 @@ export const MapView = () => {
                       mapBounds={selectedMap.bounds as [[number,number],[number,number]]}
                       rotate={mapRotate}
                       entity={
-                        point.entityId ? (entityLookup[point.entityId] || items.find((i) => i.id === point.entityId)) : undefined
+                        point.entityId ? (entityOnlyLookup[point.entityId] ?? items.find((i) => i.id === point.entityId)) : undefined
                       }
                       iconHtml={markerTemplate
                         .replaceAll(
@@ -1042,6 +1049,7 @@ export const MapView = () => {
                         .replaceAll("{{SIZE}}", sizeMarker.toString())
                         .replaceAll("{{IMAGE_STYLE}}", "opacity: 0.8;")}
                       categoriesMap={categoriesMap}
+                      items={items}
                       interactive={!activeTool}
                     />
                   );

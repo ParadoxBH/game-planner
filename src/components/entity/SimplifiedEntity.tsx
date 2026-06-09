@@ -5,7 +5,7 @@ import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import { ItemChip } from "../common/ItemChip";
 
-import type { Entity, ReferencePointsRespawnMode, EntityDrop } from "../../types/gameModels";
+import type { Entity, Item, ReferencePointsRespawnMode, EntityDrop } from "../../types/gameModels";
 import { getPublicUrl } from "../../utils/pathUtils";
 import { isDev } from "../../utils/mapper";
 
@@ -18,6 +18,7 @@ interface SimplifiedEntityProps {
   onToggleCollected?: () => void;
   onExpand: (id?: string) => void;
   entities?: Entity[];
+  items?: Item[];
   categoriesMap?: Record<string, string>;
   pointImage?: string;
   customDrops?: EntityDrop[];
@@ -35,6 +36,7 @@ export const SimplifiedEntity = ({
   pointImage,
   customDrops,
   entities,
+  items = [],
 }: SimplifiedEntityProps) => {
   const theme = useTheme() as any;
 
@@ -136,9 +138,21 @@ export const SimplifiedEntity = ({
               Drops Especiais
             </Typography>
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-              {customDrops.map((drop, idx) => (
-                <ItemChip key={idx} id={drop.itemId} amount={drop.quant} size="small" />
-              ))}
+              {customDrops.map((drop, idx) => {
+                // Resolve name and icon from items list
+                const resolvedItem = items.find(i => i.id === drop.itemId);
+                return (
+                  <ItemChip
+                    key={idx}
+                    id={drop.itemId}
+                    name={resolvedItem?.name}
+                    icon={resolvedItem?.icon}
+                    amount={drop.quant}
+                    size="small"
+                    type="item"
+                  />
+                );
+              })}
             </Stack>
           </Box>
         )}
