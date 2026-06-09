@@ -29,7 +29,11 @@
         "TreasureChest",
         "caldera_sample",
         "resource",
-        "rock"
+        "vegetable",
+        "monsters",
+        "npc",
+        "rock",
+        "fish"
       ]
     }
   },
@@ -55,7 +59,11 @@
         "TreasureChest",
         "caldera_sample",
         "resource",
-        "rock"
+        "vegetable",
+        "monsters",
+        "npc",
+        "rock",
+        "fish"
       ]
     }
   },
@@ -89,7 +97,11 @@
         "TreasureChest",
         "caldera_sample",
         "resource",
-        "rock"
+        "vegetable",
+        "monsters",
+        "npc",
+        "rock",
+        "fish"
       ]
     }
   }

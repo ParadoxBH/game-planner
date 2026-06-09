@@ -1,0 +1,191 @@
+﻿[
+  {
+    "id": "1000000",
+    "name": "Baú",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000010",
+    "name": "Simple Chest",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000030",
+    "name": "Baú herdado",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000040",
+    "name": "Baú ornamentado",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000050",
+    "name": "Ornate Chest B",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000060",
+    "name": "Baú troglodita",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000130",
+    "name": "Tronco Oco",
+    "category": ["TreasureChest"],
+    "icon": "/img/outward/colection/icon/tronco_oco.png",
+    "image": "/img/outward/colection/tronco_oco.png"
+  },
+  {
+    "id": "1000070",
+    "name": "Tronco Oco",
+    "category": ["TreasureChest"],
+    "icon": "/img/outward/colection/icon/tronco_oco.png",
+    "image": "/img/outward/colection/tronco_oco.png"
+  },
+  {
+    "id": "1001000_JunkPileA",
+    "name": "Monte de tralha",
+    "category": ["container"],
+    "icon": "/img/outward/colection/icon/monte_tralha.png",
+    "image": "/img/outward/colection/monte_tralha.png"
+  },
+  {
+    "id": "1000110",
+    "name": "Esconderijo de suprimentos",
+    "category": ["TreasureChest"],
+    "icon": "/img/outward/colection/icon/esconderijo_suprimentos.png",
+    "image": "/img/outward/colection/esconderijo_suprimentos.png"
+  },
+  {
+    "id": "9300000",
+    "name": "Árvore",
+    "category": ["tree"],
+    "icon": "/img/outward/colection/icon/tree.png"
+  },
+
+
+
+  {
+    "id": "0",
+    "name": "Bolso",
+    "category": ["ItemContainer"]
+  },
+  {
+    "id": "30",
+    "name": "Item",
+    "category": ["MerchantPouch"]
+  },
+  {
+    "id": "40",
+    "name": "Arca",
+    "category": ["ItemContainer"]
+  },
+  {
+    "id": "1000080",
+    "name": "Barraca quebrada",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000090",
+    "name": "Cadáver de trabalhador",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000091",
+    "name": "Cadáver de trabalhador",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000092",
+    "name": "Cadáver de aventureiro",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000093",
+    "name": "Cadáver de aventureiro",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000094",
+    "name": "Cadáver de cavaleiro",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000095",
+    "name": "Cadáver de cavaleiro",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000096",
+    "name": "Cadáver de soldado",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000097",
+    "name": "Cadáver de soldado",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000098",
+    "name": "Cadáver de catador",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000099",
+    "name": "Cadáver de catador",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000100",
+    "name": "Cadáver de saqueador",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000101",
+    "name": "Cadáver de saqueador",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000120",
+    "name": "Baú ornamentado",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000200",
+    "name": "Altar de sangue",
+    "category": ["VampiricTransmutationTable"]
+  },
+  {
+    "id": "1000800",
+    "name": "Cadáver",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1001000",
+    "name": "Monte de tralha",
+    "icon": "/img/outward/colection/icon/monte_tralha.png",
+    "image": "/img/outward/colection/monte_tralha.png",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1000140",
+    "name": "Baú de calygrey",
+    "category": ["TreasureChest"]
+  },
+  {
+    "id": "1300001",
+    "name": "Item",
+    "category": ["Gatherable"]
+  },
+  {
+    "id": "1900000",
+    "name": "Stack",
+    "category": ["GroupContainer"]
+  },
+  {
+    "id": "1900001",
+    "name": "Cozinha",
+    "category": ["CraftingStation"]
+  }
+]
