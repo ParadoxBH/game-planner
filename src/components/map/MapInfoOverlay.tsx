@@ -31,11 +31,6 @@ export const MapInfoOverlay = ({
     <Paper
       elevation={0}
       sx={{
-        position: "absolute",
-        bottom: isMobile ? 6 : 12,
-        left: isMobile ? 6 : 12,
-        right: isMobile ? 6 : undefined,
-        zIndex: 1000,
         backgroundColor: theme.designTokens.colors.glassBg,
         backdropFilter: theme.designTokens.colors.glassFilter,
         borderRadius: 1,

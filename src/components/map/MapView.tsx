@@ -7,9 +7,14 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   CircularProgress,
+  Avatar,
+  Paper,
+  IconButton,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { usePlatform } from "../../hooks/usePlatform";
 import { CRS, type LatLngBoundsExpression, Transformation } from "leaflet";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import {
   MapContainer,
   Marker,
@@ -220,6 +225,9 @@ export const MapView = () => {
   const theme = useTheme() as any;
   const { gameId, mapId: urlMapId, view: urlView } = useParams();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const filterItemId = searchParams.get("item");
+  const { isMobile } = usePlatform();
   const { activeEventIds, toggleEvent } = useEventFilter();
   const sizeMarker = 32;
 
@@ -355,12 +363,6 @@ export const MapView = () => {
     };
   }, [dbLoading, gameId, urlMapId, navigate]);
 
-  // Map-specific points
-  const pointsOnCurrentMap = useMemo(
-    () => referencePoints.filter((s) => !s.mapId || s.mapId === selectedMapId),
-    [referencePoints, selectedMapId],
-  );
-
   const entityLookup = useMemo(() => {
     const lookup: Record<string, Entity | Item> = {};
     // Items first so entities always override if IDs clash
@@ -375,6 +377,12 @@ export const MapView = () => {
     entities.forEach((e) => { lookup[e.id] = e; });
     return lookup;
   }, [entities]);
+
+  // Map-specific points
+  const pointsOnCurrentMap = useMemo(
+    () => referencePoints.filter((s) => !s.mapId || s.mapId === selectedMapId),
+    [referencePoints, selectedMapId],
+  );
 
   const selectedMap = useMemo(
     () => maps.find((m) => m.id === selectedMapId),
@@ -819,25 +827,43 @@ export const MapView = () => {
                     }
                   }
 
-                  if (!visibleTypes.includes(point.type)) return false;
-                  
-                  // Locations are only filtered by type, skipping entity/category checks
-                  if (point.type !== "location") {
-                    const hasVisible = Array.from(pointEntityIds).some(eId => {
-                      if (!visibleEntities.includes(eId)) return false;
-                      const entity = entityLookup[eId];
-                      const categories = entity?.category
-                        ? Array.isArray(entity.category)
-                          ? entity.category
-                          : [entity.category]
-                        : ["desconhecido"];
-                      
-                      const hasVisibleCategory = categories.some(cat => visibleCategories.includes(cat));
-                      if (!hasVisibleCategory) return false;
-                      return true;
-                    });
+                  if (filterItemId) {
+                    let dropsItem = false;
+                    if (point.customDrops?.some(d => d.itemId === filterItemId)) dropsItem = true;
+                    if (!dropsItem && point.entityId) {
+                       const entity = entityOnlyLookup[point.entityId];
+                       if (entity?.drops?.some(d => d.itemId === filterItemId)) dropsItem = true;
+                    }
+                    if (!dropsItem && point.spawns) {
+                       dropsItem = point.spawns.some(spawn => {
+                          if (spawn.customDrops?.some(d => d.itemId === filterItemId)) return true;
+                          const spawnedEntity = entityOnlyLookup[spawn.entityId];
+                          if (spawnedEntity?.drops?.some(d => d.itemId === filterItemId)) return true;
+                          return false;
+                       });
+                    }
+                    if (!dropsItem) return false;
+                  } else {
+                    if (!visibleTypes.includes(point.type)) return false;
                     
-                    if (!hasVisible) return false;
+                    // Locations are only filtered by type, skipping entity/category checks
+                    if (point.type !== "location") {
+                      const hasVisible = Array.from(pointEntityIds).some(eId => {
+                        if (!visibleEntities.includes(eId)) return false;
+                        const entity = entityLookup[eId];
+                        const categories = entity?.category
+                          ? Array.isArray(entity.category)
+                            ? entity.category
+                            : [entity.category]
+                          : ["desconhecido"];
+                        
+                        const hasVisibleCategory = categories.some(cat => visibleCategories.includes(cat));
+                        if (!hasVisibleCategory) return false;
+                        return true;
+                      });
+                      
+                      if (!hasVisible) return false;
+                    }
                   }
 
                   // 3. Event Filter
@@ -1079,13 +1105,61 @@ export const MapView = () => {
           />
         )}
         {viewMode === "map" && (
-          <MapInfoOverlay
-            gameName={gameInfo?.name || ""}
-            coords={displayCoords}
-            maps={maps}
-            selectedMapId={selectedMapId}
-            onSelectMap={setSelectedMapId}
-          />
+          <Stack
+            spacing={1}
+            sx={{
+              position: "absolute",
+              bottom: isMobile ? 6 : 12,
+              left: isMobile ? 6 : 12,
+              right: isMobile ? 6 : undefined,
+              zIndex: 1000,
+            }}
+          >
+            {filterItemId && (() => {
+              const filterItem = items.find(i => i.id === filterItemId);
+              if (!filterItem) return null;
+              return (
+                <Paper
+                  elevation={0}
+                  sx={{
+                    backgroundColor: theme.designTokens.colors.glassBg,
+                    backdropFilter: theme.designTokens.colors.glassFilter,
+                    borderRadius: 1,
+                    border: 1,
+                    borderColor: "primary.main",
+                    color: "text.primary",
+                    p: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: isMobile ? "auto" : "400px",
+                  }}
+                >
+                  <Stack direction="row" spacing={2} alignItems="center">
+                     <Avatar src={getPublicUrl(filterItem.icon || filterItem.image || "")} variant="rounded" sx={{ width: 40, height: 40, bgcolor: "rgba(0,0,0,0.3)", border: 1, borderColor: "divider" }} />
+                     <Stack>
+                        <Typography variant="caption" sx={{ color: "primary.main", fontWeight: 800 }}>VISUALIZANDO ITEM</Typography>
+                        <Typography variant="subtitle2" fontWeight={700}>{filterItem.name}</Typography>
+                     </Stack>
+                  </Stack>
+                  <IconButton onClick={() => {
+                    const newParams = new URLSearchParams(searchParams);
+                    newParams.delete("item");
+                    setSearchParams(newParams);
+                  }} size="small" sx={{ color: "text.secondary" }}>
+                     <CloseIcon fontSize="small" />
+                  </IconButton>
+                </Paper>
+              );
+            })()}
+            <MapInfoOverlay
+              gameName={gameInfo?.name || ""}
+              coords={displayCoords}
+              maps={maps}
+              selectedMapId={selectedMapId}
+              onSelectMap={setSelectedMapId}
+            />
+          </Stack>
         )}
       </Box>
 
