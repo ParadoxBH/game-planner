@@ -227,6 +227,7 @@ export const MapView = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const filterItemId = searchParams.get("item");
+  const filterEntityId = searchParams.get("entity");
   const { isMobile } = usePlatform();
   const { activeEventIds, toggleEvent } = useEventFilter();
   const sizeMarker = 32;
@@ -843,6 +844,11 @@ export const MapView = () => {
                        });
                     }
                     if (!dropsItem) return false;
+                  } else if (filterEntityId) {
+                    let hasEntity = false;
+                    if (point.entityId === filterEntityId) hasEntity = true;
+                    if (!hasEntity && point.spawns?.some(s => s.entityId === filterEntityId)) hasEntity = true;
+                    if (!hasEntity) return false;
                   } else {
                     if (!visibleTypes.includes(point.type)) return false;
                     
@@ -1145,6 +1151,43 @@ export const MapView = () => {
                   <IconButton onClick={() => {
                     const newParams = new URLSearchParams(searchParams);
                     newParams.delete("item");
+                    setSearchParams(newParams);
+                  }} size="small" sx={{ color: "text.secondary" }}>
+                     <CloseIcon fontSize="small" />
+                  </IconButton>
+                </Paper>
+              );
+            })()}
+            {filterEntityId && (() => {
+              const filterEntity = entities.find(e => e.id === filterEntityId);
+              if (!filterEntity) return null;
+              return (
+                <Paper
+                  elevation={0}
+                  sx={{
+                    backgroundColor: theme.designTokens.colors.glassBg,
+                    backdropFilter: theme.designTokens.colors.glassFilter,
+                    borderRadius: 1,
+                    border: 1,
+                    borderColor: "primary.main",
+                    color: "text.primary",
+                    p: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: isMobile ? "auto" : "400px",
+                  }}
+                >
+                  <Stack direction="row" spacing={2} alignItems="center">
+                     <Avatar src={getPublicUrl(filterEntity.icon || filterEntity.image || "")} variant="rounded" sx={{ width: 40, height: 40, bgcolor: "rgba(0,0,0,0.3)", border: 1, borderColor: "divider" }} />
+                     <Stack>
+                        <Typography variant="caption" sx={{ color: "primary.main", fontWeight: 800 }}>VISUALIZANDO ENTIDADE</Typography>
+                        <Typography variant="subtitle2" fontWeight={700}>{filterEntity.name}</Typography>
+                     </Stack>
+                  </Stack>
+                  <IconButton onClick={() => {
+                    const newParams = new URLSearchParams(searchParams);
+                    newParams.delete("entity");
                     setSearchParams(newParams);
                   }} size="small" sx={{ color: "text.secondary" }}>
                      <CloseIcon fontSize="small" />

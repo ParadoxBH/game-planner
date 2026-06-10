@@ -925,7 +925,7 @@ export function EntityDetailsPage() {
                             }}
                             onClick={() =>
                               navigate(
-                                `/game/${gameId}/map?entity=${entity.id}&mapId=${mapId}`,
+                                `/game/${gameId}/map/${mapId}?entity=${entity.id}`,
                               )
                             }
                           >
@@ -952,7 +952,7 @@ export function EntityDetailsPage() {
                                     };
                                   })}
                                   onClick={() =>
-                                    navigate(`/game/${gameId}/map/${mapId}`)
+                                    navigate(`/game/${gameId}/map/${mapId}?entity=${entity.id}`)
                                   }
                                   height={200}
                                 />
