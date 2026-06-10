@@ -10,8 +10,10 @@ import {
   Avatar,
   Paper,
   IconButton,
+  Tooltip as TooltipReact
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import LaunchIcon from "@mui/icons-material/Launch";
 import { usePlatform } from "../../hooks/usePlatform";
 import { CRS, type LatLngBoundsExpression, Transformation } from "leaflet";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
@@ -1148,13 +1150,22 @@ export const MapView = () => {
                         <Typography variant="subtitle2" fontWeight={700}>{filterItem.name}</Typography>
                      </Stack>
                   </Stack>
-                  <IconButton onClick={() => {
-                    const newParams = new URLSearchParams(searchParams);
-                    newParams.delete("item");
-                    setSearchParams(newParams);
-                  }} size="small" sx={{ color: "text.secondary" }}>
-                     <CloseIcon fontSize="small" />
-                  </IconButton>
+                  <Stack direction="row" spacing={0.5}>
+                    <TooltipReact title="Detalhar" disableInteractive placement="top">
+                      <IconButton onClick={() => navigate(`/game/${gameId}/items/view/${filterItemId}`)} size="small" sx={{ color: "text.secondary" }}>
+                        <LaunchIcon fontSize="small" />
+                      </IconButton>
+                    </TooltipReact>
+                    <TooltipReact title="Remover Filtro" disableInteractive placement="top">
+                      <IconButton onClick={() => {
+                        const newParams = new URLSearchParams(searchParams);
+                        newParams.delete("item");
+                        setSearchParams(newParams);
+                      }} size="small" sx={{ color: "text.secondary" }}>
+                        <CloseIcon fontSize="small" />
+                      </IconButton>
+                    </TooltipReact>
+                  </Stack>
                 </Paper>
               );
             })()}
@@ -1185,13 +1196,22 @@ export const MapView = () => {
                         <Typography variant="subtitle2" fontWeight={700}>{filterEntity.name}</Typography>
                      </Stack>
                   </Stack>
-                  <IconButton onClick={() => {
-                    const newParams = new URLSearchParams(searchParams);
-                    newParams.delete("entity");
-                    setSearchParams(newParams);
-                  }} size="small" sx={{ color: "text.secondary" }}>
-                     <CloseIcon fontSize="small" />
-                  </IconButton>
+                  <Stack direction="row" spacing={0.5}>
+                    <TooltipReact title="Detalhar" disableInteractive placement="top">
+                      <IconButton onClick={() => navigate(`/game/${gameId}/entity/view/${filterEntityId}`)} size="small" sx={{ color: "text.secondary" }}>
+                        <LaunchIcon fontSize="small" />
+                      </IconButton>
+                    </TooltipReact>
+                    <TooltipReact title="Remover Filtro" disableInteractive placement="top">
+                      <IconButton onClick={() => {
+                        const newParams = new URLSearchParams(searchParams);
+                        newParams.delete("entity");
+                        setSearchParams(newParams);
+                      }} size="small" sx={{ color: "text.secondary" }}>
+                        <CloseIcon fontSize="small" />
+                      </IconButton>
+                    </TooltipReact>
+                  </Stack>
                 </Paper>
               );
             })()}
