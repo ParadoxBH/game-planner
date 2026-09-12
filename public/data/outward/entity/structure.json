@@ -187,5 +187,20 @@
     "id": "1900001",
     "name": "Cozinha",
     "category": ["CraftingStation"]
+  },
+  
+  {
+    "id": "5000204",
+    "name": "Mesa da Guilda Encantadora ",
+    "icon": "img/outward/items/5000204_EnchantingGuildTable.png",
+    "category": ["EnchantmentTable"],
+    "event": ["DLC2"]
+  },
+  {
+    "id": "5000205",
+    "name": "Pilar da Guilda Encantadora ",
+    "icon": "img/outward/items/5000205_EnchantingGuildPillar.png",
+    "category": ["SingleItemContainer"],
+    "event": ["DLC2"]
   }
 ]

@@ -13045,7 +13045,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "7d3436dd-4247-4f4b-bd70-78b36af13872", "type": "AffectFood", "value": 0}, {"id": "ccf2d236-a4dc-4228-a8d2-47be4f44f5b7", "type": "statuseffect_hit", "value": "46_StaminaRecovery1 (StatusEffect)"}]
+    "metadata": [{"id": "7d3436dd-4247-4f4b-bd70-78b36af13872", "type": "AffectFood", "value": 0}, {"id": "ccf2d236-a4dc-4228-a8d2-47be4f44f5b7", "type": "statuseffect_hit_StaminaRecovery", "value": 1}]
   },
   {
     "id": "4000020",
@@ -13120,7 +13120,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "1ff89904-172d-4e7f-b970-912363e5f678", "type": "AffectFood", "value": 0}, {"id": "f0a0fc9b-73c4-4b96-ae55-58c025de8f7f", "type": "statuseffect_hit", "value": "0_HealthRecovery2 (StatusEffect)"}, {"id": "cac95443-b6f1-4012-9547-ffafd606b28e", "type": "statuseffect_hit", "value": "1_StaminaRecovery2 (StatusEffect)"}, {"id": "9e154d27-df95-4966-a03b-4fc807c37d76", "type": "statuseffect_hit", "value": "520_Indigestion_1 (Disease)"}]
+    "metadata": [{"id": "1ff89904-172d-4e7f-b970-912363e5f678", "type": "AffectFood", "value": 0}, {"id": "f0a0fc9b-73c4-4b96-ae55-58c025de8f7f", "type": "statuseffect_hit", "value": "0_HealthRecovery2 (StatusEffect)"}, {"id": "cac95443-b6f1-4012-9547-ffafd606b28e", "type": "statuseffect_hit_StaminaRecovery", "value": 2}, {"id": "9e154d27-df95-4966-a03b-4fc807c37d76", "type": "statuseffect_hit", "value": "520_Indigestion_1 (Disease)"}]
   },
   {
     "id": "4000090",
@@ -13210,7 +13210,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "a3d0cbab-8ede-4a37-99a2-ca71c6d3ff73", "type": "AffectFood", "value": 0}, {"id": "0cd1d784-53a6-41aa-9207-09a8e8297031", "type": "statuseffect_hit", "value": "7_StaminaRecovery4 (StatusEffect)"}]
+    "metadata": [{"id": "a3d0cbab-8ede-4a37-99a2-ca71c6d3ff73", "type": "AffectFood", "value": 0}, {"id": "0cd1d784-53a6-41aa-9207-09a8e8297031", "type": "statuseffect_hit_StaminaRecovery", "value": 4}]
   },
   {
     "id": "4000200",
@@ -13225,7 +13225,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "a7116b8a-716e-4868-bf72-32ea32b3237e", "type": "AffectFood", "value": 0}, {"id": "f0af3a19-dccd-4ffd-90aa-1bf07a8b674c", "type": "statuseffect_hit", "value": "1_StaminaRecovery2 (StatusEffect)"}, {"id": "59dfa429-f7a6-43d9-8861-3432a6254efc", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}]
+    "metadata": [{"id": "a7116b8a-716e-4868-bf72-32ea32b3237e", "type": "AffectFood", "value": 0}, {"id": "f0af3a19-dccd-4ffd-90aa-1bf07a8b674c", "type": "statuseffect_hit_StaminaRecovery", "value": 2}, {"id": "59dfa429-f7a6-43d9-8861-3432a6254efc", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}]
   },
   {
     "id": "4000210",
@@ -13285,7 +13285,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "bc9cd775-90e9-45af-92a2-639b31112fb5", "type": "AffectFood", "value": 0}, {"id": "d839a94e-fa86-459a-ba28-f27bd8be77b6", "type": "statuseffect_hit", "value": "46_StaminaRecovery1 (StatusEffect)"}, {"id": "2b6d77d7-bbca-4872-a5b5-d79ba5d92845", "type": "statuseffect_hit", "value": "520_Indigestion_1 (Disease)"}, {"id": "9537ad5c-fa1e-431c-8d72-99775de65e09", "type": "statuseffect_hit", "value": "45_HealthRecovery1 (StatusEffect)"}]
+    "metadata": [{"id": "bc9cd775-90e9-45af-92a2-639b31112fb5", "type": "AffectFood", "value": 0}, {"id": "d839a94e-fa86-459a-ba28-f27bd8be77b6", "type": "statuseffect_hit_StaminaRecovery", "value": 1}, {"id": "2b6d77d7-bbca-4872-a5b5-d79ba5d92845", "type": "statuseffect_hit", "value": "520_Indigestion_1 (Disease)"}, {"id": "9537ad5c-fa1e-431c-8d72-99775de65e09", "type": "statuseffect_hit", "value": "45_HealthRecovery1 (StatusEffect)"}]
   },
   {
     "id": "4000240",
@@ -13360,7 +13360,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "fdf01f80-156d-40dc-86fc-57e7c7c2286b", "type": "AffectFood", "value": 0}, {"id": "2c2de026-1cde-4ded-8198-5f9b99ecd75f", "type": "statuseffect_hit", "value": "1_StaminaRecovery2 (StatusEffect)"}]
+    "metadata": [{"id": "fdf01f80-156d-40dc-86fc-57e7c7c2286b", "type": "AffectFood", "value": 0}, {"id": "2c2de026-1cde-4ded-8198-5f9b99ecd75f", "type": "statuseffect_hit_StaminaRecovery", "value": 2}]
   },
   {
     "id": "4000290",
@@ -13375,7 +13375,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "deca0d3f-b062-475c-951b-8b5b8946675a", "type": "AffectFood", "value": 0}, {"id": "2c294b5c-c2b3-426c-b2be-9b4f09bd028b", "type": "statuseffect_hit", "value": "1_StaminaRecovery2 (StatusEffect)"}, {"id": "f76203ad-b53f-4eb4-9368-490df920ce82", "type": "AffectCorruption", "value": 0}]
+    "metadata": [{"id": "deca0d3f-b062-475c-951b-8b5b8946675a", "type": "AffectFood", "value": 0}, {"id": "2c294b5c-c2b3-426c-b2be-9b4f09bd028b", "type": "statuseffect_hit_StaminaRecovery", "value": 2}, {"id": "f76203ad-b53f-4eb4-9368-490df920ce82", "type": "AffectCorruption", "value": 0}]
   },
   {
     "id": "4000300",
@@ -13390,7 +13390,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "ac949e93-1a4d-443a-827e-fe65f00b7f67", "type": "AffectFood", "value": 0}, {"id": "715ef062-ba06-4f57-aa93-b27f2ee13ae3", "type": "statuseffect_hit", "value": "4_StaminaRecovery3 (StatusEffect)"}, {"id": "ecaaf31b-f217-45e7-83a1-16b29c888b10", "type": "AffectCorruption", "value": 0}]
+    "metadata": [{"id": "ac949e93-1a4d-443a-827e-fe65f00b7f67", "type": "AffectFood", "value": 0}, {"id": "715ef062-ba06-4f57-aa93-b27f2ee13ae3", "type": "statuseffect_hit_StaminaRecovery", "value": 3}, {"id": "ecaaf31b-f217-45e7-83a1-16b29c888b10", "type": "AffectCorruption", "value": 0}]
   },
   {
     "id": "4000310",
@@ -13510,7 +13510,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "fdaad2fd-e805-48c0-825b-cc0dbf89fe00", "type": "AffectFood", "value": 0}, {"id": "a3c941b3-34d6-48ac-a86a-f3588682b1c6", "type": "statuseffect_hit", "value": "87_AttackUp (StatusEffect)"}, {"id": "da484ed0-3ad1-40d3-b231-19546fe30875", "type": "statuseffect_hit", "value": "4_StaminaRecovery3 (StatusEffect)"}, {"id": "e965effb-c3ee-49ac-8a4b-0005fa10c451", "type": "AffectCorruption", "value": 0}]
+    "metadata": [{"id": "fdaad2fd-e805-48c0-825b-cc0dbf89fe00", "type": "AffectFood", "value": 0}, {"id": "a3c941b3-34d6-48ac-a86a-f3588682b1c6", "type": "statuseffect_hit", "value": "87_AttackUp (StatusEffect)"}, {"id": "da484ed0-3ad1-40d3-b231-19546fe30875", "type": "statuseffect_hit_StaminaRecovery", "value": 3}, {"id": "e965effb-c3ee-49ac-8a4b-0005fa10c451", "type": "AffectCorruption", "value": 0}]
   },
   {
     "id": "4100000",
@@ -13615,7 +13615,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "5cf7a812-ea18-4787-9b76-61eac2e2a1dd", "type": "AffectFood", "value": 0}, {"id": "a0b0c72f-cd50-477f-b98e-b3c35a84e9e2", "type": "statuseffect_hit", "value": "1_StaminaRecovery2 (StatusEffect)"}, {"id": "582a485d-a288-4de7-8333-b6520dead99d", "type": "statuseffect_hit", "value": "38_EnvColdResistance (StatusEffect)"}]
+    "metadata": [{"id": "5cf7a812-ea18-4787-9b76-61eac2e2a1dd", "type": "AffectFood", "value": 0}, {"id": "a0b0c72f-cd50-477f-b98e-b3c35a84e9e2", "type": "statuseffect_hit_StaminaRecovery", "value": 2}, {"id": "582a485d-a288-4de7-8333-b6520dead99d", "type": "statuseffect_hit", "value": "38_EnvColdResistance (StatusEffect)"}]
   },
   {
     "id": "4100040",
@@ -13720,7 +13720,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "326417d0-cf59-40a1-9f81-c4838484a424", "type": "AffectFood", "value": 0}, {"id": "9c93b431-9924-4fd3-80e3-784bf5307177", "type": "statuseffect_hit", "value": "0_HealthRecovery2 (StatusEffect)"}, {"id": "247aeaee-4b78-44e0-a6fe-9707890683ec", "type": "statuseffect_hit", "value": "4_StaminaRecovery3 (StatusEffect)"}, {"id": "7c04910d-be41-41bd-87b5-200b5dbee30d", "type": "statuseffect_hit", "value": "2_ManaRatioRecovery2 (StatusEffect)"}]
+    "metadata": [{"id": "326417d0-cf59-40a1-9f81-c4838484a424", "type": "AffectFood", "value": 0}, {"id": "9c93b431-9924-4fd3-80e3-784bf5307177", "type": "statuseffect_hit", "value": "0_HealthRecovery2 (StatusEffect)"}, {"id": "247aeaee-4b78-44e0-a6fe-9707890683ec", "type": "statuseffect_hit_StaminaRecovery", "value": 3}, {"id": "7c04910d-be41-41bd-87b5-200b5dbee30d", "type": "statuseffect_hit", "value": "2_ManaRatioRecovery2 (StatusEffect)"}]
   },
   {
     "id": "4100240",
@@ -13735,7 +13735,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "31d0700f-ea72-4ddd-87b7-87ced04c5ce3", "type": "AffectFood", "value": 0}, {"id": "3455f5b9-2467-48a9-b5b9-68d7eadea1bd", "type": "statuseffect_hit", "value": "75_HealthRecovery5 (StatusEffect)"}, {"id": "dc3cb3cd-e974-4f7c-b580-ad1ec2e97265", "type": "statuseffect_hit", "value": "4_StaminaRecovery3 (StatusEffect)"}, {"id": "b1f21f66-f962-4ea8-8164-15e9427ae8d7", "type": "AffectMana", "value": 0}]
+    "metadata": [{"id": "31d0700f-ea72-4ddd-87b7-87ced04c5ce3", "type": "AffectFood", "value": 0}, {"id": "3455f5b9-2467-48a9-b5b9-68d7eadea1bd", "type": "statuseffect_hit", "value": "75_HealthRecovery5 (StatusEffect)"}, {"id": "dc3cb3cd-e974-4f7c-b580-ad1ec2e97265", "type": "statuseffect_hit_StaminaRecovery", "value": 3}, {"id": "b1f21f66-f962-4ea8-8164-15e9427ae8d7", "type": "AffectMana", "value": 0}]
   },
   {
     "id": "4100250",
@@ -13795,7 +13795,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "6bfe5d6e-084b-40c8-92a8-64e737c5891a", "type": "AffectFood", "value": 0}, {"id": "62608906-4942-4007-a391-88b48fc26628", "type": "statuseffect_hit", "value": "45_HealthRecovery1 (StatusEffect)"}, {"id": "b0ca3ca0-aa15-46d6-98d2-60998a09f508", "type": "statuseffect_hit", "value": "4_StaminaRecovery3 (StatusEffect)"}]
+    "metadata": [{"id": "6bfe5d6e-084b-40c8-92a8-64e737c5891a", "type": "AffectFood", "value": 0}, {"id": "62608906-4942-4007-a391-88b48fc26628", "type": "statuseffect_hit", "value": "45_HealthRecovery1 (StatusEffect)"}, {"id": "b0ca3ca0-aa15-46d6-98d2-60998a09f508", "type": "statuseffect_hit_StaminaRecovery", "value": 3}]
   },
   {
     "id": "4100290",
@@ -13810,7 +13810,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "6357eccf-26f2-4cf7-8143-4dd695ab1eaa", "type": "AffectFood", "value": 0}, {"id": "b217407e-c1eb-4316-8ef3-25ca0903b2e4", "type": "statuseffect_hit", "value": "0_HealthRecovery2 (StatusEffect)"}, {"id": "4f31caa2-af03-463c-8896-df0401ef9cbe", "type": "statuseffect_hit", "value": "1_StaminaRecovery2 (StatusEffect)"}]
+    "metadata": [{"id": "6357eccf-26f2-4cf7-8143-4dd695ab1eaa", "type": "AffectFood", "value": 0}, {"id": "b217407e-c1eb-4316-8ef3-25ca0903b2e4", "type": "statuseffect_hit", "value": "0_HealthRecovery2 (StatusEffect)"}, {"id": "4f31caa2-af03-463c-8896-df0401ef9cbe", "type": "statuseffect_hit_StaminaRecovery", "value": 2}]
   },
   {
     "id": "4100300",
@@ -13825,7 +13825,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "5a933688-3a27-4f4a-8513-e1a2bdb1c80b", "type": "AffectFood", "value": 0}, {"id": "b3ede393-ba35-49c8-8937-c70ebf1a9222", "type": "statuseffect_hit", "value": "46_StaminaRecovery1 (StatusEffect)"}, {"id": "6f63d632-b91b-41eb-b2dd-fbac087a9143", "type": "statuseffect_hit", "value": "45_HealthRecovery1 (StatusEffect)"}]
+    "metadata": [{"id": "5a933688-3a27-4f4a-8513-e1a2bdb1c80b", "type": "AffectFood", "value": 0}, {"id": "b3ede393-ba35-49c8-8937-c70ebf1a9222", "type": "statuseffect_hit_StaminaRecovery", "value": 1}, {"id": "6f63d632-b91b-41eb-b2dd-fbac087a9143", "type": "statuseffect_hit", "value": "45_HealthRecovery1 (StatusEffect)"}]
   },
   {
     "id": "4100310",
@@ -13840,7 +13840,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "e7196ec4-5ec2-4108-bf61-b79aa9bc6ed9", "type": "AffectFood", "value": 0}, {"id": "eef3de2c-307f-4df4-92d8-fbdc55307456", "type": "statuseffect_hit", "value": "1_StaminaRecovery2 (StatusEffect)"}, {"id": "d7f5f445-6d3d-496a-90dc-32048b1fc962", "type": "statuseffect_hit", "value": "38_EnvColdResistance (StatusEffect)"}]
+    "metadata": [{"id": "e7196ec4-5ec2-4108-bf61-b79aa9bc6ed9", "type": "AffectFood", "value": 0}, {"id": "eef3de2c-307f-4df4-92d8-fbdc55307456", "type": "statuseffect_hit_StaminaRecovery", "value": 2}, {"id": "d7f5f445-6d3d-496a-90dc-32048b1fc962", "type": "statuseffect_hit", "value": "38_EnvColdResistance (StatusEffect)"}]
   },
   {
     "id": "4100320",
@@ -13855,7 +13855,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "a5211de5-ae5e-4bf1-9255-4778524c7ae2", "type": "AffectFood", "value": 0}, {"id": "4d57a388-5921-429b-aace-d2bba011fa99", "type": "statuseffect_hit", "value": "46_StaminaRecovery1 (StatusEffect)"}]
+    "metadata": [{"id": "a5211de5-ae5e-4bf1-9255-4778524c7ae2", "type": "AffectFood", "value": 0}, {"id": "4d57a388-5921-429b-aace-d2bba011fa99", "type": "statuseffect_hit_StaminaRecovery", "value": 1}]
   },
   {
     "id": "4100330",
@@ -13930,7 +13930,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "1f3264d6-2a3d-442c-acaf-75015d7cb9b4", "type": "AffectFood", "value": 0}, {"id": "af575086-edbd-4ae4-a367-9ff6578da181", "type": "statuseffect_hit", "value": "4_StaminaRecovery3 (StatusEffect)"}, {"id": "7b269525-2c47-408f-a095-f543834c7997", "type": "RemoveStatusEffect", "value": 0}]
+    "metadata": [{"id": "1f3264d6-2a3d-442c-acaf-75015d7cb9b4", "type": "AffectFood", "value": 0}, {"id": "af575086-edbd-4ae4-a367-9ff6578da181", "type": "statuseffect_hit_StaminaRecovery", "value": 3}, {"id": "7b269525-2c47-408f-a095-f543834c7997", "type": "RemoveStatusEffect", "value": 0}]
   },
   {
     "id": "4100390",
@@ -13945,7 +13945,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "78383669-a9a9-4d4e-896a-dbbd620cb50e", "type": "AffectFood", "value": 0}, {"id": "0cd46541-64a5-4962-9fbd-25db64163267", "type": "statuseffect_hit", "value": "46_StaminaRecovery1 (StatusEffect)"}, {"id": "22df06bd-3261-46c3-864e-756e87ccacb8", "type": "AffectStamina", "value": 0}]
+    "metadata": [{"id": "78383669-a9a9-4d4e-896a-dbbd620cb50e", "type": "AffectFood", "value": 0}, {"id": "0cd46541-64a5-4962-9fbd-25db64163267", "type": "statuseffect_hit_StaminaRecovery", "value": 1}, {"id": "22df06bd-3261-46c3-864e-756e87ccacb8", "type": "AffectStamina", "value": 0}]
   },
   {
     "id": "4100400",
@@ -13990,7 +13990,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "12227284-bcd7-4a81-90f2-c76b3fba6028", "type": "AffectFood", "value": 0}, {"id": "937a69c0-da00-4cc8-bc3c-844f2b0e7097", "type": "statuseffect_hit", "value": "76_StaminaRecovery5 (StatusEffect)"}]
+    "metadata": [{"id": "12227284-bcd7-4a81-90f2-c76b3fba6028", "type": "AffectFood", "value": 0}, {"id": "937a69c0-da00-4cc8-bc3c-844f2b0e7097", "type": "statuseffect_hit_StaminaRecovery", "value": 5}]
   },
   {
     "id": "4100430",
@@ -14005,7 +14005,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "caa88b61-875e-446d-8b21-a5cf4fd3d490", "type": "AffectFood", "value": 0}, {"id": "43101bf1-634a-4e80-ad8c-eca0f404aeb2", "type": "statuseffect_hit", "value": "76_StaminaRecovery5 (StatusEffect)"}]
+    "metadata": [{"id": "caa88b61-875e-446d-8b21-a5cf4fd3d490", "type": "AffectFood", "value": 0}, {"id": "43101bf1-634a-4e80-ad8c-eca0f404aeb2", "type": "statuseffect_hit_StaminaRecovery", "value": 5}]
   },
   {
     "id": "4100440",
@@ -14065,7 +14065,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "37135f33-5835-47c8-bab7-c511920ed8a6", "type": "AffectFood", "value": 0}, {"id": "6cad3fbf-8336-4ba8-9b46-4c61942b28ea", "type": "statuseffect_hit", "value": "44_SpeedUp (StatusEffect)"}, {"id": "8ee6744d-75d2-44c5-b4c9-dfe49058ac2f", "type": "statuseffect_hit", "value": "76_StaminaRecovery5 (StatusEffect)"}, {"id": "c0ea05f3-9afc-4e2e-937d-97148ee1acab", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}]
+    "metadata": [{"id": "37135f33-5835-47c8-bab7-c511920ed8a6", "type": "AffectFood", "value": 0}, {"id": "6cad3fbf-8336-4ba8-9b46-4c61942b28ea", "type": "statuseffect_hit", "value": "44_SpeedUp (StatusEffect)"}, {"id": "8ee6744d-75d2-44c5-b4c9-dfe49058ac2f", "type": "statuseffect_hit_StaminaRecovery", "value": 5}, {"id": "c0ea05f3-9afc-4e2e-937d-97148ee1acab", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}]
   },
   {
     "id": "4100480",
@@ -14080,7 +14080,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "ec9828a0-4f14-444d-a831-c47c591c7b65", "type": "AffectFood", "value": 0}, {"id": "ceda25d3-af8b-4446-9133-6a0e71bba7bf", "type": "statuseffect_hit", "value": "7_StaminaRecovery4 (StatusEffect)"}, {"id": "0a2add80-8048-4e90-a24c-932448756d01", "type": "statuseffect_hit", "value": "3_HealthRecovery3 (StatusEffect)"}, {"id": "afd085a7-1c3c-4a08-9111-e704d7b8d8b6", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}]
+    "metadata": [{"id": "ec9828a0-4f14-444d-a831-c47c591c7b65", "type": "AffectFood", "value": 0}, {"id": "ceda25d3-af8b-4446-9133-6a0e71bba7bf", "type": "statuseffect_hit_StaminaRecovery", "value": 4}, {"id": "0a2add80-8048-4e90-a24c-932448756d01", "type": "statuseffect_hit", "value": "3_HealthRecovery3 (StatusEffect)"}, {"id": "afd085a7-1c3c-4a08-9111-e704d7b8d8b6", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}]
   },
   {
     "id": "4100490",
@@ -14095,7 +14095,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "2673fe09-1b42-4ec9-9846-25f11bb97d83", "type": "AffectFood", "value": 0}, {"id": "457730b9-315d-4b5d-93fb-92e7362b6829", "type": "statuseffect_hit", "value": "4_StaminaRecovery3 (StatusEffect)"}, {"id": "bf9eff5b-53c5-48b7-bb64-f17a4721cd06", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}]
+    "metadata": [{"id": "2673fe09-1b42-4ec9-9846-25f11bb97d83", "type": "AffectFood", "value": 0}, {"id": "457730b9-315d-4b5d-93fb-92e7362b6829", "type": "statuseffect_hit_StaminaRecovery", "value": 3}, {"id": "bf9eff5b-53c5-48b7-bb64-f17a4721cd06", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}]
   },
   {
     "id": "4100500",
@@ -14140,7 +14140,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "aab8e3cd-69d5-4974-b32c-41e73253f9e6", "type": "AffectFood", "value": 0}, {"id": "28294386-9dec-4932-b56f-f6af0b84ceaa", "type": "statuseffect_hit", "value": "45_HealthRecovery1 (StatusEffect)"}, {"id": "c93409b6-d49f-413a-b037-64dd5e7300ef", "type": "statuseffect_hit", "value": "46_StaminaRecovery1 (StatusEffect)"}, {"id": "bf6ab3e6-bbdb-4f1a-a1f8-0a28ceba2a62", "type": "statuseffect_hit", "value": "85_StealthUp (StatusEffect)"}]
+    "metadata": [{"id": "aab8e3cd-69d5-4974-b32c-41e73253f9e6", "type": "AffectFood", "value": 0}, {"id": "28294386-9dec-4932-b56f-f6af0b84ceaa", "type": "statuseffect_hit", "value": "45_HealthRecovery1 (StatusEffect)"}, {"id": "c93409b6-d49f-413a-b037-64dd5e7300ef", "type": "statuseffect_hit_StaminaRecovery", "value": 1}, {"id": "bf6ab3e6-bbdb-4f1a-a1f8-0a28ceba2a62", "type": "statuseffect_hit", "value": "85_StealthUp (StatusEffect)"}]
   },
   {
     "id": "4100530",
@@ -14200,7 +14200,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "adb288a1-8c65-4219-8046-c8c0fc86ce69", "type": "AffectFood", "value": 0}, {"id": "a97c72e5-de72-422e-a75d-b16e46a39b09", "type": "statuseffect_hit", "value": "4_StaminaRecovery3 (StatusEffect)"}]
+    "metadata": [{"id": "adb288a1-8c65-4219-8046-c8c0fc86ce69", "type": "AffectFood", "value": 0}, {"id": "a97c72e5-de72-422e-a75d-b16e46a39b09", "type": "statuseffect_hit_StaminaRecovery", "value": 3}]
   },
   {
     "id": "4100570",
@@ -14230,7 +14230,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "2664f12a-f78c-4936-9629-827e9d05c2fe", "type": "AffectFood", "value": 0}, {"id": "9441f71e-e7ea-43e8-9e16-e3af03cdc7b1", "type": "statuseffect_hit", "value": "7_StaminaRecovery4 (StatusEffect)"}, {"id": "aadebc5f-55d1-4324-9bce-e8ee0bd4fc67", "type": "statuseffect_hit", "value": "87_AttackUp (StatusEffect)"}]
+    "metadata": [{"id": "2664f12a-f78c-4936-9629-827e9d05c2fe", "type": "AffectFood", "value": 0}, {"id": "9441f71e-e7ea-43e8-9e16-e3af03cdc7b1", "type": "statuseffect_hit_StaminaRecovery", "value": 4}, {"id": "aadebc5f-55d1-4324-9bce-e8ee0bd4fc67", "type": "statuseffect_hit", "value": "87_AttackUp (StatusEffect)"}]
   },
   {
     "id": "4100590",
@@ -14260,7 +14260,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "70b7192e-436f-4b85-8363-1b18416c83de", "type": "AffectFood", "value": 0}, {"id": "c01530e4-6a13-43cf-b36e-fc7060ae3f49", "type": "statuseffect_hit", "value": "87_AttackUp (StatusEffect)"}, {"id": "58485ef3-e3c0-45a4-9f32-491430ccba5e", "type": "statuseffect_hit", "value": "1_StaminaRecovery2 (StatusEffect)"}, {"id": "48e4573f-600c-465b-a5d5-21572917cdd9", "type": "AffectCorruption", "value": 0}, {"id": "eaa43ac3-e34c-4897-83c6-c155f17f687d", "type": "PlaySoundEffect", "value": 0}]
+    "metadata": [{"id": "70b7192e-436f-4b85-8363-1b18416c83de", "type": "AffectFood", "value": 0}, {"id": "c01530e4-6a13-43cf-b36e-fc7060ae3f49", "type": "statuseffect_hit", "value": "87_AttackUp (StatusEffect)"}, {"id": "58485ef3-e3c0-45a4-9f32-491430ccba5e", "type": "statuseffect_hit_StaminaRecovery", "value": 2}, {"id": "48e4573f-600c-465b-a5d5-21572917cdd9", "type": "AffectCorruption", "value": 0}, {"id": "eaa43ac3-e34c-4897-83c6-c155f17f687d", "type": "PlaySoundEffect", "value": 0}]
   },
   {
     "id": "4100610",
@@ -14275,7 +14275,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "d39169a0-6af2-46b6-8072-8015d2cd18c3", "type": "AffectFood", "value": 0}, {"id": "049cc9a8-889c-4108-be0c-c04ccbdcdff7", "type": "statuseffect_hit", "value": "88_ImpactUp (StatusEffect)"}, {"id": "e6d6bcf8-5357-4eb8-8c8e-61c75deee285", "type": "statuseffect_hit", "value": "7_StaminaRecovery4 (StatusEffect)"}, {"id": "04063ee7-ebd0-415f-a0c1-c1392857b18d", "type": "AffectCorruption", "value": 0}, {"id": "fed0ea11-763c-474c-9c2b-65f411a2caf3", "type": "PlaySoundEffect", "value": 0}]
+    "metadata": [{"id": "d39169a0-6af2-46b6-8072-8015d2cd18c3", "type": "AffectFood", "value": 0}, {"id": "049cc9a8-889c-4108-be0c-c04ccbdcdff7", "type": "statuseffect_hit", "value": "88_ImpactUp (StatusEffect)"}, {"id": "e6d6bcf8-5357-4eb8-8c8e-61c75deee285", "type": "statuseffect_hit_StaminaRecovery", "value": 4}, {"id": "04063ee7-ebd0-415f-a0c1-c1392857b18d", "type": "AffectCorruption", "value": 0}, {"id": "fed0ea11-763c-474c-9c2b-65f411a2caf3", "type": "PlaySoundEffect", "value": 0}]
   },
   {
     "id": "4100620",
@@ -14350,7 +14350,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "27247207-a002-4514-851b-e8715c0e2cdb", "type": "AffectFood", "value": 0}, {"id": "5f93de97-cf16-4199-b1fa-ef1a37ec974a", "type": "statuseffect_hit", "value": "1_StaminaRecovery2 (StatusEffect)"}, {"id": "88cb078f-2dbf-488a-9803-824f93b8c4c3", "type": "statuseffect_hit", "value": "47_ManaRatioRecovery1 (StatusEffect)"}, {"id": "b644c436-1303-44aa-9b16-8cb177eb86f8", "type": "PlaySoundEffect", "value": 0}]
+    "metadata": [{"id": "27247207-a002-4514-851b-e8715c0e2cdb", "type": "AffectFood", "value": 0}, {"id": "5f93de97-cf16-4199-b1fa-ef1a37ec974a", "type": "statuseffect_hit_StaminaRecovery", "value": 2}, {"id": "88cb078f-2dbf-488a-9803-824f93b8c4c3", "type": "statuseffect_hit", "value": "47_ManaRatioRecovery1 (StatusEffect)"}, {"id": "b644c436-1303-44aa-9b16-8cb177eb86f8", "type": "PlaySoundEffect", "value": 0}]
   },
   {
     "id": "4100670",
@@ -14410,7 +14410,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "1fa693fa-aa06-4250-8192-d9b8a3ab411b", "type": "AffectFood", "value": 0}, {"id": "0841dce7-7ef6-4a2c-8be5-32008ae78131", "type": "statuseffect_hit", "value": "0_HealthRecovery2 (StatusEffect)"}, {"id": "5e8079d0-b9b0-4544-a435-e3c90f73087a", "type": "statuseffect_hit", "value": "4_StaminaRecovery3 (StatusEffect)"}, {"id": "d1c1f291-9249-44e6-9816-964b5064eb26", "type": "statuseffect_hit", "value": "587_CorruptionResistance (StatusEffect)"}, {"id": "7b488718-a44e-4e28-92cc-235781d9519a", "type": "PlaySoundEffect", "value": 0}]
+    "metadata": [{"id": "1fa693fa-aa06-4250-8192-d9b8a3ab411b", "type": "AffectFood", "value": 0}, {"id": "0841dce7-7ef6-4a2c-8be5-32008ae78131", "type": "statuseffect_hit", "value": "0_HealthRecovery2 (StatusEffect)"}, {"id": "5e8079d0-b9b0-4544-a435-e3c90f73087a", "type": "statuseffect_hit_StaminaRecovery", "value": 3}, {"id": "d1c1f291-9249-44e6-9816-964b5064eb26", "type": "statuseffect_hit", "value": "587_CorruptionResistance (StatusEffect)"}, {"id": "7b488718-a44e-4e28-92cc-235781d9519a", "type": "PlaySoundEffect", "value": 0}]
   },
   {
     "id": "4100710",
@@ -14425,7 +14425,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "cb2aed35-a49b-4ade-97f6-cdc85d415e08", "type": "AffectFood", "value": 0}, {"id": "9cf0e6cf-5080-4011-8805-4d6ddccf9092", "type": "statuseffect_hit", "value": "87_AttackUp (StatusEffect)"}, {"id": "5090cdcb-e25e-43bd-ab4a-09b3d66fc29f", "type": "AffectCorruption", "value": 0}, {"id": "a5e97fc5-50fc-4194-94a9-7a77862e0959", "type": "statuseffect_hit", "value": "4_StaminaRecovery3 (StatusEffect)"}, {"id": "a78d08d7-5bcc-49f6-b369-ebad5417948c", "type": "PlaySoundEffect", "value": 0}]
+    "metadata": [{"id": "cb2aed35-a49b-4ade-97f6-cdc85d415e08", "type": "AffectFood", "value": 0}, {"id": "9cf0e6cf-5080-4011-8805-4d6ddccf9092", "type": "statuseffect_hit", "value": "87_AttackUp (StatusEffect)"}, {"id": "5090cdcb-e25e-43bd-ab4a-09b3d66fc29f", "type": "AffectCorruption", "value": 0}, {"id": "a5e97fc5-50fc-4194-94a9-7a77862e0959", "type": "statuseffect_hit_StaminaRecovery", "value": 3}, {"id": "a78d08d7-5bcc-49f6-b369-ebad5417948c", "type": "PlaySoundEffect", "value": 0}]
   },
   {
     "id": "4100720",
@@ -14470,7 +14470,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "91e42874-82d1-4ec8-8213-5984558169cc", "type": "AffectFood", "value": 0}, {"id": "3e35def1-6cdf-4dfb-9e4b-00b533eeb2c8", "type": "AddBoonEffect", "value": 0}, {"id": "f2130ff6-184f-4c6f-bb3a-7812cb7cfac8", "type": "statuseffect_hit", "value": "4_StaminaRecovery3 (StatusEffect)"}, {"id": "921b7d0a-5041-4328-abe4-5a52575b1525", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}, {"id": "fc546c93-e95e-49c0-9023-baf2d5bcd90e", "type": "PlaySoundEffect", "value": 0}]
+    "metadata": [{"id": "91e42874-82d1-4ec8-8213-5984558169cc", "type": "AffectFood", "value": 0}, {"id": "3e35def1-6cdf-4dfb-9e4b-00b533eeb2c8", "type": "AddBoonEffect", "value": 0}, {"id": "f2130ff6-184f-4c6f-bb3a-7812cb7cfac8", "type": "statuseffect_hit_StaminaRecovery", "value": 3}, {"id": "921b7d0a-5041-4328-abe4-5a52575b1525", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}, {"id": "fc546c93-e95e-49c0-9023-baf2d5bcd90e", "type": "PlaySoundEffect", "value": 0}]
   },
   {
     "id": "4100750",
@@ -14485,7 +14485,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "34f95b89-961c-4eaa-87ed-a9bf975b5f9c", "type": "AffectFood", "value": 0}, {"id": "6eaa227f-fa6a-4f99-9949-016ee65b068c", "type": "AddBoonEffect", "value": 0}, {"id": "e956b1b5-dd15-45ab-a9b4-46cd21acefcb", "type": "statuseffect_hit", "value": "76_StaminaRecovery5 (StatusEffect)"}, {"id": "22d80f75-7b47-4386-a128-bb83b83e49de", "type": "statuseffect_hit", "value": "587_CorruptionResistance (StatusEffect)"}, {"id": "f5aa9b73-f835-4e6c-a226-5b9966182ca3", "type": "PlaySoundEffect", "value": 0}]
+    "metadata": [{"id": "34f95b89-961c-4eaa-87ed-a9bf975b5f9c", "type": "AffectFood", "value": 0}, {"id": "6eaa227f-fa6a-4f99-9949-016ee65b068c", "type": "AddBoonEffect", "value": 0}, {"id": "e956b1b5-dd15-45ab-a9b4-46cd21acefcb", "type": "statuseffect_hit_StaminaRecovery", "value": 5}, {"id": "22d80f75-7b47-4386-a128-bb83b83e49de", "type": "statuseffect_hit", "value": "587_CorruptionResistance (StatusEffect)"}, {"id": "f5aa9b73-f835-4e6c-a226-5b9966182ca3", "type": "PlaySoundEffect", "value": 0}]
   },
   {
     "id": "4100760",
@@ -14530,7 +14530,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "bb5e0c40-0e70-4864-93f4-530957b89335", "type": "AffectFood", "value": 0}, {"id": "128f12b7-1fb7-4029-a56e-d115c313f9b7", "type": "AffectDrink", "value": 0}, {"id": "e1160feb-ee73-4f59-b74b-5cadd70776b6", "type": "statuseffect_hit", "value": "46_StaminaRecovery1 (StatusEffect)"}, {"id": "b48da60d-4f5c-4654-b5a5-d9a1b7dc63a6", "type": "PlaySoundEffect", "value": 0}]
+    "metadata": [{"id": "bb5e0c40-0e70-4864-93f4-530957b89335", "type": "AffectFood", "value": 0}, {"id": "128f12b7-1fb7-4029-a56e-d115c313f9b7", "type": "AffectDrink", "value": 0}, {"id": "e1160feb-ee73-4f59-b74b-5cadd70776b6", "type": "statuseffect_hit_StaminaRecovery", "value": 1}, {"id": "b48da60d-4f5c-4654-b5a5-d9a1b7dc63a6", "type": "PlaySoundEffect", "value": 0}]
   },
   {
     "id": "4100790",
@@ -14545,7 +14545,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "88766432-735e-4dc0-b936-29b68cff7967", "type": "AffectFood", "value": 0}, {"id": "c3eb50c8-5cc3-43c0-9aea-983daa5b5c0f", "type": "statuseffect_hit", "value": "46_StaminaRecovery1 (StatusEffect)"}, {"id": "8ef0a3a4-e29d-4bca-9814-4c0185471499", "type": "PlaySoundEffect", "value": 0}]
+    "metadata": [{"id": "88766432-735e-4dc0-b936-29b68cff7967", "type": "AffectFood", "value": 0}, {"id": "c3eb50c8-5cc3-43c0-9aea-983daa5b5c0f", "type": "statuseffect_hit_StaminaRecovery", "value": 1}, {"id": "8ef0a3a4-e29d-4bca-9814-4c0185471499", "type": "PlaySoundEffect", "value": 0}]
   },
   {
     "id": "4100800",
@@ -14560,7 +14560,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "524e627f-c834-40ab-95bd-5584283844a5", "type": "AffectFood", "value": 0}, {"id": "5dff8db7-6fb6-4d8e-9d30-77069c464f30", "type": "statuseffect_hit", "value": "1_StaminaRecovery2 (StatusEffect)"}]
+    "metadata": [{"id": "524e627f-c834-40ab-95bd-5584283844a5", "type": "AffectFood", "value": 0}, {"id": "5dff8db7-6fb6-4d8e-9d30-77069c464f30", "type": "statuseffect_hit_StaminaRecovery", "value": 2}]
   },
   {
     "id": "4100810",
@@ -14575,7 +14575,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "c5780272-7fd8-4d67-a9ba-e6aa31c2f443", "type": "AffectFood", "value": 0}, {"id": "05d7442c-9c35-4bda-a2b1-df40048d739b", "type": "statuseffect_hit", "value": "1_StaminaRecovery2 (StatusEffect)"}]
+    "metadata": [{"id": "c5780272-7fd8-4d67-a9ba-e6aa31c2f443", "type": "AffectFood", "value": 0}, {"id": "05d7442c-9c35-4bda-a2b1-df40048d739b", "type": "statuseffect_hit_StaminaRecovery", "value": 2}]
   },
   {
     "id": "4100820",
@@ -14635,7 +14635,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "70ed3c8f-4c50-43d9-b369-704ebd490b62", "type": "AffectFood", "value": 0}, {"id": "c179c77c-f65c-4a0b-aa47-3a0bd5eaf874", "type": "statuseffect_hit", "value": "4_StaminaRecovery3 (StatusEffect)"}, {"id": "f0c454f5-f32f-44cb-b95f-867ef1ecb200", "type": "statuseffect_hit", "value": "85_StealthUp (StatusEffect)"}]
+    "metadata": [{"id": "70ed3c8f-4c50-43d9-b369-704ebd490b62", "type": "AffectFood", "value": 0}, {"id": "c179c77c-f65c-4a0b-aa47-3a0bd5eaf874", "type": "statuseffect_hit_StaminaRecovery", "value": 3}, {"id": "f0c454f5-f32f-44cb-b95f-867ef1ecb200", "type": "statuseffect_hit", "value": "85_StealthUp (StatusEffect)"}]
   },
   {
     "id": "4100860",
@@ -14665,7 +14665,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "255d26de-f591-43b1-8d60-68c6fe453a40", "type": "AffectFood", "value": 0}, {"id": "8ac1ac54-3123-4425-8a1b-65dd18ff960a", "type": "statuseffect_hit", "value": "46_StaminaRecovery1 (StatusEffect)"}, {"id": "3882a7e5-ef99-4232-b3dd-d67f591a7b64", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}]
+    "metadata": [{"id": "255d26de-f591-43b1-8d60-68c6fe453a40", "type": "AffectFood", "value": 0}, {"id": "8ac1ac54-3123-4425-8a1b-65dd18ff960a", "type": "statuseffect_hit_StaminaRecovery", "value": 1}, {"id": "3882a7e5-ef99-4232-b3dd-d67f591a7b64", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}]
   },
   {
     "id": "4100880",
@@ -14680,7 +14680,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "af1b6222-48e3-49ba-b18b-bf3be7953834", "type": "AffectFood", "value": 0}, {"id": "f0aa1570-66d0-4e79-83a6-506e7b691865", "type": "statuseffect_hit", "value": "1_StaminaRecovery2 (StatusEffect)"}, {"id": "23312651-9eff-4c77-829d-725e4c61663c", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}]
+    "metadata": [{"id": "af1b6222-48e3-49ba-b18b-bf3be7953834", "type": "AffectFood", "value": 0}, {"id": "f0aa1570-66d0-4e79-83a6-506e7b691865", "type": "statuseffect_hit_StaminaRecovery", "value": 2}, {"id": "23312651-9eff-4c77-829d-725e4c61663c", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}]
   },
   {
     "id": "4100890",
@@ -14725,7 +14725,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "a50ff5bf-53ea-4686-8310-c1da2ff3899b", "type": "AffectFood", "value": 0}, {"id": "181a341d-8b68-4c7f-9f83-58b9effae360", "type": "statuseffect_hit", "value": "0_HealthRecovery2 (StatusEffect)"}, {"id": "2daacf85-7a7e-4b05-936e-b53a501af768", "type": "AddBoonEffect", "value": 0}, {"id": "9b319826-4288-4989-b1b3-0173301ab163", "type": "statuseffect_hit", "value": "1_StaminaRecovery2 (StatusEffect)"}]
+    "metadata": [{"id": "a50ff5bf-53ea-4686-8310-c1da2ff3899b", "type": "AffectFood", "value": 0}, {"id": "181a341d-8b68-4c7f-9f83-58b9effae360", "type": "statuseffect_hit", "value": "0_HealthRecovery2 (StatusEffect)"}, {"id": "2daacf85-7a7e-4b05-936e-b53a501af768", "type": "AddBoonEffect", "value": 0}, {"id": "9b319826-4288-4989-b1b3-0173301ab163", "type": "statuseffect_hit_StaminaRecovery", "value": 2}]
   },
   {
     "id": "4100920",
@@ -14740,7 +14740,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "948c4deb-7fd6-4469-9356-ab0ffe563b0d", "type": "AffectFood", "value": 0}, {"id": "09dcd86c-1e09-4581-bd3f-80688d11dc01", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}, {"id": "97d0eec4-24b2-4f8a-be54-5617beb7f62d", "type": "statuseffect_hit", "value": "4_StaminaRecovery3 (StatusEffect)"}, {"id": "9c5352c8-9413-495e-979e-f12397bb1bc3", "type": "statuseffect_hit", "value": "660_Barrier2 (StatusEffect)"}]
+    "metadata": [{"id": "948c4deb-7fd6-4469-9356-ab0ffe563b0d", "type": "AffectFood", "value": 0}, {"id": "09dcd86c-1e09-4581-bd3f-80688d11dc01", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}, {"id": "97d0eec4-24b2-4f8a-be54-5617beb7f62d", "type": "statuseffect_hit_StaminaRecovery", "value": 3}, {"id": "9c5352c8-9413-495e-979e-f12397bb1bc3", "type": "statuseffect_hit", "value": "660_Barrier2 (StatusEffect)"}]
   },
   {
     "id": "4100930",
@@ -14755,7 +14755,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "af66f368-9aae-4401-9567-3a8d56501656", "type": "AffectFood", "value": 0}, {"id": "746df47c-f00c-4b67-8424-05feec99bc6b", "type": "statuseffect_hit", "value": "7_StaminaRecovery4 (StatusEffect)"}, {"id": "f4b49d3b-dcd2-4725-acce-9649e3d4be1f", "type": "statuseffect_hit", "value": "51_Environment Resistance (StatusEffect)"}, {"id": "d8e48244-7b15-45a8-a996-e7b550de75f9", "type": "statuseffect_hit", "value": "660_Barrier2 (StatusEffect)"}]
+    "metadata": [{"id": "af66f368-9aae-4401-9567-3a8d56501656", "type": "AffectFood", "value": 0}, {"id": "746df47c-f00c-4b67-8424-05feec99bc6b", "type": "statuseffect_hit_StaminaRecovery", "value": 4}, {"id": "f4b49d3b-dcd2-4725-acce-9649e3d4be1f", "type": "statuseffect_hit", "value": "51_Environment Resistance (StatusEffect)"}, {"id": "d8e48244-7b15-45a8-a996-e7b550de75f9", "type": "statuseffect_hit", "value": "660_Barrier2 (StatusEffect)"}]
   },
   {
     "id": "4100940",
@@ -14770,7 +14770,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "adbac30f-289d-47ce-8b67-96aafaea3400", "type": "AffectFood", "value": 0}, {"id": "eeda916a-79ad-47a8-aab9-938cbaa40a46", "type": "statuseffect_hit", "value": "7_StaminaRecovery4 (StatusEffect)"}, {"id": "7c911e1d-e4e7-4c62-b004-dec891f26fe1", "type": "statuseffect_hit", "value": "51_Environment Resistance (StatusEffect)"}, {"id": "fb80b0d8-ebda-4350-bc45-e46e7e645fb1", "type": "statuseffect_hit", "value": "660_Barrier2 (StatusEffect)"}]
+    "metadata": [{"id": "adbac30f-289d-47ce-8b67-96aafaea3400", "type": "AffectFood", "value": 0}, {"id": "eeda916a-79ad-47a8-aab9-938cbaa40a46", "type": "statuseffect_hit_StaminaRecovery", "value": 4}, {"id": "7c911e1d-e4e7-4c62-b004-dec891f26fe1", "type": "statuseffect_hit", "value": "51_Environment Resistance (StatusEffect)"}, {"id": "fb80b0d8-ebda-4350-bc45-e46e7e645fb1", "type": "statuseffect_hit", "value": "660_Barrier2 (StatusEffect)"}]
   },
   {
     "id": "4100950",
@@ -14785,7 +14785,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "6ccdeba3-6f95-43c7-8019-c23298ba1392", "type": "AffectFood", "value": 0}, {"id": "271b2dc8-53d3-48ca-8d09-bea375a95d27", "type": "statuseffect_hit", "value": "45_HealthRecovery1 (StatusEffect)"}, {"id": "75a0f287-1546-495f-93f5-238b38f80c7f", "type": "statuseffect_hit", "value": "46_StaminaRecovery1 (StatusEffect)"}, {"id": "a06cc1fd-94a9-4a3a-a23c-6b037b2a70ee", "type": "AddBoonEffect", "value": 0}]
+    "metadata": [{"id": "6ccdeba3-6f95-43c7-8019-c23298ba1392", "type": "AffectFood", "value": 0}, {"id": "271b2dc8-53d3-48ca-8d09-bea375a95d27", "type": "statuseffect_hit", "value": "45_HealthRecovery1 (StatusEffect)"}, {"id": "75a0f287-1546-495f-93f5-238b38f80c7f", "type": "statuseffect_hit_StaminaRecovery", "value": 1}, {"id": "a06cc1fd-94a9-4a3a-a23c-6b037b2a70ee", "type": "AddBoonEffect", "value": 0}]
   },
   {
     "id": "4100960",
@@ -16000,7 +16000,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "91894877-c0aa-45c7-9c9f-d0fc7be13d3f", "type": "AffectFood", "value": 0}, {"id": "42bcf252-f40a-49b6-b1d5-05d39dfa377a", "type": "statuseffect_hit", "value": "46_StaminaRecovery1 (StatusEffect)"}]
+    "metadata": [{"id": "91894877-c0aa-45c7-9c9f-d0fc7be13d3f", "type": "AffectFood", "value": 0}, {"id": "42bcf252-f40a-49b6-b1d5-05d39dfa377a", "type": "statuseffect_hit_StaminaRecovery", "value": 1}]
   },
   {
     "id": "4000410",
@@ -16015,7 +16015,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "715967bc-4573-41d7-8999-0a9b525279e6", "type": "AffectFood", "value": 0}, {"id": "baf17e8d-b190-4c46-b257-f4c05d1c8565", "type": "statuseffect_hit", "value": "1_StaminaRecovery2 (StatusEffect)"}]
+    "metadata": [{"id": "715967bc-4573-41d7-8999-0a9b525279e6", "type": "AffectFood", "value": 0}, {"id": "baf17e8d-b190-4c46-b257-f4c05d1c8565", "type": "statuseffect_hit_StaminaRecovery", "value": 2}]
   },
   {
     "id": "4000420",
@@ -16045,7 +16045,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "48ab801a-2993-414c-9382-f3042a1054e8", "type": "RemoveStatusEffect", "value": 0}, {"id": "444ba76a-0284-4997-984c-ccab16969ff6", "type": "statuseffect_hit", "value": "76_StaminaRecovery5 (StatusEffect)"}, {"id": "094547a3-cbb8-46f7-bd74-28f5083cdfcc", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}, {"id": "1d99b1a8-ed08-4860-9c23-436051c6679d", "type": "statuseffect_hit", "value": "669_AmbraineWithdrawalPreEffects (Disease)"}]
+    "metadata": [{"id": "48ab801a-2993-414c-9382-f3042a1054e8", "type": "RemoveStatusEffect", "value": 0}, {"id": "444ba76a-0284-4997-984c-ccab16969ff6", "type": "statuseffect_hit_StaminaRecovery", "value": 5}, {"id": "094547a3-cbb8-46f7-bd74-28f5083cdfcc", "type": "statuseffect_hit", "value": "84_EnvHeatResistance (StatusEffect)"}, {"id": "1d99b1a8-ed08-4860-9c23-436051c6679d", "type": "statuseffect_hit", "value": "669_AmbraineWithdrawalPreEffects (Disease)"}]
   },
   {
     "id": "4000440",
@@ -16120,7 +16120,7 @@
     "image": null,
     "rarity": null,
     "variants": [],
-    "metadata": [{"id": "e84e4d8d-af08-4b2c-8df7-2bec057c55db", "type": "AffectFood", "value": 0}, {"id": "9c682462-de06-4f75-a082-6f78c89bf29c", "type": "statuseffect_hit", "value": "45_HealthRecovery1 (StatusEffect)"}, {"id": "12085c33-3df1-469d-bb04-aa7cd40f3247", "type": "statuseffect_hit", "value": "46_StaminaRecovery1 (StatusEffect)"}, {"id": "feec3c98-d9b9-4409-9490-0c0e52637676", "type": "statuseffect_hit", "value": "520_Indigestion_1 (Disease)"}]
+    "metadata": [{"id": "e84e4d8d-af08-4b2c-8df7-2bec057c55db", "type": "AffectFood", "value": 0}, {"id": "9c682462-de06-4f75-a082-6f78c89bf29c", "type": "statuseffect_hit", "value": "45_HealthRecovery1 (StatusEffect)"}, {"id": "12085c33-3df1-469d-bb04-aa7cd40f3247", "type": "statuseffect_hit_StaminaRecovery", "value": 1}, {"id": "feec3c98-d9b9-4409-9490-0c0e52637676", "type": "statuseffect_hit", "value": "520_Indigestion_1 (Disease)"}]
   },
   {
     "id": "4000500",
@@ -16582,36 +16582,6 @@
     "level": null,
     "category": ["Item", "Deployable", "Kit"],
     "event": ["Soroboreans"],
-    "image": null,
-    "rarity": null,
-    "variants": [],
-    "metadata": []
-  },
-  {
-    "id": "5000204",
-    "name": "Mesa da Guilda Encantadora ",
-    "icon": "img/outward/items/5000204_EnchantingGuildTable.png",
-    "description": "",
-    "buyPrice": 20,
-    "sellPrice": 6,
-    "level": null,
-    "category": ["EnchantmentTable"],
-    "event": ["DLC2"],
-    "image": null,
-    "rarity": null,
-    "variants": [],
-    "metadata": []
-  },
-  {
-    "id": "5000205",
-    "name": "Pilar da Guilda Encantadora ",
-    "icon": "img/outward/items/5000205_EnchantingGuildPillar.png",
-    "description": "",
-    "buyPrice": 20,
-    "sellPrice": 6,
-    "level": null,
-    "category": ["SingleItemContainer"],
-    "event": ["DLC2"],
     "image": null,
     "rarity": null,
     "variants": [],
@@ -24161,6 +24131,12 @@
     "rarity": null,
     "variants": [],
     "metadata": []
+  },
+  {
+    "id": "5800000",
+    "name": "Pilar de Encantadora ",
+    "icon": "img/outward/items/5000205_EnchantingGuildPillar.png",
+    "category": ["SingleItemContainer"]
   },
   {
     "id": "5800015",
