@@ -1,0 +1,45 @@
+# Produção — VPS Ubuntu (Hostinger).
+# Nada de segredo neste arquivo: tudo vem de um .env ao lado, fora do Git.
+#
+#   cp .env.example .env && editar && docker compose -f docker-compose.prod.yml up -d --build
+#
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    # Sem "ports": o banco só é alcançável pela rede interna do compose.
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      MEDIA_STORAGE_PATH: /var/lib/gameplanner/media
+    volumes:
+      - media-data:/var/lib/gameplanner/media
+    ports:
+      # Só no loopback: quem expõe para a internet é o reverse proxy com TLS.
+      - "127.0.0.1:8080:8080"
+
+volumes:
+  db-data:
+  media-data:

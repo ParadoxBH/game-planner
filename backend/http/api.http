@@ -1,0 +1,101 @@
+### Requisicoes para o HTTP Client do IntelliJ (Ultimate).
+### Escolha o ambiente "local" no seletor no topo do editor.
+### A senha fica em http-client.private.env.json (fora do Git) — ver backend/README.md.
+###
+### Rode "Login" primeiro: ele guarda os tokens e as demais requisicoes os usam.
+
+### Health
+GET http://localhost:8080/actuator/health
+
+### Registrar
+POST {{api}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}",
+  "displayName": "{{username}}"
+}
+
+> {%
+    client.global.set("accessToken", response.body.accessToken);
+    client.global.set("refreshToken", response.body.refreshToken);
+%}
+
+### Login
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+> {%
+    client.global.set("accessToken", response.body.accessToken);
+    client.global.set("refreshToken", response.body.refreshToken);
+%}
+
+### Renovar tokens
+POST {{api}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+> {%
+    client.global.set("accessToken", response.body.accessToken);
+    client.global.set("refreshToken", response.body.refreshToken);
+%}
+
+### Quem sou eu
+GET {{api}}/auth/me
+Authorization: Bearer {{accessToken}}
+
+### Listar jogos (anonimo ve so os publicos; com token ve tambem os seus privados)
+GET {{api}}/games
+Authorization: Bearer {{accessToken}}
+
+### Criar jogo (platform_admin)
+POST {{api}}/games
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "id": "heartopia",
+  "name": "Heartopia",
+  "summary": "Simulador de vida"
+}
+
+### Mudar politicas (owner)
+PATCH {{api}}/games/heartopia
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "readPolicy": "public",
+  "writePolicy": "community"
+}
+
+### Membros do jogo
+GET {{api}}/games/heartopia/members
+Authorization: Bearer {{accessToken}}
+
+### Conceder papel (owner)
+PUT {{api}}/games/heartopia/members/outro-usuario
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "role": "editor"
+}
+
+### Liberar vinculo de um usuario (platform_admin)
+PATCH {{api}}/users/outro-usuario
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "verified": true
+}

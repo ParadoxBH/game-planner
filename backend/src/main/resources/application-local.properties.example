@@ -1,0 +1,10 @@
+# Copie para application-local.properties (ignorado pelo Git) e ajuste.
+# Os valores abaixo batem com o docker-compose.yml deste diretorio.
+
+spring.datasource.url=jdbc:postgresql://localhost:5433/gameplanner
+spring.datasource.username=gameplanner
+spring.datasource.password=gameplanner
+
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+logging.level.org.springframework.security=DEBUG

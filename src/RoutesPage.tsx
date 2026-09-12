@@ -24,6 +24,7 @@ import { ConjuntosDetain } from "./components/item/ConjuntosDetain";
 import { CategoriesPage } from "./components/category/CategoriesPage";
 import { CategoryDetailsPage } from "./components/category/CategoryDetailsPage";
 import { MetadataDetailsPage } from "./components/item/MetadataDetailsPage";
+import { LoginPage } from "./components/auth/LoginPage";
 
 export function RoutesPage() {
   return (
@@ -31,6 +32,9 @@ export function RoutesPage() {
       <Route element={<MainLayout />}>
         {/* Rota Inicial (Seleção de Jogo) */}
         <Route path="/" element={<Home />} />
+
+        {/* Entrar, criar conta e trocar de conta */}
+        <Route path="/login" element={<LoginPage />} />
 
         {/* Rotas de um jogo específico */}
         <Route path="/game/:gameId">

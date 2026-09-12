@@ -1,0 +1,28 @@
+# Ambiente de desenvolvimento local.
+# Sobe apenas o banco — a aplicação roda pela IDE ou por ./mvnw spring-boot:run.
+#
+#   docker compose up -d
+#
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: gameplanner-db
+    environment:
+      POSTGRES_DB: gameplanner
+      POSTGRES_USER: gameplanner
+      POSTGRES_PASSWORD: gameplanner
+    ports:
+      # 5433 no host de proposito: a 5432 costuma estar ocupada por um
+      # PostgreSQL instalado nativamente, e o conflito so aparece como
+      # "password authentication failed", que despista.
+      - "5433:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gameplanner -d gameplanner"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  db-data:

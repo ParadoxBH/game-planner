@@ -9,14 +9,14 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "node scripts/deploy.js"
+    "deploy": "node scripts/deploy-disabled.js"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.7",
     "@mui/material": "^7.3.7",
+    "@tanstack/react-query": "^5.102.8",
     "@xyflow/react": "^12.10.1",
     "dexie": "^4.4.2",
     "dexie-react-hooks": "^4.4.0",
