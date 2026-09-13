@@ -1,991 +1,363 @@
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useMemo } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { Breadcrumbs, CircularProgress, Divider, Grid, Paper, Stack, Tooltip, Typography } from "@mui/material";
 import {
-  Box,
-  Typography,
-  Grid,
-  Paper,
-  Stack,
-  Divider,
-  Breadcrumbs,
-  Tooltip,
-  Tabs,
-  Tab,
-  Chip,
-} from "@mui/material";
-import {
-  NavigateNext,
-  Map as MapIcon,
-  Inventory,
-  EmojiEvents,
-  List as ListIcon,
+  Architecture,
+  Bolt,
   Construction,
+  Handyman,
+  Inventory,
+  List as ListIcon,
+  NavigateNext,
+  Place,
+  Redeem,
+  Rule,
   Storefront,
+  Style,
 } from "@mui/icons-material";
-import { useApi } from "../../hooks/useApi";
-import { StyledContainer } from "../common/StyledContainer";
-import { ItemChip } from "../common/ItemChip";
-import { RecipeCard } from "../recipe/RecipeCard";
-import { useMemo, useState, useEffect } from "react";
-import type {
-  MapMetadata,
-  ReferencePoints,
-  Entity,
-  GameEvent,
-  Item,
-  Conjunto,
-  Category,
-  GameInfo,
-  GameDataTypes,
-} from "../../types/gameModels";
-import type { EntityDetails, NormalizedRecipe } from "../../types/apiModels";
-import { MiniMap } from "../common/MiniMap";
+import { ApiError } from "../../api/ApiError";
+import type { EntityDocument, EntityRelated, Reference } from "../../api/content";
+import { contentRoute, currentMedia, ReferenceIndex } from "../../api/references";
+import { useAttributeDefinitions, useContentDetails, useRarities } from "../../api/useContent";
+import { usePlatform } from "../../hooks/usePlatform";
+import { formatAmount, formatChance, formatDuration, formatRange } from "../../utils/format";
+import {
+  ApiCollectionGroups,
+  ApiDroppedBy,
+  ApiRequiredBy,
+  ApiRewardCodes,
+  ApiVariants,
+} from "../common/ApiRelatedLists";
+import { ContentChip } from "../common/ContentChip";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
-import { parseWKTPoint } from "../../utils/wkt";
-import { eventRepository } from "../../repositories/EventRepository";
-import { itemRepository } from "../../repositories/ItemRepository";
-import { entityRepository } from "../../repositories/EntityRepository";
-import { conjuntoRepository } from "../../repositories/ConjuntoRepository";
-import { conjuntoGroupRepository } from "../../repositories/ConjuntoGroupRepository";
-import { mapRepository } from "../../repositories/MapRepository";
-import { categoryRepository } from "../../repositories/CategoryRepository";
-import { getPublicUrl } from "../../utils/pathUtils";
+import { DetailField, ReferenceChips } from "../common/DetailField";
 import { DetainContainer } from "../common/DetainContainer";
 import { DetainItem } from "../common/DetainItem";
-import { DetainConjunto } from "../item/DetainConjunto";
-import { useEventFilter } from "../../context/EventFilterContext";
+import { SpawnPointsByMap } from "../common/SpawnPointsByMap";
+import { StyledContainer } from "../common/StyledContainer";
+import { attributeLabel } from "../item/ApiItemRenderers";
+import { ApiRecipeCard } from "../recipe/ApiRecipeCard";
+import { ApiShopOffers, offersFor } from "../shop/ApiShopOffers";
 
+/** Detalhe de entidade, lido do agregado /entities/{id}/details da API. */
 export function EntityDetailsPage() {
-  const { gameId, entityId = "" } = useParams<{
-    gameId: string;
-    entityId: string;
-  }>();
+  const { gameId = "", entityId = "" } = useParams<{ gameId: string; entityId: string }>();
   const navigate = useNavigate();
+  const { isMobile } = usePlatform();
 
-  const {
-    loading: dbLoading,
-    getEntityDetails,
-    getRecipesList,
-    getGameInfo,
-  } = useApi(gameId);
-  const { activeEventIds } = useEventFilter();
-  const [entityDetails, setEntityDetails] = useState<EntityDetails | null>(null);
-  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
-  const [producedRecipes, setProducedRecipes] = useState<NormalizedRecipe[]>(
-    [],
-  );
-  const [producedPage, setProducedPage] = useState(1);
-  const [producedPageSize, setProducedPageSize] = useState(30);
-  const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
-  const [dataLoading, setDataLoading] = useState(true);
+  const details = useContentDetails<EntityDocument, EntityRelated>(gameId, "entities", entityId);
+  const rarities = useRarities(gameId);
+  const attributes = useAttributeDefinitions(gameId);
+  const references = useMemo(() => new ReferenceIndex(details.data?.references), [details.data]);
 
-  const currentEntityData = useMemo(() => {
-    if (!entityDetails?.entity) return null;
-    if (selectedVariantIndex === 0) return entityDetails.entity;
-    const variant = entityDetails.entity.variants?.[selectedVariantIndex - 1];
-    return { ...entityDetails.entity, ...variant };
-  }, [entityDetails?.entity, selectedVariantIndex]);
-
-  const producedPaginationController = useMemo(
-    () => ({
-      info: {
-        pagination: { page: producedPage, pageSize: producedPageSize },
-        sorting: { column: "name", direction: "asc" as const },
-        search: "",
-        criteria: {},
-      },
-      totalItems: producedRecipes.length,
-      lastPage: Math.max(
-        1,
-        Math.ceil(producedRecipes.length / producedPageSize),
-      ),
-      setPage: setProducedPage,
-      setPageSize: setProducedPageSize,
-      setSearch: () => {},
-      setCriteria: () => {},
-      setTotalItems: () => {},
-    }),
-    [producedPage, producedPageSize, producedRecipes.length],
-  );
-
-  const [maps, setMaps] = useState<MapMetadata[]>([]);
-  const [events, setEvents] = useState<GameEvent[]>([]);
-  const [items, setItems] = useState<Item[]>([]);
-  const [entities, setEntities] = useState<Entity[]>([]);
-  const [entityConjuntos, setEntityConjuntos] = useState<Conjunto[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  useEffect(() => {
-    if (dbLoading) return;
-
-    let isMounted = true;
-    setDataLoading(true);
-
-    Promise.all([
-      getEntityDetails(entityId),
-      mapRepository.getAll(),
-      eventRepository.getAll(),
-      itemRepository.getAll(),
-      entityRepository.getAll(),
-      conjuntoRepository.getAll(),
-      conjuntoGroupRepository.getAll(),
-      categoryRepository.getAll(),
-      getRecipesList({
-        pagination: { pageSize: 1000, page: 1 },
-        sorting: { column: "name", direction: "asc" },
-        search: "",
-        criteria: {},
-      }), // Load all to filter
-    ])
-      .then(
-        ([
-          details,
-          allMaps,
-          allEvents,
-          allItems,
-          allEntities,
-          allConjuntos,
-          allGroups,
-          allCategories,
-          allRecipes,
-        ]) => {
-          if (!isMounted) return;
-
-          setEntityDetails(details);
-          setMaps(allMaps);
-          setEvents(allEvents);
-          setItems(allItems);
-          setEntities(allEntities);
-          setCategories(allCategories);
-          
-          // Find sets (conjuntos) that contain this entity via groups
-          const groupsWithEntity = allGroups.filter(g => g.entitys?.includes(entityId));
-          const relevantConjuntoIds = new Set<string>();
-          groupsWithEntity.forEach(g => g.conjuntoIds?.forEach(cid => relevantConjuntoIds.add(cid)));
-
-          setEntityConjuntos(
-            allConjuntos.filter((c) => relevantConjuntoIds.has(c.id)),
-          );
-          if (gameId) getGameInfo(gameId).then(info => { if (info) setGameInfo(info); });
-
-          // Filter recipes produced at this entity
-          if (details) {
-            const entityCats = Array.isArray(details.entity.category)
-              ? [...details.entity.category]
-              : ([details.entity.category].filter(Boolean) as string[]);
-
-            // Include the entity ID as a potential station
-            entityCats.push(details.entity.id);
-
-            const produced = allRecipes.data.filter((r) =>
-              r.stations?.some((s) =>
-                entityCats.some((c) => c.toLowerCase() === s.toLowerCase()),
-              ),
-            );
-            setProducedRecipes(produced);
-          }
-
-          setDataLoading(false);
-        },
-      )
-      .catch((err) => {
-        console.error("Error fetching entity details:", err);
-        if (isMounted) setDataLoading(false);
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [dbLoading, entityId, getEntityDetails]);
-
-  const matchingStations = useMemo(() => {
-    if (!entityDetails?.entity || !producedRecipes.length) return [];
-
-    const entityCats = Array.isArray(entityDetails.entity.category)
-      ? [...entityDetails.entity.category]
-      : ([entityDetails.entity.category].filter(Boolean) as string[]);
-
-    entityCats.push(entityDetails.entity.id);
-    const entityCatsLower = entityCats.map((c) => c.toLowerCase());
-
-    const stationSet = new Set<string>();
-    producedRecipes.forEach((r) => {
-      r.stations?.forEach((s) => {
-        if (entityCatsLower.includes(s.toLowerCase())) {
-          stationSet.add(s);
-        }
-      });
-    });
-
-    return Array.from(stationSet).map((s) => {
-      const normalizedStation = s.toLowerCase();
-
-      // Representation Rule:
-      // 1. Find entities that belong to this station/category OR match the ID directly
-      const relatedEntities = entities.filter((e) => {
-        const cats = Array.isArray(e.category) ? e.category : [e.category];
-        return (
-          cats.some((c) => c && c.toLowerCase() === normalizedStation) ||
-          e.id.toLowerCase() === normalizedStation
-        );
-      });
-
-      const isSingle = relatedEntities.length === 1;
-      const firstEntity =
-        relatedEntities.length > 0 ? relatedEntities[0] : null;
-
-      if (isSingle && firstEntity) {
-        return {
-          id: s,
-          name: firstEntity.name,
-          icon: firstEntity.icon,
-        };
-      } else {
-        const cat = categories.find(
-          (c) => c.id.toLowerCase() === normalizedStation,
-        );
-        return {
-          id: s,
-          name: cat?.name || s,
-          icon: cat?.icon,
-        };
-      }
-    });
-  }, [entityDetails?.entity, producedRecipes, categories, entities]);
-
-  const groupedReferencePoints = useMemo(() => {
-    if (!entityDetails?.referencePoints)
-      return new Map<string, ReferencePoints[]>();
-    const map = new Map<string, ReferencePoints[]>();
-    entityDetails.referencePoints.forEach((s: any) => {
-      // Event Filter
-      if (s.event && (!Array.isArray(s.event) || s.event.length > 0)) {
-        const eventArray = Array.isArray(s.event) ? s.event : [s.event];
-        const isAnyEventActive = eventArray.some((e: string) => activeEventIds.includes(e));
-        if (!isAnyEventActive) return;
-      }
-
-      const mapId = s.mapId || "Mundo Aberto";
-      if (!map.has(mapId)) map.set(mapId, []);
-      map.get(mapId)!.push(s);
-    });
-    return map;
-  }, [entityDetails?.referencePoints, activeEventIds]);
-
-  const getMapMetadata = (mapId: string): MapMetadata | undefined => {
-    return maps.find((m) => m.id === mapId);
-  };
-
-  const eventsMap = useMemo(() => {
-    const map = new Map<string, string>();
-    events.forEach((e) => map.set(e.id, e.name));
-    return map;
-  }, [events]);
-
-  const itemsMap = useMemo(() => {
-    const map = new Map<string, any>();
-    items.forEach((i) => map.set(i.id, i));
-    return map;
-  }, [items]);
-
-  const entitiesMap = useMemo(() => {
-    const map = new Map<string, any>();
-    entities.forEach((e) => map.set(e.id, e));
-    return map;
-  }, [entities]);
-
-  const getSourceData = (type: GameDataTypes | undefined, id: string): any => {
-    if (type === "entity") return entitiesMap.get(id);
-    return itemsMap.get(id);
-  };
-
-  if (dbLoading || dataLoading) {
+  if (details.isPending) {
     return (
-      <StyledContainer title="Carregando..." label="Obtendo dados do jogo">
-        <Typography>Por favor, aguarde...</Typography>
+      <StyledContainer title="Carregando..." label="Obtendo dados da entidade">
+        <Stack alignItems="center" sx={{ py: 10 }}>
+          <CircularProgress color="primary" />
+        </Stack>
       </StyledContainer>
     );
   }
 
-  if (!entityDetails) {
+  if (details.isError) {
+    const unregistered = details.error instanceof ApiError && details.error.kind === "unregistered-content";
     return (
       <StyledContainer
-        title="Entidade não encontrada"
-        label="A entidade solicitada não existe no banco de dados."
+        title={unregistered ? "Entidade não cadastrada" : "Não foi possível abrir a entidade"}
+        label={
+          unregistered
+            ? `"${entityId}" é citada em outros conteúdos, mas ainda não foi cadastrada.`
+            : details.error.message
+        }
       >
-        <Typography>Verifique o ID ou retorne à lista de entidades.</Typography>
+        <Typography variant="body2" color="text.secondary">
+          Verifique o código ou volte para a <Link to={`/game/${gameId}/entity/list`}>lista de entidades</Link>.
+        </Typography>
       </StyledContainer>
     );
   }
 
-  const { entity, drops, recipes } = entityDetails;
+  const { document: entity, related } = details.data;
+  const self: Reference = { kind: "entity", extId: entity.extId };
+  const rarity = entity.rarityCode ? rarities.data?.find((candidate) => candidate.code === entity.rarityCode) : undefined;
+  const definitions = new Map((attributes.data ?? []).map((definition) => [definition.key, definition]));
+  const offers = offersFor(related.soldIn.content, self);
+  const hasShop = related.shops.total > 0;
 
   return (
     <StyledContainer
       title={entity.name}
-      label={`Detalhes e localizações`}
+      label={`Detalhes e localizações da entidade ${entity.extId}`}
       actionsStart={
-        <Box>
-          <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
-            <Link
-              to={`/game/${gameId}`}
-              style={{ color: "inherit", textDecoration: "none" }}
-            >
-              Dashboard
-            </Link>
-            <Link
-              to={`/game/${gameId}/entity/list`}
-              style={{ color: "inherit", textDecoration: "none" }}
-            >
-              Entidades
-            </Link>
-            <Typography color="primary">{entity.name}</Typography>
-          </Breadcrumbs>
-        </Box>
+        <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
+          <Link to={`/game/${gameId}`}>Dashboard</Link>
+          <Link to={`/game/${gameId}/entity/list`}>Entidades</Link>
+          <Typography color="primary">{entity.name}</Typography>
+        </Breadcrumbs>
       }
     >
       <DetainContainer>
         <Stack spacing={2}>
-          {/* Info Principal */}
-          <Paper
-            elevation={0}
-            sx={{ p: 0, overflow: "hidden", borderRadius: 1 }}
-          >
-            {entity.variants && entity.variants.length > 0 && (
-              <Box
-                sx={{
-                  borderBottom: 1,
-                  borderColor: "divider",
-                  bgcolor: "rgba(255,255,255,0.02)",
+          <Paper elevation={0} sx={{ p: 2 }}>
+            <Stack alignItems="center" spacing={1}>
+              <ContentChip
+                target={self}
+                resolved={{
+                  kind: "entity",
+                  extId: entity.extId,
+                  resolvedKind: "entity",
+                  name: entity.name,
+                  iconMediaId: currentMedia(entity.media, "icon") ?? currentMedia(entity.media, "screenshot"),
                 }}
-              >
-                <Tabs
-                  value={selectedVariantIndex}
-                  onChange={(_, val) => setSelectedVariantIndex(val)}
-                  variant="scrollable"
-                  scrollButtons="auto"
-                  sx={{
-                    minHeight: 40,
-                    "& .MuiTabs-indicator": {
-                      height: 3,
-                      borderRadius: "3px 3px 0 0",
-                    },
-                    "& .MuiTab-root": {
-                      minHeight: 40,
-                      minWidth: 50,
-                      p: 1,
-                      opacity: 0.6,
-                      "&.Mui-selected": { opacity: 1 },
-                    },
-                  }}
-                >
-                  {[
-                    entity,
-                    ...entity.variants.map((v) => ({ ...entity, ...v })),
-                  ].map((v, idx) => (
-                    <Tab
-                      key={idx}
-                      icon={
-                        <Box
-                          component="img"
-                          src={getPublicUrl(v.image || v.icon || entity.image || entity.icon!)}
-                          sx={{ width: 20, height: 20, objectFit: "contain" }}
-                        />
-                      }
-                    />
-                  ))}
-                </Tabs>
-              </Box>
-            )}
-
-            <Box sx={{ p: 2, textAlign: "center" }}>
-              <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-                <Box
-                  sx={{
-                    width: 120,
-                    height: 120,
-                    borderRadius: 2,
-                    backgroundColor: "rgba(0,0,0,0.2)",
-                    border: "1px solid",
-                    borderColor: "divider",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    overflow: "hidden",
-                    position: "relative",
-                  }}
-                >
-                  {currentEntityData?.level && (
-                    <Box
-                      sx={{
-                        position: "absolute",
-                        top: 8,
-                        left: 8,
-                        bgcolor: "warning.main",
-                        color: "warning.contrastText",
-                        px: 1,
-                        borderRadius: 1,
-                        fontSize: "0.7rem",
-                        fontWeight: 900,
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
-                        zIndex: 2,
-                      }}
-                    >
-                      {currentEntityData.level}
-                    </Box>
-                  )}
-                  {currentEntityData?.icon ? (
-                    <img
-                      src={getPublicUrl(currentEntityData.image || currentEntityData.icon!)}
-                      alt={currentEntityData.name}
-                      style={{
-                        width: "80%",
-                        height: "80%",
-                        objectFit: "contain",
-                      }}
-                    />
-                  ) : (
-                    <EmojiEvents
-                      sx={{ fontSize: 64, color: "rgba(255, 255, 255, 0.1)" }}
-                    />
-                  )}
-                </Box>
-              </Box>
-              <Typography
-                variant="h5"
-                fontWeight={800}
-                color="primary.main"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 1.5,
-                  lineHeight: 1.2,
-                }}
-              >
-                {currentEntityData?.name}
-                {entityDetails.shop && (
-                  <Tooltip title="Este NPC possui uma loja">
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        backgroundColor: "rgba(255, 68, 0, 0.15)",
-                        p: 0.5,
-                        borderRadius: 1,
-                        animation: "pulse-glow 2s infinite ease-in-out",
-                        "@keyframes pulse-glow": {
-                          "0%": { boxShadow: "0 0 0 0 rgba(255, 68, 0, 0.4)" },
-                          "70%": { boxShadow: "0 0 0 6px rgba(255, 68, 0, 0)" },
-                          "100%": { boxShadow: "0 0 0 0 rgba(255, 68, 0, 0)" },
-                        },
-                      }}
-                    >
-                      <Storefront
-                        sx={{ fontSize: "1.1rem", color: "primary.main" }}
-                      />
-                    </Box>
+                level={entity.level}
+                rarityColor={rarity?.color}
+                size="extraLarge"
+                disableLink
+              />
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Typography variant="h5" fontWeight={800} textAlign="center" sx={{ color: rarity?.color ?? "primary.main" }}>
+                  {entity.name}
+                </Typography>
+                {hasShop && (
+                  <Tooltip title="Este NPC possui loja">
+                    <Storefront color="primary" />
                   </Tooltip>
                 )}
-              </Typography>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ display: "block", mb: 2 }}
-              >
-                ID: {currentEntityData?.id}
-              </Typography>
-
-              <Divider sx={{ mb: 2 }} />
-
-              <Stack spacing={1.5} textAlign="left">
-                {currentEntityData?.category && (
-                  <Box>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        color: "text.secondary",
-                        fontWeight: 700,
-                        textTransform: "uppercase",
-                        letterSpacing: 1,
-                      }}
-                    >
-                      Categoria
-                    </Typography>
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                      {Array.isArray(currentEntityData.category) ? (
-                        currentEntityData.category.map((cat) => (
-                          <ItemChip
-                            key={cat}
-                            id={cat}
-                            type="category"
-                            size="small"
-                          />
-                        ))
-                      ) : (
-                        <ItemChip
-                          id={currentEntityData.category}
-                          type="category"
-                          size="small"
-                        />
-                      )}
-                    </Box>
-                  </Box>
-                )}
-
-                {/* @ts-ignore */}
-                {currentEntityData?.description && (
-                  <Box>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        color: "text.secondary",
-                        fontWeight: 700,
-                        textTransform: "uppercase",
-                        letterSpacing: 1,
-                      }}
-                    >
-                      Descrição
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{ color: "text.secondary", lineHeight: 1.4 }}
-                    >
-                      {/* @ts-ignore */}
-                      {currentEntityData.description}
-                    </Typography>
-                  </Box>
-                )}
               </Stack>
-            </Box>
+              <Typography variant="caption" color="text.secondary">
+                Código: {entity.extId}
+              </Typography>
+              {rarity && <DataChip label={rarity.name} sx={{ color: rarity.color }} />}
+            </Stack>
+
+            <Divider sx={{ my: 2 }} />
+
+            <Stack spacing={2}>
+              {entity.categories.length > 0 && (
+                <DetailField label="Categorias">
+                  <ReferenceChips
+                    targets={entity.categories.map((id) => ({ kind: "category", extId: id }))}
+                    references={references}
+                  />
+                </DetailField>
+              )}
+
+              {(entity.summary || entity.description) && (
+                <DetailField label="Descrição">
+                  {entity.summary && <Typography variant="body2">{entity.summary}</Typography>}
+                  {entity.description && (
+                    <Typography variant="body2" color="text.secondary">
+                      {entity.description}
+                    </Typography>
+                  )}
+                </DetailField>
+              )}
+
+              {(entity.baseBuyPrice !== null || entity.baseSellPrice !== null) && (
+                <DetailField label="Preços base">
+                  <Stack spacing={0.5}>
+                    {entity.baseBuyPrice !== null && (
+                      <Stack direction="row" justifyContent="space-between">
+                        <Typography variant="body2" color="text.secondary">
+                          Compra
+                        </Typography>
+                        <Typography variant="body2" fontWeight={800}>
+                          {formatAmount(entity.baseBuyPrice)}
+                        </Typography>
+                      </Stack>
+                    )}
+                    {entity.baseSellPrice !== null && (
+                      <Stack direction="row" justifyContent="space-between">
+                        <Typography variant="body2" color="text.secondary">
+                          Venda
+                        </Typography>
+                        <Typography variant="body2" fontWeight={800}>
+                          {formatAmount(entity.baseSellPrice)}
+                        </Typography>
+                      </Stack>
+                    )}
+                  </Stack>
+                </DetailField>
+              )}
+
+              {entity.respawnDelayMinutes !== null && (
+                <DetailField label="Respawn">
+                  <Typography variant="body2">{formatDuration(entity.respawnDelayMinutes * 60)}</Typography>
+                </DetailField>
+              )}
+
+              {Object.keys(entity.attributes).length > 0 && (
+                <DetailField label="Atributos">
+                  <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
+                    {Object.entries(entity.attributes).map(([key, value]) => (
+                      <DataChip key={key} label={attributeLabel(key, value, definitions.get(key))} />
+                    ))}
+                  </Stack>
+                </DetailField>
+              )}
+
+              {entity.variantOf && (
+                <DetailField label="Variante de">
+                  <ReferenceChips
+                    targets={[{ kind: "entity", extId: entity.variantOf }]}
+                    references={references}
+                    size="medium"
+                  />
+                </DetailField>
+              )}
+
+              {entity.events.length > 0 && (
+                <DetailField label="Eventos">
+                  <ReferenceChips targets={entity.events.map((id) => ({ kind: "event", extId: id }))} references={references} />
+                </DetailField>
+              )}
+
+              {related.collectionGroups.content.length > 0 && (
+                <DetailField label="Coleções">
+                  <ApiCollectionGroups groups={related.collectionGroups.content} references={references} />
+                </DetailField>
+              )}
+            </Stack>
           </Paper>
 
-          {/* Seção de Loja */}
-          {entityDetails.shop && (
-            <Paper elevation={0} sx={{ p: 2, borderRadius: 2 }}>
-              <Stack
-                direction="row"
-                spacing={1}
-                alignItems="center"
-                sx={{ mb: 2 }}
-              >
+          {related.shops.content.length > 0 && (
+            <Paper elevation={0} sx={{ p: 2 }}>
+              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1.5 }}>
                 <Storefront color="primary" sx={{ fontSize: 18 }} />
                 <Typography variant="subtitle2" fontWeight={800}>
-                  Possui Loja
-                </Typography>
-              </Stack>
-
-              <DataCard
-                onClick={() =>
-                  navigate(
-                    `/game/${gameId}/shops/list/${entityDetails.shop?.id}`,
-                  )
-                }
-                sx={{
-                  justifyContent: "space-between",
-                  p: 1.5,
-                  "&:hover": {
-                    backgroundColor: "rgba(255, 68, 0, 0.1)",
-                  },
-                }}
-              >
-                <Stack direction="row" spacing={1.5} alignItems="center">
-                  <Box
-                    sx={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: 1,
-                      bgcolor: "rgba(255, 68, 0, 0.1)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Storefront sx={{ fontSize: 20, color: "primary.main" }} />
-                  </Box>
-                  <Box>
-                    <Typography
-                      variant="body2"
-                      sx={{ fontWeight: 700, lineHeight: 1.2 }}
-                    >
-                      {entityDetails.shop.name || "Visitar Loja"}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      Produtos Disponíveis
-                    </Typography>
-                  </Box>
-                </Stack>
-                <DataChip label="Abrir" color="primary" />
-              </DataCard>
-            </Paper>
-          )}
-
-          {/* Requisitos */}
-          {entity.requirements && entity.requirements.length > 0 && (
-            <Paper elevation={0} sx={{ p: 2, borderRadius: 2 }}>
-              <Stack
-                direction="row"
-                spacing={1}
-                alignItems="center"
-                sx={{ mb: 2 }}
-              >
-                <ListIcon color="primary" sx={{ fontSize: 18 }} />
-                <Typography variant="subtitle2" fontWeight={800}>
-                  Requisitos
+                  Loja
                 </Typography>
               </Stack>
               <Stack spacing={1}>
-                {entity.requirements.map((req, idx) => {
-                  const reqItem = getSourceData(undefined, req.itemId);
-                  const reqRarityColor = reqItem?.rarity && gameInfo?.rarity?.[reqItem.rarity]?.color;
-                  return (
-                    <Box
-                      key={idx}
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        p: 1,
-                        borderRadius: 1,
-                        bgcolor: reqRarityColor ? `${reqRarityColor}11` : "rgba(255,255,255,0.02)",
-                        border: `1px solid ${reqRarityColor ? `${reqRarityColor}44` : "transparent"}`,
-                      }}
-                    >
-                      <ItemChip id={req.itemId} size="small" rarityColor={reqRarityColor} />
-                    <Typography
-                      variant="body2"
-                      fontWeight={800}
-                      color="primary.main"
-                    >
-                      x{req.quant}
+                {related.shops.content.map((shop) => (
+                  <DataCard
+                    key={shop.extId}
+                    onClick={() => navigate(contentRoute(gameId, "shop", shop.extId)!)}
+                    sx={{ p: 1.5, justifyContent: "space-between" }}
+                  >
+                    <Typography variant="body2" fontWeight={700}>
+                      {shop.name}
                     </Typography>
-                    </Box>
-                  );
-                })}
+                    <DataChip label="Abrir" color="primary" />
+                  </DataCard>
+                ))}
               </Stack>
             </Paper>
           )}
 
-          {/* Conjuntos */}
-          <DetainConjunto itens={entityConjuntos}/>
+          {entity.requirements.length > 0 && (
+            <Paper elevation={0} sx={{ p: 2 }}>
+              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1.5 }}>
+                <ListIcon color="primary" sx={{ fontSize: 18 }} />
+                <Typography variant="subtitle2" fontWeight={800}>
+                  Requisitos para coletar
+                </Typography>
+              </Stack>
+              <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap sx={{ pt: 0.5 }}>
+                {entity.requirements.map((requirement, index) => (
+                  <ContentChip
+                    key={index}
+                    target={requirement.target}
+                    resolved={references.find(requirement.target)}
+                    amount={requirement.amount}
+                    notConsumed={requirement.notConsumed}
+                    size="medium"
+                  />
+                ))}
+              </Stack>
+            </Paper>
+          )}
         </Stack>
 
-        <>
-          {/* Drops */}
+        <DetainItem startIcon={<Inventory color="primary" />} label="Drops" count={entity.drops.length}>
+          {entity.drops.length > 0 && (
+            <Grid container spacing={1}>
+              {entity.drops.map((drop, index) => (
+                <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+                  <DataCard sx={{ p: 1.5, gap: 1.5 }}>
+                    <ContentChip target={drop.target} resolved={references.find(drop.target)} size="medium" />
+                    <Stack sx={{ minWidth: 0 }}>
+                      <Typography variant="body2" fontWeight={700} noWrap>
+                        {references.name(drop.target)}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {formatRange(drop.amount, drop.maxAmount)}x · {formatChance(drop.chance)}
+                      </Typography>
+                    </Stack>
+                  </DataCard>
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </DetainItem>
 
-          <DetainItem startIcon={<Inventory color="primary" />} label="Drops">
-            {drops && drops.length > 0 && (
-              <Grid container spacing={2}>
-                {drops.map((drop, idx) => {
-                  const dropRarityColor = drop.item?.rarity && gameInfo?.rarity?.[drop.item.rarity]?.color;
-                  return (
-                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={idx}>
-                      <Box
-                        sx={{
-                          p: 1.5,
-                          backgroundColor: dropRarityColor ? `${dropRarityColor}11` : "rgba(255,255,255,0.02)",
-                          borderRadius: 2,
-                          border: `1px solid ${dropRarityColor ? `${dropRarityColor}44` : "rgba(255,255,255,0.05)"}`,
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1.5,
-                        }}
-                      >
-                        <ItemChip
-                          id={drop.item?.id || ""}
-                          icon={drop.item?.icon}
-                          size="medium"
-                          rarityColor={dropRarityColor}
-                        />
-                        <Box sx={{ flexGrow: 1 }}>
-                          <Typography
-                            variant="body2"
-                            fontWeight={700}
-                            sx={{ 
-                              color: dropRarityColor || "text.primary",
-                              lineHeight: 1.2,
-                              transition: "all 0.2s",
-                              "&:hover": {
-                                textShadow: dropRarityColor ? `0 0 8px ${dropRarityColor}88` : "none"
-                              }
-                            }}
-                          >
-                            {drop.item?.name ||
-                              drop.item?.id ||
-                              "Item Desconhecido"}
-                          </Typography>
-                        <Stack direction="row" spacing={1} alignItems="center">
-                          <Typography
-                            variant="caption"
-                            sx={{
-                              color: "rgba(255,255,255,0.5)",
-                              fontWeight: 600,
-                            }}
-                          >
-                            Qtde: {drop.quant}
-                            {drop.maxQuant ? `-${drop.maxQuant}` : ""}
-                          </Typography>
-                          <Typography
-                            variant="caption"
-                            color="primary.main"
-                            fontWeight={800}
-                          >
-                            ({((drop.chance || 0) * 100).toFixed(0)}%)
-                          </Typography>
-                        </Stack>
-                      </Box>
-                      </Box>
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            )}
-          </DetainItem>
-          {/* Como Fabricar */}
-          <DetainItem
-            startIcon={<Construction color="primary" />}
-            label="Como Fabricar"
-          >
-            {recipes && recipes.length > 0 && (
-              <Grid container spacing={2}>
-                {recipes.map((recipe) => (
-                  <Grid size={{ xs: 12, lg: 6 }} key={recipe.id}>
-                    <RecipeCard
-                      id={recipe.id}
-                      name={recipe.normalizedName}
-                      stations={recipe.normalizedStations}
-                      ingredients={recipe.normalizedIngredients}
-                      products={recipe.normalizedProducts}
-                      unlock={recipe.unlock}
-                      getSourceData={getSourceData}
-                      eventsMap={eventsMap}
-                      gameInfo={gameInfo || undefined}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            )}
-          </DetainItem>
+        <DetainItem startIcon={<Construction color="primary" />} label="Como fabricar" count={related.producedBy.total}>
+          {related.producedBy.content.length > 0 && (
+            <Grid container spacing={1}>
+              {related.producedBy.content.map((recipe) => (
+                <Grid size={{ xs: 12, lg: 6 }} key={recipe.extId}>
+                  <ApiRecipeCard recipe={recipe} references={references} highlight={self} />
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </DetainItem>
 
-          {/* Receitas Produzidas Aqui */}
-          <DetainItem
-            startIcon={<Construction color="primary" />}
-            label="Receitas Produzidas Aqui"
-            count={producedRecipes.length}
-            pages={producedRecipes.length > producedPageSize ? producedPaginationController : undefined}
-            actions={
-              matchingStations.length > 0 && (
-                <>
-                  {matchingStations.map((station) => (
-                    <Chip
-                      key={station.id}
-                      label={station.name}
-                      size="small"
-                      icon={
-                        station.icon ? (
-                          <Box
-                            component="img"
-                            src={getPublicUrl(station.icon)}
-                            sx={{
-                              width: 14,
-                              height: 14,
-                              objectFit: "contain",
-                            }}
-                          />
-                        ) : (
-                          <Construction
-                            sx={{ fontSize: "0.9rem !important" }}
-                          />
-                        )
-                      }
-                      onClick={() =>
-                        navigate(`/game/${gameId}/recipes/list/${station.id}`)
-                      }
-                      sx={{
-                        backgroundColor: "rgba(255, 68, 0, 0.1)",
-                        color: "primary.main",
-                        fontWeight: 700,
-                        cursor: "pointer",
-                        "&:hover": {
-                          backgroundColor: "rgba(255, 68, 0, 0.2)",
-                          transform: "translateY(-1px)",
-                        },
-                        transition: "all 0.2s",
-                      }}
-                    />
-                  ))}
-                </>
-              )
-            }
-          >
-            {producedRecipes && producedRecipes.length > 0 && (
-                <Box
-                  sx={{
-                    maxHeight: 500,
-                    overflowY: "auto",
-                    pr: 1,
-                    // Custom scrollbar for cleaner look
-                    "&::-webkit-scrollbar": { width: "4px" },
-                    "&::-webkit-scrollbar-track": { background: "transparent" },
-                    "&::-webkit-scrollbar-thumb": {
-                      background: "rgba(255,255,255,0.1)",
-                      borderRadius: "4px",
-                    },
-                    "&::-webkit-scrollbar-thumb:hover": {
-                      background: "primary.main",
-                    },
-                  }}
-                >
-                  <Grid container spacing={1}>
-                    {producedRecipes
-                      .slice(
-                        (producedPage - 1) * producedPageSize,
-                        producedPage * producedPageSize,
-                      )
-                      .map((recipe) => (
-                        <Grid
-                          size={{ xs: 6, sm: 4, md: 3, lg: 2 }}
-                          key={recipe.id}
-                        >
-                          <RecipeCard
-                            id={recipe.id}
-                            name={recipe.normalizedName}
-                            stations={recipe.normalizedStations}
-                            ingredients={recipe.normalizedIngredients}
-                            products={recipe.normalizedProducts}
-                            unlock={recipe.unlock}
-                            getSourceData={getSourceData}
-                            eventsMap={eventsMap}
-                            variant="compact"
-                            gameInfo={gameInfo || undefined}
-                          />
-                        </Grid>
-                      ))}
-                  </Grid>
-                </Box>
-              
-            )}
-          </DetainItem>
-          {/* Localizações (Spawns) */}
-          <DetainItem
-            startIcon={<MapIcon color="primary" />}
-            label="Localizações"
-          >
-            {groupedReferencePoints.size > 0 && (
-              <Grid container spacing={3}>
-                {Array.from(groupedReferencePoints.entries()).map(
-                  ([mapId, mapPoints]) => {
-                    const meta = getMapMetadata(mapId);
+        <DetainItem startIcon={<Handyman color="primary" />} label="Receitas feitas aqui" count={related.craftedHere.total}>
+          {related.craftedHere.content.length > 0 && (
+            <Grid container spacing={1}>
+              {related.craftedHere.content.map((recipe) => (
+                <Grid size={{ xs: 12, lg: 6 }} key={recipe.extId}>
+                  <ApiRecipeCard recipe={recipe} references={references} />
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </DetainItem>
 
-                    return (
-                      <Grid size={{ xs: 12, md: 6, lg: 4 }} key={mapId}>
-                        <Paper
-                          elevation={0}
-                          sx={{
-                            p: 2,
-                            backgroundColor: "rgba(255,255,255,0.02)",
-                            borderRadius: 2,
-                            border: "1px solid rgba(255,255,255,0.05)",
-                            overflow: "hidden",
-                          }}
-                        >
-                          <Stack
-                            direction="row"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            sx={{ mb: 1.5 }}
-                          >
-                            <Box>
-                              <Typography
-                                variant="subtitle1"
-                                fontWeight={700}
-                                color="primary.main"
-                              >
-                                {meta?.name || mapId}
-                              </Typography>
-                              <Typography
-                                variant="caption"
-                                color="text.secondary"
-                              >
-                                {mapPoints.length} Ocorrência(s)
-                              </Typography>
-                            </Box>
-                            <MapIcon sx={{ opacity: 0.3 }} />
-                          </Stack>
+        <DetainItem startIcon={<Architecture color="primary" />} label="Utilizado em" count={related.usedIn.total}>
+          {related.usedIn.content.length > 0 && (
+            <Grid container spacing={1}>
+              {related.usedIn.content.map((recipe) => (
+                <Grid size={{ xs: 12, lg: 6 }} key={recipe.extId}>
+                  <ApiRecipeCard recipe={recipe} references={references} highlight={self} />
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </DetainItem>
 
-                          <Box
-                            sx={{
-                              height: 200,
-                              width: "100%",
-                              borderRadius: 1,
-                              border: "1px solid rgba(255,255,255,0.1)",
-                              overflow: "hidden",
-                              position: "relative",
-                              cursor: "pointer",
-                            }}
-                            onClick={() =>
-                              navigate(
-                                `/game/${gameId}/map/${mapId}?entity=${entity.id}`,
-                              )
-                            }
-                          >
-                            <Box sx={{ flexGrow: 1 }}>
-                              {meta ? (
-                                <MiniMap
-                                  meta={meta}
-                                  markers={mapPoints.map((s) => {
-                                    let pos: [number, number] = [0, 0];
-                                    if (
-                                      s.geom?.type === "Point" &&
-                                      s.geom.coordinates
-                                    ) {
-                                      const wktCoords = parseWKTPoint(
-                                        s.geom.coordinates,
-                                      );
-                                      // WKT is [X, Y], Leaflet wants [Y, X] for Lat/Lng
-                                      pos = [wktCoords[1], wktCoords[0]];
-                                    }
-                                    return {
-                                      id: s.id,
-                                      position: pos,
-                                      color: "#ff4400",
-                                    };
-                                  })}
-                                  onClick={() =>
-                                    navigate(`/game/${gameId}/map/${mapId}?entity=${entity.id}`)
-                                  }
-                                  height={200}
-                                />
-                              ) : (
-                                <Box
-                                  sx={{
-                                    height: 200,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    bgcolor: "rgba(0,0,0,0.2)",
-                                    borderRadius: 1,
-                                  }}
-                                >
-                                  <Typography
-                                    variant="caption"
-                                    color="text.secondary"
-                                  >
-                                    Mapa não encontrado
-                                  </Typography>
-                                </Box>
-                              )}
-                            </Box>
-                          </Box>
-                        </Paper>
-                      </Grid>
-                    );
-                  },
-                )}
-              </Grid>
-            )}
-          </DetainItem>
-        </>
+        <DetainItem startIcon={<Place color="primary" />} label="Onde aparece" count={related.spawnPoints.total}>
+          {related.spawnPoints.content.length > 0 && (
+            <SpawnPointsByMap
+              points={related.spawnPoints.content}
+              filter={{ param: "entity", value: entity.extId }}
+              references={references}
+            />
+          )}
+        </DetainItem>
+
+        <DetainItem size={isMobile ? undefined : 6} startIcon={<Storefront color="primary" />} label="Vendido em" count={offers.length}>
+          {offers.length > 0 && <ApiShopOffers offers={offers} references={references} />}
+        </DetainItem>
+
+        <DetainItem size={isMobile ? undefined : 6} startIcon={<Bolt color="primary" />} label="Dropado por" count={related.droppedBy.total}>
+          {related.droppedBy.content.length > 0 && <ApiDroppedBy entities={related.droppedBy.content} target={self} />}
+        </DetainItem>
+
+        <DetainItem size={isMobile ? undefined : 6} startIcon={<Rule color="primary" />} label="Exigido para coletar" count={related.requiredBy.total}>
+          {related.requiredBy.content.length > 0 && <ApiRequiredBy entities={related.requiredBy.content} target={self} />}
+        </DetainItem>
+
+        <DetainItem size={isMobile ? undefined : 6} startIcon={<Style color="primary" />} label="Variantes" count={related.variants.total}>
+          {related.variants.content.length > 0 && <ApiVariants kind="entity" variants={related.variants.content} />}
+        </DetainItem>
+
+        <DetainItem size={isMobile ? undefined : 6} startIcon={<Redeem color="primary" />} label="Códigos de resgate" count={related.rewardOf.total}>
+          {related.rewardOf.content.length > 0 && <ApiRewardCodes codes={related.rewardOf.content} target={self} />}
+        </DetainItem>
       </DetainContainer>
     </StyledContainer>
   );

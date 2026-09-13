@@ -227,7 +227,7 @@ definição em `/attributes`, o tipo é conferido e divergência dá `422`.
 decrescente. Várias `category` combinam com E. Toda listagem aceita também `withoutCategory` (exclui categorias) e
 `activeEvents` (esconde conteúdo de evento fora da lista; vazio mostra só o que não tem evento), com códigos
 separados por vírgula. Itens aceitam `trade`: `buyable` (preço base de compra ou vendido em loja), `sellable`,
-`traded` ou `untraded`.
+`traded` ou `untraded`. Itens e entidades aceitam `variantOf` (código do conteúdo base).
 
 ## Crafting e economia (Fase 3)
 
@@ -346,8 +346,8 @@ recurso de conteúdo. Traz:
 
 | Recurso | Relações |
 |---|---|
-| item | `producedBy`, `usedIn`, `droppedBy`, `dropPoints`, `spawnPoints`, `soldIn`, `requiredBy`, `rewardOf`, `collectionGroups` |
-| entidade | `producedBy`, `usedIn`, `craftedHere`, `droppedBy`, `spawnPoints`, `soldIn`, `requiredBy`, `shops`, `rewardOf`, `collectionGroups` |
+| item | `producedBy`, `usedIn`, `droppedBy`, `dropPoints`, `spawnPoints`, `soldIn`, `requiredBy`, `rewardOf`, `collectionGroups`, `variants` |
+| entidade | `producedBy`, `usedIn`, `craftedHere`, `droppedBy`, `spawnPoints`, `soldIn`, `requiredBy`, `shops`, `rewardOf`, `collectionGroups`, `variants` |
 | receita | `soldIn`, `rewardOf` |
 | categoria | `items`, `entities`, `shops`, `producedBy`, `usedIn` |
 | evento | `items`, `entities`, `categories`, `recipes`, `shops`, `shopCategories`, `maps`, `mapsWithWeather`, `locations`, `spawnPoints`, `collections`, `collectionGroups` |

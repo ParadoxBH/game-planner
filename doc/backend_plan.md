@@ -973,9 +973,14 @@ Decisões tomadas na implementação, que ajustam o plano acima:
   segurança, que senão escreveria `no-store`.
 
 ### Fase 7 — Migração do front (depois, incremental)
-**Status: em andamento.** Migração tela a tela para os tipos da API, com TanStack Query. Já migradas: lista de
-itens (`/items`, com `withoutCategory`, `activeEvents` e `trade` criados para ela) e detalhe de item
-(`/items/{id}/details`). As demais telas seguem lendo os JSON até a vez delas.
+**Status: em andamento.** Migração tela a tela para os tipos da API, com TanStack Query. Já migradas:
+- itens: lista (`/items`, com `withoutCategory`, `activeEvents` e `trade` criados para ela) e detalhe
+  (`/items/{id}/details`);
+- entidades: lista (`/entities`) e detalhe (`/entities/{id}/details`). As abas de variante viraram a
+  relação `variants`, com o filtro `variantOf` em itens e entidades.
+
+As telas migradas compartilham componentes de detalhe (pontos por mapa, ofertas de loja, drops,
+códigos, coleções, variantes). As demais telas seguem lendo os JSON até a vez delas.
 
 1. Trocar `dataLoader` por chamadas à API, mantendo Dexie como cache offline — muda
    ~1 arquivo, o front continua funcionando igual.

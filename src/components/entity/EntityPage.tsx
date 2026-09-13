@@ -1,197 +1,150 @@
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { CircularProgress, FormControlLabel, Stack, Switch, Typography } from "@mui/material";
+import { FilterList } from "@mui/icons-material";
+import { ApiError } from "../../api/ApiError";
 import {
-  Box,
-  Typography,
-  CircularProgress,
-  FormControlLabel,
-  Switch,
-  Tooltip,
-  Stack,
-} from "@mui/material";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import { useState, useMemo, useEffect } from "react";
-import { StyledContainer } from "../common/StyledContainer";
-import { EntityCard } from "./EntityCard";
-import { PickSelector } from "../common/PickSelector";
-import { TriplePickSelector } from "../common/TriplePickSelector";
-import type { TripleState } from "../common/TriplePickSelector";
-import { FilterList, BugReport, ShoppingCart, Sell, Storefront } from "@mui/icons-material";
-import { useApi } from "../../hooks/useApi";
-import type { Entity, Shop, Category, GameInfo } from "../../types/gameModels";
-import { ListingDataView } from "../common/ListingDataView";
-import { ViewModeSelector } from "../common/ViewModeSelector";
-import { useViewMode } from "../../hooks/useViewMode";
-import { ItemChip } from "../common/ItemChip";
-import { shopRepository } from "../../repositories/ShopRepository";
+  MAX_PAGE_SIZE,
+  type CategoryDocument,
+  type EntityDocument,
+  type ListQuery,
+  type ShopDocument,
+} from "../../api/content";
+import { currentMedia, mediaUrl } from "../../api/references";
+import { useContentList, useRarities } from "../../api/useContent";
+import { useEventFilter } from "../../context/EventFilterContext";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
-import type { EntityCriteria } from "../../types/filterTypes";
-import type { PaginatedResponse } from "../../types/apiModels";
-import { getPublicUrl } from "../../utils/pathUtils";
 import { usePlatform } from "../../hooks/usePlatform";
-import { isDev } from "../../utils/mapper";
+import { useViewMode } from "../../hooks/useViewMode";
+import type { EntityCriteria } from "../../types/filterTypes";
+import { ListingDataView } from "../common/ListingDataView";
+import { PickSelector } from "../common/PickSelector";
+import { StyledContainer } from "../common/StyledContainer";
+import { TriplePickSelector, type TripleState } from "../common/TriplePickSelector";
+import { ViewModeSelector } from "../common/ViewModeSelector";
+import { ApiEntityCard, ApiEntityIcon, entityListCells, entityRarityColor, type EntityListView } from "./ApiEntityRenderers";
 
+function categoryOption(category: CategoryDocument) {
+  const iconId = currentMedia(category.media, "icon");
+  return { value: category.extId, label: category.name, icon: iconId ? mediaUrl(iconId) : undefined };
+}
+
+/** Lista de entidades, lida da API. */
 export function EntityPage() {
-  const { gameId, category: urlCategory } = useParams<{
-    gameId: string;
-    category?: string;
-  }>();
+  const { gameId = "", category: urlCategory } = useParams<{ gameId: string; category?: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const subCategoryParam = searchParams.get("subCategory");
-
-  const {
-    loading: dbLoading,
-    error: errorApi,
-    getEntityList,
-    getEntityCategories,
-    getEntitySubCategories,
-    getGameInfo,
-  } = useApi(gameId);
-  
-  const [entitiesResponse, setEntitiesResponse] = useState<PaginatedResponse<Entity> | null>(null);
-  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
-  const [shops, setShops] = useState<Shop[]>([]);
-  const [dataLoading, setDataLoading] = useState(false);
-  const [viewMode, setViewMode] = useViewMode("entities");
-  const [showPrices, setShowPrices] = useState(false);
-  const [allCategories, setAllCategories] = useState<(Category & { isPrimary: boolean })[]>([]);
-  const [availableSubCategories, setAvailableSubCategories] = useState<string[]>([]);
   const { isMobile } = usePlatform();
+  const { activeEventIds } = useEventFilter();
 
   const pages = usePagination<EntityCriteria>({
     primaryCategory: urlCategory || "all",
     subCategoryStates: subCategoryParam ? { [subCategoryParam]: "include" } : {},
   });
+  const [viewMode, setViewMode] = useViewMode("entities");
+  const [showPrices, setShowPrices] = useState(false);
 
-  // Sync URL Category to filter
   useEffect(() => {
     pages.setCriteria({
       primaryCategory: urlCategory || "all",
-      subCategoryStates: subCategoryParam ? { [subCategoryParam]: "include" } : {}
+      subCategoryStates: subCategoryParam ? { [subCategoryParam]: "include" } : {},
     });
-  }, [urlCategory]);
+  }, [urlCategory, subCategoryParam]);
 
-  // Sync SubCategory from URL specifically (external links)
+  // A API devolve no máximo 200 por página.
   useEffect(() => {
-    if (subCategoryParam) {
-      pages.setCriteria({
-        subCategoryStates: { [subCategoryParam]: "include" }
-      });
-    }
-  }, [subCategoryParam]);
+    if (pages.info.pagination.pageSize > MAX_PAGE_SIZE) pages.setPageSize(MAX_PAGE_SIZE);
+  }, [pages.info.pagination.pageSize, pages.setPageSize]);
 
-  // Load static data (shops and categories)
+  const search = useDebouncedValue(pages.info.search);
+  const { criteria, pagination } = pages.info;
+
+  const query = useMemo<ListQuery>(() => {
+    const states = Object.entries(criteria.subCategoryStates ?? {});
+    const included = states.filter(([, state]) => state === "include").map(([id]) => id);
+    const excluded = states.filter(([, state]) => state === "exclude").map(([id]) => id);
+    const primary = criteria.primaryCategory && criteria.primaryCategory !== "all" ? [criteria.primaryCategory] : [];
+    return {
+      search: search || undefined,
+      categories: [...primary, ...included],
+      rarity: criteria.rarity ?? undefined,
+      page: pagination.page - 1,
+      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+      filters: {
+        withoutCategory: excluded.length ? excluded.join(",") : undefined,
+        activeEvents: activeEventIds.join(","),
+      },
+    };
+  }, [search, criteria, pagination, activeEventIds]);
+
+  const entities = useContentList<EntityDocument>(gameId, "entities", query);
+  const categories = useContentList<CategoryDocument>(gameId, "categories", { size: MAX_PAGE_SIZE, sort: "name" });
+  const shops = useContentList<ShopDocument>(gameId, "shops", { size: MAX_PAGE_SIZE });
+  const rarities = useRarities(gameId);
+
   useEffect(() => {
-    if (dbLoading) return;
-    shopRepository.getAll().then(setShops);
-    getEntityCategories().then(setAllCategories);
-    if (gameId) getGameInfo(gameId).then(info => { if (info) setGameInfo(info); });
-  }, [dbLoading, getEntityCategories, gameId, getGameInfo]);
+    if (entities.data) pages.setTotalItems(entities.data.total);
+  }, [entities.data, pages.setTotalItems]);
 
-  // Load paginated entities
-  useEffect(() => {
-    if (dbLoading) return;
+  const entityCategories = useMemo(
+    () => (categories.data?.content ?? []).filter((category) => category.appliesTo !== "item"),
+    [categories.data],
+  );
 
-    let isMounted = true;
-    setDataLoading(true);
+  const view = useMemo<EntityListView>(
+    () => ({
+      gameId,
+      showPrices,
+      rarities: new Map((rarities.data ?? []).map((rarity) => [rarity.code, rarity])),
+      categories: new Map(entityCategories.map((category) => [category.extId, category])),
+      shopNpcs: new Set((shops.data?.content ?? []).flatMap((shop) => (shop.npc ? [shop.npc] : []))),
+    }),
+    [gameId, showPrices, rarities.data, entityCategories, shops.data],
+  );
 
-    getEntityList(pages.info)
-      .then((results) => {
-        if (!isMounted) return;
-        setEntitiesResponse(results);
-        pages.setTotalItems(results.total);
-        setDataLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching entities:", err);
-        if (isMounted) setDataLoading(false);
-      });
+  const currentCategoryName =
+    urlCategory && urlCategory !== "all" ? view.categories.get(urlCategory)?.name ?? urlCategory : "Entidades";
+  const sortedRarities = [...(rarities.data ?? [])].sort((a, b) => a.ordinal - b.ordinal);
 
-    return () => { isMounted = false; };
-  }, [dbLoading, getEntityList, pages.info]);
-
-  const entities = useMemo(() => entitiesResponse?.data || [], [entitiesResponse]);
-
-  // Derive available sub-categories from all entities based ONLY on primary category
-  useEffect(() => {
-    if (dbLoading) return;
-    
-    getEntitySubCategories(urlCategory || "all")
-      .then(setAvailableSubCategories)
-      .catch(console.error);
-  }, [dbLoading, urlCategory, getEntitySubCategories]);
-
-  const shopNPCIds = useMemo(() => {
-    const ids = new Set<string>();
-    shops.forEach((s: any) => {
-      if (s.npcId) ids.add(s.npcId.toLowerCase());
-    });
-    return ids;
-  }, [shops]);
-
-  const handleSubCategoryStateChange = (option: string, newState: TripleState) => {
-    const nextSub = { ...pages.info.criteria.subCategoryStates, [option]: newState };
-    pages.setCriteria({ subCategoryStates: nextSub });
+  const handleSubCategoryStateChange = (option: string, state: TripleState) => {
+    pages.setCriteria({ subCategoryStates: { ...criteria.subCategoryStates, [option]: state } });
   };
-
-    const currentCategoryName = useMemo(() => {
-    if (!urlCategory || urlCategory === "all") return "Entidades";
-    const cat = allCategories.find(c => c.id.toLowerCase() === urlCategory?.toLowerCase());
-    return cat?.name || urlCategory;
-  }, [allCategories, urlCategory]);
 
   return (
     <StyledContainer
       title={`${currentCategoryName} de ${gameId}`}
       label="Explore e descubra todas as entidades do jogo."
       searchValue={pages.info.search}
-      onChangeSearch={(val) => pages.setSearch(val)}
+      onChangeSearch={pages.setSearch}
       search={{ placeholder: "Pesquisar entidades..." }}
       pages={pages}
       actionsStart={
         <>
           <PickSelector
             label="Categoria"
-            value={urlCategory === "all" ? null : urlCategory || null}
-            options={allCategories
-              .filter(cat => cat.isPrimary)
-              .map(cat => ({ value: cat.id, label: cat.name, icon: cat.icon }))
-              .sort((a, b) => a.label.localeCompare(b.label))
-            }
-            onChange={(cat) => {
-              navigate(`/game/${gameId}/entity/list/${cat || "all"}`);
-            }}
+            value={urlCategory && urlCategory !== "all" ? urlCategory : null}
+            options={entityCategories.map(categoryOption)}
+            onChange={(category) => navigate(`/game/${gameId}/entity/list/${category || "all"}`)}
             icon={<FilterList sx={{ fontSize: 18 }} />}
             fullWidth={isMobile}
           />
-          {availableSubCategories.length > 0 && (
+          {entityCategories.length > 1 && (
             <TriplePickSelector
               label="Sub-categoria"
-              states={pages.info.criteria.subCategoryStates || {}}
-              options={availableSubCategories.map(subId => {
-                const catInfo = allCategories.find(c => c.id.toLowerCase() === subId.toLowerCase());
-                return {
-                  value: subId,
-                  label: catInfo?.name || subId,
-                  icon: catInfo?.icon
-                };
-              }).sort((a, b) => a.label.localeCompare(b.label))}
+              states={criteria.subCategoryStates || {}}
+              options={entityCategories.filter((category) => category.extId !== urlCategory).map(categoryOption)}
               onChange={handleSubCategoryStateChange}
-              icon={<FilterList sx={{ fontSize: 18 }} />}
               fullWidth={isMobile}
             />
           )}
-          {gameInfo?.rarity && Object.keys(gameInfo.rarity).length > 0 && (
+          {sortedRarities.length > 0 && (
             <PickSelector
               label="Raridade"
-              value={pages.info.criteria.rarity || null}
-              options={[
-                ...(isDev() ? [{ value: "none", label: "Não Informado" }] : []),
-                ...Object.entries(gameInfo.rarity).map(([id, r]) => ({
-                  value: id,
-                  label: r.name,
-                }))
-              ]}
-              onChange={(val) => pages.setCriteria({ rarity: val })}
+              value={criteria.rarity || null}
+              options={sortedRarities.map((rarity) => ({ value: rarity.code, label: rarity.name }))}
+              onChange={(rarity) => pages.setCriteria({ rarity })}
               icon={<FilterList sx={{ fontSize: 18 }} />}
               fullWidth={isMobile}
             />
@@ -199,46 +152,37 @@ export function EntityPage() {
         </>
       }
       actionsEnd={
-        <Stack flex={1} direction={"row"} justifyContent={isMobile ? "space-between" : "end"} alignItems={"center"}>
+        <Stack flex={1} direction="row" justifyContent={isMobile ? "space-between" : "end"} alignItems="center">
           <FormControlLabel
             control={
-              <Switch
-                checked={showPrices}
-                onChange={(e) => setShowPrices(e.target.checked)}
-                color="primary"
-                size="small"
-              />
+              <Switch checked={showPrices} onChange={(event) => setShowPrices(event.target.checked)} color="primary" size="small" />
             }
             label={
-              <Typography
-                variant="body2"
-                sx={{ color: "text.secondary", fontWeight: 600 }}
-              >
-                Mostrar Preços
+              <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600 }}>
+                Mostrar preços
               </Typography>
             }
-            sx={{ ml: 1 }}
           />
           <ViewModeSelector mode={viewMode} onChange={setViewMode} />
         </Stack>
       }
     >
-      {(dbLoading || dataLoading) ? (
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", py: 10, flex: 1 }}>
+      {entities.isPending ? (
+        <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>
           <CircularProgress color="primary" />
-        </Box>
-      ) : errorApi ? (
-        <Box sx={{ p: 4, textAlign: "center", flex: 1 }}>
+        </Stack>
+      ) : entities.isError ? (
+        <Stack alignItems="center" spacing={1} sx={{ p: 4, flex: 1 }}>
           <Typography color="error" variant="h6" sx={{ fontWeight: 700 }}>
-            Erro ao carregar entidades
+            Não foi possível carregar as entidades.
           </Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary", mt: 1 }}>
-            {errorApi}
+          <Typography variant="body2" color="text.secondary">
+            {entities.error instanceof ApiError ? entities.error.message : "Erro inesperado."}
           </Typography>
-        </Box>
+        </Stack>
       ) : (
         <ListingDataView
-          data={entities}
+          data={entities.data.content}
           viewMode={viewMode}
           variant="compact"
           cardMinWidth={200}
@@ -247,142 +191,10 @@ export function EntityPage() {
             { label: "Preços", align: "right" as const, width: "30%", hidden: !showPrices },
           ]}
           emptyMessage="Nenhuma entidade encontrada neste filtro."
-          getRowColor={(entity: any) => entity.rarity && gameInfo?.rarity?.[entity.rarity]?.color}
-          renderCard={(entity: any, variant) => (
-            <EntityCard
-              key={entity.id}
-              entity={entity}
-              showPrices={showPrices}
-              hasShop={shopNPCIds.has(entity.id.toLowerCase())}
-              onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
-              variant={variant}
-              rarityColor={entity.rarity && gameInfo?.rarity?.[entity.rarity]?.color}
-            />
-          )}
-          renderListItem={(entity: any) => [
-            <Box
-              key={`entity_list_${entity.id}`}
-              onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-                cursor: "pointer",
-              }}
-            >
-              <Box
-                sx={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: 0.5,
-                  backgroundColor: "rgba(0,0,0,0.2)",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexShrink: 0,
-                }}
-              >
-                {entity.image || entity.icon ? (
-                  <img
-                    src={getPublicUrl(entity.image || entity.icon!)}
-                    alt={entity.name}
-                    style={{
-                      width: "80%",
-                      height: "80%",
-                      objectFit: "contain",
-                    }}
-                  />
-                ) : (
-                  <BugReport
-                    sx={{ fontSize: 16, color: "rgba(255, 255, 255, 0.2)" }}
-                  />
-                )}
-              </Box>
-              <Typography 
-                variant="body2" 
-                sx={{ 
-                  fontWeight: 700, 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: 1,
-                  color: entity.rarity && gameInfo?.rarity?.[entity.rarity]?.color ? gameInfo?.rarity?.[entity.rarity]?.color : "text.primary",
-                  transition: "all 0.2s",
-                  "&:hover": {
-                    color: entity.rarity && gameInfo?.rarity?.[entity.rarity]?.color ? gameInfo?.rarity?.[entity.rarity]?.color : "primary.main",
-                    textShadow: entity.rarity && gameInfo?.rarity?.[entity.rarity]?.color ? `0 0 8px ${gameInfo?.rarity?.[entity.rarity]?.color}88` : "none"
-                  }
-                }}
-              >
-                {entity.name}
-                {shopNPCIds.has(entity.id.toLowerCase()) && (
-                  <Tooltip title="NPC com Loja">
-                    <Storefront sx={{ fontSize: 14, color: 'primary.main' }} />
-                  </Tooltip>
-                )}
-              </Typography>
-            </Box>,
-            <Box key={`entity_prices_${entity.id}`} sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
-              {entity.buyPrice !== undefined && (
-                <Tooltip title="Compra">
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, backgroundColor: 'rgba(76, 175, 80, 0.1)', px: 1, borderRadius: 1, border: '1px solid rgba(76, 175, 80, 0.2)' }}>
-                    <ShoppingCart sx={{ fontSize: 12, color: 'success.main' }} />
-                    <ItemChip
-                      id="ouro"
-                      amount={entity.buyPrice}
-                      size="small"
-                      icon={"/img/heartopia/stats/ouro.png"}
-                    />
-                  </Box>
-                </Tooltip>
-              )}
-              {entity.sellPrice !== undefined && (
-                <Tooltip title="Venda">
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, backgroundColor: 'rgba(255, 152, 0, 0.1)', px: 1, borderRadius: 1, border: '1px solid rgba(255, 152, 0, 0.2)' }}>
-                    <Sell sx={{ fontSize: 12, color: 'warning.main' }} />
-                    <ItemChip
-                      id="ouro"
-                      amount={entity.sellPrice}
-                      size="small"
-                      icon={"/img/heartopia/stats/ouro.png"}
-                    />
-                  </Box>
-                </Tooltip>
-              )}
-            </Box>
-          ]}
-          renderIconItem={(entity: any) => (
-            <Tooltip key={`entity_icon_${entity.id}`} title={`${entity.name} (${entity.id})`}>
-              <Box
-                onClick={() =>
-                  navigate(`/game/${gameId}/entity/view/${entity.id}`)
-                }
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  p: 1,
-                }}
-              >
-                {entity.image || entity.icon ? (
-                  <img
-                    src={getPublicUrl(entity.image || entity.icon!)}
-                    alt={entity.name}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "contain",
-                    }}
-                  />
-                ) : (
-                  <BugReport
-                    sx={{ fontSize: 32, color: "rgba(255, 255, 255, 0.2)" }}
-                  />
-                )}
-              </Box>
-            </Tooltip>
-          )}
+          getRowColor={(entity) => entityRarityColor(view, entity)}
+          renderCard={(entity, variant) => <ApiEntityCard entity={entity} variant={variant} view={view} />}
+          renderListItem={(entity) => entityListCells(entity, view)}
+          renderIconItem={(entity) => <ApiEntityIcon entity={entity} view={view} />}
         />
       )}
     </StyledContainer>

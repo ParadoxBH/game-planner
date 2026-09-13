@@ -90,7 +90,8 @@ public class DetailsService {
                 targeting("soldIn", SHOP_CATEGORY, "sells", ITEM),
                 targeting("requiredBy", ENTITY, "requires", ITEM),
                 targeting("rewardOf", REDEMPTION_CODE, "rewards", ITEM),
-                targeting("collectionGroups", COLLECTION_GROUP, "member", ITEM)));
+                targeting("collectionGroups", COLLECTION_GROUP, "member", ITEM),
+                coded("variants", ITEM, "variantOf")));
         relations.put(ENTITY, List.of(
                 targeting("producedBy", RECIPE, "produces", ENTITY),
                 targeting("usedIn", RECIPE, "consumes", ENTITY),
@@ -101,7 +102,8 @@ public class DetailsService {
                 targeting("requiredBy", ENTITY, "requires", ENTITY),
                 coded("shops", SHOP, "npc"),
                 targeting("rewardOf", REDEMPTION_CODE, "rewards", ENTITY),
-                targeting("collectionGroups", COLLECTION_GROUP, "member", ENTITY)));
+                targeting("collectionGroups", COLLECTION_GROUP, "member", ENTITY),
+                coded("variants", ENTITY, "variantOf")));
         relations.put(RECIPE, List.of(
                 targeting("soldIn", SHOP_CATEGORY, "sells", RECIPE),
                 targeting("rewardOf", REDEMPTION_CODE, "rewards", RECIPE)));

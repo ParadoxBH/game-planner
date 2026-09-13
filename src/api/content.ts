@@ -189,6 +189,14 @@ export interface Details<D, R> {
   categoryMembers: Record<string, ResolvedReference[]>;
 }
 
+export interface ShopDocument extends ContentBase {
+  name: string;
+  npc: string | null;
+  resetType: string | null;
+  categories: string[];
+  events: string[];
+}
+
 /** Relações do detalhe de item. Cada uma traz até 200 documentos e o total. */
 export interface ItemRelated {
   producedBy: ContentPage<RecipeDocument>;
@@ -200,6 +208,24 @@ export interface ItemRelated {
   requiredBy: ContentPage<EntityDocument>;
   rewardOf: ContentPage<RedemptionCodeDocument>;
   collectionGroups: ContentPage<CollectionGroupDocument>;
+  variants: ContentPage<ItemDocument>;
+}
+
+/** Relações do detalhe de entidade. */
+export interface EntityRelated {
+  producedBy: ContentPage<RecipeDocument>;
+  usedIn: ContentPage<RecipeDocument>;
+  /** Receitas em que a entidade é bancada. */
+  craftedHere: ContentPage<RecipeDocument>;
+  droppedBy: ContentPage<EntityDocument>;
+  spawnPoints: ContentPage<SpawnPointDocument>;
+  soldIn: ContentPage<ShopCategoryDocument>;
+  requiredBy: ContentPage<EntityDocument>;
+  /** Lojas em que a entidade é o NPC. */
+  shops: ContentPage<ShopDocument>;
+  rewardOf: ContentPage<RedemptionCodeDocument>;
+  collectionGroups: ContentPage<CollectionGroupDocument>;
+  variants: ContentPage<EntityDocument>;
 }
 
 export interface GameInfo {

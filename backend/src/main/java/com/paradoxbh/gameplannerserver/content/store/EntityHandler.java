@@ -103,12 +103,13 @@ public class EntityHandler extends AbstractContentHandler<EntityDocument, Entity
         children.delete(DROPS, gameId, extId);
     }
 
-    /** drops e requires aceitam "tipo:id" ou "id". */
+    /** drops e requires aceitam "tipo:id" ou "id"; variantOf é o código da entidade base. */
     @Override
     protected Map<String, Filter> specificFilters() {
         return Map.of(
                 "drops", childReference("drop_entry", "source_ext_id", "x.source_kind = 'entity'"),
-                "requires", childReference("entity_requirement", "entity_ext_id", null));
+                "requires", childReference("entity_requirement", "entity_ext_id", null),
+                "variantOf", codeColumn("t.variant_of_ext_id"));
     }
 
     @Override

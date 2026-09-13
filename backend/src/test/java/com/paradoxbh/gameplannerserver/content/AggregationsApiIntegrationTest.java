@@ -53,6 +53,7 @@ class AggregationsApiIntegrationTest extends ContentApiTest {
                 """);
         create("codes", "{ 'extId': 'MADEIRA10', 'rewards': [ { 'target': { 'kind': 'item', 'extId': 'madeira' }, 'amount': 10 } ] }");
         create("collection-groups", "{ 'extId': 'recursos', 'name': 'Recursos', 'members': [ { 'kind': 'item', 'extId': 'madeira' } ] }");
+        create("items", "{ 'extId': 'madeira_nobre', 'name': 'Madeira nobre', 'variantOf': 'madeira', 'level': 2 }");
 
         mvc.perform(get(DETAILS, game, "items", "madeira"))
                 .andExpect(status().isOk())
@@ -66,6 +67,7 @@ class AggregationsApiIntegrationTest extends ContentApiTest {
                 .andExpect(jsonPath("$.related.rewardOf.total").value(1))
                 .andExpect(jsonPath("$.related.collectionGroups.total").value(1))
                 .andExpect(jsonPath("$.related.requiredBy.total").value(0))
+                .andExpect(jsonPath("$.related.variants.content[0].extId").value("madeira_nobre"))
                 // Referências dos documentos ligados, já resolvidas: madeira cadastrada, tronco não.
                 .andExpect(jsonPath("$.references[?(@.extId == 'madeira')].name", hasItem("Madeira")))
                 .andExpect(jsonPath("$.references[?(@.extId == 'tronco')].resolvedKind", hasItem(nullValue())));
