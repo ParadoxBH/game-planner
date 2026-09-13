@@ -22,6 +22,9 @@ Escrito a partir da análise do front atual (`src/`) e da base em `public/data/`
 | Layout do repo | Front na raiz, `backend/` ao lado. Continua da branch `origin/backend` |
 | Tipos de coluna | **Todo campo de texto é `text`**, nunca `varchar` ou variação. Conferido por teste (`SchemaConventionsTest`). As únicas exceções são tabelas que não são nossas: controle do Flyway e catálogo do PostGIS |
 | Mídia ↔ conteúdo | Tabela de relacionamento `content_media`, **sem chave estrangeira**: a ligação pertence ao código do registro, e imagens podem ser anexadas antes de o registro existir. Vale também para o próprio jogo (ver 4.7) |
+| Loja | **Três informações:** a loja, as categorias da loja e os itens de cada categoria. A categoria aponta para a loja pelo código |
+| Receita | Nome **opcional** (exibição e busca usam o do primeiro produto). Desbloqueio como lista tipada `{ type, target, value }` |
+| Requisito de entidade | Lista `requirements` na entidade, com `notConsumed`: energia é gasta, machado não |
 
 ---
 
@@ -359,35 +362,40 @@ casting de `spatial.ts`. O WKT que já existe nos JSONs entra direto via `ST_Geo
 
 ```sql
 CREATE TABLE recipe (
-  game_id text, ext_id text, ... base ...,
+  game_id text, ext_id text, ... base ...,   -- name opcional: sem ele, vale o do primeiro produto
   craft_time_seconds int,
   PRIMARY KEY (game_id, ext_id)
 );
 -- ordinal = o slot da bancada quando o jogo é baseado em slot (Outward, Minecraft)
-CREATE TABLE recipe_input   (game_id, recipe_ext_id, ordinal int, target_kind, target_ext_id, amount numeric, consumed boolean DEFAULT true, PRIMARY KEY (game_id, recipe_ext_id, ordinal));
-CREATE TABLE recipe_output  (game_id, recipe_ext_id, ordinal int, target_kind, target_ext_id, amount numeric, chance numeric, PRIMARY KEY (game_id, recipe_ext_id, ordinal));
-CREATE TABLE recipe_station (game_id, recipe_ext_id, ordinal int, target_kind, target_ext_id,                                                PRIMARY KEY (game_id, recipe_ext_id, ordinal));
+CREATE TABLE recipe_input   (game_id, recipe_ext_id, ordinal int, target_kind, target_ext_id, amount numeric, not_consumed boolean DEFAULT false, PRIMARY KEY (game_id, recipe_ext_id, ordinal));
+CREATE TABLE recipe_output  (game_id, recipe_ext_id, ordinal int, target_kind, target_ext_id, amount numeric, chance numeric, level int,        PRIMARY KEY (game_id, recipe_ext_id, ordinal));
+CREATE TABLE recipe_station (game_id, recipe_ext_id, ordinal int, station_ext_id,                                                              PRIMARY KEY (game_id, recipe_ext_id, ordinal));
+-- desbloqueio: evento, quest, nível de bancada... target = o conteúdo envolvido; value = o que não é conteúdo
+CREATE TABLE recipe_unlock  (game_id, recipe_ext_id, ordinal int, unlock_type, target_kind, target_ext_id, value text,                         PRIMARY KEY (game_id, recipe_ext_id, ordinal));
 
+-- Loja: três informações. A loja, as categorias da loja e os itens de cada categoria.
 CREATE TABLE shop (
   game_id text, ext_id text, ... base ...,
-  npc_kind text, npc_ext_id text,
-  banner text,
+  npc_ext_id text, reset_type text,
   PRIMARY KEY (game_id, ext_id)
 );
-CREATE TABLE shop_offer (         -- groups[].items[] achatado
-  game_id text, shop_ext_id text, ordinal int,
+CREATE TABLE shop_category (      -- aponta para a loja pelo código; pode existir antes dela
+  game_id text, ext_id text, ... base ...,
+  shop_ext_id text, reset_type text,
+  PRIMARY KEY (game_id, ext_id)
+);
+CREATE TABLE shop_category_item (
+  game_id text, category_ext_id text, ordinal int,
   target_kind text, target_ext_id text NOT NULL,
-  group_label text, reset_type text,          -- daily|weekly|unique
-  amount numeric, price numeric,
-  currency_kind text, currency_ext_id text,
-  stock int, rarity_code text,
-  PRIMARY KEY (game_id, shop_ext_id, ordinal)
+  quantity numeric,               -- tamanho do pacote; nulo = avulso
+  purchase_limit int,             -- quantas compras até o reset
+  price numeric, currency_kind text, currency_ext_id text,
+  reset_type text, rarity_code text,
+  PRIMARY KEY (game_id, category_ext_id, ordinal)
 );
-CREATE TABLE shop_offer_cost (    -- troca por itens em vez de moeda
-  game_id, shop_ext_id, offer_ordinal int, ordinal int,
-  target_kind, target_ext_id text NOT NULL, amount numeric,
-  PRIMARY KEY (game_id, shop_ext_id, offer_ordinal, ordinal)
-);
+
+-- o que a entidade exige para ser coletada ou derrotada: energia (gasta), machado (não gasta)
+CREATE TABLE entity_requirement (game_id, entity_ext_id, ordinal int, target_kind, target_ext_id, amount numeric, not_consumed boolean DEFAULT false, PRIMARY KEY (game_id, entity_ext_id, ordinal));
 
 CREATE TABLE drop_entry (         -- unifica entity.drops e referencePoint.customDrops
   game_id text,
@@ -395,7 +403,7 @@ CREATE TABLE drop_entry (         -- unifica entity.drops e referencePoint.custo
   source_ext_id text NOT NULL,
   ordinal int,
   target_kind text, target_ext_id text NOT NULL,
-  chance numeric, qty_min int, qty_max int,
+  chance numeric, amount numeric NOT NULL, max_amount numeric,
   PRIMARY KEY (game_id, source_kind, source_ext_id, ordinal)
 );
 ```
@@ -448,7 +456,11 @@ Com jsonb isso não indexa.
 | `referencePoints.type` com 5 significados | `location` (área) + `spawn_point` (ocorrência) | um `type` que decide quais colunas valem é discriminador disfarçado |
 | `Recipe.itemId` + `amount` **e** `products[]` | sempre `recipe_output` | dois caminhos para a mesma coisa; o front normaliza em runtime a cada leitura |
 | `Ingredients`/`Products`/`ProducedIn` ("Raw data support") | removidos | resíduo de raspagem do Satisfactory |
-| `shop.groups[].items[]` aninhado | `shop_offer` plano com `group_label` + `ordinal` | CRUD de uma oferta não deveria reescrever o grupo inteiro |
+| `shops` + `shopCategories[].items[]` | `shop`, `shop_category` (aponta para a loja pelo código) e `shop_category_item` posicional | são três informações; editar uma categoria não reescreve a loja inteira |
+| `ShopItem.amount` (limite) e `quant` (pacote) | `purchaseLimit` e `quantity` | `amount` era limite de compra na loja e quantidade na receita |
+| `ingredients[].notConsume` | `notConsumed`, padrão `false` | o mesmo sentido do dado original, no padrão de nomes da API |
+| `unlock: { type, id?, subject?, value }` | `recipe_unlock` com `type`, `target` (referência) e `value` | evento, quest de NPC e nível de bancada cabem na mesma forma, e o alvo entra nas pendências |
+| `Entity.requirements` | `entity_requirement`, mesma forma do ingrediente | energia e ferramenta para coletar são requisito, não drop |
 | `event: string \| string[]` | `content_event` | hoje normalizado em runtime em três lugares (`event \|\| events`) |
 | `conditions: Record<string, any>` | `content_condition` tipada | condição precisa ser filtro, não texto |
 | `entity.drops` + `referencePoint.customDrops` + `spawns[].customDrops` | `drop_entry` com `source_kind` | três tabelas com o mesmo significado; o `getItemDetails` hoje concatena as três na mão |
@@ -659,7 +671,11 @@ GET /api/v1/games/{game}
 GET /api/v1/games/{game}/items?search=&category=&rarity=&event=&attr.peso=&page=&size=&sort=
 GET /api/v1/games/{game}/items/{extId}
 GET /api/v1/games/{game}/items/{extId}/details        <- agregado
-GET /api/v1/games/{game}/entities | /locations | /recipes | /shops | /categories | /events | /collections | /codes
+GET /api/v1/games/{game}/entities | /locations | /recipes | /shops | /shop-categories | /categories | /events | /collections | /codes
+GET /api/v1/games/{game}/recipes?produces=item:x&consumes=&station=
+GET /api/v1/games/{game}/entities?drops=item:x&requires=
+GET /api/v1/games/{game}/shop-categories?sells=item:x&shop=
+GET /api/v1/games/{game}/references?target=item:x&field=    <- quem aponta para um alvo, de qualquer tipo
 GET /api/v1/games/{game}/maps/{mapId}/spawn-points?bbox=&target=&category=&event=
 GET /api/v1/games/{game}/locations/{extId}/spawn-points     <- ST_Within
 GET /api/v1/games/{game}/crafting-tree?target=&amount=&choices=
@@ -677,8 +693,8 @@ GET /api/v1/games/{game}/pending-references?kind=&page=&size=
   "content": [
     { "extId": "minerio_ferro", "guessedKind": "item", "referenceCount": 14,
       "referencedBy": [
-        { "kind": "recipe", "extId": "recipe_barra_ferro", "field": "input" },
-        { "kind": "shop",   "extId": "loja_blanc",         "field": "offer" }
+        { "kind": "recipe", "extId": "recipe_barra_ferro", "field": "inputs" },
+        { "kind": "shop_category", "extId": "blanc_ferramentas", "field": "items" }
       ] }
   ],
   "total": 137
@@ -809,12 +825,37 @@ Também entra `GET /media/orphans`, que só faz sentido quando houver conteúdo 
 Ao fim desta fase o parser externo já sobe o grosso da base.
 
 ### Fase 3 — Crafting e economia
-`recipe` + inputs/outputs/stations, `shop` + offers/costs, `drop_entry`.
-Consultas "o que produz X", "o que consome X", "onde se compra X", "quem dropa X".
+**Status: concluída.** 7 testes de contrato HTTP, 38 no total.
+Decisões tomadas na implementação, que ajustam o plano acima:
+
+- **Loja em três informações:** `shop`, `shop_category` e `shop_category_item`. A categoria tem
+  código próprio e aponta para a loja pelo código, como nos dados (`shopCategories` com `shopId`),
+  e pode ser cadastrada antes dela. Editar uma categoria não reescreve a loja.
+- **Evento só na categoria de loja.** Nos itens de heartopia, a condição de evento repete sempre o
+  evento da categoria (11 de 11).
+- **Troca por itens (`exchange`) ficou fora.** Nenhum uso na base. O preço é `price` + `currency`,
+  e toda moeda da base já é item cadastrado, inclusive `rmt_br`. Com isso `shop_offer_cost` não
+  foi criada.
+- **Na loja, `amount` virou `purchaseLimit`, e `quant`, `quantity`.** `amount` era limite de compra
+  na loja e quantidade na receita.
+- **Requisitos de entidade** (`requirements`, com `notConsumed`) entraram, com a mesma forma do
+  ingrediente de receita.
+- **Desbloqueio de receita tipado:** `{ type, target, value }`, com `type` em código aberto.
+- **Receita com nome opcional.** Sem nome, `content_ref` usa o do primeiro produto cadastrado, e a
+  busca e a ordenação por nome usam o mesmo.
+- **Drops e requisitos vão no documento da entidade.** A escrita continua do agregado inteiro:
+  `PUT` sem `drops` deixa a entidade sem drops. Só `media` tem a exceção de ficar como está.
+- **Consultas inversas como filtro de listagem**, com alvo `tipo:id` ou só `id`:
+  `recipes?produces=&consumes=&station=`, `entities?drops=&requires=`,
+  `shop-categories?sells=&shop=` e `shops?npc=`. E `GET /references?target=&field=` lista toda
+  origem que aponta para um alvo, de qualquer tipo.
+- **Linhas-filhas num helper só** (`ChildRows`): chave `(pai, ordinal)`, a lista inteira regravada
+  junto com o pai. As fases seguintes reusam o mesmo mecanismo.
 
 ### Fase 4 — Mundo (PostGIS)
 `game_map`, `location`, `spawn_point`, `spawn_occupant`. Consulta por bbox e
-`ST_Within` substituindo `spatial.ts`. Índices GiST.
+`ST_Within` substituindo `spatial.ts`. Índices GiST. Drops de ponto de spawn entram em
+`drop_entry`, com `source_kind = spawn_point`.
 
 ### Fase 5 — Extras
 `collection`, `collection_group`, `redemption_code`.

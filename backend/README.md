@@ -155,7 +155,7 @@ no volume `media-data`.
 ## Conteúdo (Fase 2)
 
 Itens, entidades, categorias e eventos usam as mesmas rotas e as mesmas regras.
-`{recurso}` é `items`, `entities`, `categories` ou `events`.
+`{recurso}` é `items`, `entities`, `categories`, `events`, `recipes`, `shops` ou `shop-categories`.
 
 | Método | Rota | Quem |
 |---|---|---|
@@ -169,6 +169,7 @@ Itens, entidades, categorias e eventos usam as mesmas rotas e as mesmas regras.
 | POST | `/api/v1/games/{jogo}/{recurso}/{extId}/revisions/{n}/restore` | `moderator`+ |
 | GET | `/api/v1/games/{jogo}/pending-references?kind=` | quem lê o jogo |
 | GET | `/api/v1/games/{jogo}/search?q=&kind=` | quem lê o jogo |
+| GET | `/api/v1/games/{jogo}/references?target=&field=` | quem lê o jogo |
 | GET | `/api/v1/games/{jogo}/changes?since=&by=` | quem lê o jogo |
 | GET, PUT, DELETE | `/api/v1/games/{jogo}/attributes/{chave}` | ler, editar, `moderator` |
 | GET, PUT, DELETE | `/api/v1/games/{jogo}/rarities/{código}` | ler, editar, `moderator` |
@@ -203,7 +204,7 @@ até 128 caracteres, sem `/ \ ? # % ;` e sem espaço nas pontas. Codifique na UR
 
 `mediaId` é o id devolvido por `POST /api/v1/media`, nunca um caminho de arquivo, e a mídia
 precisa existir (senão `422`). Usos aceitos: item e entidade `icon`, `screenshot`; categoria e
-evento `icon`, `banner`; o próprio jogo, via `PATCH /api/v1/games/{jogo}`, `icon`, `capsule`,
+evento `icon`, `banner`; receita `icon`; loja e categoria de loja `icon`, `banner`; o próprio jogo, via `PATCH /api/v1/games/{jogo}`, `icon`, `capsule`,
 `thumbnail`, `banner`. A ordem dentro de cada uso é a da lista. A resposta traz `addedBy` e
 `addedAt` de cada imagem, que se mantêm enquanto ela continuar no mesmo uso. Entre vários
 ícones, o exibido é o mais recente. Mídia em uso não pode ser apagada (`409`).
@@ -219,8 +220,51 @@ apaga as ligações.
 definição em `/attributes`, o tipo é conferido e divergência dá `422`.
 
 **Paginação** começa em `page=0`. `sort` aceita `name`, `extId`, `createdAt` e `updatedAt`
-(mais `level` em item e entidade, e `periodStart` em evento), com `-` na frente para ordem
+(mais `level` em item e entidade, `periodStart` em evento e `craftTimeSeconds` em receita), com `-` na frente para ordem
 decrescente. Várias `category` combinam com E.
+
+## Crafting e economia (Fase 3)
+
+Receitas, lojas e categorias de loja usam as rotas de conteúdo acima (`recipes`, `shops`,
+`shop-categories`), com revisões, lote, pendências e imagens. Drops e requisitos ficam dentro do
+documento da entidade.
+
+**Listas posicionais.** Ingredientes, produtos, drops, requisitos e itens de loja são listas: a
+ordem é a do documento e o mesmo alvo pode se repetir — quatro slots com o mesmo ingrediente, dois
+drops do mesmo item com chances diferentes, o mesmo item em pacotes de tamanhos diferentes. Todo
+alvo é `{ "kind": "item", "extId": "madeira" }`, e `kind` pode faltar quando a origem não sabe o
+tipo.
+
+```json
+{ "extId": "tabua", "craftTimeSeconds": 30, "stations": ["bancada"],
+  "inputs":  [ { "target": { "kind": "item", "extId": "madeira" }, "amount": 2 },
+               { "target": { "kind": "item", "extId": "serrote" }, "amount": 1, "notConsumed": true } ],
+  "outputs": [ { "target": { "kind": "item", "extId": "tabua" }, "amount": 4 } ],
+  "unlock":  [ { "type": "event", "target": { "kind": "event", "extId": "gala_neve" } },
+               { "type": "station_level", "value": "2" } ] }
+```
+
+- **Receita:** `name` é opcional; sem ele, a busca e a exibição usam o nome do primeiro produto
+  cadastrado. `notConsumed: true` marca o que é exigido mas não gasto (padrão `false`). `chance` vai de 0 a 1. `stations` são códigos de
+  entidade.
+- **Entidade:** `requirements` (mesma forma do ingrediente) e `drops`
+  (`{ target, chance, amount, maxAmount }`). O documento é inteiro: `PUT` sem `drops` apaga os drops.
+- **Loja** em três partes: `shops` (`npc`, `resetType`), `shop-categories` (`shop` = código da loja,
+  `resetType`, `events`, `items`) e os itens da categoria (`target`, `quantity` = tamanho do
+  pacote, `purchaseLimit`, `price`, `currency`, `resetType`, `rarityCode`). A categoria pode ser
+  cadastrada antes da loja, que aparece em `pending-references` enquanto não existir.
+- `resetType` e `unlock.type` são códigos livres em minúsculas, ex.: `daily`, `weekly`, `unique`,
+  `event`, `quest`, `station_level`.
+
+**O que produz, consome, vende ou dropa.** Alvo como `tipo:id`, ou só `id` para qualquer tipo:
+
+| Rota | Filtros |
+|---|---|
+| `GET /api/v1/games/{jogo}/recipes` | `produces`, `consumes`, `station` |
+| `GET /api/v1/games/{jogo}/entities` | `drops`, `requires` |
+| `GET /api/v1/games/{jogo}/shop-categories` | `sells`, `shop` |
+| `GET /api/v1/games/{jogo}/shops` | `npc` |
+| `GET /api/v1/games/{jogo}/references?target=&field=` | toda origem que aponta para o alvo, de qualquer tipo |
 
 ## Produção
 

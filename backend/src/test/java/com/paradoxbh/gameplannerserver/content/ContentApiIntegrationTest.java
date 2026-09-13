@@ -2,8 +2,6 @@ package com.paradoxbh.gameplannerserver.content;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -12,56 +10,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.UUID;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
-import com.paradoxbh.gameplannerserver.support.PostgisIntegrationTest;
+import com.paradoxbh.gameplannerserver.support.ContentApiTest;
 
 /**
  * Contrato HTTP do núcleo de conteúdo de ponta a ponta: controller genérico, JSON,
  * autorização por jogo e banco real. Cada teste cria o próprio jogo.
  */
-class ContentApiIntegrationTest extends PostgisIntegrationTest {
+class ContentApiIntegrationTest extends ContentApiTest {
 
     private static final String ITEMS = "/api/v1/games/{game}/items";
     private static final String ITEM = "/api/v1/games/{game}/items/{id}";
-
-    @Autowired
-    WebApplicationContext context;
-
-    @Autowired
-    JdbcClient jdbc;
-
-    private MockMvc mvc;
-    private String game;
-
-    @BeforeEach
-    void setUp() {
-        mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
-        game = "t" + UUID.randomUUID().toString().substring(0, 8);
-        jdbc.sql("INSERT INTO game (id, name, write_policy) VALUES (:id, 'Jogo de teste', 'members')")
-                .param("id", game).update();
-
-        user("editor", true, false);
-        user("moderador", true, false);
-        user("sem-vinculo", false, false);
-        user("estranho", true, false);
-        user("admin", true, true);
-        member("editor", "editor");
-        member("moderador", "moderator");
-        member("sem-vinculo", "editor");
-    }
 
     @Test
     void createsAndReadsItemWithTagsAttributesAndSpacedId() throws Exception {
@@ -393,48 +353,5 @@ class ContentApiIntegrationTest extends PostgisIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[*].id", hasItem(orphan)))
                 .andExpect(jsonPath("$[*].id", not(hasItem(used))));
-    }
-
-    private ResultActions send(MockHttpServletRequestBuilder request, String username, String body) throws Exception {
-        request.contentType(MediaType.APPLICATION_JSON).content(body);
-        if (username != null) {
-            request.with(as(username));
-        }
-        return mvc.perform(request);
-    }
-
-    private static RequestPostProcessor as(String username) {
-        return jwt().jwt(token -> token.subject(username).claim("typ", "access"));
-    }
-
-    /** JSON com aspas simples, para os testes ficarem legíveis. */
-    private static String json(String singleQuoted) {
-        return singleQuoted.replace('\'', '"');
-    }
-
-    /** Linha de mídia direto no banco: o upload real (FFmpeg) é coberto em MediaUploadIntegrationTest. */
-    private String newMedia() {
-        String id = UUID.randomUUID().toString().replace("-", "") + UUID.randomUUID().toString().replace("-", "");
-        jdbc.sql("""
-                INSERT INTO media (id, width, height, source_format, source_bytes, uploaded_by)
-                VALUES (:id, 1, 1, 'png_pipe', 1, 'admin')
-                """).param("id", id).update();
-        return id;
-    }
-
-    private void user(String username, boolean verified, boolean platformAdmin) {
-        jdbc.sql("""
-                INSERT INTO app_user (username, password_hash, verified, platform_admin)
-                VALUES (:username, 'teste', :verified, :admin)
-                ON CONFLICT (username) DO NOTHING
-                """)
-                .param("username", username).param("verified", verified).param("admin", platformAdmin)
-                .update();
-    }
-
-    private void member(String username, String role) {
-        jdbc.sql("INSERT INTO game_member (game_id, username, role) VALUES (:game, :username, :role)")
-                .param("game", game).param("username", username).param("role", role)
-                .update();
     }
 }

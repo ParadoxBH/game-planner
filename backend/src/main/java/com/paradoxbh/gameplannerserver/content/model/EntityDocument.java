@@ -8,7 +8,11 @@ import com.paradoxbh.gameplannerserver.common.ApiException;
 import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.ExtIds;
 
-/** Entidade: criatura, NPC, estrutura, recurso coletável, bancada. */
+/**
+ * Entidade: criatura, NPC, estrutura, recurso coletável, bancada.
+ * {@code requirements} é o que ela exige para ser coletada ou derrotada; {@code drops}, a tabela
+ * do que ela larga. As duas listas são posicionais e aceitam o mesmo alvo mais de uma vez.
+ */
 public record EntityDocument(
         String extId,
         String name,
@@ -24,6 +28,8 @@ public record EntityDocument(
         List<String> categories,
         List<String> events,
         Map<String, Object> attributes,
+        List<Requirement> requirements,
+        List<Drop> drops,
         ContentMeta meta) implements ContentDocument<EntityDocument> {
 
     @Override
@@ -48,18 +54,20 @@ public record EntityDocument(
                 Canon.ids(categories, "categories"),
                 Canon.ids(events, "events"),
                 Canon.attributes(attributes),
+                Canon.rows(requirements, "requirements", Requirement::canonical),
+                Canon.rows(drops, "drops", Drop::canonical),
                 null);
     }
 
     @Override
     public EntityDocument withMeta(ContentMeta meta) {
         return new EntityDocument(extId, name, summary, description, media, rarityCode, level, respawnDelayMinutes,
-                baseBuyPrice, baseSellPrice, variantOf, categories, events, attributes, meta);
+                baseBuyPrice, baseSellPrice, variantOf, categories, events, attributes, requirements, drops, meta);
     }
 
     @Override
     public EntityDocument withMedia(List<MediaLink> media) {
         return new EntityDocument(extId, name, summary, description, media, rarityCode, level, respawnDelayMinutes,
-                baseBuyPrice, baseSellPrice, variantOf, categories, events, attributes, meta);
+                baseBuyPrice, baseSellPrice, variantOf, categories, events, attributes, requirements, drops, meta);
     }
 }

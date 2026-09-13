@@ -7,7 +7,10 @@ public enum ContentKind {
     ITEM("item", "item", "Item"),
     ENTITY("entity", "entity", "Entidade"),
     CATEGORY("category", "category", "Categoria"),
-    EVENT("event", "game_event", "Evento");
+    EVENT("event", "game_event", "Evento"),
+    RECIPE("recipe", "recipe", "Receita"),
+    SHOP("shop", "shop", "Loja"),
+    SHOP_CATEGORY("shop_category", "shop_category", "Categoria de loja");
 
     private final String code;
     private final String table;

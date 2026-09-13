@@ -243,3 +243,90 @@ Content-Type: application/json
 ### 4) Remove a ligação da imagem
 DELETE {{api}}/games/heartopia/items/girassol/media/icon/{{mediaId}}
 Authorization: Bearer {{accessToken}}
+
+### ================== Crafting e economia (Fase 3) ==================
+
+### Receita sem nome: exibida pelo nome do produto. Ingrediente pode ser categoria.
+PUT {{api}}/games/heartopia/recipes/recipe_salada_rural
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "stations": ["cooking_station"],
+  "craftTimeSeconds": 60,
+  "inputs": [
+    { "target": { "kind": "category", "extId": "vegetable" }, "amount": 2 }
+  ],
+  "outputs": [
+    { "target": { "kind": "item", "extId": "salada_rural" }, "amount": 1 }
+  ],
+  "unlock": [
+    { "type": "event", "target": { "kind": "event", "extId": "gala_neve" } },
+    { "type": "station_level", "value": 1 }
+  ]
+}
+
+### Receitas que produzem um item
+GET {{api}}/games/heartopia/recipes?produces=item:salada_rural
+Authorization: Bearer {{accessToken}}
+
+### Receitas feitas numa bancada
+GET {{api}}/games/heartopia/recipes?station=cooking_station
+Authorization: Bearer {{accessToken}}
+
+### Entidade com requisitos (machado não é gasto) e drops
+PUT {{api}}/games/heartopia/entities/arvore
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Árvore",
+  "categories": ["resource"],
+  "requirements": [
+    { "target": { "kind": "item", "extId": "energia" }, "amount": 3 },
+    { "target": { "kind": "item", "extId": "machado" }, "amount": 1, "notConsumed": true }
+  ],
+  "drops": [
+    { "target": { "kind": "item", "extId": "madeira" }, "chance": 1, "amount": 1 },
+    { "target": { "kind": "item", "extId": "madeira_qualidade" }, "chance": 1, "amount": 2 }
+  ]
+}
+
+### Quem dropa madeira
+GET {{api}}/games/heartopia/entities?drops=item:madeira
+Authorization: Bearer {{accessToken}}
+
+### Loja
+PUT {{api}}/games/heartopia/shops/blanc_shop
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{ "name": "Loja de Jardinagem", "npc": "blanc", "resetType": "daily" }
+
+### Categoria da loja com itens: o mesmo item com limites e preços diferentes
+PUT {{api}}/games/heartopia/shop-categories/blanc_ferramentas_especiais
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Ferramenta Especial",
+  "shop": "blanc_shop",
+  "resetType": "weekly",
+  "items": [
+    { "target": { "kind": "item", "extId": "po_cultivo_arco_iris" }, "purchaseLimit": 100, "price": 2,
+      "currency": { "kind": "item", "extId": "estrela_desejavel" } },
+    { "target": { "kind": "item", "extId": "po_cultivo_arco_iris" }, "purchaseLimit": 10 }
+  ]
+}
+
+### Categorias de uma loja
+GET {{api}}/games/heartopia/shop-categories?shop=blanc_shop
+Authorization: Bearer {{accessToken}}
+
+### Onde se compra um item
+GET {{api}}/games/heartopia/shop-categories?sells=item:po_cultivo_arco_iris
+Authorization: Bearer {{accessToken}}
+
+### Tudo que aponta para madeira: receitas, drops, lojas...
+GET {{api}}/games/heartopia/references?target=item:madeira
+Authorization: Bearer {{accessToken}}

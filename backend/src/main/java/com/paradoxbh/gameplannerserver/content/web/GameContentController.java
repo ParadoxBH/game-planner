@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paradoxbh.gameplannerserver.content.model.ContentPage;
 import com.paradoxbh.gameplannerserver.content.service.ReferenceService;
 import com.paradoxbh.gameplannerserver.content.service.ReferenceService.PendingReference;
+import com.paradoxbh.gameplannerserver.content.service.ReferenceService.ReferenceSource;
 import com.paradoxbh.gameplannerserver.content.service.ReferenceService.SearchHit;
 import com.paradoxbh.gameplannerserver.content.store.RevisionRepository;
 import com.paradoxbh.gameplannerserver.content.store.RevisionRepository.Change;
@@ -51,6 +52,19 @@ public class GameContentController {
                                                            @RequestParam(defaultValue = "0") int page,
                                                            @RequestParam(defaultValue = "50") int size) {
         return references.pending(gameId, kind, page, size);
+    }
+
+    /**
+     * Quem aponta para um alvo, cadastrado ou não. {@code target} é "tipo:id" ou "id";
+     * {@code field} filtra pelo campo de origem. Ex.: target=item:madeira&field=drops.
+     */
+    @GetMapping("/references")
+    public ContentPage<ReferenceSource> referencedBy(@PathVariable String gameId,
+                                                     @RequestParam String target,
+                                                     @RequestParam(required = false) String field,
+                                                     @RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "50") int size) {
+        return references.referencedBy(gameId, target, field, page, size);
     }
 
     @GetMapping("/search")

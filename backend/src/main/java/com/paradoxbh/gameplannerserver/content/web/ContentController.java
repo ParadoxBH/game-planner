@@ -1,6 +1,7 @@
 package com.paradoxbh.gameplannerserver.content.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,7 @@ public abstract class ContentController<D extends ContentDocument<D>> {
         this.handler = handler;
     }
 
+    /** Além dos filtros comuns, cada tipo aceita os seus: produces em receitas, sells em categorias de loja... */
     @GetMapping
     public ContentPage<D> list(@PathVariable String gameId,
                                @RequestParam(required = false) String search,
@@ -47,8 +49,10 @@ public abstract class ContentController<D extends ContentDocument<D>> {
                                @RequestParam(required = false) String rarity,
                                @RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "50") int size,
-                               @RequestParam(defaultValue = "name") String sort) {
-        return content.list(handler, gameId, new ContentQuery(search, category, event, rarity, page, size, sort));
+                               @RequestParam(defaultValue = "name") String sort,
+                               @RequestParam Map<String, String> parameters) {
+        return content.list(handler, gameId,
+                new ContentQuery(search, category, event, rarity, page, size, sort, parameters));
     }
 
     @GetMapping("/{extId}")

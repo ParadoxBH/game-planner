@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Map;
 
+import com.paradoxbh.gameplannerserver.content.model.Reference;
+
 /** Leitura tipada de uma linha devolvida como mapa (coluna → valor JDBC). */
 final class Rows {
 
@@ -29,6 +31,17 @@ final class Rows {
             return null;
         }
         return value instanceof BigDecimal decimal ? decimal : new BigDecimal(value.toString());
+    }
+
+    static Boolean bool(Map<String, Object> row, String column) {
+        Object value = row.get(column);
+        return value == null ? null : (Boolean) value;
+    }
+
+    /** Referência gravada em duas colunas; nula quando não há código. */
+    static Reference reference(Map<String, Object> row, String kindColumn, String extIdColumn) {
+        String extId = string(row, extIdColumn);
+        return extId == null ? null : new Reference(string(row, kindColumn), extId);
     }
 
     static Instant instant(Map<String, Object> row, String column) {

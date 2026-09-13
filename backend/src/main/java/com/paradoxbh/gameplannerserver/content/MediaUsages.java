@@ -22,7 +22,10 @@ public final class MediaUsages {
             ContentKind.ITEM.code(), Set.of("icon", "screenshot"),
             ContentKind.ENTITY.code(), Set.of("icon", "screenshot"),
             ContentKind.CATEGORY.code(), Set.of("icon", "banner"),
-            ContentKind.EVENT.code(), Set.of("icon", "banner"));
+            ContentKind.EVENT.code(), Set.of("icon", "banner"),
+            ContentKind.RECIPE.code(), Set.of("icon"),
+            ContentKind.SHOP.code(), Set.of("icon", "banner"),
+            ContentKind.SHOP_CATEGORY.code(), Set.of("icon", "banner"));
 
     private MediaUsages() {
     }

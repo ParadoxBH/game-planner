@@ -13,7 +13,7 @@ import com.paradoxbh.gameplannerserver.content.model.ItemDocument;
 import com.paradoxbh.gameplannerserver.content.model.Reference;
 
 @Component
-public class ItemHandler extends AbstractContentHandler<ItemDocument> {
+public class ItemHandler extends AbstractContentHandler<ItemDocument, Void> {
 
     public ItemHandler(JdbcClient jdbc, ContentTagsRepository tags) {
         super(jdbc, tags);
@@ -45,7 +45,7 @@ public class ItemHandler extends AbstractContentHandler<ItemDocument> {
     }
 
     @Override
-    protected ItemDocument map(Map<String, Object> row, ContentTags tags, ContentMeta meta) {
+    protected ItemDocument map(Map<String, Object> row, ContentTags tags, Void children, ContentMeta meta) {
         String currencyExtId = Rows.string(row, "currency_ext_id");
         return new ItemDocument(
                 Rows.string(row, "ext_id"),

@@ -11,7 +11,7 @@ import com.paradoxbh.gameplannerserver.content.model.CategoryDocument;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 
 @Component
-public class CategoryHandler extends AbstractContentHandler<CategoryDocument> {
+public class CategoryHandler extends AbstractContentHandler<CategoryDocument, Void> {
 
     public CategoryHandler(JdbcClient jdbc, ContentTagsRepository tags) {
         super(jdbc, tags);
@@ -38,7 +38,7 @@ public class CategoryHandler extends AbstractContentHandler<CategoryDocument> {
     }
 
     @Override
-    protected CategoryDocument map(Map<String, Object> row, ContentTags tags, ContentMeta meta) {
+    protected CategoryDocument map(Map<String, Object> row, ContentTags tags, Void children, ContentMeta meta) {
         return new CategoryDocument(
                 Rows.string(row, "ext_id"),
                 Rows.string(row, "name"),

@@ -12,7 +12,7 @@ import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 import com.paradoxbh.gameplannerserver.content.model.EventDocument;
 
 @Component
-public class EventHandler extends AbstractContentHandler<EventDocument> {
+public class EventHandler extends AbstractContentHandler<EventDocument, Void> {
 
     public EventHandler(JdbcClient jdbc, ContentTagsRepository tags) {
         super(jdbc, tags);
@@ -39,7 +39,7 @@ public class EventHandler extends AbstractContentHandler<EventDocument> {
     }
 
     @Override
-    protected EventDocument map(Map<String, Object> row, ContentTags tags, ContentMeta meta) {
+    protected EventDocument map(Map<String, Object> row, ContentTags tags, Void children, ContentMeta meta) {
         return new EventDocument(
                 Rows.string(row, "ext_id"),
                 Rows.string(row, "name"),
