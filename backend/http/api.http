@@ -125,3 +125,121 @@ GET http://localhost:8080/media/{{mediaId}}/thumb.webp
 ### Apagar imagem (quem enviou ou platform_admin)
 DELETE {{api}}/media/{{mediaId}}
 Authorization: Bearer {{accessToken}}
+
+### ======================= Conteúdo (Fase 2) =======================
+
+### Definir atributo do jogo (opcional; com definição o tipo é conferido)
+PUT {{api}}/games/heartopia/attributes/peso
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{ "label": "Peso", "dataType": "number", "unit": "kg", "ordinal": 0 }
+
+### Criar categoria
+POST {{api}}/games/heartopia/categories
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{ "extId": "flores", "name": "Flores", "appliesTo": "item" }
+
+### Lote de itens: cria ou substitui cada um; igual ao gravado não gera revisão
+PUT {{api}}/games/heartopia/items
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+[
+  { "extId": "margarida_vermelha", "name": "Margarida Vermelha", "level": 1, "baseSellPrice": 100,
+    "categories": ["flores", "margarida"], "attributes": { "peso": 0.2 } },
+  { "extId": "margarida_azul", "name": "Margarida Azul", "variantOf": "margarida_vermelha",
+    "categories": ["flores", "margarida"] }
+]
+
+### Um item
+GET {{api}}/games/heartopia/items/margarida_vermelha
+Authorization: Bearer {{accessToken}}
+
+### Itens de uma categoria, mais recentes primeiro
+GET {{api}}/games/heartopia/items?category=flores&sort=-updatedAt&size=20
+Authorization: Bearer {{accessToken}}
+
+### O que falta cadastrar ("margarida" foi citada mas não existe)
+GET {{api}}/games/heartopia/pending-references
+Authorization: Bearer {{accessToken}}
+
+### Id não cadastrado: 404 com quem aponta para ele
+GET {{api}}/games/heartopia/categories/margarida
+Authorization: Bearer {{accessToken}}
+
+### Histórico do item
+GET {{api}}/games/heartopia/items/margarida_vermelha/revisions
+Authorization: Bearer {{accessToken}}
+
+### Restaurar a revisão 1 (moderator)
+POST {{api}}/games/heartopia/items/margarida_vermelha/revisions/1/restore
+Authorization: Bearer {{accessToken}}
+
+### Busca em todos os tipos
+GET {{api}}/games/heartopia/search?q=marg
+Authorization: Bearer {{accessToken}}
+
+### Mudanças recentes do jogo
+GET {{api}}/games/heartopia/changes
+Authorization: Bearer {{accessToken}}
+
+### Mídia que nenhum conteúdo referencia (platform_admin)
+GET {{api}}/media/orphans
+Authorization: Bearer {{accessToken}}
+
+### ================ Mídia ligada a conteúdo (content_media) ================
+### Rode antes "Enviar imagem": ele guarda {{mediaId}}.
+
+### Item com ícone e screenshot (a mesma imagem só para exemplo; em uso real, ids diferentes)
+PUT {{api}}/games/heartopia/items/margarida_vermelha
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Margarida Vermelha",
+  "level": 1,
+  "baseSellPrice": 100,
+  "categories": ["flores", "margarida"],
+  "media": [
+    { "usage": "icon", "mediaId": "{{mediaId}}" },
+    { "usage": "screenshot", "mediaId": "{{mediaId}}" }
+  ]
+}
+
+### Capa do jogo (owner)
+PATCH {{api}}/games/heartopia
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{ "media": [ { "usage": "capsule", "mediaId": "{{mediaId}}" } ] }
+
+### Tentar apagar mídia em uso: 409 dizendo onde está
+DELETE {{api}}/media/{{mediaId}}
+Authorization: Bearer {{accessToken}}
+
+### ========= Anexar imagem antes de o registro existir (cadastro) =========
+
+### 1) Anexa a imagem ao código "girassol", que ainda não foi cadastrado
+POST {{api}}/games/heartopia/items/girassol/media
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{ "usage": "icon", "mediaId": "{{mediaId}}" }
+
+### 2) As imagens do código já aparecem, mesmo sem o item
+GET {{api}}/games/heartopia/items/girassol/media
+Authorization: Bearer {{accessToken}}
+
+### 3) Cria o item sem o campo "media": a imagem anexada continua ligada
+POST {{api}}/games/heartopia/items
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{ "extId": "girassol", "name": "Girassol", "categories": ["flores"] }
+
+### 4) Remove a ligação da imagem
+DELETE {{api}}/games/heartopia/items/girassol/media/icon/{{mediaId}}
+Authorization: Bearer {{accessToken}}

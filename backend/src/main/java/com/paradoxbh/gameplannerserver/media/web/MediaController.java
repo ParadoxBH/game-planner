@@ -2,6 +2,7 @@ package com.paradoxbh.gameplannerserver.media.web;
 
 import java.time.Instant;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,16 @@ public class MediaController {
         MediaService.UploadResult result = media.upload(file, uploader);
         return ResponseEntity.status(result.created() ? HttpStatus.CREATED : HttpStatus.OK)
                 .body(new UploadResponse(result.created(), MediaResponse.of(result.media())));
+    }
+
+    /**
+     * Mídia que nenhum conteúdo referencia. Restrito a platform_admin: a mídia é global,
+     * compartilhada entre jogos, então "moderador de um jogo" não se aplica.
+     */
+    @GetMapping("/orphans")
+    public List<MediaResponse> orphans() {
+        currentUser.requirePlatformAdmin();
+        return media.orphans().stream().map(MediaResponse::of).toList();
     }
 
     @GetMapping("/{id}")

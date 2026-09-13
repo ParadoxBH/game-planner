@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HexFormat;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -24,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.paradoxbh.gameplannerserver.common.ApiException;
 import com.paradoxbh.gameplannerserver.config.GamePlannerProperties;
+import com.paradoxbh.gameplannerserver.content.store.ContentMediaRepository;
+import com.paradoxbh.gameplannerserver.content.store.ContentMediaRepository.MediaUse;
 import com.paradoxbh.gameplannerserver.identity.domain.AppUser;
 import com.paradoxbh.gameplannerserver.media.domain.Media;
 import com.paradoxbh.gameplannerserver.media.domain.MediaFile;
@@ -39,16 +42,21 @@ public class MediaService {
 
     private static final Logger log = LoggerFactory.getLogger(MediaService.class);
 
+    /** Quantas ligações listar no erro de mídia em uso. */
+    private static final int MAX_USES_IN_ERROR = 50;
+
     private final MediaRepository repository;
     private final MediaStorage storage;
     private final FfmpegTranscoder transcoder;
+    private final ContentMediaRepository contentMedia;
     private final GamePlannerProperties.Media config;
 
     public MediaService(MediaRepository repository, MediaStorage storage, FfmpegTranscoder transcoder,
-                        GamePlannerProperties properties) {
+                        ContentMediaRepository contentMedia, GamePlannerProperties properties) {
         this.repository = repository;
         this.storage = storage;
         this.transcoder = transcoder;
+        this.contentMedia = contentMedia;
         this.config = properties.media();
     }
 
@@ -130,6 +138,11 @@ public class MediaService {
         return repository.findById(id).orElseThrow(() -> ApiException.notFound("Mídia"));
     }
 
+    /** Candidatas a limpeza: nenhum conteúdo de nenhum jogo, nem jogo, está ligado a elas. */
+    public List<Media> orphans() {
+        return repository.findOrphans();
+    }
+
     public Optional<StoredFile> openVariant(String id, MediaVariant variant) {
         return repository.findById(id)
                 .map(media -> media.getVariants().get(variant.code()))
@@ -140,11 +153,20 @@ public class MediaService {
     /**
      * Quem enviou, ou um admin da plataforma. Moderador de jogo não entra aqui: a mídia é
      * compartilhada entre jogos (mesmo hash, mesma linha), então não pertence a nenhum.
+     * Imagem ligada a algum conteúdo não é apagada: responde 409 dizendo onde está.
      */
     public void delete(String id, AppUser actor) {
         Media media = find(id);
         if (!actor.isPlatformAdmin() && !actor.getUsername().equals(media.getUploadedBy())) {
             throw ApiException.forbidden("Só quem enviou a imagem ou um administrador da plataforma pode apagá-la");
+        }
+
+        List<MediaUse> uses = contentMedia.usesOf(id);
+        if (!uses.isEmpty()) {
+            throw new ApiException(HttpStatus.CONFLICT, "media-in-use",
+                    "Imagem em uso em " + uses.size() + " lugar(es). Remova-a dos conteúdos antes de apagar.",
+                    Map.of("useCount", uses.size(),
+                            "usedBy", List.copyOf(uses.subList(0, Math.min(uses.size(), MAX_USES_IN_ERROR)))));
         }
 
         repository.deleteById(id);

@@ -3,6 +3,7 @@ package com.paradoxbh.gameplannerserver.identity.web;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paradoxbh.gameplannerserver.common.ApiException;
+import com.paradoxbh.gameplannerserver.content.MediaUsages;
+import com.paradoxbh.gameplannerserver.content.model.MediaLink;
+import com.paradoxbh.gameplannerserver.content.store.ContentMediaRepository;
 import com.paradoxbh.gameplannerserver.identity.domain.AppUser;
 import com.paradoxbh.gameplannerserver.identity.domain.Game;
 import com.paradoxbh.gameplannerserver.identity.domain.GameMember;
@@ -38,27 +42,32 @@ public class GameController {
     private final GameMemberRepository members;
     private final GameAccess access;
     private final CurrentUser currentUser;
+    private final ContentMediaRepository media;
 
     public GameController(GameRepository games, GameMemberRepository members, GameAccess access,
-                          CurrentUser currentUser) {
+                          CurrentUser currentUser, ContentMediaRepository media) {
         this.games = games;
         this.members = members;
         this.access = access;
         this.currentUser = currentUser;
+        this.media = media;
     }
 
     /** Lista apenas o que o solicitante enxerga. Visitante vê só os de leitura pública. */
     @GetMapping
     @Transactional(readOnly = true)
     public List<GameResponse> list() {
-        return games.findVisibleTo(currentUser.usernameOrNull()).stream()
-                .map(GameResponse::of)
+        List<Game> visible = games.findVisibleTo(currentUser.usernameOrNull());
+        Map<String, List<MediaLink>> mediaByGame = media.loadForGames(visible.stream().map(Game::getId).toList());
+        return visible.stream()
+                .map(game -> GameResponse.of(game, mediaByGame.getOrDefault(game.getId(), List.of())))
                 .toList();
     }
 
     @GetMapping("/{gameId}")
+    @Transactional(readOnly = true)
     public GameResponse get(@PathVariable String gameId) {
-        return GameResponse.of(access.requireReadable(gameId));
+        return withMedia(access.requireReadable(gameId));
     }
 
     /** Criar jogo é de platform_admin. Quem cria vira owner. */
@@ -85,10 +94,13 @@ public class GameController {
         owner.setGrantedBy(admin.getUsername());
         members.save(owner);
 
-        return GameResponse.of(game);
+        return GameResponse.of(game, List.of());
     }
 
-    /** Políticas e metadados do jogo: só owner. */
+    /**
+     * Políticas, metadados e imagens do jogo: só owner. Campo ausente não muda;
+     * {@code media} presente substitui a lista inteira de imagens do jogo.
+     */
     @PatchMapping("/{gameId}")
     @Transactional
     public GameResponse patch(@PathVariable String gameId, @Valid @RequestBody PatchGameRequest request) {
@@ -121,9 +133,18 @@ public class GameController {
             }
             game.setWeeklyResetDay(request.weeklyResetDay());
         }
+        if (request.media() != null) {
+            List<MediaLink> links = MediaLink.canonical(request.media(), MediaUsages.GAME_KIND);
+            media.requireExisting(links.stream().map(MediaLink::mediaId).toList());
+            media.replace(gameId, MediaUsages.GAME_KIND, gameId, links, currentUser.require().getUsername());
+        }
         game.setUpdatedAt(Instant.now());
 
-        return GameResponse.of(game);
+        return withMedia(game);
+    }
+
+    private GameResponse withMedia(Game game) {
+        return GameResponse.of(game, media.loadForGames(List.of(game.getId())).getOrDefault(game.getId(), List.of()));
     }
 
     private String requireOneOf(String value, String field, String... allowed) {
@@ -146,19 +167,21 @@ public class GameController {
 
     public record PatchGameRequest(@Size(max = 120) String name, @Size(max = 500) String summary,
                                    String description, String status, String readPolicy,
-                                   String writePolicy, String dailyResetTime, Short weeklyResetDay) {
+                                   String writePolicy, String dailyResetTime, Short weeklyResetDay,
+                                   List<MediaLink> media) {
     }
 
+    /** {@code media}: icon, capsule, thumbnail e banner do jogo, via content_media. */
     public record GameResponse(String id, String name, String summary, String description,
                                String status, String readPolicy, String writePolicy,
-                               String dailyResetTime, Short weeklyResetDay) {
+                               String dailyResetTime, Short weeklyResetDay, List<MediaLink> media) {
 
-        static GameResponse of(Game game) {
+        static GameResponse of(Game game, List<MediaLink> media) {
             return new GameResponse(game.getId(), game.getName(), game.getSummary(),
                     game.getDescription(), game.getStatus(), game.getReadPolicy(),
                     game.getWritePolicy(),
                     game.getDailyResetTime() == null ? null : game.getDailyResetTime().toString(),
-                    game.getWeeklyResetDay());
+                    game.getWeeklyResetDay(), media);
         }
     }
 }

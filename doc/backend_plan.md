@@ -20,6 +20,8 @@ Escrito a partir da análise do front atual (`src/`) e da base em `public/data/`
 | Ambiente local | Docker Compose (Postgres + PostGIS) |
 | Produção | Docker em VPS Ubuntu na Hostinger. Local até lá |
 | Layout do repo | Front na raiz, `backend/` ao lado. Continua da branch `origin/backend` |
+| Tipos de coluna | **Todo campo de texto é `text`**, nunca `varchar` ou variação. Conferido por teste (`SchemaConventionsTest`). As únicas exceções são tabelas que não são nossas: controle do Flyway e catálogo do PostGIS |
+| Mídia ↔ conteúdo | Tabela de relacionamento `content_media`, **sem chave estrangeira**: a ligação pertence ao código do registro, e imagens podem ser anexadas antes de o registro existir. Vale também para o próprio jogo (ver 4.7) |
 
 ---
 
@@ -237,7 +239,7 @@ CREATE TABLE game (
   name             text NOT NULL,
   summary          text,
   description      text,
-  thumbnail text, capsule text, icon text,
+  -- imagens do jogo: content_media com kind = 'game' (4.7)
   status           text NOT NULL DEFAULT 'draft',      -- draft|published|coming_soon
   read_policy      text NOT NULL DEFAULT 'public',     -- public|members
   write_policy     text NOT NULL DEFAULT 'members',    -- community|members
@@ -294,8 +296,8 @@ membro de um jogo que não existe não é um caso legítimo.
 ### 4.3 Conteúdo
 
 Todo conteúdo carrega a mesma base: `game_id`, `ext_id`, `name`, `summary`, `description`,
-`icon`, `image`, `created_by`, `updated_by`, `created_at`, `updated_at`,
-`PRIMARY KEY (game_id, ext_id)`.
+`created_by`, `updated_by`, `created_at`, `updated_at`, `PRIMARY KEY (game_id, ext_id)`.
+Imagens não ficam na tabela do conteúdo: ficam em `content_media` (4.7).
 
 ```sql
 CREATE TABLE item (
@@ -520,9 +522,51 @@ uma linha só — um `game_id` nela seria de quem enviou primeiro. O contexto de
 em quem referencia a imagem. Consequência: apagar é permitido a quem enviou ou a
 `platform_admin`, não a moderador de um jogo.
 
-Conteúdo aponta para mídia por `icon_media_id` / `image_media_id` — referência textual,
-sem FK, igual a todo o resto (2.1). Ícone apontando para mídia inexistente é o mesmo caso
-já previsto.
+**Mídia se liga a conteúdo por uma tabela de relacionamento, `content_media`**, e não por
+colunas em cada tabela. Cada linha diz: qual mídia, em qual conteúdo (ou no próprio jogo), com
+qual uso, em que posição, e quem a ligou e quando.
+
+```sql
+CREATE TABLE content_media (
+  game_id  text NOT NULL,        -- sem FK nesta tabela (ver abaixo)
+  kind     text NOT NULL,        -- game | item | entity | category | event
+  ext_id   text NOT NULL,        -- para kind = game, igual a game_id
+  usage    text NOT NULL,        -- icon | capsule | thumbnail | banner | screenshot
+  media_id text NOT NULL,
+  ordinal  int  NOT NULL,        -- posição entre as mídias do mesmo uso
+  added_by text NOT NULL,
+  added_at timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (game_id, kind, ext_id, usage, media_id)
+);
+```
+
+- **Vários por uso, com ordem.** Um item pode ter várias screenshots; `ordinal` é a ordem de
+  exibição. A mesma imagem não aparece duas vezes no mesmo uso.
+- **Autoria preservada.** A escrita é do documento inteiro, mas uma imagem que continua no mesmo
+  uso mantém `added_by` e `added_at`; só a imagem nova leva o autor e a hora da escrita atual.
+- **A atual é a mais recente.** Entre várias imagens do mesmo uso, a exibida (ex.: o ícone na
+  busca e nas referências) é a de `added_at` mais recente.
+- **Lista fechada de usos, validada por tipo de conteúdo:**
+
+  | Tipo | Usos |
+  |---|---|
+  | jogo | `icon`, `capsule`, `thumbnail`, `banner` |
+  | item, entidade | `icon`, `screenshot` |
+  | categoria, evento | `icon`, `banner` |
+
+- **Sem chave estrangeira (V6).** A ligação pertence ao **código** do registro, não ao registro:
+  durante o cadastro o usuário anexa imagens antes de o conteúdo existir, já que o código não se
+  repete. A tabela não amarra jogo, mídia nem conteúdo. A aplicação ainda recusa `mediaId` que
+  nunca foi enviado (422) e impede apagar mídia em uso (409).
+- **Rotas próprias de imagem**, que funcionam exista o registro ou não:
+  `GET`, `POST` (anexa uma) e `PUT` (substitui ou reordena) em `.../{recurso}/{extId}/media`, e
+  `DELETE .../{extId}/media/{uso}/{mediaId}`.
+- **Documento sem `media` não mexe nas imagens.** Com `media` presente, mesmo vazio, substitui.
+  Criar o registro depois de anexar as imagens não as apaga.
+- **Apagar o conteúdo não apaga as ligações.** Se o registro for restaurado ou recriado com o
+  mesmo código, as imagens continuam lá.
+- Um uso novo de imagem é um valor na lista, não uma coluna nova.
+- **O jogo também.** Os caminhos de arquivo `icon`/`capsule`/`thumbnail` de `game` saíram (V5).
 
 #### Pipeline de upload
 
@@ -652,12 +696,12 @@ E ao acessar um id inexistente, `404` com o contexto no corpo:
   "status": 404,
   "gameId": "heartopia", "kind": "item", "extId": "minerio_ferro",
   "referenceCount": 14,
-  "referencedBy": [ ... ],
-  "suggestedName": "Minério de Ferro"
+  "referencedBy": [ ... ]
 }
 ```
 
-O front usa isso para abrir a tela de cadastro já preenchida com o que as origens sabem.
+O front usa isso para abrir a tela de cadastro já sabendo quem depende daquele id. Não há
+`suggestedName`: no modelo novo a referência é só o id, não carrega nome.
 
 ### Escrita — autenticada, autorizada por jogo
 
@@ -665,10 +709,10 @@ Mesmos caminhos da leitura, métodos diferentes. Não há prefixo `/admin`: a au
 função do jogo, não da rota.
 
 ```
-POST   /api/v1/games/{game}/{resource}              cria
-PUT    /api/v1/games/{game}/{resource}              upsert em lote (array)
-PATCH  /api/v1/games/{game}/{resource}/{extId}      edita
-DELETE /api/v1/games/{game}/{resource}/{extId}
+POST   /api/v1/games/{game}/{resource}              cria (409 se o id já existe)
+PUT    /api/v1/games/{game}/{resource}/{extId}      substitui o documento inteiro, ou cria
+PUT    /api/v1/games/{game}/{resource}              lote (array), numa transação só
+DELETE /api/v1/games/{game}/{resource}/{extId}      [moderator]
 
 GET    /api/v1/games/{game}/members
 PUT    /api/v1/games/{game}/members/{username}      { role }          [owner]
@@ -705,7 +749,7 @@ ordem funciona. Essa é a consequência prática mais útil do princípio 2.1.
 ### Convenções
 
 - Erros em `ProblemDetail` (RFC 9457, nativo no Spring).
-- Paginação `{ content, page, size, total, totalPages }`.
+- Paginação `{ content, page, size, total, totalPages }`, com `page` começando em 0.
 - OpenAPI em `/swagger-ui`.
 
 ---
@@ -738,6 +782,26 @@ entrega. Vem antes do conteúdo porque todo tipo de conteúdo tem ícone, e `ico
 nasce junto com as tabelas da fase seguinte.
 
 ### Fase 2 — Núcleo de conteúdo
+**Status: concluída.** 11 testes de contrato HTTP (MockMvc + banco real) somados aos 15 anteriores.
+Decisões tomadas na implementação, que ajustam o plano acima:
+
+- **`PUT` do documento inteiro no lugar de `PATCH`.** A revisão é do agregado (4.6); um PATCH
+  sobre listas de categorias e atributos teria semântica ambígua.
+- **Escrita idêntica ao gravado não grava nem gera revisão.** Reimportar a base inteira não enche
+  o histórico. A comparação normaliza números (`10` e `10.0` são o mesmo valor).
+- **`ext_id` aceita espaço e parênteses.** A base real tem 566 ids assim (`lox bite`,
+  `Hound (1)_…`). Recusa só `/ \ ? # % ;`, caractere de controle e espaço nas pontas.
+- **Atributo sem definição é aceito**, com o tipo vindo do valor JSON. Com definição, o tipo é
+  conferido (422). O parser não precisa cadastrar definições antes dos itens.
+- **Mídia ligada por `media: [{ usage, mediaId }]`** (tabela `content_media`, ver 4.7): id de mídia
+  com 64 hex, caminho de arquivo dá 400, mídia não enviada dá 422.
+- **Referências centralizadas na view `content_reference`.** Pendências e o 404 enriquecido só
+  leem dela; cada fase nova acrescenta ali suas colunas de referência.
+- **Atributo com `data_type = reference` ficou de fora**: exigiria o kind junto do valor. Entra
+  quando um jogo precisar.
+- **Persistência de conteúdo em JDBC (`JdbcClient`), não JPA**: chave natural, sem FK, upsert e
+  lote ficam explícitos em SQL. JPA segue em identidade e mídia.
+
 `item`, `entity`, `category`, `game_event`, `content_category`, `content_event`,
 `attribute_definition`, `content_attribute`, `content_revision` (com restore).
 View `content_ref`, busca global, **`pending-references` e o 404 enriquecido**.

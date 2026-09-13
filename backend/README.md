@@ -88,6 +88,16 @@ contexto `desktop-linux` (`npipe:////./pipe/dockerDesktopLinuxEngine`), e versõ
 do Testcontainers só procuravam o pipe padrão. Resolvido subindo para 1.21.4, que lê o
 `docker context`. Não mexa na versão para baixo sem testar isso de novo.
 
+## Convenções do banco
+
+- **Todo campo de texto é `text`**, nunca `varchar` ou variação. `SchemaConventionsTest` falha se
+  alguma migration fugir disso. As únicas colunas `varchar` do banco são de tabelas que não são
+  nossas: `flyway_schema_history` (Flyway) e o catálogo do PostGIS.
+- **`content_media` não tem chave estrangeira.** A ligação de imagem pertence ao código do
+  registro e pode existir antes dele. `SchemaConventionsTest` também confere isso.
+- **Nunca edite uma migration já aplicada.** O Flyway confere o checksum; mudança vira uma
+  migration nova.
+
 ## Primeiro administrador
 
 Cadastro é aberto, mas conta nova nasce sem vínculo (`verified = false`) e sem poder
@@ -141,6 +151,76 @@ animado vira WebP animado.
 
 Em desenvolvimento os arquivos ficam em `backend/var/media/`, fora do Git. Em produção,
 no volume `media-data`.
+
+## Conteúdo (Fase 2)
+
+Itens, entidades, categorias e eventos usam as mesmas rotas e as mesmas regras.
+`{recurso}` é `items`, `entities`, `categories` ou `events`.
+
+| Método | Rota | Quem |
+|---|---|---|
+| GET | `/api/v1/games/{jogo}/{recurso}?search=&category=&event=&rarity=&page=&size=&sort=` | quem lê o jogo |
+| GET | `/api/v1/games/{jogo}/{recurso}/{extId}` | quem lê o jogo |
+| POST | `/api/v1/games/{jogo}/{recurso}` | quem edita o jogo |
+| PUT | `/api/v1/games/{jogo}/{recurso}/{extId}` | quem edita o jogo |
+| PUT | `/api/v1/games/{jogo}/{recurso}` (lote) | quem edita o jogo |
+| DELETE | `/api/v1/games/{jogo}/{recurso}/{extId}` | `moderator`+ |
+| GET | `/api/v1/games/{jogo}/{recurso}/{extId}/revisions` e `/revisions/{n}` | quem lê o jogo |
+| POST | `/api/v1/games/{jogo}/{recurso}/{extId}/revisions/{n}/restore` | `moderator`+ |
+| GET | `/api/v1/games/{jogo}/pending-references?kind=` | quem lê o jogo |
+| GET | `/api/v1/games/{jogo}/search?q=&kind=` | quem lê o jogo |
+| GET | `/api/v1/games/{jogo}/changes?since=&by=` | quem lê o jogo |
+| GET, PUT, DELETE | `/api/v1/games/{jogo}/attributes/{chave}` | ler, editar, `moderator` |
+| GET, PUT, DELETE | `/api/v1/games/{jogo}/rarities/{código}` | ler, editar, `moderator` |
+| GET | `/api/v1/games/{jogo}/{recurso}/{extId}/media` | quem lê o jogo |
+| POST, PUT | `/api/v1/games/{jogo}/{recurso}/{extId}/media` | quem edita o jogo |
+| DELETE | `/api/v1/games/{jogo}/{recurso}/{extId}/media/{uso}/{mediaId}` | quem edita o jogo |
+| GET | `/api/v1/media/orphans` | `platform_admin` |
+
+**Escrita é do documento inteiro.** `PUT` substitui tudo, inclusive categorias, eventos e
+atributos: campo omitido vira vazio. Reenviar um documento igual ao gravado devolve o atual
+sem gravar e sem criar revisão, então reimportar a base inteira é seguro. O lote (`PUT` na
+coleção, até 1000 documentos) é uma transação: entra tudo ou nada, e o erro traz o `index`
+do documento que falhou.
+
+**Referência nunca exige existência.** Categoria, evento, `variantOf` e `currency` podem
+apontar para id não cadastrado. `pending-references` lista o que falta, do mais citado para
+o menos, e o 404 de um id ausente traz `referenceCount` e `referencedBy`.
+
+**Ids vão na URL.** Aceitam espaço e parênteses — a base tem `lox bite` e `Hound (1)_…` —,
+até 128 caracteres, sem `/ \ ? # % ;` e sem espaço nas pontas. Codifique na URL:
+`/items/lox%20bite`.
+
+**Imagens** ficam na tabela de relacionamento `content_media` e vão no documento como lista:
+
+```json
+"media": [
+  { "usage": "icon", "mediaId": "…" },
+  { "usage": "screenshot", "mediaId": "…" },
+  { "usage": "screenshot", "mediaId": "…" }
+]
+```
+
+`mediaId` é o id devolvido por `POST /api/v1/media`, nunca um caminho de arquivo, e a mídia
+precisa existir (senão `422`). Usos aceitos: item e entidade `icon`, `screenshot`; categoria e
+evento `icon`, `banner`; o próprio jogo, via `PATCH /api/v1/games/{jogo}`, `icon`, `capsule`,
+`thumbnail`, `banner`. A ordem dentro de cada uso é a da lista. A resposta traz `addedBy` e
+`addedAt` de cada imagem, que se mantêm enquanto ela continuar no mesmo uso. Entre vários
+ícones, o exibido é o mais recente. Mídia em uso não pode ser apagada (`409`).
+
+**A ligação pertence ao código do registro, não ao registro.** Durante o cadastro, dá para anexar
+imagens antes de criar o conteúdo — o código não se repete. As rotas `.../{extId}/media`
+funcionam exista o registro ou não: `POST` anexa uma imagem no fim do uso (repetir não duplica),
+`PUT` substitui ou reordena, `DELETE .../media/{uso}/{mediaId}` remove. Gravar o documento **sem**
+o campo `media` não mexe nas imagens; com `media`, mesmo vazio, substitui. Apagar o conteúdo não
+apaga as ligações.
+
+**Atributos** aceitam número, texto ou booleano, com ou sem definição. Se a chave tem
+definição em `/attributes`, o tipo é conferido e divergência dá `422`.
+
+**Paginação** começa em `page=0`. `sort` aceita `name`, `extId`, `createdAt` e `updatedAt`
+(mais `level` em item e entidade, e `periodStart` em evento), com `-` na frente para ordem
+decrescente. Várias `category` combinam com E.
 
 ## Produção
 

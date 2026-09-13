@@ -24,9 +24,8 @@ public class Game {
 
     private String summary;
     private String description;
-    private String thumbnail;
-    private String capsule;
-    private String icon;
+
+    // Imagens do jogo ficam em content_media (kind = game), não em colunas daqui.
 
     /** draft | published | coming_soon */
     @Column(nullable = false)
