@@ -973,6 +973,10 @@ Decisões tomadas na implementação, que ajustam o plano acima:
   segurança, que senão escreveria `no-store`.
 
 ### Fase 7 — Migração do front (depois, incremental)
+**Status: em andamento.** Migração tela a tela para os tipos da API, com TanStack Query. Já migradas: lista de
+itens (`/items`, com `withoutCategory`, `activeEvents` e `trade` criados para ela) e detalhe de item
+(`/items/{id}/details`). As demais telas seguem lendo os JSON até a vez delas.
+
 1. Trocar `dataLoader` por chamadas à API, mantendo Dexie como cache offline — muda
    ~1 arquivo, o front continua funcionando igual.
 2. Consolidar os 16 componentes que falam com repositories atrás de um único `apiClient`.

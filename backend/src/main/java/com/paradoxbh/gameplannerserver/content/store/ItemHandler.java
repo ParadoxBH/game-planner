@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
+import com.paradoxbh.gameplannerserver.common.ApiException;
 import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 import com.paradoxbh.gameplannerserver.content.model.ItemDocument;
@@ -68,6 +69,27 @@ public class ItemHandler extends AbstractContentHandler<ItemDocument, Void> {
     @Override
     public ContentTags tagsOf(ItemDocument item) {
         return new ContentTags(item.categories(), item.events(), item.attributes(), item.media());
+    }
+
+    /**
+     * trade: buyable (tem preço base de compra ou é vendido em loja), sellable (tem preço base de
+     * venda), traded (um dos dois) ou untraded (nenhum).
+     */
+    @Override
+    protected Map<String, Filter> specificFilters() {
+        return Map.of("trade", (name, value, param, params) -> {
+            String buyable = "(t.base_buy_price IS NOT NULL OR EXISTS (SELECT 1 FROM shop_category_item s"
+                    + " WHERE s.game_id = t.game_id AND s.target_ext_id = t.ext_id"
+                    + " AND (s.target_kind IS NULL OR s.target_kind = 'item')))";
+            String sellable = "t.base_sell_price IS NOT NULL";
+            return switch (value) {
+                case "buyable" -> buyable;
+                case "sellable" -> sellable;
+                case "traded" -> "(" + buyable + " OR " + sellable + ")";
+                case "untraded" -> "NOT (" + buyable + " OR " + sellable + ")";
+                default -> throw ApiException.badRequest(name + " precisa ser buyable, sellable, traded ou untraded");
+            };
+        });
     }
 
     @Override

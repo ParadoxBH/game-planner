@@ -1,5 +1,6 @@
 package com.paradoxbh.gameplannerserver.content;
 
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -353,5 +354,33 @@ class ContentApiIntegrationTest extends ContentApiTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[*].id", hasItem(orphan)))
                 .andExpect(jsonPath("$[*].id", not(hasItem(used))));
+    }
+
+    @Test
+    void listHidesInactiveEventsExcludesCategoriesAndFiltersTrade() throws Exception {
+        send(post(ITEMS, game), "editor",
+                json("{ 'extId': 'comum', 'name': 'Comum', 'categories': ['flor'], 'baseSellPrice': 5 }"))
+                .andExpect(status().isCreated());
+        send(post(ITEMS, game), "editor",
+                json("{ 'extId': 'natal', 'name': 'Natal', 'categories': ['flor', 'raro'], 'events': ['natal'] }"))
+                .andExpect(status().isCreated());
+        send(post(ITEMS, game), "editor", json("{ 'extId': 'loja', 'name': 'Loja', 'events': ['pascoa'] }"))
+                .andExpect(status().isCreated());
+        send(post("/api/v1/games/{game}/shop-categories", game), "editor", json("""
+                { 'extId': 'balcao', 'name': 'Balcao', 'items': [ { 'target': { 'kind': 'item', 'extId': 'loja' }, 'price': 1 } ] }
+                """))
+                .andExpect(status().isCreated());
+
+        // Sem evento ativo, só o que não tem evento; com "natal" ativo, o item de natal volta.
+        mvc.perform(get(ITEMS, game).param("activeEvents", "")).andExpect(jsonPath("$.content[*].extId", contains("comum")));
+        mvc.perform(get(ITEMS, game).param("activeEvents", "natal")).andExpect(jsonPath("$.total").value(2));
+
+        mvc.perform(get(ITEMS, game).param("category", "flor").param("withoutCategory", "raro"))
+                .andExpect(jsonPath("$.content[*].extId", contains("comum")));
+
+        mvc.perform(get(ITEMS, game).param("trade", "buyable")).andExpect(jsonPath("$.content[*].extId", contains("loja")));
+        mvc.perform(get(ITEMS, game).param("trade", "sellable")).andExpect(jsonPath("$.content[*].extId", contains("comum")));
+        mvc.perform(get(ITEMS, game).param("trade", "untraded")).andExpect(jsonPath("$.content[*].extId", contains("natal")));
+        mvc.perform(get(ITEMS, game).param("trade", "talvez")).andExpect(status().isBadRequest());
     }
 }

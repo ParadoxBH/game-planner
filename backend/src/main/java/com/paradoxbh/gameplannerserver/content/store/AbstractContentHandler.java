@@ -201,6 +201,26 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
                     .append(" AND e.kind = :kind AND e.ext_id = t.ext_id AND e.event_ext_id = :event)");
             params.put("event", query.event());
         }
+        // Parâmetros comuns a toda listagem, com lista separada por vírgula.
+        String withoutCategory = query.filters().get("withoutCategory");
+        if (withoutCategory != null && !withoutCategory.isBlank()) {
+            where.append(" AND NOT EXISTS (SELECT 1 FROM content_category c WHERE c.game_id = t.game_id")
+                    .append(" AND c.kind = :kind AND c.ext_id = t.ext_id AND c.category_ext_id IN (:withoutCategory))");
+            params.put("withoutCategory", codes(withoutCategory, "withoutCategory"));
+        }
+        // Só o que não tem evento ou tem algum dos eventos ativos. Vazio: só o que não tem evento.
+        String activeEvents = query.filters().get("activeEvents");
+        if (activeEvents != null) {
+            List<String> active = codes(activeEvents, "activeEvents");
+            where.append(" AND (NOT EXISTS (SELECT 1 FROM content_event e WHERE e.game_id = t.game_id")
+                    .append(" AND e.kind = :kind AND e.ext_id = t.ext_id)");
+            if (!active.isEmpty()) {
+                where.append(" OR EXISTS (SELECT 1 FROM content_event e WHERE e.game_id = t.game_id")
+                        .append(" AND e.kind = :kind AND e.ext_id = t.ext_id AND e.event_ext_id IN (:activeEvents))");
+                params.put("activeEvents", active);
+            }
+            where.append(")");
+        }
         if (query.rarity() != null) {
             if (!hasRarity()) {
                 throw ApiException.badRequest(kind().label() + " não tem raridade para filtrar");
@@ -324,6 +344,15 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
                     + ", com - na frente para decrescente");
         }
         return " ORDER BY " + column + (descending ? " DESC" : " ASC") + " NULLS LAST, t.ext_id";
+    }
+
+    /** Lista de códigos separada por vírgula; vazia vira lista vazia. */
+    private static List<String> codes(String value, String field) {
+        return Arrays.stream(value.split(","))
+                .map(String::strip)
+                .filter(code -> !code.isEmpty())
+                .map(code -> ExtIds.require(code, field))
+                .toList();
     }
 
     private static String escapeLike(String value) {

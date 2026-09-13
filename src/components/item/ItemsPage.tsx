@@ -1,282 +1,211 @@
-import {
-  Box,
-  Typography,
-  Stack,
-  CircularProgress,
-  FormControlLabel,
-  Switch,
-} from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { CircularProgress, FormControlLabel, Stack, Switch, Typography } from "@mui/material";
 import { SwapHoriz } from "@mui/icons-material";
-import {
-  ItemCard,
-  ItemList,
-  ItemIcon,
-  ItemRenderProvider,
-} from "./ItemRenderers";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import { useApi } from "../../hooks/useApi";
-import { useState, useMemo, useEffect } from "react";
-import { StyledContainer } from "../common/StyledContainer";
-import { PickSelector } from "../common/PickSelector";
-import { ListingDataView } from "../common/ListingDataView";
-import { ViewModeSelector } from "../common/ViewModeSelector";
-import { useViewMode } from "../../hooks/useViewMode";
-import { TriplePickSelector } from "../common/TriplePickSelector";
-import type { TripleState } from "../common/TriplePickSelector";
-import type { Item, Category, GameInfo } from "../../types/gameModels";
-import type { ItemCriteria } from "../../types/filterTypes";
-import type { PaginatedResponse } from "../../types/apiModels";
+import { ApiError } from "../../api/ApiError";
+import { MAX_PAGE_SIZE, type CategoryDocument, type ItemDocument, type ListQuery } from "../../api/content";
+import { currentMedia, mediaUrl } from "../../api/references";
+import { useAttributeDefinitions, useContentList, useRarities } from "../../api/useContent";
+import { useEventFilter } from "../../context/EventFilterContext";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
-import { isDev } from "../../utils/mapper";
+import { useViewMode } from "../../hooks/useViewMode";
+import type { ItemCriteria } from "../../types/filterTypes";
+import { ListingDataView } from "../common/ListingDataView";
+import { PickSelector } from "../common/PickSelector";
+import { StyledContainer } from "../common/StyledContainer";
+import { TriplePickSelector, type TripleState } from "../common/TriplePickSelector";
+import { ViewModeSelector } from "../common/ViewModeSelector";
+import { ApiItemCard, ApiItemIcon, itemListCells, rarityColorOf, type ItemListView } from "./ApiItemRenderers";
 
+/** Opções do filtro "Status" e o filtro trade da API correspondente. */
+const TRADE_FILTERS: Record<string, string> = {
+  Compraveis: "buyable",
+  Vendiveis: "sellable",
+  Comercializados: "traded",
+  "Não Comercializados": "untraded",
+};
+
+function categoryOption(category: CategoryDocument) {
+  const iconId = currentMedia(category.media, "icon");
+  return { value: category.extId, label: category.name, icon: iconId ? mediaUrl(iconId) : undefined };
+}
+
+/** Lista de itens, lida da API. */
 export function ItemsPage() {
-  const { gameId, category: urlCategory } = useParams<{
-    gameId: string;
-    category?: string;
-  }>();
+  const { gameId = "", category: urlCategory } = useParams<{ gameId: string; category?: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const subCategoryParam = searchParams.get("subCategory");
   const { isMobile } = usePlatform();
+  const { activeEventIds } = useEventFilter();
 
-  const { loading: dbLoading, error, getItemsList, getItemCategories, getItemSubCategories, getGameInfo, getCategories } = useApi(gameId);
-  const [itemsResponse, setItemsResponse] = useState<PaginatedResponse<Item> | null>(null);
-  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
-  const [dataLoading, setDataLoading] = useState(false);
-  
   const pages = usePagination<ItemCriteria>({
     primaryCategory: urlCategory || "all",
     subCategoryStates: {},
     tradeStatus: null,
   });
-
-  const [availableSubCategories, setAvailableSubCategories] = useState<string[]>([]);
-  const [allCategories, setAllCategories] = useState<(Category & { isPrimary: boolean })[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
   const [showPrices, setShowPrices] = useState(false);
   const [viewMode, setViewMode] = useViewMode("items");
 
-  // Sync URL Category to filter via controller
   useEffect(() => {
     pages.setCriteria({
       primaryCategory: urlCategory || "all",
-      subCategoryStates: subCategoryParam ? { [subCategoryParam]: "include" } : {}
+      subCategoryStates: subCategoryParam ? { [subCategoryParam]: "include" } : {},
     });
-  }, [urlCategory]);
+  }, [urlCategory, subCategoryParam]);
 
-  // Sync SubCategory from URL specifically (external links)
+  // A API devolve no máximo 200 por página.
   useEffect(() => {
-    if (subCategoryParam) {
-      pages.setCriteria({
-        subCategoryStates: { [subCategoryParam]: "include" }
-      });
-    }
-  }, [subCategoryParam]);
+    if (pages.info.pagination.pageSize > MAX_PAGE_SIZE) pages.setPageSize(MAX_PAGE_SIZE);
+  }, [pages.info.pagination.pageSize, pages.setPageSize]);
 
-  // Load all categories for the selector
+  const search = useDebouncedValue(pages.info.search);
+  const { criteria, pagination } = pages.info;
+
+  const query = useMemo<ListQuery>(() => {
+    const states = Object.entries(criteria.subCategoryStates ?? {});
+    const included = states.filter(([, state]) => state === "include").map(([id]) => id);
+    const excluded = states.filter(([, state]) => state === "exclude").map(([id]) => id);
+    const primary = criteria.primaryCategory && criteria.primaryCategory !== "all" ? [criteria.primaryCategory] : [];
+    return {
+      search: search || undefined,
+      categories: [...primary, ...included],
+      rarity: criteria.rarity ?? undefined,
+      page: pagination.page - 1,
+      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+      filters: {
+        withoutCategory: excluded.length ? excluded.join(",") : undefined,
+        trade: criteria.tradeStatus ? TRADE_FILTERS[criteria.tradeStatus] : undefined,
+        activeEvents: activeEventIds.join(","),
+      },
+    };
+  }, [search, criteria, pagination, activeEventIds]);
+
+  const items = useContentList<ItemDocument>(gameId, "items", query);
+  const categories = useContentList<CategoryDocument>(gameId, "categories", { size: MAX_PAGE_SIZE, sort: "name" });
+  const rarities = useRarities(gameId);
+  const attributes = useAttributeDefinitions(gameId);
+
   useEffect(() => {
-    if (dbLoading) return;
-    getItemCategories().then(setAllCategories);
-    getCategories().then(setCategories);
-    if (gameId) getGameInfo(gameId).then(info => { if (info) setGameInfo(info); });
-  }, [dbLoading, getItemCategories, getCategories, gameId, getGameInfo]);
+    if (items.data) pages.setTotalItems(items.data.total);
+  }, [items.data, pages.setTotalItems]);
 
-  // Load items when filter or db changes
-  useEffect(() => {
-    if (dbLoading) return;
+  const itemCategories = useMemo(
+    () => (categories.data?.content ?? []).filter((category) => category.appliesTo !== "entity"),
+    [categories.data],
+  );
 
-    let isMounted = true;
-    setDataLoading(true);
+  const view = useMemo<ItemListView>(
+    () => ({
+      gameId,
+      showPrices,
+      rarities: new Map((rarities.data ?? []).map((rarity) => [rarity.code, rarity])),
+      categories: new Map(itemCategories.map((category) => [category.extId, category])),
+      attributes: new Map((attributes.data ?? []).map((definition) => [definition.key, definition])),
+    }),
+    [gameId, showPrices, rarities.data, itemCategories, attributes.data],
+  );
 
-    getItemsList(pages.info)
-      .then((results) => {
-        if (!isMounted) return;
-        setItemsResponse(results);
-        pages.setTotalItems(results.total);
-        setDataLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching items:", err);
-        if (isMounted) setDataLoading(false);
-      });
-
-    return () => { isMounted = false; };
-  }, [dbLoading, getItemsList, pages.info]);
-
-  const items = useMemo(() => itemsResponse?.data || [], [itemsResponse]);
-
-  const categoriesMap = useMemo(() => {
-    const map = new Map<string, any>();
-    categories.forEach(cat => {
-      map.set(cat.id.toLowerCase(), cat);
-    });
-    allCategories.forEach(cat => {
-      map.set(cat.id.toLowerCase(), cat);
-    });
-    return map;
-  }, [categories, allCategories]);
-
-
-
-  // Derive available sub-categories from all items based ONLY on primary category
-  useEffect(() => {
-    if (dbLoading) return;
-    
-    getItemSubCategories(urlCategory || "all")
-      .then(setAvailableSubCategories)
-      .catch(console.error);
-  }, [dbLoading, urlCategory, getItemSubCategories]);
-
-
-  // Update search specifically
-  const handleSearchChange = (val: string) => {
-    pages.setSearch(val);
+  const handleSubCategoryStateChange = (option: string, state: TripleState) => {
+    pages.setCriteria({ subCategoryStates: { ...criteria.subCategoryStates, [option]: state } });
   };
 
-  // Update trade status
-  const handleTradeStatusChange = (val: string | null) => {
-    pages.setCriteria({ tradeStatus: val });
-  };
-
-  const handleSubCategoryStateChange = (option: string, newState: TripleState) => {
-    const nextSub = { ...pages.info.criteria.subCategoryStates, [option]: newState };
-    pages.setCriteria({ subCategoryStates: nextSub });
-  };
-
+  const sortedRarities = [...(rarities.data ?? [])].sort((a, b) => a.ordinal - b.ordinal);
 
   return (
     <StyledContainer
       title={`Itens de ${gameId}`}
       label="Explore e descubra todos os itens disponíveis."
       searchValue={pages.info.search}
-      onChangeSearch={handleSearchChange}
+      onChangeSearch={pages.setSearch}
       search={{ placeholder: "Pesquisar itens..." }}
       pages={pages}
       actionsStart={
         <>
           <PickSelector
             label="Categoria"
-            value={urlCategory === "all" ? null : urlCategory || null}
-            options={allCategories
-              .filter(cat => cat.isPrimary)
-              .map(cat => ({ value: cat.id, label: cat.name, icon: cat.icon }))
-              .sort((a, b) => a.label.localeCompare(b.label))
-            }
-            onChange={(cat) => {
-              navigate(`/game/${gameId}/items/list/${cat || "all"}`);
-            }}
+            value={urlCategory && urlCategory !== "all" ? urlCategory : null}
+            options={itemCategories.map(categoryOption)}
+            onChange={(category) => navigate(`/game/${gameId}/items/list/${category || "all"}`)}
             fullWidth={isMobile}
           />
-          {availableSubCategories.length > 0 && (
+          {itemCategories.length > 1 && (
             <TriplePickSelector
               label="Sub-categoria"
-              states={pages.info.criteria.subCategoryStates || {}}
-              options={availableSubCategories.map(subId => {
-                const catInfo = allCategories.find(c => c.id.toLowerCase() === subId.toLowerCase());
-                return {
-                  value: subId,
-                  label: catInfo?.name || subId,
-                  icon: catInfo?.icon
-                };
-              }).sort((a, b) => a.label.localeCompare(b.label))}
+              states={criteria.subCategoryStates || {}}
+              options={itemCategories.filter((category) => category.extId !== urlCategory).map(categoryOption)}
               onChange={handleSubCategoryStateChange}
               fullWidth={isMobile}
             />
           )}
           <PickSelector
             label="Status"
-            value={pages.info.criteria.tradeStatus || null}
-            options={[
-              "Compraveis",
-              "Vendiveis",
-              "Comercializados",
-              "Não Comercializados",
-            ]}
-            onChange={handleTradeStatusChange}
+            value={criteria.tradeStatus || null}
+            options={Object.keys(TRADE_FILTERS)}
+            onChange={(status) => pages.setCriteria({ tradeStatus: status })}
             icon={<SwapHoriz sx={{ fontSize: 18 }} />}
             fullWidth={isMobile}
           />
-          {gameInfo?.rarity && Object.keys(gameInfo.rarity).length > 0 && (
+          {sortedRarities.length > 0 && (
             <PickSelector
               label="Raridade"
-              value={pages.info.criteria.rarity || null}
-              options={[
-                ...(isDev() ? [{ value: "none", label: "Não Informado" }] : []),
-                ...Object.entries(gameInfo.rarity).map(([id, r]) => ({
-                  value: id,
-                  label: r.name,
-                }))
-              ]}
-              onChange={(val) => pages.setCriteria({ rarity: val })}
+              value={criteria.rarity || null}
+              options={sortedRarities.map((rarity) => ({ value: rarity.code, label: rarity.name }))}
+              onChange={(rarity) => pages.setCriteria({ rarity })}
               fullWidth={isMobile}
             />
           )}
         </>
       }
       actionsEnd={
-        <Stack flex={1} direction={"row"} justifyContent={isMobile ? "space-between" : "end"} alignItems={"center"}>
+        <Stack flex={1} direction="row" justifyContent={isMobile ? "space-between" : "end"} alignItems="center">
           <FormControlLabel
             control={
-              <Switch
-                checked={showPrices}
-                onChange={(e) => setShowPrices(e.target.checked)}
-                color="primary"
-                size="small"
-              />
+              <Switch checked={showPrices} onChange={(event) => setShowPrices(event.target.checked)} color="primary" size="small" />
             }
             label={
-              <Typography
-                variant="body2"
-                sx={{ color: "text.secondary", fontWeight: 600 }}
-              >
-                Mostrar Preços
+              <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600 }}>
+                Mostrar preços
               </Typography>
             }
-            sx={{ ml: 1 }}
           />
           <ViewModeSelector mode={viewMode} onChange={setViewMode} />
         </Stack>
       }
     >
-      {(dbLoading || dataLoading) ? (
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", py: 10, flex: 1 }}>
+      {items.isPending ? (
+        <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>
           <CircularProgress color="primary" />
-        </Box>
-      ) : error ? (
-        <Box sx={{ p: 4, textAlign: "center", flex: 1 }}>
+        </Stack>
+      ) : items.isError ? (
+        <Stack alignItems="center" spacing={1} sx={{ p: 4, flex: 1 }}>
           <Typography color="error" variant="h6" sx={{ fontWeight: 700 }}>
-            Ops! Algo deu errado.
+            Não foi possível carregar os itens.
           </Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary", mt: 1 }}>
-            {error}
+          <Typography variant="body2" color="text.secondary">
+            {items.error instanceof ApiError ? items.error.message : "Erro inesperado."}
           </Typography>
-        </Box>
+        </Stack>
       ) : (
-        <ItemRenderProvider value={{ gameId: gameId || "", navigate, gameInfo, categoriesMap, showPrices }}>
-          <ListingDataView
-            data={items}
-            viewMode={viewMode}
-            variant="compact"
-            cardMinWidth={200}
-            listHeader={[
-              { label: "Item", width: showPrices ? "35%" : "45%" },
-              { label: "Metadados", width: "25%", hidden: isMobile },
-              { label: "Categorias", width: showPrices ? "30%" : "30%", hidden: isMobile },
-              {
-                label: "Preços",
-                align: "right" as const,
-                width: "10%",
-                hidden: !showPrices,
-              },
-            ]}
-            emptyMessage="Nenhum item encontrado com estes filtros."
-            getRowColor={(item: any) => item.rarity && gameInfo?.rarity?.[item.rarity]?.color}
-            renderCard={ItemCard}
-            renderListItem={ItemList}
-            renderIconItem={ItemIcon}
-          />
-        </ItemRenderProvider>
+        <ListingDataView
+          data={items.data.content}
+          viewMode={viewMode}
+          variant="compact"
+          cardMinWidth={200}
+          listHeader={[
+            { label: "Item", width: showPrices ? "35%" : "45%" },
+            { label: "Atributos", width: "25%", hidden: isMobile },
+            { label: "Categorias", width: "30%", hidden: isMobile },
+            { label: "Preços", align: "right" as const, width: "10%", hidden: !showPrices },
+          ]}
+          emptyMessage="Nenhum item encontrado com estes filtros."
+          getRowColor={(item) => rarityColorOf(view, item)}
+          renderCard={(item, variant) => <ApiItemCard item={item} variant={variant} view={view} />}
+          renderListItem={(item) => itemListCells(item, view)}
+          renderIconItem={(item) => <ApiItemIcon item={item} view={view} />}
+        />
       )}
     </StyledContainer>
   );
