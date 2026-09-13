@@ -1,5 +1,7 @@
 package com.paradoxbh.gameplannerserver.content;
 
+import static java.util.Map.entry;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,15 +19,18 @@ public final class MediaUsages {
     /** Ordem de exibição dos usos. */
     public static final List<String> ORDER = List.of("icon", "capsule", "thumbnail", "banner", "screenshot");
 
-    private static final Map<String, Set<String>> ALLOWED = Map.of(
-            GAME_KIND, Set.of("icon", "capsule", "thumbnail", "banner"),
-            ContentKind.ITEM.code(), Set.of("icon", "screenshot"),
-            ContentKind.ENTITY.code(), Set.of("icon", "screenshot"),
-            ContentKind.CATEGORY.code(), Set.of("icon", "banner"),
-            ContentKind.EVENT.code(), Set.of("icon", "banner"),
-            ContentKind.RECIPE.code(), Set.of("icon"),
-            ContentKind.SHOP.code(), Set.of("icon", "banner"),
-            ContentKind.SHOP_CATEGORY.code(), Set.of("icon", "banner"));
+    private static final Map<String, Set<String>> ALLOWED = Map.ofEntries(
+            entry(GAME_KIND, Set.of("icon", "capsule", "thumbnail", "banner")),
+            entry(ContentKind.ITEM.code(), Set.of("icon", "screenshot")),
+            entry(ContentKind.ENTITY.code(), Set.of("icon", "screenshot")),
+            entry(ContentKind.CATEGORY.code(), Set.of("icon", "banner")),
+            entry(ContentKind.EVENT.code(), Set.of("icon", "banner")),
+            entry(ContentKind.RECIPE.code(), Set.of("icon")),
+            entry(ContentKind.SHOP.code(), Set.of("icon", "banner")),
+            entry(ContentKind.SHOP_CATEGORY.code(), Set.of("icon", "banner")),
+            entry(ContentKind.MAP.code(), Set.of("icon", "thumbnail")),
+            entry(ContentKind.LOCATION.code(), Set.of("icon", "banner", "screenshot")),
+            entry(ContentKind.SPAWN_POINT.code(), Set.of("icon", "screenshot")));
 
     private MediaUsages() {
     }

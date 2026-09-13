@@ -93,6 +93,16 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
         return "t.name";
     }
 
+    /** Expressão que grava a coluna a partir do parâmetro, ex.: geometria a partir de WKB. */
+    protected String writeValue(String column, String param) {
+        return param;
+    }
+
+    /** Expressão que lê a coluna, com o nome dela como apelido. */
+    protected String readValue(String column) {
+        return "t." + column;
+    }
+
     protected boolean hasRarity() {
         return false;
     }
@@ -153,6 +163,24 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
     @Override
     public ContentPage<D> list(String gameId, ContentQuery query) {
         Map<String, Object> params = new HashMap<>();
+        String where = where(gameId, query, params);
+
+        long total = jdbc.sql("SELECT count(*) FROM " + table() + " t" + where)
+                .params(params).query(Long.class).single();
+
+        params.put("limit", query.size());
+        params.put("offset", (long) query.page() * query.size());
+        List<D> content = fetch(gameId,
+                selectSql() + where + orderBy(query.sort()) + " LIMIT :limit OFFSET :offset", params);
+
+        return ContentPage.of(content, query.page(), query.size(), total);
+    }
+
+    /**
+     * Condição WHERE da listagem sobre a tabela {@code t}: jogo, busca, categorias, evento, raridade
+     * e filtros próprios do tipo. Preenche {@code params}.
+     */
+    protected String where(String gameId, ContentQuery query, Map<String, Object> params) {
         params.put("game", gameId);
         params.put("kind", kind().code());
 
@@ -188,22 +216,14 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
                         .append(filter.getValue().condition(filter.getKey(), value, "filter" + index++, params));
             }
         }
-
-        long total = jdbc.sql("SELECT count(*) FROM " + table() + " t" + where)
-                .params(params).query(Long.class).single();
-
-        params.put("limit", query.size());
-        params.put("offset", (long) query.page() * query.size());
-        List<D> content = fetch(gameId,
-                selectSql() + where + orderBy(query.sort()) + " LIMIT :limit OFFSET :offset", params);
-
-        return ContentPage.of(content, query.page(), query.size(), total);
+        return where.toString();
     }
 
     @Override
     public void insert(String gameId, D document, String actor) {
         List<String> columns = writeColumns();
-        String placeholders = IntStream.range(0, columns.size()).mapToObj(i -> ":v" + i).collect(joining(", "));
+        String placeholders = IntStream.range(0, columns.size())
+                .mapToObj(i -> writeValue(columns.get(i), ":v" + i)).collect(joining(", "));
 
         jdbc.sql("INSERT INTO " + table() + " (game_id, ext_id, " + String.join(", ", columns)
                         + ", created_by, updated_by) VALUES (:game, :ext, " + placeholders + ", :actor, :actor)")
@@ -217,7 +237,7 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
     public void update(String gameId, D document, String actor) {
         List<String> columns = writeColumns();
         String assignments = IntStream.range(0, columns.size())
-                .mapToObj(i -> columns.get(i) + " = :v" + i).collect(joining(", "));
+                .mapToObj(i -> columns.get(i) + " = " + writeValue(columns.get(i), ":v" + i)).collect(joining(", "));
 
         jdbc.sql("UPDATE " + table() + " SET " + assignments
                         + ", updated_by = :actor, updated_at = now() WHERE game_id = :game AND ext_id = :ext")
@@ -263,7 +283,7 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
 
     private String selectSql() {
         List<String> columns = new ArrayList<>(List.of("t.game_id", "t.ext_id"));
-        writeColumns().forEach(column -> columns.add("t." + column));
+        writeColumns().forEach(column -> columns.add(readValue(column)));
         columns.addAll(List.of("t.created_by", "t.updated_by", "t.created_at", "t.updated_at"));
         columns.add("(SELECT coalesce(max(r.revision), 0) FROM content_revision r WHERE r.game_id = t.game_id"
                 + " AND r.kind = '" + kind().code() + "' AND r.ext_id = t.ext_id) AS revision");

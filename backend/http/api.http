@@ -330,3 +330,78 @@ Authorization: Bearer {{accessToken}}
 ### Tudo que aponta para madeira: receitas, drops, lojas...
 GET {{api}}/games/heartopia/references?target=item:madeira
 Authorization: Bearer {{accessToken}}
+
+### ======================= Mundo (Fase 4) =======================
+### Geometria em WKT, coordenadas de jogo, com ou sem Z.
+
+### Mapa (bounds em coordenadas de jogo; o front usava [[minY, minX], [maxY, maxX]])
+PUT {{api}}/games/heartopia/maps/main
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Mapa Global",
+  "mapType": "single",
+  "imageUrl": "/map/heartopia/map.png",
+  "bounds": { "minX": -790.57, "minY": -790.57, "maxX": 790.57, "maxY": 790.57 },
+  "minZoom": 2,
+  "maxZoom": 4,
+  "availableViews": ["map", "dashboard"],
+  "defaultFilters": { "types": ["spawn", "location"], "categories": ["npc", "animal", "station"] },
+  "weathers": ["rainbow", "rainy", "meteor_shower", "petal_rain"]
+}
+
+### Local com área
+PUT {{api}}/games/heartopia/locations/zone_teste
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Zona de teste",
+  "locationType": "region",
+  "map": "main",
+  "area": "POLYGON ((400 0, 600 0, 600 100, 400 100, 400 0))"
+}
+
+### Ponto com vários ocupantes, ligado a um evento de clima
+PUT {{api}}/games/heartopia/spawn-points/point_1778127893725
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "map": "main",
+  "position": "POINT (456.42945915737334 9.854081940911101)",
+  "respawnMode": "daily",
+  "events": ["meteor_shower"],
+  "occupants": [
+    { "target": { "kind": "entity", "extId": "meteoro_branco" }, "chance": 1 },
+    { "target": { "kind": "entity", "extId": "meteoro_amarelo" }, "chance": 1 },
+    { "target": { "kind": "entity", "extId": "meteoro_rosa" }, "chance": 1 }
+  ]
+}
+
+### Ponto sem posição: vale para o local inteiro
+PUT {{api}}/games/heartopia/spawn-points/minerio_zona_teste
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "location": "zone_teste",
+  "occupants": [ { "target": { "kind": "entity", "extId": "minerio" }, "chance": 1 } ]
+}
+
+### Pontos de um local: ligados a ele ou dentro da área
+GET {{api}}/games/heartopia/spawn-points?location=zone_teste
+Authorization: Bearer {{accessToken}}
+
+### Locais de um ponto
+GET {{api}}/games/heartopia/locations?containing=point_1778127893725
+Authorization: Bearer {{accessToken}}
+
+### Marcadores do mapa numa área, só com animais
+GET {{api}}/games/heartopia/maps/main/spawn-points?bbox=-800,-800,800,800&occupantCategory=animal
+Authorization: Bearer {{accessToken}}
+
+### Onde aparece uma entidade
+GET {{api}}/games/heartopia/spawn-points?occupant=entity:meteoro_rosa
+Authorization: Bearer {{accessToken}}

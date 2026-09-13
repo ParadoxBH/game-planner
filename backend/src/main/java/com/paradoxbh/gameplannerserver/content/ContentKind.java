@@ -10,7 +10,10 @@ public enum ContentKind {
     EVENT("event", "game_event", "Evento"),
     RECIPE("recipe", "recipe", "Receita"),
     SHOP("shop", "shop", "Loja"),
-    SHOP_CATEGORY("shop_category", "shop_category", "Categoria de loja");
+    SHOP_CATEGORY("shop_category", "shop_category", "Categoria de loja"),
+    MAP("map", "game_map", "Mapa"),
+    LOCATION("location", "location", "Local"),
+    SPAWN_POINT("spawn_point", "spawn_point", "Ponto de spawn");
 
     private final String code;
     private final String table;

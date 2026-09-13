@@ -25,6 +25,7 @@ Escrito a partir da análise do front atual (`src/`) e da base em `public/data/`
 | Loja | **Três informações:** a loja, as categorias da loja e os itens de cada categoria. A categoria aponta para a loja pelo código |
 | Receita | Nome **opcional** (exibição e busca usam o do primeiro produto). Desbloqueio como lista tipada `{ type, target, value }` |
 | Requisito de entidade | Lista `requirements` na entidade, com `notConsumed`: energia é gasta, machado não |
+| Mundo | Geometria em **WKT** na API (SRID 0, com ou sem Z). Mapa com exibição **tipada**. Ponto de spawn pode não ter posição quando está ligado a um local. Clima é evento: **sem tabela de condição** |
 
 ---
 
@@ -326,25 +327,40 @@ CREATE TABLE entity (             -- criatura, npc, estrutura, recurso coletáve
   PRIMARY KEY (game_id, ext_id)
 );
 
+CREATE TABLE game_map (           -- como exibir o mapa; tudo tipado
+  game_id text, ext_id text, ... base ...,
+  map_type text NOT NULL,         -- single|layered|tile|procedural
+  image_url text, url_pattern text, layers int,   -- caminho/URL; imagem de mapa não passa pelo pipeline de mídia
+  bounds_min_x numeric, bounds_min_y numeric, bounds_max_x numeric, bounds_max_y numeric,
+  min_zoom int, max_zoom int,
+  tile_z int, tile_min_x numeric, tile_min_y numeric, tile_max_x numeric, tile_max_y numeric, tile_min_zoom int, tile_max_zoom int,
+  grid_size numeric, rotate int,  -- rotate = quartos de volta do norte
+  default_view text,
+  PRIMARY KEY (game_id, ext_id)
+);
+-- views disponíveis, filtros ligados ao abrir (tipos, categorias, entidades) e climas (eventos)
+CREATE TABLE game_map_list (game_id, map_ext_id, list text, ordinal int, value text, PRIMARY KEY (game_id, map_ext_id, list, ordinal));
+
 CREATE TABLE location (           -- bioma, região, POI — o que hoje é referencePoint type=location|biome|poi
   game_id text, ext_id text,
   ... base ...,
-  location_type text NOT NULL,    -- biome|region|poi|dungeon
+  location_type text NOT NULL,    -- código aberto: region (padrão), biome, poi, dungeon
   parent_ext_id text,             -- hierarquia, textual, pode apontar para o vazio
   map_ext_id    text,
-  area geometry(Geometry, 0),     -- polígono da região
+  area geometry,                  -- polígono da região, ponto do POI; nulo em bioma procedural
   PRIMARY KEY (game_id, ext_id)
 );
 
-CREATE TABLE spawn_point (        -- ocorrência concreta no mapa
+CREATE TABLE spawn_point (        -- onde algo aparece; nome opcional (vale o do primeiro ocupante)
   game_id text, ext_id text,
   ... base ...,
   map_ext_id      text,
   location_ext_id text,
-  position        geometry(Geometry, 0) NOT NULL,
+  position        geometry,       -- ponto, com ou sem Z; nulo = vale para o local inteiro
   respawn_mode    text,           -- once|respawn|daily|weekly
   respawn_delay_minutes int,
-  PRIMARY KEY (game_id, ext_id)
+  PRIMARY KEY (game_id, ext_id),
+  CHECK (position IS NOT NULL OR location_ext_id IS NOT NULL)
 );
 CREATE INDEX ON spawn_point USING gist (position);
 CREATE INDEX ON location    USING gist (area);
@@ -352,13 +368,16 @@ CREATE INDEX ON location    USING gist (area);
 CREATE TABLE spawn_occupant (     -- o que aparece nesse ponto
   game_id text, spawn_ext_id text, ordinal int,
   target_kind text, target_ext_id text NOT NULL,
-  chance numeric, qty_min int, qty_max int,
+  chance numeric, amount numeric, max_amount numeric,
   PRIMARY KEY (game_id, spawn_ext_id, ordinal)
 );
 ```
 
-`geom` usa **SRID 0** — coordenadas de jogo, não geográficas. `ST_Within` substitui o ray
-casting de `spatial.ts`. O WKT que já existe nos JSONs entra direto via `ST_GeomFromText`.
+`geometry` usa **SRID 0** — coordenadas de jogo, não geográficas — e não fixa o tipo, porque o
+mesmo mapa mistura ponto 2D e 3D (Outward). `ST_Within` substitui o ray casting de `spatial.ts`.
+Na API a geometria é **WKT**, igual aos JSONs: o servidor valida (JTS), normaliza o texto e troca
+com o banco por WKB, que preserva cada coordenada. Reimportar o mesmo ponto com outro espaçamento
+não gera revisão.
 
 ```sql
 CREATE TABLE recipe (
@@ -409,7 +428,7 @@ CREATE TABLE drop_entry (         -- unifica entity.drops e referencePoint.custo
 ```
 
 Tipos restantes, mesma forma: `category`, `game_event`, `collection`, `collection_group`,
-`collection_member`, `game_map`, `redemption_code`, `redemption_reward`.
+`collection_member`, `redemption_code`, `redemption_reward`.
 
 ### 4.4 Transversais
 
@@ -445,6 +464,10 @@ CREATE TABLE content_condition (
 tem `MapWeatherPanel` e `availableWeathers` para "mostre só o que aparece com chuva".
 Com jsonb isso não indexa.
 
+**Na Fase 4 a tabela não foi criada.** Nenhum dado usa `conditions`, e clima já é evento: rainbow,
+rainy, meteor_shower e petal_rain são eventos do tipo clima. "Aparece com chuva" é o filtro por
+evento, que já existe.
+
 ### 4.5 O que muda em relação ao formato atual, e por quê
 
 | Hoje | Novo | Motivo |
@@ -462,9 +485,13 @@ Com jsonb isso não indexa.
 | `unlock: { type, id?, subject?, value }` | `recipe_unlock` com `type`, `target` (referência) e `value` | evento, quest de NPC e nível de bancada cabem na mesma forma, e o alvo entra nas pendências |
 | `Entity.requirements` | `entity_requirement`, mesma forma do ingrediente | energia e ferramenta para coletar são requisito, não drop |
 | `event: string \| string[]` | `content_event` | hoje normalizado em runtime em três lugares (`event \|\| events`) |
-| `conditions: Record<string, any>` | `content_condition` tipada | condição precisa ser filtro, não texto |
+| `conditions: Record<string, any>` | `events` | nenhum dado usa `conditions`; clima é evento e o filtro por clima é o filtro por evento |
 | `entity.drops` + `referencePoint.customDrops` + `spawns[].customDrops` | `drop_entry` com `source_kind` | três tabelas com o mesmo significado; o `getItemDetails` hoje concatena as três na mão |
-| `geom: { type, coordinates: "POLYGON((...))" }` | coluna `geometry` PostGIS | parser WKT manual em `wkt.ts` deixa de existir |
+| `geom: { type, coordinates: "POLYGON((...))" }` | coluna `geometry` PostGIS; na API continua WKT, normalizado | a consulta espacial vai para o banco; o ray casting de `spatial.ts` deixa de existir |
+| `referencePoint.entityId` + `spawns[]` | `occupants`, sempre lista | um ocupante ou vários, a mesma forma |
+| `type: rule` (entidade num bioma, sem posição) | `spawn_point` sem `position`, com `location` | é um "onde aparece"; mesmas consultas e drops |
+| `MapMetadata.bounds` `[[minY, minX], [maxY, maxX]]` | `bounds: { minX, minY, maxX, maxY }` | a ordem do Leaflet fica no front |
+| `availableWeathers` | `weathers`, referência a evento | clima é evento; o que não está cadastrado entra nas pendências |
 
 ### 4.6 Auditoria
 
@@ -671,13 +698,14 @@ GET /api/v1/games/{game}
 GET /api/v1/games/{game}/items?search=&category=&rarity=&event=&attr.peso=&page=&size=&sort=
 GET /api/v1/games/{game}/items/{extId}
 GET /api/v1/games/{game}/items/{extId}/details        <- agregado
-GET /api/v1/games/{game}/entities | /locations | /recipes | /shops | /shop-categories | /categories | /events | /collections | /codes
+GET /api/v1/games/{game}/entities | /locations | /spawn-points | /maps | /recipes | /shops | /shop-categories | /categories | /events | /collections | /codes
 GET /api/v1/games/{game}/recipes?produces=item:x&consumes=&station=
 GET /api/v1/games/{game}/entities?drops=item:x&requires=
 GET /api/v1/games/{game}/shop-categories?sells=item:x&shop=
 GET /api/v1/games/{game}/references?target=item:x&field=    <- quem aponta para um alvo, de qualquer tipo
-GET /api/v1/games/{game}/maps/{mapId}/spawn-points?bbox=&target=&category=&event=
-GET /api/v1/games/{game}/locations/{extId}/spawn-points     <- ST_Within
+GET /api/v1/games/{game}/maps/{mapId}/spawn-points?bbox=&occupant=&occupantCategory=&event=&limit=   <- marcadores compactos
+GET /api/v1/games/{game}/spawn-points?location=&map=&occupant=&drops=&bbox=   <- location inclui ponto dentro da área
+GET /api/v1/games/{game}/locations?containing=&parent=&type=&map=
 GET /api/v1/games/{game}/crafting-tree?target=&amount=&choices=
 GET /api/v1/games/{game}/search?q=                          <- sobre content_ref
 ```
@@ -853,9 +881,27 @@ Decisões tomadas na implementação, que ajustam o plano acima:
   junto com o pai. As fases seguintes reusam o mesmo mecanismo.
 
 ### Fase 4 — Mundo (PostGIS)
-`game_map`, `location`, `spawn_point`, `spawn_occupant`. Consulta por bbox e
-`ST_Within` substituindo `spatial.ts`. Índices GiST. Drops de ponto de spawn entram em
-`drop_entry`, com `source_kind = spawn_point`.
+**Status: concluída.** 5 testes de contrato HTTP e 3 de geometria, 46 no total.
+Decisões tomadas na implementação, que ajustam o plano acima:
+
+- **Geometria em WKT na API.** O parser não converte nada. O servidor valida com JTS (tipo certo,
+  polígono sem autointerseção) e normaliza o texto; o banco recebe e devolve WKB, que preserva cada
+  coordenada. Os 38 polígonos reais de heartopia são válidos.
+- **Coluna `geometry` sem tipo fixo**, com CHECK de tipo e SRID: o mesmo mapa mistura 2D e 3D.
+- **Ponto de spawn sem posição** quando está ligado a um local (a `rule` de Valheim). Ocupantes são
+  sempre lista, com chance e quantidade opcionais; drops de ponto vão em `drop_entry`.
+- **"Pontos do local"** é o filtro `spawn-points?location=`: os ligados pelo código e os que têm
+  posição dentro da área, no mesmo mapa. O inverso é `locations?containing=`. Não criei a rota
+  `/locations/{id}/spawn-points` do contrato: o filtro faz o mesmo.
+- **Marcadores compactos** em `GET /maps/{mapa}/spawn-points`: sem paginação, até 10.000 pontos
+  (o maior mapa tem 2.354), com nome e ícone do ocupante já resolvidos e os mesmos filtros da
+  listagem. `truncated` avisa quando o limite cortou.
+- **Mapa tipado:** imagem, camadas, bounds, zoom, tiles, rotação, views, filtros iniciais e climas.
+  A imagem do mapa é caminho ou URL: o pipeline de mídia reduziria a 1920 px. A miniatura, sim, é
+  mídia (`thumbnail`).
+- **Sem `content_condition`**: clima é evento (ver 4.4).
+- **Hierarquia de local não é recursiva** nos filtros: `location=biome` pega os pontos do bioma, não
+  os dos locais filhos.
 
 ### Fase 5 — Extras
 `collection`, `collection_group`, `redemption_code`.

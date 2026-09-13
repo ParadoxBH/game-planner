@@ -155,7 +155,8 @@ no volume `media-data`.
 ## Conteúdo (Fase 2)
 
 Itens, entidades, categorias e eventos usam as mesmas rotas e as mesmas regras.
-`{recurso}` é `items`, `entities`, `categories`, `events`, `recipes`, `shops` ou `shop-categories`.
+`{recurso}` é `items`, `entities`, `categories`, `events`, `recipes`, `shops`, `shop-categories`,
+`maps`, `locations` ou `spawn-points`.
 
 | Método | Rota | Quem |
 |---|---|---|
@@ -204,7 +205,8 @@ até 128 caracteres, sem `/ \ ? # % ;` e sem espaço nas pontas. Codifique na UR
 
 `mediaId` é o id devolvido por `POST /api/v1/media`, nunca um caminho de arquivo, e a mídia
 precisa existir (senão `422`). Usos aceitos: item e entidade `icon`, `screenshot`; categoria e
-evento `icon`, `banner`; receita `icon`; loja e categoria de loja `icon`, `banner`; o próprio jogo, via `PATCH /api/v1/games/{jogo}`, `icon`, `capsule`,
+evento `icon`, `banner`; receita `icon`; loja e categoria de loja `icon`, `banner`; mapa `icon`, `thumbnail`; local `icon`, `banner`,
+`screenshot`; ponto de spawn `icon`, `screenshot`; o próprio jogo, via `PATCH /api/v1/games/{jogo}`, `icon`, `capsule`,
 `thumbnail`, `banner`. A ordem dentro de cada uso é a da lista. A resposta traz `addedBy` e
 `addedAt` de cada imagem, que se mantêm enquanto ela continuar no mesmo uso. Entre vários
 ícones, o exibido é o mais recente. Mídia em uso não pode ser apagada (`409`).
@@ -265,6 +267,41 @@ tipo.
 | `GET /api/v1/games/{jogo}/shop-categories` | `sells`, `shop` |
 | `GET /api/v1/games/{jogo}/shops` | `npc` |
 | `GET /api/v1/games/{jogo}/references?target=&field=` | toda origem que aponta para o alvo, de qualquer tipo |
+
+## Mundo (Fase 4)
+
+Mapas, locais e pontos de spawn usam as rotas de conteúdo (`maps`, `locations`, `spawn-points`).
+Geometria é **WKT em coordenadas de jogo**, com ou sem Z, igual aos JSON atuais. O servidor valida
+(tipo certo, polígono sem autointerseção) e devolve o texto normalizado: `POINT Z (1147.01 1185.50 37.39)`
+volta como `POINT Z(1147.01 1185.5 37.39)`, e reenviar o mesmo ponto escrito de outro jeito não gera
+revisão.
+
+```json
+{ "extId": "bau-1", "map": "Caldera", "position": "POINT Z (1147.01 1185.50 37.39)",
+  "respawnMode": "once", "events": ["gala_neve"],
+  "occupants": [ { "target": { "kind": "entity", "extId": "bau" }, "chance": 1 } ],
+  "drops":     [ { "target": { "kind": "item", "extId": "ouro" }, "chance": 0.06, "amount": 1, "maxAmount": 3 } ] }
+```
+
+- **Ponto de spawn:** `position` é ponto; sem ele, o ponto precisa de `location` e vale para o local
+  inteiro (minério num bioma). `occupants` é o que aparece ali (chance e quantidade opcionais);
+  `drops`, o que o ponto larga além do drop da entidade. Sem `name`, a exibição e a busca usam o nome
+  do primeiro ocupante cadastrado.
+- **Local:** `area` é polígono, multipolígono ou ponto (POI), e pode faltar. `locationType` é código
+  livre (`region` por padrão, `biome`, `poi`...). `parent` é o local que o contém.
+- **Mapa:** `mapType` (`single`, `layered`, `tile`, `procedural`), `imageUrl` ou `urlPattern` +
+  `layers`, `bounds` e `tiles` como `{ minX, minY, maxX, maxY }`, `minZoom`, `maxZoom`, `rotate`
+  (quartos de volta, 0 a 3), `defaultView`, `availableViews`, `defaultFilters` (`types`,
+  `categories`, `entities`) e `weathers` (eventos de clima). Nos JSON antigos, `bounds` estava na
+  ordem do Leaflet, `[[minY, minX], [maxY, maxX]]`.
+
+| Rota | Filtros |
+|---|---|
+| `GET /api/v1/games/{jogo}/spawn-points` | `map`, `location` (ligados ao local ou dentro da área), `occupant`, `occupantCategory`, `drops`, `bbox` |
+| `GET /api/v1/games/{jogo}/locations` | `containing` (código de ponto), `parent`, `type`, `map` |
+| `GET /api/v1/games/{jogo}/maps/{mapa}/spawn-points` | marcadores compactos, sem página: mesmos filtros, mais `limit` (até 10000); `truncated` avisa se cortou |
+
+`bbox` é `minX,minY,maxX,maxY` em coordenadas de jogo. Alvos como `entity:bau` ou só `bau`.
 
 ## Produção
 
