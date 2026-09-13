@@ -21,7 +21,11 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 
 # Não roda como root: uploads são entrada de arquivo hostil.
-RUN useradd --system --uid 10001 --create-home app
+# O diretório de mídia nasce pertencendo ao usuário da aplicação, e um volume montado
+# nele herda essa posse. Sem isso o volume nasce do root e todo upload falha.
+RUN useradd --system --uid 10001 --create-home app \
+ && mkdir -p /var/lib/gameplanner/media \
+ && chown app:app /var/lib/gameplanner/media
 USER app
 
 COPY --from=build --chown=app:app /build/target/*.jar app.jar

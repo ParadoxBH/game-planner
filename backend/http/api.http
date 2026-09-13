@@ -99,3 +99,29 @@ Content-Type: application/json
 {
   "verified": true
 }
+
+### Enviar imagem (conta ativa com vinculo). Reenviar a mesma imagem devolve 200 e o mesmo id.
+POST {{api}}/media
+Authorization: Bearer {{accessToken}}
+Content-Type: multipart/form-data; boundary=GamePlannerBoundary
+
+--GamePlannerBoundary
+Content-Disposition: form-data; name="file"; filename="logo.png"
+Content-Type: image/png
+
+< ../../public/img/heartopia/logo.png
+--GamePlannerBoundary--
+
+> {%
+    client.global.set("mediaId", response.body.media.id);
+%}
+
+### Metadados da imagem enviada
+GET {{api}}/media/{{mediaId}}
+
+### Arquivo convertido — cole a URL no navegador para ver
+GET http://localhost:8080/media/{{mediaId}}/thumb.webp
+
+### Apagar imagem (quem enviou ou platform_admin)
+DELETE {{api}}/media/{{mediaId}}
+Authorization: Bearer {{accessToken}}

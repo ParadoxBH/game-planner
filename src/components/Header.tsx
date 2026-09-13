@@ -19,7 +19,6 @@ import { HeaderNavDropdown } from "./common/HeaderNavDropdown";
 import { GlobalEventFilter } from "./common/GlobalEventFilter";
 import { theme } from "../theme/theme";
 import { usePlatform } from "../hooks/usePlatform";
-import { RemmaperObj } from "../utils/mapper";
 import { MobileMenu } from "./common/MobileMenu";
 import { AccountMenu } from "./auth/AccountMenu";
 
@@ -104,7 +103,6 @@ export function Header() {
             </Breadcrumbs>
           </Stack>
 
-          {!gameId && <RemmaperObj/>}
           {/* Somente exibe abas extras se estiver dentro de um jogo */}
           {gameId && (
             <>

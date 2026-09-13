@@ -25,6 +25,7 @@ import { CategoriesPage } from "./components/category/CategoriesPage";
 import { CategoryDetailsPage } from "./components/category/CategoryDetailsPage";
 import { MetadataDetailsPage } from "./components/item/MetadataDetailsPage";
 import { LoginPage } from "./components/auth/LoginPage";
+import { ToolsPage } from "./components/tools/ToolsPage";
 
 export function RoutesPage() {
   return (
@@ -35,6 +36,9 @@ export function RoutesPage() {
 
         {/* Entrar, criar conta e trocar de conta */}
         <Route path="/login" element={<LoginPage />} />
+
+        {/* Utilitários: restrito a platform_admin, verificado na própria página */}
+        <Route path="/utilitarios" element={<ToolsPage />} />
 
         {/* Rotas de um jogo específico */}
         <Route path="/game/:gameId">

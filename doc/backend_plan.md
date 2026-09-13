@@ -492,15 +492,14 @@ volta como veio.
 
 ```sql
 CREATE TABLE media (
-  id             text PRIMARY KEY,      -- sha256 do arquivo JÁ convertido
-  game_id        text,                  -- nulo = mídia global
-  width int, height int,
-  uploaded_by    text NOT NULL,
-  uploaded_at    timestamptz NOT NULL DEFAULT now(),
+  id             text PRIMARY KEY,      -- sha256 da variante "full" já convertida
+  width int, height int,                -- dimensões da imagem enviada
+  animated       boolean NOT NULL DEFAULT false,
   source_name    text,                  -- nome original, só para exibição
-  source_mime    text,                  -- o que o ffprobe identificou na entrada
-  source_bytes   bigint,
-  animated       boolean NOT NULL DEFAULT false
+  source_format  text NOT NULL,         -- demuxer que o ffprobe identificou na entrada
+  source_bytes   bigint NOT NULL,
+  uploaded_by    text NOT NULL,
+  uploaded_at    timestamptz NOT NULL DEFAULT now()
 );
 
 CREATE TABLE media_variant (
@@ -516,6 +515,11 @@ O `id` é o hash do conteúdo convertido, o que dá **deduplicação de graça**
 enviado por cinco pessoas ocupa um arquivo. E permite servir com
 `Cache-Control: immutable`, já que um id nunca muda de conteúdo.
 
+**Mídia não pertence a jogo.** Como o id é o hash, a mesma imagem usada em dois jogos é
+uma linha só — um `game_id` nela seria de quem enviou primeiro. O contexto de jogo fica
+em quem referencia a imagem. Consequência: apagar é permitido a quem enviou ou a
+`platform_admin`, não a moderador de um jogo.
+
 Conteúdo aponta para mídia por `icon_media_id` / `image_media_id` — referência textual,
 sem FK, igual a todo o resto (2.1). Ícone apontando para mídia inexistente é o mesmo caso
 já previsto.
@@ -527,7 +531,9 @@ já previsto.
    rejeita acima de um teto de megapixels — proteção contra bomba de descompressão, que
    um limite de bytes sozinho não pega.
 3. `ffmpeg` converte para WebP gerando três variantes, sempre com `-map_metadata -1`
-   (tira EXIF, GPS e afins) e decoder explícito em vez de autodetecção.
+   (tira EXIF, GPS e afins), `-f` com o demuxer que o `ffprobe` identificou (sem nova
+   autodetecção) e `-fflags +bitexact` (mesma entrada, mesmos bytes — é o que faz o hash
+   deduplicar).
 4. Hash do resultado, gravação no storage, `INSERT` idempotente.
 
 Padrões propostos, todos configuráveis:
@@ -536,6 +542,7 @@ Padrões propostos, todos configuráveis:
 |---|---|
 | Tamanho máximo do upload | 8 MB |
 | Teto de megapixels na entrada | 40 MP |
+| Quadros de animação | 300 |
 | `icon` | 128 px no maior lado |
 | `thumb` | 512 px |
 | `full` | 1920 px |
@@ -555,6 +562,11 @@ trocar por S3 depois sem mexer em serviço. O caminho é derivado do hash
 Cadastro é aberto (4.2), então upload é entrada de arquivo hostil por definição:
 
 - Tipo vem do `ffprobe`, **nunca** da extensão ou do `Content-Type` do cliente.
+- `ffprobe` e `ffmpeg` rodam com `-format_whitelist` (só `png_pipe`, `jpeg_pipe`,
+  `webp_pipe`, `gif`, `gif_pipe`) e `-protocol_whitelist file`. É a defesa contra o
+  ataque clássico em que um "PNG" é na verdade uma playlist HLS e faz o FFmpeg abrir
+  arquivos locais do servidor. Olhar a extensão não protege: o FFmpeg decide o formato
+  pelo conteúdo, e isso já acontece no `ffprobe`.
 - O arquivo original é descartado após a conversão. Só o WebP gerado existe no disco.
 - Servido com `Content-Type: image/webp` fixo e `X-Content-Type-Options: nosniff`, de
   rota que não executa nada.
@@ -562,7 +574,8 @@ Cadastro é aberto (4.2), então upload é entrada de arquivo hostil por defini�
   nunca chega na linha de comando.
 - Rate limit e cota por usuário; upload exige `verified`, como toda escrita.
 - Mídia sem nenhuma referência é coletada por rotina de limpeza (`GET /media/orphans`
-  para inspecionar antes).
+  para inspecionar antes). **Entra na Fase 2**: até existir conteúdo referenciando
+  imagem, toda imagem seria órfã.
 
 #### O acervo atual passa pelo mesmo cano
 
@@ -672,14 +685,15 @@ GET    /api/v1/games/{game}/changes?since=&by=                        histórico
 ```
 POST   /api/v1/media              multipart/form-data      [verified]
 GET    /api/v1/media/{id}         metadados e variantes
-DELETE /api/v1/media/{id}         [quem subiu, ou moderator]
-GET    /api/v1/media/orphans      mídia sem referência     [moderator]
+DELETE /api/v1/media/{id}         [quem subiu, ou platform_admin]
+GET    /api/v1/media/orphans      mídia sem referência     [Fase 2]
 
 GET    /media/{id}/{variant}.webp   o arquivo — fora de /api, Cache-Control immutable
 ```
 
-`POST` devolve `{ id, width, height, variants: { icon, thumb, full } }`. Reenviar a mesma
-imagem devolve o mesmo `id` sem gravar de novo.
+`POST` devolve `201` com `{ created: true, media: { id, width, height, animated, variants } }`,
+e cada variante traz `url`, dimensões e tamanho em bytes. Reenviar a mesma imagem devolve
+`200` com `created: false` e o mesmo `id`, sem gravar de novo.
 
 `PUT` em lote é transacional e idempotente por `(game_id, ext_id)`; devolve
 `{ created, updated, unchanged }`. Nenhuma carga é rejeitada por referência inexistente —
@@ -701,6 +715,8 @@ ordem funciona. Essa é a consequência prática mais útil do princípio 2.1.
 Cada fatia entrega migration + leitura + escrita + testes do seu grupo.
 
 ### Fase 0 — Fundação e identidade
+**Status: concluída.** Verificada rodando, com a matriz de autorização exercitada de ponta a ponta.
+
 Docker Compose com `postgis/postgis:16`; `ddl-auto=validate` (hoje está `update`,
 conflitando com Flyway); Java 21 (pom está em 17); credenciais em env var;
 `hibernate-spatial`; `ProblemDetail`; CORS; springdoc; `/actuator/health`;
@@ -713,6 +729,10 @@ já apontando para o destino final: VPS Ubuntu na Hostinger. Rodar em produção
 Fase 0 é barato; descobrir na Fase 5 que a imagem não sobe, não.
 
 ### Fase 1 — Mídia
+**Status: concluída.** 15 testes automatizados, com conversão real pelo FFmpeg, e roteiro de 16
+verificações contra a imagem Docker de produção: autorização, dimensões ímpares, GIF animado,
+playlist HLS disfarçada, limites de megapixels e de bytes, cache/ETag e remoção.
+
 `media`, `media_variant`, pipeline FFmpeg, storage em volume, endpoint de upload e de
 entrega. Vem antes do conteúdo porque todo tipo de conteúdo tem ícone, e `icon_media_id`
 nasce junto com as tabelas da fase seguinte.
@@ -721,6 +741,7 @@ nasce junto com as tabelas da fase seguinte.
 `item`, `entity`, `category`, `game_event`, `content_category`, `content_event`,
 `attribute_definition`, `content_attribute`, `content_revision` (com restore).
 View `content_ref`, busca global, **`pending-references` e o 404 enriquecido**.
+Também entra `GET /media/orphans`, que só faz sentido quando houver conteúdo apontando para imagem.
 Ao fim desta fase o parser externo já sobe o grosso da base.
 
 ### Fase 3 — Crafting e economia
@@ -757,6 +778,7 @@ Endpoints `/details`, `crafting-tree` no servidor, ETag e `Cache-Control`.
 | Cadastro aberto + jogo `community` é superfície de abuso | Flag `verified` para escrever, rate limit, `status=suspended`, e `content_revision` com restore e índice por autor para desfazer estrago em massa |
 | Chave posicional: reordenar filhos reescreve `ordinal` | Escrita é sempre do agregado inteiro (4.6), então o `ordinal` é reescrito junto por definição |
 | Flag `verified` ligada à mão vira gargalo se o cadastro crescer | É provisória por decisão; a tabela `user_link` a substitui sem mexer em autorização |
+| Deduplicação de mídia depende da versão do FFmpeg | `+bitexact` garante bytes idênticos só dentro da mesma versão. A mesma imagem enviada em dev (FFmpeg da máquina) e em produção (8.0.1 do Ubuntu), ou reenviada depois de atualizar o FFmpeg da imagem Docker, gera outro hash: vira duplicata, não erro. Atualizar o FFmpeg em produção deve ser decisão consciente |
 | Spring Boot 4.1 recente; starters renomeados | Validado na Fase 0: compila em Java 21, e `actuator`, `oauth2-resource-server` e `hibernate-spatial` resolvem. Testcontainers **não** é mais versionado pelo parent — o BOM entra explícito no pom |
 | Boot 4 usa **Jackson 3** (`tools.jackson`), não Jackson 2 | `com.fasterxml.jackson` não está no classpath e `MappingJackson2HttpMessageConverter` está deprecado. Serialização manual onde não há conversor (filtros de segurança) |
 | springdoc-openapi com Boot 4 | Adiado: exige springdoc 3.x. OpenAPI segue opcional, como previsto |

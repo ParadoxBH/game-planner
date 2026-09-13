@@ -1,0 +1,8 @@
+# Contexto enviado ao Docker: só o que o Dockerfile usa.
+target/
+var/
+http/
+.env
+.env.*
+*.md
+docker-compose*.yml

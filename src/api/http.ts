@@ -37,14 +37,22 @@ async function send(path: string, options: RequestOptions, token?: string): Prom
   const { method = "GET", body, signal } = options;
 
   const headers: Record<string, string> = {};
-  if (body !== undefined) headers["Content-Type"] = "application/json";
   if (token) headers.Authorization = `Bearer ${token}`;
+
+  let payload: BodyInit | undefined;
+  if (body instanceof FormData) {
+    // Upload: o navegador monta o Content-Type com o boundary do multipart. Não sobrescrever.
+    payload = body;
+  } else if (body !== undefined) {
+    headers["Content-Type"] = "application/json";
+    payload = JSON.stringify(body);
+  }
 
   try {
     return await fetch(`${API_BASE_URL}${path}`, {
       method,
       headers,
-      body: body === undefined ? undefined : JSON.stringify(body),
+      body: payload,
       signal,
     });
   } catch (error) {

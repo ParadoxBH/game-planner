@@ -116,6 +116,32 @@ Daí em diante ele libera os demais por `PATCH /api/v1/users/{username}`.
 | DELETE | `/api/v1/games/{id}/members/{username}` | `owner` |
 | PATCH | `/api/v1/users/{username}` | `platform_admin` |
 
+## Mídia (Fase 1)
+
+Toda imagem enviada é reconvertida para WebP pelo FFmpeg em três tamanhos — `icon` 128 px,
+`thumb` 512 px e `full` 1920 px, sempre o maior lado e sem nunca ampliar. O id é o
+SHA-256 do resultado: reenviar a mesma imagem devolve o mesmo id sem gravar de novo.
+Desenho completo em `doc/backend_plan.md` 4.7.
+
+| Método | Rota | Quem |
+|---|---|---|
+| POST | `/api/v1/media` (multipart, campo `file`) | conta ativa com vínculo |
+| GET | `/api/v1/media/{id}` | qualquer um |
+| DELETE | `/api/v1/media/{id}` | quem enviou ou `platform_admin` |
+| GET | `/media/{id}/{icon\|thumb\|full}.webp` | qualquer um, com cache permanente |
+
+**FFmpeg é requisito.** A imagem Docker já traz. Rodando pela IDE, `ffmpeg` e `ffprobe`
+precisam estar no PATH, ou aponte com `FFMPEG_PATH` e `FFPROBE_PATH`. Sem eles a aplicação
+sobe normalmente, avisa no log, e só o upload responde `503`. O teste de conversão é pulado
+automaticamente onde o FFmpeg não está instalado.
+
+Limites, em `application.properties`: 8 MB por arquivo, 40 megapixels, 300 quadros de
+animação e 20 s de conversão por tamanho. Formatos aceitos: PNG, JPEG, WebP e GIF — GIF
+animado vira WebP animado.
+
+Em desenvolvimento os arquivos ficam em `backend/var/media/`, fora do Git. Em produção,
+no volume `media-data`.
+
 ## Produção
 
 ```bash

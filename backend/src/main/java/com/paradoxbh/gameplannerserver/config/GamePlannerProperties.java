@@ -18,5 +18,16 @@ public record GamePlannerProperties(Jwt jwt, Cors cors, RateLimit rateLimit, Med
 
     public record RateLimit(int writesPerMinute) {}
 
-    public record Media(String storagePath, int maxMegapixels, Duration ffmpegTimeout) {}
+    /** Ver doc/backend_plan.md 4.7. Tamanho de variante é o maior lado, em pixels. */
+    public record Media(
+            String storagePath,
+            int maxMegapixels,
+            int maxFrames,
+            Duration ffmpegTimeout,
+            String ffmpegPath,
+            String ffprobePath,
+            int webpQuality,
+            int iconSize,
+            int thumbSize,
+            int fullSize) {}
 }

@@ -16,7 +16,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { Login, Logout, PersonAdd } from "@mui/icons-material";
+import { Build, Login, Logout, PersonAdd } from "@mui/icons-material";
 import { AccountAvatar } from "./AccountAvatar";
 import { useAccountActions, useMe, useSession } from "../../api/useAuth";
 import { usePlatform } from "../../hooks/usePlatform";
@@ -110,6 +110,24 @@ export function AccountMenu() {
       ),
     );
     items.push(<Divider key="switch-divider" />);
+  }
+
+  if (me.data?.platformAdmin) {
+    items.push(
+      <MenuItem
+        key="tools"
+        onClick={() => {
+          close();
+          navigate("/utilitarios");
+        }}
+      >
+        <ListItemIcon>
+          <Build fontSize="small" />
+        </ListItemIcon>
+        <ListItemText primary="Utilitários" />
+      </MenuItem>,
+      <Divider key="tools-divider" />,
+    );
   }
 
   items.push(
