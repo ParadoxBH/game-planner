@@ -16,9 +16,7 @@ import static com.paradoxbh.gameplannerserver.content.ContentKind.SPAWN_POINT;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -32,6 +30,7 @@ import com.paradoxbh.gameplannerserver.content.ExtIds;
 import com.paradoxbh.gameplannerserver.content.model.ContentDocument;
 import com.paradoxbh.gameplannerserver.content.model.ContentPage;
 import com.paradoxbh.gameplannerserver.content.model.ContentQuery;
+import com.paradoxbh.gameplannerserver.content.model.ResolvedReference;
 import com.paradoxbh.gameplannerserver.content.store.ContentHandler;
 import com.paradoxbh.gameplannerserver.identity.service.GameAccess;
 
@@ -47,14 +46,6 @@ public class DetailsService {
     public static final int RELATED_LIMIT = ContentPage.MAX_SIZE;
 
     /**
-     * Referência citada, com nome e ícone quando o alvo está cadastrado. {@code kind} é o tipo
-     * citado (nulo quando a origem não diz); {@code resolvedKind}, o tipo encontrado — nulo quando
-     * não está cadastrado.
-     */
-    public record ResolvedReference(String kind, String extId, String resolvedKind, String name, String iconMediaId) {
-    }
-
-    /**
      * {@code related} tem uma página por relação, sempre presente, mesmo vazia. {@code categoryMembers}
      * traz os itens e entidades das categorias usadas como ingrediente ou produto.
      */
@@ -63,9 +54,6 @@ public class DetailsService {
     }
 
     private record Relation(String name, ContentHandler<?> handler, Function<String, ContentQuery> query) {
-    }
-
-    private record Source(ContentKind kind, String extId) {
     }
 
     private final GameAccess access;
@@ -144,48 +132,14 @@ public class DetailsService {
                 .orElseThrow(() -> references.unregistered(gameId, kind, id));
 
         Map<String, ContentPage<?>> related = new LinkedHashMap<>();
-        List<Source> sources = new ArrayList<>(List.of(new Source(kind, id)));
+        List<ReferenceService.Source> sources = new ArrayList<>(List.of(new ReferenceService.Source(kind, id)));
         for (Relation relation : relations.getOrDefault(kind, List.of())) {
             ContentPage<? extends ContentDocument<?>> page = relation.handler().list(gameId, relation.query().apply(id));
             related.put(relation.name(), page);
-            page.content().forEach(doc -> sources.add(new Source(relation.handler().kind(), doc.extId())));
+            page.content().forEach(doc -> sources.add(new ReferenceService.Source(relation.handler().kind(), doc.extId())));
         }
 
-        return new Details(kind.code(), document, related, resolve(gameId, sources), categoryMembers(gameId, kind, id));
-    }
-
-    /** Toda referência citada pelas origens, resolvida contra content_ref numa consulta só. */
-    private List<ResolvedReference> resolve(String gameId, List<Source> sources) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("game", gameId);
-        StringBuilder values = new StringBuilder();
-        int index = 0;
-        for (Source source : new LinkedHashSet<>(sources)) {
-            if (index > 0) {
-                values.append(", ");
-            }
-            values.append("(CAST(:k").append(index).append(" AS text), CAST(:e").append(index).append(" AS text))");
-            params.put("k" + index, source.kind().code());
-            params.put("e" + index, source.extId());
-            index++;
-        }
-        return jdbc.sql("""
-                SELECT DISTINCT r.target_kind, r.target_ext_id, c.kind AS resolved_kind, c.name, c.icon_media_id
-                FROM content_reference r
-                JOIN (VALUES %s) AS s(kind, ext_id) ON r.source_kind = s.kind AND r.source_ext_id = s.ext_id
-                LEFT JOIN LATERAL (
-                    SELECT x.kind, x.name, x.icon_media_id FROM content_ref x
-                    WHERE x.game_id = r.game_id AND x.ext_id = r.target_ext_id
-                      AND (r.target_kind IS NULL OR x.kind = r.target_kind)
-                    ORDER BY x.kind
-                    LIMIT 1) c ON true
-                WHERE r.game_id = :game
-                ORDER BY r.target_kind NULLS FIRST, r.target_ext_id
-                """.formatted(values))
-                .params(params)
-                .query((rs, rowNum) -> new ResolvedReference(rs.getString("target_kind"), rs.getString("target_ext_id"),
-                        rs.getString("resolved_kind"), rs.getString("name"), rs.getString("icon_media_id")))
-                .list();
+        return new Details(kind.code(), document, related, references.resolve(gameId, sources), categoryMembers(gameId, kind, id));
     }
 
     /** Membros cadastrados das categorias que o documento usa como ingrediente ou produto. */

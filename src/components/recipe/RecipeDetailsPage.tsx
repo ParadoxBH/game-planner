@@ -1,999 +1,313 @@
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import {
-  Box,
-  Typography,
+  Breadcrumbs,
+  Button,
+  ButtonGroup,
+  CircularProgress,
+  Divider,
   Grid,
   Paper,
   Stack,
-  Divider,
-  Breadcrumbs,
-  CircularProgress,
-  Chip,
-  ButtonGroup,
-  Button,
+  Typography,
 } from "@mui/material";
+import { AccountTree, AutoFixHigh, Construction, Info, Inventory, NavigateNext } from "@mui/icons-material";
+import { ApiError } from "../../api/ApiError";
 import {
-  NavigateNext,
-  Construction,
-  Inventory,
-  AutoFixHigh,
-  Schema,
-  AccountTree,
-  Info,
-} from "@mui/icons-material";
-import { useApi } from "../../hooks/useApi";
-import { StyledContainer } from "../common/StyledContainer";
-import { ItemChip } from "../common/ItemChip";
-import { TimeChip } from "../common/TimeChip";
-import { useMemo, useState, useEffect } from "react";
-import { ProductionFlow } from "../flow/ProductionFlow";
-import { CraftingTreeCard } from "./CraftingTreeCard";
-import { GameDataSelector } from "../common/GameDataSelector";
-import { StyledDialog } from "../common/StyledDialog";
-import { ItemShopCard } from "../shop/ItemShopCard";
-import { getCraftingTree } from "../../utils/craftingTree";
-import type { Item, Entity, Recipe, GameInfo } from "../../types/gameModels";
-import type { RecipeDetails } from "../../types/apiModels";
-import { itemRepository } from "../../repositories/ItemRepository";
-import { entityRepository } from "../../repositories/EntityRepository";
-import { recipeRepository } from "../../repositories/RecipeRepository";
-import { shopRepository } from "../../repositories/ShopRepository";
-import { eventRepository } from "../../repositories/EventRepository";
-import { getPublicUrl } from "../../utils/pathUtils";
-import type { GameEvent } from "../../types/gameModels";
-import { DetainContainer } from "../common/DetainContainer";
+  referenceParam,
+  type RecipeDocument,
+  type RecipeRelated,
+  type Reference,
+  type Requirement,
+  type ResolvedReference,
+} from "../../api/content";
+import { ReferenceIndex } from "../../api/references";
+import { useContentDetails } from "../../api/useContent";
 import { usePlatform } from "../../hooks/usePlatform";
+import { formatAmount, formatChance, formatDuration } from "../../utils/format";
+import { ApiRewardCodes } from "../common/ApiRelatedLists";
+import { ContentChip } from "../common/ContentChip";
+import { DataCard } from "../common/DataCard";
+import { DetailField, ReferenceChips } from "../common/DetailField";
+import { DetainContainer } from "../common/DetainContainer";
+import { DetainItem } from "../common/DetainItem";
+import { StyledContainer } from "../common/StyledContainer";
+import { ApiShopOffers, offersFor } from "../shop/ApiShopOffers";
+import { ApiCraftingTree, NO_CHOICES, type TreeChoices } from "./ApiCraftingTree";
+import { recipeTitle, unlockLabel } from "./ApiRecipeCard";
 
+interface IngredientCardProps {
+  input: Requirement;
+  references: ReferenceIndex;
+  /** Membros da categoria, quando o ingrediente é uma categoria. */
+  members?: ResolvedReference[];
+  chosen?: Reference;
+  onChoose: (member: Reference) => void;
+}
+
+/** Ingrediente com nome e quantidade; categoria mostra as opções, e escolher uma vale para a árvore. */
+function IngredientCard({ input, references, members, chosen, onChoose }: IngredientCardProps) {
+  const isCategory = input.target.kind === "category";
+  const chosenMember = chosen ? members?.find((member) => member.extId === chosen.extId) : undefined;
+  const title = chosenMember
+    ? chosenMember.name ?? chosenMember.extId
+    : isCategory
+      ? `Qualquer ${references.name(input.target)}`
+      : references.name(input.target);
+
+  return (
+    <DataCard sx={{ p: 1.5, flexDirection: "column", alignItems: "stretch", gap: 1, height: "100%" }}>
+      <Stack direction="row" spacing={2} alignItems="center">
+        <ContentChip
+          target={chosen ?? input.target}
+          resolved={chosenMember ?? references.find(input.target)}
+          amount={input.amount}
+          notConsumed={input.notConsumed}
+        />
+        <Stack sx={{ minWidth: 0 }}>
+          <Typography variant="body2" fontWeight={700}>
+            {title}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            Quantidade: {formatAmount(input.amount)}
+            {input.notConsumed ? " · não é gasto" : ""}
+          </Typography>
+        </Stack>
+      </Stack>
+      {members && members.length > 0 && (
+        <Stack spacing={0.5} sx={{ pt: 1, borderTop: 1, borderTopStyle: "dashed", borderColor: "divider" }}>
+          <Typography variant="caption" color="text.secondary">
+            Opções — escolha uma para a árvore de produção
+          </Typography>
+          <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
+            {members.map((member) => {
+              const target = { kind: member.kind, extId: member.extId };
+              return (
+                <Stack key={referenceParam(target)} onClick={() => onChoose(target)} sx={{ cursor: "pointer" }}>
+                  <ContentChip target={target} resolved={member} size="small" highlight={chosen?.extId === member.extId} disableLink />
+                </Stack>
+              );
+            })}
+          </Stack>
+        </Stack>
+      )}
+    </DataCard>
+  );
+}
+
+/** Detalhe de receita, lido do agregado /recipes/{id}/details, com a árvore de produção do servidor. */
 export function RecipeDetailsPage() {
-  const { gameId, recipeId = "" } = useParams<{
-    gameId: string;
-    recipeId: string;
-  }>();
-  const navigate = useNavigate();
-
-  const { loading: dbLoading, getRecipeDetails, getGameInfo } = useApi(gameId);
-
-  const [activeTab, setActiveTab] = useState(0);
-  const [recipeDetails, setRecipeDetails] = useState<RecipeDetails | null>(
-    null,
-  );
-  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
-  const [dataLoading, setDataLoading] = useState(true);
-
-  const [items, setItems] = useState<Item[]>([]);
-  const [entities, setEntities] = useState<Entity[]>([]);
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [shops, setShops] = useState<any[]>([]);
-  const [events, setEvents] = useState<GameEvent[]>([]);
+  const { gameId = "", recipeId = "" } = useParams<{ gameId: string; recipeId: string }>();
   const { isMobile } = usePlatform();
+  const [tab, setTab] = useState<"general" | "tree">("general");
+  const [choices, setChoices] = useState<TreeChoices>(NO_CHOICES);
 
-  const [categoryChoices, setCategoryChoices] = useState<
-    Record<string, string>
-  >({});
-  const [recipeChoices, setRecipeChoices] = useState<Record<string, string>>(
-    {},
-  );
-  const [activeCategorySelection, setActiveCategorySelection] = useState<
-    string | null
-  >(null);
-  const [activeRecipeSelection, setActiveRecipeSelection] = useState<
-    string | null
-  >(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isRecipeDialogOpen, setIsRecipeDialogOpen] = useState(false);
+  const details = useContentDetails<RecipeDocument, RecipeRelated>(gameId, "recipes", recipeId);
+  const references = useMemo(() => new ReferenceIndex(details.data?.references), [details.data]);
 
-  // Fetch all data needed for the page and tree calculations
-  useEffect(() => {
-    if (dbLoading || !recipeId) return;
+  // A árvore parte do produto; quando outra receita também o produz, esta é a escolhida.
+  const loaded = details.data?.document;
+  const initialChoices = useMemo<TreeChoices>(() => {
+    const output = loaded?.outputs[0];
+    return output && loaded ? { ...NO_CHOICES, products: { [referenceParam(output.target)]: loaded.extId } } : NO_CHOICES;
+  }, [loaded]);
+  useEffect(() => setChoices(initialChoices), [initialChoices]);
 
-    let isMounted = true;
-    setDataLoading(true);
-
-    Promise.all([
-      getRecipeDetails(recipeId),
-      itemRepository.getAll(),
-      entityRepository.getAll(),
-      recipeRepository.getAll(),
-      shopRepository.getAll(),
-      eventRepository.getAll(),
-    ])
-      .then(
-        ([details, allItems, allEntities, allRecipes, allShops, allEvents]) => {
-          if (!isMounted) return;
-          setRecipeDetails(details);
-          if (gameId) getGameInfo(gameId).then(info => { if (info) setGameInfo(info); });
-          setItems(allItems);
-          setEntities(allEntities);
-          setRecipes(allRecipes);
-          setShops(allShops);
-          setEvents(allEvents);
-          setDataLoading(false);
-        },
-      )
-      .catch((err) => {
-        console.error("Error loading recipe details data:", err);
-        if (isMounted) setDataLoading(false);
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [dbLoading, recipeId, getRecipeDetails]);
-
-  const treeOptions = useMemo(() => {
-    if (dataLoading) return null;
-
-    const itemMap = new Map<string, Item>();
-    items.forEach((i: Item) => itemMap.set(i.id, i));
-
-    const entityMap = new Map<string, Entity>();
-    entities.forEach((e: Entity) => entityMap.set(e.id, e));
-
-    const recipeMapByProduct = new Map<string, Recipe>();
-    const allRecipesByProduct = new Map<string, Recipe[]>();
-
-    recipes.forEach((r: Recipe) => {
-      // Direct product match
-      if (r.itemId) {
-        recipeMapByProduct.set(r.itemId, r);
-        const current = allRecipesByProduct.get(r.itemId) || [];
-        allRecipesByProduct.set(r.itemId, [...current, r]);
-      }
-      r.products?.forEach(
-        (p: { id: string; amount: number; type?: string }) => {
-          if (p.type === "category") {
-            // Map the category ID itself
-            recipeMapByProduct.set(p.id, r);
-            const catAlts = allRecipesByProduct.get(p.id) || [];
-            allRecipesByProduct.set(p.id, [...catAlts, r]);
-
-            // If product is a category, this recipe can produce any item/entity in that category
-            items.forEach((item: Item) => {
-              const categories = Array.isArray(item.category)
-                ? item.category
-                : [item.category];
-              if (categories.includes(p.id)) {
-                const current = allRecipesByProduct.get(item.id) || [];
-                allRecipesByProduct.set(item.id, [...current, r]);
-                if (!recipeMapByProduct.has(item.id))
-                  recipeMapByProduct.set(item.id, r);
-              }
-            });
-            entities.forEach((ent: Entity) => {
-              const categories = Array.isArray(ent.category)
-                ? ent.category
-                : [ent.category];
-              if (categories.includes(p.id)) {
-                const current = allRecipesByProduct.get(ent.id) || [];
-                allRecipesByProduct.set(ent.id, [...current, r]);
-                if (!recipeMapByProduct.has(ent.id))
-                  recipeMapByProduct.set(ent.id, r);
-              }
-            });
-          } else {
-            recipeMapByProduct.set(p.id, r);
-            const current = allRecipesByProduct.get(p.id) || [];
-            allRecipesByProduct.set(p.id, [...current, r]);
-          }
-        },
-      );
-    });
-
-    const shopMap = new Map<string, string>();
-    const shopNames = new Map<string, string>();
-    const shopItemPrices = new Map<string, { price: number; quant?: number; currency?: string; shopName?: string }>();
-
-    shops.forEach((shop: any) => {
-      shopNames.set(shop.id, shop.name);
-      shop.groups?.forEach((group: any) => {
-        group.items?.forEach((shopItem: any) => {
-          shopMap.set(shopItem.id, shop.id);
-          const current = shopItemPrices.get(shopItem.id);
-          const quant = shopItem.quant && shopItem.quant > 1 ? shopItem.quant : 1;
-          const newUnitPrice = (shopItem.price || 0) / quant;
-          if (!current || newUnitPrice < (current.price / (current.quant && current.quant > 1 ? current.quant : 1))) {
-            shopItemPrices.set(shopItem.id, {
-              price: shopItem.price || 0,
-              quant: shopItem.quant,
-              currency: shopItem.currency || "ouro",
-              shopName: shop.name,
-            });
-          }
-        });
-      });
-    });
-
-    return {
-      itemMap,
-      entityMap,
-      recipeMapByProduct,
-      allRecipesByProduct,
-      shopMap,
-      shopNames,
-      shopItemPrices,
-      categoryChoices,
-      recipeChoices,
-    };
-  }, [
-    items,
-    entities,
-    recipes,
-    shops,
-    categoryChoices,
-    recipeChoices,
-    dataLoading,
-  ]);
-
-  const recipesMap = useMemo(() => {
-    const map = new Map<string, any>();
-    recipes.forEach((r) => map.set(r.id, r));
-    return map;
-  }, [recipes]);
-
-  const itemsMap = useMemo(() => {
-    const map = new Map<string, any>();
-    items.forEach((i) => map.set(i.id, i));
-    return map;
-  }, [items]);
-
-  const entitiesMap = useMemo(() => {
-    const map = new Map<string, any>();
-    entities.forEach((e) => map.set(e.id, e));
-    return map;
-  }, [entities]);
-
-  const eventsMap = useMemo(() => {
-    const map = new Map<string, string>();
-    events.forEach((e) => map.set(e.id, e.name));
-    return map;
-  }, [events]);
-
-  const tree = useMemo(() => {
-    if (!recipeDetails || !treeOptions) return null;
-
-    const product = recipeDetails.products?.[0];
-    const itemId = recipeDetails.recipe.itemId || product?.id || "";
-    const type = product?.type || "item";
-
-    if (!itemId) return null;
-    return getCraftingTree(itemId, 1, type, treeOptions);
-  }, [recipeDetails, treeOptions]);
-
-  if (dbLoading || dataLoading) {
+  if (details.isPending) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100%",
-          width: "100%",
-        }}
-      >
-        <CircularProgress color="primary" />
-      </Box>
-    );
-  }
-
-  if (!recipeDetails) {
-    return (
-      <StyledContainer
-        title="Receita não encontrada"
-        label="A receita solicitada não existe no banco de dados."
-      >
-        <Typography>Verifique o ID ou retorne à lista de receitas.</Typography>
+      <StyledContainer title="Carregando..." label="Obtendo dados da receita">
+        <Stack alignItems="center" sx={{ py: 10 }}>
+          <CircularProgress color="primary" />
+        </Stack>
       </StyledContainer>
     );
   }
 
-  const { recipe, ingredients, products, soldIn = [] } = recipeDetails;
+  if (details.isError) {
+    const unregistered = details.error instanceof ApiError && details.error.kind === "unregistered-content";
+    return (
+      <StyledContainer
+        title={unregistered ? "Receita não cadastrada" : "Não foi possível abrir a receita"}
+        label={unregistered ? `"${recipeId}" é citada em outros conteúdos, mas ainda não foi cadastrada.` : details.error.message}
+      >
+        <Typography variant="body2" color="text.secondary">
+          Verifique o código ou volte para a <Link to={`/game/${gameId}/recipes/list`}>lista de receitas</Link>.
+        </Typography>
+      </StyledContainer>
+    );
+  }
+
+  const { document: recipe, related, categoryMembers } = details.data;
+  const self: Reference = { kind: "recipe", extId: recipe.extId };
+  const title = recipeTitle(recipe, references);
+  const mainOutput = recipe.outputs[0];
+  const offers = offersFor(related.soldIn.content, self);
 
   return (
     <StyledContainer
-      title={recipe.normalizedName}
-      label={`Detalhes da Receita`}
-      sx={{ header: { position: "relative" } }}
+      title={title}
+      label={`Detalhes da receita ${recipe.extId}`}
       actionsStart={
         !isMobile ? (
           <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
-            <Link
-              to={`/game/${gameId}`}
-              style={{ color: "inherit", textDecoration: "none" }}
-            >
-              Dashboard
-            </Link>
-            <Link
-              to={`/game/${gameId}/recipes/list`}
-              style={{ color: "inherit", textDecoration: "none" }}
-            >
-              Receitas
-            </Link>
-            <Typography color="primary">{recipe.normalizedName}</Typography>
+            <Link to={`/game/${gameId}`}>Dashboard</Link>
+            <Link to={`/game/${gameId}/recipes/list`}>Receitas</Link>
+            <Typography color="primary">{title}</Typography>
           </Breadcrumbs>
         ) : undefined
       }
       actionsEnd={
         <ButtonGroup fullWidth={isMobile}>
-          <Button
-            variant={activeTab === 0 ? "contained" : "outlined"}
-            startIcon={<Info />}
-            onClick={() => setActiveTab(0)}
-          >
+          <Button variant={tab === "general" ? "contained" : "outlined"} startIcon={<Info />} onClick={() => setTab("general")}>
             Geral
           </Button>
-          <Button
-            variant={activeTab === 1 ? "contained" : "outlined"}
-            startIcon={<Schema />}
-            onClick={() => setActiveTab(1)}
-          >
-            {isMobile ? "Fluxo" : "Fluxo de Produção"}
-          </Button>
-          <Button
-            variant={activeTab === 2 ? "contained" : "outlined"}
-            startIcon={<AccountTree />}
-            onClick={() => setActiveTab(2)}
-          >
-            {isMobile ? "Árvore" : "Árvore de Produção"}
+          <Button variant={tab === "tree" ? "contained" : "outlined"} startIcon={<AccountTree />} onClick={() => setTab("tree")}>
+            {isMobile ? "Árvore" : "Árvore de produção"}
           </Button>
         </ButtonGroup>
       }
     >
-      {activeTab === 0 && (
+      {tab === "general" && (
         <DetainContainer>
           <Paper elevation={0} sx={{ p: 2 }}>
-            <Stack spacing={1} alignItems="center" textAlign="center">
-              <Box
-                sx={{
-                  width: 100,
-                  height: 100,
-                  borderRadius: 2,
-                  backgroundColor: "rgba(0,0,0,0.2)",
-                  border: 1,
-                  borderColor: "divider",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  overflow: "hidden",
-                }}
-              >
-                {products[0]?.data?.icon ? (
-                  <img
-                    src={getPublicUrl(products[0].data.image || products[0].data.icon!)}
-                    alt={recipe.normalizedName}
-                    style={{
-                      width: "80%",
-                      height: "80%",
-                      objectFit: "contain",
-                    }}
-                  />
-                ) : (
-                  <Construction
-                    sx={{ fontSize: 50, color: "rgba(255, 255, 255, 0.2)" }}
-                  />
-                )}
-              </Box>
-              <Typography variant="h5" fontWeight={800} color="primary.main">
-                {recipe.normalizedName}
+            <Stack alignItems="center" spacing={1}>
+              {mainOutput ? (
+                <ContentChip target={mainOutput.target} resolved={references.find(mainOutput.target)} size="extraLarge" />
+              ) : (
+                <Construction sx={{ fontSize: 64, color: "text.disabled" }} />
+              )}
+              <Typography variant="h5" fontWeight={800} color="primary.main" textAlign="center">
+                {title}
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                ID: {recipe.id}
+                Código: {recipe.extId}
               </Typography>
+            </Stack>
 
-              <Divider sx={{ width: "100%", my: 1 }} />
+            <Divider sx={{ my: 2 }} />
 
-              <Box textAlign="left" sx={{ width: "100%" }}>
-                <Typography
-                  variant="subtitle2"
-                  color="rgba(255,255,255,0.5)"
-                  gutterBottom
-                >
-                  ESTAÇÕES DE PRODUÇÃO
-                </Typography>
-                <Stack direction="row" spacing={1} flexWrap="wrap">
-                  {recipe.normalizedStations.length > 0 ? (
-                    recipe.normalizedStations.map((s: string, idx: number) => {
-                      const relatedEntities = entities.filter((e) => {
-                        const cats = Array.isArray(e.category)
-                          ? e.category
-                          : [e.category];
-                        return cats.some(
-                          (c) => c && c.toLowerCase() === s.toLowerCase(),
-                        );
-                      });
-
-                      const isSingle = relatedEntities.length === 1;
-                      const firstEntity =
-                        relatedEntities.length > 0 ? relatedEntities[0] : null;
-                      const displayName = firstEntity ? firstEntity.name : s;
-                      const targetUrl = isSingle
-                        ? `/game/${gameId}/entity/view/${firstEntity?.id}`
-                        : `/game/${gameId}/entity/list/all?subCategory=${s}`;
-
-                      return (
-                        <Box
-                          key={idx}
-                          component={Link}
-                          to={targetUrl}
-                          sx={{
-                            px: 1,
-                            py: 0.5,
-                            bgcolor: "rgba(255,255,255,0.05)",
-                            borderRadius: 1,
-                            border: "1px solid rgba(255,255,255,0.1)",
-                            textDecoration: "none",
-                            color: "inherit",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 1,
-                            transition: "all 0.2s",
-                            "&:hover": {
-                              bgcolor: "rgba(255,255,255,0.1)",
-                              borderColor: "primary.main",
-                              transform: "translateY(-1px)",
-                            },
-                          }}
-                        >
-                          {firstEntity?.image || firstEntity?.icon && (
-                            <Box
-                              component="img"
-                              src={getPublicUrl(firstEntity.image || firstEntity.icon!)}
-                              sx={{
-                                width: 18,
-                                height: 18,
-                                objectFit: "contain",
-                              }}
-                            />
-                          )}
-                          <Typography variant="caption" fontWeight={700}>
-                            {displayName}
-                          </Typography>
-                          {!isSingle && relatedEntities.length > 1 && (
-                            <Typography
-                              variant="caption"
-                              sx={{ opacity: 0.5, fontSize: "0.6rem" }}
-                            >
-                              ({relatedEntities.length})
-                            </Typography>
-                          )}
-                        </Box>
-                      );
-                    })
-                  ) : (
-                    <Typography variant="body2" color="text.secondary">
-                      Produzido manualmente
-                    </Typography>
-                  )}
-                </Stack>
-              </Box>
-
-              {recipe.craftTime && recipe.craftTime > 0 && (
-                <Box textAlign="left" sx={{ width: "100%" }}>
-                  <Typography
-                    variant="subtitle2"
-                    color="rgba(255,255,255,0.5)"
-                    gutterBottom
-                  >
-                    TEMPO DE PRODUÇÃO
+            <Stack spacing={2}>
+              <DetailField label="Bancadas">
+                {recipe.stations.length > 0 ? (
+                  <ReferenceChips
+                    targets={recipe.stations.map((station) => ({ kind: "entity", extId: station }))}
+                    references={references}
+                    size="medium"
+                  />
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    Feita sem bancada
                   </Typography>
-                  <TimeChip seconds={recipe.craftTime} size="medium" />
-                </Box>
-              )}
+                )}
+              </DetailField>
 
-              {recipe.unlock && recipe.unlock.length > 0 && (
-                <Box textAlign="left" sx={{ width: "100%" }}>
-                  <Typography
-                    variant="subtitle2"
-                    color="rgba(255,255,255,0.5)"
-                    gutterBottom
-                  >
-                    COMO DESBLOQUEAR
-                  </Typography>
+              {recipe.craftTimeSeconds ? (
+                <DetailField label="Tempo de produção">
+                  <Typography variant="body2">{formatDuration(recipe.craftTimeSeconds)}</Typography>
+                </DetailField>
+              ) : null}
+
+              {recipe.unlock.length > 0 && (
+                <DetailField label="Como desbloquear">
                   <Stack spacing={1}>
-                    {recipe.unlock.map((u: any, idx: number) => (
-                      <Box
-                        key={idx}
-                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                      >
+                    {recipe.unlock.map((unlock, index) => (
+                      <Stack key={index} direction="row" spacing={1} alignItems="center">
                         <AutoFixHigh fontSize="small" color="primary" />
-                        {u.type === "event" ? (
-                          <Stack
-                            direction="row"
-                            spacing={1}
-                            alignItems="center"
-                          >
-                            <Typography variant="body2">Evento:</Typography>
-                            <Chip
-                              label={eventsMap.get(u.value) || u.value}
-                              size="small"
-                              component={Link}
-                              to={`/game/${gameId}/events/view/${u.value}`}
-                              clickable
-                              sx={{
-                                bgcolor: "rgba(25, 118, 210, 0.1)",
-                                color: "primary.main",
-                                fontWeight: 700,
-                                border: "1px solid rgba(25, 118, 210, 0.2)",
-                                "&:hover": {
-                                  bgcolor: "rgba(25, 118, 210, 0.2)",
-                                },
-                              }}
-                            />
-                          </Stack>
-                        ) : (
-                          <Typography variant="body2">{u.value}</Typography>
-                        )}
-                      </Box>
+                        {unlock.target && <ContentChip target={unlock.target} resolved={references.find(unlock.target)} size="small" />}
+                        <Typography variant="body2">{unlockLabel(unlock, references)}</Typography>
+                      </Stack>
                     ))}
                   </Stack>
-                </Box>
+                </DetailField>
               )}
 
-              {soldIn && soldIn.length > 0 && (
-                <Box textAlign="left" sx={{ width: "100%" }}>
-                  <Typography
-                    variant="subtitle2"
-                    color="rgba(255,255,255,0.5)"
-                    gutterBottom
-                  >
-                    VENDIDO EM
-                  </Typography>
-                  <Stack spacing={1}>
-                    {soldIn.map((s, idx) => (
-                      <ItemShopCard
-                        key={`${s.shop.id}-${idx}`}
-                        shop={s.shop}
-                        shopItem={s.shopItem}
-                        npc={entitiesMap.get(s.shop.npcId || "")}
-                        currencyItem={itemsMap.get(s.shopItem.currency || "ouro")}
-                        itemsMap={itemsMap}
-                        entitiesMap={entitiesMap}
-                        recipesMap={recipesMap}
-                        eventsMap={
-                          new Map(
-                            events?.map((e) => [e.id, { name: e.name }]) || [],
-                          )
-                        }
-                        onClick={() =>
-                          navigate(`/game/${gameId}/shops/list/${s.shop.id}`)
-                        }
-                      />
-                    ))}
-                  </Stack>
-                </Box>
+              {recipe.events.length > 0 && (
+                <DetailField label="Eventos">
+                  <ReferenceChips targets={recipe.events.map((id) => ({ kind: "event", extId: id }))} references={references} />
+                </DetailField>
+              )}
+
+              {offers.length > 0 && (
+                <DetailField label="Vendida em">
+                  <ApiShopOffers offers={offers} references={references} />
+                </DetailField>
+              )}
+
+              {related.rewardOf.content.length > 0 && (
+                <DetailField label="Códigos de resgate">
+                  <ApiRewardCodes codes={related.rewardOf.content} target={self} />
+                </DetailField>
               )}
             </Stack>
           </Paper>
-          <>
-            {/* Ingredients & Products */}
-            {true && (
-              <Stack spacing={1} flex={1}>
-                {/* Ingredients */}
-                <Paper elevation={0} sx={{ p: 2 }}>
-                  <Stack spacing={1}>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <Inventory color="primary" />
-                      <Typography variant="h6" fontWeight={700}>
-                        Ingredientes
-                      </Typography>
-                    </Stack>
-                    <Grid container spacing={1}>
-                      {ingredients.map((ing: any, idx: number) => {
-                        const choiceId = categoryChoices[ing.id];
-                        const selectedItem = choiceId
-                          ? treeOptions?.itemMap.get(choiceId)
-                          : null;
 
-                              const ingRarityColor = (choiceId ? selectedItem?.rarity : ing.data?.rarity) && gameInfo?.rarity?.[choiceId ? selectedItem?.rarity : ing.data?.rarity]?.color;
-                              
-                              return (
-                                <Grid size={{ xs: 12, sm: 6 }} key={idx}>
-                                  <Box
-                                    sx={{
-                                      p: 1,
-                                      backgroundColor: ingRarityColor ? `${ingRarityColor}11` : "rgba(255,255,255,0.02)",
-                                      borderRadius: 1,
-                                      border: `1px solid ${ingRarityColor ? `${ingRarityColor}44` : "rgba(255,255,255,0.05)"}`,
-                                      display: "flex",
-                                      flexDirection: "column",
-                                      gap: 1,
-                                      cursor:
-                                        ing.type === "category"
-                                          ? "pointer"
-                                          : "default",
-                                      "&:hover":
-                                        ing.type === "category"
-                                          ? {
-                                              backgroundColor: ingRarityColor ? `${ingRarityColor}22` : "rgba(255,255,255,0.05)",
-                                            }
-                                          : {},
-                                    }}
-                                    onClick={() => {
-                                      if (ing.type === "category") {
-                                        setActiveCategorySelection(ing.id);
-                                        setIsDialogOpen(true);
-                                      }
-                                    }}
-                                  >
-                                    <Stack
-                                      direction="row"
-                                      alignItems="center"
-                                      gap={2}
-                                    >
-                                      <ItemChip
-                                        id={choiceId || ing.id}
-                                        icon={selectedItem?.image || selectedItem?.icon || ing.data?.image || ing.data?.icon}
-                                        amount={ing.amount}
-                                        type={
-                                          choiceId
-                                            ? treeOptions?.entityMap.has(choiceId)
-                                              ? "entity"
-                                              : "item"
-                                            : ing.type
-                                        }
-                                        rarityColor={ingRarityColor}
-                                      />
-                                <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                                  {ing.type !== "category" ? (
-                                    <Link
-                                      to={`/game/${gameId}/${ing.type === "entity" ? "entity" : "items"}/view/${ing.id}`}
-                                      style={{
-                                        textDecoration: "none",
-                                        color: "inherit",
-                                      }}
-                                    >
-                                      <Typography
-                                        variant="body2"
-                                        fontWeight={700}
-                                        sx={{
-                                          color: ingRarityColor || "text.primary",
-                                          lineHeight: 1.2,
-                                          transition: "all 0.2s",
-                                          "&:hover": { 
-                                            color: ingRarityColor || "primary.main",
-                                            textShadow: ingRarityColor ? `0 0 8px ${ingRarityColor}88` : "none"
-                                          },
-                                        }}
-                                      >
-                                        {ing.name || ing.data?.name || ing.id}
-                                      </Typography>
-                                    </Link>
-                                  ) : (
-                                    <Box>
-                                      <Typography
-                                        variant="body2"
-                                        fontWeight={700}
-                                        sx={{ 
-                                          lineHeight: 1.2,
-                                          color: ingRarityColor || "text.primary" 
-                                        }}
-                                      >
-                                        {selectedItem
-                                          ? selectedItem.name
-                                          : `Qualquer ${ing.id}`}
-                                      </Typography>
-                                      <Typography
-                                        variant="caption"
-                                        color="primary"
-                                        sx={{
-                                          fontSize: "0.65rem",
-                                          textTransform: "uppercase",
-                                        }}
-                                      >
-                                        Mudar Seleção
-                                      </Typography>
-                                    </Box>
-                                  )}
-                                  <Typography
-                                    variant="caption"
-                                    color="text.secondary"
-                                  >
-                                    Quantidade: {ing.amount}
-                                  </Typography>
-                                </Box>
-                              </Stack>
-
-                              {ing.dataOptions &&
-                                ing.dataOptions.length > 0 && (
-                                  <Box
-                                    sx={{
-                                      mt: 1,
-                                      pt: 1,
-                                      borderTop:
-                                        "1px dashed rgba(255,255,255,0.1)",
-                                    }}
-                                  >
-                                    <Typography
-                                      variant="caption"
-                                      sx={{
-                                        color: "rgba(255,255,255,0.5)",
-                                        mb: 1,
-                                        display: "block",
-                                      }}
-                                    >
-                                      OPÇÕES DISPONÍVEIS:
-                                    </Typography>
-                                    <Stack
-                                      direction="row"
-                                      spacing={1}
-                                      flexWrap="wrap"
-                                      useFlexGap
-                                    >
-                                      {ing.dataOptions.map((opt: any) => (
-                                        <ItemChip
-                                          key={opt.id}
-                                          id={opt.id}
-                                          icon={opt.icon}
-                                          size="small"
-                                          name={opt.name}
-                                          isBest={opt.id === ing.bestOptionId}
-                                          type={
-                                            ing.type === "category"
-                                              ? opt.type || "item"
-                                              : ing.type
-                                          }
-                                        />
-                                      ))}
-                                    </Stack>
-                                  </Box>
-                                )}
-                            </Box>
-                          </Grid>
-                        );
-                      })}
-                    </Grid>
-                  </Stack>
-                </Paper>
-
-                {/* Products */}
-                <Paper elevation={0} sx={{ p: 2 }}>
-                  <Stack spacing={1}>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <Construction color="primary" />
-                      <Typography variant="h6" fontWeight={700}>
-                        Produtos
-                      </Typography>
-                    </Stack>
-                    <Grid container spacing={1}>
-                      {products.map((p: any, idx: number) => {
-                        const prodRarityColor = p.data?.rarity && gameInfo?.rarity?.[p.data.rarity]?.color;
-                        return (
-                          <Grid size={{ xs: 12, sm: 6 }} key={idx}>
-                            <Box
-                              sx={{
-                                p: 1.5,
-                                backgroundColor: prodRarityColor ? `${prodRarityColor}11` : "rgba(255,255,255,0.02)",
-                                borderRadius: 2,
-                                border: `1px solid ${prodRarityColor ? `${prodRarityColor}44` : "rgba(255,255,255,0.05)"}`,
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 2,
-                              }}
-                            >
-                              <ItemChip
-                                id={p.id}
-                                icon={p.data?.image || p.data?.icon}
-                                amount={p.amount}
-                                type={p.type}
-                                rarityColor={prodRarityColor}
-                              />
-                            <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                              <Link
-                                to={`/game/${gameId}/${p.type === "entity" ? "entity" : "items"}/view/${p.id}`}
-                                style={{
-                                  textDecoration: "none",
-                                  color: "inherit",
-                                }}
-                              >
-                                <Typography
-                                  variant="body2"
-                                  fontWeight={700}
-                                  sx={{
-                                    color: prodRarityColor || "text.primary",
-                                    lineHeight: 1.2,
-                                    transition: "all 0.2s",
-                                    "&:hover": { 
-                                      color: prodRarityColor || "primary.main",
-                                      textShadow: prodRarityColor ? `0 0 8px ${prodRarityColor}88` : "none"
-                                    },
-                                  }}
-                                >
-                                  {p.name || p.data?.name || p.id}
-                                </Typography>
-                              </Link>
-                              <Typography
-                                variant="caption"
-                                color="text.secondary"
-                              >
-                                Quantidade: {p.amount}
-                              </Typography>
-                            </Box>
-                          </Box>
-
-                          {p.dataOptions && p.dataOptions.length > 0 && (
-                            <Box
-                              sx={{
-                                mt: 1,
-                                p: 1,
-                                pt: 1,
-                                borderTop: "1px dashed rgba(255,255,255,0.1)",
-                                backgroundColor: "rgba(255,255,255,0.01)",
-                                borderRadius: "0 0 8px 8px",
-                              }}
-                            >
-                              <Typography
-                                variant="caption"
-                                sx={{
-                                  color: "rgba(255,255,255,0.5)",
-                                  mb: 1,
-                                  display: "block",
-                                }}
-                              >
-                                PODE PRODUZIR QUALQUER UM DESTES:
-                              </Typography>
-                              <Stack
-                                direction="row"
-                                spacing={1}
-                                flexWrap="wrap"
-                                useFlexGap
-                              >
-                                {p.dataOptions.map((opt: any) => (
-                                  <ItemChip
-                                    key={opt.id}
-                                    id={opt.id}
-                                    icon={opt.icon}
-                                    size="small"
-                                    name={opt.name}
-                                    type={
-                                      p.type === "category"
-                                        ? opt.type || "item"
-                                        : p.type
-                                    }
-                                  />
-                                ))}
-                              </Stack>
-                            </Box>
-                          )}
-                        </Grid>)
-                      })}
-                    </Grid>
-                  </Stack>
-                </Paper>
-              </Stack>
+          <DetainItem startIcon={<Inventory color="primary" />} label="Ingredientes" count={recipe.inputs.length}>
+            {recipe.inputs.length > 0 && (
+              <Grid container spacing={1}>
+                {recipe.inputs.map((input, index) => (
+                  <Grid size={{ xs: 12, sm: 6 }} key={index}>
+                    <IngredientCard
+                      input={input}
+                      references={references}
+                      members={input.target.kind === "category" ? categoryMembers[input.target.extId] ?? [] : undefined}
+                      chosen={choices.categories[input.target.extId]}
+                      onChoose={(member) =>
+                        setChoices({ ...choices, categories: { ...choices.categories, [input.target.extId]: member } })
+                      }
+                    />
+                  </Grid>
+                ))}
+              </Grid>
             )}
-          </>
+          </DetainItem>
+
+          <DetainItem startIcon={<Construction color="primary" />} label="Produtos" count={recipe.outputs.length}>
+            {recipe.outputs.length > 0 && (
+              <Grid container spacing={1}>
+                {recipe.outputs.map((output, index) => (
+                  <Grid size={{ xs: 12, sm: 6 }} key={index}>
+                    <DataCard sx={{ p: 1.5, gap: 2 }}>
+                      <ContentChip
+                        target={output.target}
+                        resolved={references.find(output.target)}
+                        amount={output.amount}
+                        level={output.level}
+                        chance={output.chance}
+                        product
+                      />
+                      <Stack sx={{ minWidth: 0 }}>
+                        <Typography variant="body2" fontWeight={700}>
+                          {references.name(output.target)}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          Quantidade: {formatAmount(output.amount)}
+                          {output.chance !== null ? ` · ${formatChance(output.chance)}` : ""}
+                          {output.level ? ` · nível ${output.level}` : ""}
+                        </Typography>
+                      </Stack>
+                    </DataCard>
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+          </DetainItem>
         </DetainContainer>
       )}
-      {activeTab === 1 && tree && treeOptions && (
-        <ProductionFlow
-          tree={tree}
-          allRecipesByProduct={treeOptions.allRecipesByProduct}
-          onSelectCategory={(catId) => {
-            setActiveCategorySelection(catId);
-            setIsDialogOpen(true);
-          }}
-          onSelectRecipe={(itemId) => {
-            setActiveRecipeSelection(itemId);
-            setIsRecipeDialogOpen(true);
-          }}
-        />
-      )}
 
-      {activeTab === 2 && tree && treeOptions && (
-        <CraftingTreeCard
-          itemId={tree.id}
-          amount={1}
-          type="item"
-          options={treeOptions}
-          onSelectCategory={(catId) => {
-            setActiveCategorySelection(catId);
-            setIsDialogOpen(true);
-          }}
-        />
-      )}
-
-      {/* Selectors */}
-      <GameDataSelector
-        open={isDialogOpen}
-        onClose={() => {
-          setIsDialogOpen(false);
-          setActiveCategorySelection(null);
-        }}
-        onConfirm={(selection) => {
-          if (activeCategorySelection) {
-            setCategoryChoices((prev) => ({
-              ...prev,
-              [activeCategorySelection]: selection.id,
-            }));
-          }
-          setIsDialogOpen(false);
-          setActiveCategorySelection(null);
-        }}
-        gameId={gameId || ""}
-        activeCategory={activeCategorySelection || undefined}
-        initialSelectionId={
-          activeCategorySelection
-            ? categoryChoices[activeCategorySelection]
-            : undefined
-        }
-      />
-
-      <StyledDialog
-        open={isRecipeDialogOpen}
-        onClose={() => setIsRecipeDialogOpen(false)}
-        title="Selecionar Receita Alternativa"
-        maxWidth="sm"
-      >
-        <Box sx={{ p: 2 }}>
-          <Typography variant="body2" sx={{ mb: 2 }}>
-            Escolha qual receita utilizar para produzir{" "}
-            <strong>
-              {activeRecipeSelection &&
-                treeOptions?.itemMap.get(activeRecipeSelection)?.name}
-            </strong>
-            :
+      {tab === "tree" &&
+        (mainOutput ? (
+          <ApiCraftingTree
+            gameId={gameId}
+            target={mainOutput.target}
+            choices={choices}
+            onChoicesChange={setChoices}
+            initialChoices={initialChoices}
+          />
+        ) : (
+          <Typography variant="body2" color="text.secondary">
+            Esta receita não tem produto para montar a árvore.
           </Typography>
-          <Stack spacing={2}>
-            {activeRecipeSelection &&
-              treeOptions?.allRecipesByProduct
-                ?.get(activeRecipeSelection)
-                ?.map((recipe) => (
-                  <Paper
-                    key={recipe.id}
-                    onClick={() => {
-                      setRecipeChoices((prev) => ({
-                        ...prev,
-                        [activeRecipeSelection]: recipe.id,
-                      }));
-                      setIsRecipeDialogOpen(false);
-                    }}
-                    sx={{
-                      p: 2,
-                      cursor: "pointer",
-                      border: "1px solid",
-                      borderColor:
-                        recipeChoices[activeRecipeSelection] === recipe.id
-                          ? "primary.main"
-                          : "divider",
-                      backgroundColor:
-                        recipeChoices[activeRecipeSelection] === recipe.id
-                          ? "rgba(25, 118, 210, 0.1)"
-                          : "transparent",
-                      "&:hover": { borderColor: "primary.main" },
-                    }}
-                  >
-                    <Typography variant="subtitle2" fontWeight={700}>
-                      {recipe.name || `Receita ${recipe.id}`}
-                    </Typography>
-                    {recipe.stations && recipe.stations.length > 0 && (
-                      <Typography variant="caption" color="text.secondary">
-                        Estação: {recipe.stations.join(", ")}
-                      </Typography>
-                    )}
-                    <Box
-                      sx={{
-                        mt: 1,
-                        display: "flex",
-                        gap: 0.5,
-                        flexWrap: "wrap",
-                      }}
-                    >
-                      {recipe.ingredients?.map((ing, idx) => (
-                        <ItemChip
-                          key={idx}
-                          id={ing.id}
-                          amount={ing.amount}
-                          size="small"
-                          type={ing.type}
-                          disableLink
-                        />
-                      ))}
-                    </Box>
-                  </Paper>
-                ))}
-          </Stack>
-        </Box>
-      </StyledDialog>
+        ))}
     </StyledContainer>
   );
 }

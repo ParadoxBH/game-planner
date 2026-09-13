@@ -472,3 +472,11 @@ Authorization: Bearer {{accessToken}}
 ### Árvore escolhendo o vegetal e comprando em vez de craftar
 GET {{api}}/games/heartopia/crafting-tree?target=item:salada_rural&amount=3&choices=category:vegetable=item:tomate&choices=item:tomate=buy
 Authorization: Bearer {{accessToken}}
+
+### Receitas com as referencias resolvidas: nome e icone de ingredientes, produtos e bancadas
+GET {{api}}/games/heartopia/recipes?references=true&size=20
+Authorization: Bearer {{accessToken}}
+
+### Bancadas citadas por receitas, com nome e quantas receitas cada uma tem
+GET {{api}}/games/heartopia/recipe-stations
+Authorization: Bearer {{accessToken}}

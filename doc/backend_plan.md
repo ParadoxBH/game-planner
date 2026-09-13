@@ -977,7 +977,10 @@ Decisões tomadas na implementação, que ajustam o plano acima:
 - itens: lista (`/items`, com `withoutCategory`, `activeEvents` e `trade` criados para ela) e detalhe
   (`/items/{id}/details`);
 - entidades: lista (`/entities`) e detalhe (`/entities/{id}/details`). As abas de variante viraram a
-  relação `variants`, com o filtro `variantOf` em itens e entidades.
+  relação `variants`, com o filtro `variantOf` em itens e entidades;
+- receitas: lista (`/recipes?references=true` e `/recipe-stations`, criados para ela), detalhe e árvore
+  de produção calculada no servidor, com escolha de categoria, de receita e de comprar em vez de craftar.
+  A aba de fluxo de produção (grafo) ainda usa o formato antigo e não foi migrada.
 
 As telas migradas compartilham componentes de detalhe (pontos por mapa, ofertas de loja, drops,
 códigos, coleções, variantes). As demais telas seguem lendo os JSON até a vez delas.

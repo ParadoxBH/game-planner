@@ -9,6 +9,11 @@ export interface Reference {
   extId: string;
 }
 
+/** Referência como parâmetro de URL: "tipo:id", ou só "id" quando o tipo não é conhecido. */
+export function referenceParam(target: Reference): string {
+  return target.kind ? `${target.kind}:${target.extId}` : target.extId;
+}
+
 export type MediaUsage = "icon" | "capsule" | "thumbnail" | "banner" | "screenshot";
 
 export interface MediaLink {
@@ -26,6 +31,15 @@ export interface ContentMeta {
   revision: number;
 }
 
+/** Referência citada, com nome e ícone. `resolvedKind` nulo quando o alvo não está cadastrado. */
+export interface ResolvedReference {
+  kind: string | null;
+  extId: string;
+  resolvedKind: string | null;
+  name: string | null;
+  iconMediaId: string | null;
+}
+
 export interface ContentPage<T> {
   content: T[];
   /** Começa em 0. */
@@ -33,6 +47,8 @@ export interface ContentPage<T> {
   size: number;
   total: number;
   totalPages: number;
+  /** Só quando a listagem pede references=true. */
+  references?: ResolvedReference[];
 }
 
 interface ContentBase {
@@ -136,6 +152,14 @@ export interface ShopCategoryDocument extends ContentBase {
   items: ShopItem[];
 }
 
+export interface ShopDocument extends ContentBase {
+  name: string;
+  npc: string | null;
+  resetType: string | null;
+  categories: string[];
+  events: string[];
+}
+
 export interface SpawnPointDocument extends ContentBase {
   map: string | null;
   location: string | null;
@@ -172,29 +196,13 @@ export interface CategoryDocument extends ContentBase {
   events: string[];
 }
 
-/** Referência citada, com nome e ícone. `resolvedKind` nulo quando o alvo não está cadastrado. */
-export interface ResolvedReference {
-  kind: string | null;
-  extId: string;
-  resolvedKind: string | null;
-  name: string | null;
-  iconMediaId: string | null;
-}
-
 export interface Details<D, R> {
   kind: string;
   document: D;
   related: R;
   references: ResolvedReference[];
+  /** Itens e entidades de cada categoria usada como ingrediente ou produto. */
   categoryMembers: Record<string, ResolvedReference[]>;
-}
-
-export interface ShopDocument extends ContentBase {
-  name: string;
-  npc: string | null;
-  resetType: string | null;
-  categories: string[];
-  events: string[];
 }
 
 /** Relações do detalhe de item. Cada uma traz até 200 documentos e o total. */
@@ -226,6 +234,98 @@ export interface EntityRelated {
   rewardOf: ContentPage<RedemptionCodeDocument>;
   collectionGroups: ContentPage<CollectionGroupDocument>;
   variants: ContentPage<EntityDocument>;
+}
+
+/** Relações do detalhe de receita. */
+export interface RecipeRelated {
+  soldIn: ContentPage<ShopCategoryDocument>;
+  rewardOf: ContentPage<RedemptionCodeDocument>;
+}
+
+/** Bancada citada por receitas do jogo. */
+export interface RecipeStation {
+  extId: string;
+  name: string | null;
+  iconMediaId: string | null;
+  registered: boolean;
+  recipeCount: number;
+}
+
+export type CraftSource = "recipe" | "shop" | "price" | "base" | "stock" | "category" | "cycle";
+
+/** Nó da árvore de crafting calculada no servidor. Campos ausentes não se aplicam ao nó. */
+export interface CraftTreeNode {
+  target: Reference;
+  name?: string;
+  iconMediaId?: string;
+  /** O que o pai pede. */
+  amount: number;
+  /** Quanto disso veio do que sobrou antes na árvore. */
+  fromStock?: number;
+  /** O que este nó produziu ou comprou além do pedido. */
+  leftover?: number;
+  notConsumed?: boolean;
+  source: CraftSource;
+  /** Categoria de onde este alvo foi escolhido. */
+  category?: string;
+  options?: ResolvedReference[];
+  recipe?: {
+    extId: string;
+    name?: string;
+    batches: number;
+    produced: number;
+    craftTimeSeconds?: number;
+    stations: ResolvedReference[];
+  };
+  /** Receitas que produzem o alvo. */
+  alternatives?: string[];
+  buyable?: boolean;
+  purchase?: {
+    shopCategory: string;
+    shop?: string;
+    packs: number;
+    packSize: number;
+    price: number;
+    currency?: Reference;
+    cost: number;
+    purchaseLimit?: number;
+    resetType?: string;
+  };
+  price?: { unitPrice: number; currency?: Reference; cost: number };
+  children?: CraftTreeNode[];
+}
+
+export interface CraftAmount {
+  target: Reference;
+  name: string | null;
+  iconMediaId: string | null;
+  amount: number;
+}
+
+export interface CraftTotals {
+  baseResources: CraftAmount[];
+  tools: CraftAmount[];
+  leftovers: CraftAmount[];
+  purchases: {
+    target: Reference;
+    name?: string;
+    shopCategory: string;
+    shop?: string;
+    packs: number;
+    cost: number;
+    currency?: Reference;
+  }[];
+  recipes: { extId: string; name: string | null; batches: number }[];
+  stations: ResolvedReference[];
+  craftTimeSeconds: number;
+  openCategories: CraftAmount[];
+  cycles: Reference[];
+  costWithoutCurrency?: number;
+}
+
+export interface CraftingTree {
+  root: CraftTreeNode;
+  totals: CraftTotals;
 }
 
 export interface GameInfo {
@@ -273,7 +373,7 @@ export type ContentResource =
 
 /**
  * Filtros de listagem: os comuns e, em `filters`, os próprios de cada tipo
- * (produces, sells, trade, activeEvents, withoutCategory...). Valor undefined não é enviado.
+ * (produces, sells, trade, activeEvents, withoutCategory, references...). Valor undefined não é enviado.
  */
 export interface ListQuery {
   search?: string;
@@ -324,6 +424,16 @@ export const contentApi = {
       signal,
     });
   },
+
+  /**
+   * Árvore de crafting. `target` é "tipo:id"; cada escolha é "category:x=item:y" (membro da
+   * categoria) ou "item:x=buy|base|codigo_da_receita".
+   */
+  craftingTree(gameId: string, target: string, amount: number, choices: string[], signal?: AbortSignal) {
+    const params = new URLSearchParams({ target, amount: String(amount) });
+    choices.forEach((choice) => params.append("choices", choice));
+    return apiRequest<CraftingTree>(`${gamePath(gameId)}/crafting-tree?${params}`, { signal });
+  },
 };
 
 export const gameApi = {
@@ -337,5 +447,9 @@ export const gameApi = {
 
   attributes(gameId: string, signal?: AbortSignal) {
     return apiRequest<AttributeDefinition[]>(`${gamePath(gameId)}/attributes`, { signal });
+  },
+
+  recipeStations(gameId: string, signal?: AbortSignal) {
+    return apiRequest<RecipeStation[]>(`${gamePath(gameId)}/recipe-stations`, { signal });
   },
 };

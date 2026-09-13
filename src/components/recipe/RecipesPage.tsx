@@ -1,412 +1,176 @@
-import { getPublicUrl } from "../../utils/pathUtils";
-import { 
-  Box, 
-  Typography, 
-  Stack,
-  CircularProgress,
-  Tooltip,
-  Chip
-} from "@mui/material";
-import { useParams, useNavigate } from "react-router-dom";
-import { useApi } from "../../hooks/useApi";
-import { useState, useMemo, useEffect } from "react";
-import { StyledContainer } from "../common/StyledContainer";
-import { RecipeCard } from "./RecipeCard";
-import { PickSelector } from "../common/PickSelector";
-import { TriplePickSelector } from "../common/TriplePickSelector";
-import type { TripleState } from "../common/TriplePickSelector";
+import { useEffect, useMemo } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { CircularProgress, Stack, Tooltip, Typography } from "@mui/material";
 import { Build, Science } from "@mui/icons-material";
-import type { GameDataTypes, Item, Entity, GameEvent, Category, GameInfo } from "../../types/gameModels";
-import type { NormalizedRecipe, PaginatedResponse } from "../../types/apiModels";
-import { ListingDataView } from "../common/ListingDataView";
-import { TimeChip } from "../common/TimeChip";
-import { ViewModeSelector } from "../common/ViewModeSelector";
-import { useViewMode } from "../../hooks/useViewMode";
-import { itemRepository } from "../../repositories/ItemRepository";
-import { entityRepository } from "../../repositories/EntityRepository";
-import { eventRepository } from "../../repositories/EventRepository";
-import { categoryRepository } from "../../repositories/CategoryRepository";
+import { ApiError } from "../../api/ApiError";
+import { MAX_PAGE_SIZE, type ListQuery, type RecipeDocument } from "../../api/content";
+import { contentRoute, mediaUrl, ReferenceIndex } from "../../api/references";
+import { useContentList, useRecipeStations } from "../../api/useContent";
+import { useEventFilter } from "../../context/EventFilterContext";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
-import type { RecipeCriteria } from "../../types/filterTypes";
 import { usePlatform } from "../../hooks/usePlatform";
+import { useViewMode } from "../../hooks/useViewMode";
+import type { RecipeCriteria } from "../../types/filterTypes";
+import { formatDuration } from "../../utils/format";
+import { ContentChip } from "../common/ContentChip";
+import { ContentIcon } from "../common/ContentIcon";
+import { DataChip } from "../common/DataChip";
+import { ListingDataView } from "../common/ListingDataView";
+import { PickSelector } from "../common/PickSelector";
+import { StyledContainer } from "../common/StyledContainer";
+import { ViewModeSelector } from "../common/ViewModeSelector";
+import { ApiRecipeCard, recipeTitle, unlockLabel } from "./ApiRecipeCard";
 
+/** Lista de receitas, lida da API com as referências já resolvidas. */
 export function RecipesPage() {
-  const { gameId, category: urlStation } = useParams<{ gameId: string; category?: string }>();
+  const { gameId = "", category: urlStation } = useParams<{ gameId: string; category?: string }>();
   const navigate = useNavigate();
   const { isMobile } = usePlatform();
-  const { 
-    loading: dbLoading, 
-    error: errorApi, 
-    getRecipesList, 
-    getRecipeStations,
-    getGameInfo
-  } = useApi(gameId);
+  const { activeEventIds } = useEventFilter();
 
-  const [recipesResponse, setRecipesResponse] = useState<PaginatedResponse<NormalizedRecipe> | null>(null);
-  const [items, setItems] = useState<Item[]>([]);
-  const [entities, setEntities] = useState<Entity[]>([]);
-  const [events, setEvents] = useState<GameEvent[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
-  const [dataLoading, setDataLoading] = useState(false);
+  const pages = usePagination<RecipeCriteria>({ primaryStation: urlStation || "all", subStationStates: {} });
   const [viewMode, setViewMode] = useViewMode("recipes");
-  const [allStations, setAllStations] = useState<string[]>([]);
-  const [availableSubStations, setAvailableSubStations] = useState<string[]>([]);
 
-  const pages = usePagination<RecipeCriteria>({
-    primaryStation: urlStation || "all",
-    subStationStates: {},
-  });
-
-  // Sync URL Category to filter
   useEffect(() => {
-    pages.setCriteria({
-      primaryStation: urlStation || "all",
-      subStationStates: {}
-    });
+    pages.setCriteria({ primaryStation: urlStation || "all" });
   }, [urlStation]);
 
-  // Fetch static mappings and stations list
+  // A API devolve no máximo 200 por página.
   useEffect(() => {
-    if (dbLoading) return;
-    itemRepository.getAll().then(setItems);
-    entityRepository.getAll().then(setEntities);
-    eventRepository.getAll().then(setEvents);
-    categoryRepository.getAll().then(setCategories);
-    getRecipeStations().then(setAllStations);
-    if (gameId) getGameInfo(gameId).then(info => { if (info) setGameInfo(info); });
-  }, [dbLoading, getRecipeStations, gameId, getGameInfo]);
+    if (pages.info.pagination.pageSize > MAX_PAGE_SIZE) pages.setPageSize(MAX_PAGE_SIZE);
+  }, [pages.info.pagination.pageSize, pages.setPageSize]);
 
-  // Load paginated recipes
+  const search = useDebouncedValue(pages.info.search);
+  const { pagination } = pages.info;
+  const station = urlStation && urlStation !== "all" ? urlStation : undefined;
+
+  const query = useMemo<ListQuery>(
+    () => ({
+      search: search || undefined,
+      page: pagination.page - 1,
+      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+      filters: { station, activeEvents: activeEventIds.join(","), references: "true" },
+    }),
+    [search, pagination, station, activeEventIds],
+  );
+
+  const recipes = useContentList<RecipeDocument>(gameId, "recipes", query);
+  const stations = useRecipeStations(gameId);
+  const references = useMemo(() => new ReferenceIndex(recipes.data?.references), [recipes.data]);
+
   useEffect(() => {
-    if (dbLoading) return;
+    if (recipes.data) pages.setTotalItems(recipes.data.total);
+  }, [recipes.data, pages.setTotalItems]);
 
-    let isMounted = true;
-    setDataLoading(true);
+  const stationOptions = (stations.data ?? []).map((candidate) => ({
+    value: candidate.extId,
+    label: `${candidate.name ?? candidate.extId} (${candidate.recipeCount})`,
+    icon: candidate.iconMediaId ? mediaUrl(candidate.iconMediaId) : undefined,
+  }));
 
-    getRecipesList(pages.info)
-      .then((results) => {
-        if (!isMounted) return;
-        setRecipesResponse(results);
-        pages.setTotalItems(results.total);
-        setDataLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching recipes:", err);
-        if (isMounted) setDataLoading(false);
-      });
-
-    return () => { isMounted = false; };
-  }, [dbLoading, getRecipesList, pages.info]);
-
-  const recipes = useMemo(() => recipesResponse?.data || [], [recipesResponse]);
-
-  // Derived data for details
-  const itemsMap = useMemo(() => {
-    const map = new Map<string, any>();
-    items.forEach(i => map.set(i.id.toLowerCase(), i));
-    return map;
-  }, [items]);
-
-  const entitiesMap = useMemo(() => {
-    const map = new Map<string, any>();
-    entities.forEach(e => map.set(e.id.toLowerCase(), e));
-    return map;
-  }, [entities]);
-
-  const getSourceData = (type: GameDataTypes | undefined, id: string): any => {
-    if (type === 'entity') return entitiesMap.get(id.toLowerCase());
-    return itemsMap.get(id.toLowerCase());
-  };
-
-  const eventsMap = useMemo(() => {
-    const map = new Map<string, string>();
-    events.forEach(e => map.set(e.id, e.name));
-    return map;
-  }, [events]);
-
-  const categoriesMap = useMemo(() => {
-    const map = new Map<string, Category>();
-    categories.forEach(c => map.set(c.id.toLowerCase(), c));
-    return map;
-  }, [categories]);
-
-  const resolveStation = (stationId: string) => {
-    const normalizedStation = stationId.toLowerCase();
-    const relatedEntities = entities.filter(e => {
-      const cats = Array.isArray(e.category) ? e.category : [e.category];
-      return cats.some(c => c && c.toLowerCase() === normalizedStation);
-    });
-
-    if (relatedEntities.length === 1) {
-      return { 
-        value: stationId, 
-        label: relatedEntities[0].name,
-        icon: relatedEntities[0].icon,
-        entityId: relatedEntities[0].id
-      };
-    }
-
-    const cat = categoriesMap.get(normalizedStation);
-    if (cat) {
-      return {
-        value: stationId,
-        label: cat.name,
-        icon: cat.icon
-      };
-    }
-
-    return { 
-      value: stationId, 
-      label: stationId,
-      icon: undefined
-    };
-  };
-
-  // Update available sub-stations based on current results
-  useEffect(() => {
-    const subs = new Set<string>();
-    const currentPrimary = urlStation === "all" ? null : urlStation;
-    
-    recipes.forEach(recipe => {
-      const primary = recipe.normalizedStations[0];
-      if (!currentPrimary || (primary && primary.toLowerCase() === currentPrimary.toLowerCase())) {
-        if (recipe.normalizedStations.length > 1) {
-          recipe.normalizedStations.slice(1).forEach(s => { if (s) subs.add(s); });
-        }
-      }
-    });
-
-    setAvailableSubStations(Array.from(subs).sort());
-  }, [recipes, urlStation]);
-
-  const handleSubStationStateChange = (option: string, newState: TripleState) => {
-    const nextSub = { ...pages.info.criteria.subStationStates, [option]: newState };
-    pages.setCriteria({ subStationStates: nextSub });
-  };
-
-  const stationOptions = useMemo(() => {
-    return allStations.map(station => resolveStation(station)).sort((a, b) => a.label.localeCompare(b.label));
-  }, [allStations, entities, categoriesMap]);
-
-  const subStationOptions = useMemo(() => {
-    return availableSubStations.map(station => resolveStation(station)).sort((a, b) => a.label.localeCompare(b.label));
-  }, [availableSubStations, entities, categoriesMap]);
+  const openRecipe = (recipe: RecipeDocument) => navigate(contentRoute(gameId, "recipe", recipe.extId)!);
 
   return (
     <StyledContainer
       title={`Receitas de ${gameId}`}
       label="Descubra como fabricar todos os itens do jogo."
       searchValue={pages.info.search}
-      onChangeSearch={(val) => pages.setSearch(val)}
-      search={{ placeholder: "Pesquisar receitas, ingredientes..." }}
+      onChangeSearch={pages.setSearch}
+      search={{ placeholder: "Pesquisar receitas pelo nome ou pelo produto..." }}
       pages={pages}
       actionsStart={
-        <Stack direction={"row"} spacing={1} justifyContent={"space-between"} flex={1} alignItems={"center"}>
-        <Stack direction="row" spacing={1} flex={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
+        <Stack direction="row" spacing={1} justifyContent="space-between" flex={1} alignItems="center">
           <PickSelector
-            label="Estação"
-            value={urlStation === "all" ? null : urlStation || null}
+            label="Bancada"
+            value={station ?? null}
             options={stationOptions}
-            onChange={(st: string | null) => {
-              navigate(`/game/${gameId}/recipes/list/${st || "all"}`);
-            }}
-            allLabel="Todas Estações"
+            onChange={(selected) => navigate(`/game/${gameId}/recipes/list/${selected || "all"}`)}
+            allLabel="Todas as bancadas"
             icon={<Build sx={{ fontSize: 18 }} />}
             fullWidth={isMobile}
           />
-          {availableSubStations.length > 0 && (
-            <TriplePickSelector
-              label="Sub-estação"
-              states={pages.info.criteria.subStationStates || {}}
-              options={subStationOptions}
-              onChange={handleSubStationStateChange}
-              icon={<Build sx={{ fontSize: 18 }} />}
-              fullWidth={isMobile}
-            />
-          )}
-        </Stack>
-        <ViewModeSelector mode={viewMode} onChange={setViewMode} />
+          <ViewModeSelector mode={viewMode} onChange={setViewMode} />
         </Stack>
       }
     >
-      {(dbLoading || dataLoading) ? (
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", py: 10, flex: 1 }}>
+      {recipes.isPending ? (
+        <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>
           <CircularProgress color="primary" />
-        </Box>
-      ) : errorApi ? (
-        <Box sx={{ p: 4, textAlign: "center", flex: 1 }}>
+        </Stack>
+      ) : recipes.isError ? (
+        <Stack alignItems="center" spacing={1} sx={{ p: 4, flex: 1 }}>
           <Typography color="error" variant="h6" sx={{ fontWeight: 700 }}>
-            Erro ao carregar receitas
+            Não foi possível carregar as receitas.
           </Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary", mt: 1 }}>
-            {errorApi}
+          <Typography variant="body2" color="text.secondary">
+            {recipes.error instanceof ApiError ? recipes.error.message : "Erro inesperado."}
           </Typography>
-        </Box>
+        </Stack>
       ) : (
         <ListingDataView
-          data={recipes}
+          data={recipes.data.content}
           viewMode={viewMode}
-          variant="compact"
-          cardMinWidth={200}
+          variant="default"
+          cardMinWidth={320}
           listHeader={[
-            { label: "Receita / Produto", width: "30%" },
-            { label: "Tempo / Ingredientes", width: "40%" },
+            { label: "Receita / produto", width: "30%" },
+            { label: "Tempo / ingredientes", width: "40%" },
             { label: "Bancadas", width: "15%" },
             { label: "Desbloqueio", align: "right" as const, width: "15%" },
           ]}
           emptyMessage="Nenhuma receita encontrada com estes filtros."
-          getRowColor={(recipe: any) => {
-            const mainProduct = recipe.normalizedProducts[0];
-            const productData = mainProduct ? getSourceData(mainProduct.type, mainProduct.id) : null;
-            return productData?.rarity && gameInfo?.rarity?.[productData.rarity]?.color;
-          }}
-          renderCard={(recipe: any, variant) => {
-            const mainProduct = recipe.normalizedProducts[0];
-            const productData = mainProduct ? getSourceData(mainProduct.type, mainProduct.id) : null;
-            const rarityColor = productData?.rarity && gameInfo?.rarity?.[productData.rarity]?.color;
-            
-            return (
-              <RecipeCard
-                id={recipe.id}
-                name={recipe.normalizedName}
-                stations={recipe.normalizedStations}
-                ingredients={recipe.normalizedIngredients}
-                products={recipe.normalizedProducts}
-                unlock={recipe.unlock}
-                getSourceData={getSourceData}
-                eventsMap={eventsMap}
-                craftTime={recipe.craftTime}
-                variant={variant}
-                entities={entities}
-                categories={categories}
-                rarityColor={rarityColor}
-                gameInfo={gameInfo || undefined}
-              />
-            );
-          }}
-          renderListItem={(recipe: any) => {
-            const mainProduct = recipe.normalizedProducts[0];
-            const productData = mainProduct ? getSourceData(mainProduct.type, mainProduct.id) : null;
-            
+          renderCard={(recipe) => <ApiRecipeCard recipe={recipe} references={references} />}
+          renderListItem={(recipe) => {
+            const output = recipe.outputs[0];
             return [
-              <Box 
-                key={`recipe_view_${recipe.id}`}
-                onClick={() => navigate(`/game/${gameId}/recipes/view/${recipe.id}`)}
-                sx={{ display: 'flex', alignItems: 'center', gap: 2, cursor: 'pointer' }}
-              >
-                <Box sx={{ width: 32, height: 32, borderRadius: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
-                  {productData?.icon ? (
-                    <img src={getPublicUrl(productData.icon)} alt={recipe.normalizedName} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
-                  ) : (
-                    <Science sx={{ fontSize: 16, color: 'rgba(255, 255, 255, 0.2)' }} />
-                  )}
-                </Box>
-                <Typography 
-                  variant="body2" 
-                  sx={{ 
-                    fontWeight: 700,
-                    color: productData?.rarity && gameInfo?.rarity?.[productData.rarity]?.color ? gameInfo?.rarity?.[productData.rarity]?.color : "text.primary",
-                    transition: "all 0.2s",
-                    "&:hover": {
-                      color: productData?.rarity && gameInfo?.rarity?.[productData.rarity]?.color ? gameInfo?.rarity?.[productData.rarity]?.color : "primary.main",
-                      textShadow: productData?.rarity && gameInfo?.rarity?.[productData.rarity]?.color ? `0 0 8px ${gameInfo?.rarity?.[productData.rarity]?.color}88` : "none"
-                    }
-                  }}
-                >
-                  {recipe.normalizedName}
-                </Typography>
-              </Box>,
-
-              <Box key={`recipe_ing_${recipe.id}`} sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
-                {(!!recipe.craftTime && recipe.craftTime > 0) && (
-                  <TimeChip seconds={recipe.craftTime} />
+              <Stack key="name" direction="row" spacing={2} alignItems="center" sx={{ cursor: "pointer" }} onClick={() => openRecipe(recipe)}>
+                {output ? (
+                  <ContentChip target={output.target} resolved={references.find(output.target)} size="small" disableLink />
+                ) : (
+                  <Science sx={{ color: "text.disabled" }} />
                 )}
-                {recipe.normalizedIngredients.map((ing: any, i: number) => {
-                  const ingData = getSourceData(ing.type, ing.id);
-                  return (
-                    <Tooltip key={i} title={`${ingData?.name || ing.id} x${ing.amount}`}>
-                      <Box sx={{ 
-                        width: 24, height: 24, 
-                        borderRadius: 0.5, 
-                        backgroundColor: 'rgba(255,255,255,0.03)',
-                        border: '1px solid rgba(255,255,255,0.05)',
-                        display: 'flex', justifyContent: 'center', alignItems: 'center',
-                        position: 'relative'
-                      }}>
-                        <img src={getPublicUrl(ingData?.icon)} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
-                        {ing.amount > 1 && (
-                          <Typography sx={{ 
-                            position: 'absolute', bottom: -2, right: -2, 
-                            fontSize: '0.5rem', fontWeight: 900, color: 'white',
-                            textShadow: '0 0 2px black',
-                            backgroundColor: 'secondary.main',
-                            borderRadius: '50%',
-                            width: 12, height: 12,
-                            display: 'flex', justifyContent: 'center', alignItems: 'center'
-                          }}>{ing.amount}</Typography>
-                        )}
-                      </Box>
-                    </Tooltip>
-                  );
+                <Typography variant="body2" fontWeight={700} sx={{ "&:hover": { color: "primary.main" } }}>
+                  {recipeTitle(recipe, references)}
+                </Typography>
+              </Stack>,
+              <Stack key="inputs" direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+                {recipe.craftTimeSeconds ? <DataChip label={formatDuration(recipe.craftTimeSeconds)} /> : null}
+                {recipe.inputs.map((input, index) => (
+                  <ContentChip
+                    key={index}
+                    target={input.target}
+                    resolved={references.find(input.target)}
+                    amount={input.amount}
+                    notConsumed={input.notConsumed}
+                    size="small"
+                  />
+                ))}
+              </Stack>,
+              <Stack key="stations" direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                {recipe.stations.map((code) => {
+                  const target = { kind: "entity", extId: code };
+                  return <ContentChip key={code} target={target} resolved={references.find(target)} size="small" />;
                 })}
-              </Box>,
-
-              <Box key={`recipe_stations_${recipe.id}`} sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-                {recipe.normalizedStations.filter(Boolean).map((station: string) => {
-                  const resolved = resolveStation(station);
-                  const targetUrl = resolved.entityId 
-                    ? `/game/${gameId}/entity/view/${resolved.entityId}`
-                    : `/game/${gameId}/entity/list/all?subCategory=${station}`;
-
-                  return (
-                    <Chip 
-                      key={station} 
-                      label={resolved.label} 
-                      size="small" 
-                      icon={resolved.icon ? (
-                        <Box component="img" src={getPublicUrl(resolved.icon)} sx={{ width: 12, height: 12, objectFit: 'contain' }} />
-                      ) : undefined} 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(targetUrl);
-                      }}
-                      sx={{ 
-                        height: 18, 
-                        fontSize: '0.6rem', 
-                        backgroundColor: 'rgba(255,255,255,0.05)',
-                        cursor: 'pointer',
-                        '&:hover': {
-                          backgroundColor: 'rgba(255,255,255,0.1)',
-                          borderColor: 'primary.main',
-                        }
-                      }} 
-                    />
-                  );
-                })}
-              </Box>,
-
-              <Typography key={`recipe_unlock_${recipe.id}`} variant="caption" sx={{ textAlign: 'right', display: 'block', color: 'text.secondary', fontWeight: 700 }}>
-                {recipe.unlock && recipe.unlock.length > 0 ? recipe.unlock[0].value : '-'}
-              </Typography>
+              </Stack>,
+              <Typography key="unlock" variant="caption" color="text.secondary" sx={{ display: "block", textAlign: "right", fontWeight: 700 }}>
+                {recipe.unlock[0] ? unlockLabel(recipe.unlock[0], references) : "-"}
+              </Typography>,
             ];
           }}
-          renderIconItem={(recipe: any) => {
-            const mainProduct = recipe.normalizedProducts[0];
-            const productData = mainProduct ? getSourceData(mainProduct.type, mainProduct.id) : null;
-
+          renderIconItem={(recipe) => {
+            const output = recipe.outputs[0];
+            const resolved = output ? references.find(output.target) : undefined;
             return (
-              <Tooltip key={`recipe_icon_${recipe.id}`} title={`${recipe.normalizedName} (${recipe.id})`}>
-                <Box 
-                  onClick={() => navigate(`/game/${gameId}/recipes/view/${recipe.id}`)}
-                  sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1 }}
+              <Tooltip title={`${recipeTitle(recipe, references)} (${recipe.extId})`}>
+                <Stack
+                  alignItems="center"
+                  justifyContent="center"
+                  onClick={() => openRecipe(recipe)}
+                  sx={{ width: "100%", height: "100%", p: 1, cursor: "pointer" }}
                 >
-                  {productData?.icon ? (
-                    <img src={getPublicUrl(productData.icon)} alt={recipe.normalizedName} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                  ) : (
-                    <Science sx={{ fontSize: 32, color: 'rgba(255, 255, 255, 0.2)' }} />
-                  )}
-                </Box>
+                  <ContentIcon mediaId={resolved?.iconMediaId} kind={resolved?.resolvedKind ?? "recipe"} size={56} />
+                </Stack>
               </Tooltip>
             );
           }}

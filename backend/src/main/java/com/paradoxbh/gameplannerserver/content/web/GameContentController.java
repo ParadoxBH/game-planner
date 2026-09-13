@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paradoxbh.gameplannerserver.content.model.ContentPage;
 import com.paradoxbh.gameplannerserver.content.service.ReferenceService;
 import com.paradoxbh.gameplannerserver.content.service.ReferenceService.PendingReference;
+import com.paradoxbh.gameplannerserver.content.service.ReferenceService.RecipeStation;
 import com.paradoxbh.gameplannerserver.content.service.ReferenceService.ReferenceSource;
 import com.paradoxbh.gameplannerserver.content.service.ReferenceService.SearchHit;
 import com.paradoxbh.gameplannerserver.content.store.RevisionRepository;
@@ -65,6 +66,12 @@ public class GameContentController {
                                                      @RequestParam(defaultValue = "0") int page,
                                                      @RequestParam(defaultValue = "50") int size) {
         return references.referencedBy(gameId, target, field, page, size);
+    }
+
+    /** Bancadas citadas por receitas, com nome, ícone e quantas receitas cada uma tem. */
+    @GetMapping("/recipe-stations")
+    public List<RecipeStation> recipeStations(@PathVariable String gameId) {
+        return references.recipeStations(gameId);
     }
 
     @GetMapping("/search")

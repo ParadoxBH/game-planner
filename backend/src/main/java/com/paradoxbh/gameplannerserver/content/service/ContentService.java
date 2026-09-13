@@ -73,10 +73,17 @@ public class ContentService {
         this.json = json;
     }
 
+    /** Com references=true, a página traz também toda referência citada pelos documentos, já resolvida. */
     public <D extends ContentDocument<D>> ContentPage<D> list(ContentHandler<D> handler, String gameId,
                                                               ContentQuery query) {
         access.requireReadable(gameId);
-        return handler.list(gameId, query);
+        ContentPage<D> page = handler.list(gameId, query);
+        if (!"true".equals(query.filters().get("references"))) {
+            return page;
+        }
+        return page.withReferences(references.resolve(gameId, page.content().stream()
+                .map(document -> new ReferenceService.Source(handler.kind(), document.extId()))
+                .toList()));
     }
 
     /** Id não cadastrado responde 404 com quem aponta para ele. */

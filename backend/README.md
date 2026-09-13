@@ -171,6 +171,7 @@ Itens, entidades, categorias e eventos usam as mesmas rotas e as mesmas regras.
 | GET | `/api/v1/games/{jogo}/pending-references?kind=` | quem lê o jogo |
 | GET | `/api/v1/games/{jogo}/search?q=&kind=` | quem lê o jogo |
 | GET | `/api/v1/games/{jogo}/references?target=&field=` | quem lê o jogo |
+| GET | `/api/v1/games/{jogo}/recipe-stations` | quem lê o jogo |
 | GET | `/api/v1/games/{jogo}/changes?since=&by=` | quem lê o jogo |
 | GET, PUT, DELETE | `/api/v1/games/{jogo}/attributes/{chave}` | ler, editar, `moderator` |
 | GET, PUT, DELETE | `/api/v1/games/{jogo}/rarities/{código}` | ler, editar, `moderator` |
@@ -227,7 +228,8 @@ definição em `/attributes`, o tipo é conferido e divergência dá `422`.
 decrescente. Várias `category` combinam com E. Toda listagem aceita também `withoutCategory` (exclui categorias) e
 `activeEvents` (esconde conteúdo de evento fora da lista; vazio mostra só o que não tem evento), com códigos
 separados por vírgula. Itens aceitam `trade`: `buyable` (preço base de compra ou vendido em loja), `sellable`,
-`traded` ou `untraded`. Itens e entidades aceitam `variantOf` (código do conteúdo base).
+`traded` ou `untraded`. Itens e entidades aceitam `variantOf` (código do conteúdo base). Com `references=true`, a página traz
+também `references`: toda referência citada pelos documentos da página, com nome e ícone, como no detalhe.
 
 ## Crafting e economia (Fase 3)
 

@@ -2,6 +2,7 @@ package com.paradoxbh.gameplannerserver.content.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import com.paradoxbh.gameplannerserver.common.ApiException;
 import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.model.ContentPage;
 import com.paradoxbh.gameplannerserver.content.model.Reference;
+import com.paradoxbh.gameplannerserver.content.model.ResolvedReference;
 import com.paradoxbh.gameplannerserver.identity.service.GameAccess;
 
 /**
@@ -30,6 +32,14 @@ public class ReferenceService {
 
     public record PendingReference(String extId, String guessedKind, long referenceCount,
                                    List<ReferenceSource> referencedBy) {
+    }
+
+    /** Conteúdo cujas referências se quer resolver. */
+    public record Source(ContentKind kind, String extId) {
+    }
+
+    /** Bancada citada por receitas, com nome e ícone quando está cadastrada como entidade. */
+    public record RecipeStation(String extId, String name, String iconMediaId, boolean registered, long recipeCount) {
     }
 
     public record SearchHit(String kind, String extId, String name, String iconMediaId) {
@@ -207,6 +217,62 @@ public class ReferenceService {
                 .list();
 
         return ContentPage.of(content, page, size, total);
+    }
+
+    /** Toda referência citada pelas origens, resolvida contra content_ref numa consulta só. */
+    public List<ResolvedReference> resolve(String gameId, List<Source> sources) {
+        if (sources.isEmpty()) {
+            return List.of();
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("game", gameId);
+        StringBuilder values = new StringBuilder();
+        int index = 0;
+        for (Source source : new LinkedHashSet<>(sources)) {
+            if (index > 0) {
+                values.append(", ");
+            }
+            values.append("(CAST(:k").append(index).append(" AS text), CAST(:e").append(index).append(" AS text))");
+            params.put("k" + index, source.kind().code());
+            params.put("e" + index, source.extId());
+            index++;
+        }
+        return jdbc.sql("""
+                SELECT DISTINCT r.target_kind, r.target_ext_id, c.kind AS resolved_kind, c.name, c.icon_media_id
+                FROM content_reference r
+                JOIN (VALUES %s) AS s(kind, ext_id) ON r.source_kind = s.kind AND r.source_ext_id = s.ext_id
+                LEFT JOIN LATERAL (
+                    SELECT x.kind, x.name, x.icon_media_id FROM content_ref x
+                    WHERE x.game_id = r.game_id AND x.ext_id = r.target_ext_id
+                      AND (r.target_kind IS NULL OR x.kind = r.target_kind)
+                    ORDER BY x.kind
+                    LIMIT 1) c ON true
+                WHERE r.game_id = :game
+                ORDER BY r.target_kind NULLS FIRST, r.target_ext_id
+                """.formatted(values))
+                .params(params)
+                .query((rs, rowNum) -> new ResolvedReference(rs.getString("target_kind"), rs.getString("target_ext_id"),
+                        rs.getString("resolved_kind"), rs.getString("name"), rs.getString("icon_media_id")))
+                .list();
+    }
+
+    /** Bancadas citadas por receitas do jogo, com quantas receitas cada uma tem, pelo nome. */
+    public List<RecipeStation> recipeStations(String gameId) {
+        access.requireReadable(gameId);
+        return jdbc.sql("""
+                SELECT s.station_ext_id, count(DISTINCT s.recipe_ext_id) AS recipe_count,
+                       max(c.name) AS name, max(c.icon_media_id) AS icon_media_id,
+                       bool_or(c.ext_id IS NOT NULL) AS registered
+                FROM recipe_station s
+                LEFT JOIN content_ref c ON c.game_id = s.game_id AND c.kind = 'entity' AND c.ext_id = s.station_ext_id
+                WHERE s.game_id = :game
+                GROUP BY s.station_ext_id
+                ORDER BY coalesce(max(c.name), s.station_ext_id), s.station_ext_id
+                """)
+                .param("game", gameId)
+                .query((rs, rowNum) -> new RecipeStation(rs.getString("station_ext_id"), rs.getString("name"),
+                        rs.getString("icon_media_id"), rs.getBoolean("registered"), rs.getLong("recipe_count")))
+                .list();
     }
 
     private static String targetKey(String extId, String kind) {

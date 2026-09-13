@@ -14,35 +14,41 @@ const UNLOCK_LABELS: Record<string, string> = {
   station_level: "Nível da bancada",
 };
 
-function unlockLabel(unlock: RecipeUnlock, references: ReferenceIndex): string {
+export function unlockLabel(unlock: RecipeUnlock, references: ReferenceIndex): string {
   const parts = [unlock.target ? references.name(unlock.target) : null, unlock.value].filter(Boolean);
   return `${UNLOCK_LABELS[unlock.type] ?? unlock.type}: ${parts.join(" · ")}`;
 }
 
+/** Nome de exibição: o da receita ou, sem ele, o do primeiro produto. */
+export function recipeTitle(recipe: RecipeDocument, references: ReferenceIndex): string {
+  const firstOutput = recipe.outputs[0];
+  return recipe.name ?? (firstOutput ? references.find(firstOutput.target)?.name : null) ?? recipe.extId;
+}
+
 interface ApiRecipeCardProps {
   recipe: RecipeDocument;
-  /** Referências resolvidas do detalhe onde o card aparece. */
+  /** Referências resolvidas da tela onde o card aparece. */
   references: ReferenceIndex;
   /** Alvo destacado nos ingredientes e produtos, ex.: o item da página. */
   highlight?: Reference;
+  /** Substitui a navegação para o detalhe, ex.: escolher a receita num diálogo. */
+  onClick?: () => void;
 }
 
 /** Receita vinda da API: ingredientes, produtos, bancadas, desbloqueio e tempo. */
-export function ApiRecipeCard({ recipe, references, highlight }: ApiRecipeCardProps) {
+export function ApiRecipeCard({ recipe, references, highlight, onClick }: ApiRecipeCardProps) {
   const navigate = useNavigate();
   const { gameId = "" } = useParams<{ gameId: string }>();
-  const firstOutput = recipe.outputs[0];
-  const title = recipe.name ?? (firstOutput ? references.find(firstOutput.target)?.name : null) ?? recipe.extId;
   const isHighlight = (target: Reference) => Boolean(highlight && sameTarget(target, highlight));
 
   return (
     <DataCard
-      onClick={() => navigate(contentRoute(gameId, "recipe", recipe.extId)!)}
+      onClick={onClick ?? (() => navigate(contentRoute(gameId, "recipe", recipe.extId)!))}
       sx={{ p: 1.5, flexDirection: "column", alignItems: "stretch", gap: 1.5, height: "100%" }}
     >
       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
         <Typography variant="body2" fontWeight={700} noWrap>
-          {title}
+          {recipeTitle(recipe, references)}
         </Typography>
         {recipe.craftTimeSeconds ? <DataChip label={formatDuration(recipe.craftTimeSeconds)} /> : null}
       </Stack>
@@ -57,6 +63,7 @@ export function ApiRecipeCard({ recipe, references, highlight }: ApiRecipeCardPr
             notConsumed={input.notConsumed}
             highlight={isHighlight(input.target)}
             size="medium"
+            disableLink={Boolean(onClick)}
           />
         ))}
         <ArrowForward sx={{ color: "text.disabled" }} />
@@ -71,6 +78,7 @@ export function ApiRecipeCard({ recipe, references, highlight }: ApiRecipeCardPr
             highlight={isHighlight(output.target)}
             product
             size="medium"
+            disableLink={Boolean(onClick)}
           />
         ))}
       </Stack>
@@ -79,7 +87,9 @@ export function ApiRecipeCard({ recipe, references, highlight }: ApiRecipeCardPr
         <Stack direction="row" alignItems="center" spacing={1} flexWrap="wrap" useFlexGap>
           {recipe.stations.map((station) => {
             const target = { kind: "entity", extId: station };
-            return <ContentChip key={station} target={target} resolved={references.find(target)} size="small" />;
+            return (
+              <ContentChip key={station} target={target} resolved={references.find(target)} size="small" disableLink={Boolean(onClick)} />
+            );
           })}
           {recipe.unlock.map((unlock, index) => (
             <DataChip key={`unlock-${index}`} label={unlockLabel(unlock, references)} />

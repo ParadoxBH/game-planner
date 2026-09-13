@@ -1,6 +1,8 @@
 package com.paradoxbh.gameplannerserver.content;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -247,5 +249,33 @@ class CraftingEconomyApiIntegrationTest extends ContentApiTest {
                 .andExpect(jsonPath("$.stations[0]").value("Alchemy"))
                 .andExpect(jsonPath("$.unlock[2].value").value("1"))
                 .andExpect(jsonPath("$.meta.revision").value(3));
+    }
+
+    @Test
+    void recipeListCanResolveReferencesAndStationsAreListedWithNames() throws Exception {
+        send(post("/api/v1/games/{game}/items", game), "editor", json("{ 'extId': 'madeira', 'name': 'Madeira' }"))
+                .andExpect(status().isCreated());
+        send(post(ENTITIES, game), "editor", json("{ 'extId': 'bancada', 'name': 'Bancada' }"))
+                .andExpect(status().isCreated());
+        send(post(RECIPES, game), "editor", json("""
+                { 'extId': 'tabua', 'stations': ['bancada', 'serraria'],
+                  'inputs': [ { 'target': { 'kind': 'item', 'extId': 'madeira' }, 'amount': 2 } ],
+                  'outputs': [ { 'target': { 'kind': 'item', 'extId': 'tabua' }, 'amount': 4 } ] }
+                """))
+                .andExpect(status().isCreated());
+
+        mvc.perform(get(RECIPES, game)).andExpect(jsonPath("$.references").doesNotExist());
+        mvc.perform(get(RECIPES, game).param("references", "true"))
+                .andExpect(jsonPath("$.references[?(@.extId == 'madeira')].name", hasItem("Madeira")))
+                .andExpect(jsonPath("$.references[?(@.extId == 'tabua')].resolvedKind", hasItem(nullValue())));
+
+        mvc.perform(get("/api/v1/games/{game}/recipe-stations", game))
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].extId").value("bancada"))
+                .andExpect(jsonPath("$[0].name").value("Bancada"))
+                .andExpect(jsonPath("$[0].registered").value(true))
+                .andExpect(jsonPath("$[1].extId").value("serraria"))
+                .andExpect(jsonPath("$[1].registered").value(false))
+                .andExpect(jsonPath("$[1].recipeCount").value(1));
     }
 }

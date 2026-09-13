@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.paradoxbh.gameplannerserver.common.ApiException;
 import com.paradoxbh.gameplannerserver.content.ExtIds;
 import com.paradoxbh.gameplannerserver.content.model.Reference;
-import com.paradoxbh.gameplannerserver.content.service.DetailsService.ResolvedReference;
+import com.paradoxbh.gameplannerserver.content.model.ResolvedReference;
 import com.paradoxbh.gameplannerserver.identity.service.GameAccess;
 
 /**
