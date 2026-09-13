@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
 import com.paradoxbh.gameplannerserver.content.ContentKind;
+import com.paradoxbh.gameplannerserver.content.ExtIds;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 import com.paradoxbh.gameplannerserver.content.model.MapDocument;
 import com.paradoxbh.gameplannerserver.content.model.MapDocument.Bounds;
@@ -136,6 +137,16 @@ public class MapHandler extends AbstractContentHandler<MapDocument, MapHandler.L
         for (Table table : List.of(VIEWS, TYPES, CATEGORIES, ENTITIES, WEATHERS)) {
             children.delete(table, gameId, extId);
         }
+    }
+
+    /** weather é o código de um evento de clima do mapa. */
+    @Override
+    protected Map<String, Filter> specificFilters() {
+        return Map.of("weather", (name, value, param, params) -> {
+            params.put(param, ExtIds.require(value, name));
+            return "EXISTS (SELECT 1 FROM game_map_list x WHERE x.game_id = t.game_id AND x.map_ext_id = t.ext_id"
+                    + " AND x.list = 'weather' AND x.value = :" + param + ")";
+        });
     }
 
     private static Table list(String name) {

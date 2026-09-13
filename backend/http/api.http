@@ -450,3 +450,25 @@ Content-Type: application/json
 ### Códigos que ainda valem, mais recentes primeiro
 GET {{api}}/games/heartopia/codes?active=true&sort=-addedOn
 Authorization: Bearer {{accessToken}}
+
+### ===================== Agregações (Fase 6) =====================
+
+### Detalhe de um item: receitas, drops, lojas, códigos e coleções numa chamada
+GET {{api}}/games/heartopia/items/salada_rural/details
+Authorization: Bearer {{accessToken}}
+
+### Detalhe de uma receita: opções de cada ingrediente que é categoria
+GET {{api}}/games/heartopia/recipes/recipe_salada_rural/details
+Authorization: Bearer {{accessToken}}
+
+### Detalhe de um evento: tudo que pertence a ele
+GET {{api}}/games/heartopia/events/gala_neve/details
+Authorization: Bearer {{accessToken}}
+
+### Árvore de crafting: lotes inteiros, com o que sobra em totals.leftovers
+GET {{api}}/games/heartopia/crafting-tree?target=item:salada_rural&amount=3
+Authorization: Bearer {{accessToken}}
+
+### Árvore escolhendo o vegetal e comprando em vez de craftar
+GET {{api}}/games/heartopia/crafting-tree?target=item:salada_rural&amount=3&choices=category:vegetable=item:tomate&choices=item:tomate=buy
+Authorization: Bearer {{accessToken}}

@@ -330,6 +330,50 @@ datas, e o código vale até o fim de `expiresOn`.
 | `GET /api/v1/games/{jogo}/collection-groups` | `collection`, `member` |
 | `GET /api/v1/games/{jogo}/codes` | `active` (`true` = ainda vale hoje), `rewards`; `sort` aceita `addedOn` e `expiresOn` |
 
+## Agregações (Fase 6)
+
+**Detalhe numa chamada:** `GET /api/v1/games/{jogo}/{recurso}/{extId}/details`, para qualquer
+recurso de conteúdo. Traz:
+
+- `document`: o conteúdo;
+- `related`: uma página por relação, sempre presente, até 200 documentos cada (com `total`);
+- `references`: toda referência citada pelo documento e pelos relacionados, com `name` e
+  `iconMediaId` — `resolvedKind` nulo quando o alvo não está cadastrado;
+- `categoryMembers`: em receita, os itens e entidades de cada categoria usada como ingrediente.
+
+| Recurso | Relações |
+|---|---|
+| item | `producedBy`, `usedIn`, `droppedBy`, `dropPoints`, `spawnPoints`, `soldIn`, `requiredBy`, `rewardOf`, `collectionGroups` |
+| entidade | `producedBy`, `usedIn`, `craftedHere`, `droppedBy`, `spawnPoints`, `soldIn`, `requiredBy`, `shops`, `rewardOf`, `collectionGroups` |
+| receita | `soldIn`, `rewardOf` |
+| categoria | `items`, `entities`, `shops`, `producedBy`, `usedIn` |
+| evento | `items`, `entities`, `categories`, `recipes`, `shops`, `shopCategories`, `maps`, `mapsWithWeather`, `locations`, `spawnPoints`, `collections`, `collectionGroups` |
+| loja | `categories` |
+| local | `spawnPoints`, `children` |
+| ponto de spawn | `locations` |
+| mapa | `locations` |
+| coleção | `groups` |
+
+**Árvore de crafting:** `GET /api/v1/games/{jogo}/crafting-tree?target=item:tabua&amount=6`.
+
+- Com receita, crafta. Sem receita, compra na oferta mais barata por unidade; sem oferta, usa o
+  preço base; sem nada, é recurso base.
+- Moeda que é conteúdo vira nó filho com o valor gasto e desce na árvore.
+- `choices` se repete: `category:vegetal=item:tomate` escolhe o membro da categoria (sem escolha,
+  a categoria fica em aberto); `item:prego=buy` compra em vez de craftar; `item:prego=base` para ali;
+  `item:prego=fazer_prego_2` escolhe a receita.
+- Lotes e pacotes são sempre inteiros. O que sobra (o excedente do último lote, o resto do pacote,
+  os subprodutos da receita) vai para o estoque, e o próximo passo que precisa do mesmo alvo usa o
+  estoque antes de craftar ou comprar de novo. Ferramenta não consumida é obtida uma vez.
+- Cada nó traz `source` (`recipe`, `shop`, `price`, `base`, `stock`, `category`, `cycle`), `amount`,
+  `fromStock` (quanto veio do que sobrou), `leftover` (quanto sobrou dele), nome, ícone, `recipe`
+  (lotes, produzido, tempo, bancadas), `purchase` (pacotes, custo, moeda), `alternatives` (receitas
+  do alvo), `buyable` e `children`. `totals` soma recursos base, ferramentas (não consumidos),
+  `leftovers` (o que sobrou no fim), compras, receitas, bancadas, tempo, categorias em aberto e ciclos.
+
+**Cache:** toda leitura da API responde com `ETag` e `Cache-Control: no-cache`. Reenviando
+`If-None-Match`, a resposta é `304` sem corpo quando nada mudou.
+
 ## Produção
 
 ```bash

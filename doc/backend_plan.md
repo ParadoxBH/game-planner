@@ -27,6 +27,7 @@ Escrito a partir da análise do front atual (`src/`) e da base em `public/data/`
 | Requisito de entidade | Lista `requirements` na entidade, com `notConsumed`: energia é gasta, machado não |
 | Mundo | Geometria em **WKT** na API (SRID 0, com ou sem Z). Mapa com exibição **tipada**. Ponto de spawn pode não ter posição quando está ligado a um local. Clima é evento: **sem tabela de condição** |
 | Coleções e códigos | Grupo de coleção tem código próprio e **lista de coleções** (16 dos 32 grupos estão em duas). Código de resgate é identificado pelo **próprio código** |
+| Árvore de crafting | Crafta quando há receita (loja fica como alternativa, escolha "buy"). Categoria sem escolha fica **em aberto**. Moeda que é conteúdo **vira nó filho** e desce. Lotes e pacotes **sempre inteiros**; o que sobra vai para o estoque e é usado antes de craftar ou comprar de novo |
 
 ---
 
@@ -714,7 +715,7 @@ GET /api/v1/games
 GET /api/v1/games/{game}
 GET /api/v1/games/{game}/items?search=&category=&rarity=&event=&attr.peso=&page=&size=&sort=
 GET /api/v1/games/{game}/items/{extId}
-GET /api/v1/games/{game}/items/{extId}/details        <- agregado
+GET /api/v1/games/{game}/{resource}/{extId}/details   <- agregado de qualquer tipo
 GET /api/v1/games/{game}/entities | /locations | /spawn-points | /maps | /recipes | /shops | /shop-categories | /categories | /events | /collections | /collection-groups | /codes
 GET /api/v1/games/{game}/collections?member=item:x | /collection-groups?collection=&member=
 GET /api/v1/games/{game}/codes?active=true&rewards=item:x&sort=-addedOn
@@ -725,7 +726,7 @@ GET /api/v1/games/{game}/references?target=item:x&field=    <- quem aponta para 
 GET /api/v1/games/{game}/maps/{mapId}/spawn-points?bbox=&occupant=&occupantCategory=&event=&limit=   <- marcadores compactos
 GET /api/v1/games/{game}/spawn-points?location=&map=&occupant=&drops=&bbox=   <- location inclui ponto dentro da área
 GET /api/v1/games/{game}/locations?containing=&parent=&type=&map=
-GET /api/v1/games/{game}/crafting-tree?target=&amount=&choices=
+GET /api/v1/games/{game}/crafting-tree?target=item:x&amount=&choices=
 GET /api/v1/games/{game}/search?q=                          <- sobre content_ref
 ```
 
@@ -941,7 +942,35 @@ Decisões tomadas na implementação, que ajustam o plano acima:
   liberados por ela. Quest não estava no roadmap.
 
 ### Fase 6 — Agregações
-Endpoints `/details`, `crafting-tree` no servidor, ETag e `Cache-Control`.
+**Status: concluída.** 7 testes de contrato HTTP, 55 no total.
+Decisões tomadas na implementação, que ajustam o plano acima:
+
+- **Um `/details` genérico** para todo tipo: `GET /{recurso}/{extId}/details` devolve o documento,
+  `related` (uma página por relação: `producedBy`, `usedIn`, `droppedBy`, `soldIn`, `rewardOf`...)
+  e `references`, toda referência citada pelo documento e pelos relacionados já com nome e ícone,
+  resolvida numa consulta só sobre `content_reference`. Receita traz também `categoryMembers`, as
+  opções de cada ingrediente que é categoria. As relações reusam os filtros de listagem das fases
+  anteriores; cada uma traz até 200 documentos e o total.
+- **Árvore de crafting no servidor** (`GET /crafting-tree`), sobre o jogo inteiro carregado de uma
+  vez (receitas, ofertas, preços base e membros de categoria):
+  - com receita, crafta; a loja fica como alternativa (`buyable`), e a escolha `item:x=buy` compra;
+    `item:x=base` para ali, e `item:x=codigo_da_receita` escolhe entre as receitas do alvo;
+  - sem receita, compra na oferta de menor preço por unidade; sem oferta, usa o preço base;
+  - moeda que é conteúdo vira nó filho com o valor gasto e desce como qualquer alvo;
+  - categoria sem escolha fica em aberto, com as opções; com um membro só, usa ele;
+  - lotes e pacotes sempre inteiros. O que sobra — o excedente do último lote, o resto do pacote e
+    os subprodutos certos da receita (chance nula ou 1) — vai para um estoque, e o próximo nó que
+    precisa do mesmo alvo usa o estoque antes de craftar ou comprar de novo (`source: stock`,
+    `fromStock`). Cada nó mostra o `leftover` que gerou, e `totals.leftovers` o que sobrou no fim;
+  - ingrediente não consumido é obtido uma vez e fica com o jogador;
+  - alvo que já está no caminho para (`cycle`); limite de 5.000 nós e 64 níveis (`422`);
+  - `totals` soma recursos base, ferramentas, sobras, compras, receitas, bancadas, tempo, categorias
+    em aberto e ciclos.
+- **Sem cálculo proporcional.** A árvore e as calculadoras (lucro, lucro por tempo) usam lotes
+  inteiros, como o jogador faz; o custo por unidade sai do total dividido pela quantidade pedida.
+- **ETag e `Cache-Control: no-cache` em toda leitura da API**, com `Vary: Authorization`. O navegador
+  revalida e recebe `304` quando nada mudou. O `Cache-Control` é definido antes da cadeia de
+  segurança, que senão escreveria `no-store`.
 
 ### Fase 7 — Migração do front (depois, incremental)
 1. Trocar `dataLoader` por chamadas à API, mantendo Dexie como cache offline — muda
