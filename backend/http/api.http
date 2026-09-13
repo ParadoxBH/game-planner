@@ -405,3 +405,48 @@ Authorization: Bearer {{accessToken}}
 ### Onde aparece uma entidade
 GET {{api}}/games/heartopia/spawn-points?occupant=entity:meteoro_rosa
 Authorization: Bearer {{accessToken}}
+
+### ================= Coleções e códigos (Fase 5) =================
+
+### Coleção
+PUT {{api}}/games/heartopia/collections/flower
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{ "name": "Flores e Hibridações" }
+
+### Grupo de coleção: pode estar em mais de uma coleção
+PUT {{api}}/games/heartopia/collection-groups/set_margarida
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Margaridas",
+  "collections": ["flower", "seed"],
+  "members": [
+    { "kind": "item", "extId": "margarida_vermelha" },
+    { "kind": "item", "extId": "margarida_branca" }
+  ]
+}
+
+### Em quais coleções um item está
+GET {{api}}/games/heartopia/collections?member=item:margarida_vermelha
+Authorization: Bearer {{accessToken}}
+
+### Código de resgate: o código é o id
+PUT {{api}}/games/heartopia/codes/SPRINGFEST2026
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "addedOn": "2026-02-01",
+  "expiresOn": "2026-03-31",
+  "rewards": [
+    { "target": { "kind": "item", "extId": "estrela_desejavel" }, "amount": 3 },
+    { "target": { "kind": "item", "extId": "kit_reparo" }, "amount": 5 }
+  ]
+}
+
+### Códigos que ainda valem, mais recentes primeiro
+GET {{api}}/games/heartopia/codes?active=true&sort=-addedOn
+Authorization: Bearer {{accessToken}}

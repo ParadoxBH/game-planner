@@ -26,6 +26,7 @@ Escrito a partir da análise do front atual (`src/`) e da base em `public/data/`
 | Receita | Nome **opcional** (exibição e busca usam o do primeiro produto). Desbloqueio como lista tipada `{ type, target, value }` |
 | Requisito de entidade | Lista `requirements` na entidade, com `notConsumed`: energia é gasta, machado não |
 | Mundo | Geometria em **WKT** na API (SRID 0, com ou sem Z). Mapa com exibição **tipada**. Ponto de spawn pode não ter posição quando está ligado a um local. Clima é evento: **sem tabela de condição** |
+| Coleções e códigos | Grupo de coleção tem código próprio e **lista de coleções** (16 dos 32 grupos estão em duas). Código de resgate é identificado pelo **próprio código** |
 
 ---
 
@@ -427,8 +428,22 @@ CREATE TABLE drop_entry (         -- unifica entity.drops e referencePoint.custo
 );
 ```
 
-Tipos restantes, mesma forma: `category`, `game_event`, `collection`, `collection_group`,
-`collection_member`, `redemption_code`, `redemption_reward`.
+Coleções e códigos de resgate:
+
+```sql
+CREATE TABLE collection        (game_id, ext_id, ... base ..., PRIMARY KEY (game_id, ext_id));
+CREATE TABLE collection_group  (game_id, ext_id, ... base ..., PRIMARY KEY (game_id, ext_id));
+-- um grupo pode estar em mais de uma coleção
+CREATE TABLE collection_group_collection (game_id, group_ext_id, ordinal int, collection_ext_id,       PRIMARY KEY (game_id, group_ext_id, ordinal));
+CREATE TABLE collection_group_member     (game_id, group_ext_id, ordinal int, target_kind, target_ext_id, PRIMARY KEY (game_id, group_ext_id, ordinal));
+
+CREATE TABLE redemption_code (    -- ext_id é o próprio código; name opcional
+  game_id text, ext_id text, ... base ...,
+  added_on date, expires_on date,
+  PRIMARY KEY (game_id, ext_id)
+);
+CREATE TABLE redemption_reward (game_id, code_ext_id, ordinal int, target_kind, target_ext_id, amount numeric, PRIMARY KEY (game_id, code_ext_id, ordinal));
+```
 
 ### 4.4 Transversais
 
@@ -484,6 +499,8 @@ evento, que já existe.
 | `ingredients[].notConsume` | `notConsumed`, padrão `false` | o mesmo sentido do dado original, no padrão de nomes da API |
 | `unlock: { type, id?, subject?, value }` | `recipe_unlock` com `type`, `target` (referência) e `value` | evento, quest de NPC e nível de bancada cabem na mesma forma, e o alvo entra nas pendências |
 | `Entity.requirements` | `entity_requirement`, mesma forma do ingrediente | energia e ferramenta para coletar são requisito, não drop |
+| `ConjuntoGroup.items` + `entitys` | `members`, lista de referências | um grupo de item e um de entidade têm a mesma forma |
+| `RedemptionCode.addedAt` / `expiresAt` (datas) | `addedOn` / `expiresOn` | são datas, não instantes; o código vale até o fim do dia |
 | `event: string \| string[]` | `content_event` | hoje normalizado em runtime em três lugares (`event \|\| events`) |
 | `conditions: Record<string, any>` | `events` | nenhum dado usa `conditions`; clima é evento e o filtro por clima é o filtro por evento |
 | `entity.drops` + `referencePoint.customDrops` + `spawns[].customDrops` | `drop_entry` com `source_kind` | três tabelas com o mesmo significado; o `getItemDetails` hoje concatena as três na mão |
@@ -698,7 +715,9 @@ GET /api/v1/games/{game}
 GET /api/v1/games/{game}/items?search=&category=&rarity=&event=&attr.peso=&page=&size=&sort=
 GET /api/v1/games/{game}/items/{extId}
 GET /api/v1/games/{game}/items/{extId}/details        <- agregado
-GET /api/v1/games/{game}/entities | /locations | /spawn-points | /maps | /recipes | /shops | /shop-categories | /categories | /events | /collections | /codes
+GET /api/v1/games/{game}/entities | /locations | /spawn-points | /maps | /recipes | /shops | /shop-categories | /categories | /events | /collections | /collection-groups | /codes
+GET /api/v1/games/{game}/collections?member=item:x | /collection-groups?collection=&member=
+GET /api/v1/games/{game}/codes?active=true&rewards=item:x&sort=-addedOn
 GET /api/v1/games/{game}/recipes?produces=item:x&consumes=&station=
 GET /api/v1/games/{game}/entities?drops=item:x&requires=
 GET /api/v1/games/{game}/shop-categories?sells=item:x&shop=
@@ -904,7 +923,22 @@ Decisões tomadas na implementação, que ajustam o plano acima:
   os dos locais filhos.
 
 ### Fase 5 — Extras
-`collection`, `collection_group`, `redemption_code`.
+**Status: concluída.** 2 testes de contrato HTTP, 48 no total.
+Decisões tomadas na implementação, que ajustam o plano acima:
+
+- **Grupo de coleção tem código próprio e lista de coleções.** 16 dos 32 grupos de heartopia estão
+  em duas coleções, e 4 códigos de coleção citados não existem (viram pendência).
+- **Membros numa lista só** (`members`), de qualquer tipo e sem repetição. Os dados separam
+  `items` e `entitys`, mas nenhum grupo mistura os dois.
+- **Código de resgate identificado pelo próprio código**, como o jogador digita (há `SPRINGFEST2026`
+  em maiúsculas). `name` é opcional; sem ele, vale o código.
+- **Datas de código são datas** (`addedOn`, `expiresOn`). `active=true` são os sem validade ou que
+  vencem hoje ou depois.
+- **Na base atual há dois problemas para o parser resolver:** `m2q7r6a9k3` aparece duas vezes em
+  `codes_26_05.json`, com as mesmas recompensas e datas diferentes; e `p6n4m9q3a2` tem
+  `addedAt: "2026-04-06-04"`.
+- **`heartopia/quest.json` ficou de fora:** uma quest ("Tesouro de Alu") com pontos de spawn
+  liberados por ela. Quest não estava no roadmap.
 
 ### Fase 6 — Agregações
 Endpoints `/details`, `crafting-tree` no servidor, ETag e `Cache-Control`.

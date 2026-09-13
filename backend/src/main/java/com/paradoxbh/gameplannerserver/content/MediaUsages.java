@@ -30,7 +30,9 @@ public final class MediaUsages {
             entry(ContentKind.SHOP_CATEGORY.code(), Set.of("icon", "banner")),
             entry(ContentKind.MAP.code(), Set.of("icon", "thumbnail")),
             entry(ContentKind.LOCATION.code(), Set.of("icon", "banner", "screenshot")),
-            entry(ContentKind.SPAWN_POINT.code(), Set.of("icon", "screenshot")));
+            entry(ContentKind.SPAWN_POINT.code(), Set.of("icon", "screenshot")),
+            entry(ContentKind.COLLECTION.code(), Set.of("icon", "banner")),
+            entry(ContentKind.COLLECTION_GROUP.code(), Set.of("icon", "banner")));
 
     private MediaUsages() {
     }

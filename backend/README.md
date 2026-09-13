@@ -156,7 +156,7 @@ no volume `media-data`.
 
 Itens, entidades, categorias e eventos usam as mesmas rotas e as mesmas regras.
 `{recurso}` é `items`, `entities`, `categories`, `events`, `recipes`, `shops`, `shop-categories`,
-`maps`, `locations` ou `spawn-points`.
+`maps`, `locations`, `spawn-points`, `collections`, `collection-groups` ou `codes`.
 
 | Método | Rota | Quem |
 |---|---|---|
@@ -206,7 +206,8 @@ até 128 caracteres, sem `/ \ ? # % ;` e sem espaço nas pontas. Codifique na UR
 `mediaId` é o id devolvido por `POST /api/v1/media`, nunca um caminho de arquivo, e a mídia
 precisa existir (senão `422`). Usos aceitos: item e entidade `icon`, `screenshot`; categoria e
 evento `icon`, `banner`; receita `icon`; loja e categoria de loja `icon`, `banner`; mapa `icon`, `thumbnail`; local `icon`, `banner`,
-`screenshot`; ponto de spawn `icon`, `screenshot`; o próprio jogo, via `PATCH /api/v1/games/{jogo}`, `icon`, `capsule`,
+`screenshot`; ponto de spawn `icon`, `screenshot`; coleção e grupo de coleção `icon`, `banner`; código de resgate nenhum;
+o próprio jogo, via `PATCH /api/v1/games/{jogo}`, `icon`, `capsule`,
 `thumbnail`, `banner`. A ordem dentro de cada uso é a da lista. A resposta traz `addedBy` e
 `addedAt` de cada imagem, que se mantêm enquanto ela continuar no mesmo uso. Entre vários
 ícones, o exibido é o mais recente. Mídia em uso não pode ser apagada (`409`).
@@ -302,6 +303,32 @@ revisão.
 | `GET /api/v1/games/{jogo}/maps/{mapa}/spawn-points` | marcadores compactos, sem página: mesmos filtros, mais `limit` (até 10000); `truncated` avisa se cortou |
 
 `bbox` é `minX,minY,maxX,maxY` em coordenadas de jogo. Alvos como `entity:bau` ou só `bau`.
+
+## Coleções e códigos (Fase 5)
+
+**Coleção** (`collections`) é o conjunto exibido, como "Flores e Hibridações". Os membros ficam nos
+**grupos** (`collection-groups`), que têm código próprio e podem estar em mais de uma coleção:
+
+```json
+{ "extId": "set_margarida", "name": "Margaridas", "collections": ["flower", "seed"],
+  "members": [ { "kind": "item", "extId": "margarida_vermelha" },
+               { "kind": "item", "extId": "margarida_branca" } ] }
+```
+
+**Código de resgate** (`codes`) é identificado pelo próprio código, como o jogador digita:
+`PUT /api/v1/games/heartopia/codes/SPRINGFEST2026`. `name` é opcional; `addedOn` e `expiresOn` são
+datas, e o código vale até o fim de `expiresOn`.
+
+```json
+{ "addedOn": "2026-05-18", "expiresOn": "2026-06-30",
+  "rewards": [ { "target": { "kind": "item", "extId": "estrela_desejavel" }, "amount": 3 } ] }
+```
+
+| Rota | Filtros |
+|---|---|
+| `GET /api/v1/games/{jogo}/collections` | `member` (coleções com um grupo que tem o alvo) |
+| `GET /api/v1/games/{jogo}/collection-groups` | `collection`, `member` |
+| `GET /api/v1/games/{jogo}/codes` | `active` (`true` = ainda vale hoje), `rewards`; `sort` aceita `addedOn` e `expiresOn` |
 
 ## Produção
 

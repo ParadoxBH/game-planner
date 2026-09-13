@@ -13,7 +13,10 @@ public enum ContentKind {
     SHOP_CATEGORY("shop_category", "shop_category", "Categoria de loja"),
     MAP("map", "game_map", "Mapa"),
     LOCATION("location", "location", "Local"),
-    SPAWN_POINT("spawn_point", "spawn_point", "Ponto de spawn");
+    SPAWN_POINT("spawn_point", "spawn_point", "Ponto de spawn"),
+    COLLECTION("collection", "collection", "Coleção"),
+    COLLECTION_GROUP("collection_group", "collection_group", "Grupo de coleção"),
+    REDEMPTION_CODE("redemption_code", "redemption_code", "Código de resgate");
 
     private final String code;
     private final String table;
