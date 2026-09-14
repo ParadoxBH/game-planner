@@ -500,3 +500,11 @@ Authorization: Bearer {{accessToken}}
 ### Itens que tem um atributo, com qualquer valor
 GET {{api}}/games/heartopia/items?attribute=peso&sort=name
 Authorization: Bearer {{accessToken}}
+
+### Plano com varios alvos: as sobras de um servem ao proximo, com custo e venda por moeda
+GET {{api}}/games/heartopia/crafting-plan?target=item:salada_rural&amount=3&target=item:tabua&amount=10
+Authorization: Bearer {{accessToken}}
+
+### Rentabilidade de um lote de cada produto, do maior lucro por hora para o menor
+GET {{api}}/games/heartopia/crafting-profits?timed=true&sort=-profitPerHour&size=50
+Authorization: Bearer {{accessToken}}

@@ -372,7 +372,17 @@ export interface CraftAmount {
   amount: number;
 }
 
+export interface CurrencyAmount {
+  /** Ausente: preço sem moeda informada. */
+  currency?: Reference;
+  name?: string;
+  iconMediaId?: string;
+  amount: number;
+}
+
 export interface CraftTotals {
+  /** Gasto por moeda. */
+  costs: CurrencyAmount[];
   baseResources: CraftAmount[];
   tools: CraftAmount[];
   leftovers: CraftAmount[];
@@ -396,6 +406,50 @@ export interface CraftTotals {
 export interface CraftingTree {
   root: CraftTreeNode;
   totals: CraftTotals;
+}
+
+/** Vários alvos numa árvore só: as sobras de um servem ao próximo. */
+export interface CraftingPlan {
+  roots: CraftTreeNode[];
+  totals: CraftTotals;
+  /** Venda dos alvos pelo preço base, por moeda. */
+  revenue: CurrencyAmount[];
+}
+
+/** Rentabilidade de um lote (ou pacote, sem receita) de um produto. Campos ausentes não se aplicam. */
+export interface CraftProfit {
+  target: Reference;
+  name?: string;
+  iconMediaId?: string;
+  recipe?: string;
+  /** Quanto o lote produz. */
+  produced: number;
+  /** Tempo de um lote da receita do alvo. */
+  craftTimeSeconds?: number;
+  /** Moeda em que custo, venda e lucro se comparam; ausente quando não há moeda informada. */
+  currency?: ResolvedReference;
+  /** Ausente quando o custo tem mais de uma moeda. */
+  unitCost?: number;
+  sellPrice?: number;
+  profit?: number;
+  profitPerHour?: number;
+  steps: number;
+  costs: CurrencyAmount[];
+  stations: ResolvedReference[];
+  baseResources: CraftAmount[];
+  purchases: CraftTotals["purchases"];
+  /** Categoria em aberto, ciclo ou árvore grande demais: o custo é parcial. */
+  incomplete?: boolean;
+}
+
+export interface ProfitQuery {
+  search?: string;
+  /** Só o que tem tempo de receita. */
+  timed?: boolean;
+  /** name, profit, unitCost, sellPrice, craftTimeSeconds, profitPerHour ou steps; "-" na frente para decrescente. */
+  sort?: string;
+  page?: number;
+  size?: number;
 }
 
 export interface GameInfo {
@@ -503,6 +557,27 @@ export const contentApi = {
     const params = new URLSearchParams({ target, amount: String(amount) });
     choices.forEach((choice) => params.append("choices", choice));
     return apiRequest<CraftingTree>(`${gamePath(gameId)}/crafting-tree?${params}`, { signal });
+  },
+
+  /** Vários alvos numa árvore só, na ordem da lista; escolhas como na árvore. */
+  craftingPlan(gameId: string, targets: { target: string; amount: number }[], choices: string[], signal?: AbortSignal) {
+    const params = new URLSearchParams();
+    targets.forEach(({ target, amount }) => {
+      params.append("target", target);
+      params.append("amount", String(amount));
+    });
+    choices.forEach((choice) => params.append("choices", choice));
+    return apiRequest<CraftingPlan>(`${gamePath(gameId)}/crafting-plan?${params}`, { signal });
+  },
+
+  craftingProfits(gameId: string, query: ProfitQuery, signal?: AbortSignal) {
+    const params = new URLSearchParams();
+    if (query.search) params.set("search", query.search);
+    if (query.timed) params.set("timed", "true");
+    if (query.sort) params.set("sort", query.sort);
+    if (query.page !== undefined) params.set("page", String(query.page));
+    if (query.size !== undefined) params.set("size", String(query.size));
+    return apiRequest<ContentPage<CraftProfit>>(`${gamePath(gameId)}/crafting-profits?${params}`, { signal });
   },
 };
 

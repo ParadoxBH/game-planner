@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import {
   Box,
   Button,
@@ -24,6 +24,7 @@ import {
   type CraftAmount,
   type CraftTotals,
   type CraftTreeNode,
+  type CurrencyAmount,
   type RecipeDocument,
   type Reference,
   type ResolvedReference,
@@ -32,6 +33,7 @@ import { ReferenceIndex } from "../../api/references";
 import { useContentList, useCraftingTree } from "../../api/useContent";
 import { formatAmount, formatDuration } from "../../utils/format";
 import { ContentChip } from "../common/ContentChip";
+import { CurrencyValue, CurrencyValues, currencyReference, sameCurrency } from "../common/CurrencyValue";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
 import { ChipRow, DetailField } from "../common/DetailField";
@@ -46,7 +48,7 @@ export interface TreeChoices {
 
 export const NO_CHOICES: TreeChoices = { categories: {}, products: {} };
 
-function choiceParams(choices: TreeChoices): string[] {
+export function choiceParams(choices: TreeChoices): string[] {
   return [
     ...Object.entries(choices.categories).map(([category, member]) => `category:${category}=${referenceParam(member)}`),
     ...Object.entries(choices.products).map(([target, choice]) => `${target}=${choice}`),
@@ -62,6 +64,13 @@ function resolvedOf(target: Reference, name?: string | null, iconMediaId?: strin
     name: name ?? null,
     iconMediaId: iconMediaId ?? null,
   };
+}
+
+/** Moeda com nome e ícone, procurados entre os custos que já trazem a moeda resolvida. */
+function currencyAmong(currency: Reference | undefined, costs: CurrencyAmount[]): ResolvedReference | null {
+  if (!currency) return null;
+  const known = costs.find((entry) => sameCurrency(entry.currency, currency));
+  return known ? currencyReference(known) : resolvedOf(currency);
 }
 
 interface TreeActions {
@@ -207,9 +216,20 @@ function AmountChips({ amounts }: { amounts: CraftAmount[] }) {
   );
 }
 
-/** O que juntar, o que comprar, o que sobra e o que ficou em aberto. */
-function TotalsView({ totals }: { totals: CraftTotals }) {
+/** Venda menos custo, quando os dois estão numa moeda só. */
+function planResult(costs: CurrencyAmount[], revenue: CurrencyAmount[]): CurrencyAmount | null {
+  if (revenue.length !== 1) return null;
+  const currency = revenue[0].currency;
+  if (!costs.every((entry) => sameCurrency(entry.currency, currency))) return null;
+  const cost = costs.reduce((sum, entry) => sum + entry.amount, 0);
+  return { ...revenue[0], amount: revenue[0].amount - cost };
+}
+
+/** O que juntar, o que comprar, quanto custa, o que sobra e o que ficou em aberto. */
+function TotalsView({ totals, revenue }: { totals: CraftTotals; revenue?: CurrencyAmount[] }) {
   const batches = totals.recipes.reduce((sum, recipe) => sum + recipe.batches, 0);
+  const result = revenue ? planResult(totals.costs, revenue) : null;
+
   return (
     <Stack spacing={2}>
       {totals.baseResources.length > 0 && (
@@ -228,17 +248,38 @@ function TotalsView({ totals }: { totals: CraftTotals }) {
                     {formatAmount(purchase.packs)} {purchase.packs === 1 ? "pacote" : "pacotes"}
                   </Typography>
                 </Stack>
-                {purchase.currency ? (
-                  <ContentChip target={purchase.currency} resolved={resolvedOf(purchase.currency)} amount={purchase.cost} size="small" />
-                ) : (
-                  <Typography variant="body2" fontWeight={800}>
-                    {formatAmount(purchase.cost)}
-                  </Typography>
-                )}
+                <CurrencyValue amount={purchase.cost} currency={currencyAmong(purchase.currency, totals.costs)} />
               </DataCard>
             ))}
           </Stack>
         </DetailField>
+      )}
+      {totals.costs.length > 0 && (
+        <DetailField label="Custo total">
+          <CurrencyValues amounts={totals.costs} />
+        </DetailField>
+      )}
+      {revenue && revenue.length > 0 && (
+        <DetailField label="Venda pelo preço base">
+          <CurrencyValues amounts={revenue} />
+        </DetailField>
+      )}
+      {result && (
+        <Paper
+          elevation={0}
+          sx={{
+            p: 1.5,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            bgcolor: result.amount >= 0 ? "success.dark" : "error.dark",
+          }}
+        >
+          <Typography variant="subtitle2" fontWeight={800}>
+            {result.amount >= 0 ? "Lucro estimado" : "Prejuízo estimado"}
+          </Typography>
+          <CurrencyValue amount={Math.abs(result.amount)} currency={currencyReference(result)} />
+        </Paper>
       )}
       {totals.tools.length > 0 && (
         <DetailField label="Ferramentas (não são gastas)">
@@ -282,11 +323,6 @@ function TotalsView({ totals }: { totals: CraftTotals }) {
           <Typography variant="body2">{totals.cycles.map((cycle) => cycle.extId).join(", ")}</Typography>
         </DetailField>
       )}
-      {totals.costWithoutCurrency !== undefined && (
-        <DetailField label="Custo sem moeda informada">
-          <Typography variant="body2">{formatAmount(totals.costWithoutCurrency)}</Typography>
-        </DetailField>
-      )}
     </Stack>
   );
 }
@@ -314,13 +350,7 @@ function CategoryChoiceDialog({
           const target = { kind: option.kind, extId: option.extId };
           return (
             <DataCard key={referenceParam(target)} onClick={() => onChoose(target)} sx={{ p: 1.5, gap: 2 }}>
-              <ContentChip
-                target={target}
-                resolved={option}
-                size="medium"
-                highlight={selected?.extId === option.extId}
-                disableLink
-              />
+              <ContentChip target={target} resolved={option} size="medium" highlight={selected?.extId === option.extId} disableLink />
               <Typography variant="body2" fontWeight={700}>
                 {option.name ?? option.extId}
               </Typography>
@@ -372,21 +402,35 @@ function RecipeChoiceDialog({
   );
 }
 
-interface ApiCraftingTreeProps {
+export interface CraftingTreeBodyProps {
   gameId: string;
-  target: Reference;
+  roots: CraftTreeNode[];
+  totals: CraftTotals;
+  /** Venda pelo preço base; com ela, os totais mostram o resultado. */
+  revenue?: CurrencyAmount[];
   choices: TreeChoices;
   onChoicesChange: (choices: TreeChoices) => void;
   /** Escolhas de partida, ex.: a receita da página para o produto. "Limpar escolhas" volta a elas. */
   initialChoices?: TreeChoices;
+  /** Controles no topo da árvore, ex.: a quantidade. */
+  toolbar?: ReactNode;
+  fetching?: boolean;
 }
 
-/** Árvore de produção calculada no servidor, com escolhas e totais. Lotes e pacotes são inteiros. */
-export function ApiCraftingTree({ gameId, target, choices, onChoicesChange, initialChoices = NO_CHOICES }: ApiCraftingTreeProps) {
-  const [amount, setAmount] = useState(1);
+/** Árvore (uma ou várias raízes) e totais calculados no servidor, com as escolhas de categoria, receita e compra. */
+export function CraftingTreeBody({
+  gameId,
+  roots,
+  totals,
+  revenue,
+  choices,
+  onChoicesChange,
+  initialChoices = NO_CHOICES,
+  toolbar,
+  fetching = false,
+}: CraftingTreeBodyProps) {
   const [categoryDialog, setCategoryDialog] = useState<{ category: string; options: ResolvedReference[] } | null>(null);
   const [recipeDialog, setRecipeDialog] = useState<Reference | null>(null);
-  const tree = useCraftingTree(gameId, referenceParam(target), amount, choiceParams(choices));
   const hasChoices = JSON.stringify(choices) !== JSON.stringify(initialChoices);
 
   const actions: TreeActions = {
@@ -405,38 +449,25 @@ export function ApiCraftingTree({ gameId, target, choices, onChoicesChange, init
   return (
     <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ minHeight: 0, flex: 1 }}>
       <Paper elevation={0} sx={{ p: 2, flex: 2, overflow: "auto" }}>
-        <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
-          <TextField
-            label="Quantidade"
-            type="number"
-            size="small"
-            value={amount}
-            onChange={(event) => setAmount(Math.max(1, Math.floor(Number(event.target.value) || 1)))}
-            sx={{ width: 140 }}
-          />
+        <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap" useFlexGap sx={{ mb: 1 }}>
+          {toolbar}
           {hasChoices && (
             <Button size="small" onClick={() => onChoicesChange(initialChoices)}>
               Limpar escolhas
             </Button>
           )}
-          {tree.isFetching && <CircularProgress size={18} color="primary" />}
+          {fetching && <CircularProgress size={18} color="primary" />}
         </Stack>
-        {tree.isPending ? (
-          <Stack alignItems="center" sx={{ py: 6 }}>
-            <CircularProgress color="primary" />
-          </Stack>
-        ) : tree.isError ? (
-          <Typography color="error">{tree.error.message}</Typography>
-        ) : (
-          <TreeNodeView node={tree.data.root} level={0} actions={actions} />
-        )}
+        {roots.map((root, index) => (
+          <TreeNodeView key={`${referenceParam(root.target)}-${index}`} node={root} level={0} actions={actions} />
+        ))}
       </Paper>
 
       <Paper elevation={0} sx={{ p: 2, flex: 1, overflow: "auto" }}>
         <Typography variant="h6" fontWeight={700} sx={{ mb: 1 }}>
           Total
         </Typography>
-        {tree.data && <TotalsView totals={tree.data.totals} />}
+        <TotalsView totals={totals} revenue={revenue} />
       </Paper>
 
       <CategoryChoiceDialog
@@ -463,5 +494,58 @@ export function ApiCraftingTree({ gameId, target, choices, onChoicesChange, init
         }}
       />
     </Stack>
+  );
+}
+
+interface ApiCraftingTreeProps {
+  gameId: string;
+  target: Reference;
+  choices: TreeChoices;
+  onChoicesChange: (choices: TreeChoices) => void;
+  initialChoices?: TreeChoices;
+}
+
+/** Árvore de produção de um alvo, com quantidade. Lotes e pacotes são inteiros. */
+export function ApiCraftingTree({ gameId, target, choices, onChoicesChange, initialChoices = NO_CHOICES }: ApiCraftingTreeProps) {
+  const [amount, setAmount] = useState(1);
+  const tree = useCraftingTree(gameId, referenceParam(target), amount, choiceParams(choices));
+
+  if (!tree.data) {
+    return tree.isError ? (
+      <Typography color="error">{tree.error.message}</Typography>
+    ) : (
+      <Stack alignItems="center" sx={{ py: 6 }}>
+        <CircularProgress color="primary" />
+      </Stack>
+    );
+  }
+
+  return (
+    <CraftingTreeBody
+      gameId={gameId}
+      roots={[tree.data.root]}
+      totals={tree.data.totals}
+      choices={choices}
+      onChoicesChange={onChoicesChange}
+      initialChoices={initialChoices}
+      fetching={tree.isFetching}
+      toolbar={
+        <>
+          <TextField
+            label="Quantidade"
+            type="number"
+            size="small"
+            value={amount}
+            onChange={(event) => setAmount(Math.max(1, Math.floor(Number(event.target.value) || 1)))}
+            sx={{ width: 140 }}
+          />
+          {tree.isError && (
+            <Typography variant="body2" color="error">
+              {tree.error.message}
+            </Typography>
+          )}
+        </>
+      }
+    />
   );
 }

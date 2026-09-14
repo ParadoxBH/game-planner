@@ -1,8 +1,8 @@
-import { useState, useMemo, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
-  Typography,
+  CircularProgress,
   Stack,
-  Box,
   Table,
   TableBody,
   TableCell,
@@ -10,49 +10,22 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  TextField,
-  InputAdornment,
   ToggleButton,
   ToggleButtonGroup,
-  CircularProgress,
+  Typography,
 } from "@mui/material";
-import { Search } from "@mui/icons-material";
-import { getPublicUrl } from "../../utils/pathUtils";
-import { useParams } from "react-router-dom";
-import { useApi } from "../../hooks/useApi";
-import { ItemChip } from "../common/ItemChip";
+import { MAX_PAGE_SIZE, type ProfitQuery } from "../../api/content";
+import { useCraftingProfits } from "../../api/useContent";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+import { usePagination } from "../../hooks/usePagination";
+import { formatAmount } from "../../utils/format";
+import { CurrencyValue } from "../common/CurrencyValue";
 import { StyledContainer } from "../common/StyledContainer";
 import { TimeChip } from "../common/TimeChip";
-import { getCraftingTotals } from "../../utils/craftingTree";
-import type { TreeOptions, CraftingTotals } from "../../utils/craftingTree";
-import type {
-  Item,
-  Entity,
-  Recipe,
-  Shop,
-} from "../../types/gameModels";
-import { recipeRepository } from "../../repositories/RecipeRepository";
-import { itemRepository } from "../../repositories/ItemRepository";
-import { entityRepository } from "../../repositories/EntityRepository";
-import { shopRepository } from "../../repositories/ShopRepository";
+import { ProfitItemCell, ProfitStations, profitColor } from "./ProfitCells";
 
-type Order = "asc" | "desc";
+type SortKey = "name" | "profit" | "craftTimeSeconds" | "profitPerHour";
 type TimeUnit = "second" | "minute" | "hour" | "day" | "week";
-
-interface CraftProfitData {
-  id: string;
-  name: string;
-  icon?: string;
-  baseCost: number;
-  sellPrice: number;
-  profit: number;
-  scaledProfit: number;
-  scaledQuantity: number;
-  craftTime: number;
-  steps: number;
-  station?: string;
-  nonPurchasable: { id: string; amount: number }[];
-}
 
 const TIME_UNIT_LABELS: Record<TimeUnit, string> = {
   second: "Segundo",
@@ -62,7 +35,7 @@ const TIME_UNIT_LABELS: Record<TimeUnit, string> = {
   week: "Semana",
 };
 
-const TIME_UNIT_MULTIPLIERS: Record<TimeUnit, number> = {
+const TIME_UNIT_SECONDS: Record<TimeUnit, number> = {
   second: 1,
   minute: 60,
   hour: 3600,
@@ -70,390 +43,153 @@ const TIME_UNIT_MULTIPLIERS: Record<TimeUnit, number> = {
   week: 604800,
 };
 
+const NO_CRITERIA = {};
+
+/** Lucro por tempo de cada produto com receita temporizada, pelo tempo de um lote. */
 export function ProfitPerTimeCalculator() {
-  const { gameId } = useParams<{ gameId: string }>();
-  const { loading: dbLoading } = useApi(gameId);
-
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [items, setItems] = useState<Item[]>([]);
-  const [entities, setEntities] = useState<Entity[]>([]);
-  const [shops, setShops] = useState<Shop[]>([]);
-  const [dataLoading, setDataLoading] = useState(true);
-
-  const [searchTerm, setSearchTerm] = useState("");
+  const { gameId = "" } = useParams<{ gameId: string }>();
+  const pages = usePagination(NO_CRITERIA);
   const [timeUnit, setTimeUnit] = useState<TimeUnit>("hour");
-  const [orderBy, setOrderBy] = useState<keyof CraftProfitData>("scaledProfit");
-  const [order, setOrder] = useState<Order>("desc");
+  const [orderBy, setOrderBy] = useState<SortKey>("profitPerHour");
+  const [order, setOrder] = useState<"asc" | "desc">("desc");
 
-  // Fetch data
+  // A API devolve no máximo 200 por página.
   useEffect(() => {
-    if (dbLoading) return;
+    if (pages.info.pagination.pageSize > MAX_PAGE_SIZE) pages.setPageSize(MAX_PAGE_SIZE);
+  }, [pages.info.pagination.pageSize, pages.setPageSize]);
 
-    let isMounted = true;
-    setDataLoading(true);
+  const search = useDebouncedValue(pages.info.search);
+  const { pagination } = pages.info;
+  const query = useMemo<ProfitQuery>(
+    () => ({
+      search: search || undefined,
+      timed: true,
+      sort: `${order === "desc" ? "-" : ""}${orderBy}`,
+      page: pagination.page - 1,
+      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+    }),
+    [search, order, orderBy, pagination],
+  );
+  const profits = useCraftingProfits(gameId, query);
 
-    Promise.all([
-      recipeRepository.getAll(),
-      itemRepository.getAll(),
-      entityRepository.getAll(),
-      shopRepository.getAll()
-    ]).then(([allRecipes, allItems, allEntities, allShops]) => {
-      if (!isMounted) return;
-      setRecipes(allRecipes);
-      setItems(allItems);
-      setEntities(allEntities);
-      setShops(allShops);
-      setDataLoading(false);
-    }).catch(err => {
-      console.error("Error fetching profit per time calculator data:", err);
-      if (isMounted) setDataLoading(false);
-    });
+  useEffect(() => {
+    if (profits.data) pages.setTotalItems(profits.data.total);
+  }, [profits.data, pages.setTotalItems]);
 
-    return () => { isMounted = false; };
-  }, [dbLoading]);
-
-  const itemMap = useMemo(() => {
-    const map = new Map<string, Item>();
-    items.forEach((item) => map.set(item.id, item));
-    return map;
-  }, [items]);
-
-  const entityMap = useMemo(() => {
-    const map = new Map<string, Entity>();
-    entities.forEach((entity) => map.set(entity.id, entity));
-    return map;
-  }, [entities]);
-
-  const itemToShopIdMap = useMemo(() => {
-    const map = new Map<string, string>();
-    shops.forEach((shop) => {
-      shop.groups.forEach((group) => {
-        group.items.forEach((shopItem) => {
-          map.set(shopItem.id, shop.id);
-        });
-      });
-    });
-    return map;
-  }, [shops]);
-
-  const recipeMapByProduct = useMemo(() => {
-    const map = new Map<string, Recipe>();
-    recipes.forEach((recipe) => {
-      if (recipe.itemId) {
-        map.set(recipe.itemId, recipe);
-      }
-      recipe.products?.forEach((product) => {
-        map.set(product.id, recipe);
-      });
-    });
-    return map;
-  }, [recipes]);
-
-  const calculateBaseCostAndSteps = useMemo(() => {
-    const options: TreeOptions = {
-        itemMap,
-        entityMap,
-        recipeMapByProduct,
-        shopMap: itemToShopIdMap
-    };
-
-    const cache = new Map<string, CraftingTotals>();
-
-    return (id: string, type: string = "item") => {
-        return getCraftingTotals(id, 1, type, options, cache);
-    };
-  }, [itemMap, entityMap, recipeMapByProduct, itemToShopIdMap]);
-
-  const profitData = useMemo(() => {
-    if (dataLoading || !itemMap.size) return [];
-
-    const data: CraftProfitData[] = [];
-    const processedItems = new Set<string>();
-
-    recipes.forEach((recipe) => {
-      const productIds = new Set<string>();
-      if (recipe.itemId) productIds.add(recipe.itemId);
-      recipe.products?.forEach((p) => productIds.add(p.id));
-
-      productIds.forEach((id) => {
-        if (processedItems.has(id)) return;
-        processedItems.add(id);
-
-        const item = itemMap.get(id);
-        if (!item) return;
-
-        const { totalCost, recipeIds, shopIds, baseResources } = calculateBaseCostAndSteps(id);
-        const sellPrice = item.sellPrice || 0;
-        const profit = sellPrice - totalCost;
-        const craftTime = recipe.craftTime || 0;
-
-        if (craftTime <= 0) return;
-
-        const scaledQuantity = TIME_UNIT_MULTIPLIERS[timeUnit] / craftTime;
-        const scaledProfit = profit * scaledQuantity;
-
-        data.push({
-          id,
-          name: item.name,
-          icon: item.icon,
-          baseCost: totalCost,
-          sellPrice,
-          profit,
-          scaledProfit,
-          scaledQuantity,
-          craftTime,
-          steps: recipeIds.size + shopIds.size,
-          nonPurchasable: Array.from(baseResources.entries()).map(
-            ([npId, amount]) => ({ id: npId, amount }),
-          ),
-          station: recipe.stations?.[0] || recipe.ProducedIn?.[0],
-        });
-      });
-    });
-
-    return data;
-  }, [recipes, itemMap, calculateBaseCostAndSteps, timeUnit, dataLoading]);
-
-  const filteredAndSortedData = useMemo(() => {
-    let result = profitData.filter((item) =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-
-    result.sort((a, b) => {
-      const aValue = a[orderBy];
-      const bValue = b[orderBy];
-
-      if (typeof aValue === "string" && typeof bValue === "string") {
-        return order === "asc"
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
-      }
-
-      if (typeof aValue === "number" && typeof bValue === "number") {
-        return order === "asc" ? aValue - bValue : bValue - aValue;
-      }
-
-      return 0;
-    });
-
-    return result;
-  }, [profitData, searchTerm, orderBy, order]);
-
-  const handleRequestSort = (property: keyof CraftProfitData) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
-
-  const formatNumber = (num: number, decimals: number = 2) => {
-    return num.toLocaleString(undefined, {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: decimals,
-    });
-  };
-
-  const handleTimeUnitChange = (
-    _event: React.MouseEvent<HTMLElement>,
-    newUnit: TimeUnit | null,
-  ) => {
-    if (newUnit !== null) {
-      setTimeUnit(newUnit);
+  const sortBy = (key: SortKey) => {
+    if (orderBy === key) setOrder(order === "asc" ? "desc" : "asc");
+    else {
+      setOrderBy(key);
+      setOrder(key === "name" || key === "craftTimeSeconds" ? "asc" : "desc");
     }
+    pages.setPage(1);
   };
 
-  if (dbLoading || dataLoading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
-        <CircularProgress color="primary" />
-      </Box>
-    );
-  }
+  const header = (key: SortKey, label: string, align: "left" | "right" = "right") => (
+    <TableCell align={align}>
+      <TableSortLabel active={orderBy === key} direction={orderBy === key ? order : "asc"} onClick={() => sortBy(key)}>
+        {label}
+      </TableSortLabel>
+    </TableCell>
+  );
+
+  const unitSeconds = TIME_UNIT_SECONDS[timeUnit];
+  const unitLabel = TIME_UNIT_LABELS[timeUnit];
 
   return (
     <StyledContainer
-      title="Lucro por Tempo"
-      label="Cálculo de rentabilidade levando em conta o tempo necessário para produzir cada item."
+      title="Lucro por tempo"
+      label="Quanto cada produto rende no tempo, pela duração de um lote da receita."
+      searchValue={pages.info.search}
+      onChangeSearch={pages.setSearch}
+      search={{ placeholder: "Buscar item..." }}
+      pages={pages}
+      actionsStart={
+        <ToggleButtonGroup
+          value={timeUnit}
+          exclusive
+          size="small"
+          color="primary"
+          onChange={(_, unit: TimeUnit | null) => unit && setTimeUnit(unit)}
+        >
+          {Object.entries(TIME_UNIT_LABELS).map(([unit, label]) => (
+            <ToggleButton key={unit} value={unit} sx={{ px: 2 }}>
+              {label}
+            </ToggleButton>
+          ))}
+        </ToggleButtonGroup>
+      }
     >
-      <Stack spacing={2} overflow={"hidden"}>
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center">
-          <TextField
-            sx={{ flexGrow: 1 }}
-            variant="outlined"
-            placeholder="Buscar item..."
-            value={searchTerm}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <ToggleButtonGroup
-            value={timeUnit}
-            exclusive
-            onChange={handleTimeUnitChange}
-            size="small"
-            color="primary"
-          >
-            {Object.entries(TIME_UNIT_LABELS).map(([unit, label]) => (
-              <ToggleButton key={unit} value={unit} sx={{ px: 2 }}>
-                {label}
-              </ToggleButton>
-            ))}
-          </ToggleButtonGroup>
+      {!profits.data ? (
+        <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>
+          {profits.isError ? <Typography color="error">{profits.error.message}</Typography> : <CircularProgress color="primary" />}
         </Stack>
-
-        <TableContainer>
+      ) : (
+        <TableContainer sx={{ flex: 1, overflow: "auto" }}>
           <Table size="small" stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell>
-                  <TableSortLabel
-                    active={orderBy === "name"}
-                    direction={orderBy === "name" ? order : "asc"}
-                    onClick={() => handleRequestSort("name")}
-                  >
-                    Item
-                  </TableSortLabel>
-                </TableCell>
-                <TableCell align="right">
-                    <TableSortLabel
-                        active={orderBy === "profit"}
-                        direction={orderBy === "profit" ? order : "asc"}
-                        onClick={() => handleRequestSort("profit")}
-                    >
-                        Lucro Unit.
-                    </TableSortLabel>
-                </TableCell>
-                <TableCell align="right">
-                  <TableSortLabel
-                    active={orderBy === "craftTime"}
-                    direction={orderBy === "craftTime" ? order : "asc"}
-                    onClick={() => handleRequestSort("craftTime")}
-                  >
-                    Tempo
-                  </TableSortLabel>
-                </TableCell>
-                <TableCell align="right">
-                  <TableSortLabel
-                    active={orderBy === "scaledQuantity"}
-                    direction={orderBy === "scaledQuantity" ? order : "asc"}
-                    onClick={() => handleRequestSort("scaledQuantity")}
-                  >
-                    Qtd. / {TIME_UNIT_LABELS[timeUnit]}
-                  </TableSortLabel>
-                </TableCell>
-                <TableCell align="right">
-                  <TableSortLabel
-                    active={orderBy === "scaledProfit"}
-                    direction={orderBy === "scaledProfit" ? order : "asc"}
-                    onClick={() => handleRequestSort("scaledProfit")}
-                  >
-                    Lucro / {TIME_UNIT_LABELS[timeUnit]}
-                  </TableSortLabel>
-                </TableCell>
-                <TableCell>Estação</TableCell>
+                {header("name", "Item", "left")}
+                {header("profit", "Lucro por unidade")}
+                {header("craftTimeSeconds", "Tempo do lote")}
+                <TableCell align="right">Qtd. / {unitLabel}</TableCell>
+                {header("profitPerHour", `Lucro / ${unitLabel}`)}
+                <TableCell>Bancada</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredAndSortedData.map((row) => (
-                <TableRow key={row.id} hover>
-                  <TableCell>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <ItemChip
-                        key={row.id}
-                        id={row.id}
-                        icon={row.icon}
-                        amount={0}
-                        size="small"
-                      />
-                      <Typography variant="body2" fontWeight={500}>
-                        {row.name}
-                      </Typography>
-                    </Stack>
-                  </TableCell>
-                  <TableCell align="right">
-                    {Math.abs(row.profit) > 0.001 && (
-                      <Stack
-                        direction="row"
-                        spacing={0.5}
-                        justifyContent="flex-end"
-                        alignItems="center"
-                      >
-                        <Typography
-                          variant="body2"
-                          fontWeight={600}
-                          color={
-                            row.profit > 0
-                              ? "success.main"
-                              : row.profit < 0
-                                ? "error.main"
-                                : "text.secondary"
-                          }
-                        >
-                          {formatNumber(row.profit)}
-                        </Typography>
-                        <Box
-                          component="img"
-                          src={getPublicUrl("/img/heartopia/stats/ouro.png")}
-                          sx={{ width: 14, height: 14 }}
-                        />
-                      </Stack>
-                    )}
-                  </TableCell>
-                  <TableCell align="right">
-                    <Stack direction="row" spacing={0.5} justifyContent="flex-end" alignItems="center">
-                        <TimeChip seconds={row.craftTime} />
-                    </Stack>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography variant="body2" fontWeight={500}>
-                        {formatNumber(row.scaledQuantity)}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    {Math.abs(row.scaledProfit) > 0.001 && (
-                      <Stack
-                        direction="row"
-                        spacing={0.5}
-                        justifyContent="flex-end"
-                        alignItems="center"
-                      >
-                        <Typography
-                          variant="body2"
-                          fontWeight={700}
-                          color={
-                            row.scaledProfit > 0
-                              ? "success.main"
-                              : "error.main"
-                          }
-                        >
-                          {formatNumber(row.scaledProfit)}
-                        </Typography>
-                        <Box
-                          component="img"
-                          src={getPublicUrl("/img/heartopia/stats/ouro.png")}
-                          sx={{ width: 14, height: 14 }}
-                        />
-                      </Stack>
-                    )}
-                    {Math.abs(row.scaledProfit) <= 0.001 && row.craftTime > 0 && (
-                         <Typography variant="body2" color="text.secondary">-</Typography>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="caption" sx={{ opacity: 0.7 }}>
-                      {row.station || "-"}
+              {profits.data.content.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={6}>
+                    <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", py: 4 }}>
+                      Nenhum produto com tempo de receita encontrado.
                     </Typography>
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
+              {profits.data.content.map((row) => {
+                const time = row.craftTimeSeconds ?? 0;
+                const quantity = time > 0 ? (row.produced * unitSeconds) / time : 0;
+                const scaledProfit = row.profitPerHour !== undefined ? (row.profitPerHour * unitSeconds) / 3600 : undefined;
+                return (
+                  <TableRow key={`${row.target.kind ?? ""}:${row.target.extId}`} hover>
+                    <TableCell>
+                      <ProfitItemCell row={row} />
+                    </TableCell>
+                    <TableCell align="right">
+                      {row.profit !== undefined ? (
+                        <CurrencyValue amount={row.profit} currency={row.currency} color={profitColor(row.profit)} />
+                      ) : (
+                        "-"
+                      )}
+                    </TableCell>
+                    <TableCell align="right">
+                      <Stack direction="row" justifyContent="flex-end">
+                        <TimeChip seconds={time} />
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography variant="body2" fontWeight={500}>
+                        {formatAmount(quantity)}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      {scaledProfit !== undefined ? (
+                        <CurrencyValue amount={scaledProfit} currency={row.currency} color={profitColor(scaledProfit)} />
+                      ) : (
+                        "-"
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <ProfitStations row={row} />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
-      </Stack>
+      )}
     </StyledContainer>
   );
 }

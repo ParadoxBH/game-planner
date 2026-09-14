@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { contentApi, gameApi, type ContentResource, type ListQuery } from "./content";
+import { contentApi, gameApi, type ContentResource, type ListQuery, type ProfitQuery } from "./content";
 
 /** Dados que mudam pouco (raridades, definições de atributo, bancadas) não são relidos a cada tela. */
 const RARELY_CHANGES = 5 * 60_000;
@@ -33,6 +33,25 @@ export function useCraftingTree(gameId: string | undefined, target: string | und
     queryKey: ["crafting-tree", gameId, target, amount, choices],
     queryFn: ({ signal }) => contentApi.craftingTree(gameId!, target!, amount, choices, signal),
     enabled: Boolean(gameId && target),
+    placeholderData: keepPreviousData,
+  });
+}
+
+/** Plano com vários alvos. Sem alvos, não consulta. */
+export function useCraftingPlan(gameId: string | undefined, targets: { target: string; amount: number }[], choices: string[]) {
+  return useQuery({
+    queryKey: ["crafting-plan", gameId, targets, choices],
+    queryFn: ({ signal }) => contentApi.craftingPlan(gameId!, targets, choices, signal),
+    enabled: Boolean(gameId) && targets.length > 0,
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function useCraftingProfits(gameId: string | undefined, query: ProfitQuery) {
+  return useQuery({
+    queryKey: ["crafting-profits", gameId, query],
+    queryFn: ({ signal }) => contentApi.craftingProfits(gameId!, query, signal),
+    enabled: Boolean(gameId),
     placeholderData: keepPreviousData,
   });
 }

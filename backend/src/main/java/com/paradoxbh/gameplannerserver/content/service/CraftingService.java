@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.paradoxbh.gameplannerserver.common.ApiException;
 import com.paradoxbh.gameplannerserver.content.ExtIds;
+import com.paradoxbh.gameplannerserver.content.model.ContentPage;
 import com.paradoxbh.gameplannerserver.content.model.Reference;
 import com.paradoxbh.gameplannerserver.content.model.ResolvedReference;
 import com.paradoxbh.gameplannerserver.identity.service.GameAccess;
@@ -52,6 +54,7 @@ public class CraftingService {
 
     public static final int MAX_NODES = 5_000;
     public static final int MAX_DEPTH = 64;
+    public static final int MAX_PLAN_TARGETS = 100;
 
     /**
      * {@code amount} é o que o pai pede; {@code fromStock}, quanto disso veio do que sobrou antes;
@@ -91,15 +94,42 @@ public class CraftingService {
 
     /**
      * {@code baseResources} somam o que é consumido; {@code tools}, o que é exigido e não gasto;
-     * {@code leftovers}, o que sobrou no fim. {@code costWithoutCurrency} soma preços sem moeda informada.
+     * {@code leftovers}, o que sobrou no fim. {@code costWithoutCurrency} soma preços sem moeda informada;
+     * {@code costs}, todo o gasto por moeda (moeda nula: sem moeda informada).
      */
     public record Totals(List<Amount> baseResources, List<Amount> tools, List<Amount> leftovers,
                          List<PurchaseTotal> purchases, List<RecipeTotal> recipes, List<ResolvedReference> stations,
                          BigDecimal craftTimeSeconds, List<Amount> openCategories, List<Reference> cycles,
-                         BigDecimal costWithoutCurrency) {
+                         BigDecimal costWithoutCurrency, List<CurrencyAmount> costs) {
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public record CurrencyAmount(Reference currency, String name, String iconMediaId, BigDecimal amount) {
     }
 
     public record Tree(Node root, Totals totals) {
+    }
+
+    /** Vários alvos numa árvore só: o que sobra de um serve ao próximo. {@code revenue} é a venda pelo preço base. */
+    public record Plan(List<Node> roots, Totals totals, List<CurrencyAmount> revenue) {
+    }
+
+    /**
+     * Rentabilidade de um lote da receita padrão (ou de um pacote da oferta mais barata, sem receita).
+     * Custo e venda só se comparam na mesma moeda, {@code currency}: a da venda ou, sem venda, a única do
+     * custo. Com custo em outra moeda, {@code unitCost} e {@code profit} ficam nulos. {@code profitPerHour}
+     * usa o tempo da receita do alvo. {@code incomplete}: categoria em aberto, ciclo ou árvore grande demais.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public record Profit(Reference target, String name, String iconMediaId, String recipe, BigDecimal produced,
+                         BigDecimal craftTimeSeconds, ResolvedReference currency, BigDecimal unitCost,
+                         BigDecimal sellPrice, BigDecimal profit, BigDecimal profitPerHour, int steps,
+                         List<CurrencyAmount> costs, List<ResolvedReference> stations, List<Amount> baseResources,
+                         List<PurchaseTotal> purchases, Boolean incomplete) {
+    }
+
+    /** Alvo da rentabilidade, com a quantidade de um lote ou pacote e a árvore calculada. */
+    private record Candidate(Reference target, BigDecimal amount, Draft draft, Builder builder) {
     }
 
     private record Input(Reference target, BigDecimal amount, boolean notConsumed) {
@@ -135,6 +165,7 @@ public class CraftingService {
         final Map<String, List<Output>> producers = new HashMap<>();
         final Map<String, List<Offer>> offers = new HashMap<>();
         final Map<String, List<BasePrice>> prices = new HashMap<>();
+        final Map<String, List<BasePrice>> sellPrices = new HashMap<>();
         final Map<String, List<Reference>> categoryMembers = new HashMap<>();
     }
 
@@ -211,14 +242,212 @@ public class CraftingService {
     public Tree tree(String gameId, String target, BigDecimal amount, List<String> choices) {
         access.requireReadable(gameId);
         Reference root = Reference.parse(target, "target");
+        Builder builder = new Builder(load(gameId), Choices.parse(choices));
+        Draft draft = builder.node(root, positive(amount), false, new ArrayDeque<>(), 0);
+
+        Map<String, List<NameRow>> names = names(gameId, builder.ids);
+        return new Tree(convert(draft, names), totals(List.of(draft), builder, names));
+    }
+
+    /** {@code amounts} vem na mesma ordem de {@code targets}; os alvos dividem o estoque, na ordem pedida. */
+    public Plan plan(String gameId, List<String> targets, List<BigDecimal> amounts, List<String> choices) {
+        access.requireReadable(gameId);
+        if (targets == null || targets.isEmpty()) {
+            throw ApiException.badRequest("target é obrigatório");
+        }
+        if (targets.size() > MAX_PLAN_TARGETS) {
+            throw ApiException.badRequest("o plano aceita até " + MAX_PLAN_TARGETS + " alvos");
+        }
+        if (amounts == null || amounts.size() != targets.size()) {
+            throw ApiException.badRequest("informe um amount para cada target, na mesma ordem");
+        }
+        Graph graph = load(gameId);
+        Builder builder = new Builder(graph, Choices.parse(choices));
+        List<Draft> drafts = new ArrayList<>();
+        for (int i = 0; i < targets.size(); i++) {
+            drafts.add(builder.node(Reference.parse(targets.get(i), "target"), positive(amounts.get(i)), false,
+                    new ArrayDeque<>(), 0));
+        }
+
+        Map<String, BigDecimal> revenue = new LinkedHashMap<>();
+        Map<String, Reference> currencies = new HashMap<>();
+        for (Draft draft : drafts) {
+            BasePrice sell = sellPrice(graph, draft.target);
+            if (sell != null) {
+                revenue.merge(currencyKey(sell.currency()), sell.price().multiply(draft.amount), BigDecimal::add);
+                currencies.putIfAbsent(currencyKey(sell.currency()), sell.currency());
+                if (sell.currency() != null) {
+                    builder.ids.add(sell.currency().extId());
+                }
+            }
+        }
+
+        Map<String, List<NameRow>> names = names(gameId, builder.ids);
+        return new Plan(drafts.stream().map(draft -> convert(draft, names)).toList(),
+                totals(drafts, builder, names), currencyAmounts(revenue, currencies, names));
+    }
+
+    /**
+     * Rentabilidade de tudo que alguma receita produz ou alguma loja vende (item ou entidade), cada um
+     * na própria árvore, sem escolhas. {@code search} filtra pelo nome ou código; {@code timed}, só o que
+     * tem tempo de receita. {@code sort}: name, profit, unitCost, sellPrice, craftTimeSeconds, profitPerHour
+     * ou steps, com - na frente para decrescente; nulos por último.
+     */
+    public ContentPage<Profit> profits(String gameId, String search, boolean timed, String sort, int page, int size) {
+        access.requireReadable(gameId);
+        ContentPage.requireValid(page, size);
+        Comparator<Profit> order = profitOrder(sort == null || sort.isBlank() ? "-profit" : sort);
+        Graph graph = load(gameId);
+
+        Map<String, Candidate> candidates = new LinkedHashMap<>();
+        graph.recipes.keySet().stream().sorted().forEach(recipe -> graph.recipes.get(recipe).outputs().forEach(output -> {
+            Reference target = output.target();
+            if (tradable(target) && !candidates.containsKey(key(target))) {
+                Output first = matching(graph.producers, target, Output::target).stream()
+                        .min(Comparator.comparing(Output::recipe)).orElseThrow();
+                candidates.put(key(target), new Candidate(target, first.amount(), null, null));
+            }
+        }));
+        graph.offers.values().forEach(offers -> offers.forEach(offer -> {
+            Reference target = offer.target();
+            if (tradable(target) && !candidates.containsKey(key(target))) {
+                Offer cheapest = matching(graph.offers, target, Offer::target).stream()
+                        .min(Comparator.comparing(Offer::unitPrice)).orElseThrow();
+                candidates.put(key(target), new Candidate(target,
+                        cheapest.quantity() == null ? BigDecimal.ONE : cheapest.quantity(), null, null));
+            }
+        }));
+
+        Set<String> ids = new HashSet<>();
+        List<Candidate> computed = new ArrayList<>();
+        for (Candidate candidate : candidates.values()) {
+            ids.add(candidate.target().extId());
+            Builder builder = new Builder(graph, Choices.parse(List.of()));
+            Draft draft = null;
+            try {
+                draft = builder.node(candidate.target(), candidate.amount(), false, new ArrayDeque<>(), 0);
+                ids.addAll(builder.ids);
+            } catch (ApiException tooLarge) {
+                // Árvore grande demais: a linha aparece sem custo, marcada como incompleta.
+            }
+            BasePrice sell = sellPrice(graph, candidate.target());
+            if (sell != null && sell.currency() != null) {
+                ids.add(sell.currency().extId());
+            }
+            computed.add(new Candidate(candidate.target(), candidate.amount(), draft, builder));
+        }
+        Map<String, List<NameRow>> names = names(gameId, ids);
+
+        String term = search == null ? "" : search.strip().toLowerCase(Locale.ROOT);
+        List<Profit> rows = computed.stream()
+                .map(candidate -> profit(graph, candidate, names))
+                .filter(row -> term.isEmpty() || displayName(row).toLowerCase(Locale.ROOT).contains(term)
+                        || row.target().extId().toLowerCase(Locale.ROOT).contains(term))
+                .filter(row -> !timed || (row.craftTimeSeconds() != null && row.craftTimeSeconds().signum() > 0))
+                .sorted(order)
+                .toList();
+        int from = (int) Math.min((long) page * size, rows.size());
+        return ContentPage.of(rows.subList(from, Math.min(from + size, rows.size())), page, size, rows.size());
+    }
+
+    private static Profit profit(Graph graph, Candidate candidate, Map<String, List<NameRow>> names) {
+        Reference target = candidate.target();
+        NameRow row = find(names, target.kind(), target.extId());
+        String name = row == null ? null : row.name();
+        String icon = row == null ? null : row.iconMediaId();
+        BasePrice sell = sellPrice(graph, target);
+        BigDecimal sellPrice = sell == null ? null : sell.price();
+        Draft draft = candidate.draft();
+        if (draft == null) {
+            return new Profit(target, name, icon, null, candidate.amount(), null,
+                    sell == null || sell.currency() == null ? null : resolved(names, sell.currency()), null, sellPrice,
+                    null, null, 0, List.of(), List.of(), List.of(), List.of(), Boolean.TRUE);
+        }
+
+        Totals totals = totals(List.of(draft), candidate.builder(), names);
+        boolean incomplete = !totals.openCategories().isEmpty() || !totals.cycles().isEmpty();
+        Reference currency = sell != null ? sell.currency()
+                : totals.costs().size() == 1 ? totals.costs().getFirst().currency() : null;
+        boolean comparable = totals.costs().stream().allMatch(cost -> sameCurrency(cost.currency(), currency));
+        BigDecimal cost = totals.costs().stream()
+                .filter(entry -> sameCurrency(entry.currency(), currency))
+                .map(CurrencyAmount::amount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal unitCost = comparable ? cost.divide(draft.amount, MathContext.DECIMAL64).stripTrailingZeros() : null;
+        BigDecimal profit = sellPrice != null && unitCost != null && !incomplete
+                ? sellPrice.subtract(unitCost).stripTrailingZeros() : null;
+        BigDecimal recipeTime = draft.recipe == null ? null : draft.craftTime;
+        BigDecimal profitPerHour = profit != null && recipeTime != null && recipeTime.signum() > 0
+                ? profit.multiply(draft.amount).multiply(BigDecimal.valueOf(3600))
+                        .divide(recipeTime, 4, RoundingMode.HALF_UP).stripTrailingZeros()
+                : null;
+
+        return new Profit(target, name, icon, draft.recipe, draft.amount, recipeTime,
+                currency == null ? null : resolved(names, currency), unitCost, sellPrice, profit, profitPerHour,
+                totals.recipes().size() + totals.purchases().size(), totals.costs(),
+                draft.stations == null ? List.of()
+                        : draft.stations.stream().map(station -> resolved(names, new Reference("entity", station))).toList(),
+                totals.baseResources(), totals.purchases(), incomplete ? Boolean.TRUE : null);
+    }
+
+    private static Comparator<Profit> profitOrder(String sort) {
+        boolean descending = sort.startsWith("-");
+        String key = descending ? sort.substring(1) : sort;
+        Comparator<Profit> byName = Comparator.comparing((Profit row) -> displayName(row).toLowerCase(Locale.ROOT));
+        Function<Profit, BigDecimal> value = switch (key) {
+            case "name" -> null;
+            case "profit" -> Profit::profit;
+            case "unitCost" -> Profit::unitCost;
+            case "sellPrice" -> Profit::sellPrice;
+            case "craftTimeSeconds" -> Profit::craftTimeSeconds;
+            case "profitPerHour" -> Profit::profitPerHour;
+            case "steps" -> row -> BigDecimal.valueOf(row.steps());
+            default -> throw ApiException.badRequest("sort inválido: \"" + sort + "\". Use name, profit, unitCost, "
+                    + "sellPrice, craftTimeSeconds, profitPerHour ou steps, com - na frente para decrescente");
+        };
+        if (value == null) {
+            return descending ? byName.reversed() : byName;
+        }
+        Comparator<BigDecimal> direction = descending ? Comparator.reverseOrder() : Comparator.naturalOrder();
+        return Comparator.comparing(value, Comparator.nullsLast(direction)).thenComparing(byName);
+    }
+
+    private static String displayName(Profit row) {
+        return row.name() != null ? row.name() : row.target().extId();
+    }
+
+    /** Só item e entidade são vendidos pelo preço base; alvo sem tipo pode ser qualquer um deles. */
+    private static boolean tradable(Reference target) {
+        return target.kind() == null || "item".equals(target.kind()) || "entity".equals(target.kind());
+    }
+
+    private static BigDecimal positive(BigDecimal amount) {
         if (amount == null || amount.signum() <= 0) {
             throw ApiException.badRequest("amount precisa ser maior que zero");
         }
-        Builder builder = new Builder(load(gameId), Choices.parse(choices));
-        Draft draft = builder.node(root, amount.stripTrailingZeros(), false, new ArrayDeque<>(), 0);
+        return amount.stripTrailingZeros();
+    }
 
-        Map<String, List<NameRow>> names = names(gameId, builder.ids);
-        return new Tree(convert(draft, names), totals(draft, builder, names));
+    private static BasePrice sellPrice(Graph graph, Reference target) {
+        return matching(graph.sellPrices, target, BasePrice::target).stream().findFirst().orElse(null);
+    }
+
+    private static boolean sameCurrency(Reference a, Reference b) {
+        return a == null ? b == null : b != null && sameTarget(a, b);
+    }
+
+    private static String currencyKey(Reference currency) {
+        return currency == null ? "" : key(currency);
+    }
+
+    private static List<CurrencyAmount> currencyAmounts(Map<String, BigDecimal> values, Map<String, Reference> currencies,
+                                                        Map<String, List<NameRow>> names) {
+        return values.entrySet().stream().map(entry -> {
+            Reference currency = currencies.get(entry.getKey());
+            NameRow row = currency == null ? null : find(names, currency.kind(), currency.extId());
+            return new CurrencyAmount(currency, row == null ? null : row.name(), row == null ? null : row.iconMediaId(),
+                    entry.getValue().stripTrailingZeros());
+        }).toList();
     }
 
     private static final class Builder {
@@ -467,19 +696,8 @@ public class CraftingService {
                             currency == null ? null : reference(rs.getString("currency_kind"), currency),
                             rs.getString("reset_type")));
         });
-        jdbc.sql("""
-                SELECT 'item' AS kind, ext_id, base_buy_price, currency_kind, currency_ext_id FROM item
-                WHERE game_id = :game AND base_buy_price IS NOT NULL
-                UNION ALL
-                SELECT 'entity', ext_id, base_buy_price, NULL, NULL FROM entity
-                WHERE game_id = :game AND base_buy_price IS NOT NULL
-                """).param("game", gameId).query(rs -> {
-            String currency = rs.getString("currency_ext_id");
-            graph.prices.computeIfAbsent(rs.getString("ext_id"), key -> new ArrayList<>())
-                    .add(new BasePrice(reference(rs.getString("kind"), rs.getString("ext_id")),
-                            rs.getBigDecimal("base_buy_price"),
-                            currency == null ? null : reference(rs.getString("currency_kind"), currency)));
-        });
+        loadPrices(gameId, "base_buy_price", graph.prices);
+        loadPrices(gameId, "base_sell_price", graph.sellPrices);
         jdbc.sql("""
                 SELECT category_ext_id, kind, ext_id FROM content_category
                 WHERE game_id = :game AND kind IN ('item', 'entity')
@@ -489,6 +707,22 @@ public class CraftingService {
                     .add(reference(rs.getString("kind"), rs.getString("ext_id")));
         });
         return graph;
+    }
+
+    /** Preço base de compra ou de venda de itens e entidades; {@code column} é uma das duas colunas. */
+    private void loadPrices(String gameId, String column, Map<String, List<BasePrice>> into) {
+        jdbc.sql("""
+                SELECT 'item' AS kind, ext_id, %1$s AS price, currency_kind, currency_ext_id FROM item
+                WHERE game_id = :game AND %1$s IS NOT NULL
+                UNION ALL
+                SELECT 'entity', ext_id, %1$s, NULL, NULL FROM entity
+                WHERE game_id = :game AND %1$s IS NOT NULL
+                """.formatted(column)).param("game", gameId).query(rs -> {
+            String currency = rs.getString("currency_ext_id");
+            into.computeIfAbsent(rs.getString("ext_id"), key -> new ArrayList<>())
+                    .add(new BasePrice(reference(rs.getString("kind"), rs.getString("ext_id")), rs.getBigDecimal("price"),
+                            currency == null ? null : reference(rs.getString("currency_kind"), currency)));
+        });
     }
 
     private Map<String, List<NameRow>> names(String gameId, Set<String> ids) {
@@ -557,9 +791,9 @@ public class CraftingService {
                 draft.children.isEmpty() ? null : draft.children.stream().map(child -> convert(child, names)).toList());
     }
 
-    private static Totals totals(Draft root, Builder builder, Map<String, List<NameRow>> names) {
+    private static Totals totals(List<Draft> roots, Builder builder, Map<String, List<NameRow>> names) {
         Accumulator sum = new Accumulator();
-        sum.visit(root);
+        roots.forEach(sum::visit);
 
         Map<String, BigDecimal> leftovers = new LinkedHashMap<>();
         builder.stock.forEach((key, amount) -> {
@@ -588,7 +822,8 @@ public class CraftingService {
                 purchases, recipes, stations, sum.craftTime,
                 amounts(sum.open, sum.targets, names),
                 List.copyOf(sum.cycles),
-                sum.costWithoutCurrency.signum() == 0 ? null : sum.costWithoutCurrency);
+                sum.costWithoutCurrency.signum() == 0 ? null : sum.costWithoutCurrency,
+                currencyAmounts(sum.costs, sum.currencies, names));
     }
 
     private static List<Amount> amounts(Map<String, BigDecimal> values, Map<String, Reference> targets,
@@ -612,6 +847,15 @@ public class CraftingService {
         final Set<Reference> cycles = new LinkedHashSet<>();
         BigDecimal craftTime = BigDecimal.ZERO;
         BigDecimal costWithoutCurrency = BigDecimal.ZERO;
+        final Map<String, BigDecimal> costs = new LinkedHashMap<>();
+        final Map<String, Reference> currencies = new HashMap<>();
+
+        void cost(Reference currency, BigDecimal amount) {
+            if (amount.signum() > 0) {
+                costs.merge(currencyKey(currency), amount, BigDecimal::add);
+                currencies.putIfAbsent(currencyKey(currency), currency);
+            }
+        }
 
         void visit(Draft draft) {
             String key = key(draft.target);
@@ -647,11 +891,13 @@ public class CraftingService {
                     if (offer.currency() == null) {
                         costWithoutCurrency = costWithoutCurrency.add(draft.cost);
                     }
+                    cost(offer.currency(), draft.cost);
                 }
                 case "price" -> {
                     if (draft.basePrice.currency() == null) {
                         costWithoutCurrency = costWithoutCurrency.add(draft.cost);
                     }
+                    cost(draft.basePrice.currency(), draft.cost);
                 }
                 default -> throw new IllegalStateException("Origem desconhecida: " + draft.source);
             }

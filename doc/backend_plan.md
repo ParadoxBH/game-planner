@@ -998,7 +998,11 @@ Decisões tomadas na implementação, que ajustam o plano acima:
 - metadados: viraram atributos. A tela lista itens e entidades com o atributo (`?attribute=`, filtro criado
   para ela), e os chips de atributo das telas migradas abrem essa tela;
 - filtro global de eventos (cabeçalho): lê `/events`, com as datas ISO, e mantém as preferências salvas no
-  navegador pelo código do evento.
+  navegador pelo código do evento;
+- calculadoras: a de crafting usa `/crafting-plan` (vários alvos numa árvore só, dividindo as sobras, com
+  custo e venda por moeda); rentabilidade e lucro por tempo usam `/crafting-profits`, que calcula um lote
+  de cada produto no servidor, com busca, ordenação e paginação. Custo e venda só se comparam na mesma
+  moeda; o que tem categoria em aberto ou ciclo aparece marcado como incompleto.
 
 As telas migradas compartilham componentes de detalhe (pontos por mapa, ofertas de loja, drops,
 códigos, coleções, variantes). As demais telas seguem lendo os JSON até a vez delas.

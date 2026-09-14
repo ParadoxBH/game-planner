@@ -377,7 +377,22 @@ recurso de conteúdo. Traz:
   `fromStock` (quanto veio do que sobrou), `leftover` (quanto sobrou dele), nome, ícone, `recipe`
   (lotes, produzido, tempo, bancadas), `purchase` (pacotes, custo, moeda), `alternatives` (receitas
   do alvo), `buyable` e `children`. `totals` soma recursos base, ferramentas (não consumidos),
-  `leftovers` (o que sobrou no fim), compras, receitas, bancadas, tempo, categorias em aberto e ciclos.
+  `leftovers` (o que sobrou no fim), compras, `costs` (gasto por moeda), receitas, bancadas, tempo,
+  categorias em aberto e ciclos.
+
+**Plano com vários alvos:** `GET /api/v1/games/{jogo}/crafting-plan?target=item:tabua&amount=2&target=item:banco&amount=1`.
+`target` e `amount` se repetem na mesma ordem (até 100 alvos) e `choices` vale como na árvore. Os alvos
+dividem o estoque: o que sobra de um serve ao próximo. A resposta traz `roots` (uma árvore por alvo),
+`totals` e `revenue`, a venda dos alvos pelo preço base, por moeda.
+
+**Rentabilidade:** `GET /api/v1/games/{jogo}/crafting-profits?search=&timed=&sort=-profit&page=0&size=50`.
+Uma linha por produto de receita ou item/entidade vendido em loja, calculada para um lote da receita
+padrão (ou um pacote da oferta mais barata): `produced`, `craftTimeSeconds` (tempo do lote),
+`unitCost`, `sellPrice`, `profit`, `profitPerHour`, `steps` (receitas + compras), `costs`, bancadas,
+recursos base e compras. Custo e venda só se comparam em `currency` (a moeda da venda ou, sem venda, a
+única do custo); com custo em outra moeda, `unitCost` e `profit` ficam de fora. `incomplete` marca
+categoria em aberto, ciclo ou árvore grande demais. `timed=true` traz só o que tem tempo de receita;
+`sort` aceita `name`, `profit`, `unitCost`, `sellPrice`, `craftTimeSeconds`, `profitPerHour` e `steps`.
 
 **Cache:** toda leitura da API responde com `ETag` e `Cache-Control: no-cache`. Reenviando
 `If-None-Match`, a resposta é `304` sem corpo quando nada mudou.

@@ -24,6 +24,8 @@ class AggregationsApiIntegrationTest extends ContentApiTest {
 
     private static final String DETAILS = "/api/v1/games/{game}/{resource}/{id}/details";
     private static final String TREE = "/api/v1/games/{game}/crafting-tree";
+    private static final String PLAN = "/api/v1/games/{game}/crafting-plan";
+    private static final String PROFITS = "/api/v1/games/{game}/crafting-profits";
 
     @Autowired
     ApiCacheFilter cacheFilter;
@@ -264,6 +266,64 @@ class AggregationsApiIntegrationTest extends ContentApiTest {
                 .andExpect(jsonPath("$.totals.cycles[0].extId").value("a"));
 
         mvc.perform(get(TREE, game).param("target", "item:a").param("amount", "0")).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void craftingPlanSharesLeftoversBetweenTargetsAndSumsCostAndRevenue() throws Exception {
+        create("items", "{ 'extId': 'madeira', 'name': 'Madeira', 'baseBuyPrice': 5 }");
+        create("items", "{ 'extId': 'tabua', 'name': 'Tabua', 'baseSellPrice': 4 }");
+        createTabua();
+        create("recipes", """
+                { 'extId': 'fazer_banco', 'inputs': [ { 'target': { 'kind': 'item', 'extId': 'tabua' }, 'amount': 2 } ],
+                  'outputs': [ { 'target': { 'kind': 'item', 'extId': 'banco' }, 'amount': 1 } ] }
+                """);
+
+        // 2 tábuas e 1 banco: um lote de 4 tábuas serve aos dois, e o banco usa as 2 que sobraram.
+        mvc.perform(get(PLAN, game).param("target", "item:tabua", "item:banco").param("amount", "2", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.roots.length()").value(2))
+                .andExpect(jsonPath("$.roots[0].recipe.batches").value(1))
+                .andExpect(jsonPath("$.roots[1].children[0].source").value("stock"))
+                .andExpect(jsonPath("$.totals.recipes[?(@.extId == 'fazer_tabua')].batches", hasItem(1)))
+                .andExpect(jsonPath("$.totals.costs[0].currency").doesNotExist())
+                .andExpect(jsonPath("$.totals.costs[0].amount").value(10))
+                .andExpect(jsonPath("$.revenue[0].amount").value(8));
+
+        mvc.perform(get(PLAN, game).param("target", "item:tabua").param("amount", "1", "2"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void craftingProfitsCompareCostAndSaleOfOneBatchInTheSameCurrency() throws Exception {
+        create("items", "{ 'extId': 'madeira', 'name': 'Madeira', 'baseBuyPrice': 5 }");
+        create("items", "{ 'extId': 'tabua', 'name': 'Tabua', 'baseSellPrice': 4 }");
+        createTabua();
+        create("shop-categories", """
+                { 'extId': 'loja', 'name': 'Loja', 'items': [
+                    { 'target': { 'kind': 'item', 'extId': 'prego' }, 'quantity': 10, 'price': 3,
+                      'currency': { 'kind': 'item', 'extId': 'estrela' } } ] }
+                """);
+
+        // Lote de 4 tábuas custa 2 madeiras (10): 2,5 por tábua, vendida a 4. O lote leva 10 s: 1,5 × 4 × 360 por hora.
+        mvc.perform(get(PROFITS, game))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.total").value(2))
+                .andExpect(jsonPath("$.content[0].target.extId").value("tabua"))
+                .andExpect(jsonPath("$.content[0].produced").value(4))
+                .andExpect(jsonPath("$.content[0].unitCost").value(2.5))
+                .andExpect(jsonPath("$.content[0].profit").value(1.5))
+                .andExpect(jsonPath("$.content[0].profitPerHour").value(2160))
+                .andExpect(jsonPath("$.content[0].stations[0].extId").value("bancada"))
+                // Pacote de 10 pregos por 3 estrelas, sem preço de venda: custo na estrela, sem lucro.
+                .andExpect(jsonPath("$.content[1].target.extId").value("prego"))
+                .andExpect(jsonPath("$.content[1].currency.extId").value("estrela"))
+                .andExpect(jsonPath("$.content[1].unitCost").value(0.3))
+                .andExpect(jsonPath("$.content[1].profit").doesNotExist());
+
+        mvc.perform(get(PROFITS, game).param("timed", "true")).andExpect(jsonPath("$.total").value(1));
+        mvc.perform(get(PROFITS, game).param("search", "preg"))
+                .andExpect(jsonPath("$.content[0].target.extId").value("prego"));
+        mvc.perform(get(PROFITS, game).param("sort", "lucro")).andExpect(status().isBadRequest());
     }
 
     @Test
