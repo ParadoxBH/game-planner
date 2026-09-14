@@ -1,25 +1,24 @@
 # Estrutura de Dados e Carregamento
 
-O Game Planner utiliza um sistema descentralizado de arquivos JSON para facilitar a manutenção e escalabilidade.
+O front não carrega mais arquivos de dados: todas as telas leem a API do backend (`src/api`). O formato dos
+documentos da API está em `backend/README.md`.
 
-## Organização de Arquivos
+## Acervo antigo (fora do repositório)
 
-### 1. `public/data/games.json`
-Contém apenas a lista global de jogos e seus metadados básicos (ID, Nome, Descrição, Thumbnail). **Não deve conter detalhes de mapas ou receitas.**
+Os JSON e as imagens do modelo antigo saíram de `public/` e estão em `C:\Dev\game-planner-data`, fonte para o
+script de importação na base:
 
-### 2. Diretórios por Jogo (`public/data/[gameId]/`)
-Cada jogo tem sua própria pasta contendo:
-- `maps.json`: Especificações de todos os mapas disponíveis para o jogo.
-- `items.json` ou pasta `items/`: Dicionário de itens.
-- `recipes.json`: Lista de receitas/crafting.
-- `entity.json`: Entidades, NPCs, Inimigos e Regiões.
-- `spawns.json`: Localização ou regras de spawn.
+- `data/games.json`: lista global de jogos.
+- `data/[gameId]/`: um diretório por jogo (`maps.json`, `items/`, `recipes.json`, `entity/`, `spawns.json`,
+  `categories/`, `conjuntos/`, `events.json`...). Vários tipos são divididos em arquivos por tema com um
+  `manifest.json`.
+- `data/codes/`: códigos de resgate por mês, com `manifest.json`.
+- `img/`, `icon/`, `map/`: imagens, ícones e mapas/tiles. Os JSON apontam para eles com caminhos relativos à raiz
+  do acervo, com ou sem `/` inicial (`/img/heartopia/logo.png` ou `img/heartopia/logo.png`).
 
-## Uso dos arquivos
+O histórico desses arquivos continua no git deste repositório (até o commit `4a5c031`).
 
-O front não carrega mais estes arquivos: todas as telas leem a API do backend (`src/api`), e o antigo
-carregamento por `dataLoader.ts`, `useApi` e o cache Dexie foi removido. Os JSON continuam no repositório
-como fonte dos dados para importar na API; o formato dos documentos da API está em `backend/README.md`.
+Em `public/` ficam só assets da aplicação (`vite.svg`, `img/add.png`).
 
 ---
 **Padrão de IDs**: IDs devem ser únicos preferencialmente no formato `tipo_nome` (ex: `spawn_coal_node`, `biome_meadows`).

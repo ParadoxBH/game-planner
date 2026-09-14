@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import type { GameInfo } from "../api/content";
 import { gameImage, isComingSoon, readAccessLog, recordAccess } from "../api/games";
 import { useGames } from "../api/useContent";
-import { getPublicUrl } from "../utils/pathUtils";
 import { isDev } from "../utils/mapper";
 import { StyledContainer } from "./common/StyledContainer";
 
@@ -59,7 +58,7 @@ export function Home() {
             <Box sx={{ position: "relative", height: "100%" }}>
               <CardMedia
                 component="img"
-                image={gameImage(game, ["capsule", "thumbnail", "banner", "icon"]) ?? getPublicUrl(`img/${game.id}/logo.png`)}
+                image={gameImage(game, ["capsule", "thumbnail", "banner", "icon"]) ?? `https://placehold.co/400x600/333/fff?text=${encodeURIComponent(game.name)}`}
                 alt={`Capa de ${game.name}`}
                 sx={{
                   height: "100%",

@@ -1,7 +1,8 @@
 # Backend — Análise e Plano
 
 Documento de planejamento do servidor Java/Spring/Postgres do Game Planner.
-Escrito a partir da análise do front atual (`src/`) e da base em `public/data/`.
+Escrito a partir da análise do front atual (`src/`) e da base em `public/data/` (hoje fora do repositório,
+em `C:\Dev\game-planner-data`).
 
 ---
 
@@ -133,7 +134,7 @@ performance a resolver; há problema de **modelagem, integridade e edição**.
 
 ### 3.6 Os 108 MB de imagens ficam estáticos
 
-4.002 arquivos em `public/img|map|icon`. Os bytes nunca entram no Postgres — no máximo os
+4.002 arquivos em `img|map|icon` (antes em `public/`, hoje em `C:\Dev\game-planner-data`). Os bytes nunca entram no Postgres — no máximo os
 metadados, se o acervo for migrado para o subsistema de mídia (4.7).
 
 ### 3.7 Repetir o mesmo alvo é mecânica de jogo, não erro de dado
@@ -680,10 +681,11 @@ Cadastro é aberto (4.2), então upload é entrada de arquivo hostil por defini�
 
 #### O acervo atual passa pelo mesmo cano
 
-Os 4.002 arquivos de `public/img|map|icon` (108 MB, em PNG e JPG) podem ser reenviados
+Os 4.002 arquivos de `img|map|icon` (108 MB, em PNG e JPG) podem ser reenviados
 pelo parser externo por esse mesmo endpoint. Além de unificar o armazenamento, converter
-o acervo para WebP costuma cortar entre 25% e 35% do peso. Não é pré-requisito de nada —
-os caminhos estáticos atuais continuam funcionando enquanto não forem migrados.
+o acervo para WebP costuma cortar entre 25% e 35% do peso. O acervo saiu de `public/` e está em
+`C:\Dev\game-planner-data`, então o front não serve mais esses caminhos estáticos: as imagens só
+voltam a aparecer depois de importadas.
 
 ---
 

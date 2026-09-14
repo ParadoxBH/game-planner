@@ -36,11 +36,9 @@ This document defines architectural and design standards to ensure consistency.
 10. **No Build or Verification Commands**: Do NOT run `npm run build`, automated verification commands, or use the browser tool to verify functionality. The user handles the live application and validation.
 
 ## 📂 Data Structure
-Data in `public/data/[game-id]/`:
-- `entity.json`: High-level information about game entities.
-- `items.json`: Detailed information about items (including `icon` paths).
-- `spawns.json`: Precise coordinates for the map.
-- `games.json`: Metadata for games and maps.
+All game content comes from the backend API (`src/api`). The legacy JSON files and images that used to live in
+`public/` were moved out of the project to `C:\Dev\game-planner-data` (source for the import into the database);
+`public/` only keeps app assets (`vite.svg`, `img/add.png`).
 
 ## 🗺️ Map Implementation
 - **Custom Markers**: Use `L.divIcon` for rendered entity icons (32x32) on the map.

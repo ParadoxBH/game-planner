@@ -109,7 +109,7 @@ Content-Type: multipart/form-data; boundary=GamePlannerBoundary
 Content-Disposition: form-data; name="file"; filename="logo.png"
 Content-Type: image/png
 
-< ../../public/img/heartopia/logo.png
+< ../../../game-planner-data/img/heartopia/logo.png
 --GamePlannerBoundary--
 
 > {%
