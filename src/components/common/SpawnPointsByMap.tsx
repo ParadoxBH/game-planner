@@ -7,8 +7,8 @@ import { DataCard } from "./DataCard";
 
 interface SpawnPointsByMapProps {
   points: SpawnPointDocument[];
-  /** Filtro aplicado ao abrir o mapa: ?item=codigo ou ?entity=codigo. */
-  filter: { param: "item" | "entity"; value: string };
+  /** Filtro aplicado ao abrir o mapa: ?item=codigo ou ?entity=codigo. Sem ele, abre o mapa sem filtro. */
+  filter?: { param: "item" | "entity"; value: string };
   references: ReferenceIndex;
 }
 
@@ -29,7 +29,9 @@ export function SpawnPointsByMap({ points, filter, references }: SpawnPointsByMa
               map
                 ? () =>
                     navigate(
-                      `/game/${gameId}/map/${encodeURIComponent(map)}?${filter.param}=${encodeURIComponent(filter.value)}`,
+                      `/game/${gameId}/map/${encodeURIComponent(map)}${
+                        filter ? `?${filter.param}=${encodeURIComponent(filter.value)}` : ""
+                      }`,
                     )
                 : undefined
             }

@@ -480,3 +480,11 @@ Authorization: Bearer {{accessToken}}
 ### Bancadas citadas por receitas, com nome e quantas receitas cada uma tem
 GET {{api}}/games/heartopia/recipe-stations
 Authorization: Bearer {{accessToken}}
+
+### Eventos de um tipo, os mais recentes primeiro
+GET {{api}}/games/heartopia/events?type=season&sort=-periodStart
+Authorization: Bearer {{accessToken}}
+
+### Categorias de item, incluindo as que valem para item e entidade
+GET {{api}}/games/heartopia/categories?appliesTo=item&sort=name
+Authorization: Bearer {{accessToken}}

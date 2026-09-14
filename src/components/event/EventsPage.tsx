@@ -1,115 +1,97 @@
-import { 
-  Box, 
-  Typography, 
-  Grid, 
-  Stack,
-  Tabs,
-  Tab,
-  CircularProgress
-} from "@mui/material";
-import { useState, useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { useApi } from "../../hooks/useApi";
-import { StyledContainer } from "../common/StyledContainer";
-import { EventCard } from "./EventCard";
-import type { GameEvent } from "../../types/gameModels";
-import { eventRepository } from "../../repositories/EventRepository";
+import { CircularProgress, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { ApiError } from "../../api/ApiError";
+import { MAX_PAGE_SIZE, type EventDocument, type ListQuery } from "../../api/content";
+import { useContentList } from "../../api/useContent";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
+import { ListingDataView } from "../common/ListingDataView";
+import { StyledContainer } from "../common/StyledContainer";
+import { ApiEventCard, EVENT_TYPES } from "./ApiEventRenderers";
 
+interface EventCriteria {
+  type: string | null;
+}
+
+const INITIAL_CRITERIA: EventCriteria = { type: null };
+const ALL = "all";
+
+/** Lista de eventos, lida da API, com abas por tipo e os mais recentes primeiro. */
 export function EventsPage() {
-  const { gameId } = useParams<{ gameId: string }>();
-  const { loading: dbLoading, error } = useApi(gameId);
-  const [events, setEvents] = useState<GameEvent[]>([]);
-  const [dataLoading, setDataLoading] = useState(true);
-  const [tabValue, setTabValue] = useState(0);
+  const { gameId = "" } = useParams<{ gameId: string }>();
   const { isMobile } = usePlatform();
+  const pages = usePagination(INITIAL_CRITERIA);
+
+  // A API devolve no máximo 200 por página.
+  useEffect(() => {
+    if (pages.info.pagination.pageSize > MAX_PAGE_SIZE) pages.setPageSize(MAX_PAGE_SIZE);
+  }, [pages.info.pagination.pageSize, pages.setPageSize]);
+
+  const search = useDebouncedValue(pages.info.search);
+  const { criteria, pagination } = pages.info;
+
+  const query = useMemo<ListQuery>(
+    () => ({
+      search: search || undefined,
+      page: pagination.page - 1,
+      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+      sort: "-periodStart",
+      filters: { type: criteria.type ?? undefined },
+    }),
+    [search, pagination, criteria.type],
+  );
+
+  const events = useContentList<EventDocument>(gameId, "events", query);
 
   useEffect(() => {
-    if (dbLoading) return;
-
-    let isMounted = true;
-    setDataLoading(true);
-
-    eventRepository.getAll().then(allEvents => {
-      if (!isMounted) return;
-      setEvents(allEvents);
-      setDataLoading(false);
-    }).catch(err => {
-      console.error("Error fetching events:", err);
-      if (isMounted) setDataLoading(false);
-    });
-
-    return () => { isMounted = false; };
-  }, [dbLoading]);
-
-  if (dbLoading || dataLoading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
-        <CircularProgress color="primary" />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Box sx={{ p: 4, textAlign: 'center' }}>
-        <Typography color="error" variant="h6">Erro ao carregar eventos: {error}</Typography>
-      </Box>
-    );
-  }
-
-  const filteredEvents = events?.filter(event => {
-    if (tabValue === 0) return true;
-    const types = ["all", "clima", "season", "mapa", "event"];
-    return event.type === (types[tabValue] as any);
-  }) || [];
+    if (events.data) pages.setTotalItems(events.data.total);
+  }, [events.data, pages.setTotalItems]);
 
   return (
     <StyledContainer
       title={`Eventos de ${gameId}`}
       label={isMobile ? undefined : "Central de eventos climáticos, temporadas e atividades especiais."}
+      searchValue={pages.info.search}
+      onChangeSearch={pages.setSearch}
+      search={{ placeholder: "Pesquisar eventos..." }}
+      pages={pages}
       actionsStart={
-        <Tabs 
-          value={tabValue} 
-          onChange={(_, v) => setTabValue(v)}
+        <Tabs
+          value={criteria.type ?? ALL}
+          onChange={(_, value: string) => pages.setCriteria({ type: value === ALL ? null : value })}
           variant="scrollable"
           scrollButtons="auto"
-          sx={{
-            minHeight: 48,
-            '& .MuiTab-root': { 
-              textTransform: 'none',
-              fontWeight: 600,
-              fontSize: '0.9rem',
-              minWidth: 100,
-              minHeight: 48,
-              color: 'text.secondary',
-              '&.Mui-selected': { color: 'secondary.main' }
-            },
-            '& .MuiTabs-indicator': { backgroundColor: 'secondary.main', height: 3, borderRadius: '3px 3px 0 0' }
-          }}
         >
-          <Tab label="Todos" />
-          <Tab label="Clima" />
-          <Tab label="Temporadas" />
-          <Tab label="Mapa" />
-          <Tab label="Eventos" />
+          <Tab value={ALL} label="Todos" />
+          {Object.entries(EVENT_TYPES).map(([type, info]) => (
+            <Tab key={type} value={type} label={info.label} />
+          ))}
         </Tabs>
       }
     >
-      <Grid container spacing={isMobile ? 1 : 2}>
-        {filteredEvents.map((event) => (
-          <Grid size={{ xs: 12, md: 4 }} key={event.id}>
-            <EventCard event={event} />
-          </Grid>
-        ))}
-      </Grid>
-
-      {filteredEvents.length === 0 && (
-        <Stack sx={{ flex: 1, textAlign: 'center', py: 8, alignItems: "center", justifyContent: "center" }}>
-          <Typography variant="h6" color="text.secondary">
-            Nenhum evento desta categoria encontrado.
+      {events.isPending ? (
+        <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>
+          <CircularProgress color="primary" />
+        </Stack>
+      ) : events.isError ? (
+        <Stack alignItems="center" spacing={1} sx={{ p: 4, flex: 1 }}>
+          <Typography color="error" variant="h6" sx={{ fontWeight: 700 }}>
+            Não foi possível carregar os eventos.
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {events.error instanceof ApiError ? events.error.message : "Erro inesperado."}
           </Typography>
         </Stack>
+      ) : (
+        <ListingDataView
+          data={events.data.content}
+          viewMode="cards"
+          cardMinWidth={isMobile ? 260 : 340}
+          emptyMessage="Nenhum evento encontrado com estes filtros."
+          renderCard={(event) => <ApiEventCard event={event} gameId={gameId} />}
+        />
       )}
     </StyledContainer>
   );

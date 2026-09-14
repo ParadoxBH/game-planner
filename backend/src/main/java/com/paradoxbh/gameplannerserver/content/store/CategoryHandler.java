@@ -2,10 +2,12 @@ package com.paradoxbh.gameplannerserver.content.store;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
+import com.paradoxbh.gameplannerserver.common.ApiException;
 import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.model.CategoryDocument;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
@@ -54,5 +56,17 @@ public class CategoryHandler extends AbstractContentHandler<CategoryDocument, Vo
     @Override
     public ContentTags tagsOf(CategoryDocument category) {
         return new ContentTags(List.of(), category.events(), Map.of(), category.media());
+    }
+
+    /** appliesTo=item traz as categorias de item e as de ambos; both, só as de ambos. */
+    @Override
+    protected Map<String, Filter> specificFilters() {
+        return Map.of("appliesTo", (name, value, param, params) -> {
+            if (!Set.of("item", "entity", "both").contains(value)) {
+                throw ApiException.badRequest("appliesTo precisa ser item, entity ou both");
+            }
+            params.put(param, value);
+            return "t.applies_to IN (:" + param + ", 'both')";
+        });
     }
 }

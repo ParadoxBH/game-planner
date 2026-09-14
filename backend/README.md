@@ -228,7 +228,8 @@ definição em `/attributes`, o tipo é conferido e divergência dá `422`.
 decrescente. Várias `category` combinam com E. Toda listagem aceita também `withoutCategory` (exclui categorias) e
 `activeEvents` (esconde conteúdo de evento fora da lista; vazio mostra só o que não tem evento), com códigos
 separados por vírgula. Itens aceitam `trade`: `buyable` (preço base de compra ou vendido em loja), `sellable`,
-`traded` ou `untraded`. Itens e entidades aceitam `variantOf` (código do conteúdo base). Com `references=true`, a página traz
+`traded` ou `untraded`. Itens e entidades aceitam `variantOf` (código do conteúdo base). Eventos aceitam `type` (tipo do
+evento) e categorias, `appliesTo` (`item` e `entity` trazem também as categorias de ambos). Com `references=true`, a página traz
 também `references`: toda referência citada pelos documentos da página, com nome e ícone, como no detalhe.
 
 ## Crafting e economia (Fase 3)

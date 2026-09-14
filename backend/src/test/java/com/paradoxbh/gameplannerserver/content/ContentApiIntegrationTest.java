@@ -383,4 +383,32 @@ class ContentApiIntegrationTest extends ContentApiTest {
         mvc.perform(get(ITEMS, game).param("trade", "untraded")).andExpect(jsonPath("$.content[*].extId", contains("natal")));
         mvc.perform(get(ITEMS, game).param("trade", "talvez")).andExpect(status().isBadRequest());
     }
+
+    @Test
+    void eventsFilterByTypeAndCategoriesByWhatTheyApplyTo() throws Exception {
+        send(put("/api/v1/games/{game}/events", game), "editor", json("""
+                [ { 'extId': 'chuva', 'name': 'Chuva', 'eventType': 'clima' },
+                  { 'extId': 'natal', 'name': 'Natal', 'eventType': 'season' } ]
+                """))
+                .andExpect(status().isOk());
+        send(put("/api/v1/games/{game}/categories", game), "editor", json("""
+                [ { 'extId': 'flor', 'name': 'Flor', 'appliesTo': 'item' },
+                  { 'extId': 'npc', 'name': 'NPC', 'appliesTo': 'entity' },
+                  { 'extId': 'raro', 'name': 'Raro' } ]
+                """))
+                .andExpect(status().isOk());
+
+        mvc.perform(get("/api/v1/games/{game}/events", game).param("type", "clima"))
+                .andExpect(jsonPath("$.content[*].extId", contains("chuva")));
+
+        // Categoria sem appliesTo vale para ambos e aparece tanto em item quanto em entidade.
+        mvc.perform(get("/api/v1/games/{game}/categories", game).param("appliesTo", "item").param("sort", "extId"))
+                .andExpect(jsonPath("$.content[*].extId", contains("flor", "raro")));
+        mvc.perform(get("/api/v1/games/{game}/categories", game).param("appliesTo", "entity").param("sort", "extId"))
+                .andExpect(jsonPath("$.content[*].extId", contains("npc", "raro")));
+        mvc.perform(get("/api/v1/games/{game}/categories", game).param("appliesTo", "both"))
+                .andExpect(jsonPath("$.content[*].extId", contains("raro")));
+        mvc.perform(get("/api/v1/games/{game}/categories", game).param("appliesTo", "mapa"))
+                .andExpect(status().isBadRequest());
+    }
 }

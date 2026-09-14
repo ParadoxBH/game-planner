@@ -62,4 +62,10 @@ public class EventHandler extends AbstractContentHandler<EventDocument, Void> {
     protected Map<String, String> specificSortColumns() {
         return Map.of("periodStart", "t.period_start");
     }
+
+    /** type é o tipo do evento, ex.: season, clima. */
+    @Override
+    protected Map<String, Filter> specificFilters() {
+        return Map.of("type", codeColumn("t.event_type"));
+    }
 }

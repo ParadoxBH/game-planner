@@ -196,6 +196,36 @@ export interface CategoryDocument extends ContentBase {
   events: string[];
 }
 
+export interface EventDocument extends ContentBase {
+  name: string;
+  /** Tipo do evento, ex.: season, clima; padrão "event". */
+  eventType: string;
+  /** Datas ISO (aaaa-mm-dd), inclusivas. */
+  periodStart: string | null;
+  periodEnd: string | null;
+}
+
+export interface CollectionDocument extends ContentBase {
+  name: string;
+  events: string[];
+}
+
+/** Mapa, com os campos que as listagens usam; tiles, limites e zoom ficam de fora. */
+export interface MapDocument extends ContentBase {
+  mapType: string | null;
+  weathers: string[];
+  events: string[];
+}
+
+export interface LocationDocument extends ContentBase {
+  locationType: string | null;
+  parent: string | null;
+  map: string | null;
+  /** WKT em coordenadas de jogo. */
+  area: string | null;
+  events: string[];
+}
+
 export interface Details<D, R> {
   kind: string;
   document: D;
@@ -240,6 +270,34 @@ export interface EntityRelated {
 export interface RecipeRelated {
   soldIn: ContentPage<ShopCategoryDocument>;
   rewardOf: ContentPage<RedemptionCodeDocument>;
+}
+
+/** Relações do detalhe de categoria. */
+export interface CategoryRelated {
+  items: ContentPage<ItemDocument>;
+  entities: ContentPage<EntityDocument>;
+  shops: ContentPage<ShopDocument>;
+  /** Receitas cujo produto é a categoria. */
+  producedBy: ContentPage<RecipeDocument>;
+  /** Receitas que aceitam qualquer membro da categoria como ingrediente. */
+  usedIn: ContentPage<RecipeDocument>;
+}
+
+/** Relações do detalhe de evento: tudo que pertence a ele. */
+export interface EventRelated {
+  items: ContentPage<ItemDocument>;
+  entities: ContentPage<EntityDocument>;
+  categories: ContentPage<CategoryDocument>;
+  recipes: ContentPage<RecipeDocument>;
+  shops: ContentPage<ShopDocument>;
+  shopCategories: ContentPage<ShopCategoryDocument>;
+  maps: ContentPage<MapDocument>;
+  /** Mapas em que o evento é um dos climas. */
+  mapsWithWeather: ContentPage<MapDocument>;
+  locations: ContentPage<LocationDocument>;
+  spawnPoints: ContentPage<SpawnPointDocument>;
+  collections: ContentPage<CollectionDocument>;
+  collectionGroups: ContentPage<CollectionGroupDocument>;
 }
 
 /** Relações do detalhe de loja. */

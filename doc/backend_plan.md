@@ -984,7 +984,12 @@ Decisões tomadas na implementação, que ajustam o plano acima:
 - lojas: lista (`/shops?references=true`, com o NPC resolvido) e loja aberta (`/shops/{id}/details`, com as
   categorias e seus itens), mais onde encontrar o NPC (`/spawn-points?occupant=entity:x`). Categorias de
   evento inativo ficam ocultas, pela mesma regra de `activeEvents`. Requisitos da loja, troca por itens e
-  condições por oferta do JSON antigo não existem no modelo e saíram da tela.
+  condições por oferta do JSON antigo não existem no modelo e saíram da tela;
+- categorias: lista (`/categories?appliesTo=`, filtro criado para ela) e detalhe, com itens e entidades
+  paginados pela listagem (`?category=`) e receitas e lojas vindas de `/categories/{id}/details`;
+- eventos: lista (`/events?type=`, filtro criado para ela, mais recentes primeiro) e detalhe
+  (`/events/{id}/details`, com tudo que pertence ao evento). A situação (acontecendo, em breve, encerrado)
+  vem do período, e o evento pode ser ligado ou desligado no filtro de eventos ativos pela própria tela.
 
 As telas migradas compartilham componentes de detalhe (pontos por mapa, ofertas de loja, drops,
 códigos, coleções, variantes). As demais telas seguem lendo os JSON até a vez delas.
