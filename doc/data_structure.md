@@ -15,11 +15,11 @@ Cada jogo tem sua própria pasta contendo:
 - `entity.json`: Entidades, NPCs, Inimigos e Regiões.
 - `spawns.json`: Localização ou regras de spawn.
 
-## Mecanismos de Carregamento (`dataLoader.ts`)
+## Uso dos arquivos
 
-- **Manifesto**: O sistema tenta carregar um manifesto para listar múltiplos arquivos de uma categoria.
-- **Fallback**: Se o manifesto não existir, ele tenta carregar o arquivo `.json` padrão da categoria.
-- **Maps**: O hook `useApi` carrega o arquivo `maps.json` automaticamente e o mescla ao estado global do jogo selecionado.
+O front não carrega mais estes arquivos: todas as telas leem a API do backend (`src/api`), e o antigo
+carregamento por `dataLoader.ts`, `useApi` e o cache Dexie foi removido. Os JSON continuam no repositório
+como fonte dos dados para importar na API; o formato dos documentos da API está em `backend/README.md`.
 
 ---
 **Padrão de IDs**: IDs devem ser únicos preferencialmente no formato `tipo_nome` (ex: `spawn_coal_node`, `biome_meadows`).

@@ -973,7 +973,7 @@ Decisões tomadas na implementação, que ajustam o plano acima:
   segurança, que senão escreveria `no-store`.
 
 ### Fase 7 — Migração do front (depois, incremental)
-**Status: em andamento.** Migração tela a tela para os tipos da API, com TanStack Query. Já migradas:
+**Status: concluída.** Migração tela a tela para os tipos da API, com TanStack Query. Telas migradas:
 - itens: lista (`/items`, com `withoutCategory`, `activeEvents` e `trade` criados para ela) e detalhe
   (`/items/{id}/details`);
 - entidades: lista (`/entities`) e detalhe (`/entities/{id}/details`). As abas de variante viraram a
@@ -1012,16 +1012,13 @@ Decisões tomadas na implementação, que ajustam o plano acima:
   jogo montado por `/content-counts` (criado para ele), categorias, bancadas e lojas. O item "Quests" saiu:
   não há modelo de quest na API.
 
-As telas migradas compartilham componentes de detalhe (pontos por mapa, ofertas de loja, drops,
-códigos, coleções, variantes). As demais telas seguem lendo os JSON até a vez delas.
+As telas compartilham componentes de detalhe (pontos por mapa, ofertas de loja, drops, códigos, coleções,
+variantes). O front não lê mais os JSON: `dataLoader`, `useApi`, `apiService`, `dbService`, os
+repositories, o banco Dexie e os componentes que só eles usavam foram removidos. O cache fica com o
+TanStack Query e o ETag da API.
 
-1. Trocar `dataLoader` por chamadas à API, mantendo Dexie como cache offline — muda
-   ~1 arquivo, o front continua funcionando igual.
-2. Consolidar os 16 componentes que falam com repositories atrás de um único `apiClient`.
-3. Trocar `getItemDetails`/`getEntityDetails` pelos endpoints agregados e apagar as
-   varreduras do `apiService`.
-4. Telas novas que o backend habilita: login, gestão de membros, fila de
-   `pending-references`, cadastro a partir do 404, histórico de revisões.
+Próximos passos, fora desta fase: telas que o backend já habilita e o front ainda não tem — gestão de
+membros, fila de `pending-references`, cadastro a partir do 404 e histórico de revisões.
 
 ---
 
