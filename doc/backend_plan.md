@@ -980,7 +980,11 @@ Decisões tomadas na implementação, que ajustam o plano acima:
   relação `variants`, com o filtro `variantOf` em itens e entidades;
 - receitas: lista (`/recipes?references=true` e `/recipe-stations`, criados para ela), detalhe e árvore
   de produção calculada no servidor, com escolha de categoria, de receita e de comprar em vez de craftar.
-  A aba de fluxo de produção (grafo) ainda usa o formato antigo e não foi migrada.
+  A aba de fluxo de produção (grafo) saiu por enquanto: calculava custo e sobras no formato antigo;
+- lojas: lista (`/shops?references=true`, com o NPC resolvido) e loja aberta (`/shops/{id}/details`, com as
+  categorias e seus itens), mais onde encontrar o NPC (`/spawn-points?occupant=entity:x`). Categorias de
+  evento inativo ficam ocultas, pela mesma regra de `activeEvents`. Requisitos da loja, troca por itens e
+  condições por oferta do JSON antigo não existem no modelo e saíram da tela.
 
 As telas migradas compartilham componentes de detalhe (pontos por mapa, ofertas de loja, drops,
 códigos, coleções, variantes). As demais telas seguem lendo os JSON até a vez delas.

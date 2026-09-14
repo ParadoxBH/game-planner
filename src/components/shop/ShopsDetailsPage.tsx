@@ -1,584 +1,260 @@
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Chip,
-  Tooltip,
-} from "@mui/material";
-import { Storefront, Lock, Refresh, Map as MapIcon } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 import { useMemo } from "react";
-import { getPublicUrl } from "../../utils/pathUtils";
-import { parseWKTPoint } from "../../utils/wkt";
-import { MiniMap } from "../common/MiniMap";
-import { ListingDataView } from "../common/ListingDataView";
-import { type ViewMode } from "../common/ViewModeSelector";
-import { ShopItemCard } from "./ShopItemCard";
-import type {
-  ShopItem,
-  Item,
-  Entity,
-  GameEvent,
-  ReferencePoints,
-  MapMetadata,
-  Recipe,
-} from "../../types/gameModels";
-import type { ShopDetails } from "../../types/apiModels";
-import { DetainItem } from "../common/DetainItem";
-import { DetainContainer } from "../common/DetainContainer";
+import { Link } from "react-router-dom";
+import { Box, CircularProgress, Divider, Paper, Stack, Typography } from "@mui/material";
+import { Map as MapIcon, Storefront } from "@mui/icons-material";
+import { ApiError } from "../../api/ApiError";
+import {
+  MAX_PAGE_SIZE,
+  type Reference,
+  type ShopCategoryDocument,
+  type ShopDocument,
+  type ShopRelated,
+  type SpawnPointDocument,
+} from "../../api/content";
+import { currentMedia, mediaUrl, ReferenceIndex, resolvedFrom } from "../../api/references";
+import { useContentDetails, useContentList, useRarities } from "../../api/useContent";
 import { useEventFilter } from "../../context/EventFilterContext";
+import { useViewMode } from "../../hooks/useViewMode";
+import { formatReset } from "../../utils/format";
+import { ContentChip } from "../common/ContentChip";
+import { DataChip } from "../common/DataChip";
+import { DetailField, ReferenceChips } from "../common/DetailField";
+import { DetainContainer } from "../common/DetainContainer";
+import { DetainItem } from "../common/DetainItem";
+import { ListingDataView } from "../common/ListingDataView";
+import { SpawnPointsByMap } from "../common/SpawnPointsByMap";
+import { StyledContainer } from "../common/StyledContainer";
+import { ViewModeSelector } from "../common/ViewModeSelector";
+import {
+  ApiShopItemCard,
+  ApiShopItemIcon,
+  shopItemListCells,
+  shopItemRarityColor,
+  type ShopItemView,
+} from "./ApiShopItemRenderers";
+import { ShopPicker } from "./ApiShopRenderers";
+
+/** Categoria sem evento ou com algum evento ativo: a mesma regra do filtro activeEvents da API. */
+function isAvailable(category: ShopCategoryDocument, activeEventIds: string[]): boolean {
+  return category.events.length === 0 || category.events.some((id) => activeEventIds.includes(id));
+}
 
 interface ShopsDetailsPageProps {
   gameId: string;
-  shopDetails: ShopDetails;
-  itemsMap: Map<string, Item>;
-  entitiesMap: Map<string, Entity>;
-  recipesMap: Map<string, Recipe>;
-  eventsMap: Map<string, GameEvent>;
-  referencePoints: ReferencePoints[];
-  maps: MapMetadata[];
-  itemsViewMode: ViewMode;
+  shopId: string;
 }
 
-export function ShopsDetailsPage({
-  gameId,
-  shopDetails,
-  itemsMap,
-  entitiesMap,
-  recipesMap,
-  eventsMap,
-  referencePoints,
-  maps,
-  itemsViewMode,
-}: ShopsDetailsPageProps) {
-  const navigate = useNavigate();
-
-  const currentShop = shopDetails.shop;
-  const currentNpc = shopDetails.npc;
+/** Loja lida do agregado /shops/{id}/details: o NPC, onde encontrá-lo e as categorias com os itens à venda. */
+export function ShopsDetailsPage({ gameId, shopId }: ShopsDetailsPageProps) {
   const { activeEventIds } = useEventFilter();
+  const [itemsViewMode, setItemsViewMode] = useViewMode("shop_items");
 
-  const filteredGroups = useMemo(() => {
-    if (!currentShop?.groups) return [];
-    return currentShop.groups.filter((group) => {
-      if (group.event && (!Array.isArray(group.event) || group.event.length > 0)) {
-        const eventArray = Array.isArray(group.event) ? group.event : [group.event];
-        return eventArray.some((e) => activeEventIds.includes(e));
-      }
-      return true;
-    });
-  }, [currentShop.groups, activeEventIds]);
+  const details = useContentDetails<ShopDocument, ShopRelated>(gameId, "shops", shopId);
+  const rarities = useRarities(gameId);
+  const references = useMemo(() => new ReferenceIndex(details.data?.references), [details.data]);
 
-  const npcLocation = useMemo(() => {
-    if (!currentNpc || !referencePoints) return null;
-    return referencePoints.find((s: any) => s.entityId === currentNpc.id);
-  }, [currentNpc, referencePoints]);
+  const npc = details.data?.document.npc ?? null;
+  const npcSpawns = useContentList<SpawnPointDocument>(
+    gameId,
+    "spawn-points",
+    { size: MAX_PAGE_SIZE, filters: { occupant: `entity:${npc}`, references: "true" } },
+    { enabled: npc !== null },
+  );
+  const spawnReferences = useMemo(() => new ReferenceIndex(npcSpawns.data?.references), [npcSpawns.data]);
 
-  const mapMetadata = useMemo(() => {
-    if (!npcLocation || !maps) return null;
-    return maps.find((m: any) => m.id === npcLocation.mapId) || maps[0];
-  }, [npcLocation, maps]);
+  const view = useMemo<ShopItemView>(
+    () => ({ gameId, references, rarities: new Map((rarities.data ?? []).map((rarity) => [rarity.code, rarity])) }),
+    [gameId, references, rarities.data],
+  );
+
+  const actions = (
+    <Stack direction="row" spacing={1} justifyContent="space-between" flex={1} alignItems="center">
+      <ShopPicker gameId={gameId} value={shopId} />
+      <ViewModeSelector mode={itemsViewMode} onChange={setItemsViewMode} />
+    </Stack>
+  );
+
+  if (details.isPending) {
+    return (
+      <StyledContainer title="Carregando..." label="Obtendo dados da loja" actionsStart={actions}>
+        <Stack alignItems="center" sx={{ py: 10 }}>
+          <CircularProgress color="primary" />
+        </Stack>
+      </StyledContainer>
+    );
+  }
+
+  if (details.isError) {
+    const unregistered = details.error instanceof ApiError && details.error.kind === "unregistered-content";
+    return (
+      <StyledContainer
+        title={unregistered ? "Loja não cadastrada" : "Não foi possível abrir a loja"}
+        label={unregistered ? `"${shopId}" é citada em outros conteúdos, mas ainda não foi cadastrada.` : details.error.message}
+        actionsStart={actions}
+      >
+        <Typography variant="body2" color="text.secondary">
+          Verifique o código ou volte para a <Link to={`/game/${gameId}/shops/list`}>lista de lojas</Link>.
+        </Typography>
+      </StyledContainer>
+    );
+  }
+
+  const { document: shop, related } = details.data;
+  const categories = related.categories.content;
+  const available = categories.filter((category) => isAvailable(category, activeEventIds));
+  const hiddenCount = categories.length - available.length;
+  const bannerId = currentMedia(shop.media, "banner");
+  const npcTarget: Reference | null = shop.npc ? { kind: "entity", extId: shop.npc } : null;
 
   return (
-    <DetainContainer>
-      {/* NPC Info & Reset */}
-      <>
-        <Card
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            overflow: "hidden",
-            background: "rgba(255, 255, 255, 0.02)",
-            backdropFilter: "blur(10px)",
-            border: "1px solid rgba(255, 255, 255, 0.05)",
-          }}
-        >
-          <Box
-            onClick={() =>
-              currentNpc?.id &&
-              navigate(`/game/${gameId}/entity/view/${currentNpc.id}`)
-            }
-            sx={{
-              height: 200,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              position: "relative",
-              overflow: "hidden",
-              "&:hover .view-npc-overlay": {
-                opacity: 1,
-              },
-              background:
-                "linear-gradient(135deg, rgba(255, 68, 0, 0.05), rgba(255, 136, 0, 0.05))",
-              backgroundImage: `url(${getPublicUrl(currentNpc?.icon || currentShop.banner || currentShop.icon)})`,
-              backgroundPosition: "top center",
-              backgroundSize: "cover",
-            }}
-          >
-            {(!currentNpc?.icon && !currentShop.icon && !currentShop.banner) && (
-              <Storefront sx={{ fontSize: 80, color: "text.disabled" }} />
-            )}
-            <Box
-              className="view-npc-overlay"
-              sx={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                bgcolor: "rgba(0,0,0,0.4)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                opacity: 0,
-                transition: "opacity 0.2s",
-                backdropFilter: "blur(2px)",
-              }}
-            >
-              <Typography
-                variant="button"
-                sx={{ color: "white", fontWeight: 700 }}
-              >
-                Ver Perfil
-              </Typography>
-            </Box>
-          </Box>
-          <CardContent>
-            <Typography
-              variant="h5"
-              align="center"
-              onClick={() =>
-                currentNpc?.id &&
-                navigate(`/game/${gameId}/entity/view/${currentNpc.id}`)
-              }
-              sx={{
-                fontWeight: 700,
-                mb: 1,
-                cursor: "pointer",
-                "&:hover": { color: "primary.main" },
-              }}
-            >
-              {currentShop.name || currentNpc?.name || currentShop.npcId || currentShop.id}
-            </Typography>
-
-            {currentShop.conditional && currentShop.conditional.length > 0 && (
+    <StyledContainer
+      title={shop.name}
+      label={npcTarget ? `Loja atendida por ${references.name(npcTarget)}` : `Detalhes da loja ${shop.extId}`}
+      actionsStart={actions}
+    >
+      <DetainContainer>
+        <Stack spacing={2}>
+          <Paper elevation={0} sx={{ overflow: "hidden" }}>
+            {bannerId && (
               <Box
                 sx={{
-                  mt: 2,
-                  p: 2,
-                  borderRadius: 2,
-                  backgroundColor: "rgba(255, 68, 0, 0.05)",
-                  border: "1px dashed rgba(255, 68, 0, 0.2)",
+                  height: 140,
+                  backgroundImage: `url(${mediaUrl(bannerId, "thumb")})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
                 }}
-              >
-                <Typography
-                  variant="overline"
-                  sx={{
-                    color: "#ffbb00",
-                    fontWeight: 800,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 0.5,
-                    mb: 1,
-                  }}
-                >
-                  <Lock sx={{ fontSize: "1rem" }} /> REQUISITOS
-                </Typography>
-                {currentShop.conditional.map((cond, i) => {
-                  const eventName =
-                    cond.type === "event" ? eventsMap.get(cond.id)?.name : null;
-                  return (
-                    <Typography
-                      key={i}
-                      variant="body2"
-                      sx={{ fontSize: "0.85rem" }}
-                    >
-                      • {eventName ? `Evento: ${eventName}` : cond.description}
-                      {eventName &&
-                        cond.description &&
-                        ` (${cond.description})`}
-                    </Typography>
-                  );
-                })}
-              </Box>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Map Location Card */}
-        {mapMetadata && npcLocation && (
-          <DetainItem
-            label={`Localização ${mapMetadata.name ? `- ${mapMetadata.name}` : ""}`}
-            sx={{ label: { fontSize: 12 } }}
-            startIcon={
-              <MapIcon sx={{ fontSize: "1rem", color: "primary.main" }} />
-            }
-          >
-            <Box sx={{ height: 200 }}>
-              <MiniMap
-                meta={mapMetadata}
-                markers={[
-                  {
-                    id: "npc-location",
-                    position: (() => {
-                      if (
-                        npcLocation.geom?.type === "Point" &&
-                        npcLocation.geom.coordinates
-                      ) {
-                        const wktCoords = parseWKTPoint(
-                          npcLocation.geom.coordinates,
-                        );
-                        // GeoJSON is [lng, lat], Leaflet wants [lat, lng]
-                        return [wktCoords[1], wktCoords[0]];
-                      }
-                      return [0, 0];
-                    })(),
-                    color: "#ff4400",
-                  },
-                ]}
-                height="100%"
               />
-            </Box>
-          </DetainItem>
-        )}
-      </>
-      {/* Groups and Items List */}
-      <>
-        {filteredGroups.map((group, idx) => (
-          <DetainItem
-            key={`group-${idx}`}
-            label={group.name}
-            actions={
-              group.resetType && (
-                <Chip
-                  size="small"
-                  icon={<Refresh sx={{ fontSize: "0.9rem" }} />}
-                  label={
-                    group.resetType === "diario"
-                      ? "Diário"
-                      : group.resetType === "semanal"
-                        ? "Semanal"
-                        : "Único"
-                  }
-                  sx={{
-                    backgroundColor: "rgba(255, 68, 0, 0.08)",
-                    color: "#ff4400",
-                    height: 24,
-                    "& .MuiChip-label": {
-                      px: 1,
-                      fontWeight: 700,
-                      fontSize: "0.7rem",
-                    },
-                  }}
-                />
-              )
-            }
-          >
-            <ListingDataView
-              data={group.items}
-              viewMode={itemsViewMode}
-              variant="compact"
-              cardMinWidth={200}
-              listHeader={[
-                { label: "Item", width: "60%" },
-                { label: "Preço", align: "right" as const, width: "20%" },
-                {
-                  label: "Limite / Qtd",
-                  align: "right" as const,
-                  width: "20%",
-                },
-              ]}
-              renderCard={(shopItem: ShopItem, variant) => (
-                <ShopItemCard
-                  key={shopItem.id}
-                  shopItem={shopItem}
-                  baseItem={itemsMap.get(shopItem.id)}
-                  baseEntity={entitiesMap.get(shopItem.id)}
-                  baseRecipe={recipesMap.get(shopItem.id)}
-                  currencyItem={itemsMap.get(shopItem.currency || "ouro")}
-                  eventsMap={eventsMap}
-                  itemsMap={itemsMap}
-                  entitiesMap={entitiesMap}
-                  variant={variant}
-                />
+            )}
+            <Stack alignItems="center" spacing={1} sx={{ p: 2 }}>
+              {npcTarget ? (
+                <ContentChip target={npcTarget} resolved={references.find(npcTarget)} size="extraLarge" />
+              ) : (
+                <ContentChip target={{ kind: "shop", extId: shop.extId }} resolved={resolvedFrom("shop", shop)} size="extraLarge" disableLink />
               )}
-              renderListItem={(shopItem: ShopItem) => {
-                const baseItem = itemsMap.get(shopItem.id);
-                const baseEntity = entitiesMap.get(shopItem.id);
-                const baseRecipe = recipesMap.get(shopItem.id);
-                const currencyItem = itemsMap.get(shopItem.currency || "ouro");
-                const target: any = baseItem || baseEntity || baseRecipe;
-                const displayPrice =
-                  shopItem.price ?? (baseItem?.buyPrice || baseItem?.sellPrice);
+              <Typography variant="h5" fontWeight={800} color="primary.main" textAlign="center">
+                {shop.name}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Código: {shop.extId}
+              </Typography>
+              {shop.resetType && <DataChip label={`Reset: ${formatReset(shop.resetType)}`} />}
+            </Stack>
 
-                return [
-                  <Box
-                    key={`shop_item_list_${shopItem.id}`}
-                    sx={{ display: "flex", alignItems: "center", gap: 2 }}
-                  >
-                    <Box
-                      sx={{
-                        width: 32,
-                        height: 32,
-                        borderRadius: 0.5,
-                        backgroundColor: "rgba(0,0,0,0.2)",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        flexShrink: 0,
-                      }}
-                    >
-                      <img
-                        src={getPublicUrl(target?.icon)}
-                        alt={target?.name}
-                        style={{
-                          width: "80%",
-                          height: "80%",
-                          objectFit: "contain",
-                        }}
-                      />
-                    </Box>
-                    <Typography variant="body2" sx={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
-                      {target?.name}
-                      {shopItem.quant && shopItem.quant > 1 && (
-                        <Typography component="span" variant="caption" sx={{ color: "primary.light", fontWeight: 800, bgcolor: "rgba(25, 118, 210, 0.15)", px: 0.8, py: 0.2, borderRadius: 1 }}>
-                          Pacote c/ {shopItem.quant}
-                        </Typography>
-                      )}
+            <Divider />
+
+            <Stack spacing={2} sx={{ p: 2 }}>
+              <DetailField label="Atendida por">
+                {npcTarget ? (
+                  <Stack direction="row" spacing={1.5} alignItems="center">
+                    <ContentChip target={npcTarget} resolved={references.find(npcTarget)} size="medium" />
+                    <Typography variant="body2" fontWeight={700}>
+                      {references.name(npcTarget)}
                     </Typography>
-                  </Box>,
+                  </Stack>
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    Loja global, sem NPC
+                  </Typography>
+                )}
+              </DetailField>
 
-                  <Box
-                    key={`shop_item_price_${shopItem.id}`}
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "flex-end",
-                    }}
-                  >
-                    {displayPrice !== undefined && (
-                      <Box
-                        sx={{
-                          px: 1,
-                          py: 0.25,
-                          borderRadius: 1,
-                          backgroundColor: "rgba(255,255,255,0.03)",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
-                        }}
-                      >
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            fontWeight: 800,
-                            color: "#ffbb00",
-                            fontSize: "0.8rem",
-                          }}
-                        >
-                          {displayPrice.toLocaleString()}
-                        </Typography>
-                        {currencyItem?.icon && (
-                          <img
-                            src={getPublicUrl(currencyItem.icon)}
-                            alt={currencyItem.name}
-                            style={{
-                              width: 16,
-                              height: 16,
-                              objectFit: "contain",
-                            }}
-                          />
-                        )}
-                      </Box>
-                    )}
-                    {shopItem.quant && shopItem.quant > 1 && typeof displayPrice === "number" && (
-                      <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.65rem", fontWeight: 600, mt: 0.5 }}>
-                        (~{(displayPrice / shopItem.quant).toFixed(2)}/un)
-                      </Typography>
-                    )}
-                  </Box>,
+              {(shop.summary || shop.description) && (
+                <DetailField label="Descrição">
+                  {shop.summary && <Typography variant="body2">{shop.summary}</Typography>}
+                  {shop.description && (
+                    <Typography variant="body2" color="text.secondary">
+                      {shop.description}
+                    </Typography>
+                  )}
+                </DetailField>
+              )}
 
-                  <Box
-                    key={`shop_item_limit_${shopItem.id}`}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      alignItems: "center",
-                      gap: 1,
-                    }}
-                  >
-                    {shopItem.quant && shopItem.quant > 1 && (
-                      <Chip
-                        label={`${shopItem.quant}x`}
-                        size="small"
-                        sx={{
-                          height: 18,
-                          fontSize: "0.65rem",
-                          fontWeight: 800,
-                          backgroundColor: "primary.main",
-                          color: "white",
-                        }}
-                      />
-                    )}
-                    <Chip
-                      label={!!shopItem.amount ? `Lim: ${shopItem.amount}x` : "Ilimitado"}
-                      size="small"
-                      variant="outlined"
-                      sx={{
-                        height: 18,
-                        fontSize: "0.65rem",
-                        fontWeight: 800,
-                        borderColor: "rgba(255,255,255,0.1)",
-                        color: "text.secondary",
-                      }}
-                    />
-                  </Box>,
-                ];
-              }}
-              renderIconItem={(shopItem: ShopItem) => {
-                const baseItem = itemsMap.get(shopItem.id);
-                const baseEntity = entitiesMap.get(shopItem.id);
-                const baseRecipe = recipesMap.get(shopItem.id);
-                const target: any = baseItem || baseEntity || baseRecipe;
-                const currencyItem = itemsMap.get(shopItem.currency || "ouro");
-                const displayPrice =
-                  shopItem.price ?? (baseItem?.buyPrice || baseItem?.sellPrice);
+              {shop.categories.length > 0 && (
+                <DetailField label="Categorias">
+                  <ReferenceChips targets={shop.categories.map((id) => ({ kind: "category", extId: id }))} references={references} />
+                </DetailField>
+              )}
 
-                return (
-                  <Tooltip
-                    key={`shop_item_icon_${shopItem.id}`}
-                    title={`${target?.name}${shopItem.quant && shopItem.quant > 1 ? ` (Pacote c/ ${shopItem.quant})` : ""} - Total: ${displayPrice} ${currencyItem?.name || "ouro"}${shopItem.quant && shopItem.quant > 1 && typeof displayPrice === "number" ? ` (~${(displayPrice / shopItem.quant).toFixed(2)}/un)` : ""}${shopItem.amount ? ` | Limite: ${shopItem.amount}` : ""}`}
-                  >
-                    <Box
-                      sx={{
-                        width: "100%",
-                        height: "100%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        p: 1,
-                        position: "relative",
-                      }}
-                    >
-                      <img
-                        src={getPublicUrl(target?.icon)}
-                        alt={target?.name}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "contain",
-                        }}
-                      />
+              {shop.events.length > 0 && (
+                <DetailField label="Eventos">
+                  <ReferenceChips targets={shop.events.map((id) => ({ kind: "event", extId: id }))} references={references} />
+                </DetailField>
+              )}
 
-                      {/* Top-Right: Quantity in Package */}
-                      {shopItem.quant && shopItem.quant > 1 && (
-                        <Box
-                          sx={{
-                            position: "absolute",
-                            top: 2,
-                            right: 2,
-                            backgroundColor: "primary.main",
-                            borderRadius: "4px",
-                            px: 0.5,
-                            py: 0.1,
-                            zIndex: 1,
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              fontSize: "0.6rem",
-                              fontWeight: 900,
-                              color: "#fff",
-                            }}
-                          >
-                            {shopItem.quant}x
-                          </Typography>
-                        </Box>
-                      )}
+              {hiddenCount > 0 && (
+                <Typography variant="caption" color="text.secondary">
+                  {hiddenCount === 1
+                    ? "1 categoria da loja está oculta porque o evento dela não está ativo."
+                    : `${hiddenCount} categorias da loja estão ocultas porque os eventos delas não estão ativos.`}
+                </Typography>
+              )}
+            </Stack>
+          </Paper>
 
-                      {/* Top-Left: Purchase Limit */}
-                      {shopItem.amount && (
-                        <Box
-                          sx={{
-                            position: "absolute",
-                            top: 2,
-                            left: 2,
-                            backgroundColor: "rgba(0,0,0,0.6)",
-                            backdropFilter: "blur(2px)",
-                            borderRadius: "4px",
-                            px: 0.5,
-                            py: 0.1,
-                            border: "1px solid rgba(255,255,255,0.1)",
-                            zIndex: 1,
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              fontSize: "0.55rem",
-                              fontWeight: 800,
-                              color: "#aaa",
-                            }}
-                          >
-                            Lim:{shopItem.amount}
-                          </Typography>
-                        </Box>
-                      )}
+          {shop.npc && npcSpawns.data && npcSpawns.data.content.length > 0 && (
+            <Paper elevation={0} sx={{ p: 2 }}>
+              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1.5 }}>
+                <MapIcon color="primary" sx={{ fontSize: 18 }} />
+                <Typography variant="subtitle2" fontWeight={800}>
+                  Onde encontrar
+                </Typography>
+              </Stack>
+              <SpawnPointsByMap points={npcSpawns.data.content} filter={{ param: "entity", value: shop.npc }} references={spawnReferences} />
+            </Paper>
+          )}
+        </Stack>
 
-                      {/* Bottom-Center: Price */}
-                      {displayPrice !== undefined && (
-                        <Box
-                          sx={{
-                            position: "absolute",
-                            bottom: 0,
-                            left: "50%",
-                            transform: "translateX(-50%)",
-                            backgroundColor: "rgba(0,0,0,0.7)",
-                            backdropFilter: "blur(4px)",
-                            borderRadius: "10px",
-                            px: 1,
-                            py: 0.2,
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 0.5,
-                            whiteSpace: "nowrap",
-                            border: "1px solid rgba(255,255,255,0.1)",
-                            zIndex: 1,
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              fontSize: "0.65rem",
-                              fontWeight: 800,
-                              color: "#ffbb00",
-                            }}
-                          >
-                            {displayPrice >= 1000
-                              ? `${(displayPrice / 1000).toFixed(1)}k`
-                              : displayPrice}
-                          </Typography>
-                          {currencyItem?.icon && (
-                            <img
-                              src={getPublicUrl(currencyItem.icon)}
-                              alt={currencyItem.name}
-                              style={{
-                                width: 10,
-                                height: 10,
-                                objectFit: "contain",
-                              }}
-                            />
-                          )}
-                        </Box>
-                      )}
-                    </Box>
-                  </Tooltip>
-                );
-              }}
-            />
+        {available.length === 0 ? (
+          <DetainItem startIcon={<Storefront color="primary" />} label="Itens à venda">
+            <Typography variant="body2" color="text.secondary">
+              {categories.length === 0
+                ? "Nenhuma categoria cadastrada para esta loja."
+                : "Nenhuma categoria disponível com os eventos ativos."}
+            </Typography>
           </DetainItem>
-        ))}
-      </>
-    </DetainContainer>
+        ) : (
+          available.map((category) => (
+            <DetainItem
+              key={category.extId}
+              startIcon={<Storefront color="primary" />}
+              label={category.name}
+              count={category.items.length}
+              actions={
+                category.resetType || category.events.length > 0 ? (
+                  <>
+                    {category.resetType && <DataChip label={`Reset: ${formatReset(category.resetType)}`} />}
+                    {category.events.map((id) => (
+                      <DataChip key={id} label={references.name({ kind: "event", extId: id })} color="secondary" />
+                    ))}
+                  </>
+                ) : undefined
+              }
+            >
+              {category.items.length > 0 ? (
+                <ListingDataView
+                  data={category.items}
+                  viewMode={itemsViewMode}
+                  variant="compact"
+                  cardMinWidth={200}
+                  listHeader={[
+                    { label: "Item", width: "50%" },
+                    { label: "Preço", align: "right" as const, width: "25%" },
+                    { label: "Limite / reset", align: "right" as const, width: "25%" },
+                  ]}
+                  getRowColor={(item) => shopItemRarityColor(view, item)}
+                  renderCard={(item, variant) => <ApiShopItemCard item={item} variant={variant} view={view} />}
+                  renderListItem={(item) => shopItemListCells(item, view)}
+                  renderIconItem={(item) => <ApiShopItemIcon item={item} view={view} />}
+                />
+              ) : (
+                <Typography variant="body2" color="text.secondary">
+                  Nenhum item nesta categoria.
+                </Typography>
+              )}
+            </DetainItem>
+          ))
+        )}
+      </DetainContainer>
+    </StyledContainer>
   );
 }

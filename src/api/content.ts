@@ -242,6 +242,12 @@ export interface RecipeRelated {
   rewardOf: ContentPage<RedemptionCodeDocument>;
 }
 
+/** Relações do detalhe de loja. */
+export interface ShopRelated {
+  /** Categorias da loja, cada uma com os itens à venda. */
+  categories: ContentPage<ShopCategoryDocument>;
+}
+
 /** Bancada citada por receitas do jogo. */
 export interface RecipeStation {
   extId: string;

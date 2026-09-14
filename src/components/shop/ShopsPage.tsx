@@ -1,403 +1,106 @@
-import { getPublicUrl } from "../../utils/pathUtils";
-import {
-  Box,
-  Typography,
-  Chip,
-  Stack,
-  CircularProgress,
-} from "@mui/material";
-import {
-  Storefront,
-  Inventory,
-} from "@mui/icons-material";
-import { useParams, useNavigate } from "react-router-dom";
-import { useApi } from "../../hooks/useApi";
-import { useMemo, useState, useEffect } from "react";
-import { StyledContainer } from "../common/StyledContainer";
-import { ShopCard } from "./ShopCard";
-import type {
-  Shop,
-  Entity,
-  Item,
-  GameEvent,
-  ReferencePoints,
-  MapMetadata,
-  Recipe,
-} from "../../types/gameModels";
-import type { ShopDetails } from "../../types/apiModels";
-import { ListingDataView } from "../common/ListingDataView";
-import { Tooltip } from "@mui/material";
-import { ViewModeSelector } from "../common/ViewModeSelector";
-import { useViewMode } from "../../hooks/useViewMode";
-import { shopRepository } from "../../repositories/ShopRepository";
-import { entityRepository } from "../../repositories/EntityRepository";
-import { itemRepository } from "../../repositories/ItemRepository";
-import { eventRepository } from "../../repositories/EventRepository";
-import { referencePointRepository } from "../../repositories/ReferencePointRepository";
-import { recipeRepository } from "../../repositories/RecipeRepository";
-import { mapRepository } from "../../repositories/MapRepository";
-import { usePlatform } from "../../hooks/usePlatform";
-import { ShopsDetailsPage } from "./ShopsDetailsPage";
-import { PickSelector } from "../common/PickSelector";
+import { useEffect, useMemo } from "react";
+import { useParams } from "react-router-dom";
+import { CircularProgress, Stack, Typography } from "@mui/material";
+import { ApiError } from "../../api/ApiError";
+import { MAX_PAGE_SIZE, type ListQuery, type ShopDocument } from "../../api/content";
+import { ReferenceIndex } from "../../api/references";
+import { useContentList } from "../../api/useContent";
 import { useEventFilter } from "../../context/EventFilterContext";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+import { usePagination } from "../../hooks/usePagination";
+import { usePlatform } from "../../hooks/usePlatform";
+import { useViewMode } from "../../hooks/useViewMode";
+import { ListingDataView } from "../common/ListingDataView";
+import { StyledContainer } from "../common/StyledContainer";
+import { ViewModeSelector } from "../common/ViewModeSelector";
+import { ApiShopCard, ApiShopIcon, ShopPicker, shopListCells, type ShopListView } from "./ApiShopRenderers";
+import { ShopsDetailsPage } from "./ShopsDetailsPage";
 
+const NO_CRITERIA = {};
+
+/** Lojas: a lista ou, com o código na URL, a loja aberta. */
 export function ShopsPage() {
-  const { gameId, category: urlShopId } = useParams<{
-    gameId: string;
-    category?: string;
-  }>();
-  const navigate = useNavigate();
+  const { gameId = "", category: shopId } = useParams<{ gameId: string; category?: string }>();
+  return shopId ? <ShopsDetailsPage key={shopId} gameId={gameId} shopId={shopId} /> : <ShopList gameId={gameId} />;
+}
+
+/** Lista de lojas, lida da API com o NPC de cada uma já resolvido. */
+function ShopList({ gameId }: { gameId: string }) {
   const { isMobile } = usePlatform();
-  const { loading: dbLoading, getShopDetails } = useApi(gameId);
   const { activeEventIds } = useEventFilter();
-  const [shops, setShops] = useState<Shop[]>([]);
-  const [items, setItems] = useState<Item[]>([]);
-  const [entities, setEntities] = useState<Entity[]>([]);
-  const [events, setEvents] = useState<GameEvent[]>([]);
-  const [referencePoints, setReferencePoints] = useState<ReferencePoints[]>([]);
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [maps, setMaps] = useState<MapMetadata[]>([]);
-
-  const [shopDetails, setShopDetails] = useState<ShopDetails | null>(null);
-  const [dataLoading, setDataLoading] = useState(true);
-
+  const pages = usePagination(NO_CRITERIA);
   const [viewMode, setViewMode] = useViewMode("shops");
-  const [itemsViewMode, setItemsViewMode] = useViewMode("shop_items");
 
-  // Fetch all data for mappings and filtering
+  // A API devolve no máximo 200 por página.
   useEffect(() => {
-    if (dbLoading) return;
+    if (pages.info.pagination.pageSize > MAX_PAGE_SIZE) pages.setPageSize(MAX_PAGE_SIZE);
+  }, [pages.info.pagination.pageSize, pages.setPageSize]);
 
-    let isMounted = true;
-    setDataLoading(true);
+  const search = useDebouncedValue(pages.info.search);
+  const { pagination } = pages.info;
 
-    const promises: Promise<any>[] = [
-      shopRepository.getAll(),
-      itemRepository.getAll(),
-      entityRepository.getAll(),
-      eventRepository.getAll(),
-      referencePointRepository.getAll(),
-      recipeRepository.getAll(),
-      mapRepository.getAll(),
-    ];
+  const query = useMemo<ListQuery>(
+    () => ({
+      search: search || undefined,
+      page: pagination.page - 1,
+      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+      sort: "name",
+      filters: { activeEvents: activeEventIds.join(","), references: "true" },
+    }),
+    [search, pagination, activeEventIds],
+  );
 
-    if (urlShopId) {
-      promises.push(getShopDetails(urlShopId));
-    }
+  const shops = useContentList<ShopDocument>(gameId, "shops", query);
+  const view = useMemo<ShopListView>(() => ({ gameId, references: new ReferenceIndex(shops.data?.references) }), [gameId, shops.data]);
 
-    Promise.all(promises)
-      .then(
-        ([
-          allShops,
-          allItems,
-          allEntities,
-          allEvents,
-          allRefPoints,
-          allRecipes,
-          allMaps,
-          details,
-        ]) => {
-          if (!isMounted) return;
-
-          setShops(allShops);
-          setItems(allItems);
-          setEntities(allEntities);
-          setEvents(allEvents);
-          setReferencePoints(allRefPoints);
-          setRecipes(allRecipes);
-          setMaps(allMaps);
-
-          if (details) {
-            setShopDetails(details);
-          } else {
-            setShopDetails(null);
-          }
-
-          setDataLoading(false);
-        },
-      )
-      .catch((err) => {
-        console.error("Error fetching shops data:", err);
-        if (isMounted) setDataLoading(false);
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [dbLoading, getShopDetails, urlShopId]);
-
-  const itemsMap = useMemo(() => {
-    const map = new Map<string, any>();
-    items.forEach((item) => map.set(item.id, item));
-    return map;
-  }, [items]);
-
-  const filteredReferencePoints = useMemo(() => {
-    return referencePoints.filter(s => {
-      if (s.event && (!Array.isArray(s.event) || s.event.length > 0)) {
-        const eventArray = Array.isArray(s.event) ? s.event : [s.event];
-        return eventArray.some(e => activeEventIds.includes(e));
-      }
-      return true;
-    });
-  }, [referencePoints, activeEventIds]);
-  
-  const filteredShops = useMemo(() => {
-    return shops.filter(s => {
-      if (s.event && (!Array.isArray(s.event) || s.event.length > 0)) {
-        const eventArray = Array.isArray(s.event) ? s.event : [s.event];
-        return eventArray.some(e => activeEventIds.includes(e));
-      }
-      return true;
-    });
-  }, [shops, activeEventIds]);
-
-  const entitiesMap = useMemo(() => {
-    const map = new Map<string, any>();
-    entities.forEach((entity) => map.set(entity.id, entity));
-    return map;
-  }, [entities]);
-
-  const eventsMap = useMemo(() => {
-    const map = new Map<string, any>();
-    events.forEach((event) => map.set(event.id, event));
-    return map;
-  }, [events]);
-
-  const recipesMap = useMemo(() => {
-    const map = new Map<string, any>();
-    recipes.forEach((recipe) => map.set(recipe.id, recipe));
-    return map;
-  }, [recipes]);
-
-  const currentShop = shopDetails?.shop;
-
-  if (dbLoading || dataLoading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100%",
-          width: "100%",
-        }}
-      >
-        <CircularProgress color="primary" />
-      </Box>
-    );
-  }
-
-  if (!shops || shops.length === 0) {
-    return (
-      <StyledContainer
-        title={`Lojas de ${gameId}`}
-        label="Visite os NPCs locais para comprar suprimentos e trocar recursos."
-      >
-        <Stack
-          sx={{
-            flex: 1,
-            textAlign: "center",
-            py: 8,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Storefront sx={{ fontSize: 64, color: "text.disabled", mb: 2 }} />
-          <Typography variant="h5" color="text.secondary">
-            Nenhuma loja cadastrada para este jogo.
-          </Typography>
-        </Stack>
-      </StyledContainer>
-    );
-  }
-
-  const isOverview = !urlShopId;
+  useEffect(() => {
+    if (shops.data) pages.setTotalItems(shops.data.total);
+  }, [shops.data, pages.setTotalItems]);
 
   return (
     <StyledContainer
       title={`Lojas de ${gameId}`}
       label="Visite os NPCs locais para comprar suprimentos e trocar recursos."
-      sx={{ container: { overflowY: isOverview ? "auto" : "hidden" } }}
+      searchValue={pages.info.search}
+      onChangeSearch={pages.setSearch}
+      search={{ placeholder: "Pesquisar lojas..." }}
+      pages={pages}
       actionsStart={
-        <Stack
-          direction={"row"}
-          spacing={1}
-          justifyContent={"space-between"}
-          flex={1}
-        >
-          <PickSelector
-            label={"Loja"}
-            value={urlShopId || ""}
-            options={filteredShops.map((shop) => {
-              const npc = shop.npcId ? entitiesMap.get(shop.npcId) : null;
-              return {
-                value: shop.id,
-                label: shop.name || npc?.name || shop.npcId || shop.id,
-                icon: npc?.icon || shop.icon,
-              };
-            })}
-            onChange={(value: string | null) => {
-              if (!!value) navigate(`/game/${gameId}/shops/list/${value}`);
-              else navigate(`/game/${gameId}/shops/list`);
-            }}
-          />
-          {isOverview ? (
-            <ViewModeSelector mode={viewMode} onChange={setViewMode} />
-          ) : (
-            <ViewModeSelector
-              mode={itemsViewMode}
-              onChange={setItemsViewMode}
-            />
-          )}
+        <Stack direction="row" spacing={1} justifyContent="space-between" flex={1} alignItems="center">
+          <ShopPicker gameId={gameId} value={null} />
+          <ViewModeSelector mode={viewMode} onChange={setViewMode} />
         </Stack>
       }
     >
-      {isOverview ? (
+      {shops.isPending ? (
+        <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>
+          <CircularProgress color="primary" />
+        </Stack>
+      ) : shops.isError ? (
+        <Stack alignItems="center" spacing={1} sx={{ p: 4, flex: 1 }}>
+          <Typography color="error" variant="h6" sx={{ fontWeight: 700 }}>
+            Não foi possível carregar as lojas.
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {shops.error instanceof ApiError ? shops.error.message : "Erro inesperado."}
+          </Typography>
+        </Stack>
+      ) : (
         <ListingDataView
-          data={filteredShops}
+          data={shops.data.content}
           viewMode={viewMode}
           variant="compact"
           cardMinWidth={200}
           listHeader={[
             { label: "Loja / NPC", width: "60%" },
-            { label: "ID", width: "20%", hidden: isMobile },
-            { label: "Status", align: "right" as const, width: "20%" },
+            { label: "Código", width: "20%", hidden: isMobile },
+            { label: "Reset", align: "right" as const, width: "20%" },
           ]}
-          emptyMessage="Nenhuma loja cadastrada para este jogo."
-          renderCard={(shop, variant) => (
-            <ShopCard
-              key={shop.id}
-              shop={shop}
-              npc={shop.npcId ? entitiesMap.get(shop.npcId) : undefined}
-              onClick={() => navigate(`/game/${gameId}/shops/list/${shop.id}`)}
-              variant={variant}
-            />
-          )}
-          renderListItem={(shop) => {
-            const npc = shop.npcId ? entitiesMap.get(shop.npcId) : null;
-            const displayIcon = npc?.icon || shop.icon;
-            return [
-              <Box
-                key={`shop_list_${shop.id}`}
-                onClick={() =>
-                  navigate(`/game/${gameId}/shops/list/${shop.id}`)
-                }
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                  cursor: "pointer",
-                }}
-              >
-                <Box
-                  sx={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: 0.5,
-                    backgroundColor: "rgba(0,0,0,0.2)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexShrink: 0,
-                  }}
-                >
-                  {displayIcon ? (
-                    <img
-                      src={getPublicUrl(displayIcon)}
-                      alt={shop.name}
-                      style={{
-                        width: "80%",
-                        height: "80%",
-                        objectFit: "contain",
-                      }}
-                    />
-                  ) : (
-                    <Inventory
-                      sx={{ fontSize: 16, color: "rgba(255, 255, 255, 0.2)" }}
-                    />
-                  )}
-                </Box>
-                <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                  {shop.name}
-                </Typography>
-              </Box>,
-              <Typography
-                key={`shop_id_${shop.id}`}
-                variant="caption"
-                sx={{ color: "text.secondary", fontFamily: "monospace" }}
-              >
-                {shop.id}
-              </Typography>,
-              <Box
-                key={`shop_status_${shop.id}`}
-                sx={{ display: "flex", justifyContent: "flex-end" }}
-              >
-                <Chip
-                  label="Ativa"
-                  size="small"
-                  color="success"
-                  variant="outlined"
-                  sx={{ height: 18, fontSize: "0.6rem" }}
-                />
-              </Box>,
-            ];
-          }}
-          renderIconItem={(shop) => {
-            const npc = shop.npcId ? entitiesMap.get(shop.npcId) : null;
-            const displayIcon = npc?.icon || shop.icon;
-            return (
-              <Tooltip
-                key={`shop_icon_${shop.id}`}
-                title={`${shop.name || npc?.name || shop.npcId || shop.id} (${shop.id})`}
-              >
-                <Box
-                  onClick={() =>
-                    navigate(`/game/${gameId}/shops/list/${shop.id}`)
-                  }
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    p: 1,
-                  }}
-                >
-                  {displayIcon ? (
-                    <img
-                      src={getPublicUrl(displayIcon)}
-                      alt={shop.name}
-                      style={{
-                        width: "80%",
-                        height: "80%",
-                        objectFit: "contain",
-                      }}
-                    />
-                  ) : (
-                    <Storefront
-                      sx={{ fontSize: 32, color: "rgba(255, 255, 255, 0.2)" }}
-                    />
-                  )}
-                </Box>
-              </Tooltip>
-            );
-          }}
+          emptyMessage="Nenhuma loja encontrada com estes filtros."
+          renderCard={(shop, variant) => <ApiShopCard shop={shop} variant={variant} view={view} />}
+          renderListItem={(shop) => shopListCells(shop, view)}
+          renderIconItem={(shop) => <ApiShopIcon shop={shop} view={view} />}
         />
-      ) : (
-        currentShop && (
-          <ShopsDetailsPage
-            gameId={gameId || ""}
-            shopDetails={shopDetails}
-            itemsMap={itemsMap}
-            entitiesMap={entitiesMap}
-            recipesMap={recipesMap}
-            eventsMap={eventsMap}
-            referencePoints={filteredReferencePoints}
-            maps={maps}
-            itemsViewMode={itemsViewMode}
-          />
-        )
       )}
     </StyledContainer>
   );
