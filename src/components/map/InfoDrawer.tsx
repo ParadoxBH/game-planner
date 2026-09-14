@@ -1,163 +1,351 @@
-import { useTheme } from "@mui/material";
-import { useMemo } from "react";
+import { useMemo, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import type { NavigationItem } from "./MapView";
+import { CircularProgress, Stack, Typography } from "@mui/material";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import MapIcon from "@mui/icons-material/Map";
+import StorefrontIcon from "@mui/icons-material/Storefront";
+import TravelExploreIcon from "@mui/icons-material/TravelExplore";
+import { ApiError } from "../../api/ApiError";
+import type {
+  EntityDocument,
+  EntityRelated,
+  ItemDocument,
+  ItemRelated,
+  MediaLink,
+  Reference,
+  SpawnPointDocument,
+} from "../../api/content";
+import { contentRoute, currentMedia, ReferenceIndex, sameTarget } from "../../api/references";
+import { useContentDetails } from "../../api/useContent";
+import { formatAmount, formatChance, formatRange } from "../../utils/format";
 import { BaseDrawer } from "../BaseDrawer";
-import { EntityDrawerContent } from "../entity/EntityDrawerContent";
-import { ItemDrawerContent } from "../item/ItemDrawerContent";
+import { ContentChip } from "../common/ContentChip";
+import { DataCard } from "../common/DataCard";
+import { DataChip } from "../common/DataChip";
+import { ReferenceChips } from "../common/DetailField";
+import type { NavigationItem } from "./MapView";
 
-import type { Entity, Item, ReferencePoints, MapMetadata, Shop } from "../../types/gameModels";
+interface PanelProps {
+  gameId: string;
+  id: string;
+  onPush: (item: NavigationItem) => void;
+  onSelectMap: (mapId: string) => void;
+}
+
+function Section({ icon, title, children }: { icon: ReactNode; title: string; children: ReactNode }) {
+  return (
+    <Stack spacing={1.5}>
+      <Stack direction="row" alignItems="center" spacing={1}>
+        {icon}
+        <Typography variant="subtitle2">{title}</Typography>
+      </Stack>
+      {children}
+    </Stack>
+  );
+}
+
+function Empty({ text }: { text: string }) {
+  return (
+    <Typography variant="body2" sx={{ color: "text.secondary", fontStyle: "italic" }}>
+      {text}
+    </Typography>
+  );
+}
+
+function PanelState({ error, id }: { error: Error | null; id: string }) {
+  if (!error) {
+    return (
+      <Stack alignItems="center" sx={{ py: 6 }}>
+        <CircularProgress color="primary" />
+      </Stack>
+    );
+  }
+  const unregistered = error instanceof ApiError && error.kind === "unregistered-content";
+  return <Empty text={unregistered ? `"${id}" ainda não foi cadastrado.` : error.message} />;
+}
+
+function Header({
+  kind,
+  document,
+  categories,
+  references,
+}: {
+  kind: "item" | "entity";
+  document: { extId: string; name: string; media: MediaLink[] };
+  categories: string[];
+  references: ReferenceIndex;
+}) {
+  const iconMediaId = currentMedia(document.media, "icon") ?? currentMedia(document.media, "screenshot");
+  return (
+    <Stack direction="row" spacing={2} alignItems="center">
+      <ContentChip
+        target={{ kind, extId: document.extId }}
+        resolved={{ kind, extId: document.extId, resolvedKind: kind, name: document.name, iconMediaId }}
+        size="large"
+        disableLink
+      />
+      <Stack spacing={0.5} sx={{ minWidth: 0 }}>
+        <Typography variant="h5" sx={{ lineHeight: 1.1 }}>
+          {document.name}
+        </Typography>
+        <Typography variant="caption" sx={{ color: "text.secondary", fontFamily: "monospace" }}>
+          {document.extId}
+        </Typography>
+        {categories.length > 0 && (
+          <ReferenceChips targets={categories.map((id) => ({ kind: "category", extId: id }))} references={references} />
+        )}
+      </Stack>
+    </Stack>
+  );
+}
+
+/** Alvo citado (requisito ou drop): abre o resumo dele no drawer quando é item ou entidade. */
+function TargetRow({
+  target,
+  references,
+  caption,
+  label,
+  onPush,
+}: {
+  target: Reference;
+  references: ReferenceIndex;
+  caption?: string;
+  label?: string;
+  onPush: (item: NavigationItem) => void;
+}) {
+  const resolved = references.find(target);
+  const kind = resolved?.resolvedKind ?? target.kind;
+  const type = kind === "entity" || kind === "item" ? kind : null;
+  return (
+    <DataCard
+      onClick={type ? () => onPush({ type, id: target.extId }) : undefined}
+      sx={{ p: 1.5, gap: 1.5, justifyContent: "space-between" }}
+    >
+      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ minWidth: 0 }}>
+        <ContentChip target={target} resolved={resolved} size="small" disableLink />
+        <Stack sx={{ minWidth: 0 }}>
+          <Typography variant="body2" fontWeight={600}>
+            {references.name(target)}
+          </Typography>
+          {caption && (
+            <Typography variant="caption" color="text.secondary">
+              {caption}
+            </Typography>
+          )}
+        </Stack>
+      </Stack>
+      {label && <DataChip label={label} />}
+    </DataCard>
+  );
+}
+
+/** Pontos agrupados por mapa; escolher um abre o mapa. */
+function MapOccurrences({
+  points,
+  references,
+  onSelectMap,
+}: {
+  points: SpawnPointDocument[];
+  references: ReferenceIndex;
+  onSelectMap: (mapId: string) => void;
+}) {
+  const counts = new Map<string, Set<string>>();
+  points.forEach((point) => {
+    if (point.map) counts.set(point.map, (counts.get(point.map) ?? new Set()).add(point.extId));
+  });
+  if (counts.size === 0) return <Empty text="Nenhum ponto registrado nos mapas." />;
+  return (
+    <Stack spacing={1}>
+      {[...counts.entries()]
+        .sort((a, b) => b[1].size - a[1].size)
+        .map(([map, ids]) => (
+          <DataCard key={map} onClick={() => onSelectMap(map)} sx={{ p: 1.5, justifyContent: "space-between" }}>
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              <MapIcon sx={{ fontSize: 18, color: "primary.main" }} />
+              <Typography variant="body2" fontWeight={600}>
+                {references.name({ kind: "map", extId: map })}
+              </Typography>
+            </Stack>
+            <DataChip label={`${ids.size}x`} />
+          </DataCard>
+        ))}
+    </Stack>
+  );
+}
+
+function EntityPanel({ gameId, id, onPush, onSelectMap }: PanelProps) {
+  const navigate = useNavigate();
+  const details = useContentDetails<EntityDocument, EntityRelated>(gameId, "entities", id);
+  const references = useMemo(() => new ReferenceIndex(details.data?.references), [details.data]);
+  if (!details.data) return <PanelState error={details.error} id={id} />;
+
+  const { document: entity, related } = details.data;
+  return (
+    <Stack spacing={3}>
+      <Header kind="entity" document={entity} categories={entity.categories} references={references} />
+
+      {related.shops.content.length > 0 && (
+        <Section icon={<StorefrontIcon sx={{ color: "primary.main", fontSize: 20 }} />} title="Loja">
+          <Stack spacing={1}>
+            {related.shops.content.map((shop) => (
+              <DataCard
+                key={shop.extId}
+                onClick={() => navigate(contentRoute(gameId, "shop", shop.extId)!)}
+                sx={{ p: 1.5, justifyContent: "space-between" }}
+              >
+                <Typography variant="body2" fontWeight={600}>
+                  {shop.name}
+                </Typography>
+                <DataChip label="Abrir" color="primary" />
+              </DataCard>
+            ))}
+          </Stack>
+        </Section>
+      )}
+
+      {entity.requirements.length > 0 && (
+        <Section icon={<TravelExploreIcon sx={{ color: "primary.main", fontSize: 20 }} />} title="Requisitos de coleta">
+          <Stack spacing={1}>
+            {entity.requirements.map((requirement, index) => (
+              <TargetRow
+                key={index}
+                target={requirement.target}
+                references={references}
+                caption={requirement.notConsumed ? "Não é gasto" : undefined}
+                label={`x${formatAmount(requirement.amount)}`}
+                onPush={onPush}
+              />
+            ))}
+          </Stack>
+        </Section>
+      )}
+
+      <Section icon={<InventoryIcon sx={{ color: "primary.main", fontSize: 20 }} />} title="Drops">
+        {entity.drops.length > 0 ? (
+          <Stack spacing={1}>
+            {entity.drops.map((drop, index) => (
+              <TargetRow
+                key={index}
+                target={drop.target}
+                references={references}
+                caption={formatChance(drop.chance)}
+                label={`${formatRange(drop.amount, drop.maxAmount)}x`}
+                onPush={onPush}
+              />
+            ))}
+          </Stack>
+        ) : (
+          <Empty text="Nenhum drop registrado." />
+        )}
+      </Section>
+
+      <Section icon={<MapIcon sx={{ color: "primary.main", fontSize: 20 }} />} title="Mapas">
+        <MapOccurrences points={related.spawnPoints.content} references={references} onSelectMap={onSelectMap} />
+      </Section>
+    </Stack>
+  );
+}
+
+function ItemPanel({ gameId, id, onPush, onSelectMap }: PanelProps) {
+  const details = useContentDetails<ItemDocument, ItemRelated>(gameId, "items", id);
+  const references = useMemo(() => new ReferenceIndex(details.data?.references), [details.data]);
+  if (!details.data) return <PanelState error={details.error} id={id} />;
+
+  const { document: item, related } = details.data;
+  const self: Reference = { kind: "item", extId: item.extId };
+  return (
+    <Stack spacing={3}>
+      <Header kind="item" document={item} categories={item.categories} references={references} />
+
+      {(item.summary || item.description) && (
+        <Typography variant="body2" sx={{ lineHeight: 1.6 }}>
+          {item.summary ?? item.description}
+        </Typography>
+      )}
+
+      <Section icon={<TravelExploreIcon sx={{ color: "primary.main", fontSize: 20 }} />} title="Dropado por">
+        {related.droppedBy.content.length > 0 ? (
+          <Stack spacing={1}>
+            {related.droppedBy.content.map((entity) => {
+              const drop = entity.drops.find((candidate) => sameTarget(candidate.target, self));
+              return (
+                <DataCard
+                  key={entity.extId}
+                  onClick={() => onPush({ type: "entity", id: entity.extId })}
+                  sx={{ p: 1.5, gap: 1.5, justifyContent: "space-between" }}
+                >
+                  <Stack direction="row" spacing={1.5} alignItems="center" sx={{ minWidth: 0 }}>
+                    <ContentChip
+                      target={{ kind: "entity", extId: entity.extId }}
+                      resolved={{
+                        kind: "entity",
+                        extId: entity.extId,
+                        resolvedKind: "entity",
+                        name: entity.name,
+                        iconMediaId: currentMedia(entity.media, "icon") ?? currentMedia(entity.media, "screenshot"),
+                      }}
+                      size="small"
+                      disableLink
+                    />
+                    <Stack sx={{ minWidth: 0 }}>
+                      <Typography variant="body2" fontWeight={600}>
+                        {entity.name}
+                      </Typography>
+                      {drop && (
+                        <Typography variant="caption" color="text.secondary">
+                          {formatChance(drop.chance)}
+                        </Typography>
+                      )}
+                    </Stack>
+                  </Stack>
+                  {drop && <DataChip label={`${formatRange(drop.amount, drop.maxAmount)}x`} />}
+                </DataCard>
+              );
+            })}
+          </Stack>
+        ) : (
+          <Empty text="Nenhuma entidade dropa este item." />
+        )}
+      </Section>
+
+      <Section icon={<MapIcon sx={{ color: "primary.main", fontSize: 20 }} />} title="Mapas">
+        <MapOccurrences
+          points={[...related.dropPoints.content, ...related.spawnPoints.content]}
+          references={references}
+          onSelectMap={onSelectMap}
+        />
+      </Section>
+    </Stack>
+  );
+}
 
 interface InfoDrawerProps {
   stack: NavigationItem[];
-  entities: Entity[];
-  items: Item[];
-  referencePoints: ReferencePoints[];
-  shops: Shop[];
-  maps: MapMetadata[];
   onSelectMap: (mapId: string) => void;
   onPush: (item: NavigationItem) => void;
   onPop: () => void;
   onClose: () => void;
-  categoriesMap?: Record<string, string>;
 }
 
-export const InfoDrawer = ({
-  stack,
-  entities,
-  items,
-  referencePoints,
-  shops,
-  maps,
-  onSelectMap,
-  onPush,
-  onPop,
-  onClose,
-  categoriesMap = {},
-}: InfoDrawerProps) => {
-  const theme = useTheme() as any;
+/** Resumo de item ou entidade ao lado do mapa, lido do agregado /details, com pilha para ir e voltar. */
+export const InfoDrawer = ({ stack, onSelectMap, onPush, onPop, onClose }: InfoDrawerProps) => {
   const navigate = useNavigate();
-  const { gameId } = useParams();
-  const currentItem = stack[stack.length - 1];
-
-  const currentEntity = useMemo(() => {
-    if (currentItem?.type !== "entity") return undefined;
-    const baseEntity = entities.find((e) => e.id === currentItem.id);
-    if (!baseEntity) return undefined;
-    const customDrops = referencePoints.flatMap((p) => {
-      const drops = [];
-      if (p.entityId === baseEntity.id && p.customDrops) drops.push(...p.customDrops);
-      if (p.spawns) {
-        p.spawns.forEach(sp => {
-          if (sp.entityId === baseEntity.id && sp.customDrops) drops.push(...sp.customDrops);
-        });
-      }
-      return drops;
-    });
-    const combinedDrops = [...(baseEntity.drops || []), ...customDrops].filter((v, i, a) => a.findIndex(t => t.itemId === v.itemId) === i);
-    return { ...baseEntity, drops: combinedDrops };
-  }, [currentItem, entities, referencePoints]);
-
-  const currentItemData = useMemo(() => {
-    if (currentItem?.type !== "item") return undefined;
-    return items.find((i) => i.id === currentItem.id);
-  }, [currentItem, items]);
-
-  const currentShop = useMemo(() => {
-    if (currentItem?.type !== "entity") return undefined;
-    return shops.find((s) => s.npcId === currentItem.id);
-  }, [currentItem, shops]);
-
-  const droppedBy = useMemo(() => {
-    if (currentItem?.type !== "item") return [];
-    return entities.filter((e) =>
-      e.drops?.some((d) => d.itemId === currentItem.id) ||
-      referencePoints.some((p) => 
-        (p.entityId === e.id && p.customDrops?.some((cd) => cd.itemId === currentItem.id)) ||
-        (p.spawns && p.spawns.some(sp => sp.entityId === e.id && sp.customDrops?.some(cd => cd.itemId === currentItem.id)))
-      )
-    ).map((e) => {
-      const customDrops = referencePoints.flatMap((p) => {
-        const drops = [];
-        if (p.entityId === e.id && p.customDrops) drops.push(...p.customDrops);
-        if (p.spawns) {
-          p.spawns.forEach(sp => {
-            if (sp.entityId === e.id && sp.customDrops) drops.push(...sp.customDrops);
-          });
-        }
-        return drops;
-      });
-      const combinedDrops = [...(e.drops || []), ...customDrops].filter((v, i, a) => a.findIndex(t => t.itemId === v.itemId) === i);
-      return { ...e, drops: combinedDrops };
-    });
-  }, [currentItem, entities, referencePoints]);
-
-  const handleViewDetails = () => {
-    if (currentItem.type === "entity") {
-      navigate(`/game/${gameId}/entity/view/${currentItem.id}`);
-    } else {
-      navigate(`/game/${gameId}/items/view/${currentItem.id}`);
-    }
-  };
-
-  const mapOccurrences = useMemo(() => {
-    if (currentItem?.type !== "entity") return [];
-
-    const relevantPoints = referencePoints.filter((s) => 
-      s.entityId === currentItem.id || 
-      (s.spawns && s.spawns.some(sp => sp.entityId === currentItem.id))
-    );
-    const counts: Record<string, number> = {};
-
-    relevantPoints.forEach((s) => {
-      const mapId = s.mapId || (maps.length > 0 ? maps[0].id : "default");
-      counts[mapId] = (counts[mapId] || 0) + 1;
-    });
-
-    return Object.entries(counts)
-      .map(([mapId, count]) => {
-        const mapInfo = maps.find((m) => m.id === mapId);
-        return {
-          id: mapId,
-          name:
-            mapInfo?.name || (mapId === "default" ? "Mapa Principal" : mapId),
-          count,
-          thumbnail: mapInfo?.thumbnail,
-        };
-      })
-      .sort((a, b) => b.count - a.count);
-  }, [currentItem, referencePoints, maps]);
-
-  if (!currentItem) return null;
+  const { gameId = "" } = useParams<{ gameId: string }>();
+  const current = stack[stack.length - 1];
+  if (!current) return null;
 
   return (
     <BaseDrawer
-      title={currentItem.type === "entity" ? "Entidade" : "Item"}
+      title={current.type === "entity" ? "Entidade" : "Item"}
       onClose={onClose}
       onPop={onPop}
-      onViewDetails={handleViewDetails}
+      onViewDetails={() => navigate(contentRoute(gameId, current.type, current.id)!)}
       showBackButton={stack.length > 1}
     >
-      {currentItem.type === "entity" ? (
-        <EntityDrawerContent
-          entityId={currentItem.id}
-          currentEntity={currentEntity}
-          items={items}
-          theme={theme}
-          mapOccurrences={mapOccurrences}
-          shop={currentShop}
-          onPush={onPush}
-          onSelectMap={onSelectMap}
-          categoriesMap={categoriesMap}
-        />
+      {current.type === "entity" ? (
+        <EntityPanel key={`entity-${current.id}`} gameId={gameId} id={current.id} onPush={onPush} onSelectMap={onSelectMap} />
       ) : (
-        <ItemDrawerContent
-          itemId={currentItem.id}
-          currentItemData={currentItemData}
-          droppedBy={droppedBy}
-          theme={theme}
-          onPush={onPush}
-        />
+        <ItemPanel key={`item-${current.id}`} gameId={gameId} id={current.id} onPush={onPush} onSelectMap={onSelectMap} />
       )}
     </BaseDrawer>
   );

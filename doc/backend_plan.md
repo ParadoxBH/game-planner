@@ -1002,7 +1002,12 @@ Decisões tomadas na implementação, que ajustam o plano acima:
 - calculadoras: a de crafting usa `/crafting-plan` (vários alvos numa árvore só, dividindo as sobras, com
   custo e venda por moeda); rentabilidade e lucro por tempo usam `/crafting-profits`, que calcula um lote
   de cada produto no servidor, com busca, ordenação e paginação. Custo e venda só se comparam na mesma
-  moeda; o que tem categoria em aberto ou ciclo aparece marcado como incompleto.
+  moeda; o que tem categoria em aberto ou ciclo aparece marcado como incompleto;
+- mapa: seletor (`/maps`), mapa com marcadores (`/maps/{id}/spawn-points`, que passou a trazer ícone,
+  respawn e categorias dos ocupantes, e ganhou `yields` para "onde conseguir este item"), áreas dos locais
+  (`/locations?map=`), climas pelos eventos de `weathers`, popup do ponto e drawer de item/entidade pelo
+  `/details`, e dashboard com ocupantes, lojas e locais. As marcações da ferramenta de pontos exportam JSON
+  no formato da API (pontos de spawn e locais).
 
 As telas migradas compartilham componentes de detalhe (pontos por mapa, ofertas de loja, drops,
 códigos, coleções, variantes). As demais telas seguem lendo os JSON até a vez delas.

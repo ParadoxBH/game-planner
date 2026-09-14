@@ -23,7 +23,10 @@ public class MapSpawnPointController {
         this.world = world;
     }
 
-    /** Aceita os filtros de /spawn-points: bbox, occupant, occupantCategory, drops, location, event e search. */
+    /**
+     * Aceita os filtros de /spawn-points: bbox, occupant, occupantCategory, drops, yields, location, event,
+     * activeEvents e search.
+     */
     @GetMapping
     public Markers markers(@PathVariable String gameId,
                            @PathVariable String mapId,

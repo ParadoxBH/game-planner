@@ -1,69 +1,117 @@
-import { useMemo } from "react";
-import { Box, Paper, Stack, Typography, IconButton, TextField, Autocomplete, MenuItem, Select, FormControl, InputLabel, Button, Divider, Tooltip, List, ListItem, ListItemText, ListItemSecondaryAction, Slide } from "@mui/material";
+import { useState } from "react";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Divider,
+  FormControl,
+  IconButton,
+  InputLabel,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  MenuItem,
+  Paper,
+  Select,
+  Slide,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import PlaceIcon from "@mui/icons-material/Place";
 import InfoIcon from "@mui/icons-material/Info";
-import type { Entity, ReferencePoints, Item } from "../../types/gameModels";
-import { getPublicUrl } from "../../utils/pathUtils";
+import { useParams } from "react-router-dom";
+import type { ResolvedReference, SearchHit } from "../../api/content";
+import { useSearch } from "../../api/useContent";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+import { ContentChip } from "../common/ContentChip";
+
+/** Marcação feita no mapa: ponto de spawn (sempre POINT) ou local (POINT ou POLYGON), em coordenadas de jogo. */
+export interface MapDraft {
+  id: string;
+  kind: "spawn" | "location";
+  locationType: string | null;
+  /** Ocupante do ponto de spawn. */
+  target: SearchHit | null;
+  /** Nome do local. */
+  name: string | null;
+  map: string;
+  wkt: string;
+}
+
+export interface DraftConfig {
+  /** "spawn" ou o tipo do local. */
+  type: string;
+  target: SearchHit | null;
+  name: string;
+}
+
+export const DRAFT_TYPES = [
+  { value: "spawn", label: "Ponto de spawn (entidade ou recurso)" },
+  { value: "poi", label: "Local: ponto de interesse" },
+  { value: "location", label: "Local: localização" },
+  { value: "biome", label: "Local: bioma" },
+  { value: "region", label: "Local: região" },
+];
+
+/** JSON no formato da API, pronto para importar: pontos de spawn e locais. */
+export function draftsJson(drafts: MapDraft[]): string {
+  const spawnPoints = drafts
+    .filter((draft) => draft.kind === "spawn")
+    .map((draft) => ({
+      extId: draft.id,
+      map: draft.map,
+      position: draft.wkt,
+      occupants: draft.target ? [{ target: { kind: draft.target.kind, extId: draft.target.extId } }] : [],
+    }));
+  const locations = drafts
+    .filter((draft) => draft.kind === "location")
+    .map((draft) => ({
+      extId: draft.id,
+      name: draft.name ?? draft.id,
+      locationType: draft.locationType,
+      map: draft.map,
+      area: draft.wkt,
+    }));
+  return JSON.stringify({ spawnPoints, locations }, null, 2);
+}
+
+function hitReference(hit: SearchHit): ResolvedReference {
+  return { kind: hit.kind, extId: hit.extId, resolvedKind: hit.kind, name: hit.name, iconMediaId: hit.iconMediaId };
+}
 
 interface PointMarkerPanelProps {
   open: boolean;
   onClose: () => void;
-  sessionPoints: ReferencePoints[];
-  onDeletePoint: (id: string) => void;
-  onClearPoints: () => void;
+  drafts: MapDraft[];
+  onDeleteDraft: (id: string) => void;
+  onClearDrafts: () => void;
   onCopyAll: () => void;
-  pointConfig: {
-    type: string;
-    entityId: string;
-  };
-  onConfigChange: (config: { type: string; entityId: string }) => void;
-  entities: Entity[];
-  items: Item[];
+  config: DraftConfig;
+  onConfigChange: (config: DraftConfig) => void;
 }
-
-const POINT_TYPES = [
-  { value: "spawn", label: "Spawn (Inimigo/Recurso)" },
-  { value: "poi", label: "Ponto de Interesse (Local)" },
-  { value: "location", label: "Localização" },
-  { value: "biome", label: "Bioma/Região" },
-  { value: "rule", label: "Regra" },
-];
 
 export const PointMarkerPanel = ({
   open,
   onClose,
-  sessionPoints,
-  onDeletePoint,
-  onClearPoints,
+  drafts,
+  onDeleteDraft,
+  onClearDrafts,
   onCopyAll,
-  pointConfig,
+  config,
   onConfigChange,
-  entities,
-  items,
 }: PointMarkerPanelProps) => {
-  const allOptions = useMemo(() => {
-    const map = new Map<string, { id: string; name: string; icon?: string; type: string }>();
-    
-    // Add entities first
-    entities.forEach(e => {
-      map.set(e.id, { id: e.id, name: e.name, icon: e.icon, type: 'entity' });
-    });
-    
-    // Add items only if not already present (avoid duplicates)
-    items.forEach(i => {
-      if (!map.has(i.id)) {
-        map.set(i.id, { id: i.id, name: i.name, icon: i.icon, type: 'item' });
-      }
-    });
-    
-    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
-  }, [entities, items]);
-
-  const selectedOption = allOptions.find(o => o.id === pointConfig.entityId) || null;
+  const { gameId = "" } = useParams<{ gameId: string }>();
+  const [input, setInput] = useState("");
+  const term = useDebouncedValue(input);
+  const search = useSearch(gameId, term);
+  const isSpawn = config.type === "spawn";
 
   return (
     <Slide direction="left" in={open} mountOnEnter unmountOnExit>
@@ -86,11 +134,12 @@ export const PointMarkerPanel = ({
           overflow: "hidden",
         }}
       >
-        {/* Header */}
         <Box sx={{ p: 2, pb: 1, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Stack direction="row" spacing={1} alignItems="center">
             <PlaceIcon color="primary" />
-            <Typography variant="h6" sx={{ fontSize: "1rem" }}>Marcador de Pontos</Typography>
+            <Typography variant="h6" sx={{ fontSize: "1rem" }}>
+              Marcador de pontos
+            </Typography>
           </Stack>
           <IconButton onClick={onClose} size="small">
             <CloseIcon fontSize="small" />
@@ -99,58 +148,73 @@ export const PointMarkerPanel = ({
 
         <Divider />
 
-        {/* Configuration Section */}
         <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
-          <Typography variant="subtitle2" color="primary" sx={{ fontSize: "0.7rem", textTransform: "uppercase" }}>Configuração do Próximo Ponto</Typography>
-          
+          <Typography variant="subtitle2" color="primary" sx={{ fontSize: "0.7rem", textTransform: "uppercase" }}>
+            Configuração da próxima marcação
+          </Typography>
+
           <FormControl fullWidth size="small">
-            <InputLabel>Tipo de Ponto</InputLabel>
-            <Select
-              value={pointConfig.type}
-              label="Tipo de Ponto"
-              onChange={(e) => onConfigChange({ ...pointConfig, type: e.target.value })}
-            >
-              {POINT_TYPES.map(type => (
-                <MenuItem key={type.value} value={type.value}>{type.label}</MenuItem>
+            <InputLabel>Tipo</InputLabel>
+            <Select value={config.type} label="Tipo" onChange={(event) => onConfigChange({ ...config, type: event.target.value })}>
+              {DRAFT_TYPES.map((type) => (
+                <MenuItem key={type.value} value={type.value}>
+                  {type.label}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
 
-          <Autocomplete
-            size="small"
-            options={allOptions}
-            getOptionLabel={(option) => option.name}
-            value={selectedOption}
-            onChange={(_, newValue) => onConfigChange({ ...pointConfig, entityId: newValue?.id || "TODO" })}
-            renderInput={(params) => <TextField {...params} label="Entidade/Item" variant="outlined" />}
-            renderOption={(props, option) => (
-              <Box component="li" {...props} sx={{ gap: 1 }}>
-                <img src={getPublicUrl(option.icon || "/img/placeholder.png")} alt="" style={{ width: 24, height: 24, objectFit: "contain" }} />
-                <Typography variant="body2">{option.name}</Typography>
-                <Typography variant="caption" sx={{ ml: "auto", opacity: 0.5 }}>{option.type}</Typography>
-              </Box>
-            )}
-          />
-          
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'rgba(255,255,255,0.03)', p: 1, borderRadius: 1 }}>
-            <InfoIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
+          {isSpawn ? (
+            <Autocomplete
+              size="small"
+              options={search.data ?? []}
+              value={config.target}
+              filterOptions={(options) => options}
+              loading={search.isFetching}
+              inputValue={input}
+              onInputChange={(_, value) => setInput(value)}
+              onChange={(_, value) => onConfigChange({ ...config, target: value })}
+              getOptionLabel={(option) => option.name ?? option.extId}
+              isOptionEqualToValue={(a, b) => a.kind === b.kind && a.extId === b.extId}
+              noOptionsText={term.trim().length < 2 ? "Digite ao menos 2 letras" : "Nada encontrado"}
+              renderInput={(params) => <TextField {...params} label="Ocupante (entidade ou item)" />}
+              renderOption={(props, option) => (
+                <Box component="li" {...props} key={`${option.kind}:${option.extId}`} sx={{ gap: 1 }}>
+                  <ContentChip target={{ kind: option.kind, extId: option.extId }} resolved={hitReference(option)} size="small" disableLink />
+                  <Typography variant="body2">{option.name ?? option.extId}</Typography>
+                  <Typography variant="caption" sx={{ ml: "auto", opacity: 0.5 }}>
+                    {option.kind}
+                  </Typography>
+                </Box>
+              )}
+            />
+          ) : (
+            <TextField
+              size="small"
+              label="Nome do local"
+              value={config.name}
+              onChange={(event) => onConfigChange({ ...config, name: event.target.value })}
+            />
+          )}
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, bgcolor: "rgba(255,255,255,0.03)", p: 1, borderRadius: 1 }}>
+            <InfoIcon sx={{ fontSize: 16, color: "text.secondary" }} />
             <Typography variant="caption" color="text.secondary">
-              Cada clique no mapa adicionará um ponto com estas configurações.
+              Cada clique no mapa marca um ponto; a ferramenta de área marca um local com polígono.
             </Typography>
           </Box>
         </Box>
 
         <Divider />
 
-        {/* Session List */}
         <Box sx={{ flexGrow: 1, overflow: "auto", p: 1 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ px: 1, mb: 1 }}>
             <Typography variant="subtitle2" sx={{ fontSize: "0.7rem", textTransform: "uppercase" }}>
-              Sessão Atual ({sessionPoints.length})
+              Sessão atual ({drafts.length})
             </Typography>
-            {sessionPoints.length > 0 && (
-              <Tooltip title="Limpar Tudo">
-                <IconButton onClick={onClearPoints} size="small" color="error">
+            {drafts.length > 0 && (
+              <Tooltip title="Limpar tudo">
+                <IconButton onClick={onClearDrafts} size="small" color="error">
                   <ClearAllIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
@@ -158,79 +222,75 @@ export const PointMarkerPanel = ({
           </Stack>
 
           <List dense disablePadding>
-            {sessionPoints.length === 0 ? (
-              <Box sx={{ py: 4, textAlign: 'center', opacity: 0.5 }}>
-                <Typography variant="caption">Nenhum ponto marcado ainda.</Typography>
+            {drafts.length === 0 ? (
+              <Box sx={{ py: 4, textAlign: "center", opacity: 0.5 }}>
+                <Typography variant="caption">Nenhuma marcação ainda.</Typography>
               </Box>
             ) : (
-              sessionPoints.slice().reverse().map((point) => {
-                const entity = allOptions.find(o => o.id === point.entityId);
-                const isPolygon = point.geom.type === "Polygon";
-                
-                return (
-                  <ListItem 
-                    key={point.id} 
-                    sx={{ 
-                      borderRadius: 1.5, 
-                      mb: 0.5, 
+              drafts
+                .slice()
+                .reverse()
+                .map((draft) => (
+                  <ListItem
+                    key={draft.id}
+                    sx={{
+                      borderRadius: 1.5,
+                      mb: 0.5,
                       border: 1,
                       borderColor: "rgba(255,255,255,0.05)",
-                      "&:hover": { 
-                        bgcolor: "rgba(255,255,255,0.08)",
-                        borderColor: "primary.main"
-                      } 
+                      "&:hover": { bgcolor: "rgba(255,255,255,0.08)", borderColor: "primary.main" },
                     }}
                   >
-                    <Box 
-                      sx={{ 
-                        width: 32, 
-                        height: 32, 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        justifyContent: 'center',
-                        mr: 1.5,
-                        bgcolor: isPolygon ? 'rgba(33, 150, 243, 0.1)' : 'rgba(255,255,255,0.03)',
-                        borderRadius: 1
-                      }}
-                    >
-                      <img 
-                        src={getPublicUrl(point.icon || entity?.icon || (isPolygon ? "/img/zone.png" : "/img/placeholder.png"))} 
-                        alt="" 
-                        style={{ width: 24, height: 24, objectFit: "contain" }} 
-                      />
+                    <Box sx={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", mr: 1.5 }}>
+                      {draft.target ? (
+                        <ContentChip
+                          target={{ kind: draft.target.kind, extId: draft.target.extId }}
+                          resolved={hitReference(draft.target)}
+                          size="small"
+                          disableLink
+                        />
+                      ) : (
+                        <PlaceIcon sx={{ color: "text.secondary" }} />
+                      )}
                     </Box>
                     <ListItemText
-                      primary={entity?.name || point.name || point.entityId}
-                      secondary={isPolygon ? `Zona (${point.geom.coordinates.split(',').length} pontos)` : `${point.type} - [${point.geom.coordinates}]`}
+                      primary={draft.target?.name ?? draft.name ?? draft.id}
+                      secondary={`${draft.kind === "spawn" ? "spawn" : draft.locationType} · ${draft.wkt}`}
                       primaryTypographyProps={{ variant: "body2", sx: { fontSize: "0.8rem", fontWeight: 600, color: "text.primary" } }}
-                      secondaryTypographyProps={{ variant: "caption", sx: { display: "block", fontSize: "0.65rem", opacity: 0.7, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" } }}
+                      secondaryTypographyProps={{
+                        variant: "caption",
+                        sx: { display: "block", fontSize: "0.65rem", opacity: 0.7, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" },
+                      }}
                     />
                     <ListItemSecondaryAction>
-                      <IconButton edge="end" size="small" onClick={() => onDeletePoint(point.id)} sx={{ color: "error.main", opacity: 0.5, "&:hover": { opacity: 1 } }}>
+                      <IconButton
+                        edge="end"
+                        size="small"
+                        onClick={() => onDeleteDraft(draft.id)}
+                        sx={{ color: "error.main", opacity: 0.5, "&:hover": { opacity: 1 } }}
+                      >
                         <DeleteIcon fontSize="inherit" />
                       </IconButton>
                     </ListItemSecondaryAction>
                   </ListItem>
-                );
-              })
+                ))
             )}
           </List>
         </Box>
 
         <Divider />
 
-        {/* Footer Actions */}
         <Box sx={{ p: 2 }}>
           <Button
             fullWidth
             variant="contained"
             color="primary"
-            disabled={sessionPoints.length === 0}
+            disabled={drafts.length === 0}
             startIcon={<ContentCopyIcon />}
             onClick={onCopyAll}
             sx={{ borderRadius: 1.5, py: 1 }}
           >
-            Copiar Lista (JSON)
+            Copiar JSON (formato da API)
           </Button>
         </Box>
       </Paper>

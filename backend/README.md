@@ -306,9 +306,9 @@ revisão.
 
 | Rota | Filtros |
 |---|---|
-| `GET /api/v1/games/{jogo}/spawn-points` | `map`, `location` (ligados ao local ou dentro da área), `occupant`, `occupantCategory`, `drops`, `bbox` |
+| `GET /api/v1/games/{jogo}/spawn-points` | `map`, `location` (ligados ao local ou dentro da área), `occupant`, `occupantCategory`, `drops`, `yields` (drop do ponto ou das entidades que aparecem nele), `bbox` |
 | `GET /api/v1/games/{jogo}/locations` | `containing` (código de ponto), `parent`, `type`, `map` |
-| `GET /api/v1/games/{jogo}/maps/{mapa}/spawn-points` | marcadores compactos, sem página: mesmos filtros, mais `limit` (até 10000); `truncated` avisa se cortou |
+| `GET /api/v1/games/{jogo}/maps/{mapa}/spawn-points` | marcadores compactos, sem página: mesmos filtros, mais `limit` (até 10000); `truncated` avisa se cortou. Cada marcador traz ícone, `respawnDelayMinutes` (do ponto ou do primeiro ocupante que tem) e os ocupantes com categorias |
 
 `bbox` é `minX,minY,maxX,maxY` em coordenadas de jogo. Alvos como `entity:bau` ou só `bau`.
 

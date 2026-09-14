@@ -210,11 +210,86 @@ export interface CollectionDocument extends ContentBase {
   events: string[];
 }
 
-/** Mapa, com os campos que as listagens usam; tiles, limites e zoom ficam de fora. */
+/** Retângulo em coordenadas de jogo. */
+export interface MapBounds {
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+}
+
+/** Faixa de tiles que cobre o mapa no zoom `z`, e os zooms em que há tile. */
+export interface MapTiles {
+  z: number;
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+  minZoom: number | null;
+  maxZoom: number | null;
+}
+
 export interface MapDocument extends ContentBase {
-  mapType: string | null;
+  name: string;
+  mapType: "single" | "layered" | "tile" | "procedural";
+  /** Caminho ou URL da imagem única. */
+  imageUrl: string | null;
+  /** Caminho ou URL das camadas ({layer}) ou dos tiles ({z}, {x}, {y}). */
+  urlPattern: string | null;
+  layers: number | null;
+  bounds: MapBounds | null;
+  minZoom: number | null;
+  maxZoom: number | null;
+  tiles: MapTiles | null;
+  gridSize: number | null;
+  /** Quartos de volta do norte do mapa, de 0 a 3. */
+  rotate: number | null;
+  defaultView: string | null;
+  availableViews: string[];
+  defaultFilters: { types: string[]; categories: string[]; entities: string[] };
+  /** Eventos de clima que acontecem no mapa. */
   weathers: string[];
   events: string[];
+}
+
+export interface MarkerOccupant {
+  kind: string | null;
+  extId: string;
+  name: string | null;
+  iconMediaId: string | null;
+  chance: number | null;
+  categories: string[];
+  /** Respawn da entidade, em minutos. */
+  respawnDelayMinutes: number | null;
+}
+
+/** Ponto de spawn compacto para desenhar no mapa. */
+export interface MapMarker {
+  extId: string;
+  name: string | null;
+  /** WKT em coordenadas de jogo. */
+  position: string;
+  location: string | null;
+  respawnMode: string | null;
+  /** O do ponto ou, sem ele, o do primeiro ocupante que tem. */
+  respawnDelayMinutes: number | null;
+  iconMediaId: string | null;
+  occupants: MarkerOccupant[];
+  events: string[];
+}
+
+export interface MapMarkers {
+  content: MapMarker[];
+  total: number;
+  /** Ficou ponto de fora por causa do limite. */
+  truncated: boolean;
+}
+
+export interface SearchHit {
+  kind: string;
+  extId: string;
+  name: string | null;
+  iconMediaId: string | null;
 }
 
 export interface LocationDocument extends ContentBase {
@@ -559,6 +634,17 @@ export const contentApi = {
     return apiRequest<CraftingTree>(`${gamePath(gameId)}/crafting-tree?${params}`, { signal });
   },
 
+  /** Pontos de spawn de um mapa, compactos para desenhar; aceita os filtros de /spawn-points. */
+  markers(gameId: string, mapId: string, filters: Record<string, string | undefined>, signal?: AbortSignal) {
+    const params = new URLSearchParams({ limit: "10000" });
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined) params.set(key, value);
+    });
+    return apiRequest<MapMarkers>(`${gamePath(gameId)}/maps/${encodeURIComponent(mapId)}/spawn-points?${params}`, {
+      signal,
+    });
+  },
+
   /** Vários alvos numa árvore só, na ordem da lista; escolhas como na árvore. */
   craftingPlan(gameId: string, targets: { target: string; amount: number }[], choices: string[], signal?: AbortSignal) {
     const params = new URLSearchParams();
@@ -592,6 +678,13 @@ export const gameApi = {
 
   attributes(gameId: string, signal?: AbortSignal) {
     return apiRequest<AttributeDefinition[]>(`${gamePath(gameId)}/attributes`, { signal });
+  },
+
+  /** Busca por nome ou código em todos os tipos cadastrados; `kind` restringe a um tipo. */
+  search(gameId: string, term: string, kind?: string, signal?: AbortSignal) {
+    const params = new URLSearchParams({ q: term, limit: "20" });
+    if (kind) params.set("kind", kind);
+    return apiRequest<SearchHit[]>(`${gamePath(gameId)}/search?${params}`, { signal });
   },
 
   recipeStations(gameId: string, signal?: AbortSignal) {

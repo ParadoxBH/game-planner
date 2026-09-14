@@ -1,281 +1,98 @@
-import {
-  Typography,
-  Grid,
-  Stack,
-  Button,
-  Avatar,
-  Tooltip,
-  Box,
-  CircularProgress,
-} from "@mui/material";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import type {
-  Entity,
-  Item,
-  ReferencePoints,
-  Shop,
-  MapMetadata,
-} from "../../types/gameModels";
-import { useApi } from "../../hooks/useApi";
+import { Avatar, Button, Grid, Stack, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import MapIcon from "@mui/icons-material/Map";
-import GroupsIcon from "@mui/icons-material/Groups";
 import ExploreIcon from "@mui/icons-material/Explore";
+import CategoryIcon from "@mui/icons-material/Category";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import InventoryIcon from "@mui/icons-material/Inventory";
-import { StyledContainer } from "../common/StyledContainer";
+import PlaceIcon from "@mui/icons-material/Place";
+import {
+  MAX_PAGE_SIZE,
+  type LocationDocument,
+  type MapDocument,
+  type MapMarker,
+  type MarkerOccupant,
+  type ShopDocument,
+} from "../../api/content";
+import { contentRoute, currentMedia, mediaUrl, ReferenceIndex } from "../../api/references";
+import { useContentList } from "../../api/useContent";
+import { usePlatform } from "../../hooks/usePlatform";
+import { ContentChip } from "../common/ContentChip";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
-import { itemRepository } from "../../repositories/ItemRepository";
-import { entityRepository } from "../../repositories/EntityRepository";
-import { shopRepository } from "../../repositories/ShopRepository";
-import { mapRepository } from "../../repositories/MapRepository";
-import { referencePointRepository } from "../../repositories/ReferencePointRepository";
-import { categoryRepository } from "../../repositories/CategoryRepository";
-import { getPublicUrl } from "../../utils/pathUtils";
-import { usePlatform } from "../../hooks/usePlatform";
 import { DetainItem } from "../common/DetainItem";
-import { useEventFilter } from "../../context/EventFilterContext";
-import PlaceIcon from '@mui/icons-material/Place';
-import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
+import { StyledContainer } from "../common/StyledContainer";
+import { ApiShopCard, type ShopListView } from "../shop/ApiShopRenderers";
+import { locationTypeOf, occupantCategory, typeLabel, UNCATEGORIZED } from "./MapFilterDrawer";
+
+interface OccupantCount {
+  occupant: MarkerOccupant;
+  count: number;
+}
 
 interface MapDashboardProps {
   gameId: string;
-  selectedMapId: string;
-  availableViews?: string[];
-  onSelectEntity: (entityId: string) => void;
+  map: MapDocument;
+  markers: MapMarker[];
+  locations: LocationDocument[];
+  categoryNames: Map<string, string>;
+  availableViews: string[];
   onSwitchToMap: () => void;
 }
 
-export const MapDashboard = ({
-  gameId,
-  selectedMapId,
-  availableViews = ["map", "dashboard"],
-  onSelectEntity,
-  onSwitchToMap,
-}: MapDashboardProps) => {
+/** Visão geral do mapa: ocorrências, ocupantes por categoria, lojas dos NPCs que aparecem nele e locais. */
+export const MapDashboard = ({ gameId, map, markers, locations, categoryNames, availableViews, onSwitchToMap }: MapDashboardProps) => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const { loading: dbLoading } = useApi(gameId);
-  const { activeEventIds } = useEventFilter();
-
-  const [entities, setEntities] = useState<Entity[]>([]);
-  const [referencePoints, setReferencePoints] = useState<ReferencePoints[]>([]);
-  const [shops, setShops] = useState<Shop[]>([]);
-  const [maps, setMaps] = useState<MapMetadata[]>([]);
-  const [items, setItems] = useState<Item[]>([]);
-  const [categoriesMap, setCategoriesMap] = useState<Record<string, string>>(
-    {},
-  );
-  const [dataLoading, setDataLoading] = useState(true);
   const { isMobile } = usePlatform();
-
   const { spacing: dtSpacing, borderRadius: dtRadius } = theme.designTokens;
+  const shops = useContentList<ShopDocument>(gameId, "shops", { size: MAX_PAGE_SIZE, filters: { references: "true" } });
 
-  // Fetch all data
-  useEffect(() => {
-    if (dbLoading) return;
-
-    let isMounted = true;
-    setDataLoading(true);
-
-    Promise.all([
-      entityRepository.getAll(),
-      referencePointRepository.getAll(),
-      shopRepository.getAll(),
-      mapRepository.getAll(),
-      itemRepository.getAll(),
-      categoryRepository.getAll(),
-    ])
-      .then(
-        ([
-          allEntities,
-          allRefPoints,
-          allShops,
-          allMaps,
-          allItems,
-          allCategories,
-        ]) => {
-          if (!isMounted) return;
-          setEntities(allEntities);
-          setReferencePoints(allRefPoints);
-          setShops(allShops);
-          setMaps(allMaps);
-          setItems(allItems);
-
-          const catMap: Record<string, string> = {};
-          allCategories.forEach((c) => (catMap[c.id] = c.name));
-          setCategoriesMap(catMap);
-
-          setDataLoading(false);
-        },
-      )
-      .catch((err) => {
-        console.error("Error fetching map dashboard data:", err);
-        if (isMounted) setDataLoading(false);
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [dbLoading]);
-
-  const itemLookup = useMemo(() => {
-    const lookup: Record<string, Item> = {};
-    items.forEach((i: Item) => (lookup[i.id] = i));
-    return lookup;
-  }, [items]);
-
-  const filteredReferencePoints = useMemo(() => {
-    return referencePoints.filter((s) => {
-      if (s.event && (!Array.isArray(s.event) || s.event.length > 0)) {
-        const eventArray = Array.isArray(s.event) ? s.event : [s.event];
-        return eventArray.some((e) => activeEventIds.includes(e));
-      }
-      return true;
-    });
-  }, [referencePoints, activeEventIds]);
-
-  const currentMap = useMemo(
-    () => maps.find((m) => m.id === selectedMapId),
-    [maps, selectedMapId],
-  );
-
-  // Filtro de Pontos deste mapa
-  const mapPoints = useMemo(() => {
-    return filteredReferencePoints.filter(
-      (s) => !s.mapId || s.mapId === selectedMapId,
+  const occupants = useMemo(() => {
+    const counts = new Map<string, OccupantCount>();
+    markers.forEach((marker) =>
+      marker.occupants.forEach((occupant) => {
+        const key = `${occupant.kind ?? ""}:${occupant.extId}`;
+        const entry = counts.get(key);
+        if (entry) entry.count++;
+        else counts.set(key, { occupant, count: 1 });
+      }),
     );
-  }, [filteredReferencePoints, selectedMapId]);
+    return [...counts.values()];
+  }, [markers]);
 
-  // Contagem de Ocorrências por Entidade
-  const entityCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    mapPoints.forEach((s) => {
-      if (s.entityId) {
-        counts[s.entityId] = (counts[s.entityId] || 0) + 1;
-      }
-      if (s.spawns) {
-        s.spawns.forEach((sp) => {
-          counts[sp.entityId] = (counts[sp.entityId] || 0) + 1;
-        });
-      }
+  const groups = useMemo(() => {
+    const byCategory = new Map<string, OccupantCount[]>();
+    occupants.forEach((entry) => {
+      const category = occupantCategory(entry.occupant);
+      byCategory.set(category, [...(byCategory.get(category) ?? []), entry]);
     });
-    return counts;
-  }, [mapPoints]);
+    return [...byCategory.entries()]
+      .map(([category, entries]) => ({ category, entries: [...entries].sort((a, b) => b.count - a.count) }))
+      .sort((a, b) => b.entries.length - a.entries.length);
+  }, [occupants]);
 
-  // Regiões (Biomas, POIs, Zonas)
-  const regions = useMemo(() => {
-    return filteredReferencePoints.filter((p) => {
-      return ["location", "biome", "poi", "zone", "region"].includes(
-        p.type?.toLowerCase() || "",
-      );
-    });
-  }, [filteredReferencePoints]);
+  const occupantIds = useMemo(() => new Set(occupants.map((entry) => entry.occupant.extId)), [occupants]);
+  const mapShops = (shops.data?.content ?? []).filter((shop) => shop.npc && occupantIds.has(shop.npc));
+  const shopView = useMemo<ShopListView>(() => ({ gameId, references: new ReferenceIndex(shops.data?.references) }), [gameId, shops.data]);
 
-  // Entidades presentes no mapa (através de spawns)
-  const mapEntities = useMemo(() => {
-    const entityIds = new Set<string>();
-    mapPoints.forEach((s) => {
-      if (s.entityId) entityIds.add(s.entityId);
-      if (s.spawns) s.spawns.forEach((sp) => entityIds.add(sp.entityId));
-    });
-    return entities.filter((e) => entityIds.has(e.id));
-  }, [entities, mapPoints]);
+  const stats = [
+    { label: "Ocorrências", value: markers.length, icon: <ExploreIcon />, color: "primary.main" },
+    { label: "Ocupantes", value: occupants.length, icon: <MapIcon />, color: "success.main" },
+    { label: "Categorias", value: groups.length, icon: <CategoryIcon />, color: "info.main" },
+    { label: "Lojas", value: mapShops.length, icon: <StorefrontIcon />, color: "warning.main" },
+    { label: "Locais", value: locations.length, icon: <PlaceIcon />, color: "secondary.main" },
+  ];
 
-  // Lojas presentes no mapa (baseado nos NPCs que têm spawn no mapa)
-  const mapShops = useMemo(() => {
-    const mapNpcIds = new Set(
-      mapEntities
-        .filter((e) => {
-          const cats = Array.isArray(e.category)
-            ? e.category
-            : [e.category || ""];
-          return cats.includes("npc");
-        })
-        .map((e) => e.id),
-    );
-
-    return shops.filter((s) => s.npcId && mapNpcIds.has(s.npcId));
-  }, [shops, mapEntities]);
-
-  // Agrupamento Global (para Visão Plana)
-  const globalCategories = useMemo(() => {
-    const categories: Record<string, Entity[]> = {};
-
-    if (mapShops.length > 0) {
-      categories["Lojas & Comércio"] = mapShops.map(
-        (s) =>
-          ({
-            id: s.id,
-            name: s.name,
-            category: "shop",
-            icon:
-              entities.find((e) => e.id === s.npcId)?.icon ||
-              getPublicUrl("/img/icons/shop.png"),
-            description: `Aberta por ${entities.find((e) => e.id === s.npcId)?.name || s.npcId}.`,
-          }) as any,
-      );
-    }
-
-    mapEntities.forEach((e) => {
-      let cat = "Outros";
-      const cats = Array.isArray(e.category) ? e.category : [e.category || ""];
-      if (cats.includes("npc")) cat = "Habitantes & NPCs";
-      else if (cats.includes("resource")) cat = "Recursos & Coletáveis";
-      else if (
-        cats.some((c) => ["station", "crafter", "generator"].includes(c))
-      )
-        cat = "Instalações & Máquinas";
-      else if (cats.includes("monster") || cats.includes("enemy"))
-        cat = "Ameaças & Criaturas";
-
-      if (!categories[cat]) categories[cat] = [];
-      categories[cat].push(e);
-    });
-    return categories;
-  }, [mapEntities, mapShops, entities]);
-
-  const stats = useMemo(
-    () => ({
-      totalSpawns: mapPoints.length,
-      uniqueEntities: mapEntities.length,
-      npcs: mapEntities.filter((e) => {
-        const cats = Array.isArray(e.category)
-          ? e.category
-          : [e.category || ""];
-        return cats.includes("npc");
-      }).length,
-      shops: mapShops.length,
-      regions: regions.length,
-      total: mapPoints.length + mapEntities.length + mapShops.length + regions.length,
-    }),
-    [mapPoints, mapEntities, mapShops, regions],
-  );
-
-  if (dbLoading || dataLoading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100%",
-          width: "100%",
-        }}
-      >
-        <CircularProgress color="primary" />
-      </Box>
-    );
-  }
+  const categoryLabel = (category: string) =>
+    category === UNCATEGORIZED ? "Sem categoria" : categoryNames.get(category) ?? category.replace(/_/g, " ");
 
   return (
     <StyledContainer
-      title={currentMap?.name || "Dashboard"}
-      label={
-        "Visão analítica completa de todos os recursos, NPCs e lojas mapeadas."
-      }
+      title={map.name}
+      label="Visão geral dos pontos, ocupantes, lojas e locais deste mapa."
       actionsEnd={
         availableViews.includes("map") && (
           <Button
@@ -283,93 +100,29 @@ export const MapDashboard = ({
             startIcon={<MapIcon />}
             onClick={onSwitchToMap}
             size="small"
-            sx={{
-              borderRadius: 2,
-              px: 3,
-              textTransform: "none",
-              fontWeight: 700,
-              flex: isMobile ? 1 : undefined,
-            }}
+            sx={{ borderRadius: 2, px: 3, textTransform: "none", fontWeight: 700, flex: isMobile ? 1 : undefined }}
           >
-            Voltar para o Mapa
+            Voltar para o mapa
           </Button>
         )
       }
     >
       <Stack flex={1} spacing={1} sx={{ overflowY: "auto" }}>
-        {/* Cards de Estatísticas */}
         <Grid container spacing={dtSpacing.itemGap}>
-          {[
-            {
-              label: "Ocorrências",
-              value: stats.totalSpawns,
-              icon: <ExploreIcon />,
-              color: "primary.main",
-            },
-            {
-              label: "Entidades",
-              value: stats.uniqueEntities,
-              icon: <MapIcon />,
-              color: "success.main",
-            },
-            {
-              label: "Habitantes",
-              value: stats.npcs,
-              icon: <GroupsIcon />,
-              color: "info.main",
-            },
-            {
-              label: "Lojas",
-              value: stats.shops,
-              icon: <StorefrontIcon />,
-              color: "warning.main",
-            },
-            {
-              label: "Pontos de Interesse",
-              value: stats.regions,
-              icon: <PlaceIcon />,
-              color: "secondary.main",
-            },
-            {
-              label: "Total",
-              value: stats.total,
-              icon: <AllInclusiveIcon />,
-              color: "error.main",
-            },
-          ].map((stat, i) => (
-            <Grid size={{ xs: 4, md: 2 }} key={i}>
-              <DataCard
-                sx={{ p: dtSpacing.cardPadding, borderRadius: dtRadius }}
-              >
-                <Stack
-                  direction="row"
-                  spacing={dtSpacing.itemGap}
-                  alignItems="center"
-                >
+          {stats.map((stat) => (
+            <Grid size={{ xs: 6, sm: 4, md: "grow" }} key={stat.label}>
+              <DataCard sx={{ p: dtSpacing.cardPadding, borderRadius: dtRadius }}>
+                <Stack direction="row" spacing={dtSpacing.itemGap} alignItems="center">
                   <Avatar
-                    sx={{
-                      bgcolor: "rgba(255,255,255,0.03)",
-                      color: stat.color,
-                      width: 40,
-                      height: 40,
-                      border: 1,
-                      borderColor: "divider",
-                    }}
+                    sx={{ bgcolor: "rgba(255,255,255,0.03)", color: stat.color, width: 40, height: 40, border: 1, borderColor: "divider" }}
                   >
                     {stat.icon}
                   </Avatar>
                   <Stack>
-                    <Typography
-                      variant="h6"
-                      fontWeight={900}
-                      sx={{ lineHeight: 1 }}
-                    >
+                    <Typography variant="h6" fontWeight={900} sx={{ lineHeight: 1 }}>
                       {stat.value}
                     </Typography>
-                    <Typography
-                      variant="caption"
-                      sx={{ opacity: 0.5, fontWeight: 700, fontSize: "0.6rem" }}
-                    >
+                    <Typography variant="caption" sx={{ opacity: 0.5, fontWeight: 700, fontSize: "0.6rem" }}>
                       {stat.label}
                     </Typography>
                   </Stack>
@@ -378,369 +131,107 @@ export const MapDashboard = ({
             </Grid>
           ))}
         </Grid>
-        {/* Conteúdo Adaptativo */}
-        {Object.entries(globalCategories).map(([catName, catItems]) => (
-          <DetainItem
-            size={isMobile ? undefined : 6}
-            startIcon={
-              <Avatar
-                sx={{
-                  bgcolor: "rgba(255,255,255,0.03)",
-                  width: 32,
-                  height: 32,
-                  border: 1,
-                  borderColor: "divider",
-                  color: "primary.main",
-                }}
-              >
-                {catName.includes("Loja") ? (
-                  <StorefrontIcon sx={{ fontSize: 18 }} />
-                ) : (
-                  <InventoryIcon sx={{ fontSize: 18 }} />
-                )}
-              </Avatar>
-            }
-            label={catName}
-            count={catItems.length}
-          >
-            <Grid container spacing={dtSpacing.itemGap}>
-              {catItems.map((entity) => {
-                const count = entityCounts[entity.id];
-                const isShop = catName.includes("Loja");
 
-                const handleNavigate = (e?: React.MouseEvent) => {
-                  if (e) e.stopPropagation();
-                  if (isShop) {
-                    navigate(`/game/${gameId}/shops/list/${entity.id}`);
-                  } else if (
-                    entity.category === "npc" ||
-                    (Array.isArray(entity.category) &&
-                      entity.category.includes("npc"))
-                  ) {
-                    navigate(`/game/${gameId}/entity/view/${entity.id}`);
-                  } else {
-                    const isCommonEntity = entities.some(
-                      (ent) => ent.id === entity.id,
-                    );
-                    if (isCommonEntity) {
-                      navigate(`/game/${gameId}/entity/view/${entity.id}`);
-                    } else {
-                      navigate(`/game/${gameId}/item/view/${entity.id}`);
-                    }
-                  }
-                };
-
-                return (
-                  <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={entity.id}>
-                    <DataCard
-                      hoverable
-                      onClick={() => handleNavigate()}
-                      sx={{
-                        p: dtSpacing.cardPadding,
-                        overflow: "hidden",
-                        borderRadius: dtRadius,
-                      }}
-                    >
-                      {/* Background Icon Effect */}
-                      <Stack
-                        sx={{
-                          position: "absolute",
-                          right: -10,
-                          bottom: -10,
-                          width: 80,
-                          height: 80,
-                          opacity: 0.04,
-                          filter: "grayscale(1) brightness(1.5)",
-                          zIndex: 0,
-                          pointerEvents: "none",
-                          backgroundImage: `url(${getPublicUrl(entity.icon || entity.image)})`,
-                          backgroundSize: "contain",
-                          backgroundRepeat: "no-repeat",
-                        }}
-                      />
-
-                      <Stack
-                        direction="row"
-                        spacing={1.5}
-                        alignItems="center"
-                        sx={{ zIndex: 1, width: "100%" }}
-                      >
-                        <Avatar
-                          src={getPublicUrl(entity.image || entity.icon!)}
-                          variant="rounded"
-                          sx={{
-                            width: 40,
-                            height: 40,
-                            bgcolor: "rgba(255,255,255,0.03)",
-                            border: 1,
-                            borderColor: "divider",
-                          }}
-                        />
-                        <Stack sx={{ minWidth: 0, flex: 1 }}>
-                          <Typography
-                            variant="subtitle2"
-                            noWrap
-                            fontWeight={700}
-                            textAlign={"left"}
-                            sx={{ lineHeight: 1.2 }}
-                          >
-                            {entity.name}
-                          </Typography>
-                          <Stack
-                            direction="row"
-                            spacing={1}
-                            alignItems="center"
-                          >
-                            <Typography
-                              variant="caption"
-                              sx={{ opacity: 0.5, fontWeight: 500 }}
-                            >
-                              {isShop
-                                ? "Disponível"
-                                : (() => {
-                                    const rawCat = Array.isArray(
-                                      entity.category,
-                                    )
-                                      ? entity.category[0]
-                                      : entity.category;
-                                    return (
-                                      categoriesMap[rawCat || ""] ||
-                                      rawCat ||
-                                      "Geral"
-                                    );
-                                  })()}
-                            </Typography>
-                            {count > 1 && (
-                              <Typography
-                                variant="caption"
-                                sx={{
-                                  color: "primary.main",
-                                  fontWeight: 800,
-                                }}
-                              >
-                                x{count}
-                              </Typography>
-                            )}
-                          </Stack>
-                        </Stack>
-                      </Stack>
-                    </DataCard>
-                  </Grid>
-                );
-              })}
-            </Grid>
-          </DetainItem>
-        ))}
-        {regions.length > 0 && (
-          <DetainItem
-            size={isMobile ? undefined : 6}
-            startIcon={
-              <Avatar
-                sx={{
-                  bgcolor: "rgba(255,255,255,0.03)",
-                  width: 32,
-                  height: 32,
-                  border: 1,
-                  borderColor: "divider",
-                  color: "primary.main",
-                }}
-              >
-                <PlaceIcon sx={{ fontSize: 18 }} />
-              </Avatar>
-            }
-            label={"Pontos de Interesse"}
-            count={regions.length}
-          >
-            <Grid container spacing={dtSpacing.itemGap}>
-              {regions.map((region) => (
-                <Grid size={isMobile ? 6 : 4} key={region.id}>
-                  {(() => {
-                    const rawBg = region.image || (region as any).thumb || region.icon;
-                    const bgImage = getPublicUrl(rawBg);
-                    const hasIcon = Boolean(region.image || region.icon);
-
-                    return (
+        <Grid container spacing={1}>
+          {groups.map(({ category, entries }) => (
+            <DetainItem
+              key={category}
+              size={isMobile ? undefined : 6}
+              startIcon={<InventoryIcon color="primary" />}
+              label={categoryLabel(category)}
+              count={entries.length}
+            >
+              <Grid container spacing={dtSpacing.itemGap}>
+                {entries.map(({ occupant, count }) => {
+                  const route = occupant.name ? contentRoute(gameId, occupant.kind ?? "entity", occupant.extId) : null;
+                  return (
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={`${occupant.kind ?? ""}:${occupant.extId}`}>
                       <DataCard
-                        hoverable
-                        onClick={() => onSelectEntity(region.id)}
+                        onClick={route ? () => navigate(route) : undefined}
+                        sx={{ p: dtSpacing.cardPadding, borderRadius: dtRadius, gap: 1.5 }}
+                      >
+                        <ContentChip
+                          target={{ kind: occupant.kind, extId: occupant.extId }}
+                          resolved={{
+                            kind: occupant.kind,
+                            extId: occupant.extId,
+                            resolvedKind: occupant.name ? occupant.kind ?? "entity" : null,
+                            name: occupant.name,
+                            iconMediaId: occupant.iconMediaId,
+                          }}
+                          size="medium"
+                          disableLink
+                        />
+                        <Typography variant="subtitle2" noWrap fontWeight={700} sx={{ flex: 1, minWidth: 0 }}>
+                          {occupant.name ?? occupant.extId}
+                        </Typography>
+                        {count > 1 && (
+                          <Typography variant="caption" sx={{ color: "primary.main", fontWeight: 800 }}>
+                            x{count}
+                          </Typography>
+                        )}
+                      </DataCard>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            </DetainItem>
+          ))}
+
+          <DetainItem size={isMobile ? undefined : 6} startIcon={<StorefrontIcon color="primary" />} label="Lojas" count={mapShops.length}>
+            {mapShops.length > 0 && (
+              <Grid container spacing={1}>
+                {mapShops.map((shop) => (
+                  <Grid size={{ xs: 6, md: 4 }} key={shop.extId}>
+                    <ApiShopCard shop={shop} variant="compact" view={shopView} />
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+          </DetainItem>
+
+          <DetainItem size={isMobile ? undefined : 6} startIcon={<PlaceIcon color="primary" />} label="Locais" count={locations.length}>
+            {locations.length > 0 && (
+              <Grid container spacing={dtSpacing.itemGap}>
+                {locations.map((location) => {
+                  const imageId = currentMedia(location.media, "banner") ?? currentMedia(location.media, "screenshot");
+                  const iconId = currentMedia(location.media, "icon");
+                  const background = imageId ? mediaUrl(imageId, "thumb") : null;
+                  return (
+                    <Grid size={isMobile ? 12 : 6} key={location.extId}>
+                      <DataCard
                         sx={{
                           height: "100%",
-                          p: 0,
-                          overflow: "hidden",
+                          p: dtSpacing.cardPadding,
                           flexDirection: "column",
                           alignItems: "stretch",
-                          position: "relative",
+                          gap: 1,
                           borderRadius: dtRadius,
-                          ...(bgImage && {
-                            backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url(${bgImage})`,
+                          ...(background && {
+                            backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url(${background})`,
                             backgroundSize: "cover",
                             backgroundPosition: "center",
-                            border: 1,
-                            borderColor: "divider",
                           }),
                         }}
                       >
-                        <Stack
-                          spacing={dtSpacing.contentGap}
-                          sx={{
-                            p: dtSpacing.cardPadding,
-                            position: "relative",
-                            zIndex: 1,
-                            height: "100%",
-                            justifyContent: "flex-end",
-                          }}
-                        >
-                          <Stack spacing={1.5}>
-                            <Stack
-                              direction="row"
-                              spacing={2}
-                              alignItems="center"
-                            >
-                              {hasIcon && (
-                                <Avatar
-                                  src={getPublicUrl(
-                                    region.image || region.icon!,
-                                  )}
-                                  variant="rounded"
-                                  sx={{
-                                    width: 48,
-                                    height: 48,
-                                    border: 1,
-                                    borderColor: "rgba(255,255,255,0.1)",
-                                    bgcolor: "rgba(0,0,0,0.3)",
-                                  }}
-                                />
-                              )}
-                              <Stack
-                                direction={"row"}
-                                alignItems={"center"}
-                                justifyContent={"space-between"}
-                                flex={1}
-                              >
-                                <Typography
-                                  variant="h6"
-                                  fontWeight={900}
-                                  sx={{
-                                    letterSpacing: "-0.5px",
-                                    textShadow: bgImage
-                                      ? "0 2px 4px rgba(0,0,0,0.5)"
-                                      : "none",
-                                  }}
-                                >
-                                  {region.name}
-                                </Typography>
-                                <DataChip
-                                  label={region.type || "Região"}
-                                  sx={{
-                                    alignSelf: "flex-start",
-                                    bgcolor: bgImage
-                                      ? "rgba(0,0,0,0.4)"
-                                      : "rgba(255,255,255,0.1)",
-                                    backdropFilter: "blur(4px)",
-                                  }}
-                                />
-                              </Stack>
-                            </Stack>
-
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                opacity: 0.9,
-                                minHeight: 40,
-                                lineHeight: 1.5,
-                                textShadow: bgImage
-                                  ? "0 1px 2px rgba(0,0,0,0.5)"
-                                  : "none",
-                                fontSize: "0.85rem",
-                              }}
-                            >
-                              {region.description ||
-                                "Sem descrição disponível."}
-                            </Typography>
-
-                            {region.data?.potentialSpawns &&
-                              region.data.potentialSpawns.length > 0 && (
-                                <Stack spacing={1}>
-                                  <Typography
-                                    variant="caption"
-                                    fontWeight={800}
-                                    sx={{
-                                      color: bgImage
-                                        ? "rgba(255,255,255,0.6)"
-                                        : "designTokens.colors.fieldLabel",
-                                      fontSize: "0.6rem",
-                                    }}
-                                  >
-                                    Exploração disponível
-                                  </Typography>
-                                  <Stack
-                                    direction="row"
-                                    spacing={0.5}
-                                    flexWrap="wrap"
-                                    useFlexGap
-                                  >
-                                    {region.data.potentialSpawns
-                                      .slice(0, 10)
-                                      .map((ps: any) => (
-                                        <Tooltip
-                                          key={ps.entityId}
-                                          title={
-                                            entities.find(
-                                              (e) => e.id === ps.entityId,
-                                            )?.name || ps.entityId
-                                          }
-                                          arrow
-                                        >
-                                          <Avatar
-                                            src={getPublicUrl(
-                                              entities.find(
-                                                (e) => e.id === ps.entityId,
-                                              )?.icon ||
-                                                itemLookup[ps.entityId]?.icon,
-                                            )}
-                                            sx={{
-                                              width: 26,
-                                              height: 26,
-                                              border: 1,
-                                              borderColor:
-                                                "rgba(255,255,255,0.1)",
-                                              bgcolor: "rgba(0,0,0,0.3)",
-                                              "&:hover": {
-                                                borderColor: "primary.main",
-                                                transform: "scale(1.1)",
-                                              },
-                                              transition: "all 0.2s",
-                                            }}
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              onSelectEntity(ps.entityId);
-                                            }}
-                                          />
-                                        </Tooltip>
-                                      ))}
-                                    {region.data.potentialSpawns.length >
-                                      10 && (
-                                      <DataChip
-                                        label={`+${region.data.potentialSpawns.length - 10}`}
-                                        sx={{
-                                          height: 26,
-                                          bgcolor: "rgba(0,0,0,0.4)",
-                                        }}
-                                      />
-                                    )}
-                                  </Stack>
-                                </Stack>
-                              )}
-                          </Stack>
+                        <Stack direction="row" spacing={1.5} alignItems="center">
+                          {iconId && <Avatar src={mediaUrl(iconId)} variant="rounded" sx={{ width: 40, height: 40 }} />}
+                          <Typography variant="h6" fontWeight={900} sx={{ flex: 1, minWidth: 0 }}>
+                            {location.name ?? location.extId}
+                          </Typography>
+                          <DataChip label={typeLabel(locationTypeOf(location))} />
                         </Stack>
+                        <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                          {location.summary ?? location.description ?? "Sem descrição disponível."}
+                        </Typography>
                       </DataCard>
-                    );
-                  })()}
-                </Grid>
-              ))}
-            </Grid>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            )}
           </DetainItem>
-        )}
+        </Grid>
       </Stack>
     </StyledContainer>
   );

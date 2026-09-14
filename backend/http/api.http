@@ -508,3 +508,7 @@ Authorization: Bearer {{accessToken}}
 ### Rentabilidade de um lote de cada produto, do maior lucro por hora para o menor
 GET {{api}}/games/heartopia/crafting-profits?timed=true&sort=-profitPerHour&size=50
 Authorization: Bearer {{accessToken}}
+
+### Pontos de um mapa que rendem um item: drop do ponto ou da entidade que aparece nele
+GET {{api}}/games/heartopia/maps/main/spawn-points?yields=item:madeira&activeEvents=rainy
+Authorization: Bearer {{accessToken}}

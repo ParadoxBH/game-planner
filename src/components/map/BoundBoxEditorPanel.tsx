@@ -19,13 +19,14 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import CropIcon from "@mui/icons-material/Crop";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import type { MapMetadata } from "../../types/gameModels";
+import type { MapDocument } from "../../api/content";
 import { getPublicUrl } from "../../utils/pathUtils";
+import { boundsDocument, leafletBounds, mapThumbnail } from "./mapGeometry";
 
 export type Bounds = [[number, number], [number, number]];
 
 interface BoundBoxEditorPanelProps {
-  selectedMap: MapMetadata;
+  selectedMap: MapDocument;
   open: boolean;
   onClose: () => void;
   onApply: (bounds: Bounds) => void;
@@ -80,7 +81,7 @@ export const BoundBoxEditorPanel = ({
   onApply,
   appliedBounds,
 }: BoundBoxEditorPanelProps) => {
-  const originalBounds = selectedMap.bounds as Bounds;
+  const originalBounds: Bounds = leafletBounds(selectedMap);
   const [bounds, setBounds] = useState<Bounds>(originalBounds);
   const [copied, setCopied] = useState(false);
   const [previewExpanded, setPreviewExpanded] = useState(true);
@@ -88,8 +89,8 @@ export const BoundBoxEditorPanel = ({
 
   // Reset when map changes
   useEffect(() => {
-    setBounds(selectedMap.bounds as Bounds);
-  }, [selectedMap.id]);
+    setBounds(leafletBounds(selectedMap));
+  }, [selectedMap.extId]);
 
   const updateBound = useCallback(
     (corner: 0 | 1, axis: 0 | 1, value: number) => {
@@ -106,12 +107,13 @@ export const BoundBoxEditorPanel = ({
   );
 
   const reset = () => {
-    setBounds(selectedMap.bounds as Bounds);
-    onApply(selectedMap.bounds as Bounds);
+    setBounds(originalBounds);
+    onApply(originalBounds);
   };
 
+  // Copia no formato do documento de mapa, pronto para gravar em "bounds".
   const copyToClipboard = () => {
-    const text = JSON.stringify(bounds);
+    const text = JSON.stringify(boundsDocument(bounds));
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -126,11 +128,7 @@ export const BoundBoxEditorPanel = ({
 
   // Derive image source
   const imgSrc =
-    selectedMap.type === "single" && selectedMap.url
-      ? getPublicUrl(selectedMap.url)
-      : selectedMap.thumbnail
-        ? getPublicUrl(selectedMap.thumbnail)
-        : null;
+    selectedMap.mapType === "single" && selectedMap.imageUrl ? getPublicUrl(selectedMap.imageUrl) : mapThumbnail(selectedMap);
 
   // Preview dimensions
   const PREVIEW_W = 300;
@@ -390,7 +388,7 @@ export const BoundBoxEditorPanel = ({
               transition: "border-color 0.3s, color 0.3s",
             }}
           >
-            {JSON.stringify(bounds)}
+            {JSON.stringify(boundsDocument(bounds))}
           </Box>
         </Stack>
 

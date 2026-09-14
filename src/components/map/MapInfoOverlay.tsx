@@ -1,16 +1,16 @@
 import { Box, Typography, Paper, Stack, Collapse } from "@mui/material";
 import { useState } from "react";
-import { getPublicUrl } from "../../utils/pathUtils";
 import { OutputField } from "../common/OutputField";
-import type { MapMetadata } from "../../types/gameModels";
+import type { MapDocument } from "../../api/content";
 import { theme } from "../../theme/theme";
 import { usePlatform } from "../../hooks/usePlatform";
+import { MAP_PLACEHOLDER, mapThumbnail } from "./mapGeometry";
 
 interface MapInfoOverlayProps {
   gameName?: string;
   coords: [number, number];
   region?: string;
-  maps: MapMetadata[];
+  maps: MapDocument[];
   selectedMapId: string;
   onSelectMap: (id: string) => void;
 }
@@ -24,7 +24,7 @@ export const MapInfoOverlay = ({
   onSelectMap,
 }: MapInfoOverlayProps) => {
   const [expanded, setExpanded] = useState(false);
-  const currentMap = maps.find(m => m.id === selectedMapId);
+  const currentMap = maps.find((map) => map.extId === selectedMapId);
   const { isMobile } = usePlatform();
 
   return (
@@ -40,7 +40,7 @@ export const MapInfoOverlay = ({
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        width: isMobile? "auto" : "400px",
+        width: isMobile ? "auto" : "400px",
         transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
       }}
     >
@@ -70,40 +70,62 @@ export const MapInfoOverlay = ({
               boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
             }}
           >
-            <img src={getPublicUrl(currentMap?.thumbnail || "https://placehold.co/100x100/333/fff?text=Map")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <img
+              src={(currentMap && mapThumbnail(currentMap)) || MAP_PLACEHOLDER}
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
             <Stack sx={{ position: "absolute", bottom: 0, width: "100%", bgcolor: "rgba(0,0,0,0.6)", textAlign: "center" }}>
-              <Typography variant="caption" sx={{ fontSize: "9px", fontWeight: 800 }}>MAPAS</Typography>
+              <Typography variant="caption" sx={{ fontSize: "9px", fontWeight: 800 }}>
+                MAPAS
+              </Typography>
             </Stack>
           </Box>
         </Stack>
-        <Collapse in={expanded} sx={{p: 0, m: 0}}>
+        <Collapse in={expanded} sx={{ p: 0, m: 0 }}>
           <Stack spacing={1}>
-            <Typography variant="subtitle2" sx={{ color: "designTokens.colors.fieldLabel", display: "block", fontSize: "0.65rem" }}>SELECIONAR MAPA</Typography>
+            <Typography variant="subtitle2" sx={{ color: "designTokens.colors.fieldLabel", display: "block", fontSize: "0.65rem" }}>
+              SELECIONAR MAPA
+            </Typography>
             <Stack direction="row" spacing={1} sx={{ overflowX: "auto" }}>
               {maps.map((map) => (
                 <Box
-                  key={map.id}
-                  onClick={() => { onSelectMap(map.id); setExpanded(false); }}
+                  key={map.extId}
+                  onClick={() => {
+                    onSelectMap(map.extId);
+                    setExpanded(false);
+                  }}
                   sx={{
-                    minWidth: 80, height: 80, borderRadius: 1,
-                    border: selectedMapId === map.id ? 2 : 1,
-                    borderColor: selectedMapId === map.id ? "primary.main" : "divider",
-                    overflow: "hidden", cursor: "pointer", position: "relative",
-                    opacity: selectedMapId === map.id ? 1 : 0.7, transition: "all 0.2s",
+                    minWidth: 80,
+                    height: 80,
+                    borderRadius: 1,
+                    border: selectedMapId === map.extId ? 2 : 1,
+                    borderColor: selectedMapId === map.extId ? "primary.main" : "divider",
+                    overflow: "hidden",
+                    cursor: "pointer",
+                    position: "relative",
+                    opacity: selectedMapId === map.extId ? 1 : 0.7,
+                    transition: "all 0.2s",
                     "&:hover": { opacity: 1, borderColor: "rgba(255,255,255,0.5)" },
                   }}
                 >
-                  <img src={getPublicUrl(map.thumbnail || "https://placehold.co/100x100/333/fff?text=Map")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  <Typography variant="caption" sx={{ position: "absolute", bottom: 0, width: "100%", bgcolor: "rgba(0,0,0,0.7)", fontSize: "10px", textAlign: "center", p: 0.5 }}>{map.name}</Typography>
+                  <img src={mapThumbnail(map) ?? MAP_PLACEHOLDER} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  <Typography
+                    variant="caption"
+                    sx={{ position: "absolute", bottom: 0, width: "100%", bgcolor: "rgba(0,0,0,0.7)", fontSize: "10px", textAlign: "center", p: 0.5 }}
+                  >
+                    {map.name}
+                  </Typography>
                 </Box>
               ))}
             </Stack>
           </Stack>
         </Collapse>
-        {!isMobile && <Stack direction={"row"} spacing={1.5}>
-          <OutputField label="Região" values={[region]} flex={1} />
-          <OutputField label="Coordenadas" values={[`X: ${coords[1].toFixed(1)}`, `Y: ${coords[0].toFixed(1)}`]} flex={1.5} />
-        </Stack>}
+        {!isMobile && (
+          <Stack direction={"row"} spacing={1.5}>
+            <OutputField label="Região" values={[region]} flex={1} />
+            <OutputField label="Coordenadas" values={[`X: ${coords[1].toFixed(1)}`, `Y: ${coords[0].toFixed(1)}`]} flex={1.5} />
+          </Stack>
+        )}
       </Stack>
     </Paper>
   );

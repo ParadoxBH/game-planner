@@ -172,6 +172,32 @@ class WorldApiIntegrationTest extends ContentApiTest {
     }
 
     @Test
+    void markersCarryRespawnCategoriesAndFindPointsThatYieldAnItem() throws Exception {
+        send(post("/api/v1/games/{game}/entities", game), "editor", json("""
+                { 'extId': 'arvore', 'name': 'Arvore', 'categories': ['planta'], 'respawnDelayMinutes': 30,
+                  'drops': [ { 'target': { 'kind': 'item', 'extId': 'madeira' }, 'chance': 1, 'amount': 2 } ] }
+                """))
+                .andExpect(status().isCreated());
+        point("a1", "'map': 'main', 'position': 'POINT (1 1)',"
+                + " 'occupants': [ { 'target': { 'kind': 'entity', 'extId': 'arvore' } } ]");
+        point("a2", "'map': 'main', 'position': 'POINT (2 2)', 'respawnDelayMinutes': 5,"
+                + " 'drops': [ { 'target': { 'kind': 'item', 'extId': 'resina' }, 'amount': 1 } ]");
+        point("a3", "'map': 'main', 'position': 'POINT (3 3)'");
+
+        // Sem tempo próprio, o ponto usa o respawn da entidade que aparece nele.
+        mvc.perform(get(MARKERS, game, "main"))
+                .andExpect(jsonPath("$.content[0].respawnDelayMinutes").value(30))
+                .andExpect(jsonPath("$.content[0].occupants[0].categories[0]").value("planta"))
+                .andExpect(jsonPath("$.content[0].occupants[0].respawnDelayMinutes").value(30))
+                .andExpect(jsonPath("$.content[1].respawnDelayMinutes").value(5));
+
+        mvc.perform(get(MARKERS, game, "main").param("yields", "item:madeira"))
+                .andExpect(jsonPath("$.content[*].extId", containsInAnyOrder("a1")));
+        mvc.perform(get(MARKERS, game, "main").param("yields", "item:resina"))
+                .andExpect(jsonPath("$.content[*].extId", containsInAnyOrder("a2")));
+    }
+
+    @Test
     void rejectsGeometryThatDoesNotFitTheField() throws Exception {
         send(post(SPAWN_POINTS, game), "editor", json("{ 'extId': 's1' }")).andExpect(status().isBadRequest());
         send(post(SPAWN_POINTS, game), "editor", json("{ 'extId': 's2', 'position': 'POINT (1)' }"))

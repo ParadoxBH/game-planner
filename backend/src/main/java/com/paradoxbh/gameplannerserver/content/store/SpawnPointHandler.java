@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 import com.paradoxbh.gameplannerserver.content.model.ContentQuery;
 import com.paradoxbh.gameplannerserver.content.model.Drop;
 import com.paradoxbh.gameplannerserver.content.model.Occupant;
+import com.paradoxbh.gameplannerserver.content.model.Reference;
 import com.paradoxbh.gameplannerserver.content.model.SpawnPointDocument;
 import com.paradoxbh.gameplannerserver.content.store.ChildRows.Table;
 
@@ -33,13 +35,21 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
     record Parts(Map<String, List<Occupant>> occupants, Map<String, List<Drop>> drops) {
     }
 
-    /** Ponto num mapa, compacto para desenhar muitos de uma vez. */
+    /**
+     * Ponto num mapa, compacto para desenhar muitos de uma vez. {@code iconMediaId} é o ícone de exibição do
+     * ponto; {@code respawnDelayMinutes}, o do ponto ou, sem ele, o do primeiro ocupante que tem.
+     */
     public record Marker(String extId, String name, String position, String location, String respawnMode,
-                         List<MarkerOccupant> occupants, List<String> events) {
+                         Integer respawnDelayMinutes, String iconMediaId, List<MarkerOccupant> occupants,
+                         List<String> events) {
     }
 
-    /** Ocupante com nome e ícone já resolvidos; nulos quando o alvo não está cadastrado. */
-    public record MarkerOccupant(String kind, String extId, String name, String iconMediaId, BigDecimal chance) {
+    /**
+     * Ocupante com nome, ícone e categorias já resolvidos; nome e ícone nulos quando o alvo não está
+     * cadastrado. {@code respawnDelayMinutes} é o da entidade.
+     */
+    public record MarkerOccupant(String kind, String extId, String name, String iconMediaId, BigDecimal chance,
+                                 List<String> categories, Integer respawnDelayMinutes) {
     }
 
     /** {@code truncated} diz se ficou ponto de fora por causa do limite. */
@@ -132,7 +142,8 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
 
     /**
      * map e location são códigos (location também pega os pontos dentro da área do local);
-     * occupant e drops aceitam "tipo:id" ou "id"; occupantCategory é a categoria do ocupante;
+     * occupant e drops aceitam "tipo:id" ou "id"; yields também, e soma aos drops do ponto os das
+     * entidades que aparecem nele; occupantCategory é a categoria do ocupante;
      * bbox é "minX,minY,maxX,maxY" em coordenadas de jogo.
      */
     @Override
@@ -142,8 +153,29 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
                 "location", inLocation(),
                 "occupant", childReference("spawn_occupant", "spawn_ext_id", null),
                 "drops", childReference("drop_entry", "source_ext_id", "x.source_kind = 'spawn_point'"),
+                "yields", yields(),
                 "occupantCategory", occupantCategory(),
                 "bbox", bbox());
+    }
+
+    /** O ponto rende o alvo: drop do próprio ponto ou drop de uma entidade que aparece nele. */
+    private static Filter yields() {
+        return (name, value, param, params) -> {
+            Reference target = Reference.parse(value, name);
+            params.put(param, target.extId());
+            String kind = "";
+            if (target.kind() != null) {
+                params.put(param + "Kind", target.kind());
+                kind = " AND (d.target_kind IS NULL OR d.target_kind = :" + param + "Kind)";
+            }
+            return "(EXISTS (SELECT 1 FROM drop_entry d WHERE d.game_id = t.game_id AND d.source_kind = 'spawn_point'"
+                    + " AND d.source_ext_id = t.ext_id AND d.target_ext_id = :" + param + kind + ")"
+                    + " OR EXISTS (SELECT 1 FROM spawn_occupant o JOIN drop_entry d ON d.game_id = o.game_id"
+                    + " AND d.source_kind = 'entity' AND d.source_ext_id = o.target_ext_id"
+                    + " WHERE o.game_id = t.game_id AND o.spawn_ext_id = t.ext_id"
+                    + " AND (o.target_kind IS NULL OR o.target_kind = 'entity')"
+                    + " AND d.target_ext_id = :" + param + kind + "))";
+        };
     }
 
     /** Sem nome próprio, vale o nome de exibição de content_ref: o do primeiro ocupante cadastrado. */
@@ -166,7 +198,10 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
 
         params.put("limit", limit);
         List<Map<String, Object>> rows = jdbc.sql("SELECT t.ext_id, t.name, ST_AsEWKB(t.position) AS position,"
-                        + " t.location_ext_id, t.respawn_mode FROM spawn_point t" + where
+                        + " t.location_ext_id, t.respawn_mode, t.respawn_delay_minutes,"
+                        + " (SELECT c.icon_media_id FROM content_ref c WHERE c.game_id = t.game_id"
+                        + " AND c.kind = 'spawn_point' AND c.ext_id = t.ext_id) AS icon_media_id"
+                        + " FROM spawn_point t" + where
                         + " ORDER BY t.ext_id LIMIT :limit")
                 .params(params)
                 .query().listOfRows();
@@ -177,7 +212,14 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
 
         Map<String, List<MarkerOccupant>> occupants = new HashMap<>();
         jdbc.sql("""
-                SELECT o.spawn_ext_id, o.target_kind, o.target_ext_id, o.chance, r.name, r.icon_media_id
+                SELECT o.spawn_ext_id, o.target_kind, o.target_ext_id, o.chance, r.name, r.icon_media_id,
+                       ARRAY(SELECT DISTINCT cc.category_ext_id FROM content_category cc
+                             WHERE cc.game_id = o.game_id AND cc.ext_id = o.target_ext_id
+                               AND (o.target_kind IS NULL OR cc.kind = o.target_kind)
+                             ORDER BY cc.category_ext_id) AS categories,
+                       (SELECT e.respawn_delay_minutes FROM entity e
+                         WHERE e.game_id = o.game_id AND e.ext_id = o.target_ext_id
+                           AND (o.target_kind IS NULL OR o.target_kind = 'entity')) AS respawn_delay_minutes
                 FROM spawn_occupant o
                 LEFT JOIN LATERAL (
                     SELECT c.name, c.icon_media_id FROM content_ref c
@@ -192,7 +234,9 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
                 .query(rs -> {
                     occupants.computeIfAbsent(rs.getString("spawn_ext_id"), key -> new ArrayList<>())
                             .add(new MarkerOccupant(rs.getString("target_kind"), rs.getString("target_ext_id"),
-                                    rs.getString("name"), rs.getString("icon_media_id"), rs.getBigDecimal("chance")));
+                                    rs.getString("name"), rs.getString("icon_media_id"), rs.getBigDecimal("chance"),
+                                    List.of((String[]) rs.getArray("categories").getArray()),
+                                    (Integer) rs.getObject("respawn_delay_minutes")));
                 });
 
         Map<String, List<String>> events = new HashMap<>();
@@ -209,9 +253,15 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
 
         List<Marker> content = rows.stream().map(row -> {
             String id = Rows.string(row, "ext_id");
+            List<MarkerOccupant> own = occupants.getOrDefault(id, List.of());
+            Integer delay = Rows.integer(row, "respawn_delay_minutes");
+            if (delay == null) {
+                delay = own.stream().map(MarkerOccupant::respawnDelayMinutes).filter(Objects::nonNull).findFirst()
+                        .orElse(null);
+            }
             return new Marker(id, Rows.string(row, "name"), Geometries.fromWkb(row.get("position")),
-                    Rows.string(row, "location_ext_id"), Rows.string(row, "respawn_mode"),
-                    occupants.getOrDefault(id, List.of()), events.getOrDefault(id, List.of()));
+                    Rows.string(row, "location_ext_id"), Rows.string(row, "respawn_mode"), delay,
+                    Rows.string(row, "icon_media_id"), own, events.getOrDefault(id, List.of()));
         }).toList();
         return new Markers(content, total, total > content.size());
     }

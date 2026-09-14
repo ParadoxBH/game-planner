@@ -22,14 +22,77 @@ import SelectAllIcon from "@mui/icons-material/SelectAll";
 import DeselectIcon from "@mui/icons-material/Deselect";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { useMemo, useState } from "react";
-import type { ReferencePoints, Entity, Item } from "../../types/gameModels";
-import { getPublicUrl } from "../../utils/pathUtils";
+import { useState } from "react";
+import type { LocationDocument, MapMarker, MarkerOccupant } from "../../api/content";
+import { mediaUrl } from "../../api/references";
+
+export const SPAWN_TYPE = "spawn";
+export const UNCATEGORIZED = "desconhecido";
+
+const TYPE_LABELS: Record<string, string> = {
+  spawn: "Pontos de spawn",
+  region: "Regiões",
+  biome: "Biomas",
+  poi: "Pontos de interesse",
+  location: "Localizações",
+};
+
+export function typeLabel(type: string): string {
+  return TYPE_LABELS[type] ?? type.replace(/_/g, " ");
+}
+
+export function locationTypeOf(location: LocationDocument): string {
+  return location.locationType ?? "region";
+}
+
+/** Categoria usada no filtro: a primeira do ocupante. */
+export function occupantCategory(occupant: MarkerOccupant): string {
+  return occupant.categories[0] ?? UNCATEGORIZED;
+}
+
+export interface FilterEntity {
+  count: number;
+  name: string;
+  iconMediaId: string | null;
+}
+
+export interface FilterStats {
+  types: [string, number][];
+  categories: [string, { count: number; entities: Record<string, FilterEntity> }][];
+}
+
+/** Tipos (spawn e tipos de local) e categorias com os ocupantes de cada uma, com as contagens. */
+export function computeFilterStats(markers: MapMarker[], locations: LocationDocument[]): FilterStats {
+  const typeCount: Record<string, number> = {};
+  if (markers.length > 0) typeCount[SPAWN_TYPE] = markers.length;
+  locations.forEach((location) => {
+    const type = locationTypeOf(location);
+    typeCount[type] = (typeCount[type] ?? 0) + 1;
+  });
+
+  const categories: Record<string, { count: number; entities: Record<string, FilterEntity> }> = {};
+  markers.forEach((marker) =>
+    marker.occupants.forEach((occupant) => {
+      const category = occupantCategory(occupant);
+      if (!categories[category]) categories[category] = { count: 0, entities: {} };
+      const group = categories[category];
+      group.count++;
+      if (!group.entities[occupant.extId]) {
+        group.entities[occupant.extId] = { count: 0, name: occupant.name ?? occupant.extId, iconMediaId: occupant.iconMediaId };
+      }
+      group.entities[occupant.extId].count++;
+    }),
+  );
+
+  return {
+    types: Object.entries(typeCount).sort((a, b) => b[1] - a[1]),
+    categories: Object.entries(categories).sort((a, b) => b[1].count - a[1].count),
+  };
+}
 
 interface MapFilterDrawerProps {
-  referencePoints: ReferencePoints[];
-  entities: Entity[];
-  items: Item[];
+  stats: FilterStats;
+  categoryNames: Map<string, string>;
   visibleTypes: string[];
   setVisibleTypes: (types: string[]) => void;
   visibleCategories: string[];
@@ -41,8 +104,8 @@ interface MapFilterDrawerProps {
 }
 
 export const MapFilterDrawer = ({
-  referencePoints,
-  entities,
+  stats,
+  categoryNames,
   visibleTypes,
   setVisibleTypes,
   visibleCategories,
@@ -52,124 +115,44 @@ export const MapFilterDrawer = ({
   hideCollected,
   setHideCollected,
 }: MapFilterDrawerProps) => {
-  const [open, setOpen] = useState<boolean>();
+  const [open, setOpen] = useState(false);
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
 
-  const [expandedCategories, setExpandedCategories] = useState<
-    Record<string, boolean>
-  >({});
-
-  const entityLookup = useMemo(() => {
-    const lookup: Record<string, Entity> = {};
-    entities.forEach((e) => (lookup[e.id] = e));
-    return lookup;
-  }, [entities]);
-
-  const stats = useMemo(() => {
-    const typeCount: Record<string, number> = {};
-    const categoryMap: Record<
-      string,
-      {
-        count: number;
-        entities: Record<
-          string,
-          { count: number; name: string; icon?: string }
-        >;
-      }
-    > = {};
-
-    referencePoints.forEach((p) => {
-      // Count types
-      typeCount[p.type] = (typeCount[p.type] || 0) + 1;
-
-      // Hierarchical grouping - skip for locations as requested
-      if (p.type === "location") return;
-
-      const entityIds = new Set<string>();
-      if (p.entityId) entityIds.add(p.entityId);
-      if (p.spawns) p.spawns.forEach(sp => entityIds.add(sp.entityId));
-
-      entityIds.forEach(eId => {
-        const entity = entityLookup[eId];
-        const category = entity?.category
-          ? Array.isArray(entity.category)
-            ? entity.category[0]
-            : entity.category
-          : "desconhecido";
-
-        if (!categoryMap[category])
-          categoryMap[category] = { count: 0, entities: {} };
-        categoryMap[category].count++;
-
-        if (!categoryMap[category].entities[eId]) {
-          categoryMap[category].entities[eId] = {
-            count: 0,
-            name: entity?.name || eId,
-            icon: entity?.icon,
-          };
-        }
-        categoryMap[category].entities[eId].count++;
-      });
-    });
-
-    return {
-      types: Object.entries(typeCount).sort((a, b) => b[1] - a[1]),
-      categories: Object.entries(categoryMap).sort(
-        (a, b) => b[1].count - a[1].count,
-      ),
-    };
-  }, [referencePoints, entityLookup]);
+  const categoryLabel = (category: string) => categoryNames.get(category) ?? category.replace(/_/g, " ");
 
   const toggleType = (type: string) => {
-    if (visibleTypes.includes(type))
-      setVisibleTypes(visibleTypes.filter((t) => t !== type));
+    if (visibleTypes.includes(type)) setVisibleTypes(visibleTypes.filter((t) => t !== type));
     else setVisibleTypes([...visibleTypes, type]);
   };
 
   const toggleCategory = (category: string) => {
     const categoryData = stats.categories.find(([cat]) => cat === category);
     if (!categoryData) return;
-
     const childEntityIds = Object.keys(categoryData[1].entities);
-    const isCurrentlySelected = visibleCategories.includes(category);
 
-    if (isCurrentlySelected) {
+    if (visibleCategories.includes(category)) {
       setVisibleCategories(visibleCategories.filter((c) => c !== category));
-      setVisibleEntities(
-        visibleEntities.filter((id) => !childEntityIds.includes(id)),
-      );
+      setVisibleEntities(visibleEntities.filter((id) => !childEntityIds.includes(id)));
     } else {
       setVisibleCategories([...visibleCategories, category]);
-      setVisibleEntities(
-        Array.from(new Set([...visibleEntities, ...childEntityIds])),
-      );
+      setVisibleEntities(Array.from(new Set([...visibleEntities, ...childEntityIds])));
     }
   };
 
   const toggleEntity = (entityId: string, parentCategory: string) => {
-    const isVisible = visibleEntities.includes(entityId);
-    let newVisibleEntities: string[];
+    const next = visibleEntities.includes(entityId)
+      ? visibleEntities.filter((id) => id !== entityId)
+      : [...visibleEntities, entityId];
+    setVisibleEntities(next);
 
-    if (isVisible) {
-      newVisibleEntities = visibleEntities.filter((id) => id !== entityId);
-    } else {
-      newVisibleEntities = [...visibleEntities, entityId];
-    }
-
-    setVisibleEntities(newVisibleEntities);
-
-    // Update parent category based on children
-    const categoryData = stats.categories.find(
-      ([cat]) => cat === parentCategory,
-    );
+    // A categoria acompanha os filhos: marcada se algum está visível.
+    const categoryData = stats.categories.find(([cat]) => cat === parentCategory);
     if (categoryData) {
-      const children = Object.keys(categoryData[1].entities);
-      const anyVisible = children.some((id) => newVisibleEntities.includes(id));
+      const anyVisible = Object.keys(categoryData[1].entities).some((id) => next.includes(id));
       if (anyVisible && !visibleCategories.includes(parentCategory)) {
         setVisibleCategories([...visibleCategories, parentCategory]);
       } else if (!anyVisible && visibleCategories.includes(parentCategory)) {
-        setVisibleCategories(
-          visibleCategories.filter((c) => c !== parentCategory),
-        );
+        setVisibleCategories(visibleCategories.filter((c) => c !== parentCategory));
       }
     }
   };
@@ -177,21 +160,13 @@ export const MapFilterDrawer = ({
   const selectAll = () => {
     setVisibleTypes(stats.types.map((t) => t[0]));
     setVisibleCategories(stats.categories.map((c) => c[0]));
-    const allEntityIds: string[] = [];
-    stats.categories.forEach(([_, data]) =>
-      allEntityIds.push(...Object.keys(data.entities)),
-    );
-    setVisibleEntities(Array.from(new Set(allEntityIds)));
+    setVisibleEntities(Array.from(new Set(stats.categories.flatMap(([, data]) => Object.keys(data.entities)))));
   };
 
   const clearAll = () => {
     setVisibleTypes([]);
     setVisibleCategories([]);
     setVisibleEntities([]);
-  };
-
-  const toggleExpand = (category: string) => {
-    setExpandedCategories((prev) => ({ ...prev, [category]: !prev[category] }));
   };
 
   return (
@@ -206,17 +181,14 @@ export const MapFilterDrawer = ({
             width: 34,
             minHeight: "auto",
             minWidth: "auto",
-            
             color: "black",
-            zIndex: 1100, 
-            bgcolor: "rgba(255,255,255)", 
-            borderRadius: 0.5, 
-            p: 0.5, 
+            zIndex: 1100,
+            bgcolor: "rgba(255,255,255)",
+            borderRadius: 0.5,
+            p: 0.5,
             border: "2px solid rgba(0, 0, 0, 0.2)",
             backgroundClip: "padding-box",
-            "&:hover": {
-              bgcolor: darken("rgba(255,255,255)",0.1),
-            }
+            "&:hover": { bgcolor: darken("rgba(255,255,255)", 0.1) },
           }}
           onClick={() => setOpen(true)}
           variant="contained"
@@ -245,15 +217,7 @@ export const MapFilterDrawer = ({
             flexDirection: "column",
           }}
         >
-          {/* Header */}
-          <Box
-            sx={{
-              p: 2,
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
+          <Box sx={{ p: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <Stack direction="row" spacing={1} alignItems="center">
               <FilterListIcon color="primary" />
               <Typography variant="h6" sx={{ fontSize: "1rem" }}>
@@ -267,45 +231,23 @@ export const MapFilterDrawer = ({
 
           <Divider />
 
-          {/* Action Buttons */}
           <Stack direction="row" spacing={1} sx={{ p: 1.5 }}>
-            <Button
-              fullWidth
-              size="small"
-              variant="outlined"
-              startIcon={<SelectAllIcon />}
-              onClick={selectAll}
-              sx={{ fontSize: "0.7rem" }}
-            >
+            <Button fullWidth size="small" variant="outlined" startIcon={<SelectAllIcon />} onClick={selectAll} sx={{ fontSize: "0.7rem" }}>
               Todos
             </Button>
-            <Button
-              fullWidth
-              size="small"
-              variant="outlined"
-              startIcon={<DeselectIcon />}
-              onClick={clearAll}
-              sx={{ fontSize: "0.7rem" }}
-            >
+            <Button fullWidth size="small" variant="outlined" startIcon={<DeselectIcon />} onClick={clearAll} sx={{ fontSize: "0.7rem" }}>
               Nenhum
             </Button>
           </Stack>
 
           <Divider />
 
-          {/* Special Filters */}
           <Box sx={{ px: 2, py: 1.5 }}>
             <FormControlLabel
-              control={
-                <Checkbox
-                  size="small"
-                  checked={hideCollected}
-                  onChange={(e) => setHideCollected(e.target.checked)}
-                />
-              }
+              control={<Checkbox size="small" checked={hideCollected} onChange={(event) => setHideCollected(event.target.checked)} />}
               label={
                 <Typography variant="body2" sx={{ fontSize: "0.85rem" }}>
-                  Ocultar Coletados
+                  Ocultar coletados
                 </Typography>
               }
             />
@@ -313,67 +255,27 @@ export const MapFilterDrawer = ({
 
           <Divider />
 
-          {/* Content */}
           <Box sx={{ flexGrow: 1, overflowY: "auto", p: 1.5 }}>
-            {/* Point Types */}
             <Typography
               variant="subtitle2"
               color="primary"
               gutterBottom
-              sx={{
-                textTransform: "uppercase",
-                fontSize: "0.65rem",
-                mb: 1.5,
-                opacity: 0.7,
-                ml: 1,
-              }}
+              sx={{ textTransform: "uppercase", fontSize: "0.65rem", mb: 1.5, opacity: 0.7, ml: 1 }}
             >
-              Tipos de Ponto
+              Tipos
             </Typography>
             <List dense disablePadding sx={{ mb: 3 }}>
               {stats.types.map(([type, count]) => (
                 <ListItem key={type} disablePadding sx={{ mb: 0.5 }}>
                   <FormControlLabel
-                    sx={{
-                      width: "100%",
-                      ml: 0,
-                      mr: 0,
-                      px: 1,
-                      borderRadius: 1,
-                      "&:hover": { bgcolor: "rgba(255,255,255,0.05)" },
-                    }}
-                    control={
-                      <Checkbox
-                        size="small"
-                        checked={visibleTypes.includes(type)}
-                        onChange={() => toggleType(type)}
-                      />
-                    }
+                    sx={{ width: "100%", ml: 0, mr: 0, px: 1, borderRadius: 1, "&:hover": { bgcolor: "rgba(255,255,255,0.05)" } }}
+                    control={<Checkbox size="small" checked={visibleTypes.includes(type)} onChange={() => toggleType(type)} />}
                     label={
-                      <Stack
-                        direction="row"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        sx={{ width: "100%", ml: 1 }}
-                      >
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            textTransform: "capitalize",
-                            fontSize: "0.85rem",
-                          }}
-                        >
-                          {type}
+                      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ width: "100%", ml: 1 }}>
+                        <Typography variant="body2" sx={{ fontSize: "0.85rem" }}>
+                          {typeLabel(type)}
                         </Typography>
-                        <Chip
-                          label={count}
-                          size="small"
-                          sx={{
-                            height: 18,
-                            fontSize: "0.6rem",
-                            bgcolor: "rgba(255,255,255,0.1)",
-                          }}
-                        />
+                        <Chip label={count} size="small" sx={{ height: 18, fontSize: "0.6rem", bgcolor: "rgba(255,255,255,0.1)" }} />
                       </Stack>
                     }
                   />
@@ -385,188 +287,100 @@ export const MapFilterDrawer = ({
               variant="subtitle2"
               color="primary"
               gutterBottom
-              sx={{
-                textTransform: "uppercase",
-                fontSize: "0.65rem",
-                mb: 1.5,
-                opacity: 0.7,
-                ml: 1,
-              }}
+              sx={{ textTransform: "uppercase", fontSize: "0.65rem", mb: 1.5, opacity: 0.7, ml: 1 }}
             >
-              Categorias & Entidades
+              Categorias e ocupantes
             </Typography>
             <List dense disablePadding>
-              {stats.categories.map(([cat, data]) => {
+              {stats.categories.map(([category, data]) => {
                 const children = Object.keys(data.entities);
-                const visibleChildren = children.filter((id) =>
-                  visibleEntities.includes(id),
-                );
-                const allSelected =
-                  children.length > 0 &&
-                  visibleChildren.length === children.length;
+                const visibleChildren = children.filter((id) => visibleEntities.includes(id));
+                const allSelected = children.length > 0 && visibleChildren.length === children.length;
                 const someSelected = visibleChildren.length > 0 && !allSelected;
-                const isExpanded = !!expandedCategories[cat];
+                const isExpanded = !!expandedCategories[category];
 
                 return (
-                  <Box key={cat} sx={{ mb: 0.5 }}>
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      sx={{
-                        px: 1,
-                        borderRadius: 1,
-                        "&:hover": { bgcolor: "rgba(255,255,255,0.05)" },
-                      }}
-                    >
+                  <Box key={category} sx={{ mb: 0.5 }}>
+                    <Stack direction="row" alignItems="center" sx={{ px: 1, borderRadius: 1, "&:hover": { bgcolor: "rgba(255,255,255,0.05)" } }}>
                       <IconButton
                         size="small"
-                        onClick={() => toggleExpand(cat)}
+                        onClick={() => setExpandedCategories((prev) => ({ ...prev, [category]: !prev[category] }))}
                         sx={{ p: 0.5, mr: 0.5 }}
                       >
-                        {isExpanded ? (
-                          <ExpandMoreIcon fontSize="small" />
-                        ) : (
-                          <ChevronRightIcon fontSize="small" />
-                        )}
+                        {isExpanded ? <ExpandMoreIcon fontSize="small" /> : <ChevronRightIcon fontSize="small" />}
                       </IconButton>
                       <FormControlLabel
                         sx={{ flexGrow: 1, ml: 0, mr: 0 }}
                         control={
-                          <Checkbox
-                            size="small"
-                            checked={allSelected}
-                            indeterminate={someSelected}
-                            onChange={() => toggleCategory(cat)}
-                          />
+                          <Checkbox size="small" checked={allSelected} indeterminate={someSelected} onChange={() => toggleCategory(category)} />
                         }
                         label={
-                          <Stack
-                            direction="row"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            sx={{ ml: 1 }}
-                          >
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                textTransform: "capitalize",
-                                fontSize: "0.85rem",
-                                fontWeight: 600,
-                              }}
-                            >
-                              {cat.replace(/_/g, " ")}
+                          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ ml: 1 }}>
+                            <Typography variant="body2" sx={{ fontSize: "0.85rem", fontWeight: 600 }}>
+                              {categoryLabel(category)}
                             </Typography>
-                            <Chip
-                              label={data.count}
-                              size="small"
-                              sx={{
-                                height: 18,
-                                fontSize: "0.6rem",
-                                bgcolor: "rgba(255,255,255,0.1)",
-                              }}
-                            />
+                            <Chip label={data.count} size="small" sx={{ height: 18, fontSize: "0.6rem", bgcolor: "rgba(255,255,255,0.1)" }} />
                           </Stack>
                         }
                       />
                     </Stack>
                     <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                      <Box
-                        sx={{
-                          p: 1,
-                          pl: 2,
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: 1,
-                        }}
-                      >
-                        {Object.entries(data.entities).map(
-                          ([entityId, entityInfo]) => {
-                            const isVisible =
-                              visibleEntities.includes(entityId);
-                            return (
-                              <Tooltip
-                                key={entityId}
-                                title={`${entityInfo.name} (${entityInfo.count})`}
-                                arrow
+                      <Box sx={{ p: 1, pl: 2, display: "flex", flexWrap: "wrap", gap: 1 }}>
+                        {Object.entries(data.entities).map(([entityId, entity]) => {
+                          const isVisible = visibleEntities.includes(entityId);
+                          return (
+                            <Tooltip key={entityId} title={`${entity.name} (${entity.count})`} arrow>
+                              <Box
+                                onClick={() => toggleEntity(entityId, category)}
+                                sx={{
+                                  width: 42,
+                                  height: 42,
+                                  borderRadius: 1,
+                                  border: 1,
+                                  borderColor: isVisible ? "primary.main" : "divider",
+                                  bgcolor: isVisible ? "rgba(255, 68, 0, 0.15)" : "rgba(255,255,255,0.03)",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  cursor: "pointer",
+                                  position: "relative",
+                                  transition: "all 0.2s",
+                                  "&:hover": { transform: "translateY(-2px)" },
+                                }}
                               >
+                                {entity.iconMediaId ? (
+                                  <img
+                                    src={mediaUrl(entity.iconMediaId)}
+                                    style={{
+                                      width: "75%",
+                                      height: "75%",
+                                      objectFit: "contain",
+                                      filter: isVisible ? "none" : "grayscale(100%) opacity(0.6)",
+                                    }}
+                                  />
+                                ) : (
+                                  <Box sx={{ width: "60%", height: "60%", borderRadius: "50%", bgcolor: "divider" }} />
+                                )}
                                 <Box
-                                  onClick={() => toggleEntity(entityId, cat)}
                                   sx={{
-                                    width: 42,
-                                    height: 42,
+                                    position: "absolute",
+                                    bottom: -4,
+                                    right: -4,
+                                    bgcolor: isVisible ? "primary.main" : "grey.800",
+                                    color: "white",
+                                    fontSize: "0.6rem",
+                                    px: 0.6,
                                     borderRadius: 1,
-                                    border: 1,
-                                    borderColor: isVisible
-                                      ? "primary.main"
-                                      : "divider",
-                                    bgcolor: isVisible
-                                      ? "rgba(255, 68, 0, 0.15)"
-                                      : "rgba(255,255,255,0.03)",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    cursor: "pointer",
-                                    position: "relative",
-                                    transition: "all 0.2s",
-                                    "&:hover": {
-                                      bgcolor: isVisible
-                                        ? "rgba(255, 68, 0, 0.25)"
-                                        : "rgba(255,255,255,0.08)",
-                                      borderColor: isVisible
-                                        ? "primary.main"
-                                        : "rgba(255,255,255,0.3)",
-                                      transform: "translateY(-2px)",
-                                    },
-                                    "&:active": { transform: "scale(0.95)" },
+                                    fontWeight: 800,
+                                    zIndex: 1,
                                   }}
                                 >
-                                  {entityInfo.icon ? (
-                                    <img
-                                      src={getPublicUrl(entityInfo.icon)}
-                                      style={{
-                                        width: "75%",
-                                        height: "75%",
-                                        objectFit: "contain",
-                                        filter: isVisible
-                                          ? "none"
-                                          : "grayscale(100%) opacity(0.6)",
-                                      }}
-                                    />
-                                  ) : (
-                                    <Box
-                                      sx={{
-                                        width: "60%",
-                                        height: "60%",
-                                        borderRadius: "50%",
-                                        bgcolor: "divider",
-                                      }}
-                                    />
-                                  )}
-
-                                  <Box
-                                    sx={{
-                                      position: "absolute",
-                                      bottom: -4,
-                                      right: -4,
-                                      bgcolor: isVisible
-                                        ? "primary.main"
-                                        : "grey.800",
-                                      color: "white",
-                                      fontSize: "0.6rem",
-                                      px: 0.6,
-                                      borderRadius: 1,
-                                      fontWeight: 800,
-                                      boxShadow: "0 2px 4px rgba(0,0,0,0.5)",
-                                      zIndex: 1,
-                                    }}
-                                  >
-                                    {entityInfo.count}
-                                  </Box>
+                                  {entity.count}
                                 </Box>
-                              </Tooltip>
-                            );
-                          },
-                        )}
+                              </Box>
+                            </Tooltip>
+                          );
+                        })}
                       </Box>
                     </Collapse>
                   </Box>
@@ -577,10 +391,9 @@ export const MapFilterDrawer = ({
 
           <Divider />
 
-          {/* Footer */}
           <Box sx={{ p: 1.5, bgcolor: "rgba(0,0,0,0.2)", textAlign: "center" }}>
             <Typography variant="caption" color="text.secondary">
-              {visibleEntities.length} entidades ativas no filtro
+              {visibleEntities.length} ocupantes ativos no filtro
             </Typography>
           </Box>
         </Paper>

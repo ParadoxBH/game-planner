@@ -37,6 +37,34 @@ export function useCraftingTree(gameId: string | undefined, target: string | und
   });
 }
 
+/** Um documento pelo código. Sem código, não consulta. */
+export function useContentDocument<T>(gameId: string | undefined, resource: ContentResource, extId: string | null | undefined) {
+  return useQuery({
+    queryKey: ["content", gameId, resource, "get", extId],
+    queryFn: ({ signal }) => contentApi.get<T>(gameId!, resource, extId!, signal),
+    enabled: Boolean(gameId && extId),
+  });
+}
+
+/** Marcadores de um mapa. Ao mudar filtro no mesmo mapa, mantém os anteriores até chegar a resposta. */
+export function useMapMarkers(gameId: string | undefined, mapId: string | undefined, filters: Record<string, string | undefined>) {
+  return useQuery({
+    queryKey: ["map-markers", gameId, mapId, filters],
+    queryFn: ({ signal }) => contentApi.markers(gameId!, mapId!, filters, signal),
+    enabled: Boolean(gameId && mapId),
+    placeholderData: (previous, previousQuery) => (previousQuery?.queryKey[2] === mapId ? previous : undefined),
+  });
+}
+
+/** Busca por nome ou código, a partir de 2 letras. */
+export function useSearch(gameId: string | undefined, term: string, kind?: string) {
+  return useQuery({
+    queryKey: ["search", gameId, term, kind],
+    queryFn: ({ signal }) => gameApi.search(gameId!, term.trim(), kind, signal),
+    enabled: Boolean(gameId) && term.trim().length >= 2,
+  });
+}
+
 /** Plano com vários alvos. Sem alvos, não consulta. */
 export function useCraftingPlan(gameId: string | undefined, targets: { target: string; amount: number }[], choices: string[]) {
   return useQuery({

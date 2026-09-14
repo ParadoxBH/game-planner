@@ -89,6 +89,34 @@ export function parseWKTPolygon(wkt: string): [number, number][] {
 }
 
 /**
+ * Polígonos de um WKT POLYGON ou MULTIPOLYGON, com furos: cada polígono é uma lista de anéis e cada
+ * anel, uma lista de [x, y] (a altura, se houver, fica de fora). Outras geometrias dão lista vazia.
+ */
+export function parseWKTAreas(wkt: string | null | undefined): [number, number][][][] {
+  if (!wkt) return [];
+  const text = wkt.trim();
+  const upper = text.toUpperCase();
+  const isMulti = upper.startsWith("MULTIPOLYGON");
+  if (!isMulti && !upper.startsWith("POLYGON")) return [];
+  if (upper.endsWith("EMPTY")) return [];
+
+  const body = text.slice(text.indexOf("(") + 1, text.lastIndexOf(")"));
+  const ringsOf = (polygon: string): [number, number][][] =>
+    polygon.split(/\)\s*,\s*\(/).map((ring) =>
+      ring
+        .replace(/[()]/g, "")
+        .trim()
+        .split(/\s*,\s*/)
+        .map((pair) => {
+          const [x, y] = pair.trim().split(/\s+/).map(Number);
+          return [x, y] as [number, number];
+        }),
+    );
+
+  return isMulti ? body.split(/\)\s*\)\s*,\s*\(\s*\(/).map(ringsOf) : [ringsOf(body)];
+}
+
+/**
  * Calculates the centroid of a polygon provided as [x, y] coordinates.
  * @param points Array of [x, y] coordinates
  * @returns Centroid as [lat, lng] for Leaflet
