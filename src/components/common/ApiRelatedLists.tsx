@@ -7,7 +7,7 @@ import type {
   Reference,
 } from "../../api/content";
 import { contentRoute, resolvedFrom, sameTarget, type ReferenceIndex } from "../../api/references";
-import { formatAmount, formatChance, formatDate, formatRange } from "../../utils/format";
+import { formatAmount, formatChance, formatDate, formatRange, isoDate } from "../../utils/format";
 import { ContentChip } from "./ContentChip";
 import { DataCard } from "./DataCard";
 import { DataChip } from "./DataChip";
@@ -73,7 +73,7 @@ export function ApiRequiredBy({ entities, target }: { entities: EntityDocument[]
 export function ApiRewardCodes({ codes, target }: { codes: RedemptionCodeDocument[]; target: Reference }) {
   const navigate = useNavigate();
   const { gameId = "" } = useParams<{ gameId: string }>();
-  const today = new Date().toISOString().slice(0, 10);
+  const today = isoDate();
 
   return (
     <Stack spacing={1}>

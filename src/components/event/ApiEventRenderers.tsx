@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import type { EventDocument } from "../../api/content";
 import { contentRoute, currentMedia, mediaUrl } from "../../api/references";
 import { useEventFilter } from "../../context/EventFilterContext";
-import { formatDate } from "../../utils/format";
+import { formatDate, isoDate } from "../../utils/format";
 import { ContentIcon } from "../common/ContentIcon";
 import { DataChip } from "../common/DataChip";
 
@@ -36,14 +36,10 @@ const STATUS: Record<EventStatus, { label: string; color: "success" | "info" | "
   occasional: { label: "Ocasional", color: "default" },
 };
 
-function localIsoDate(date: Date): string {
-  return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, "0"), String(date.getDate()).padStart(2, "0")].join("-");
-}
-
 /** Situação pelo período, com as datas inclusivas. Sem datas, o evento é ocasional. */
 export function eventStatus(event: EventDocument, today: Date = new Date()): EventStatus {
   if (!event.periodStart && !event.periodEnd) return "occasional";
-  const day = localIsoDate(today);
+  const day = isoDate(today);
   if (event.periodStart && day < event.periodStart) return "upcoming";
   if (event.periodEnd && day > event.periodEnd) return "ended";
   return "live";

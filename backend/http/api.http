@@ -488,3 +488,11 @@ Authorization: Bearer {{accessToken}}
 ### Categorias de item, incluindo as que valem para item e entidade
 GET {{api}}/games/heartopia/categories?appliesTo=item&sort=name
 Authorization: Bearer {{accessToken}}
+
+### Codigos ainda validos, sem os ja coletados, com as recompensas resolvidas
+GET {{api}}/games/heartopia/codes?active=true&exclude=m2q7r6a9k3&sort=-addedOn&references=true
+Authorization: Bearer {{accessToken}}
+
+### Colecao com os grupos e os membros resolvidos
+GET {{api}}/games/heartopia/collections/roupas_inverno/details
+Authorization: Bearer {{accessToken}}

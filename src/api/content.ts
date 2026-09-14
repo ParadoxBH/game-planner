@@ -300,6 +300,12 @@ export interface EventRelated {
   collectionGroups: ContentPage<CollectionGroupDocument>;
 }
 
+/** Relações do detalhe de coleção. */
+export interface CollectionRelated {
+  /** Grupos da coleção, cada um com os membros. */
+  groups: ContentPage<CollectionGroupDocument>;
+}
+
 /** Relações do detalhe de loja. */
 export interface ShopRelated {
   /** Categorias da loja, cada uma com os itens à venda. */

@@ -208,6 +208,11 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
                     .append(" AND c.kind = :kind AND c.ext_id = t.ext_id AND c.category_ext_id IN (:withoutCategory))");
             params.put("withoutCategory", codes(withoutCategory, "withoutCategory"));
         }
+        String exclude = query.filters().get("exclude");
+        if (exclude != null && !codes(exclude, "exclude").isEmpty()) {
+            where.append(" AND t.ext_id NOT IN (:exclude)");
+            params.put("exclude", codes(exclude, "exclude"));
+        }
         // Só o que não tem evento ou tem algum dos eventos ativos. Vazio: só o que não tem evento.
         String activeEvents = query.filters().get("activeEvents");
         if (activeEvents != null) {

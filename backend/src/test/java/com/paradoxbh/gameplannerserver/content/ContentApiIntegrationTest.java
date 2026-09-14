@@ -377,6 +377,8 @@ class ContentApiIntegrationTest extends ContentApiTest {
 
         mvc.perform(get(ITEMS, game).param("category", "flor").param("withoutCategory", "raro"))
                 .andExpect(jsonPath("$.content[*].extId", contains("comum")));
+        mvc.perform(get(ITEMS, game).param("exclude", "comum,natal"))
+                .andExpect(jsonPath("$.content[*].extId", contains("loja")));
 
         mvc.perform(get(ITEMS, game).param("trade", "buyable")).andExpect(jsonPath("$.content[*].extId", contains("loja")));
         mvc.perform(get(ITEMS, game).param("trade", "sellable")).andExpect(jsonPath("$.content[*].extId", contains("comum")));

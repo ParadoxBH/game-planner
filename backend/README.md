@@ -225,7 +225,8 @@ definição em `/attributes`, o tipo é conferido e divergência dá `422`.
 
 **Paginação** começa em `page=0`. `sort` aceita `name`, `extId`, `createdAt` e `updatedAt`
 (mais `level` em item e entidade, `periodStart` em evento e `craftTimeSeconds` em receita), com `-` na frente para ordem
-decrescente. Várias `category` combinam com E. Toda listagem aceita também `withoutCategory` (exclui categorias) e
+decrescente. Várias `category` combinam com E. Toda listagem aceita também `withoutCategory` (exclui categorias),
+`exclude` (esconde esses códigos, ex.: os códigos de resgate já coletados) e
 `activeEvents` (esconde conteúdo de evento fora da lista; vazio mostra só o que não tem evento), com códigos
 separados por vírgula. Itens aceitam `trade`: `buyable` (preço base de compra ou vendido em loja), `sellable`,
 `traded` ou `untraded`. Itens e entidades aceitam `variantOf` (código do conteúdo base). Eventos aceitam `type` (tipo do

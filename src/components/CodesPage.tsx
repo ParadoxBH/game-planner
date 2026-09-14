@@ -1,303 +1,280 @@
-import { 
-  Box, 
-  Typography, 
-  Grid, 
-  Card, 
-  Stack,
-  CircularProgress,
-  IconButton,
-  Tooltip,
-  Divider,
-  Snackbar,
-  Alert,
-  Switch,
-} from "@mui/material";
-import { 
-  ContentCopy,
-  Redeem,
-  CalendarToday,
-  TimerOff,
-  CheckCircle,
-  RadioButtonUnchecked,
-} from "@mui/icons-material";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useApi } from "../hooks/useApi";
-import { useState, useMemo, useEffect } from "react";
-import { StyledContainer } from "./common/StyledContainer";
-import { ItemChip } from "./common/ItemChip";
-import { redemptionService } from "../services/redemptionService";
-import type { Item, RedemptionCode } from "../types/gameModels";
-import { codeRepository } from "../repositories/CodeRepository";
-import { itemRepository } from "../repositories/ItemRepository";
-import { theme } from "../theme/theme";
-import { Ribbon } from "./Ribbon";
+import {
+  Alert,
+  Card,
+  CircularProgress,
+  Divider,
+  IconButton,
+  Snackbar,
+  Stack,
+  Switch,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { CalendarToday, CheckCircle, ContentCopy, RadioButtonUnchecked, TimerOff } from "@mui/icons-material";
+import { ApiError } from "../api/ApiError";
+import { MAX_PAGE_SIZE, type ListQuery, type RedemptionCodeDocument } from "../api/content";
+import { ReferenceIndex } from "../api/references";
+import { useContentList } from "../api/useContent";
+import { useDebouncedValue } from "../hooks/useDebouncedValue";
+import { usePagination } from "../hooks/usePagination";
 import { usePlatform } from "../hooks/usePlatform";
+import { redemptionService } from "../services/redemptionService";
+import { formatDate, isoDate } from "../utils/format";
+import { ContentChip } from "./common/ContentChip";
+import { ListingDataView } from "./common/ListingDataView";
+import { StyledContainer } from "./common/StyledContainer";
+import { Ribbon } from "./Ribbon";
 
-export function CodesPage() {
-  const { gameId } = useParams<{ gameId: string }>();
-  const { loading: dbLoading, error: codesError } = useApi(gameId);
+const NO_CRITERIA = {};
+
+interface CodeCardProps {
+  code: RedemptionCodeDocument;
+  references: ReferenceIndex;
+  collected: boolean;
+  onToggle: () => void;
+  onCopy: () => void;
+}
+
+function CodeCard({ code, references, collected, onToggle, onCopy }: CodeCardProps) {
+  const theme = useTheme();
   const { isMobile } = usePlatform();
-  
-  const [codes, setCodes] = useState<RedemptionCode[]>([]);
-  const [items, setItems] = useState<Item[]>([]);
-  const [dataLoading, setDataLoading] = useState(true);
-  
-  const [copySuccess, setCopySuccess] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  
-  // States for filters
+  const expired = code.expiresOn !== null && code.expiresOn < isoDate();
+
+  return (
+    <Card
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: 1,
+        border: 1,
+        borderColor: collected ? "success.dark" : expired ? "error.dark" : "divider",
+        transition: "all 0.3s",
+        "&:hover": { transform: "translateY(-4px)" },
+      }}
+    >
+      {collected ? (
+        <Ribbon backgroundColor={theme.palette.success.main} label="Coletado" />
+      ) : (
+        expired && <Ribbon backgroundColor={theme.palette.error.main} label="Expirado" />
+      )}
+
+      <Stack spacing={1} sx={{ p: isMobile ? 1.5 : 3, flexGrow: 1 }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+          <Stack sx={{ minWidth: 0 }}>
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: 900,
+                letterSpacing: 2,
+                fontFamily: "monospace",
+                wordBreak: "break-all",
+                color: collected ? "success.main" : expired ? "text.disabled" : "primary.main",
+              }}
+            >
+              {code.extId}
+            </Typography>
+            {code.name && code.name !== code.extId && (
+              <Typography variant="caption" color="text.secondary">
+                {code.name}
+              </Typography>
+            )}
+          </Stack>
+          <Stack direction="row" spacing={1}>
+            <Tooltip title={collected ? "Desmarcar como coletado" : "Marcar como coletado"}>
+              <IconButton size="small" onClick={onToggle} sx={{ color: collected ? "success.main" : "text.disabled" }}>
+                {collected ? <CheckCircle fontSize="small" /> : <RadioButtonUnchecked fontSize="small" />}
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Copiar código">
+              <span>
+                <IconButton size="small" onClick={onCopy} disabled={expired && !collected}>
+                  <ContentCopy fontSize="small" />
+                </IconButton>
+              </span>
+            </Tooltip>
+          </Stack>
+        </Stack>
+
+        <Divider />
+
+        <Typography variant="overline" color="text.secondary" sx={{ lineHeight: 1.5 }}>
+          Recompensas
+        </Typography>
+        {code.rewards.length > 0 ? (
+          <Stack direction="row" flexWrap="wrap" useFlexGap sx={{ gap: 1.5 }}>
+            {code.rewards.map((reward, index) => (
+              <ContentChip
+                key={index}
+                target={reward.target}
+                resolved={references.find(reward.target)}
+                amount={reward.amount}
+                size="medium"
+              />
+            ))}
+          </Stack>
+        ) : (
+          <Typography variant="caption" color="text.secondary">
+            Recompensas não informadas.
+          </Typography>
+        )}
+
+        <Stack spacing={0.5} sx={{ mt: "auto", pt: 1 }}>
+          {code.addedOn && (
+            <Stack direction="row" spacing={1} alignItems="center">
+              <CalendarToday sx={{ fontSize: 14, color: "text.disabled" }} />
+              <Typography variant="caption" color="text.secondary">
+                Adicionado em <b>{formatDate(code.addedOn)}</b>
+              </Typography>
+            </Stack>
+          )}
+          <Stack direction="row" spacing={1} alignItems="center">
+            <TimerOff sx={{ fontSize: 14, color: expired ? "error.main" : "warning.main" }} />
+            <Typography variant="caption" sx={{ color: expired ? "error.main" : "text.secondary" }}>
+              {code.expiresOn ? (
+                <>
+                  {expired ? "Expirou" : "Expira"} em <b>{formatDate(code.expiresOn)}</b>
+                </>
+              ) : (
+                "Sem validade informada"
+              )}
+            </Typography>
+          </Stack>
+        </Stack>
+      </Stack>
+    </Card>
+  );
+}
+
+/** Códigos de resgate lidos da API, os mais novos primeiro, com a marcação de coletado guardada no navegador. */
+export function CodesPage() {
+  const { gameId = "" } = useParams<{ gameId: string }>();
+  const pages = usePagination(NO_CRITERIA);
   const [hideExpired, setHideExpired] = useState(true);
   const [hideCollected, setHideCollected] = useState(false);
-  
-  // State for collected codes
-  const [collectedCodes, setCollectedCodes] = useState<string[]>([]);
+  const [collectedCodes, setCollectedCodes] = useState<string[]>(() => redemptionService.getCollectedCodes(gameId));
+  const [copied, setCopied] = useState<string | null>(null);
 
   useEffect(() => {
-    if (dbLoading) return;
-
-    let isMounted = true;
-    setDataLoading(true);
-
-    Promise.all([
-      codeRepository.getAll(),
-      itemRepository.getAll()
-    ]).then(([allCodes, allItems]) => {
-      if (!isMounted) return;
-      setCodes(allCodes);
-      setItems(allItems);
-      setDataLoading(false);
-    }).catch(err => {
-      console.error("Error fetching codes data:", err);
-      if (isMounted) setDataLoading(false);
-    });
-
-    return () => { isMounted = false; };
-  }, [dbLoading]);
-
-  useEffect(() => {
-    if (gameId) {
-      setCollectedCodes(redemptionService.getCollectedCodes(gameId));
-    }
+    setCollectedCodes(redemptionService.getCollectedCodes(gameId));
   }, [gameId]);
 
-  const itemsMap = useMemo(() => {
-    const map = new Map<string, Item>();
-    items.forEach(item => map.set(item.id, item));
-    return map;
-  }, [items]);
+  // A API devolve no máximo 200 por página.
+  useEffect(() => {
+    if (pages.info.pagination.pageSize > MAX_PAGE_SIZE) pages.setPageSize(MAX_PAGE_SIZE);
+  }, [pages.info.pagination.pageSize, pages.setPageSize]);
 
-  const filteredCodes = useMemo<RedemptionCode[]>(() => {
-    if (!codes) return [];
-    
-    const now = new Date();
-    
-    return codes.filter(c => {
-      // Search filter
-      const matchesSearch = c.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            c.rewards.some(r => {
-                              const item = itemsMap.get(r.id);
-                              return item?.name.toLowerCase().includes(searchTerm.toLowerCase()) || r.id.toLowerCase().includes(searchTerm.toLowerCase());
-                            });
-      
-      if (!matchesSearch) return false;
+  const search = useDebouncedValue(pages.info.search);
+  const { pagination } = pages.info;
 
-      // Expired filter
-      const isExpired = new Date(c.expiresAt) < now;
-      if (hideExpired && isExpired) return false;
+  const query = useMemo<ListQuery>(
+    () => ({
+      search: search || undefined,
+      page: pagination.page - 1,
+      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+      sort: "-addedOn",
+      filters: {
+        active: hideExpired ? "true" : undefined,
+        exclude: hideCollected && collectedCodes.length > 0 ? collectedCodes.join(",") : undefined,
+        references: "true",
+      },
+    }),
+    [search, pagination, hideExpired, hideCollected, collectedCodes],
+  );
 
-      // Collected filter
-      const isCollected = collectedCodes.includes(c.code);
-      if (hideCollected && isCollected) return false;
+  const codes = useContentList<RedemptionCodeDocument>(gameId, "codes", query);
+  const references = useMemo(() => new ReferenceIndex(codes.data?.references), [codes.data]);
 
-      return true;
-    });
-  }, [codes, searchTerm, itemsMap, hideExpired, hideCollected, collectedCodes]);
-
-  const handleCopy = (code: string) => {
-    navigator.clipboard.writeText(code);
-    setCopySuccess(code);
-  };
+  useEffect(() => {
+    if (codes.data) pages.setTotalItems(codes.data.total);
+  }, [codes.data, pages.setTotalItems]);
 
   const toggleCollected = (code: string) => {
-    if (!gameId) return;
-    
     if (collectedCodes.includes(code)) {
       redemptionService.removeCollectedCode(gameId, code);
-      setCollectedCodes(prev => prev.filter(c => c !== code));
+      setCollectedCodes((previous) => previous.filter((candidate) => candidate !== code));
     } else {
       redemptionService.saveCollectedCode(gameId, code);
-      setCollectedCodes(prev => [...prev, code]);
+      setCollectedCodes((previous) => [...previous, code]);
     }
   };
 
-  if (dbLoading || dataLoading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
-        <CircularProgress color="primary" />
-      </Box>
-    );
-  }
-
-  if (codesError) {
-    return (
-      <Box sx={{ p: 4, textAlign: 'center' }}>
-        <Typography color="error" variant="h6">Erro ao carregar códigos: {codesError}</Typography>
-      </Box>
-    );
-  }
+  const copy = (code: string) => {
+    navigator.clipboard
+      ?.writeText(code)
+      .then(() => setCopied(code))
+      .catch(() => setCopied(null));
+  };
 
   return (
     <StyledContainer
-      title={`Códigos de Resgate - ${gameId}`}
+      title={`Códigos de resgate - ${gameId}`}
       label="Aproveite recompensas gratuitas com os códigos abaixo."
-      searchValue={searchTerm}
-      onChangeSearch={setSearchTerm}
-      search={{ placeholder: "Pesquisar códigos ou recompensas..." }}
+      searchValue={pages.info.search}
+      onChangeSearch={pages.setSearch}
+      search={{ placeholder: "Pesquisar códigos..." }}
+      pages={pages}
       actionsStart={
-          <Stack flex={1} px={1} direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
-            <Stack direction={"row"} alignItems={"center"} justifyContent={"start"}>
-              <Switch size="small" checked={hideExpired} onChange={(e) => setHideExpired(e.target.checked)} />
-                <Typography variant="caption" sx={{ color: 'text.secondary' }}>Ocultar Expirados</Typography>
-            </Stack>
-            <Stack direction={"row"} alignItems={"center"} justifyContent={"end"}>
-              <Switch size="small" checked={hideCollected} onChange={(e) => setHideCollected(e.target.checked)} />
-                <Typography variant="caption" sx={{ color: 'text.secondary' }}>Ocultar Coletados</Typography>
-            </Stack>
+        <Stack flex={1} px={1} direction="row" alignItems="center" justifyContent="space-between">
+          <Stack direction="row" alignItems="center">
+            <Switch size="small" checked={hideExpired} onChange={(event) => setHideExpired(event.target.checked)} />
+            <Typography variant="caption" sx={{ color: "text.secondary" }}>
+              Ocultar expirados
+            </Typography>
           </Stack>
-        }
+          <Stack direction="row" alignItems="center">
+            <Switch size="small" checked={hideCollected} onChange={(event) => setHideCollected(event.target.checked)} />
+            <Typography variant="caption" sx={{ color: "text.secondary" }}>
+              Ocultar coletados
+            </Typography>
+          </Stack>
+        </Stack>
+      }
     >
-      {filteredCodes && filteredCodes.length > 0 ? (
-        <Grid container spacing={1}>
-          {filteredCodes.map((c, idx) => {
-            const isExpired = new Date(c.expiresAt) < new Date();
-            const isCollected = collectedCodes.includes(c.code);
-            
-            return (
-              <Grid size={{ xs: 12, sm: 6, md: 4 }} spacing={1} key={idx}>
-                <Card sx={{ 
-                  backgroundColor: isCollected ? 'rgba(0, 255, 0, 0.01)' : 'rgba(255, 255, 255, 0.02)', 
-                  backdropFilter: 'blur(16px)',
-                  borderRadius: 1,
-                  border: 1,
-                  borderColor: isCollected ? 'rgba(0, 255, 0, 0.2)' : isExpired ? 'rgba(255, 0, 0, 0.2)' : 'divider',
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  '&:hover': {
-                    transform: 'translateY(-4px)',
-                    backgroundColor: isCollected ? 'rgba(0, 255, 0, 0.02)' : 'rgba(255, 255, 255, 0.04)',
-                    borderColor: isCollected ? 'rgba(0, 255, 0, 0.3)' : isExpired ? 'rgba(255, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.15)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.4)'
-                  }
-                }}>
-                  {isCollected ? <Ribbon backgroundColor={theme.palette.success.main} label="Coletado"/>
-                  : isExpired && (
-                    <Ribbon backgroundColor={theme.palette.error.main} label={"Expirado"}/>
-                  )}
-                  
-                    <Stack spacing={1} sx={{ p: isMobile ? 1 : 3, flexGrow: 1 }}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Typography variant="h5" sx={{ 
-                          fontWeight: 900, 
-                          color: isExpired && !isCollected ? 'text.disabled' : (isCollected ? 'success.main' : 'primary.main'),
-                          letterSpacing: 2,
-                          fontFamily: 'monospace'
-                        }}>
-                          {c.code}
-                        </Typography>
-                        <Stack direction="row" spacing={1}>
-                          <Tooltip title={isCollected ? "Desmarcar como Coletado" : "Marcar como Coletado"}>
-                            <IconButton 
-                              onClick={() => toggleCollected(c.code)} 
-                              size="small"
-                              sx={{ 
-                                color: isCollected ? 'success.main' : 'text.disabled',
-                                backgroundColor: isCollected ? 'rgba(0, 255, 0, 0.05)' : 'rgba(255,255,255,0.05)',
-                                '&:hover': { backgroundColor: isCollected ? 'rgba(0, 255, 0, 0.1)' : 'rgba(255,255,255,0.1)' }
-                              }}
-                            >
-                              {isCollected ? <CheckCircle fontSize="small" /> : <RadioButtonUnchecked fontSize="small" />}
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Copiar Código">
-                            <IconButton 
-                              onClick={() => handleCopy(c.code)} 
-                              disabled={isExpired && !isCollected}
-                              size="small"
-                              sx={{ 
-                                backgroundColor: 'rgba(255,255,255,0.05)',
-                                '&:hover': { backgroundColor: 'primary.main', color: 'white' }
-                              }}
-                            >
-                              <ContentCopy fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-                        </Stack>
-                      </Box>
-
-                      <Divider sx={{ opacity: 0.1 }} />
-
-                      <Stack spacing={1}>
-                        <Typography variant="subtitle2" sx={{ color: 'text.secondary', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: 1 }}>
-                          Recompensas
-                        </Typography>
-                        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ gap: 1 }}>
-                          {c.rewards.map((r: { id: string; quantity: number }, rIdx: number) => {
-                            const item = itemsMap.get(r.id);
-                            return (
-                              <ItemChip
-                                key={rIdx}
-                                id={r.id}
-                                name={item?.name}
-                                icon={item?.icon}
-                                amount={r.quantity}
-                                size="small"
-                              />
-                            );
-                          })}
-                        </Stack>
-                      </Stack>
-
-                        <Stack spacing={1}>
-                          {false && <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <CalendarToday sx={{ fontSize: '0.9rem', color: 'text.disabled' }} />
-                            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                              Adicionado em: <b>{new Date(c.addedAt).toLocaleDateString()}</b>
-                            </Typography>
-                          </Box>}
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <TimerOff sx={{ fontSize: '0.9rem', color: isExpired ? 'error.main' : 'warning.main' }} />
-                            <Typography variant="caption" sx={{ color: isExpired ? 'error.main' : 'text.secondary' }}>
-                              Expira em: <b>{new Date(c.expiresAt).toLocaleDateString()}</b>
-                            </Typography>
-                          </Box>
-                        </Stack>
-                    </Stack>
-                </Card>
-              </Grid>
-            );
-          })}
-        </Grid>
-      ) : (
-        <Stack sx={{ flex: 1, textAlign: 'center', py: 8, alignItems: "center", justifyContent: "center" }}>
-          <Redeem sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.05)', mb: 2 }} />
-          <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.3)' }}>
-            Nenhum código encontrado.
+      {codes.isPending ? (
+        <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>
+          <CircularProgress color="primary" />
+        </Stack>
+      ) : codes.isError ? (
+        <Stack alignItems="center" spacing={1} sx={{ p: 4, flex: 1 }}>
+          <Typography color="error" variant="h6" sx={{ fontWeight: 700 }}>
+            Não foi possível carregar os códigos.
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {codes.error instanceof ApiError ? codes.error.message : "Erro inesperado."}
           </Typography>
         </Stack>
+      ) : (
+        <ListingDataView
+          data={codes.data.content}
+          viewMode="cards"
+          cardMinWidth={300}
+          emptyMessage="Nenhum código encontrado."
+          renderCard={(code) => (
+            <CodeCard
+              code={code}
+              references={references}
+              collected={collectedCodes.includes(code.extId)}
+              onToggle={() => toggleCollected(code.extId)}
+              onCopy={() => copy(code.extId)}
+            />
+          )}
+        />
       )}
 
-      <Snackbar 
-        open={!!copySuccess} 
-        autoHideDuration={2000} 
-        onClose={() => setCopySuccess(null)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      <Snackbar
+        open={copied !== null}
+        autoHideDuration={2000}
+        onClose={() => setCopied(null)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert severity="success" variant="filled" sx={{ width: '100%', borderRadius: 2 }}>
-          Código <b>{copySuccess}</b> copiado!
+        <Alert severity="success" variant="filled" sx={{ width: "100%", borderRadius: 2 }}>
+          Código <b>{copied}</b> copiado!
         </Alert>
       </Snackbar>
     </StyledContainer>

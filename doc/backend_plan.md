@@ -989,7 +989,12 @@ Decisões tomadas na implementação, que ajustam o plano acima:
   paginados pela listagem (`?category=`) e receitas e lojas vindas de `/categories/{id}/details`;
 - eventos: lista (`/events?type=`, filtro criado para ela, mais recentes primeiro) e detalhe
   (`/events/{id}/details`, com tudo que pertence ao evento). A situação (acontecendo, em breve, encerrado)
-  vem do período, e o evento pode ser ligado ou desligado no filtro de eventos ativos pela própria tela.
+  vem do período, e o evento pode ser ligado ou desligado no filtro de eventos ativos pela própria tela;
+- códigos de resgate: lista (`/codes?active=&exclude=&references=true`, os mais novos primeiro). `exclude`,
+  comum a toda listagem, foi criado para esconder os códigos já coletados sem quebrar a paginação;
+- conjuntos: lista de coleções (`/collections`, com o progresso somado de `/collection-groups`) e coleção
+  aberta (`/collections/{id}/details`, com os grupos e os membros resolvidos). O que foi obtido continua
+  marcado no navegador, na mesma chave das telas antigas.
 
 As telas migradas compartilham componentes de detalhe (pontos por mapa, ofertas de loja, drops,
 códigos, coleções, variantes). As demais telas seguem lendo os JSON até a vez delas.

@@ -47,3 +47,8 @@ const RESET_LABELS: Record<string, string> = {
 export function formatReset(resetType: string): string {
   return RESET_LABELS[resetType] ?? resetType;
 }
+
+/** Data local no formato ISO (aaaa-mm-dd), comparável como texto com as datas da API. */
+export function isoDate(date: Date = new Date()): string {
+  return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, "0"), String(date.getDate()).padStart(2, "0")].join("-");
+}
