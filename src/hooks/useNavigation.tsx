@@ -1,28 +1,19 @@
 import { useMemo } from "react";
-import { 
-  Map as MapIcon, 
-  Construction, 
-  Pets, 
-  Assignment, 
-  Storefront, 
-  Event, 
-  Redeem, 
+import {
+  Map as MapIcon,
+  Construction,
+  Pets,
+  Assignment,
+  Storefront,
+  Event,
+  Redeem,
   Calculate,
   AutoAwesomeMosaic,
 } from "@mui/icons-material";
-import { useGameData } from "./useGameData";
 import { useTheme } from "@mui/material";
-import type { 
-  Item, 
-  Entity, 
-  Recipe, 
-  Shop, 
-  GameEvent, 
-  MapMetadata, 
-  RedemptionCode,
-  Category
-} from "../types/gameModels";
-import { getPublicUrl } from "../utils/pathUtils";
+import { MAX_PAGE_SIZE, type CategoryDocument, type ShopDocument } from "../api/content";
+import { contentRoute, currentMedia, mediaUrl } from "../api/references";
+import { useContentCounts, useContentList, useRecipeStations } from "../api/useContent";
 
 export interface NavigationOption {
   label: string;
@@ -40,203 +31,108 @@ export interface NavigationItem {
   options?: NavigationOption[];
 }
 
+function optionIcon(mediaId: string | null, label: string): React.ReactNode {
+  return mediaId ? <img src={mediaUrl(mediaId)} alt={label} style={{ width: 20, height: 20, objectFit: "contain" }} /> : undefined;
+}
+
+/**
+ * Menu do jogo lido da API: cada seção aparece quando o jogo tem conteúdo daquele tipo; entidades e
+ * itens listam as categorias, receitas as bancadas e lojas as lojas.
+ */
 export function useNavigation(gameId: string | null) {
   const theme = useTheme();
-  
-  const { data: entities } = useGameData<Entity>(gameId || "", "entity");
-  const { data: items } = useGameData<Item>(gameId || "", "items");
-  const { data: recipes } = useGameData<Recipe>(gameId || "", "recipes");
-  const { data: shops } = useGameData<Shop>(gameId || "", "shops");
-  const { data: events } = useGameData<GameEvent>(gameId || "", "events");
-  const { data: codes } = useGameData<RedemptionCode>(gameId || "", "codes");
-  const { data: maps } = useGameData<MapMetadata>(gameId || "", "maps");
-  const { data: quests } = useGameData<any>(gameId || "", "quests");
-  const { data: categories } = useGameData<Category>(gameId || "", "categories");
+  const id = gameId ?? undefined;
+  const counts = useContentCounts(id);
+  const categories = useContentList<CategoryDocument>(id, "categories", { size: MAX_PAGE_SIZE, sort: "name" });
+  const shops = useContentList<ShopDocument>(id, "shops", { size: MAX_PAGE_SIZE, sort: "name" });
+  const stations = useRecipeStations(id);
 
-  const dynamicEntityCategories = useMemo(() => {
-    if (!entities) return [];
-    const sets = new Set<string>();
-    entities.forEach((e: Entity) => {
-      if (e.category) {
-        if (Array.isArray(e.category)) {
-          sets.add(e.category[0].toLowerCase());
-        } else {
-          sets.add(e.category.toLowerCase());
-        }
-      }
-    });
-    const mapped = Array.from(sets).map(cat => {
-      const foundCategory = categories?.find(c => c.id.toLowerCase() === cat.toLowerCase());
-      const label = foundCategory?.name || (cat.charAt(0).toUpperCase() + cat.slice(1));
-      const icon = foundCategory?.icon 
-        ? <img src={getPublicUrl(foundCategory.icon)} alt={label} style={{ width: 20, height: 20, objectFit: 'contain' }} /> 
-        : undefined;
-      return {
-        label,
-        path: `/game/${gameId}/entity/list/${cat}`,
-        icon
-      };
-    });
-    return mapped.sort((a, b) => a.label.localeCompare(b.label));
-  }, [entities, gameId, categories]);
+  const menuItems = useMemo<NavigationItem[]>(() => {
+    if (!gameId) return [];
+    const base = `/game/${gameId}`;
+    const count = (kind: string) => counts.data?.[kind] ?? 0;
 
-  const dynamicItemCategories = useMemo(() => {
-    if (!items) return [];
-    const sets = new Set<string>();
-    items.forEach((item: Item) => {
-      const cats = Array.isArray(item.category) ? item.category : (item.category ? [item.category] : []);
-      if(cats.length > 0)
-        sets.add(cats[0].toLowerCase());
-    });
-    const mapped = Array.from(sets).map(cat => {
-      const foundCategory = categories?.find(c => c.id.toLowerCase() === cat.toLowerCase());
-      const label = foundCategory?.name || (cat.charAt(0).toUpperCase() + cat.slice(1));
-      const icon = foundCategory?.icon 
-        ? <img src={getPublicUrl(foundCategory.icon)} alt={label} style={{ width: 20, height: 20, objectFit: 'contain' }} /> 
-        : undefined;
-      return {
-        label,
-        path: `/game/${gameId}/items/list/${cat}`,
-        icon
-      };
-    });
-    return mapped.sort((a, b) => a.label.localeCompare(b.label));
-  }, [items, gameId, categories]);
+    const categoryOptions = (appliesTo: "item" | "entity", listPath: string): NavigationOption[] =>
+      (categories.data?.content ?? [])
+        .filter((category) => category.appliesTo === appliesTo || category.appliesTo === "both")
+        .map((category) => ({
+          label: category.name,
+          path: `${listPath}/${encodeURIComponent(category.extId)}`,
+          icon: optionIcon(currentMedia(category.media, "icon"), category.name),
+        }));
 
-  const dynamicRecipeStations = useMemo(() => {
-    if (!recipes) return [];
-    const sets = new Set<string>();
-    recipes.forEach((r: Recipe) => {
-      const stations = r.stations || r.ProducedIn || [];
-      stations.forEach((s: string) => sets.add(s));
-    });
-    const mapped = Array.from(sets).map(station => {
-      const foundCategory = categories?.find(c => c.id.toLowerCase() === station.toLowerCase());
-      const label = foundCategory?.name || station;
-      const icon = foundCategory?.icon 
-        ? <img src={getPublicUrl(foundCategory.icon)} alt={label} style={{ width: 20, height: 20, objectFit: 'contain' }} /> 
-        : undefined;
-      return {
-        label,
-        path: `/game/${gameId}/recipes/list/${station}`,
-        icon
-      };
-    });
-    return mapped.sort((a, b) => a.label.localeCompare(b.label));
-  }, [recipes, gameId, categories]);
+    const all: NavigationItem[] = [
+      { id: "map", label: "Mapa", icon: <MapIcon />, path: `${base}/map`, color: theme.palette.primary.main },
+      {
+        id: "entities",
+        label: "Entidades",
+        icon: <Pets />,
+        path: `${base}/entity/list`,
+        color: "#ff9800",
+        isDropdown: true,
+        options: categoryOptions("entity", `${base}/entity/list`),
+      },
+      {
+        id: "items",
+        label: "Itens",
+        icon: <Construction />,
+        path: `${base}/items/list`,
+        color: "#4caf50",
+        isDropdown: true,
+        options: categoryOptions("item", `${base}/items/list`),
+      },
+      { id: "conjuntos", label: "Conjuntos", icon: <AutoAwesomeMosaic />, path: `${base}/conjuntos`, color: "#ffca28" },
+      {
+        id: "recipes",
+        label: "Receitas",
+        icon: <Assignment />,
+        path: `${base}/recipes/list`,
+        color: "#f44336",
+        isDropdown: true,
+        options: (stations.data ?? []).map((station) => ({
+          label: station.name ?? station.extId,
+          path: `${base}/recipes/list/${encodeURIComponent(station.extId)}`,
+          icon: optionIcon(station.iconMediaId, station.name ?? station.extId),
+        })),
+      },
+      {
+        id: "shops",
+        label: "Lojas",
+        icon: <Storefront />,
+        path: `${base}/shops/list`,
+        color: "#9c27b0",
+        isDropdown: true,
+        options: (shops.data?.content ?? []).map((shop) => ({ label: shop.name, path: contentRoute(gameId, "shop", shop.extId)! })),
+      },
+      { id: "events", label: "Eventos", icon: <Event />, path: `${base}/events`, color: "#e91e63" },
+      { id: "codes", label: "Códigos", icon: <Redeem />, path: `${base}/codes`, color: "#795548" },
+      {
+        id: "calculator",
+        label: "Calculadora",
+        icon: <Calculate />,
+        path: `${base}/calculator`,
+        color: "#00bcd4",
+        isDropdown: true,
+        options: [
+          { label: "Crafting", path: `${base}/calculator/crafting` },
+          { label: "Rentabilidade", path: `${base}/calculator/profitability` },
+          { label: "Lucro por tempo", path: `${base}/calculator/profit-per-time` },
+        ],
+      },
+    ];
 
-  const dynamicShops = useMemo(() => {
-    if (!shops || !entities) return [];
-    const entityMap = new Map<string, Entity>(entities.map((e: Entity) => [e.id, e]));
-    return shops.map((shop: Shop) => {
-      const npc = shop.npcId ? entityMap.get(shop.npcId) : undefined;
-      return {
-        label: shop.name || npc?.name || shop.npcId || "Loja",
-        path: `/game/${gameId}/shops/list/${shop.id}`,
-      };
-    });
-  }, [shops, entities, gameId]);
-
-  const allMenuItems: NavigationItem[] = useMemo(() => [
-    { 
-      id: "map",
-      label: "Mapa", 
-      icon: <MapIcon />, 
-      path: `/game/${gameId}/map`, 
-      color: theme.palette.primary.main 
-    },
-    { 
-      id: "entities",
-      label: "Entidades", 
-      icon: <Pets />, 
-      path: `/game/${gameId}/entity/list`, 
-      color: "#ff9800",
-      isDropdown: true,
-      options: dynamicEntityCategories
-    },
-    { 
-      id: "items",
-      label: "Itens", 
-      icon: <Construction />, 
-      path: `/game/${gameId}/items/list`, 
-      color: "#4caf50",
-      isDropdown: true,
-      options: dynamicItemCategories
-    },
-    { 
-      id: "conjuntos",
-      label: "Conjuntos", 
-      icon: <AutoAwesomeMosaic />, 
-      path: `/game/${gameId}/conjuntos`, 
-      color: "#ffca28"
-    },
-    { 
-      id: "recipes",
-      label: "Receitas", 
-      icon: <Assignment />, 
-      path: `/game/${gameId}/recipes/list`, 
-      color: "#f44336",
-      isDropdown: true,
-      options: dynamicRecipeStations
-    },
-    { 
-      id: "shops",
-      label: "Lojas", 
-      icon: <Storefront />, 
-      path: `/game/${gameId}/shops/list`, 
-      color: "#9c27b0",
-      isDropdown: true,
-      options: dynamicShops
-    },
-    { 
-      id: "events",
-      label: "Eventos", 
-      icon: <Event />, 
-      path: `/game/${gameId}/events`, 
-      color: "#e91e63" 
-    },
-    { 
-      id: "codes",
-      label: "Códigos", 
-      icon: <Redeem />, 
-      path: `/game/${gameId}/codes`, 
-      color: "#795548" 
-    },
-    { 
-      id: "quests",
-      label: "Quests", 
-      icon: <Assignment />, 
-      path: `/game/${gameId}/quests`, 
-      color: "#2196f3" 
-    },
-    { 
-      id: "calculator",
-      label: "Calculadora", 
-      icon: <Calculate />, 
-      path: `/game/${gameId}/calculator`, 
-      color: "#00bcd4", // Cyan
-      isDropdown: true,
-      options: [
-        { label: "Crafting", path: `/game/${gameId}/calculator/crafting` },
-        { label: "Rentabilidade", path: `/game/${gameId}/calculator/profitability` },
-        { label: "Lucro por Tempo", path: `/game/${gameId}/calculator/profit-per-time` },
-      ]
-    },
-  ], [gameId, theme, dynamicEntityCategories, dynamicItemCategories, dynamicRecipeStations, dynamicShops]);
-
-  const menuItems = useMemo(() => {
-    return allMenuItems.filter(item => {
-      if (item.id === "map") return maps && maps.length > 0;
-      if (item.id === "entities") return entities && entities.length > 0;
-      if (item.id === "items") return items && items.length > 0;
-      if (item.id === "recipes") return recipes && recipes.length > 0;
-      if (item.id === "shops") return shops && shops.length > 0;
-      if (item.id === "events") return events && events.length > 0;
-      if (item.id === "codes") return codes && codes.length > 0;
-      if (item.id === "quests") return quests && quests.length > 0;
-      return true;
-    });
-  }, [allMenuItems, maps, entities, items, recipes, shops, events, codes]);
+    const kindOf: Record<string, string> = {
+      map: "map",
+      entities: "entity",
+      items: "item",
+      conjuntos: "collection",
+      recipes: "recipe",
+      shops: "shop",
+      events: "event",
+      codes: "redemption_code",
+    };
+    return all.filter((item) => !kindOf[item.id] || count(kindOf[item.id]) > 0);
+  }, [gameId, theme, counts.data, categories.data, shops.data, stations.data]);
 
   return { menuItems };
 }

@@ -2,6 +2,7 @@ package com.paradoxbh.gameplannerserver.content.web;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,6 +67,12 @@ public class GameContentController {
                                                      @RequestParam(defaultValue = "0") int page,
                                                      @RequestParam(defaultValue = "50") int size) {
         return references.referencedBy(gameId, target, field, page, size);
+    }
+
+    /** Quantos conteúdos o jogo tem de cada tipo, pelo código do tipo; tipo sem conteúdo fica de fora. */
+    @GetMapping("/content-counts")
+    public Map<String, Long> contentCounts(@PathVariable String gameId) {
+        return references.contentCounts(gameId);
     }
 
     /** Bancadas citadas por receitas, com nome, ícone e quantas receitas cada uma tem. */

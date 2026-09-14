@@ -14,6 +14,7 @@ import {
 } from "@mui/icons-material";
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from "react";
+import { useGame } from "../api/useContent";
 import { useNavigation } from "../hooks/useNavigation";
 import { HeaderNavDropdown } from "./common/HeaderNavDropdown";
 import { GlobalEventFilter } from "./common/GlobalEventFilter";
@@ -34,6 +35,7 @@ export function Header() {
   const gameId = isGameRoute ? pathParts[1] : null;
 
   const { menuItems } = useNavigation(gameId);
+  const game = useGame(gameId ?? undefined);
 
   const toggleMobileMenu = (open: boolean) => () => {
     setMobileMenuOpen(open);
@@ -96,7 +98,7 @@ export function Header() {
                       textOverflow: 'ellipsis'
                     }}
                   >
-                    {gameId}
+                    {game.data?.name ?? gameId}
                   </Typography>
                 </Link>
               )}

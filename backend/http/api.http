@@ -512,3 +512,7 @@ Authorization: Bearer {{accessToken}}
 ### Pontos de um mapa que rendem um item: drop do ponto ou da entidade que aparece nele
 GET {{api}}/games/heartopia/maps/main/spawn-points?yields=item:madeira&activeEvents=rainy
 Authorization: Bearer {{accessToken}}
+
+### Quantos conteudos o jogo tem de cada tipo (usado para montar o menu)
+GET {{api}}/games/heartopia/content-counts
+Authorization: Bearer {{accessToken}}

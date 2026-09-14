@@ -392,6 +392,21 @@ class ContentApiIntegrationTest extends ContentApiTest {
     }
 
     @Test
+    void contentCountsTellWhichKindsTheGameHas() throws Exception {
+        send(post(ITEMS, game), "editor", json("{ 'extId': 'pedra', 'name': 'Pedra' }")).andExpect(status().isCreated());
+        send(put("/api/v1/games/{game}/entities", game), "editor", json("""
+                [ { 'extId': 'lobo', 'name': 'Lobo' }, { 'extId': 'urso', 'name': 'Urso' } ]
+                """))
+                .andExpect(status().isOk());
+
+        mvc.perform(get("/api/v1/games/{game}/content-counts", game))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.item").value(1))
+                .andExpect(jsonPath("$.entity").value(2))
+                .andExpect(jsonPath("$.recipe").doesNotExist());
+    }
+
+    @Test
     void eventsFilterByTypeAndCategoriesByWhatTheyApplyTo() throws Exception {
         send(put("/api/v1/games/{game}/events", game), "editor", json("""
                 [ { 'extId': 'chuva', 'name': 'Chuva', 'eventType': 'clima' },

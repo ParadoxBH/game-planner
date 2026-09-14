@@ -1,53 +1,26 @@
 import { Outlet, useParams, Navigate } from "react-router-dom";
+import { Box, Stack } from "@mui/material";
+import { ApiError } from "../api/ApiError";
+import { isComingSoon } from "../api/games";
+import { useGame } from "../api/useContent";
 import { Header } from "../components/Header";
-import { Box, Stack, CircularProgress } from "@mui/material";
-import { useEffect, useState } from "react";
-import { loadGamesList } from "../services/dataLoader";
 import { isDev } from "../utils/mapper";
 
 export function MainLayout() {
   const { gameId } = useParams<{ gameId: string }>();
-  const [loading, setLoading] = useState(!!gameId);
-  const [isAllowed, setIsAllowed] = useState(true);
+  const game = useGame(gameId);
 
-  useEffect(() => {
-    if (gameId) {
-      setLoading(true);
-      loadGamesList().then(games => {
-        const game = games.find(g => g.id.toLowerCase() === gameId.toLowerCase());
-        if (game?.comingSoon && !isDev()) {
-          setIsAllowed(false);
-        } else {
-          setIsAllowed(true);
-        }
-        setLoading(false);
-      }).catch(() => {
-        setLoading(false);
-      });
-    } else {
-      setIsAllowed(true);
-      setLoading(false);
-    }
-  }, [gameId]);
-
-  if (loading) {
-    return (
-      <Box display="flex" flex={1} alignItems="center" justifyContent="center" height="100vh" bgcolor="#0a0a0a">
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (!isAllowed) {
+  // Jogo que não existe, que o usuário não pode ler ou que ainda vai sair: volta para o início.
+  const notReadable = game.error instanceof ApiError && (game.error.status === 403 || game.error.status === 404);
+  const notReleased = game.data !== undefined && isComingSoon(game.data) && !isDev();
+  if (gameId && (notReadable || notReleased)) {
     return <Navigate to="/" replace />;
   }
 
   return (
     <Stack sx={{ position: "absolute", left: 0, top: 0, right: 0, bottom: 0, overflow: "hidden" }}>
-      {/* O Header aparecerá em todas as rotas filhas */}
       <Header />
       <Box display={"flex"} flex={1} sx={{ overflowY: "auto" }}>
-        {/* Renderiza o conteúdo das rotas filhas aqui */}
         <Outlet />
       </Box>
     </Stack>

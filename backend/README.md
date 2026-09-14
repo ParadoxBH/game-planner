@@ -172,6 +172,7 @@ Itens, entidades, categorias e eventos usam as mesmas rotas e as mesmas regras.
 | GET | `/api/v1/games/{jogo}/search?q=&kind=` | quem lê o jogo |
 | GET | `/api/v1/games/{jogo}/references?target=&field=` | quem lê o jogo |
 | GET | `/api/v1/games/{jogo}/recipe-stations` | quem lê o jogo |
+| GET | `/api/v1/games/{jogo}/content-counts` | quem lê o jogo |
 | GET | `/api/v1/games/{jogo}/changes?since=&by=` | quem lê o jogo |
 | GET, PUT, DELETE | `/api/v1/games/{jogo}/attributes/{chave}` | ler, editar, `moderator` |
 | GET, PUT, DELETE | `/api/v1/games/{jogo}/rarities/{código}` | ler, editar, `moderator` |

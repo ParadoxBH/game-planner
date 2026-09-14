@@ -668,6 +668,16 @@ export const contentApi = {
 };
 
 export const gameApi = {
+  /** Jogos que o usuário atual pode ver. */
+  list(signal?: AbortSignal) {
+    return apiRequest<GameInfo[]>("/games", { signal });
+  },
+
+  /** Quantos conteúdos o jogo tem de cada tipo, pelo código do tipo (item, entity, redemption_code...). */
+  contentCounts(gameId: string, signal?: AbortSignal) {
+    return apiRequest<Record<string, number>>(`${gamePath(gameId)}/content-counts`, { signal });
+  },
+
   get(gameId: string, signal?: AbortSignal) {
     return apiRequest<GameInfo>(gamePath(gameId), { signal });
   },

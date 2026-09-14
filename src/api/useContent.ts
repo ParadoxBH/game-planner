@@ -84,6 +84,24 @@ export function useCraftingProfits(gameId: string | undefined, query: ProfitQuer
   });
 }
 
+export function useGames(enabled = true) {
+  return useQuery({
+    queryKey: ["games"],
+    queryFn: ({ signal }) => gameApi.list(signal),
+    enabled,
+  });
+}
+
+/** Contagem de conteúdo por tipo, usada para montar o menu do jogo. */
+export function useContentCounts(gameId: string | undefined) {
+  return useQuery({
+    queryKey: ["game", gameId, "content-counts"],
+    queryFn: ({ signal }) => gameApi.contentCounts(gameId!, signal),
+    enabled: Boolean(gameId),
+    staleTime: RARELY_CHANGES,
+  });
+}
+
 export function useGame(gameId: string | undefined) {
   return useQuery({
     queryKey: ["game", gameId],

@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import org.springframework.http.HttpStatus;
@@ -273,6 +274,18 @@ public class ReferenceService {
                 .query((rs, rowNum) -> new RecipeStation(rs.getString("station_ext_id"), rs.getString("name"),
                         rs.getString("icon_media_id"), rs.getBoolean("registered"), rs.getLong("recipe_count")))
                 .list();
+    }
+
+    /** Quantos conteúdos o jogo tem de cada tipo, pelo código do tipo; tipo sem conteúdo fica de fora. */
+    public Map<String, Long> contentCounts(String gameId) {
+        access.requireReadable(gameId);
+        Map<String, Long> counts = new TreeMap<>();
+        jdbc.sql("SELECT kind, count(*) AS total FROM content_ref WHERE game_id = :game GROUP BY kind")
+                .param("game", gameId)
+                .query(rs -> {
+                    counts.put(rs.getString("kind"), rs.getLong("total"));
+                });
+        return counts;
     }
 
     private static String targetKey(String extId, String kind) {

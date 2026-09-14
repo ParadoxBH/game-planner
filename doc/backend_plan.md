@@ -1007,7 +1007,10 @@ Decisões tomadas na implementação, que ajustam o plano acima:
   respawn e categorias dos ocupantes, e ganhou `yields` para "onde conseguir este item"), áreas dos locais
   (`/locations?map=`), climas pelos eventos de `weathers`, popup do ponto e drawer de item/entidade pelo
   `/details`, e dashboard com ocupantes, lojas e locais. As marcações da ferramenta de pontos exportam JSON
-  no formato da API (pontos de spawn e locais).
+  no formato da API (pontos de spawn e locais);
+- shell: lista de jogos (`/games`) na página inicial e no menu mobile, nome do jogo no cabeçalho e menu do
+  jogo montado por `/content-counts` (criado para ele), categorias, bancadas e lojas. O item "Quests" saiu:
+  não há modelo de quest na API.
 
 As telas migradas compartilham componentes de detalhe (pontos por mapa, ofertas de loja, drops,
 códigos, coleções, variantes). As demais telas seguem lendo os JSON até a vez delas.

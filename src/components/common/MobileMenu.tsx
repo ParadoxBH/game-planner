@@ -12,20 +12,14 @@ import {
   Stack,
   IconButton,
 } from "@mui/material";
-import {
-  ExpandLess,
-  ExpandMore,
-  Home,
-  Gamepad,
-  ArrowBack,
-} from "@mui/icons-material";
+import { ExpandLess, ExpandMore, Home, Gamepad, ArrowBack } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
+import type { GameInfo } from "../../api/content";
+import { gameImage, isComingSoon, readAccessLog, recordAccess } from "../../api/games";
+import { useGame, useGames } from "../../api/useContent";
 import type { NavigationItem } from "../../hooks/useNavigation";
-import { loadGamesList } from "../../services/dataLoader";
-import type { GameInfo } from "../../types/gameModels";
 import { isDev } from "../../utils/mapper";
-import { getPublicUrl } from "../../utils/pathUtils";
 
 interface MobileMenuProps {
   open: boolean;
@@ -34,109 +28,69 @@ interface MobileMenuProps {
   menuItems: NavigationItem[];
 }
 
-export function MobileMenu({
-  open,
-  onClose,
-  gameId,
-  menuItems,
-}: MobileMenuProps) {
-  const location = useLocation();
-  const [openDropdowns, setOpenDropdowns] = useState<Record<string, boolean>>(
-    {},
+function GameIcon({ game, faded = false }: { game: GameInfo; faded?: boolean }) {
+  const icon = gameImage(game, ["icon"], "icon");
+  return icon ? (
+    <Box component="img" src={icon} sx={{ width: 24, height: 24, objectFit: "contain", opacity: faded ? 0.3 : 1 }} />
+  ) : (
+    <Gamepad sx={{ opacity: faded ? 0.3 : 1 }} />
   );
-  const [games, setGames] = useState<GameInfo[]>([]);
-  const [loadingGames, setLoadingGames] = useState(false);
+}
 
-  useEffect(() => {
-    if (!gameId) {
-      setLoadingGames(true);
-      loadGamesList()
-        .then(setGames)
-        .finally(() => setLoadingGames(false));
-    }
-  }, [gameId]);
+export function MobileMenu({ open, onClose, gameId, menuItems }: MobileMenuProps) {
+  const location = useLocation();
+  const [openDropdowns, setOpenDropdowns] = useState<Record<string, boolean>>({});
+  const games = useGames(!gameId);
+  const game = useGame(gameId ?? undefined);
 
-  const toggleDropdown = (id: string) => (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setOpenDropdowns((prev) => ({ ...prev, [id]: !prev[id] }));
+  const toggleDropdown = (id: string) => (event: React.MouseEvent) => {
+    event.stopPropagation();
+    setOpenDropdowns((previous) => ({ ...previous, [id]: !previous[id] }));
   };
 
-  const accessLog = useMemo(() => {
-    try {
-      return JSON.parse(localStorage.getItem('gameAccessLog') || '{}');
-    } catch {
-      return {};
-    }
-  }, [open]);
+  const accessLog = useMemo(() => readAccessLog(), [open]);
 
   const sortedGames = useMemo(() => {
-    const available = games
-      .filter((g) => !g.comingSoon)
-      .sort((a, b) => (accessLog[b.id] || 0) - (accessLog[a.id] || 0));
-    const comingSoon = games.filter((g) => g.comingSoon);
-    return { available, comingSoon };
-  }, [games, accessLog]);
-
-
+    const list = games.data ?? [];
+    return {
+      available: list.filter((item) => !isComingSoon(item)).sort((a, b) => (accessLog[b.id] || 0) - (accessLog[a.id] || 0)),
+      comingSoon: list.filter(isComingSoon),
+    };
+  }, [games.data, accessLog]);
 
   return (
     <Drawer
       anchor="left"
       open={open}
       onClose={onClose}
-      PaperProps={{
-        sx: {
-          width: 280,
-          backgroundColor: "#0d0d0d",
-          backgroundImage: "none",
-        },
-      }}
+      PaperProps={{ sx: { width: 280, backgroundColor: "#0d0d0d", backgroundImage: "none" } }}
     >
       <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 0.5 }}>
-        <Stack
-          direction={"row"}
-          alignItems={"center"}
-          justifyContent={"space-between"}
-        >
+        <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
           <Stack direction={"column"}>
-            <Typography
-              variant="h6"
-              color="primary"
-              sx={{ fontWeight: "bold" }}
-            >
+            <Typography variant="h6" color="primary" sx={{ fontWeight: "bold" }}>
               Game Planner
             </Typography>
             {gameId && (
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{
-                  textTransform: "uppercase",
-                  letterSpacing: 1,
-                  fontWeight: 700,
-                }}
-              >
-                {gameId}
+              <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: 1, fontWeight: 700 }}>
+                {game.data?.name ?? gameId}
               </Typography>
             )}
           </Stack>
-          {!!gameId && <IconButton component={Link} to="/">
-            <ArrowBack />
-          </IconButton>}
+          {!!gameId && (
+            <IconButton component={Link} to="/">
+              <ArrowBack />
+            </IconButton>
+          )}
         </Stack>
       </Box>
       <Divider sx={{ opacity: 0.1 }} />
 
       <List sx={{ pt: 0 }}>
-        {/* Se NÃO estiver em um jogo, mostra lista de jogos */}
         {!gameId ? (
           <>
             <ListItem disablePadding>
-              <ListItemButton
-                component={Link}
-                to="/"
-                selected={location.pathname === "/"}
-              >
+              <ListItemButton component={Link} to="/" selected={location.pathname === "/"}>
                 <ListItemIcon sx={{ minWidth: 40, color: "primary.main" }}>
                   <Home />
                 </ListItemIcon>
@@ -144,48 +98,27 @@ export function MobileMenu({
               </ListItemButton>
             </ListItem>
             <Divider sx={{ my: 1, opacity: 0.05 }} />
-            <Typography
-              variant="overline"
-              sx={{ px: 2, color: "text.disabled", fontWeight: 700 }}
-            >
-              Escolha um Jogo
+            <Typography variant="overline" sx={{ px: 2, color: "text.disabled", fontWeight: 700 }}>
+              Escolha um jogo
             </Typography>
-            {loadingGames ? (
-              <Typography
-                sx={{
-                  px: 2,
-                  py: 1,
-                  color: "text.secondary",
-                  fontSize: "0.8rem",
-                }}
-              >
-                Carregando jogos...
-              </Typography>
+            {games.isPending ? (
+              <Typography sx={{ px: 2, py: 1, color: "text.secondary", fontSize: "0.8rem" }}>Carregando jogos...</Typography>
             ) : (
               <>
-                {sortedGames.available.map((game) => (
-                  <ListItem key={game.id} disablePadding>
+                {sortedGames.available.map((item) => (
+                  <ListItem key={item.id} disablePadding>
                     <ListItemButton
                       component={Link}
-                      to={`/game/${game.id}`}
+                      to={`/game/${item.id}`}
                       onClick={() => {
-                        // Update access log on click
-                        try {
-                          const log = JSON.parse(localStorage.getItem('gameAccessLog') || '{}');
-                          log[game.id] = Date.now();
-                          localStorage.setItem('gameAccessLog', JSON.stringify(log));
-                        } catch(e){}
+                        recordAccess(item.id);
                         onClose();
                       }}
                     >
                       <ListItemIcon sx={{ minWidth: 40 }}>
-                        {game.icon ? (
-                          <Box component="img" src={getPublicUrl(game.icon)} sx={{ width: 24, height: 24, objectFit: 'contain' }} />
-                        ) : (
-                          <Gamepad />
-                        )}
+                        <GameIcon game={item} />
                       </ListItemIcon>
-                      <ListItemText primary={game.name} />
+                      <ListItemText primary={item.name} />
                     </ListItemButton>
                   </ListItem>
                 ))}
@@ -193,31 +126,16 @@ export function MobileMenu({
                 {sortedGames.comingSoon.length > 0 && (
                   <>
                     <Divider sx={{ my: 1, opacity: 0.05 }} />
-                    <Typography
-                      variant="overline"
-                      sx={{ px: 2, color: "text.disabled", fontWeight: 700 }}
-                    >
-                      Em Breve
+                    <Typography variant="overline" sx={{ px: 2, color: "text.disabled", fontWeight: 700 }}>
+                      Em breve
                     </Typography>
-                    {sortedGames.comingSoon.map((game) => (
-                      <ListItem key={game.id} disablePadding>
-                        <ListItemButton
-                          component={Link}
-                          to={`/game/${game.id}`}
-                          disabled={!isDev()}
-                          onClick={onClose}
-                        >
+                    {sortedGames.comingSoon.map((item) => (
+                      <ListItem key={item.id} disablePadding>
+                        <ListItemButton component={Link} to={`/game/${item.id}`} disabled={!isDev()} onClick={onClose}>
                           <ListItemIcon sx={{ minWidth: 40 }}>
-                            {game.icon ? (
-                              <Box component="img" src={getPublicUrl(game.icon)} sx={{ width: 24, height: 24, objectFit: 'contain', opacity: 0.3 }} />
-                            ) : (
-                              <Gamepad sx={{ opacity: 0.3 }} />
-                            )}
+                            <GameIcon game={item} faded />
                           </ListItemIcon>
-                          <ListItemText
-                            primary={game.name}
-                            primaryTypographyProps={{ sx: { opacity: 0.5 } }}
-                          />
+                          <ListItemText primary={item.name} primaryTypographyProps={{ sx: { opacity: 0.5 } }} />
                         </ListItemButton>
                       </ListItem>
                     ))}
@@ -227,7 +145,6 @@ export function MobileMenu({
             )}
           </>
         ) : (
-          /* Se ESTIVER em um jogo, mostra menuItems do jogo */
           <>
             {menuItems.map((item) => {
               const isActive = location.pathname.includes(item.path);
@@ -240,50 +157,29 @@ export function MobileMenu({
                       component={item.isDropdown ? "div" : Link}
                       //@ts-ignore
                       to={item.isDropdown ? undefined : item.path}
-                      onClick={
-                        item.isDropdown ? toggleDropdown(item.id) : onClose
-                      }
+                      onClick={item.isDropdown ? toggleDropdown(item.id) : onClose}
                       selected={isActive}
                       sx={{
                         py: 1.5,
-                        borderLeft: isActive
-                          ? "4px solid #ff4400"
-                          : "4px solid transparent",
+                        borderLeft: isActive ? "4px solid #ff4400" : "4px solid transparent",
                         "&.Mui-selected": {
                           backgroundColor: "rgba(255, 68, 0, 0.08)",
-                          "&:hover": {
-                            backgroundColor: "rgba(255, 68, 0, 0.12)",
-                          },
+                          "&:hover": { backgroundColor: "rgba(255, 68, 0, 0.12)" },
                         },
                       }}
                     >
-                      <ListItemIcon
-                        sx={{
-                          color: isActive ? "primary.main" : "text.secondary",
-                          minWidth: 40,
-                        }}
-                      >
-                        {item.icon}
-                      </ListItemIcon>
+                      <ListItemIcon sx={{ color: isActive ? "primary.main" : "text.secondary", minWidth: 40 }}>{item.icon}</ListItemIcon>
                       <ListItemText
                         primary={item.label}
-                        primaryTypographyProps={{
-                          fontWeight: isActive ? 700 : 500,
-                          color: isActive ? "primary.main" : "text.primary",
-                        }}
+                        primaryTypographyProps={{ fontWeight: isActive ? 700 : 500, color: isActive ? "primary.main" : "text.primary" }}
                       />
-                      {item.isDropdown &&
-                        (isDropdownOpen ? <ExpandLess /> : <ExpandMore />)}
+                      {item.isDropdown && (isDropdownOpen ? <ExpandLess /> : <ExpandMore />)}
                     </ListItemButton>
                   </ListItem>
 
                   {item.isDropdown && item.options && (
                     <Collapse in={isDropdownOpen} timeout="auto" unmountOnExit>
-                      <List
-                        component="div"
-                        disablePadding
-                        sx={{ backgroundColor: "rgba(255, 255, 255, 0.02)" }}
-                      >
+                      <List component="div" disablePadding sx={{ backgroundColor: "rgba(255, 255, 255, 0.02)" }}>
                         <ListItemButton
                           component={Link}
                           to={item.path}
@@ -291,24 +187,18 @@ export function MobileMenu({
                           sx={{ pl: 7, py: 1 }}
                           selected={location.pathname === item.path}
                         >
-                          <ListItemText
-                            primary="Ver Todos"
-                            primaryTypographyProps={{ fontSize: "0.875rem" }}
-                          />
+                          <ListItemText primary="Ver todos" primaryTypographyProps={{ fontSize: "0.875rem" }} />
                         </ListItemButton>
-                        {item.options.map((opt) => (
+                        {item.options.map((option) => (
                           <ListItemButton
-                            key={opt.path}
+                            key={option.path}
                             component={Link}
-                            to={opt.path}
+                            to={option.path}
                             onClick={onClose}
                             sx={{ pl: 7, py: 1 }}
-                            selected={location.pathname === opt.path}
+                            selected={location.pathname === option.path}
                           >
-                            <ListItemText
-                              primary={opt.label}
-                              primaryTypographyProps={{ fontSize: "0.875rem" }}
-                            />
+                            <ListItemText primary={option.label} primaryTypographyProps={{ fontSize: "0.875rem" }} />
                           </ListItemButton>
                         ))}
                       </List>
