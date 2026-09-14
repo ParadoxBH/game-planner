@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
+import type { EventDocument } from "../api/content";
+import { isoDate } from "../utils/format";
 
 interface EventUserPreference {
   active: boolean;
@@ -13,9 +15,9 @@ interface EventFilterContextType {
   isEventActive: (eventId: string) => boolean;
   seenEventIds: string[];
   markEventsAsSeen: (eventIds: string[]) => void;
-  initializeNewEvents: (events: any[]) => void;
-  restoreDefaults: (events: any[]) => void;
-  checkEventLive: (event: any) => boolean;
+  initializeNewEvents: (events: EventDocument[]) => void;
+  restoreDefaults: (events: EventDocument[]) => void;
+  checkEventLive: (event: EventDocument) => boolean;
 }
 
 const EventFilterContext = createContext<EventFilterContextType | undefined>(undefined);
@@ -24,7 +26,7 @@ export function EventFilterProvider({ children }: { children: ReactNode }) {
   const [userPreferences, setUserPreferences] = useState<Record<string, EventUserPreference>>(() => {
     const saved = localStorage.getItem("eventUserPreferences");
     if (saved) return JSON.parse(saved);
-    
+
     // Migração: se tivermos activeEventIds da versão antiga, convertemos
     const oldActive = localStorage.getItem("activeEventIds");
     if (oldActive) {
@@ -39,7 +41,7 @@ export function EventFilterProvider({ children }: { children: ReactNode }) {
         return {};
       }
     }
-    
+
     return {};
   });
 
@@ -114,48 +116,41 @@ export function EventFilterProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const parseEventDate = (d: string) => {
-    if (!d) return null;
-    const [day, month, year] = d.split('/').map(Number);
-    return new Date(year, month - 1, day);
+  /** Acontecendo na data: sem início ou já começado, e sem fim ou ainda não terminado. Datas ISO, inclusivas. */
+  const isEventLiveAt = (event: EventDocument, date: Date) => {
+    const day = isoDate(date);
+    return (!event.periodStart || day >= event.periodStart) && (!event.periodEnd || day <= event.periodEnd);
   };
 
-  const isEventLiveAt = (event: any, date: Date) => {
-    if (!event.period || (!event.period.start && !event.period.end)) return true;
-    const start = parseEventDate(event.period.start) || new Date(0);
-    const end = parseEventDate(event.period.end) || new Date(9999, 11, 31);
-    return date >= start && date <= end;
-  };
-
-  const isEventLive = (event: any) => {
+  const isEventLive = (event: EventDocument) => {
     return isEventLiveAt(event, new Date());
   };
 
-  const initializeNewEvents = useCallback((events: any[]) => {
+  const initializeNewEvents = useCallback((events: EventDocument[]) => {
     const newSeenIds: string[] = [];
     const updatedPreferences = { ...userPreferences };
     let hasChanges = false;
 
     events.forEach(event => {
       // 1. Marca como visto se for novo
-      if (!seenEventIds.includes(event.id)) {
-        newSeenIds.push(event.id);
+      if (!seenEventIds.includes(event.extId)) {
+        newSeenIds.push(event.extId);
       }
 
       // 2. Lógica de Mudança de Status (Status Shift Logic)
-      const pref = userPreferences[event.id];
+      const pref = userPreferences[event.extId];
       const isCurrentlyLive = isEventLive(event);
 
       if (pref) {
         const wasLiveAtInteraction = isEventLiveAt(event, new Date(pref.timestamp));
         if (wasLiveAtInteraction !== isCurrentlyLive) {
           // Status mudou! Reseta para o padrão (o estado atual do evento)
-          updatedPreferences[event.id] = { active: isCurrentlyLive, timestamp: Date.now() };
+          updatedPreferences[event.extId] = { active: isCurrentlyLive, timestamp: Date.now() };
           hasChanges = true;
         }
       } else {
         // Nenhuma preferência salva ainda, define inicial baseado no status atual
-        updatedPreferences[event.id] = { active: isCurrentlyLive, timestamp: Date.now() };
+        updatedPreferences[event.extId] = { active: isCurrentlyLive, timestamp: Date.now() };
         hasChanges = true;
       }
     });
@@ -163,27 +158,27 @@ export function EventFilterProvider({ children }: { children: ReactNode }) {
     if (newSeenIds.length > 0) {
       setSeenEventIds(prev => [...prev, ...newSeenIds]);
     }
-    
+
     if (hasChanges) {
       setUserPreferences(updatedPreferences);
     }
 
     // Sincroniza activeEventIds com base nas preferências atualizadas
     const activeIds = events
-      .filter(e => updatedPreferences[e.id]?.active)
-      .map(e => e.id);
-    
+      .filter(e => updatedPreferences[e.extId]?.active)
+      .map(e => e.extId);
+
     setActiveEventIds(activeIds);
   }, [seenEventIds, userPreferences]);
 
-  const restoreDefaults = useCallback((events: any[]) => {
+  const restoreDefaults = useCallback((events: EventDocument[]) => {
     const newPrefs = { ...userPreferences };
     const liveIds: string[] = [];
 
     events.forEach(event => {
       const isLive = isEventLive(event);
-      newPrefs[event.id] = { active: isLive, timestamp: Date.now() };
-      if (isLive) liveIds.push(event.id);
+      newPrefs[event.extId] = { active: isLive, timestamp: Date.now() };
+      if (isLive) liveIds.push(event.extId);
     });
 
     setUserPreferences(newPrefs);

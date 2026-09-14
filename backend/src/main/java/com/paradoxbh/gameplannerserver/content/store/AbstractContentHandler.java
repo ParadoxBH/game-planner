@@ -213,6 +213,13 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
             where.append(" AND t.ext_id NOT IN (:exclude)");
             params.put("exclude", codes(exclude, "exclude"));
         }
+        // Tem o atributo, com qualquer valor. Só item e entidade têm atributos.
+        String attribute = query.filters().get("attribute");
+        if (attribute != null && !attribute.isBlank()) {
+            where.append(" AND EXISTS (SELECT 1 FROM content_attribute a WHERE a.game_id = t.game_id")
+                    .append(" AND a.kind = :kind AND a.ext_id = t.ext_id AND a.key = :attribute)");
+            params.put("attribute", ExtIds.require(attribute.strip(), "attribute"));
+        }
         // Só o que não tem evento ou tem algum dos eventos ativos. Vazio: só o que não tem evento.
         String activeEvents = query.filters().get("activeEvents");
         if (activeEvents != null) {

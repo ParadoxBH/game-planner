@@ -36,7 +36,7 @@ import { DetainContainer } from "../common/DetainContainer";
 import { DetainItem } from "../common/DetainItem";
 import { SpawnPointsByMap } from "../common/SpawnPointsByMap";
 import { StyledContainer } from "../common/StyledContainer";
-import { attributeLabel } from "../item/ApiItemRenderers";
+import { AttributeChips } from "../item/ApiItemRenderers";
 import { ApiRecipeCard } from "../recipe/ApiRecipeCard";
 import { ApiShopOffers, offersFor } from "../shop/ApiShopOffers";
 
@@ -190,11 +190,7 @@ export function EntityDetailsPage() {
 
               {Object.keys(entity.attributes).length > 0 && (
                 <DetailField label="Atributos">
-                  <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-                    {Object.entries(entity.attributes).map(([key, value]) => (
-                      <DataChip key={key} label={attributeLabel(key, value, definitions.get(key))} />
-                    ))}
-                  </Stack>
+                  <AttributeChips attributes={entity.attributes} definitions={definitions} />
                 </DetailField>
               )}
 

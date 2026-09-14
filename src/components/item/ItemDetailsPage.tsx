@@ -35,7 +35,7 @@ import { SpawnPointsByMap } from "../common/SpawnPointsByMap";
 import { StyledContainer } from "../common/StyledContainer";
 import { ApiRecipeCard } from "../recipe/ApiRecipeCard";
 import { ApiShopOffers, offersFor } from "../shop/ApiShopOffers";
-import { attributeLabel } from "./ApiItemRenderers";
+import { AttributeChips } from "./ApiItemRenderers";
 
 /** Detalhe de item, lido do agregado /items/{id}/details da API. */
 export function ItemDetailsPage() {
@@ -166,11 +166,7 @@ export function ItemDetailsPage() {
 
             {Object.keys(item.attributes).length > 0 && (
               <DetailField label="Atributos">
-                <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-                  {Object.entries(item.attributes).map(([key, value]) => (
-                    <DataChip key={key} label={attributeLabel(key, value, definitions.get(key))} />
-                  ))}
-                </Stack>
+                <AttributeChips attributes={item.attributes} definitions={definitions} />
               </DetailField>
             )}
 

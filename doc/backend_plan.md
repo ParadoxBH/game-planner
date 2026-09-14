@@ -994,7 +994,11 @@ Decisões tomadas na implementação, que ajustam o plano acima:
   comum a toda listagem, foi criado para esconder os códigos já coletados sem quebrar a paginação;
 - conjuntos: lista de coleções (`/collections`, com o progresso somado de `/collection-groups`) e coleção
   aberta (`/collections/{id}/details`, com os grupos e os membros resolvidos). O que foi obtido continua
-  marcado no navegador, na mesma chave das telas antigas.
+  marcado no navegador, na mesma chave das telas antigas;
+- metadados: viraram atributos. A tela lista itens e entidades com o atributo (`?attribute=`, filtro criado
+  para ela), e os chips de atributo das telas migradas abrem essa tela;
+- filtro global de eventos (cabeçalho): lê `/events`, com as datas ISO, e mantém as preferências salvas no
+  navegador pelo código do evento.
 
 As telas migradas compartilham componentes de detalhe (pontos por mapa, ofertas de loja, drops,
 códigos, coleções, variantes). As demais telas seguem lendo os JSON até a vez delas.

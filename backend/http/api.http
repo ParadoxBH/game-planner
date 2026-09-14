@@ -496,3 +496,7 @@ Authorization: Bearer {{accessToken}}
 ### Colecao com os grupos e os membros resolvidos
 GET {{api}}/games/heartopia/collections/roupas_inverno/details
 Authorization: Bearer {{accessToken}}
+
+### Itens que tem um atributo, com qualquer valor
+GET {{api}}/games/heartopia/items?attribute=peso&sort=name
+Authorization: Bearer {{accessToken}}

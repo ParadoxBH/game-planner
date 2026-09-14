@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Box, Card, Chip, Stack, Tooltip, Typography } from "@mui/material";
 import { Sell, ShoppingCart } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type { AttributeDefinition, AttributeValue, CategoryDocument, ItemDocument, Rarity } from "../../api/content";
 import { contentRoute, currentMedia } from "../../api/references";
 import { formatAmount } from "../../utils/format";
@@ -25,6 +25,32 @@ export function rarityColorOf(view: ItemListView, item: ItemDocument): string | 
 export function attributeLabel(key: string, value: AttributeValue, definition?: AttributeDefinition): string {
   const shown = typeof value === "boolean" ? (value ? "sim" : "não") : String(value);
   return `${definition?.label ?? key}: ${shown}${definition?.unit ? ` ${definition.unit}` : ""}`;
+}
+
+interface AttributeChipsProps {
+  attributes: Record<string, AttributeValue>;
+  definitions: Map<string, AttributeDefinition>;
+}
+
+/** Atributos como chips; cada um abre a lista de itens e entidades que têm o mesmo atributo. */
+export function AttributeChips({ attributes, definitions }: AttributeChipsProps) {
+  const navigate = useNavigate();
+  const { gameId = "" } = useParams<{ gameId: string }>();
+  return (
+    <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
+      {Object.entries(attributes).map(([key, value]) => (
+        <DataChip
+          key={key}
+          label={attributeLabel(key, value, definitions.get(key))}
+          clickable
+          onClick={(event) => {
+            event.stopPropagation();
+            navigate(`/game/${gameId}/metadado/view/${encodeURIComponent(key)}`);
+          }}
+        />
+      ))}
+    </Stack>
+  );
 }
 
 function itemRoute(view: ItemListView, item: ItemDocument): string {
@@ -164,21 +190,14 @@ function ItemNameCell({ item, view }: { item: ItemDocument; view: ItemListView }
 }
 
 function ItemAttributesCell({ item, view }: { item: ItemDocument; view: ItemListView }) {
-  const entries = Object.entries(item.attributes);
-  if (entries.length === 0) {
+  if (Object.keys(item.attributes).length === 0) {
     return (
       <Typography variant="caption" color="text.disabled">
         -
       </Typography>
     );
   }
-  return (
-    <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-      {entries.map(([key, value]) => (
-        <DataChip key={key} label={attributeLabel(key, value, view.attributes.get(key))} />
-      ))}
-    </Stack>
-  );
+  return <AttributeChips attributes={item.attributes} definitions={view.attributes} />;
 }
 
 function ItemCategoriesCell({ item, view }: { item: ItemDocument; view: ItemListView }) {

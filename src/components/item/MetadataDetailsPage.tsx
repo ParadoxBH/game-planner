@@ -1,463 +1,220 @@
-import { useState, useEffect, useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { Breadcrumbs, CircularProgress, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Bolt, Bookmarks, Inventory, NavigateNext } from "@mui/icons-material";
+import { ApiError } from "../../api/ApiError";
 import {
-  Container,
-  Typography,
-  Box,
-  Breadcrumbs,
-  Link as MuiLink,
-  CircularProgress,
-  Stack,
-  Chip,
-  Tooltip,
-  Tabs,
-  Tab,
-} from "@mui/material";
-import {
-  NavigateNext,
-  Bookmarks,
-  Inventory,
-  Bolt,
-  BugReport,
-} from "@mui/icons-material";
-import { Link } from "react-router-dom";
-import { useApi } from "../../hooks/useApi";
-import { EntityCard } from "../entity/EntityCard";
-import {
-  ItemCard,
-  ItemList,
-  ItemIcon,
-  ItemRenderProvider,
-} from "./ItemRenderers";
-import { StyledContainer } from "../common/StyledContainer";
-import { ListingDataView } from "../common/ListingDataView";
-import { ViewModeSelector } from "../common/ViewModeSelector";
-import { useViewMode } from "../../hooks/useViewMode";
+  MAX_PAGE_SIZE,
+  type CategoryDocument,
+  type EntityDocument,
+  type ItemDocument,
+  type ListQuery,
+  type ShopDocument,
+} from "../../api/content";
+import { useAttributeDefinitions, useContentList, useRarities } from "../../api/useContent";
+import { useEventFilter } from "../../context/EventFilterContext";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
-import { getPublicUrl } from "../../utils/pathUtils";
-import type { Item, Entity, GameInfo, Category } from "../../types/gameModels";
+import { usePlatform } from "../../hooks/usePlatform";
+import { useViewMode } from "../../hooks/useViewMode";
+import { DataChip } from "../common/DataChip";
+import { ListingDataView } from "../common/ListingDataView";
+import { StyledContainer } from "../common/StyledContainer";
+import { ViewModeSelector } from "../common/ViewModeSelector";
+import { ApiEntityCard, ApiEntityIcon, entityListCells, entityRarityColor, type EntityListView } from "../entity/ApiEntityRenderers";
+import { ApiItemCard, ApiItemIcon, attributeLabel, itemListCells, rarityColorOf, type ItemListView } from "./ApiItemRenderers";
 
+type MetadataTab = "items" | "entities";
+
+const NO_CRITERIA = {};
+
+function Loading() {
+  return (
+    <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>
+      <CircularProgress color="primary" />
+    </Stack>
+  );
+}
+
+function ListError({ error }: { error: Error }) {
+  return (
+    <Stack alignItems="center" spacing={1} sx={{ p: 4, flex: 1 }}>
+      <Typography color="error" variant="h6" sx={{ fontWeight: 700 }}>
+        Não foi possível carregar a lista.
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        {error instanceof ApiError ? error.message : "Erro inesperado."}
+      </Typography>
+    </Stack>
+  );
+}
+
+/** Itens e entidades que têm um atributo (os antigos metadados), paginados pela API com ?attribute=. */
 export function MetadataDetailsPage() {
-  const { gameId, type: metadataId = "" } = useParams<{
-    gameId: string;
-    type: string;
-  }>();
-  const navigate = useNavigate();
-  const { getAllItems, getAllEntities, getGameInfo, getCategories, loading: apiLoading } = useApi(gameId);
-
-  const [items, setItems] = useState<Item[]>([]);
-  const [entities, setEntities] = useState<Entity[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { gameId = "", type: attributeKey = "" } = useParams<{ gameId: string; type: string }>();
+  const { isMobile } = usePlatform();
+  const { activeEventIds } = useEventFilter();
+  const [tab, setTab] = useState<MetadataTab>("items");
   const [viewMode, setViewMode] = useViewMode("metadata_details");
-  const [activeTab, setActiveTab] = useState<"items" | "entities">("items");
+  const pages = usePagination(NO_CRITERIA);
 
-  const itemsPages = usePagination({});
-  const entitiesPages = usePagination({});
+  // A API devolve no máximo 200 por página.
+  useEffect(() => {
+    if (pages.info.pagination.pageSize > MAX_PAGE_SIZE) pages.setPageSize(MAX_PAGE_SIZE);
+  }, [pages.info.pagination.pageSize, pages.setPageSize]);
+
+  const search = useDebouncedValue(pages.info.search);
+  const { pagination } = pages.info;
+  const activeEvents = activeEventIds.join(",");
+
+  const query = useMemo<ListQuery>(
+    () => ({
+      search: search || undefined,
+      page: pagination.page - 1,
+      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+      sort: "name",
+      filters: { attribute: attributeKey, activeEvents },
+    }),
+    [search, pagination, attributeKey, activeEvents],
+  );
+  // Só o total, para as contagens das abas.
+  const countQuery = useMemo<ListQuery>(() => ({ size: 1, filters: { attribute: attributeKey, activeEvents } }), [attributeKey, activeEvents]);
+
+  const items = useContentList<ItemDocument>(gameId, "items", query, { enabled: tab === "items" });
+  const entities = useContentList<EntityDocument>(gameId, "entities", query, { enabled: tab === "entities" });
+  const itemCount = useContentList<ItemDocument>(gameId, "items", countQuery);
+  const entityCount = useContentList<EntityDocument>(gameId, "entities", countQuery);
+  const categories = useContentList<CategoryDocument>(gameId, "categories", { size: MAX_PAGE_SIZE, sort: "name" });
+  const shops = useContentList<ShopDocument>(gameId, "shops", { size: MAX_PAGE_SIZE }, { enabled: tab === "entities" });
+  const rarities = useRarities(gameId);
+  const attributes = useAttributeDefinitions(gameId);
 
   useEffect(() => {
-    if (gameId && metadataId) {
-      setLoading(true);
-      Promise.all([
-        getAllItems(),
-        getAllEntities(),
-        getGameInfo(gameId),
-        getCategories(),
-      ])
-        .then(([allItems, allEntities, info, allCats]) => {
-          if (info) setGameInfo(info);
-          if (allCats) setCategories(allCats);
+    const total = tab === "items" ? items.data?.total : entities.data?.total;
+    if (total !== undefined) pages.setTotalItems(total);
+  }, [tab, items.data, entities.data, pages.setTotalItems]);
 
-          // Filter items containing this metadata
-          const filteredItems = allItems.filter((item) =>
-            item.metadata?.some(
-              (m) =>
-                m.id?.toLowerCase() === metadataId.toLowerCase() ||
-                m.type?.toLowerCase() === metadataId.toLowerCase()
-            )
-          );
+  const definitions = useMemo(
+    () => new Map((attributes.data ?? []).map((definition) => [definition.key, definition])),
+    [attributes.data],
+  );
+  const categoryMap = useMemo(
+    () => new Map((categories.data?.content ?? []).map((category) => [category.extId, category])),
+    [categories.data],
+  );
+  const rarityMap = useMemo(() => new Map((rarities.data ?? []).map((rarity) => [rarity.code, rarity])), [rarities.data]);
+  const itemView = useMemo<ItemListView>(
+    () => ({ gameId, showPrices: false, rarities: rarityMap, categories: categoryMap, attributes: definitions }),
+    [gameId, rarityMap, categoryMap, definitions],
+  );
+  const entityView = useMemo<EntityListView>(
+    () => ({
+      gameId,
+      showPrices: false,
+      rarities: rarityMap,
+      categories: categoryMap,
+      shopNpcs: new Set((shops.data?.content ?? []).flatMap((shop) => (shop.npc ? [shop.npc] : []))),
+    }),
+    [gameId, rarityMap, categoryMap, shops.data],
+  );
 
-          // Filter entities containing this metadata
-          const filteredEntities = allEntities.filter((entity) =>
-            (entity as any).metadata?.some(
-              (m: any) =>
-                m.id?.toLowerCase() === metadataId.toLowerCase() ||
-                m.type?.toLowerCase() === metadataId.toLowerCase()
-            )
-          );
+  const definition = definitions.get(attributeKey);
+  const label = definition?.label ?? attributeKey;
 
-          setItems(filteredItems);
-          setEntities(filteredEntities);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error("Error loading metadata details:", err);
-          setLoading(false);
-        });
-    }
-  }, [gameId, metadataId, getAllItems, getAllEntities, getGameInfo, getCategories]);
-
-  const categoriesMap = useMemo(() => {
-    const map = new Map<string, Category>();
-    categories.forEach(cat => {
-      map.set(cat.id.toLowerCase(), cat);
-    });
-    return map;
-  }, [categories]);
-
-  const renderMetadataChip = (meta: any) => {
-    const metaKey = (meta.type || meta.id).toLowerCase();
-    const cat = categoriesMap.get(metaKey);
-    const isCurrent = meta.id?.toLowerCase() === metadataId.toLowerCase() || meta.type?.toLowerCase() === metadataId.toLowerCase();
-    const displayName = cat?.name || meta.type || meta.id;
-
-    if (cat?.icon) {
-      return (
-        <Tooltip key={`${meta.id}`} title={`${displayName}: ${meta.value}`}>
-          <Box
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/game/${gameId}/metadado/view/${meta.type || meta.id}`);
-            }}
-            sx={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 0.5,
-              px: 1,
-              height: "20px",
-              borderRadius: 1,
-              cursor: "pointer",
-              bgcolor: isCurrent ? "rgba(255, 255, 255, 0.02)" : "rgba(255, 255, 255, 0.05)",
-              color: isCurrent ? "primary.main" : "text.primary",
-              border: "1px solid",
-              borderColor: isCurrent ? "primary.main" : "rgba(255, 255, 255, 0.1)",
-              "&:hover": {
-                bgcolor: isCurrent ? "rgba(255, 255, 255, 0.08)" : "rgba(255, 255, 255, 0.15)",
-                borderColor: "primary.main"
-              }
-            }}
-          >
-            <img
-              src={getPublicUrl(cat.icon)}
-              alt={displayName}
-              style={{ width: 14, height: 14, objectFit: "contain", imageRendering: "pixelated" }}
-            />
-            <Typography variant="caption" sx={{ fontSize: "0.7rem", fontWeight: 700 }}>
-              {meta.value}
-            </Typography>
-          </Box>
-        </Tooltip>
-      );
-    }
-    return (
-      <Tooltip key={`${meta.id}`} title={`Ver todos com ${displayName}`}>
-        <Chip
-          label={`${displayName}: ${meta.value}`}
-          size="small"
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate(`/game/${gameId}/metadado/view/${meta.type || meta.id}`);
-          }}
-          clickable
-          variant={isCurrent ? "outlined" : "filled"}
-          sx={{
-            fontSize: "0.7rem",
-            height: "20px",
-            bgcolor: isCurrent ? "rgba(255, 255, 255, 0.02)" : "rgba(255, 255, 255, 0.05)",
-            color: isCurrent ? "primary.main" : "text.primary",
-            fontWeight: isCurrent ? 700 : 400,
-            border: "1px solid",
-            borderColor: isCurrent ? "primary.main" : "rgba(255, 255, 255, 0.1)",
-            "& .MuiChip-label": { px: 1 },
-            "&:hover": {
-              bgcolor: isCurrent ? "rgba(255, 255, 255, 0.08)" : "rgba(255, 255, 255, 0.15)",
-              borderColor: "primary.main"
-            }
-          }}
-        />
-      </Tooltip>
-    );
+  const changeTab = (next: MetadataTab) => {
+    setTab(next);
+    pages.setPage(1);
   };
-
-  const currentCategory = useMemo(() => {
-    return categoriesMap.get(metadataId.toLowerCase());
-  }, [categoriesMap, metadataId]);
-
-  useEffect(() => {
-    itemsPages.setTotalItems(items.length);
-  }, [items, itemsPages]);
-
-  useEffect(() => {
-    entitiesPages.setTotalItems(entities.length);
-  }, [entities, entitiesPages]);
-
-  // Paginate items client-side
-  const paginatedItems = useMemo(() => {
-    const page = itemsPages.info.pagination.page;
-    const pageSize = itemsPages.info.pagination.pageSize;
-    const start = (page - 1) * pageSize;
-    return items.slice(start, start + pageSize);
-  }, [items, itemsPages.info.pagination.page, itemsPages.info.pagination.pageSize]);
-
-  // Paginate entities client-side
-  const paginatedEntities = useMemo(() => {
-    const page = entitiesPages.info.pagination.page;
-    const pageSize = entitiesPages.info.pagination.pageSize;
-    const start = (page - 1) * pageSize;
-    return entities.slice(start, start + pageSize);
-  }, [entities, entitiesPages.info.pagination.page, entitiesPages.info.pagination.pageSize]);
-
-  if (loading || apiLoading) {
-    return (
-      <Container sx={{ display: "flex", justifyContent: "center", mt: 10 }}>
-        <CircularProgress />
-      </Container>
-    );
-  }
 
   return (
     <StyledContainer
-      prefix={
-        currentCategory?.icon ? (
-          <img
-            src={getPublicUrl(currentCategory.icon)}
-            alt={currentCategory.name}
-            style={{ height: 60, width: 60, objectFit: "contain", imageRendering: "pixelated" }}
-          />
-        ) : (
-          <Bookmarks sx={{ height: 60, width: 60, color: "primary.main" }} />
-        )
-      }
-      title={currentCategory ? currentCategory.name : `Metadado: ${metadataId}`}
-      label={currentCategory?.description || `Itens e entidades que possuem o metadado "${metadataId}"`}
-      pages={activeTab === "items" ? itemsPages : entitiesPages}
+      prefix={<Bookmarks sx={{ height: 60, width: 60, color: "primary.main" }} />}
+      title={label}
+      label={`Itens e entidades com o atributo "${label}"${definition?.unit ? `, em ${definition.unit}` : ""}.`}
+      searchValue={pages.info.search}
+      onChangeSearch={pages.setSearch}
+      search={{ placeholder: tab === "items" ? "Pesquisar itens..." : "Pesquisar entidades..." }}
+      pages={pages}
       actionsStart={
-        <Breadcrumbs
-          separator={<NavigateNext fontSize="small" />}
-          sx={{ mb: 2 }}
-        >
-          <MuiLink
-            component={Link}
-            to={`/game/${gameId}`}
-            underline="hover"
-            color="inherit"
-          >
-            Dashboard
-          </MuiLink>
-          <MuiLink
-            component={Link}
-            to={`/game/${gameId}/items/list`}
-            underline="hover"
-            color="inherit"
-          >
-            Itens
-          </MuiLink>
-          <Typography color="primary" sx={{ fontWeight: 700 }}>
-            Metadado: {currentCategory ? currentCategory.name : metadataId}
-          </Typography>
-        </Breadcrumbs>
+        <Stack spacing={1} sx={{ minWidth: 0 }}>
+          {!isMobile && (
+            <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
+              <Link to={`/game/${gameId}`}>Dashboard</Link>
+              <Link to={`/game/${gameId}/items/list`}>Itens</Link>
+              <Typography color="primary">Atributo: {label}</Typography>
+            </Breadcrumbs>
+          )}
+          <Tabs value={tab} onChange={(_, value: MetadataTab) => changeTab(value)} variant="scrollable" scrollButtons="auto">
+            <Tab value="items" icon={<Inventory />} iconPosition="start" label={`Itens (${itemCount.data?.total ?? "…"})`} />
+            <Tab value="entities" icon={<Bolt />} iconPosition="start" label={`Entidades (${entityCount.data?.total ?? "…"})`} />
+          </Tabs>
+        </Stack>
       }
       actionsEnd={
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{ mt: 2, flex: 1, justifyContent: "flex-end", alignItems: "center" }}
-        >
+        <Stack direction="row" flex={1} justifyContent={isMobile ? "flex-start" : "flex-end"}>
           <ViewModeSelector mode={viewMode} onChange={setViewMode} />
         </Stack>
       }
     >
-      <Tabs
-        value={activeTab}
-        onChange={(_, val) => setActiveTab(val)}
-        textColor="primary"
-        indicatorColor="primary"
-        sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}
-      >
-        <Tab icon={<Inventory />} iconPosition="start" label={`Itens (${items.length})`} value="items" />
-        <Tab icon={<Bolt />} iconPosition="start" label={`Entidades (${entities.length})`} value="entities" />
-      </Tabs>
-
-      {activeTab === "items" ? (
-        <Box sx={{ mb: 6 }}>
-          <ItemRenderProvider value={{ gameId: gameId || "", navigate, gameInfo, categoriesMap, currentMetadataId: metadataId }}>
-            <ListingDataView
-              data={paginatedItems}
-              viewMode={viewMode}
-              variant="compact"
-              cardMinWidth={200}
-              listHeader={[
-                { label: "Item", width: "30%" },
-                { label: "Metadados", width: "45%" },
-                { label: "Categorias", width: "25%" },
-              ]}
-              emptyMessage="Nenhum item encontrado."
-              getRowColor={(item: any) => item.rarity && gameInfo?.rarity?.[item.rarity]?.color}
-              renderCard={(item: any, variant) => {
-                const meta = item.metadata?.find(
-                  (m: any) =>
-                    m.id?.toLowerCase() === metadataId.toLowerCase() ||
-                    m.type?.toLowerCase() === metadataId.toLowerCase()
-                );
-                return ItemCard(
-                  item,
-                  variant,
-                  meta && (
-                    <Box sx={{ display: "flex", gap: 0.5, mt: 1 }}>
-                      {renderMetadataChip(meta)}
-                    </Box>
-                  )
-                );
-              }}
-              renderListItem={ItemList}
-              renderIconItem={ItemIcon}
-            />
-          </ItemRenderProvider>
-        </Box>
-      ) : (
-        <Box sx={{ mb: 6 }}>
+      {tab === "items" &&
+        (items.isPending ? (
+          <Loading />
+        ) : items.isError ? (
+          <ListError error={items.error} />
+        ) : (
           <ListingDataView
-            data={paginatedEntities}
+            data={items.data.content}
             viewMode={viewMode}
             variant="compact"
             cardMinWidth={200}
             listHeader={[
-              { label: "Entidade", width: "30%" },
-              { label: "Metadados", width: "45%" },
-              { label: "Categorias", width: "25%" },
+              { label: "Item", width: "45%" },
+              { label: "Atributos", width: "25%", hidden: isMobile },
+              { label: "Categorias", width: "30%", hidden: isMobile },
+              { label: "Preços", align: "right" as const, width: "10%", hidden: true },
             ]}
-            emptyMessage="Nenhuma entidade encontrada."
-            getRowColor={(entity: any) => entity.rarity && gameInfo?.rarity?.[entity.rarity]?.color}
-            renderCard={(entity: any, variant) => (
-              <EntityCard
-                key={entity.id}
-                entity={entity}
-                onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
-                variant={variant}
-                rarityColor={entity.rarity && gameInfo?.rarity?.[entity.rarity]?.color}
-              />
-            )}
-            renderListItem={(entity: any) => [
-              <Box
-                key={`entity_list_${entity.id}`}
-                onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                  cursor: "pointer",
-                }}
-              >
-                <Box
-                  sx={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: 0.5,
-                    backgroundColor: "rgba(0,0,0,0.2)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexShrink: 0,
-                  }}
-                >
-                  {entity.image || entity.icon ? (
-                    <img
-                      src={getPublicUrl(entity.image || entity.icon!)}
-                      alt={entity.name}
-                      style={{
-                        width: "80%",
-                        height: "80%",
-                        objectFit: "contain",
-                      }}
-                    />
-                  ) : (
-                    <BugReport
-                      sx={{ fontSize: 16, color: "rgba(255, 255, 255, 0.2)" }}
-                    />
-                  )}
-                </Box>
-                <Typography 
-                  variant="body2" 
-                  sx={{ 
-                    fontWeight: 700, 
-                    color: entity.rarity && gameInfo?.rarity?.[entity.rarity]?.color ? gameInfo?.rarity?.[entity.rarity]?.color : "text.primary",
-                    transition: "all 0.2s",
-                    "&:hover": {
-                      color: entity.rarity && gameInfo?.rarity?.[entity.rarity]?.color ? entity.rarity && gameInfo?.rarity?.[entity.rarity]?.color : "primary.main",
-                    }
-                  }}
-                >
-                  {entity.name}
-                </Typography>
-              </Box>,
-              <Box key={`val_entity_${entity.id}`}>
-                {(entity as any).metadata && (entity as any).metadata.length > 0 ? (
-                  <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-                    {(entity as any).metadata.map((meta: any) => renderMetadataChip(meta))}
-                  </Stack>
-                ) : (
-                  <Typography variant="caption" sx={{ color: "text.disabled", fontStyle: "italic" }}>
+            emptyMessage="Nenhum item com este atributo."
+            getRowColor={(item) => rarityColorOf(itemView, item)}
+            renderCard={(item, variant) => <ApiItemCard item={item} variant={variant} view={itemView} />}
+            renderListItem={(item) => itemListCells(item, itemView)}
+            renderIconItem={(item) => <ApiItemIcon item={item} view={itemView} />}
+          />
+        ))}
+
+      {tab === "entities" &&
+        (entities.isPending ? (
+          <Loading />
+        ) : entities.isError ? (
+          <ListError error={entities.error} />
+        ) : (
+          <ListingDataView
+            data={entities.data.content}
+            viewMode={viewMode}
+            variant="compact"
+            cardMinWidth={200}
+            listHeader={[
+              { label: "Entidade", width: "60%" },
+              { label: "Valor", width: "40%" },
+            ]}
+            emptyMessage="Nenhuma entidade com este atributo."
+            getRowColor={(entity) => entityRarityColor(entityView, entity)}
+            renderCard={(entity, variant) => <ApiEntityCard entity={entity} variant={variant} view={entityView} />}
+            renderListItem={(entity) => {
+              const value = entity.attributes[attributeKey];
+              return [
+                entityListCells(entity, entityView)[0],
+                value === undefined ? (
+                  <Typography key="value" variant="caption" color="text.disabled">
                     -
                   </Typography>
-                )}
-              </Box>,
-              <Stack direction={"row"} spacing={1} key={`list_cats_entity_${entity.id}`}>
-                {(Array.isArray(entity.category) ? entity.category : [entity.category]).filter(Boolean).map((catId: string) => {
-                  const cat = categoriesMap.get(catId.toLowerCase());
-                  const displayName = cat?.name || catId;
-                  return (
-                    <Chip
-                      key={`${entity.id}_category_${catId}`}
-                      label={displayName}
-                      size="small"
-                      avatar={cat?.icon ? <img src={getPublicUrl(cat.icon)} style={{ width: 16, height: 16, objectFit: "contain", borderRadius: "50%", imageRendering: "pixelated" }} /> : undefined}
-                      onClick={() => navigate(`/game/${gameId}/categories/view/${catId}`)}
-                      clickable
-                      sx={{
-                        fontSize: "0.75rem",
-                        height: "22px",
-                        cursor: "pointer",
-                      }}
-                    />
-                  );
-                })}
-              </Stack>
-            ]}
-            renderIconItem={(entity: any) => (
-              <Tooltip key={`entity_icon_${entity.id}`} title={`${entity.name}: ${(entity as any).metadata?.find((m: any) => m.id?.toLowerCase() === metadataId.toLowerCase() || m.type?.toLowerCase() === metadataId.toLowerCase())?.value}`}>
-                <Box
-                  onClick={() => navigate(`/game/${gameId}/entity/view/${entity.id}`)}
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    p: 1,
-                  }}
-                >
-                  {entity.image || entity.icon ? (
-                    <img
-                      src={getPublicUrl(entity.image || entity.icon!)}
-                      alt={entity.name}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "contain",
-                      }}
-                    />
-                  ) : (
-                    <BugReport
-                      sx={{ fontSize: 32, color: "rgba(255, 255, 255, 0.2)" }}
-                    />
-                  )}
-                </Box>
-              </Tooltip>
-            )}
+                ) : (
+                  <DataChip key="value" label={attributeLabel(attributeKey, value, definition)} />
+                ),
+              ];
+            }}
+            renderIconItem={(entity) => <ApiEntityIcon entity={entity} view={entityView} />}
           />
-        </Box>
-      )}
+        ))}
     </StyledContainer>
   );
 }

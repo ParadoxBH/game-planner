@@ -229,7 +229,8 @@ decrescente. Várias `category` combinam com E. Toda listagem aceita também `wi
 `exclude` (esconde esses códigos, ex.: os códigos de resgate já coletados) e
 `activeEvents` (esconde conteúdo de evento fora da lista; vazio mostra só o que não tem evento), com códigos
 separados por vírgula. Itens aceitam `trade`: `buyable` (preço base de compra ou vendido em loja), `sellable`,
-`traded` ou `untraded`. Itens e entidades aceitam `variantOf` (código do conteúdo base). Eventos aceitam `type` (tipo do
+`traded` ou `untraded`. Itens e entidades aceitam `variantOf` (código do conteúdo base) e `attribute` (tem o atributo, com
+qualquer valor). Eventos aceitam `type` (tipo do
 evento) e categorias, `appliesTo` (`item` e `entity` trazem também as categorias de ambos). Com `references=true`, a página traz
 também `references`: toda referência citada pelos documentos da página, com nome e ícone, como no detalhe.
 

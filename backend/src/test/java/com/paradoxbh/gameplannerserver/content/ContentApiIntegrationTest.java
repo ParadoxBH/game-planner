@@ -162,6 +162,11 @@ class ContentApiIntegrationTest extends ContentApiTest {
                 .andExpect(status().is(422));
         send(post(ITEMS, game), "editor", json("{ 'extId': 'pedra', 'name': 'Pedra', 'attributes': { 'peso': 2 } }"))
                 .andExpect(status().isCreated());
+        send(post(ITEMS, game), "editor", json("{ 'extId': 'pena', 'name': 'Pena' }"))
+                .andExpect(status().isCreated());
+
+        mvc.perform(get(ITEMS, game).param("attribute", "peso"))
+                .andExpect(jsonPath("$.content[*].extId", contains("pedra")));
     }
 
     @Test
