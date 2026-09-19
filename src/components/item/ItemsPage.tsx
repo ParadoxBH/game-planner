@@ -12,6 +12,7 @@ import { useViewMode } from "../../hooks/useViewMode";
 import { categoryUrlFilters } from "../../utils/urlFilters";
 import { ListingDataView } from "../common/ListingDataView";
 import { ListingFilterBar } from "../common/ListingFilterBar";
+import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { ApiItemCard, ApiItemIcon, itemListCells, rarityColorOf, type ItemListView } from "./ApiItemRenderers";
@@ -84,6 +85,15 @@ export function ItemsPage() {
       searchValue={pages.info.search}
       onChangeSearch={pages.setSearch}
       search={{ placeholder: listing.data?.search.placeholder }}
+      searchEnd={
+        <QueryBuilder
+          schema={listing.data}
+          search={pages.info.search}
+          onSearchChange={pages.setSearch}
+          values={criteria}
+          onChange={changeFilter}
+        />
+      }
       pages={pages}
       actionsStart={<ListingFilterBar filters={listing.data?.filters} values={criteria} onChange={changeFilter} />}
       actionsEnd={

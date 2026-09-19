@@ -25,6 +25,8 @@ interface StyledContainerProps {
   search?: {
     placeholder?: string;
   };
+  /** À direita da busca, ex.: o QueryBuilder. */
+  searchEnd?: ReactNode;
   actionsStart?: ReactNode;
   actionsEnd?: ReactNode;
   children?: ReactNode;
@@ -44,6 +46,7 @@ export function StyledContainer({
   search,
   searchValue,
   onChangeSearch,
+  searchEnd,
   actionsStart,
   actionsEnd,
   children,
@@ -116,34 +119,39 @@ export function StyledContainer({
               {postfix}
             </Stack>
 
-            {onChangeSearch && (
-              <Box sx={{ width: { xs: "100%", md: "400px" } }}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  variant="outlined"
-                  placeholder={search?.placeholder || "Pesquisar..."}
-                  value={searchValue}
-                  onChange={(e) => onChangeSearch(e.target.value)}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Search sx={{ color: "text.disabled", fontSize: '1.2rem' }} />
-                      </InputAdornment>
-                    ),
-                    sx: {
-                      backgroundColor: "rgba(255, 255, 255, 0.03)",
-                      borderRadius: dtRadius,
-                      height: { xs: 40, md: 45 },
-                      "& fieldset": { borderColor: "divider" },
-                      "&:hover fieldset": {
-                        borderColor: "rgba(255, 255, 255, 0.2)",
-                      },
-                      "&.Mui-focused fieldset": { borderColor: "primary.main" },
-                    },
-                  }}
-                />
-              </Box>
+            {(onChangeSearch || searchEnd) && (
+              <Stack direction="row" spacing={1} alignItems="center" sx={{ width: { xs: "100%", md: "auto" } }}>
+                {onChangeSearch && (
+                  <Box sx={{ flex: { xs: 1, md: "none" }, width: { md: "400px" } }}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      variant="outlined"
+                      placeholder={search?.placeholder || "Pesquisar..."}
+                      value={searchValue}
+                      onChange={(e) => onChangeSearch(e.target.value)}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Search sx={{ color: "text.disabled", fontSize: '1.2rem' }} />
+                          </InputAdornment>
+                        ),
+                        sx: {
+                          backgroundColor: "rgba(255, 255, 255, 0.03)",
+                          borderRadius: dtRadius,
+                          height: { xs: 40, md: 45 },
+                          "& fieldset": { borderColor: "divider" },
+                          "&:hover fieldset": {
+                            borderColor: "rgba(255, 255, 255, 0.2)",
+                          },
+                          "&.Mui-focused fieldset": { borderColor: "primary.main" },
+                        },
+                      }}
+                    />
+                  </Box>
+                )}
+                {searchEnd}
+              </Stack>
             )}
           </Stack>
 

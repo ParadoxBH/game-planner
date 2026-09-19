@@ -212,3 +212,16 @@ export function listingWhere(schema: ListingSchema, term: string | undefined, va
   });
   return and(...parts);
 }
+
+/** Valor de um filtro sem nada escolhido: nenhuma opção, ou nenhuma marcada em multi. */
+export function emptyFilterValue(filter: ListingFilter): FilterValue {
+  return filter.display === "multi" ? {} : null;
+}
+
+/** Quantas escolhas de um filtro estão valendo: 0 ou 1, e em multi uma por opção marcada. */
+export function filterCount(filter: ListingFilter, values: FilterValues): number {
+  const value = filterValue(filter, values);
+  if (value === null) return 0;
+  if (typeof value === "string") return 1;
+  return Object.values(value).filter((state) => state !== "indifferent").length;
+}
