@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.model.CategoryDocument;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
+import com.paradoxbh.gameplannerserver.query.FieldType;
 import com.paradoxbh.gameplannerserver.query.QueryField;
 import com.paradoxbh.gameplannerserver.query.QueryField.Option;
 
@@ -31,12 +32,12 @@ public class CategoryHandler extends AbstractContentHandler<CategoryDocument, Vo
 
     @Override
     protected List<String> specificColumns() {
-        return List.of("applies_to");
+        return List.of("applies_to", "is_primary");
     }
 
     @Override
     protected List<Object> specificValues(CategoryDocument category) {
-        return java.util.Collections.singletonList(category.appliesTo());
+        return java.util.Arrays.asList(category.appliesTo(), category.primary());
     }
 
     @Override
@@ -48,6 +49,7 @@ public class CategoryHandler extends AbstractContentHandler<CategoryDocument, Vo
                 Rows.string(row, "description"),
                 tags.media(),
                 Rows.string(row, "applies_to"),
+                Rows.bool(row, "is_primary"),
                 tags.events(),
                 meta);
     }
@@ -58,10 +60,15 @@ public class CategoryHandler extends AbstractContentHandler<CategoryDocument, Vo
         return new ContentTags(List.of(), category.events(), Map.of(), category.media());
     }
 
-    /** appliesTo "both" vale para item e entidade: categorias de item são appliesTo in [item, both]. */
+    /**
+     * appliesTo "both" vale para item e entidade: categorias de item são appliesTo in [item, both]. primary é a
+     * categoria principal.
+     */
     @Override
     protected List<QueryField> specificFields() {
-        return List.of(QueryField.options("appliesTo", "Aplica-se a", "t.applies_to",
-                new Option("item", "Item"), new Option("entity", "Entidade"), new Option("both", "Ambos")));
+        return List.of(
+                QueryField.options("appliesTo", "Aplica-se a", "t.applies_to",
+                        new Option("item", "Item"), new Option("entity", "Entidade"), new Option("both", "Ambos")),
+                QueryField.column("primary", "Principal", FieldType.BOOLEAN, "t.is_primary"));
     }
 }

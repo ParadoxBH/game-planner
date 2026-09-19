@@ -194,6 +194,8 @@ export interface CollectionGroupDocument extends ContentBase {
 export interface CategoryDocument extends ContentBase {
   name: string;
   appliesTo: "item" | "entity" | "both";
+  /** Categoria principal: abre a listagem de itens e entidades e o menu; as demais são sub-categorias. */
+  primary: boolean;
   events: string[];
 }
 

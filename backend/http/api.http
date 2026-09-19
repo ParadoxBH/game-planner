@@ -140,7 +140,7 @@ POST {{api}}/games/heartopia/categories
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
-{ "extId": "flores", "name": "Flores", "appliesTo": "item" }
+{ "extId": "flores", "name": "Flores", "appliesTo": "item", "primary": true }
 
 ### Lote de itens: cria ou substitui cada um; igual ao gravado não gera revisão
 PUT {{api}}/games/heartopia/items

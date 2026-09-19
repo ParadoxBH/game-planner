@@ -22,6 +22,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -104,9 +105,9 @@ public class ListingFilterService {
         handlers.forEach(handler -> this.handlers.put(handler.kind(), handler));
 
         specs.put(ITEM, List.of(
-                categories("category", "Categoria", Display.SELECT, "item"),
-                categories("subCategory", "Sub-categoria", Display.MULTI, "item"),
-                fixed(new ListingFilter("status", "Status", Display.SELECT, "trade", null, null, null, List.of(
+                primaryCategories(ITEM),
+                subCategories(ITEM),
+                fixed(new ListingFilter("status", "Status", Display.SELECT, "trade", null, null, null, null, List.of(
                         Option.of("buyable", "Compráveis", and(rule("buyable", "equal", true))),
                         Option.of("sellable", "Vendíveis", and(rule("sellable", "equal", true))),
                         Option.of("traded", "Comercializados",
@@ -115,22 +116,25 @@ public class ListingFilterService {
                                 and(rule("buyable", "equal", false), rule("sellable", "equal", false)))))),
                 rarity()));
         specs.put(ENTITY, List.of(
-                categories("category", "Categoria", Display.SELECT, "entity"),
-                categories("subCategory", "Sub-categoria", Display.MULTI, "entity"),
+                primaryCategories(ENTITY),
+                subCategories(ENTITY),
                 rarity()));
         // Categoria "both" vale para item e para entidade.
         specs.put(CATEGORY, List.of(
-                fixed(new ListingFilter("appliesTo", "Agrupa", Display.SELECT, null, "Tudo", null, null, List.of(
+                fixed(new ListingFilter("appliesTo", "Agrupa", Display.SELECT, null, "Tudo", null, null, null, List.of(
                         Option.of("item", "Itens", and(rule("appliesTo", "in", List.of("item", "both")))),
-                        Option.of("entity", "Entidades", and(rule("appliesTo", "in", List.of("entity", "both")))))))));
+                        Option.of("entity", "Entidades", and(rule("appliesTo", "in", List.of("entity", "both"))))))),
+                fixed(new ListingFilter("primary", "Nível", Display.SELECT, null, "Todas", null, null, null, List.of(
+                        Option.of("primary", "Principais", and(rule("primary", "equal", true))),
+                        Option.of("sub", "Sub-categorias", and(rule("primary", "equal", false))))))));
         specs.put(RECIPE, List.of(
                 new Spec(new ListingFilter("station", "Bancada", Display.SELECT, "station", "Todas as bancadas", "station",
-                        null, List.of()), this::stations)));
+                        null, null, List.of()), this::stations)));
         specs.put(EVENT, List.of(
-                new Spec(new ListingFilter("type", "Tipo", Display.TABS, null, "Todos", "type", null, List.of()),
+                new Spec(new ListingFilter("type", "Tipo", Display.TABS, null, "Todos", "type", null, null, List.of()),
                         this::eventTypes)));
         specs.put(REDEMPTION_CODE, List.of(
-                fixed(new ListingFilter("active", "Validade", Display.SWITCH, null, null, null, "true", List.of(
+                fixed(new ListingFilter("active", "Validade", Display.SWITCH, null, null, null, "true", null, List.of(
                         Option.of("true", "Ocultar expirados", and(rule("active", "equal", true))))))));
 
         this.handlers.forEach(this::validateSearch);
@@ -155,25 +159,76 @@ public class ListingFilterService {
         return new Spec(filter, null);
     }
 
-    /** Categorias que agrupam o tipo, incluindo as de ambos, pelo nome. */
-    private Spec categories(String key, String label, Display display, String appliesTo) {
-        return new Spec(new ListingFilter(key, label, display, null, null, "category", null, List.of()),
+    /**
+     * Categorias principais que o tipo usa, incluindo as de ambos, pelo nome. Escolher uma traz o que
+     * a tem, em qualquer posição.
+     */
+    private Spec primaryCategories(ContentKind kind) {
+        return new Spec(new ListingFilter("category", "Categoria", Display.SELECT, null, null, "category", null, null,
+                List.of()),
                 gameId -> jdbc.sql("""
                         SELECT c.ext_id, r.name, r.icon_media_id
                         FROM category c
                         JOIN content_ref r ON r.game_id = c.game_id AND r.kind = 'category' AND r.ext_id = c.ext_id
-                        WHERE c.game_id = :game AND c.applies_to IN (:appliesTo, 'both')
+                        WHERE c.game_id = :game AND c.is_primary AND c.applies_to IN (:kind, 'both')
+                          AND EXISTS (SELECT 1 FROM content_category u WHERE u.game_id = c.game_id
+                                      AND u.kind = :kind AND u.category_ext_id = c.ext_id)
                         ORDER BY r.name, c.ext_id
                         """)
-                        .param("game", gameId).param("appliesTo", appliesTo)
+                        .param("game", gameId).param("kind", kind.code())
                         .query((rs, rowNum) -> new Option(rs.getString("ext_id"),
                                 labelOr(rs.getString("name"), rs.getString("ext_id")), rs.getString("icon_media_id"),
-                                null, null, null))
+                                null, null, null, null))
                         .list());
     }
 
+    /**
+     * Sub-categorias: as categorias que o tipo usa, cadastradas ou não (sem cadastro, aparecem pelo
+     * código), cada uma com as principais junto das quais aparece. Escolhida a Categoria, o front
+     * mostra só as que estão dentro dela. Principal só entra quando aparece junto de outra principal,
+     * como pássaro dentro de ração.
+     */
+    private Spec subCategories(ContentKind kind) {
+        return new Spec(new ListingFilter("subCategory", "Sub-categoria", Display.MULTI, null, null, "category", null,
+                "category", List.of()),
+                gameId -> jdbc.sql("""
+                        WITH used AS (
+                            SELECT DISTINCT category_ext_id AS ext_id FROM content_category
+                            WHERE game_id = :game AND kind = :kind)
+                        SELECT used.ext_id, r.name, r.icon_media_id, coalesce(c.is_primary, false) AS is_primary,
+                               ARRAY(SELECT DISTINCT p.category_ext_id
+                                     FROM content_category s
+                                     JOIN content_category p ON p.game_id = s.game_id AND p.kind = s.kind
+                                                            AND p.ext_id = s.ext_id
+                                                            AND p.category_ext_id <> s.category_ext_id
+                                     JOIN category pc ON pc.game_id = p.game_id AND pc.ext_id = p.category_ext_id
+                                                     AND pc.is_primary
+                                     WHERE s.game_id = :game AND s.kind = :kind AND s.category_ext_id = used.ext_id
+                                     ORDER BY 1) AS parents
+                        FROM used
+                        LEFT JOIN category c ON c.game_id = :game AND c.ext_id = used.ext_id
+                        LEFT JOIN content_ref r ON r.game_id = :game AND r.kind = 'category' AND r.ext_id = used.ext_id
+                        WHERE c.ext_id IS NULL OR c.applies_to IN (:kind, 'both')
+                        ORDER BY coalesce(r.name, used.ext_id), used.ext_id
+                        """)
+                        .param("game", gameId).param("kind", kind.code())
+                        .query((rs, rowNum) -> {
+                            List<String> parents = List.of((String[]) rs.getArray("parents").getArray());
+                            if (rs.getBoolean("is_primary") && parents.isEmpty()) {
+                                return null;
+                            }
+                            return new Option(rs.getString("ext_id"),
+                                    labelOr(rs.getString("name"), rs.getString("ext_id")), rs.getString("icon_media_id"),
+                                    null, null, null, parents);
+                        })
+                        .list().stream()
+                        .filter(Objects::nonNull)
+                        .toList());
+    }
+
     private Spec rarity() {
-        return new Spec(new ListingFilter("rarity", "Raridade", Display.SELECT, null, null, "rarity", null, List.of()),
+        return new Spec(new ListingFilter("rarity", "Raridade", Display.SELECT, null, null, "rarity", null, null,
+                List.of()),
                 gameId -> rarities.findByGameIdOrderByOrdinal(gameId).stream()
                         .map(rarity -> Option.of(rarity.getCode(), rarity.getName()))
                         .toList());
@@ -183,7 +238,7 @@ public class ListingFilterService {
     private List<Option> stations(String gameId) {
         return references.recipeStations(gameId).stream()
                 .map(station -> new Option(station.extId(), labelOr(station.name(), station.extId()),
-                        station.iconMediaId(), station.recipeCount(), null, null))
+                        station.iconMediaId(), station.recipeCount(), null, null, null))
                 .toList();
     }
 
@@ -193,7 +248,8 @@ public class ListingFilterService {
                 .param("game", gameId)
                 .query((rs, rowNum) -> {
                     String type = rs.getString("event_type");
-                    return new Option(type, EVENT_TYPES.getOrDefault(type, type), null, rs.getLong("total"), null, null);
+                    return new Option(type, EVENT_TYPES.getOrDefault(type, type), null, rs.getLong("total"), null, null,
+                            null);
                 })
                 .list().stream()
                 .sorted(Comparator.comparing(Option::label))
@@ -233,6 +289,10 @@ public class ListingFilterService {
             }
         } else if (spec.load() != null) {
             throw new IllegalStateException(where + ": opções lidas do jogo precisam de field");
+        }
+        if (filter.dependsOn() != null && specs.get(kind).stream()
+                .noneMatch(other -> other.filter().key().equals(filter.dependsOn()))) {
+            throw new IllegalStateException(where + ": dependsOn " + filter.dependsOn() + " não é filtro da listagem");
         }
         if (filter.display() == Display.SWITCH && filter.options().size() != 1) {
             throw new IllegalStateException(where + ": switch tem uma opção só");

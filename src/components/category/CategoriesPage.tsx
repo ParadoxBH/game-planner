@@ -51,7 +51,10 @@ function CategoryCard({ category, variant, gameId }: { category: CategoryDocumen
           <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
             {category.name}
           </Typography>
-          <DataChip label={APPLIES_TO_LABELS[category.appliesTo]} />
+          <Stack direction="row" spacing={0.5} justifyContent={compact ? "center" : "flex-start"}>
+            <DataChip label={APPLIES_TO_LABELS[category.appliesTo]} />
+            {category.primary && <PrimaryChip />}
+          </Stack>
           {!compact && category.summary && (
             <Typography variant="caption" color="text.secondary">
               {category.summary}
@@ -60,6 +63,15 @@ function CategoryCard({ category, variant, gameId }: { category: CategoryDocumen
         </Stack>
       </Stack>
     </Card>
+  );
+}
+
+/** Marca a categoria principal, a que abre a listagem de itens e entidades; as demais são sub-categorias. */
+function PrimaryChip() {
+  return (
+    <Tooltip title="Categoria principal: aparece no filtro Categoria e no menu; as demais são sub-categorias">
+      <DataChip label="Principal" color="primary" sx={{ bgcolor: "primary.main", color: "primary.contrastText" }} />
+    </Tooltip>
   );
 }
 
@@ -78,7 +90,10 @@ function CategoryNameCell({ category, gameId }: { category: CategoryDocument; ga
 function categoryListCells(category: CategoryDocument, gameId: string): ReactNode[] {
   return [
     <CategoryNameCell key="name" category={category} gameId={gameId} />,
-    <DataChip key="appliesTo" label={APPLIES_TO_LABELS[category.appliesTo]} />,
+    <Stack key="appliesTo" direction="row" spacing={0.5}>
+      <DataChip label={APPLIES_TO_LABELS[category.appliesTo]} />
+      {category.primary && <PrimaryChip />}
+    </Stack>,
     <Typography key="id" variant="caption" sx={{ color: "text.secondary", fontFamily: "monospace" }}>
       {category.extId}
     </Typography>,

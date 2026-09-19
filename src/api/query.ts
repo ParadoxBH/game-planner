@@ -142,6 +142,8 @@ export interface ListingFilterOption {
   query?: QueryGroup;
   /** Em multi, o que "não conter" aplica; ausente, `field not_equal value`. */
   exclude?: QueryGroup;
+  /** Com `dependsOn` no filtro: sob quais valores do filtro pai a opção aparece. */
+  parents?: string[];
 }
 
 /** Filtro de tela descrito pelo backend (GET .../query/filters). O front desenha e aplica sem conhecê-lo. */
@@ -158,6 +160,8 @@ export interface ListingFilter {
   field?: string;
   /** Valor antes de o usuário mexer. */
   defaultValue?: string;
+  /** Key de outro filtro: com um valor escolhido nele, só valem as opções que o têm em `parents`. */
+  dependsOn?: string;
   options: ListingFilterOption[];
 }
 
@@ -176,6 +180,18 @@ export type FilterValue = string | null | Record<string, IncludeState>;
 
 /** Valores da barra pela `key` de cada filtro. Ausente: vale o padrão do filtro. */
 export type FilterValues = Record<string, FilterValue | undefined>;
+
+/**
+ * As opções que valem agora. Com `dependsOn` e um valor escolhido no filtro pai, só as que aparecem sob ele, como
+ * as sub-categorias da categoria principal escolhida; sem valor no pai, todas.
+ */
+export function visibleOptions(filter: ListingFilter, filters: ListingFilter[], values: FilterValues): ListingFilterOption[] {
+  const parent = filter.dependsOn ? filters.find((candidate) => candidate.key === filter.dependsOn) : undefined;
+  const selected = parent ? filterValue(parent, values) : null;
+  return typeof selected === "string"
+    ? filter.options.filter((option) => option.parents?.includes(selected))
+    : filter.options;
+}
 
 /** O valor em vigor: o escolhido ou, antes de o usuário mexer, o padrão do filtro. */
 export function filterValue(filter: ListingFilter, values: FilterValues): FilterValue {

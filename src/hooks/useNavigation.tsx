@@ -11,9 +11,10 @@ import {
   AutoAwesomeMosaic,
 } from "@mui/icons-material";
 import { useTheme } from "@mui/material";
-import { MAX_PAGE_SIZE, type CategoryDocument, type ShopDocument } from "../api/content";
-import { contentRoute, currentMedia, mediaUrl } from "../api/references";
-import { useContentCounts, useContentList, useRecipeStations } from "../api/useContent";
+import { MAX_PAGE_SIZE, type ShopDocument } from "../api/content";
+import type { ListingSchema } from "../api/query";
+import { contentRoute, mediaUrl } from "../api/references";
+import { useContentCounts, useContentList, useListingFilters, useRecipeStations } from "../api/useContent";
 
 export interface NavigationOption {
   label: string;
@@ -31,7 +32,7 @@ export interface NavigationItem {
   options?: NavigationOption[];
 }
 
-function optionIcon(mediaId: string | null, label: string): React.ReactNode {
+function optionIcon(mediaId: string | null | undefined, label: string): React.ReactNode {
   return mediaId ? <img src={mediaUrl(mediaId)} alt={label} style={{ width: 20, height: 20, objectFit: "contain" }} /> : undefined;
 }
 
@@ -43,7 +44,9 @@ export function useNavigation(gameId: string | null) {
   const theme = useTheme();
   const id = gameId ?? undefined;
   const counts = useContentCounts(id);
-  const categories = useContentList<CategoryDocument>(id, "categories", { size: MAX_PAGE_SIZE, sort: "name" });
+  // As mesmas categorias do filtro Categoria de cada listagem: as principais que o tipo usa.
+  const itemFilters = useListingFilters(id, "items");
+  const entityFilters = useListingFilters(id, "entities");
   const shops = useContentList<ShopDocument>(id, "shops", { size: MAX_PAGE_SIZE, sort: "name" });
   const stations = useRecipeStations(id);
 
@@ -52,14 +55,12 @@ export function useNavigation(gameId: string | null) {
     const base = `/game/${gameId}`;
     const count = (kind: string) => counts.data?.[kind] ?? 0;
 
-    const categoryOptions = (appliesTo: "item" | "entity", listPath: string): NavigationOption[] =>
-      (categories.data?.content ?? [])
-        .filter((category) => category.appliesTo === appliesTo || category.appliesTo === "both")
-        .map((category) => ({
-          label: category.name,
-          path: `${listPath}/${encodeURIComponent(category.extId)}`,
-          icon: optionIcon(currentMedia(category.media, "icon"), category.name),
-        }));
+    const categoryOptions = (schema: ListingSchema | undefined, listPath: string): NavigationOption[] =>
+      (schema?.filters.find((filter) => filter.key === "category")?.options ?? []).map((option) => ({
+        label: option.label,
+        path: `${listPath}/${encodeURIComponent(option.value)}`,
+        icon: optionIcon(option.iconMediaId, option.label),
+      }));
 
     const all: NavigationItem[] = [
       { id: "map", label: "Mapa", icon: <MapIcon />, path: `${base}/map`, color: theme.palette.primary.main },
@@ -70,7 +71,7 @@ export function useNavigation(gameId: string | null) {
         path: `${base}/entity/list`,
         color: "#ff9800",
         isDropdown: true,
-        options: categoryOptions("entity", `${base}/entity/list`),
+        options: categoryOptions(entityFilters.data, `${base}/entity/list`),
       },
       {
         id: "items",
@@ -79,7 +80,7 @@ export function useNavigation(gameId: string | null) {
         path: `${base}/items/list`,
         color: "#4caf50",
         isDropdown: true,
-        options: categoryOptions("item", `${base}/items/list`),
+        options: categoryOptions(itemFilters.data, `${base}/items/list`),
       },
       { id: "conjuntos", label: "Conjuntos", icon: <AutoAwesomeMosaic />, path: `${base}/conjuntos`, color: "#ffca28" },
       {
@@ -132,7 +133,7 @@ export function useNavigation(gameId: string | null) {
       codes: "redemption_code",
     };
     return all.filter((item) => !kindOf[item.id] || count(kindOf[item.id]) > 0);
-  }, [gameId, theme, counts.data, categories.data, shops.data, stations.data]);
+  }, [gameId, theme, counts.data, itemFilters.data, entityFilters.data, shops.data, stations.data]);
 
   return { menuItems };
 }

@@ -261,12 +261,19 @@ ele, o front põe na raiz de toda consulta o grupo do filtro global de eventos a
 
 | Recurso | Filtros de tela |
 |---|---|
-| `items` | Categoria (`select`), Sub-categoria (`multi`), Status (compráveis, vendíveis, comercializados, não comercializados), Raridade |
+| `items` | Categoria (`select`), Sub-categoria (`multi`, depende da Categoria), Status (compráveis, vendíveis, comercializados, não comercializados), Raridade |
 | `entities` | Categoria, Sub-categoria, Raridade |
-| `categories` | Agrupa (itens, entidades) |
+| `categories` | Agrupa (itens, entidades), Nível (principais, sub-categorias) |
 | `recipes` | Bancada, com a contagem de receitas |
 | `events` | Tipo (`tabs`), com os tipos que o jogo usa |
 | `codes` | Ocultar expirados (`switch`, ligado por padrão) |
+
+**Categoria principal.** Categoria tem `primary` (padrão `false`): a principal abre a listagem de
+itens e entidades. O filtro Categoria (e o menu do front) lista as principais que o tipo usa; a
+Sub-categoria lista as demais categorias que o tipo usa, cadastradas ou não, cada uma com `parents`,
+as principais junto das quais aparece. Com `dependsOn: "category"`, o front mostra só as da categoria
+escolhida. A migração V11 marcou como principal quem era a primeira categoria de algum item ou
+entidade. Como a escrita é do documento inteiro, reimportar categorias sem `primary` desmarca.
 
 **Paginação** começa em `page=0`. `sort` aceita as chaves de `query/fields` (`name`, `extId`,
 `createdAt`, `updatedAt`, mais `level` em item e entidade, `periodStart` em evento...), com `-` na

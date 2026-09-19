@@ -27,6 +27,7 @@ import {
   emptyFilterValue,
   filterCount,
   filterValue,
+  visibleOptions,
   type FilterValue,
   type FilterValues,
   type IncludeState,
@@ -107,19 +108,21 @@ function Section({ label, action, children }: { label: string; action?: ReactNod
 
 interface FieldProps {
   filter: ListingFilter;
+  /** As opções que valem agora (ver visibleOptions). */
+  options: ListingFilterOption[];
   value: FilterValue;
   onChange: (value: FilterValue) => void;
 }
 
 /** Escolha única (select e tabs): chips quando são poucas opções, campo com busca quando são muitas. */
-function SingleField({ filter, value, onChange }: FieldProps) {
+function SingleField({ filter, options, value, onChange }: FieldProps) {
   const selected = typeof value === "string" ? value : null;
 
-  if (filter.options.length <= CHIP_LIMIT) {
+  if (options.length <= CHIP_LIMIT) {
     return (
       <Section label={filter.label}>
         <Stack direction="row" flexWrap="wrap" gap={1}>
-          {filter.options.map((option) => {
+          {options.map((option) => {
             const active = option.value === selected;
             return (
               <Chip
@@ -142,7 +145,7 @@ function SingleField({ filter, value, onChange }: FieldProps) {
     <Section label={filter.label}>
       <Autocomplete
         size="small"
-        options={filter.options}
+        options={options}
         value={selected === null ? null : optionOf(filter, selected)}
         onChange={(_, option) => onChange(option?.value ?? null)}
         getOptionLabel={optionLabel}
@@ -206,14 +209,14 @@ function OptionList({ options, onPick }: { options: ListingFilterOption[]; onPic
  * Conter e não conter (multi): o + abre as opções; a escolhida entra na lista como "contém", e cada linha pode
  * virar "não contém" ou sair.
  */
-function MultiField({ filter, value, onChange }: FieldProps) {
+function MultiField({ filter, options, value, onChange }: FieldProps) {
   const theme = useTheme();
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const current = states(value);
   const chosen = Object.entries(current).filter(
     (entry): entry is [string, "include" | "exclude"] => entry[1] !== "indifferent",
   );
-  const available = filter.options.filter((option) => !chosen.some(([chosenValue]) => chosenValue === option.value));
+  const available = options.filter((option) => !chosen.some(([chosenValue]) => chosenValue === option.value));
 
   const set = (option: string, state: "include" | "exclude") => onChange({ ...current, [option]: state });
   const remove = (option: string) => {
@@ -441,16 +444,20 @@ export function QueryBuilder({ schema, search, onSearchChange, values, onChange 
             }}
           />
 
-          {filters
-            .filter((filter) => filter.options.length > 0)
-            .map((filter) => (
+          {filters.map((filter) => {
+            // Sem opções agora (ex.: categoria sem sub-categorias) e nada escolhido, o filtro não aparece.
+            const options = visibleOptions(filter, filters, values);
+            if (options.length === 0 && filterCount(filter, values) === 0) return null;
+            return (
               <FilterField
                 key={filter.key}
                 filter={filter}
+                options={options}
                 value={filterValue(filter, values)}
                 onChange={(value) => onChange(filter.key, value)}
               />
-            ))}
+            );
+          })}
         </Stack>
       </Popover>
     </>

@@ -3,7 +3,9 @@ import { Stack, Switch, Tab, Tabs, Typography } from "@mui/material";
 import { Build, FilterList, SwapHoriz } from "@mui/icons-material";
 import { mediaUrl } from "../../api/references";
 import {
+  filterCount,
   filterValue,
+  visibleOptions,
   type FilterValue,
   type FilterValues,
   type IncludeState,
@@ -57,8 +59,9 @@ export function ListingFilterBar({ filters, values, onChange }: ListingFilterBar
   return (
     <>
       {(filters ?? [])
-        .filter((filter) => filter.options.length > 0)
-        .map((filter) => {
+        .map((filter) => ({ filter, options: visibleOptions(filter, filters ?? [], values) }))
+        .filter(({ filter, options }) => options.length > 0 || filterCount(filter, values) > 0)
+        .map(({ filter, options }) => {
           const value = filterValue(filter, values);
           switch (filter.display) {
             case "multi":
@@ -67,7 +70,7 @@ export function ListingFilterBar({ filters, values, onChange }: ListingFilterBar
                   key={filter.key}
                   label={filter.label}
                   states={states(value)}
-                  options={filter.options.map(pickOption)}
+                  options={options.map(pickOption)}
                   onChange={(option, state) => onChange(filter.key, { ...states(value), [option]: state })}
                   icon={filter.icon ? ICONS[filter.icon] : undefined}
                   fullWidth={isMobile}
@@ -83,7 +86,7 @@ export function ListingFilterBar({ filters, values, onChange }: ListingFilterBar
                   scrollButtons="auto"
                 >
                   <Tab value={ALL} label={filter.allLabel ?? "Todos"} />
-                  {filter.options.map((option) => (
+                  {options.map((option) => (
                     <Tab key={option.value} value={option.value} label={optionLabel(option)} />
                   ))}
                 </Tabs>
@@ -109,7 +112,7 @@ export function ListingFilterBar({ filters, values, onChange }: ListingFilterBar
                   key={filter.key}
                   label={filter.label}
                   value={typeof value === "string" ? value : null}
-                  options={filter.options.map(pickOption)}
+                  options={options.map(pickOption)}
                   onChange={(selected) => onChange(filter.key, selected)}
                   allLabel={filter.allLabel}
                   icon={filter.icon ? ICONS[filter.icon] : undefined}

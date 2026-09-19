@@ -455,12 +455,32 @@ class ContentApiIntegrationTest extends ContentApiTest {
     @Test
     void listingFiltersComeWithTheGameOptions() throws Exception {
         send(put(CATEGORIES, game), "editor", json("""
-                [ { 'extId': 'flor', 'name': 'Flor', 'appliesTo': 'item' },
-                  { 'extId': 'npc', 'name': 'NPC', 'appliesTo': 'entity' },
-                  { 'extId': 'raro', 'name': 'Raro' } ]
+                [ { 'extId': 'flor', 'name': 'Flor', 'appliesTo': 'item', 'primary': true },
+                  { 'extId': 'fruta', 'name': 'Fruta', 'appliesTo': 'item', 'primary': true },
+                  { 'extId': 'npc', 'name': 'NPC', 'appliesTo': 'entity', 'primary': true },
+                  { 'extId': 'vazia', 'name': 'Vazia', 'appliesTo': 'item', 'primary': true },
+                  { 'extId': 'raro', 'name': 'Raro' },
+                  { 'extId': 'doce', 'name': 'Doce', 'appliesTo': 'item' } ]
                 """))
                 .andExpect(status().isOk());
+        send(put(ITEMS, game), "editor", json("""
+                [ { 'extId': 'rosa', 'name': 'Rosa', 'categories': ['flor', 'raro', 'sazonal'] },
+                  { 'extId': 'maca', 'name': 'Maca', 'categories': ['fruta', 'doce', 'raro'] },
+                  { 'extId': 'cesta', 'name': 'Cesta', 'categories': ['fruta', 'flor'] } ]
+                """))
+                .andExpect(status().isOk());
+        send(put("/api/v1/games/{game}/entities", game), "editor",
+                json("[ { 'extId': 'joao', 'name': 'Joao', 'categories': ['npc', 'raro'] } ]"))
+                .andExpect(status().isOk());
 
+        mvc.perform(get(CATEGORIES + "/flor", game)).andExpect(jsonPath("$.primary").value(true));
+        mvc.perform(get(CATEGORIES + "/raro", game)).andExpect(jsonPath("$.primary").value(false));
+        mvc.perform(query(CATEGORIES, and(rule("primary", "equal", true)), game).param("sort", "extId"))
+                .andExpect(jsonPath("$.content[*].extId", contains("flor", "fruta", "npc", "vazia")));
+
+        // Categoria: só as principais que algum item usa. Sub-categoria: as que os itens usam, cadastradas
+        // ou não (sazonal), cada uma com as principais junto das quais aparece; principal só entra quando
+        // aparece junto de outra (flor e fruta na cesta).
         mvc.perform(get(ITEMS + "/query/filters", game))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.search.placeholder").value("Pesquisar itens..."))
@@ -469,19 +489,32 @@ class ContentApiIntegrationTest extends ContentApiTest {
                 .andExpect(jsonPath("$.filters[*].key", contains("category", "subCategory", "status", "rarity")))
                 .andExpect(jsonPath("$.filters[0].display").value("select"))
                 .andExpect(jsonPath("$.filters[0].field").value("category"))
-                .andExpect(jsonPath("$.filters[0].options[*].value", contains("flor", "raro")))
+                .andExpect(jsonPath("$.filters[0].options[*].value", contains("flor", "fruta")))
                 .andExpect(jsonPath("$.filters[1].display").value("multi"))
+                .andExpect(jsonPath("$.filters[1].dependsOn").value("category"))
+                .andExpect(jsonPath("$.filters[1].options[*].value", contains("doce", "flor", "fruta", "raro", "sazonal")))
+                .andExpect(jsonPath("$.filters[1].options[?(@.value == 'doce')].parents[*]", contains("fruta")))
+                .andExpect(jsonPath("$.filters[1].options[?(@.value == 'flor')].parents[*]", contains("fruta")))
+                .andExpect(jsonPath("$.filters[1].options[?(@.value == 'raro')].parents[*]", contains("flor", "fruta")))
+                .andExpect(jsonPath("$.filters[1].options[?(@.value == 'sazonal')].label", contains("sazonal")))
+                .andExpect(jsonPath("$.filters[1].options[?(@.value == 'sazonal')].parents[*]", contains("flor")))
                 .andExpect(jsonPath("$.filters[2].options[0].query.rules[0].field").value("buyable"))
                 .andExpect(jsonPath("$.filters[3].options").isEmpty());
-
-        // Categoria nova entra no filtro sem mudança no front.
-        send(post(CATEGORIES, game), "editor", json("{ 'extId': 'arvore', 'name': 'Arvore', 'appliesTo': 'item' }"))
-                .andExpect(status().isCreated());
-        mvc.perform(get(ITEMS + "/query/filters", game))
-                .andExpect(jsonPath("$.filters[0].options[*].value", contains("arvore", "flor", "raro")));
         mvc.perform(get("/api/v1/games/{game}/entities/query/filters", game))
-                .andExpect(jsonPath("$.filters[0].options[*].value", contains("npc", "raro")));
+                .andExpect(jsonPath("$.filters[0].options[*].value", contains("npc")))
+                .andExpect(jsonPath("$.filters[1].options[*].value", contains("raro")))
+                .andExpect(jsonPath("$.filters[1].options[0].parents[*]", contains("npc")));
 
+        // Marcar uma categoria como principal a leva para o filtro, sem mudança no front.
+        send(put(CATEGORIES + "/{id}", game, "doce"), "editor",
+                json("{ 'name': 'Doce', 'appliesTo': 'item', 'primary': true }"))
+                .andExpect(status().isOk());
+        mvc.perform(get(ITEMS + "/query/filters", game))
+                .andExpect(jsonPath("$.filters[0].options[*].value", contains("doce", "flor", "fruta")))
+                .andExpect(jsonPath("$.filters[1].options[?(@.value == 'raro')].parents[*]", contains("doce", "flor", "fruta")));
+
+        mvc.perform(get(CATEGORIES + "/query/filters", game))
+                .andExpect(jsonPath("$.filters[*].key", contains("appliesTo", "primary")));
         mvc.perform(get("/api/v1/games/{game}/maps/query/filters", game)).andExpect(jsonPath("$.filters").isEmpty());
         // Evento e código de resgate não têm eventos: o filtro global não vale para eles.
         mvc.perform(get("/api/v1/games/{game}/codes/query/filters", game)).andExpect(jsonPath("$.activeEvents").value(false));

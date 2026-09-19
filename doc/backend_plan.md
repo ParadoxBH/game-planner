@@ -1116,6 +1116,11 @@ descreve a barra, e o front a desenha com um componente só (`ListingFilterBar`)
   desfaz grupo vazio, grupo com um filho só e grupo com o mesmo operador do pai.
 - Os rótulos dos tipos de evento conhecidos (clima, season, mapa, event) estão no serviço; tipo novo
   aparece com o próprio código.
+- **Categoria principal é campo** (`primary`, V11), não mais a ordem das categorias no item. A
+  migração marcou quem era a primeira categoria de algum item ou entidade, a regra da versão antiga
+  do front. O filtro Categoria e o menu listam as principais que o tipo usa; a Sub-categoria, as
+  demais categorias usadas (cadastradas ou não, e principais que aparecem junto de outra), com
+  `parents`. `dependsOn` no filtro faz o front mostrar só as sub-categorias da categoria escolhida.
 
 ---
 
