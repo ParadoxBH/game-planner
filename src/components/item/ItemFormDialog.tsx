@@ -2,24 +2,19 @@ import { useMemo, useState } from "react";
 import {
   Alert,
   Button,
-  Chip,
   CircularProgress,
   Divider,
-  FormControlLabel,
   Grid,
   IconButton,
   InputAdornment,
   MenuItem,
   Stack,
-  Switch,
   TextField,
-  Tooltip,
   Typography,
 } from "@mui/material";
-import { Clear, Search } from "@mui/icons-material";
+import { Add, Clear, Search } from "@mui/icons-material";
 import {
   MAX_PAGE_SIZE,
-  type AttributeValue,
   type CategoryDocument,
   type EventDocument,
   type ItemDocument,
@@ -27,7 +22,10 @@ import {
 } from "../../api/content";
 import { currentMedia } from "../../api/references";
 import { useAttributeDefinitions, useContentDocument, useContentList, useRarities } from "../../api/useContent";
+import { CategoryFormDialog } from "../category/CategoryFormDialog";
 import { ApiContentSelector } from "../common/ApiContentSelector";
+import { AttributeFields } from "../common/AttributeFields";
+import { attributeFormOf, attributesInvalid, attributesOut, type AttributeForm } from "../common/attributeValues";
 import { CodesField, type CodeOption } from "../common/CodesField";
 import { numberOf, slugOf, useContentSave } from "../common/contentForm";
 import { IconUploadField } from "../common/IconUploadField";
@@ -47,7 +45,7 @@ interface ItemForm {
   variantOf: string | null;
   categories: string[];
   events: string[];
-  attributes: Record<string, string | boolean>;
+  attributes: AttributeForm;
 }
 
 const text = (value: number | string | null | undefined) => (value === null || value === undefined ? "" : String(value));
@@ -66,9 +64,7 @@ function formOf(item: ItemDocument | null): ItemForm {
     variantOf: item?.variantOf ?? null,
     categories: item?.categories ?? [],
     events: item?.events ?? [],
-    attributes: Object.fromEntries(
-      Object.entries(item?.attributes ?? {}).map(([key, value]) => [key, typeof value === "boolean" ? value : String(value)]),
-    ),
+    attributes: attributeFormOf(item?.attributes),
   };
 }
 
@@ -159,6 +155,7 @@ export function ItemFormDialog({ gameId, item, onClose, onSaved }: ItemFormDialo
   const [icon, setIcon] = useState<File | null>(null);
   const [picking, setPicking] = useState<Picking>(null);
   const [pickError, setPickError] = useState<string | null>(null);
+  const [creatingCategory, setCreatingCategory] = useState(false);
   const { save, saving, error, creating } = useContentSave(gameId, "items", item === null);
 
   const rarities = useRarities(gameId);
@@ -186,11 +183,6 @@ export function ItemFormDialog({ gameId, item, onClose, onSaved }: ItemFormDialo
       })),
     [events.data],
   );
-  const sortedDefinitions = useMemo(
-    () => [...(definitions.data ?? [])].sort((a, b) => a.ordinal - b.ordinal),
-    [definitions.data],
-  );
-
   const set = <K extends keyof ItemForm>(key: K, value: ItemForm[K]) => setForm((current) => ({ ...current, [key]: value }));
   const setAttribute = (key: string, value: string | boolean) =>
     setForm((current) => ({ ...current, attributes: { ...current.attributes, [key]: value } }));
@@ -202,12 +194,7 @@ export function ItemFormDialog({ gameId, item, onClose, onSaved }: ItemFormDialo
   const buy = numberOf(form.baseBuyPrice);
   const sell = numberOf(form.baseSellPrice);
   const levelInvalid = level === undefined || (level !== null && !Number.isInteger(level));
-  const numberAttributesInvalid = sortedDefinitions.some(
-    (definition) =>
-      definition.dataType === "number" &&
-      typeof form.attributes[definition.key] === "string" &&
-      numberOf(form.attributes[definition.key] as string) === undefined,
-  );
+  const numberAttributesInvalid = attributesInvalid(form.attributes, definitions.data ?? []);
   const valid =
     form.name.trim() !== "" &&
     form.extId.trim() !== "" &&
@@ -215,20 +202,6 @@ export function ItemFormDialog({ gameId, item, onClose, onSaved }: ItemFormDialo
     buy !== undefined &&
     sell !== undefined &&
     !numberAttributesInvalid;
-
-  const attributesOut = (): Record<string, AttributeValue> => {
-    const types = new Map(sortedDefinitions.map((definition) => [definition.key, definition.dataType]));
-    const out: Record<string, AttributeValue> = {};
-    Object.entries(form.attributes).forEach(([key, value]) => {
-      if (typeof value === "boolean") {
-        out[key] = value;
-        return;
-      }
-      if (value.trim() === "") return;
-      out[key] = types.get(key) === "number" ? (numberOf(value) as number) : value.trim();
-    });
-    return out;
-  };
 
   const submit = async () => {
     if (!valid) return;
@@ -248,7 +221,7 @@ export function ItemFormDialog({ gameId, item, onClose, onSaved }: ItemFormDialo
         variantOf: form.variantOf,
         categories: form.categories,
         events: form.events,
-        attributes: attributesOut(),
+        attributes: attributesOut(form.attributes, definitions.data ?? []),
       },
       [{ file: icon, usage: "icon" }],
     );
@@ -257,10 +230,6 @@ export function ItemFormDialog({ gameId, item, onClose, onSaved }: ItemFormDialo
       onSaved?.(extId);
     }
   };
-
-  // Atributos gravados cuja definição o jogo não tem: vão de volta como estão, só para leitura.
-  const knownKeys = new Set(sortedDefinitions.map((definition) => definition.key));
-  const unknownAttributes = Object.entries(form.attributes).filter(([key]) => !knownKeys.has(key));
 
   return (
     <StyledDialog
@@ -401,6 +370,11 @@ export function ItemFormDialog({ gameId, item, onClose, onSaved }: ItemFormDialo
           onChange={(value) => set("categories", value)}
           loading={categories.isPending}
           helperText="A principal abre o item nos painéis e no filtro Categoria; as demais são sub-categorias."
+          action={
+            <Button size="small" startIcon={<Add />} onClick={() => setCreatingCategory(true)} sx={{ textTransform: "none", whiteSpace: "nowrap", mt: 1 }}>
+              Nova
+            </Button>
+          }
         />
         <CodesField
           label="Eventos"
@@ -420,63 +394,7 @@ export function ItemFormDialog({ gameId, item, onClose, onSaved }: ItemFormDialo
         />
         {pickError && <Alert severity="warning">{pickError}</Alert>}
 
-        {(sortedDefinitions.length > 0 || unknownAttributes.length > 0) && (
-          <>
-            <Divider textAlign="left">
-              <Typography variant="caption" color="text.secondary">
-                Atributos
-              </Typography>
-            </Divider>
-            <Grid container spacing={2}>
-              {sortedDefinitions.map((definition) => {
-                const value = form.attributes[definition.key];
-                if (definition.dataType === "boolean") {
-                  return (
-                    <Grid key={definition.key} size={{ xs: 12, sm: 6 }}>
-                      <FormControlLabel
-                        control={
-                          <Switch checked={value === true} onChange={(event) => setAttribute(definition.key, event.target.checked)} />
-                        }
-                        label={definition.label}
-                      />
-                    </Grid>
-                  );
-                }
-                const invalid = definition.dataType === "number" && typeof value === "string" && numberOf(value) === undefined;
-                return (
-                  <Grid key={definition.key} size={{ xs: 12, sm: 6 }}>
-                    <TextField
-                      label={definition.label}
-                      value={typeof value === "string" ? value : ""}
-                      onChange={(event) => setAttribute(definition.key, event.target.value)}
-                      error={invalid}
-                      helperText={invalid ? "Número." : undefined}
-                      fullWidth
-                      slotProps={{
-                        input: {
-                          endAdornment: definition.unit ? <InputAdornment position="end">{definition.unit}</InputAdornment> : undefined,
-                        },
-                        htmlInput: definition.dataType === "number" ? { inputMode: "decimal" } : undefined,
-                      }}
-                    />
-                  </Grid>
-                );
-              })}
-            </Grid>
-            {unknownAttributes.length > 0 && (
-              <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" alignItems="center">
-                <Tooltip title="Atributos sem definição no jogo: são mantidos como estão.">
-                  <Typography variant="caption" color="text.secondary">
-                    Outros atributos:
-                  </Typography>
-                </Tooltip>
-                {unknownAttributes.map(([key, value]) => (
-                  <Chip key={key} size="small" variant="outlined" label={`${key}: ${String(value)}`} />
-                ))}
-              </Stack>
-            )}
-          </>
-        )}
+        <AttributeFields definitions={definitions.data ?? []} value={form.attributes} onChange={setAttribute} />
 
         {error && <Alert severity="error">{error}</Alert>}
       </Stack>
@@ -502,6 +420,14 @@ export function ItemFormDialog({ gameId, item, onClose, onSaved }: ItemFormDialo
           setPicking(null);
         }}
       />
+      {creatingCategory && (
+        <CategoryFormDialog
+          gameId={gameId}
+          category={null}
+          onClose={() => setCreatingCategory(false)}
+          onSaved={(extId) => set("categories", [...form.categories, extId])}
+        />
+      )}
     </StyledDialog>
   );
 }

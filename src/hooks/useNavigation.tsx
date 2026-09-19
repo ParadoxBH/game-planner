@@ -18,7 +18,7 @@ import { useTheme } from "@mui/material";
 import { MAX_PAGE_SIZE, type ShopDocument } from "../api/content";
 import type { ListingSchema } from "../api/query";
 import { contentRoute, mediaUrl } from "../api/references";
-import { useGameAdmin } from "./useGameAdmin";
+import { useGameAdmin, useGameEditor } from "./useGameAdmin";
 import { useContentCounts, useContentList, useListingFilters, useRecipeStations } from "../api/useContent";
 
 export interface NavigationOption {
@@ -26,6 +26,9 @@ export interface NavigationOption {
   path: string;
   icon?: React.ReactNode;
 }
+
+/** Seções com tela de criação: aparecem para quem edita mesmo num jogo ainda sem nada. */
+const CREATABLE = new Set(["map", "entities", "items", "recipes"]);
 
 export interface NavigationItem {
   id: string;
@@ -57,6 +60,7 @@ export function useNavigation(gameId: string | null) {
   const shops = useContentList<ShopDocument>(id, "shops", { size: MAX_PAGE_SIZE, sort: "name" });
   const stations = useRecipeStations(id);
   const { isAdmin, isOwner } = useGameAdmin(id);
+  const { canEdit } = useGameEditor(id);
 
   const menuItems = useMemo<NavigationItem[]>(() => {
     if (!gameId) return [];
@@ -160,9 +164,12 @@ export function useNavigation(gameId: string | null) {
       events: "event",
       codes: "redemption_code",
     };
-    // O mapa aparece para admin mesmo sem nenhum: é na seleção de mapas que se cria o primeiro.
-    return all.filter((item) => !kindOf[item.id] || count(kindOf[item.id]) > 0 || (item.id === "map" && isAdmin));
-  }, [gameId, theme, counts.data, itemFilters.data, entityFilters.data, shops.data, stations.data, isAdmin, isOwner]);
+    // Sem nenhum conteúdo do tipo, a seção some — menos para quem edita, que precisa dela para
+    // cadastrar o primeiro. Só vale onde há tela de criação (ver CREATABLE).
+    return all.filter(
+      (item) => !kindOf[item.id] || count(kindOf[item.id]) > 0 || (canEdit && CREATABLE.has(item.id)),
+    );
+  }, [gameId, theme, counts.data, itemFilters.data, entityFilters.data, shops.data, stations.data, isAdmin, isOwner, canEdit]);
 
   return { menuItems };
 }

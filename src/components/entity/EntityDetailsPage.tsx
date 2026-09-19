@@ -1,10 +1,11 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Breadcrumbs, CircularProgress, Divider, Grid, Paper, Stack, Tooltip, Typography } from "@mui/material";
+import { Breadcrumbs, Button, CircularProgress, Divider, Grid, Paper, Stack, Tooltip, Typography } from "@mui/material";
 import {
   Architecture,
   Bolt,
   Construction,
+  Edit,
   Handyman,
   Inventory,
   List as ListIcon,
@@ -19,6 +20,7 @@ import { ApiError } from "../../api/ApiError";
 import type { EntityDocument, EntityRelated, Reference } from "../../api/content";
 import { contentRoute, currentMedia, ReferenceIndex } from "../../api/references";
 import { useAttributeDefinitions, useContentDetails, useRarities } from "../../api/useContent";
+import { useGameAdmin, useGameEditor } from "../../hooks/useGameAdmin";
 import { usePlatform } from "../../hooks/usePlatform";
 import { formatAmount, formatChance, formatDuration, formatRange } from "../../utils/format";
 import {
@@ -39,6 +41,7 @@ import { StyledContainer } from "../common/StyledContainer";
 import { AttributeChips } from "../item/ApiItemRenderers";
 import { ApiRecipeCard } from "../recipe/ApiRecipeCard";
 import { ApiShopOffers, offersFor } from "../shop/ApiShopOffers";
+import { EntityFormDialog } from "./EntityFormDialog";
 
 /** Detalhe de entidade, lido do agregado /entities/{id}/details da API. */
 export function EntityDetailsPage() {
@@ -47,6 +50,9 @@ export function EntityDetailsPage() {
   const { isMobile } = usePlatform();
 
   const details = useContentDetails<EntityDocument, EntityRelated>(gameId, "entities", entityId);
+  const { canEdit } = useGameEditor(gameId);
+  const { isAdmin } = useGameAdmin(gameId);
+  const [editing, setEditing] = useState(false);
   const rarities = useRarities(gameId);
   const attributes = useAttributeDefinitions(gameId);
   const references = useMemo(() => new ReferenceIndex(details.data?.references), [details.data]);
@@ -96,6 +102,13 @@ export function EntityDetailsPage() {
           <Link to={`/game/${gameId}/entity`}>Entidades</Link>
           <Typography color="primary">{entity.name}</Typography>
         </Breadcrumbs>
+      }
+      actionsEnd={
+        canEdit && (
+          <Button variant="outlined" size="small" startIcon={<Edit />} onClick={() => setEditing(true)} sx={{ textTransform: "none" }}>
+            Editar
+          </Button>
+        )
       }
     >
       <DetainContainer>
@@ -355,6 +368,15 @@ export function EntityDetailsPage() {
           {related.rewardOf.content.length > 0 && <ApiRewardCodes codes={related.rewardOf.content} target={self} />}
         </DetainItem>
       </DetainContainer>
+      {editing && (
+        <EntityFormDialog
+          gameId={gameId}
+          entity={entity}
+          onClose={() => setEditing(false)}
+          canDelete={isAdmin}
+          onDeleted={() => navigate(`/game/${gameId}/entity`)}
+        />
+      )}
     </StyledContainer>
   );
 }

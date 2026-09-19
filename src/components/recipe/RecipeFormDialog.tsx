@@ -4,9 +4,7 @@ import {
   Autocomplete,
   Box,
   Button,
-  Chip,
   CircularProgress,
-  Divider,
   FormControlLabel,
   Grid,
   IconButton,
@@ -19,7 +17,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Add, ArrowDownward, ArrowUpward, Clear, Delete, ErrorOutline, SwapHoriz } from "@mui/icons-material";
+import { Add, Clear, Delete } from "@mui/icons-material";
 import {
   MAX_PAGE_SIZE,
   type EventDocument,
@@ -35,6 +33,8 @@ import { ConfirmDeleteDialog } from "../common/ConfirmDeleteDialog";
 import { numberOf, slugOf, useContentSave } from "../common/contentForm";
 import { IconUploadField } from "../common/IconUploadField";
 import { ReferenceName } from "../common/ReferenceName";
+import { FormSection, TabLabel, TargetRow } from "../common/formLayout";
+import { chanceIn, chanceOut, isChance, isOptionalInteger, isPositive, move } from "../common/formValues";
 import { StyledDialog } from "../common/StyledDialog";
 import { UNLOCK_LABELS } from "./recipeLabels";
 
@@ -98,8 +98,7 @@ function formOf(recipe: RecipeDocument | null): RecipeForm {
       key: key(),
       target: output.target,
       amount: String(output.amount),
-      // O documento guarda a chance de 0 a 1; a tela, em porcentagem.
-      chance: output.chance === null ? "" : String(+(output.chance * 100).toFixed(4)),
+      chance: chanceIn(output.chance),
       level: text(output.level),
     })),
     unlock: (recipe?.unlock ?? []).map((unlock) => ({
@@ -112,115 +111,8 @@ function formOf(recipe: RecipeDocument | null): RecipeForm {
   };
 }
 
-const isPositive = (value: string) => {
-  const number = numberOf(value);
-  return number !== null && number !== undefined && number > 0;
-};
-
-const isOptionalInteger = (value: string) => {
-  const number = numberOf(value);
-  return number === null || (number !== undefined && Number.isInteger(number));
-};
-
-const isChance = (value: string) => {
-  const number = numberOf(value);
-  return number === null || (number !== undefined && number > 0 && number <= 100);
-};
-
-function Section({ title, action }: { title: string; action?: React.ReactNode }) {
-  return (
-    <Stack direction="row" alignItems="center" spacing={1}>
-      <Divider textAlign="left" sx={{ flex: 1 }}>
-        <Typography variant="caption" color="text.secondary">
-          {title}
-        </Typography>
-      </Divider>
-      {action}
-    </Stack>
-  );
-}
-
 type RecipeTab = "data" | "inputs" | "outputs";
 
-/** Rótulo da aba: o nome, a quantidade de linhas e, em vermelho, quando algo nela impede salvar. */
-function TabLabel({ label, count, invalid }: { label: string; count?: number; invalid: boolean }) {
-  return (
-    <Stack direction="row" spacing={1} alignItems="center">
-      <span>{label}</span>
-      {count !== undefined && <Chip size="small" label={count} color={invalid ? "error" : "default"} sx={{ height: 20 }} />}
-      {count === undefined && invalid && <ErrorOutline fontSize="small" color="error" />}
-    </Stack>
-  );
-}
-
-/** Linha de uma lista, com o alvo à esquerda, os campos no meio e as ações à direita. */
-function Row({
-  gameId,
-  target,
-  onPick,
-  children,
-  onUp,
-  onDown,
-  onRemove,
-}: {
-  gameId: string;
-  target: Reference | null;
-  onPick: () => void;
-  children?: React.ReactNode;
-  onUp?: () => void;
-  onDown?: () => void;
-  onRemove: () => void;
-}) {
-  return (
-    <Stack
-      direction={{ xs: "column", sm: "row" }}
-      spacing={1}
-      alignItems={{ sm: "center" }}
-      sx={{ p: 1, border: 1, borderColor: "divider", borderRadius: 1 }}
-    >
-      <Button
-        onClick={onPick}
-        color="inherit"
-        endIcon={<SwapHoriz fontSize="small" />}
-        sx={{ textTransform: "none", justifyContent: "space-between", minWidth: 0, flex: { sm: "0 0 38%" } }}
-      >
-        {target ? (
-          <ReferenceName gameId={gameId} target={target} />
-        ) : (
-          <Typography variant="body2" color="text.secondary">
-            Sem alvo
-          </Typography>
-        )}
-      </Button>
-      <Stack direction="row" spacing={1} alignItems="center" sx={{ flex: 1 }}>
-        {children}
-      </Stack>
-      <Stack direction="row" spacing={0.5} justifyContent="flex-end">
-        {onUp && (
-          <Tooltip title="Subir">
-            <IconButton size="small" onClick={onUp}>
-              <ArrowUpward fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        )}
-        {onDown && (
-          <Tooltip title="Descer">
-            <IconButton size="small" onClick={onDown}>
-              <ArrowDownward fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        )}
-        <Tooltip title="Remover">
-          <IconButton size="small" color="error" onClick={onRemove}>
-            <Delete fontSize="small" />
-          </IconButton>
-        </Tooltip>
-      </Stack>
-    </Stack>
-  );
-}
-
-/** O que o seletor está escolhendo: o alvo de uma linha de uma lista, ou (index null) uma linha nova. */
 type Picking = { list: "inputs" | "outputs" | "unlock"; index: number | null } | null;
 
 const PICK_KINDS: Record<"inputs" | "outputs" | "unlock", SelectorKind[]> = {
@@ -235,12 +127,6 @@ const PICK_TITLES = {
   outputs: "Selecionar produto",
   unlock: "Selecionar alvo do desbloqueio",
 };
-
-function move<T>(list: T[], index: number, direction: -1 | 1): T[] {
-  const next = [...list];
-  [next[index], next[index + direction]] = [next[index + direction], next[index]];
-  return next;
-}
 
 interface RecipeFormDialogProps {
   gameId: string;
@@ -352,15 +238,12 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
         craftTimeSeconds: craftTime,
         stations: form.stations,
         inputs: form.inputs.map((row) => ({ target: row.target, amount: numberOf(row.amount), notConsumed: row.notConsumed })),
-        outputs: form.outputs.map((row) => {
-          const chance = numberOf(row.chance);
-          return {
-            target: row.target,
-            amount: numberOf(row.amount),
-            chance: chance === null || chance === undefined ? null : chance / 100,
-            level: numberOf(row.level),
-          };
-        }),
+        outputs: form.outputs.map((row) => ({
+          target: row.target,
+          amount: numberOf(row.amount),
+          chance: chanceOut(row.chance),
+          level: numberOf(row.level),
+        })),
         unlock: form.unlock.map((row) => ({ type: row.type.trim(), target: row.target, value: row.value.trim() || null })),
         events: form.events,
       },
@@ -487,7 +370,7 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
                 />
               </Grid>
             </Grid>
-            <Section title="Descrição e eventos" />
+            <FormSection title="Descrição e eventos" />
             <TextField label="Resumo" value={form.summary} onChange={(event) => set("summary", event.target.value)} fullWidth />
             <TextField
               label="Descrição"
@@ -505,7 +388,7 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
               loading={events.isPending}
               helperText="Com eventos, a receita só aparece quando algum deles está ativo."
             />
-            <Section
+            <FormSection
               title="Desbloqueio"
               action={
                 <Button
@@ -588,7 +471,7 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
 
         {tab === "inputs" && (
           <>
-            <Section
+            <FormSection
               title="Ingredientes"
               action={
                 <Button size="small" startIcon={<Add />} onClick={() => setPicking({ list: "inputs", index: null })} sx={{ textTransform: "none" }}>
@@ -602,7 +485,7 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
               </Typography>
             )}
             {form.inputs.map((row, index) => (
-              <Row
+              <TargetRow
                 key={row.key}
                 gameId={gameId}
                 target={row.target}
@@ -628,14 +511,14 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
                     label={<Typography variant="body2">Não consome</Typography>}
                   />
                 </Tooltip>
-              </Row>
+              </TargetRow>
             ))}
           </>
         )}
 
         {tab === "outputs" && (
           <>
-            <Section
+            <FormSection
               title="Produtos"
               action={
                 <Button size="small" startIcon={<Add />} onClick={() => setPicking({ list: "outputs", index: null })} sx={{ textTransform: "none" }}>
@@ -649,7 +532,7 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
               </Typography>
             )}
             {form.outputs.map((row, index) => (
-              <Row
+              <TargetRow
                 key={row.key}
                 gameId={gameId}
                 target={row.target}
@@ -693,7 +576,7 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
                   sx={{ width: 90 }}
                   slotProps={{ htmlInput: { inputMode: "numeric" } }}
                 />
-              </Row>
+              </TargetRow>
             ))}
           </>
         )}

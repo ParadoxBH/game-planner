@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { Autocomplete, Chip, Stack, TextField, Typography } from "@mui/material";
+import { useMemo, type ReactNode } from "react";
+import { Autocomplete, Box, Chip, Stack, TextField, Typography } from "@mui/material";
 import { mediaUrl } from "../../api/references";
 
 export interface CodeOption {
@@ -17,6 +17,7 @@ export function CodesField({
   loading,
   helperText,
   freeSolo = false,
+  action,
 }: {
   label: string;
   options: CodeOption[];
@@ -26,10 +27,12 @@ export function CodesField({
   helperText?: string;
   /** Aceita código digitado que não está nas opções (Enter para incluir). */
   freeSolo?: boolean;
+  /** Botão à direita do campo, ex.: cadastrar uma opção que ainda não existe. */
+  action?: ReactNode;
 }) {
   const byId = useMemo(() => new Map(options.map((option) => [option.extId, option])), [options]);
   const optionOf = (extId: string): CodeOption => byId.get(extId) ?? { extId, name: extId, iconMediaId: null };
-  return (
+  const field = (
     <Autocomplete
       multiple
       freeSolo={freeSolo}
@@ -68,5 +71,13 @@ export function CodesField({
       }
       renderInput={(params) => <TextField {...params} label={label} helperText={helperText} />}
     />
+  );
+
+  if (!action) return field;
+  return (
+    <Stack direction="row" spacing={1} alignItems="flex-start">
+      <Box sx={{ flex: 1, minWidth: 0 }}>{field}</Box>
+      {action}
+    </Stack>
   );
 }

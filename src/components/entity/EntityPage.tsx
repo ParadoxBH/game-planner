@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { CircularProgress, FormControlLabel, Stack, Switch, Typography } from "@mui/material";
+import { Button, CircularProgress, FormControlLabel, Stack, Switch, Typography } from "@mui/material";
+import { Add } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import { MAX_PAGE_SIZE, type CategoryDocument, type EntityDocument, type ShopDocument } from "../../api/content";
 import { useContentList, useListing, useListingFilters, useRarities } from "../../api/useContent";
 import type { FilterValue, FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+import { useGameEditor } from "../../hooks/useGameAdmin";
 import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
 import { useViewMode } from "../../hooks/useViewMode";
@@ -14,6 +16,7 @@ import { ListingDataView } from "../common/ListingDataView";
 import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
+import { EntityFormDialog } from "./EntityFormDialog";
 import { ApiEntityCard, ApiEntityIcon, entityListCells, entityRarityColor, type EntityListView } from "./ApiEntityRenderers";
 
 /** Lista de entidades, lida da API. A busca e os filtros ficam no QueryBuilder e vêm do backend (GET /entities/query/filters). */
@@ -27,6 +30,8 @@ export function EntityPage() {
   const pages = usePagination<FilterValues>(categoryUrlFilters(urlCategory, subCategoryParam));
   const [viewMode, setViewMode] = useViewMode("entities");
   const [showPrices, setShowPrices] = useState(false);
+  const { canEdit } = useGameEditor(gameId);
+  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     pages.setCriteria(categoryUrlFilters(urlCategory, subCategoryParam));
@@ -97,6 +102,17 @@ export function EntityPage() {
                 </Typography>
               }
             />
+            {canEdit && (
+              <Button
+                variant="contained"
+                size="small"
+                startIcon={<Add />}
+                onClick={() => setCreating(true)}
+                sx={{ textTransform: "none", whiteSpace: "nowrap", mr: 1 }}
+              >
+                Nova entidade
+              </Button>
+            )}
             <ViewModeSelector mode={viewMode} onChange={setViewMode} />
           </Stack>
           <QueryBuilder
@@ -138,6 +154,14 @@ export function EntityPage() {
           renderCard={(entity, variant) => <ApiEntityCard entity={entity} variant={variant} view={view} />}
           renderListItem={(entity) => entityListCells(entity, view)}
           renderIconItem={(entity) => <ApiEntityIcon entity={entity} view={view} />}
+        />
+      )}
+      {creating && (
+        <EntityFormDialog
+          gameId={gameId}
+          entity={null}
+          onClose={() => setCreating(false)}
+          onSaved={(extId) => navigate(`/game/${gameId}/entity/view/${encodeURIComponent(extId)}`)}
         />
       )}
     </StyledContainer>

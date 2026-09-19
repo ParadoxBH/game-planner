@@ -45,13 +45,15 @@ interface CategoryFormDialogProps {
   /** A categoria a editar; null, criando. Montado só enquanto aberto, então o formulário nasce dela. */
   category: CategoryDocument | null;
   onClose: () => void;
+  /** Depois de salvar, com o código da categoria. */
+  onSaved?: (extId: string) => void;
 }
 
 /**
  * Cria ou edita uma categoria. A escrita substitui o documento inteiro, então os eventos da categoria
  * são reenviados como estão; as imagens ficam fora do documento, e um ícone novo é anexado depois de salvar.
  */
-export function CategoryFormDialog({ gameId, category, onClose }: CategoryFormDialogProps) {
+export function CategoryFormDialog({ gameId, category, onClose, onSaved }: CategoryFormDialogProps) {
   const [form, setForm] = useState<CategoryForm>(() => formOf(category));
   const [extIdTouched, setExtIdTouched] = useState(false);
   const [icon, setIcon] = useState<File | null>(null);
@@ -80,7 +82,10 @@ export function CategoryFormDialog({ gameId, category, onClose }: CategoryFormDi
       },
       [{ file: icon, usage: "icon" }],
     );
-    if (saved) onClose();
+    if (saved) {
+      onClose();
+      onSaved?.(extId);
+    }
   };
 
   return (
