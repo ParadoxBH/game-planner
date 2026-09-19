@@ -2,15 +2,15 @@ package com.paradoxbh.gameplannerserver.content.store;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
-import com.paradoxbh.gameplannerserver.common.ApiException;
 import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.model.CategoryDocument;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
+import com.paradoxbh.gameplannerserver.query.QueryField;
+import com.paradoxbh.gameplannerserver.query.QueryField.Option;
 
 @Component
 public class CategoryHandler extends AbstractContentHandler<CategoryDocument, Void> {
@@ -58,15 +58,10 @@ public class CategoryHandler extends AbstractContentHandler<CategoryDocument, Vo
         return new ContentTags(List.of(), category.events(), Map.of(), category.media());
     }
 
-    /** appliesTo=item traz as categorias de item e as de ambos; both, só as de ambos. */
+    /** appliesTo "both" vale para item e entidade: categorias de item são appliesTo in [item, both]. */
     @Override
-    protected Map<String, Filter> specificFilters() {
-        return Map.of("appliesTo", (name, value, param, params) -> {
-            if (!Set.of("item", "entity", "both").contains(value)) {
-                throw ApiException.badRequest("appliesTo precisa ser item, entity ou both");
-            }
-            params.put(param, value);
-            return "t.applies_to IN (:" + param + ", 'both')";
-        });
+    protected List<QueryField> specificFields() {
+        return List.of(QueryField.options("appliesTo", "Aplica-se a", "t.applies_to",
+                new Option("item", "Item"), new Option("entity", "Entidade"), new Option("both", "Ambos")));
     }
 }

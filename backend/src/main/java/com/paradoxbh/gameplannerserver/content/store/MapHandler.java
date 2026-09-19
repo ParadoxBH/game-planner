@@ -9,13 +9,14 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
 import com.paradoxbh.gameplannerserver.content.ContentKind;
-import com.paradoxbh.gameplannerserver.content.ExtIds;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
-import com.paradoxbh.gameplannerserver.content.model.MapDocument;
 import com.paradoxbh.gameplannerserver.content.model.MapDocument.Bounds;
 import com.paradoxbh.gameplannerserver.content.model.MapDocument.Filters;
 import com.paradoxbh.gameplannerserver.content.model.MapDocument.Tiles;
+import com.paradoxbh.gameplannerserver.content.model.MapDocument;
 import com.paradoxbh.gameplannerserver.content.store.ChildRows.Table;
+import com.paradoxbh.gameplannerserver.query.FieldType;
+import com.paradoxbh.gameplannerserver.query.QueryField;
 
 @Component
 public class MapHandler extends AbstractContentHandler<MapDocument, MapHandler.Lists> {
@@ -141,12 +142,12 @@ public class MapHandler extends AbstractContentHandler<MapDocument, MapHandler.L
 
     /** weather é o código de um evento de clima do mapa. */
     @Override
-    protected Map<String, Filter> specificFilters() {
-        return Map.of("weather", (name, value, param, params) -> {
-            params.put(param, ExtIds.require(value, name));
-            return "EXISTS (SELECT 1 FROM game_map_list x WHERE x.game_id = t.game_id AND x.map_ext_id = t.ext_id"
-                    + " AND x.list = 'weather' AND x.value = :" + param + ")";
-        });
+    protected List<QueryField> specificFields() {
+        return List.of(
+                QueryField.column("type", "Tipo", FieldType.TEXT, "t.map_type"),
+                QueryField.has("weather", "Clima", FieldType.CODE, "event", match -> "EXISTS (SELECT 1"
+                        + " FROM game_map_list x WHERE x.game_id = t.game_id AND x.map_ext_id = t.ext_id"
+                        + " AND x.list = 'weather' AND " + match.code("x.value") + ")"));
     }
 
     private static Table list(String name) {

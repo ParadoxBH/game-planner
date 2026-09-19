@@ -1,5 +1,7 @@
 package com.paradoxbh.gameplannerserver.content;
 
+import static com.paradoxbh.gameplannerserver.query.QueryJson.and;
+import static com.paradoxbh.gameplannerserver.query.QueryJson.rule;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -41,10 +43,10 @@ class CollectionsCodesApiIntegrationTest extends ContentApiTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.meta.revision").value(1));
 
-        mvc.perform(get(GROUPS, game).param("collection", "seed")).andExpect(jsonPath("$.total").value(1));
-        mvc.perform(get(GROUPS, game).param("member", "item:margarida_vermelha")).andExpect(jsonPath("$.total").value(1));
-        mvc.perform(get(GROUPS, game).param("member", "entity:margarida_vermelha")).andExpect(jsonPath("$.total").value(0));
-        mvc.perform(get(COLLECTIONS, game).param("member", "abelha"))
+        mvc.perform(query(GROUPS, and(rule("collection", "equal", "seed")), game)).andExpect(jsonPath("$.total").value(1));
+        mvc.perform(query(GROUPS, and(rule("member", "equal", "item:margarida_vermelha")), game)).andExpect(jsonPath("$.total").value(1));
+        mvc.perform(query(GROUPS, and(rule("member", "equal", "entity:margarida_vermelha")), game)).andExpect(jsonPath("$.total").value(0));
+        mvc.perform(query(COLLECTIONS, and(rule("member", "equal", "abelha")), game))
                 .andExpect(jsonPath("$.total").value(1))
                 .andExpect(jsonPath("$.content[0].extId").value("flower"));
 
@@ -69,14 +71,14 @@ class CollectionsCodesApiIntegrationTest extends ContentApiTest {
                 .andExpect(jsonPath("$.rewards[0].target.extId").value("estrela_desejavel"))
                 .andExpect(jsonPath("$.rewards[1].amount").value(5));
 
-        mvc.perform(get(CODES, game).param("active", "true"))
+        mvc.perform(query(CODES, and(rule("active", "equal", true)), game))
                 .andExpect(jsonPath("$.content[*].extId", containsInAnyOrder("SPRINGFEST2026", "heartopia10m")));
-        mvc.perform(get(CODES, game).param("active", "false"))
+        mvc.perform(query(CODES, and(rule("active", "equal", false)), game))
                 .andExpect(jsonPath("$.content[*].extId", contains("happy2026")));
-        mvc.perform(get(CODES, game).param("active", "talvez")).andExpect(status().isBadRequest());
-        mvc.perform(get(CODES, game).param("sort", "-addedOn"))
+        mvc.perform(query(CODES, and(rule("active", "equal", "talvez")), game)).andExpect(status().isBadRequest());
+        mvc.perform(list(CODES, game).param("sort", "-addedOn"))
                 .andExpect(jsonPath("$.content[*].extId", contains("heartopia10m", "SPRINGFEST2026", "happy2026")));
-        mvc.perform(get(CODES, game).param("rewards", "item:kit_reparo")).andExpect(jsonPath("$.total").value(3));
+        mvc.perform(query(CODES, and(rule("rewards", "equal", "item:kit_reparo")), game)).andExpect(jsonPath("$.total").value(3));
 
         // Sem nome, o código é exibido e buscado por ele mesmo.
         mvc.perform(get("/api/v1/games/{game}/search", game).param("q", "springfest"))

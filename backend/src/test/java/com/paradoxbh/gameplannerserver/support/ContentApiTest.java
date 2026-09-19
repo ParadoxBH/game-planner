@@ -2,6 +2,7 @@ package com.paradoxbh.gameplannerserver.support;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.util.UUID;
 
@@ -16,11 +17,17 @@ import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.paradoxbh.gameplannerserver.query.QueryJson;
+
+import tools.jackson.databind.json.JsonMapper;
+
 /**
  * Base dos testes de contrato HTTP de conteúdo: MockMvc com segurança e banco real, um jogo novo
  * por teste (só membros escrevem) e um usuário para cada situação de permissão.
  */
 public abstract class ContentApiTest extends PostgisIntegrationTest {
+
+    private static final JsonMapper JSON = JsonMapper.builder().build();
 
     @Autowired
     protected WebApplicationContext context;
@@ -58,6 +65,20 @@ public abstract class ContentApiTest extends PostgisIntegrationTest {
 
     protected static RequestPostProcessor as(String username) {
         return jwt().jwt(token -> token.subject(username).claim("typ", "access"));
+    }
+
+    /**
+     * Listagem filtrada: POST {path}/query com o QueryJson no corpo, sem login. Página, ordenação e
+     * references vão por {@code .param()}.
+     */
+    protected static MockHttpServletRequestBuilder query(String path, QueryJson filter, Object... uriVariables) {
+        return post(path + "/query", uriVariables).contentType(MediaType.APPLICATION_JSON)
+                .content(JSON.writeValueAsString(filter));
+    }
+
+    /** Listagem sem filtro. */
+    protected static MockHttpServletRequestBuilder list(String path, Object... uriVariables) {
+        return query(path, QueryJson.and(), uriVariables);
     }
 
     /** JSON com aspas simples, para os testes ficarem legíveis. */

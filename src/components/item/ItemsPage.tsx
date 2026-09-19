@@ -6,6 +6,7 @@ import { ApiError } from "../../api/ApiError";
 import { MAX_PAGE_SIZE, type CategoryDocument, type ItemDocument, type ListQuery } from "../../api/content";
 import { currentMedia, mediaUrl } from "../../api/references";
 import { useAttributeDefinitions, useContentList, useRarities } from "../../api/useContent";
+import { and, inActiveEvents, or, rule, textSearch, type QueryGroup } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
@@ -20,11 +21,11 @@ import { ViewModeSelector } from "../common/ViewModeSelector";
 import { ApiItemCard, ApiItemIcon, itemListCells, rarityColorOf, type ItemListView } from "./ApiItemRenderers";
 
 /** Opções do filtro "Status" e o filtro trade da API correspondente. */
-const TRADE_FILTERS: Record<string, string> = {
-  Compraveis: "buyable",
-  Vendiveis: "sellable",
-  Comercializados: "traded",
-  "Não Comercializados": "untraded",
+const TRADE_FILTERS: Record<string, QueryGroup> = {
+  Compraveis: and(rule("buyable", "equal", true)),
+  Vendiveis: and(rule("sellable", "equal", true)),
+  Comercializados: or(rule("buyable", "equal", true), rule("sellable", "equal", true)),
+  "Não Comercializados": and(rule("buyable", "equal", false), rule("sellable", "equal", false)),
 };
 
 function categoryOption(category: CategoryDocument) {
@@ -70,16 +71,16 @@ export function ItemsPage() {
     const excluded = states.filter(([, state]) => state === "exclude").map(([id]) => id);
     const primary = criteria.primaryCategory && criteria.primaryCategory !== "all" ? [criteria.primaryCategory] : [];
     return {
-      search: search || undefined,
-      categories: [...primary, ...included],
-      rarity: criteria.rarity ?? undefined,
+      where: and(
+        textSearch(search),
+        ...[...primary, ...included].map((category) => rule("category", "equal", category)),
+        excluded.length > 0 && rule("category", "not_in", excluded),
+        criteria.rarity && rule("rarity", "equal", criteria.rarity),
+        criteria.tradeStatus && TRADE_FILTERS[criteria.tradeStatus],
+        inActiveEvents(activeEventIds),
+      ),
       page: pagination.page - 1,
       size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
-      filters: {
-        withoutCategory: excluded.length ? excluded.join(",") : undefined,
-        trade: criteria.tradeStatus ? TRADE_FILTERS[criteria.tradeStatus] : undefined,
-        activeEvents: activeEventIds.join(","),
-      },
     };
   }, [search, criteria, pagination, activeEventIds]);
 

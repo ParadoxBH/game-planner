@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 import com.paradoxbh.gameplannerserver.content.model.EventDocument;
+import com.paradoxbh.gameplannerserver.query.FieldType;
+import com.paradoxbh.gameplannerserver.query.QueryField;
 
 @Component
 public class EventHandler extends AbstractContentHandler<EventDocument, Void> {
@@ -63,9 +65,17 @@ public class EventHandler extends AbstractContentHandler<EventDocument, Void> {
         return Map.of("periodStart", "t.period_start");
     }
 
+    @Override
+    protected boolean hasEvents() {
+        return false;
+    }
+
     /** type é o tipo do evento, ex.: season, clima. */
     @Override
-    protected Map<String, Filter> specificFilters() {
-        return Map.of("type", codeColumn("t.event_type"));
+    protected List<QueryField> specificFields() {
+        return List.of(
+                QueryField.column("type", "Tipo", FieldType.TEXT, "t.event_type"),
+                QueryField.column("periodStart", "Início", FieldType.DATE, "t.period_start"),
+                QueryField.column("periodEnd", "Fim", FieldType.DATE, "t.period_end"));
     }
 }

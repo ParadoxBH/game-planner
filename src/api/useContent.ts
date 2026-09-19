@@ -1,5 +1,6 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQueries, useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { contentApi, gameApi, type ContentResource, type ListQuery, type ProfitQuery } from "./content";
+import type { QueryGroup } from "./query";
 
 /** Dados que mudam pouco (raridades, definições de atributo, bancadas) não são relidos a cada tela. */
 const RARELY_CHANGES = 5 * 60_000;
@@ -46,11 +47,49 @@ export function useContentDocument<T>(gameId: string | undefined, resource: Cont
   });
 }
 
-/** Marcadores de um mapa. Ao mudar filtro no mesmo mapa, mantém os anteriores até chegar a resposta. */
-export function useMapMarkers(gameId: string | undefined, mapId: string | undefined, filters: Record<string, string | undefined>) {
+/** Fora do hook: o combine precisa ser a mesma função para o useQueries devolver o mesmo Map enquanto nada muda. */
+function documentsById<T extends { extId: string }>(results: UseQueryResult<T>[]): Map<string, T> {
+  const byId = new Map<string, T>();
+  results.forEach((result) => {
+    if (result.data) byId.set(result.data.extId, result.data);
+  });
+  return byId;
+}
+
+/**
+ * Vários documentos pelo código, um pedido por código e com o mesmo cache de useContentDocument. Devolve só os
+ * que já chegaram. Para poucos códigos: a listagem é paginada e não filtra por lista de ids.
+ */
+export function useContentDocuments<T extends { extId: string }>(
+  gameId: string | undefined,
+  resource: ContentResource,
+  extIds: string[],
+): Map<string, T> {
+  return useQueries({
+    queries: extIds.map((extId) => ({
+      queryKey: ["content", gameId, resource, "get", extId],
+      queryFn: ({ signal }: { signal: AbortSignal }) => contentApi.get<T>(gameId!, resource, extId, signal),
+      enabled: Boolean(gameId),
+    })),
+    combine: documentsById<T>,
+  });
+}
+
+/** Campos do filtro de uma listagem. Não mudam enquanto o backend não muda. */
+export function useQueryFields(gameId: string | undefined, resource: ContentResource) {
   return useQuery({
-    queryKey: ["map-markers", gameId, mapId, filters],
-    queryFn: ({ signal }) => contentApi.markers(gameId!, mapId!, filters, signal),
+    queryKey: ["content", gameId, resource, "query-fields"],
+    queryFn: ({ signal }) => contentApi.queryFields(gameId!, resource, signal),
+    enabled: Boolean(gameId),
+    staleTime: RARELY_CHANGES,
+  });
+}
+
+/** Marcadores de um mapa. Ao mudar filtro no mesmo mapa, mantém os anteriores até chegar a resposta. */
+export function useMapMarkers(gameId: string | undefined, mapId: string | undefined, where: QueryGroup) {
+  return useQuery({
+    queryKey: ["map-markers", gameId, mapId, where],
+    queryFn: ({ signal }) => contentApi.markers(gameId!, mapId!, where, signal),
     enabled: Boolean(gameId && mapId),
     placeholderData: (previous, previousQuery) => (previousQuery?.queryKey[2] === mapId ? previous : undefined),
   });

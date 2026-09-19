@@ -1,5 +1,7 @@
 package com.paradoxbh.gameplannerserver.content.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.paradoxbh.gameplannerserver.common.ApiException;
@@ -8,6 +10,7 @@ import com.paradoxbh.gameplannerserver.content.model.ContentQuery;
 import com.paradoxbh.gameplannerserver.content.store.SpawnPointHandler;
 import com.paradoxbh.gameplannerserver.content.store.SpawnPointHandler.Markers;
 import com.paradoxbh.gameplannerserver.identity.service.GameAccess;
+import com.paradoxbh.gameplannerserver.query.QuerySchema;
 
 /** Leituras do mundo que não cabem na listagem paginada de conteúdo. */
 @Service
@@ -22,6 +25,12 @@ public class WorldService {
     public WorldService(GameAccess access, SpawnPointHandler spawnPoints) {
         this.access = access;
         this.spawnPoints = spawnPoints;
+    }
+
+    /** Os campos de /spawn-points; os marcadores não ordenam, então não há sort. */
+    public QuerySchema markerFields(String gameId) {
+        access.requireReadable(gameId);
+        return new QuerySchema(spawnPoints.querySchema().fields(), List.of());
     }
 
     public Markers markers(String gameId, String mapId, ContentQuery query, int limit) {

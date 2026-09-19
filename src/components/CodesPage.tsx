@@ -18,6 +18,7 @@ import { ApiError } from "../api/ApiError";
 import { MAX_PAGE_SIZE, type ListQuery, type RedemptionCodeDocument } from "../api/content";
 import { ReferenceIndex } from "../api/references";
 import { useContentList } from "../api/useContent";
+import { and, rule, textSearch } from "../api/query";
 import { useDebouncedValue } from "../hooks/useDebouncedValue";
 import { usePagination } from "../hooks/usePagination";
 import { usePlatform } from "../hooks/usePlatform";
@@ -174,15 +175,15 @@ export function CodesPage() {
 
   const query = useMemo<ListQuery>(
     () => ({
-      search: search || undefined,
+      where: and(
+        textSearch(search),
+        hideExpired && rule("active", "equal", true),
+        hideCollected && collectedCodes.length > 0 && rule("extId", "not_in", collectedCodes),
+      ),
       page: pagination.page - 1,
       size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
       sort: "-addedOn",
-      filters: {
-        active: hideExpired ? "true" : undefined,
-        exclude: hideCollected && collectedCodes.length > 0 ? collectedCodes.join(",") : undefined,
-        references: "true",
-      },
+      references: true,
     }),
     [search, pagination, hideExpired, hideCollected, collectedCodes],
   );

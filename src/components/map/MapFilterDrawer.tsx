@@ -34,6 +34,8 @@ const TYPE_LABELS: Record<string, string> = {
   region: "Regiões",
   biome: "Biomas",
   poi: "Pontos de interesse",
+  dungeon: "Masmorras",
+  spawner: "Geradores de criaturas",
   location: "Localizações",
 };
 

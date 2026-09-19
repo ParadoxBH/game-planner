@@ -8,24 +8,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.IntStream;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
 
 import com.paradoxbh.gameplannerserver.common.ApiException;
-import com.paradoxbh.gameplannerserver.content.ExtIds;
 import com.paradoxbh.gameplannerserver.content.model.ContentDocument;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 import com.paradoxbh.gameplannerserver.content.model.ContentPage;
 import com.paradoxbh.gameplannerserver.content.model.ContentQuery;
-import com.paradoxbh.gameplannerserver.content.model.Reference;
+import com.paradoxbh.gameplannerserver.query.FieldType;
+import com.paradoxbh.gameplannerserver.query.QueryBuilder;
+import com.paradoxbh.gameplannerserver.query.QueryField;
+import com.paradoxbh.gameplannerserver.query.QuerySchema;
 
 /**
  * SQL comum a todos os tipos: colunas base, etiquetas, mídias, linhas-filhas, listagem e
- * ordenação. Cada tipo só declara suas colunas próprias, suas linhas-filhas, seus filtros e como
- * montar o documento.
+ * ordenação. Cada tipo só declara suas colunas próprias, suas linhas-filhas, seus campos de
+ * consulta e como montar o documento.
  *
  * {@code C} é o que o tipo carrega de linhas-filhas para uma página inteira de uma vez;
  * {@link Void} quando não tem.
@@ -42,17 +43,9 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
             "createdAt", "t.created_at",
             "updatedAt", "t.updated_at");
 
-    /**
-     * Filtro de listagem próprio do tipo. Recebe o nome e o valor do parâmetro da URL e um nome
-     * livre para o parâmetro SQL; devolve a condição sobre a tabela {@code t}.
-     */
-    @FunctionalInterface
-    protected interface Filter {
-        String condition(String name, String value, String param, Map<String, Object> params);
-    }
-
     protected final JdbcClient jdbc;
     private final ContentTagsRepository tags;
+    private volatile QueryBuilder queryBuilder;
 
     protected AbstractContentHandler(JdbcClient jdbc, ContentTagsRepository tags) {
         this.jdbc = jdbc;
@@ -83,9 +76,12 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
         return Map.of();
     }
 
-    /** Parâmetros de listagem próprios do tipo, pelo nome na URL. Os demais parâmetros são ignorados. */
-    protected Map<String, Filter> specificFilters() {
-        return Map.of();
+    /**
+     * Campos de consulta próprios do tipo, depois dos comuns (nome, código, datas, raridade, categoria,
+     * evento, atributo). Condições sobre a tabela {@code t}.
+     */
+    protected List<QueryField> specificFields() {
+        return List.of();
     }
 
     /** O nome usado na busca e na ordenação por nome. */
@@ -107,44 +103,86 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
         return false;
     }
 
-    /** Filtro por código numa coluna do próprio tipo, ex.: a loja de uma categoria de loja. */
-    protected static Filter codeColumn(String column) {
-        return (name, value, param, params) -> {
-            params.put(param, ExtIds.require(value, name));
-            return column + " = :" + param;
-        };
+    protected boolean hasCategories() {
+        return false;
     }
 
-    /** Existe linha-filha com o código na coluna, ex.: a bancada de uma receita. */
-    protected static Filter childCode(String table, String parentColumn, String column) {
-        return (name, value, param, params) -> {
-            params.put(param, ExtIds.require(value, name));
-            return "EXISTS (SELECT 1 FROM " + table + " x WHERE x.game_id = t.game_id AND x." + parentColumn
-                    + " = t.ext_id AND x." + column + " = :" + param + ")";
-        };
+    protected boolean hasEvents() {
+        return true;
+    }
+
+    protected boolean hasAttributes() {
+        return false;
     }
 
     /**
-     * Existe linha-filha apontando para a referência do parâmetro, "tipo:id" ou só "id". Linha
-     * gravada sem tipo casa com qualquer tipo pedido. {@code condition}, quando não nula, restringe
-     * as linhas, ex.: só os drops de entidade.
+     * Linha-filha com o código na coluna, ex.: a bancada de uma receita. {@code kind} é o tipo do
+     * código, para o front saber onde procurar os valores.
      */
-    protected static Filter childReference(String table, String parentColumn, String condition) {
-        return (name, value, param, params) -> {
-            Reference target = Reference.parse(value, name);
-            StringBuilder sql = new StringBuilder("EXISTS (SELECT 1 FROM ").append(table)
-                    .append(" x WHERE x.game_id = t.game_id AND x.").append(parentColumn).append(" = t.ext_id")
-                    .append(" AND x.target_ext_id = :").append(param);
-            params.put(param, target.extId());
-            if (target.kind() != null) {
-                sql.append(" AND (x.target_kind IS NULL OR x.target_kind = :").append(param).append("Kind)");
-                params.put(param + "Kind", target.kind());
-            }
-            if (condition != null) {
-                sql.append(" AND ").append(condition);
-            }
-            return sql.append(")").toString();
-        };
+    protected static QueryField childCode(String name, String label, String kind, String table, String parentColumn,
+                                          String column) {
+        return QueryField.has(name, label, FieldType.CODE, kind, match -> "EXISTS (SELECT 1 FROM " + table
+                + " x WHERE x.game_id = t.game_id AND x." + parentColumn + " = t.ext_id AND "
+                + match.code("x." + column) + ")");
+    }
+
+    /**
+     * Linha-filha apontando para a referência, "tipo:id" ou só "id". Linha gravada sem tipo casa com
+     * qualquer tipo pedido. {@code condition}, quando não nula, restringe as linhas, ex.: só os drops
+     * de entidade.
+     */
+    protected static QueryField childReference(String name, String label, String table, String parentColumn,
+                                               String condition) {
+        return QueryField.has(name, label, FieldType.REFERENCE, null, match -> "EXISTS (SELECT 1 FROM " + table
+                + " x WHERE x.game_id = t.game_id AND x." + parentColumn + " = t.ext_id AND "
+                + match.reference("x.target_kind", "x.target_ext_id")
+                + (condition == null ? "" : " AND " + condition) + ")");
+    }
+
+    @Override
+    public QuerySchema querySchema() {
+        return new QuerySchema(queryBuilder().fields(), List.copyOf(sortKeys()));
+    }
+
+    /** Montado uma vez: os campos não mudam depois que o handler existe. */
+    protected QueryBuilder queryBuilder() {
+        QueryBuilder builder = queryBuilder;
+        if (builder == null) {
+            builder = new QueryBuilder(queryFields());
+            queryBuilder = builder;
+        }
+        return builder;
+    }
+
+    private List<QueryField> queryFields() {
+        List<QueryField> fields = new ArrayList<>(List.of(
+                QueryField.column("name", "Nome", FieldType.TEXT, nameExpression()),
+                QueryField.column("extId", "Código", FieldType.TEXT, "t.ext_id"),
+                QueryField.column("createdAt", "Criado em", FieldType.DATETIME, "t.created_at"),
+                QueryField.column("updatedAt", "Alterado em", FieldType.DATETIME, "t.updated_at"),
+                QueryField.column("createdBy", "Criado por", FieldType.TEXT, "t.created_by"),
+                QueryField.column("updatedBy", "Alterado por", FieldType.TEXT, "t.updated_by")));
+        if (hasRarity()) {
+            fields.add(QueryField.code("rarity", "Raridade", "rarity", "t.rarity_code"));
+        }
+        if (hasCategories()) {
+            fields.add(tag("category", "Categoria", "category", "content_category", "category_ext_id"));
+        }
+        if (hasEvents()) {
+            fields.add(tag("event", "Evento", "event", "content_event", "event_ext_id"));
+        }
+        if (hasAttributes()) {
+            fields.add(tag("attribute", "Atributo", "attribute", "content_attribute", "key"));
+        }
+        fields.addAll(specificFields());
+        return fields;
+    }
+
+    /** Etiqueta do conteúdo, nas tabelas comuns a todos os tipos. */
+    private static QueryField tag(String name, String label, String kind, String table, String column) {
+        return QueryField.has(name, label, FieldType.CODE, kind, match -> "EXISTS (SELECT 1 FROM " + table
+                + " x WHERE x.game_id = t.game_id AND x.kind = :kind AND x.ext_id = t.ext_id AND "
+                + match.code("x." + column) + ")");
     }
 
     @Override
@@ -176,79 +214,11 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
         return ContentPage.of(content, query.page(), query.size(), total);
     }
 
-    /**
-     * Condição WHERE da listagem sobre a tabela {@code t}: jogo, busca, categorias, evento, raridade
-     * e filtros próprios do tipo. Preenche {@code params}.
-     */
+    /** Condição WHERE da listagem sobre a tabela {@code t}: o jogo e o filtro. Preenche {@code params}. */
     protected String where(String gameId, ContentQuery query, Map<String, Object> params) {
         params.put("game", gameId);
         params.put("kind", kind().code());
-
-        StringBuilder where = new StringBuilder(" WHERE t.game_id = :game");
-        if (query.search() != null) {
-            where.append(" AND (").append(nameExpression()).append(" ILIKE :search OR t.ext_id ILIKE :search)");
-            params.put("search", "%" + escapeLike(query.search()) + "%");
-        }
-        List<String> categories = query.categories();
-        for (int i = 0; i < categories.size(); i++) {
-            where.append(" AND EXISTS (SELECT 1 FROM content_category c WHERE c.game_id = t.game_id")
-                    .append(" AND c.kind = :kind AND c.ext_id = t.ext_id AND c.category_ext_id = :category")
-                    .append(i).append(")");
-            params.put("category" + i, categories.get(i));
-        }
-        if (query.event() != null) {
-            where.append(" AND EXISTS (SELECT 1 FROM content_event e WHERE e.game_id = t.game_id")
-                    .append(" AND e.kind = :kind AND e.ext_id = t.ext_id AND e.event_ext_id = :event)");
-            params.put("event", query.event());
-        }
-        // Parâmetros comuns a toda listagem, com lista separada por vírgula.
-        String withoutCategory = query.filters().get("withoutCategory");
-        if (withoutCategory != null && !withoutCategory.isBlank()) {
-            where.append(" AND NOT EXISTS (SELECT 1 FROM content_category c WHERE c.game_id = t.game_id")
-                    .append(" AND c.kind = :kind AND c.ext_id = t.ext_id AND c.category_ext_id IN (:withoutCategory))");
-            params.put("withoutCategory", codes(withoutCategory, "withoutCategory"));
-        }
-        String exclude = query.filters().get("exclude");
-        if (exclude != null && !codes(exclude, "exclude").isEmpty()) {
-            where.append(" AND t.ext_id NOT IN (:exclude)");
-            params.put("exclude", codes(exclude, "exclude"));
-        }
-        // Tem o atributo, com qualquer valor. Só item e entidade têm atributos.
-        String attribute = query.filters().get("attribute");
-        if (attribute != null && !attribute.isBlank()) {
-            where.append(" AND EXISTS (SELECT 1 FROM content_attribute a WHERE a.game_id = t.game_id")
-                    .append(" AND a.kind = :kind AND a.ext_id = t.ext_id AND a.key = :attribute)");
-            params.put("attribute", ExtIds.require(attribute.strip(), "attribute"));
-        }
-        // Só o que não tem evento ou tem algum dos eventos ativos. Vazio: só o que não tem evento.
-        String activeEvents = query.filters().get("activeEvents");
-        if (activeEvents != null) {
-            List<String> active = codes(activeEvents, "activeEvents");
-            where.append(" AND (NOT EXISTS (SELECT 1 FROM content_event e WHERE e.game_id = t.game_id")
-                    .append(" AND e.kind = :kind AND e.ext_id = t.ext_id)");
-            if (!active.isEmpty()) {
-                where.append(" OR EXISTS (SELECT 1 FROM content_event e WHERE e.game_id = t.game_id")
-                        .append(" AND e.kind = :kind AND e.ext_id = t.ext_id AND e.event_ext_id IN (:activeEvents))");
-                params.put("activeEvents", active);
-            }
-            where.append(")");
-        }
-        if (query.rarity() != null) {
-            if (!hasRarity()) {
-                throw ApiException.badRequest(kind().label() + " não tem raridade para filtrar");
-            }
-            where.append(" AND t.rarity_code = :rarity");
-            params.put("rarity", query.rarity());
-        }
-        int index = 0;
-        for (Map.Entry<String, Filter> filter : new TreeMap<>(specificFilters()).entrySet()) {
-            String value = query.filters().get(filter.getKey());
-            if (value != null) {
-                where.append(" AND ")
-                        .append(filter.getValue().condition(filter.getKey(), value, "filter" + index++, params));
-            }
-        }
-        return where.toString();
+        return " WHERE t.game_id = :game AND " + queryBuilder().where(query.filter(), params);
     }
 
     @Override
@@ -349,25 +319,16 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
         String column = key.equals("name") ? nameExpression()
                 : BASE_SORT.containsKey(key) ? BASE_SORT.get(key) : specificSortColumns().get(key);
         if (column == null) {
-            TreeSet<String> options = new TreeSet<>(BASE_SORT.keySet());
-            options.add("name");
-            options.addAll(specificSortColumns().keySet());
-            throw ApiException.badRequest("sort inválido: \"" + sort + "\". Use " + String.join(", ", options)
+            throw ApiException.badRequest("sort inválido: \"" + sort + "\". Use " + String.join(", ", sortKeys())
                     + ", com - na frente para decrescente");
         }
         return " ORDER BY " + column + (descending ? " DESC" : " ASC") + " NULLS LAST, t.ext_id";
     }
 
-    /** Lista de códigos separada por vírgula; vazia vira lista vazia. */
-    private static List<String> codes(String value, String field) {
-        return Arrays.stream(value.split(","))
-                .map(String::strip)
-                .filter(code -> !code.isEmpty())
-                .map(code -> ExtIds.require(code, field))
-                .toList();
-    }
-
-    private static String escapeLike(String value) {
-        return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");
+    private TreeSet<String> sortKeys() {
+        TreeSet<String> keys = new TreeSet<>(BASE_SORT.keySet());
+        keys.add("name");
+        keys.addAll(specificSortColumns().keySet());
+        return keys;
     }
 }

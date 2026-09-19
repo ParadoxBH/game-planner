@@ -159,8 +159,50 @@ GET {{api}}/games/heartopia/items/margarida_vermelha
 Authorization: Bearer {{accessToken}}
 
 ### Itens de uma categoria, mais recentes primeiro
-GET {{api}}/games/heartopia/items?category=flores&sort=-updatedAt&size=20
+POST {{api}}/games/heartopia/items/query?sort=-updatedAt&size=20
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "category", "operator": "equal", "value": "flores"}
+  ],
+  "groups": []
+}
+
+### Campos que o filtro de itens aceita: nome, tipo, operadores, opções e chaves de ordenação
+GET {{api}}/games/heartopia/items/query/fields
+
+### Filtro com grupos: (nível acima de 10, ou flor rara ou épica) e (sem evento, ou do natal)
+POST {{api}}/games/heartopia/items/query?sort=name
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and", "rules": [],
+  "groups": [
+    {
+      "type": "group", "operator": "or",
+      "rules": [ { "type": "rule", "field": "level", "operator": "greater", "value": 10 } ],
+      "groups": [
+        {
+          "type": "group", "operator": "and", "groups": [],
+          "rules": [
+            { "type": "rule", "field": "category", "operator": "equal", "value": "flores" },
+            { "type": "rule", "field": "rarity", "operator": "in", "value": ["rare", "epic"] }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "group", "operator": "or", "groups": [],
+      "rules": [
+        { "type": "rule", "field": "event", "operator": "is_null" },
+        { "type": "rule", "field": "event", "operator": "in", "value": ["natal"] }
+      ]
+    }
+  ]
+}
 
 ### O que falta cadastrar ("margarida" foi citada mas não existe)
 GET {{api}}/games/heartopia/pending-references
@@ -267,12 +309,30 @@ Content-Type: application/json
 }
 
 ### Receitas que produzem um item
-GET {{api}}/games/heartopia/recipes?produces=item:salada_rural
+POST {{api}}/games/heartopia/recipes/query
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "produces", "operator": "equal", "value": "item:salada_rural"}
+  ],
+  "groups": []
+}
 
 ### Receitas feitas numa bancada
-GET {{api}}/games/heartopia/recipes?station=cooking_station
+POST {{api}}/games/heartopia/recipes/query
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "station", "operator": "equal", "value": "cooking_station"}
+  ],
+  "groups": []
+}
 
 ### Entidade com requisitos (machado não é gasto) e drops
 PUT {{api}}/games/heartopia/entities/arvore
@@ -293,8 +353,17 @@ Content-Type: application/json
 }
 
 ### Quem dropa madeira
-GET {{api}}/games/heartopia/entities?drops=item:madeira
+POST {{api}}/games/heartopia/entities/query
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "drops", "operator": "equal", "value": "item:madeira"}
+  ],
+  "groups": []
+}
 
 ### Loja
 PUT {{api}}/games/heartopia/shops/blanc_shop
@@ -320,12 +389,30 @@ Content-Type: application/json
 }
 
 ### Categorias de uma loja
-GET {{api}}/games/heartopia/shop-categories?shop=blanc_shop
+POST {{api}}/games/heartopia/shop-categories/query
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "shop", "operator": "equal", "value": "blanc_shop"}
+  ],
+  "groups": []
+}
 
 ### Onde se compra um item
-GET {{api}}/games/heartopia/shop-categories?sells=item:po_cultivo_arco_iris
+POST {{api}}/games/heartopia/shop-categories/query
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "sells", "operator": "equal", "value": "item:po_cultivo_arco_iris"}
+  ],
+  "groups": []
+}
 
 ### Tudo que aponta para madeira: receitas, drops, lojas...
 GET {{api}}/games/heartopia/references?target=item:madeira
@@ -391,20 +478,57 @@ Content-Type: application/json
 }
 
 ### Pontos de um local: ligados a ele ou dentro da área
-GET {{api}}/games/heartopia/spawn-points?location=zone_teste
+POST {{api}}/games/heartopia/spawn-points/query
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "location", "operator": "equal", "value": "zone_teste"}
+  ],
+  "groups": []
+}
 
 ### Locais de um ponto
-GET {{api}}/games/heartopia/locations?containing=point_1778127893725
+POST {{api}}/games/heartopia/locations/query
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "containing", "operator": "equal", "value": "point_1778127893725"}
+  ],
+  "groups": []
+}
 
 ### Marcadores do mapa numa área, só com animais
-GET {{api}}/games/heartopia/maps/main/spawn-points?bbox=-800,-800,800,800&occupantCategory=animal
+POST {{api}}/games/heartopia/maps/main/spawn-points/query
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "position", "operator": "intersects", "value": [-800, -800, 800, 800]},
+    {"type": "rule", "field": "occupantCategory", "operator": "equal", "value": "animal"}
+  ],
+  "groups": []
+}
 
 ### Onde aparece uma entidade
-GET {{api}}/games/heartopia/spawn-points?occupant=entity:meteoro_rosa
+POST {{api}}/games/heartopia/spawn-points/query
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "occupant", "operator": "equal", "value": "entity:meteoro_rosa"}
+  ],
+  "groups": []
+}
 
 ### ================= Coleções e códigos (Fase 5) =================
 
@@ -430,8 +554,17 @@ Content-Type: application/json
 }
 
 ### Em quais coleções um item está
-GET {{api}}/games/heartopia/collections?member=item:margarida_vermelha
+POST {{api}}/games/heartopia/collections/query
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "member", "operator": "equal", "value": "item:margarida_vermelha"}
+  ],
+  "groups": []
+}
 
 ### Código de resgate: o código é o id
 PUT {{api}}/games/heartopia/codes/SPRINGFEST2026
@@ -448,8 +581,17 @@ Content-Type: application/json
 }
 
 ### Códigos que ainda valem, mais recentes primeiro
-GET {{api}}/games/heartopia/codes?active=true&sort=-addedOn
+POST {{api}}/games/heartopia/codes/query?sort=-addedOn
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "active", "operator": "equal", "value": true}
+  ],
+  "groups": []
+}
 
 ### ===================== Agregações (Fase 6) =====================
 
@@ -474,32 +616,76 @@ GET {{api}}/games/heartopia/crafting-tree?target=item:salada_rural&amount=3&choi
 Authorization: Bearer {{accessToken}}
 
 ### Receitas com as referencias resolvidas: nome e icone de ingredientes, produtos e bancadas
-GET {{api}}/games/heartopia/recipes?references=true&size=20
+POST {{api}}/games/heartopia/recipes/query?references=true&size=20
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [],
+  "groups": []
+}
 
 ### Bancadas citadas por receitas, com nome e quantas receitas cada uma tem
 GET {{api}}/games/heartopia/recipe-stations
 Authorization: Bearer {{accessToken}}
 
 ### Eventos de um tipo, os mais recentes primeiro
-GET {{api}}/games/heartopia/events?type=season&sort=-periodStart
+POST {{api}}/games/heartopia/events/query?sort=-periodStart
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "type", "operator": "equal", "value": "season"}
+  ],
+  "groups": []
+}
 
 ### Categorias de item, incluindo as que valem para item e entidade
-GET {{api}}/games/heartopia/categories?appliesTo=item&sort=name
+POST {{api}}/games/heartopia/categories/query?sort=name
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "appliesTo", "operator": "in", "value": ["item", "both"]}
+  ],
+  "groups": []
+}
 
 ### Codigos ainda validos, sem os ja coletados, com as recompensas resolvidas
-GET {{api}}/games/heartopia/codes?active=true&exclude=m2q7r6a9k3&sort=-addedOn&references=true
+POST {{api}}/games/heartopia/codes/query?sort=-addedOn&references=true
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "active", "operator": "equal", "value": true},
+    {"type": "rule", "field": "extId", "operator": "not_in", "value": ["m2q7r6a9k3"]}
+  ],
+  "groups": []
+}
 
 ### Colecao com os grupos e os membros resolvidos
 GET {{api}}/games/heartopia/collections/roupas_inverno/details
 Authorization: Bearer {{accessToken}}
 
 ### Itens que tem um atributo, com qualquer valor
-GET {{api}}/games/heartopia/items?attribute=peso&sort=name
+POST {{api}}/games/heartopia/items/query?sort=name
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "attribute", "operator": "equal", "value": "peso"}
+  ],
+  "groups": []
+}
 
 ### Plano com varios alvos: as sobras de um servem ao proximo, com custo e venda por moeda
 GET {{api}}/games/heartopia/crafting-plan?target=item:salada_rural&amount=3&target=item:tabua&amount=10
@@ -510,8 +696,19 @@ GET {{api}}/games/heartopia/crafting-profits?timed=true&sort=-profitPerHour&size
 Authorization: Bearer {{accessToken}}
 
 ### Pontos de um mapa que rendem um item: drop do ponto ou da entidade que aparece nele
-GET {{api}}/games/heartopia/maps/main/spawn-points?yields=item:madeira&activeEvents=rainy
+POST {{api}}/games/heartopia/maps/main/spawn-points/query
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [
+    {"type": "rule", "field": "yields", "operator": "equal", "value": "item:madeira"}
+  ],
+  "groups": [
+    {"type": "group", "operator": "or", "rules": [{"type": "rule", "field": "event", "operator": "is_null"}, {"type": "rule", "field": "event", "operator": "in", "value": ["rainy"]}], "groups": []}
+  ]
+}
 
 ### Quantos conteudos o jogo tem de cada tipo (usado para montar o menu)
 GET {{api}}/games/heartopia/content-counts

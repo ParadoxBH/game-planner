@@ -1,8 +1,12 @@
 package com.paradoxbh.gameplannerserver.content;
 
+import static com.paradoxbh.gameplannerserver.query.QueryJson.and;
+import static com.paradoxbh.gameplannerserver.query.QueryJson.or;
+import static com.paradoxbh.gameplannerserver.query.QueryJson.rule;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -10,6 +14,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -23,6 +29,7 @@ class ContentApiIntegrationTest extends ContentApiTest {
 
     private static final String ITEMS = "/api/v1/games/{game}/items";
     private static final String ITEM = "/api/v1/games/{game}/items/{id}";
+    private static final String CATEGORIES = "/api/v1/games/{game}/categories";
 
     @Test
     void createsAndReadsItemWithTagsAttributesAndSpacedId() throws Exception {
@@ -165,7 +172,7 @@ class ContentApiIntegrationTest extends ContentApiTest {
         send(post(ITEMS, game), "editor", json("{ 'extId': 'pena', 'name': 'Pena' }"))
                 .andExpect(status().isCreated());
 
-        mvc.perform(get(ITEMS, game).param("attribute", "peso"))
+        mvc.perform(query(ITEMS, and(rule("attribute", "equal", "peso")), game))
                 .andExpect(jsonPath("$.content[*].extId", contains("pedra")));
     }
 
@@ -188,17 +195,22 @@ class ContentApiIntegrationTest extends ContentApiTest {
                 """))
                 .andExpect(status().isOk());
 
-        mvc.perform(get(ITEMS + "?category=x&category=y", game))
+        mvc.perform(query(ITEMS, and(rule("category", "equal", "x"), rule("category", "equal", "y")), game))
                 .andExpect(jsonPath("$.total").value(1))
                 .andExpect(jsonPath("$.content[0].extId").value("a"));
 
-        mvc.perform(get(ITEMS + "?sort=extId&size=2&page=1", game))
+        // Só x, ou o que se chama Gama.
+        mvc.perform(query(ITEMS, or(and(rule("category", "equal", "x"), rule("category", "not_in", List.of("y"))),
+                        rule("name", "equal", "Gama")), game).param("sort", "extId"))
+                .andExpect(jsonPath("$.content[*].extId", contains("b", "c")));
+
+        mvc.perform(list(ITEMS, game).param("sort", "extId").param("size", "2").param("page", "1"))
                 .andExpect(jsonPath("$.total").value(3))
                 .andExpect(jsonPath("$.totalPages").value(2))
                 .andExpect(jsonPath("$.content.length()").value(1))
                 .andExpect(jsonPath("$.content[0].extId").value("c"));
 
-        mvc.perform(get(ITEMS + "?search=bet", game))
+        mvc.perform(query(ITEMS, or(rule("name", "contains", "bet"), rule("extId", "contains", "bet")), game))
                 .andExpect(jsonPath("$.total").value(1))
                 .andExpect(jsonPath("$.content[0].extId").value("b"));
     }
@@ -377,18 +389,24 @@ class ContentApiIntegrationTest extends ContentApiTest {
                 .andExpect(status().isCreated());
 
         // Sem evento ativo, só o que não tem evento; com "natal" ativo, o item de natal volta.
-        mvc.perform(get(ITEMS, game).param("activeEvents", "")).andExpect(jsonPath("$.content[*].extId", contains("comum")));
-        mvc.perform(get(ITEMS, game).param("activeEvents", "natal")).andExpect(jsonPath("$.total").value(2));
-
-        mvc.perform(get(ITEMS, game).param("category", "flor").param("withoutCategory", "raro"))
+        mvc.perform(query(ITEMS, or(rule("event", "is_null")), game))
                 .andExpect(jsonPath("$.content[*].extId", contains("comum")));
-        mvc.perform(get(ITEMS, game).param("exclude", "comum,natal"))
+        mvc.perform(query(ITEMS, or(rule("event", "is_null"), rule("event", "in", List.of("natal"))), game))
+                .andExpect(jsonPath("$.total").value(2));
+
+        mvc.perform(query(ITEMS, and(rule("category", "equal", "flor"), rule("category", "not_in", List.of("raro"))), game))
+                .andExpect(jsonPath("$.content[*].extId", contains("comum")));
+        mvc.perform(query(ITEMS, and(rule("extId", "not_in", List.of("comum", "natal"))), game))
                 .andExpect(jsonPath("$.content[*].extId", contains("loja")));
 
-        mvc.perform(get(ITEMS, game).param("trade", "buyable")).andExpect(jsonPath("$.content[*].extId", contains("loja")));
-        mvc.perform(get(ITEMS, game).param("trade", "sellable")).andExpect(jsonPath("$.content[*].extId", contains("comum")));
-        mvc.perform(get(ITEMS, game).param("trade", "untraded")).andExpect(jsonPath("$.content[*].extId", contains("natal")));
-        mvc.perform(get(ITEMS, game).param("trade", "talvez")).andExpect(status().isBadRequest());
+        mvc.perform(query(ITEMS, and(rule("buyable", "equal", true)), game))
+                .andExpect(jsonPath("$.content[*].extId", contains("loja")));
+        mvc.perform(query(ITEMS, and(rule("sellable", "equal", true)), game))
+                .andExpect(jsonPath("$.content[*].extId", contains("comum")));
+        mvc.perform(query(ITEMS, and(rule("buyable", "equal", false), rule("sellable", "equal", false)), game))
+                .andExpect(jsonPath("$.content[*].extId", contains("natal")));
+        mvc.perform(query(ITEMS, and(rule("buyable", "equal", "talvez")), game)).andExpect(status().isBadRequest());
+        mvc.perform(query(ITEMS, and(rule("buyable", "contains", "x")), game)).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -420,17 +438,39 @@ class ContentApiIntegrationTest extends ContentApiTest {
                 """))
                 .andExpect(status().isOk());
 
-        mvc.perform(get("/api/v1/games/{game}/events", game).param("type", "clima"))
+        mvc.perform(query("/api/v1/games/{game}/events", and(rule("type", "equal", "clima")), game))
                 .andExpect(jsonPath("$.content[*].extId", contains("chuva")));
 
         // Categoria sem appliesTo vale para ambos e aparece tanto em item quanto em entidade.
-        mvc.perform(get("/api/v1/games/{game}/categories", game).param("appliesTo", "item").param("sort", "extId"))
+        mvc.perform(query(CATEGORIES, and(rule("appliesTo", "in", List.of("item", "both"))), game).param("sort", "extId"))
                 .andExpect(jsonPath("$.content[*].extId", contains("flor", "raro")));
-        mvc.perform(get("/api/v1/games/{game}/categories", game).param("appliesTo", "entity").param("sort", "extId"))
+        mvc.perform(query(CATEGORIES, and(rule("appliesTo", "in", List.of("entity", "both"))), game).param("sort", "extId"))
                 .andExpect(jsonPath("$.content[*].extId", contains("npc", "raro")));
-        mvc.perform(get("/api/v1/games/{game}/categories", game).param("appliesTo", "both"))
+        mvc.perform(query(CATEGORIES, and(rule("appliesTo", "equal", "both")), game))
                 .andExpect(jsonPath("$.content[*].extId", contains("raro")));
-        mvc.perform(get("/api/v1/games/{game}/categories", game).param("appliesTo", "mapa"))
+        mvc.perform(query(CATEGORIES, and(rule("appliesTo", "equal", "mapa")), game))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void queryFieldsDescribeWhatEachListingAccepts() throws Exception {
+        mvc.perform(get(ITEMS + "/query/fields", game))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.fields[0].name").value("name"))
+                .andExpect(jsonPath("$.fields[?(@.name == 'rarity')].kind", contains("rarity")))
+                .andExpect(jsonPath("$.fields[?(@.name == 'buyable')].type", contains("boolean")))
+                .andExpect(jsonPath("$.fields[?(@.name == 'level')].operators[*]", hasItem("between")))
+                .andExpect(jsonPath("$.sorts", hasItem("level")));
+        mvc.perform(get(CATEGORIES + "/query/fields", game))
+                .andExpect(jsonPath("$.fields[?(@.name == 'appliesTo')].options[*].value",
+                        contains("item", "entity", "both")));
+
+        // Tipo sem raridade não oferece o campo, e o filtro recusa.
+        mvc.perform(get("/api/v1/games/{game}/events/query/fields", game))
+                .andExpect(jsonPath("$.fields[*].name", not(hasItem("rarity"))));
+        mvc.perform(query("/api/v1/games/{game}/events", and(rule("rarity", "equal", "raro")), game))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.detail").value(startsWith(
+                        "query.rules[0]: campo desconhecido \"rarity\"")));
     }
 }

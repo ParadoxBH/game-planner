@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 import com.paradoxbh.gameplannerserver.content.model.ShopDocument;
+import com.paradoxbh.gameplannerserver.query.FieldType;
+import com.paradoxbh.gameplannerserver.query.QueryField;
 
 /** Loja. Os itens ficam nas categorias da loja (ShopCategoryHandler). */
 @Component
@@ -60,7 +62,15 @@ public class ShopHandler extends AbstractContentHandler<ShopDocument, Void> {
     }
 
     @Override
-    protected Map<String, Filter> specificFilters() {
-        return Map.of("npc", codeColumn("t.npc_ext_id"));
+    protected boolean hasCategories() {
+        return true;
+    }
+
+    /** npc é o código da entidade que atende a loja. */
+    @Override
+    protected List<QueryField> specificFields() {
+        return List.of(
+                QueryField.code("npc", "NPC", "entity", "t.npc_ext_id"),
+                QueryField.column("resetType", "Reposição", FieldType.TEXT, "t.reset_type"));
     }
 }

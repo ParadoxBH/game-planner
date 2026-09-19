@@ -14,6 +14,8 @@ import com.paradoxbh.gameplannerserver.content.model.RecipeOutput;
 import com.paradoxbh.gameplannerserver.content.model.RecipeUnlock;
 import com.paradoxbh.gameplannerserver.content.model.Requirement;
 import com.paradoxbh.gameplannerserver.content.store.ChildRows.Table;
+import com.paradoxbh.gameplannerserver.query.FieldType;
+import com.paradoxbh.gameplannerserver.query.QueryField;
 
 @Component
 public class RecipeHandler extends AbstractContentHandler<RecipeDocument, RecipeHandler.Parts> {
@@ -105,13 +107,14 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
         }
     }
 
-    /** produces e consumes aceitam "tipo:id" ou "id"; station, o código da bancada. */
+    /** produces e consumes são "tipo:id" ou "id"; station é o código da entidade bancada. */
     @Override
-    protected Map<String, Filter> specificFilters() {
-        return Map.of(
-                "produces", childReference("recipe_output", "recipe_ext_id", null),
-                "consumes", childReference("recipe_input", "recipe_ext_id", null),
-                "station", childCode("recipe_station", "recipe_ext_id", "station_ext_id"));
+    protected List<QueryField> specificFields() {
+        return List.of(
+                QueryField.column("craftTimeSeconds", "Tempo de preparo (s)", FieldType.NUMBER, "t.craft_time_seconds"),
+                childReference("produces", "Produz", "recipe_output", "recipe_ext_id", null),
+                childReference("consumes", "Consome", "recipe_input", "recipe_ext_id", null),
+                childCode("station", "Bancada", "entity", "recipe_station", "recipe_ext_id", "station_ext_id"));
     }
 
     @Override

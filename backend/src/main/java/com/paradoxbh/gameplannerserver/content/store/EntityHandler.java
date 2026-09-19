@@ -13,6 +13,8 @@ import com.paradoxbh.gameplannerserver.content.model.Drop;
 import com.paradoxbh.gameplannerserver.content.model.EntityDocument;
 import com.paradoxbh.gameplannerserver.content.model.Requirement;
 import com.paradoxbh.gameplannerserver.content.store.ChildRows.Table;
+import com.paradoxbh.gameplannerserver.query.FieldType;
+import com.paradoxbh.gameplannerserver.query.QueryField;
 
 @Component
 public class EntityHandler extends AbstractContentHandler<EntityDocument, EntityHandler.Parts> {
@@ -103,13 +105,27 @@ public class EntityHandler extends AbstractContentHandler<EntityDocument, Entity
         children.delete(DROPS, gameId, extId);
     }
 
-    /** drops e requires aceitam "tipo:id" ou "id"; variantOf é o código da entidade base. */
     @Override
-    protected Map<String, Filter> specificFilters() {
-        return Map.of(
-                "drops", childReference("drop_entry", "source_ext_id", "x.source_kind = 'entity'"),
-                "requires", childReference("entity_requirement", "entity_ext_id", null),
-                "variantOf", codeColumn("t.variant_of_ext_id"));
+    protected boolean hasCategories() {
+        return true;
+    }
+
+    @Override
+    protected boolean hasAttributes() {
+        return true;
+    }
+
+    @Override
+    protected List<QueryField> specificFields() {
+        return List.of(
+                QueryField.column("level", "Nível", FieldType.NUMBER, "t.level"),
+                QueryField.column("respawnDelayMinutes", "Renascimento (min)", FieldType.NUMBER,
+                        "t.respawn_delay_minutes"),
+                QueryField.column("baseBuyPrice", "Preço de compra", FieldType.NUMBER, "t.base_buy_price"),
+                QueryField.column("baseSellPrice", "Preço de venda", FieldType.NUMBER, "t.base_sell_price"),
+                QueryField.code("variantOf", "Variante de", "entity", "t.variant_of_ext_id"),
+                childReference("drops", "Dropa", "drop_entry", "source_ext_id", "x.source_kind = 'entity'"),
+                childReference("requires", "Requer", "entity_requirement", "entity_ext_id", null));
     }
 
     @Override

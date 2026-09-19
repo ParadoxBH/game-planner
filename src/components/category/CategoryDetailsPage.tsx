@@ -17,6 +17,7 @@ import {
 } from "../../api/content";
 import { currentMedia, ReferenceIndex } from "../../api/references";
 import { useAttributeDefinitions, useContentDetails, useContentList, useRarities } from "../../api/useContent";
+import { and, inActiveEvents, rule, textSearch } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
@@ -142,12 +143,10 @@ export function CategoryDetailsPage() {
   const { pagination } = pages.info;
   const query = useMemo<ListQuery>(
     () => ({
-      search: search || undefined,
-      categories: [categoryId],
+      where: and(textSearch(search), rule("category", "equal", categoryId), inActiveEvents(activeEventIds)),
       page: pagination.page - 1,
       size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
       sort: "name",
-      filters: { activeEvents: activeEventIds.join(",") },
     }),
     [search, categoryId, pagination, activeEventIds],
   );

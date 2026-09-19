@@ -3,6 +3,7 @@ import { Box, Button, CircularProgress, Grid, Tab, Tabs, TextField, Typography }
 import type { EntityDocument, ItemDocument, ListQuery, MediaLink, ResolvedReference } from "../../api/content";
 import { currentMedia } from "../../api/references";
 import { useContentList } from "../../api/useContent";
+import { and, textSearch } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { ContentChip } from "./ContentChip";
 import { StyledDialog } from "./StyledDialog";
@@ -39,7 +40,7 @@ export function ApiContentSelector({ open, onClose, onConfirm, gameId, title = "
     }
   }, [open]);
 
-  const query = useMemo<ListQuery>(() => ({ search: term || undefined, size: PAGE, sort: "name" }), [term]);
+  const query = useMemo<ListQuery>(() => ({ where: and(textSearch(term)), size: PAGE, sort: "name" }), [term]);
   const items = useContentList<ItemDocument>(gameId, "items", query, { enabled: open && tab === "items" });
   const entities = useContentList<EntityDocument>(gameId, "entities", query, { enabled: open && tab === "entities" });
 

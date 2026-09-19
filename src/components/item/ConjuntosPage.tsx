@@ -5,6 +5,7 @@ import { ApiError } from "../../api/ApiError";
 import { MAX_PAGE_SIZE, type CollectionDocument, type CollectionGroupDocument, type ListQuery } from "../../api/content";
 import { contentRoute, currentMedia } from "../../api/references";
 import { useContentList } from "../../api/useContent";
+import { and, inActiveEvents, textSearch } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
 import {
   addProgress,
@@ -42,22 +43,19 @@ export function ConjuntosPage() {
 
   const search = useDebouncedValue(pages.info.search);
   const { pagination } = pages.info;
-  const activeEvents = activeEventIds.join(",");
-
   const query = useMemo<ListQuery>(
     () => ({
-      search: search || undefined,
+      where: and(textSearch(search), inActiveEvents(activeEventIds)),
       page: pagination.page - 1,
       size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
       sort: "name",
-      filters: { activeEvents },
     }),
-    [search, pagination, activeEvents],
+    [search, pagination, activeEventIds],
   );
 
   const collections = useContentList<CollectionDocument>(gameId, "collections", query);
   // O progresso soma os grupos dos eventos ativos; uma página cheia cobre os grupos do jogo.
-  const groups = useContentList<CollectionGroupDocument>(gameId, "collection-groups", { size: MAX_PAGE_SIZE, filters: { activeEvents } });
+  const groups = useContentList<CollectionGroupDocument>(gameId, "collection-groups", { size: MAX_PAGE_SIZE, where: inActiveEvents(activeEventIds) });
 
   useEffect(() => {
     if (collections.data) pages.setTotalItems(collections.data.total);

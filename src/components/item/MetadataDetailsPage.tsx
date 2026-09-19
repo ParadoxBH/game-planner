@@ -12,6 +12,7 @@ import {
   type ShopDocument,
 } from "../../api/content";
 import { useAttributeDefinitions, useContentList, useRarities } from "../../api/useContent";
+import { and, inActiveEvents, rule, textSearch } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
@@ -65,20 +66,22 @@ export function MetadataDetailsPage() {
 
   const search = useDebouncedValue(pages.info.search);
   const { pagination } = pages.info;
-  const activeEvents = activeEventIds.join(",");
+  const where = useMemo(
+    () => and(attributeKey && rule("attribute", "equal", attributeKey), inActiveEvents(activeEventIds)),
+    [attributeKey, activeEventIds],
+  );
 
   const query = useMemo<ListQuery>(
     () => ({
-      search: search || undefined,
+      where: and(textSearch(search), where),
       page: pagination.page - 1,
       size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
       sort: "name",
-      filters: { attribute: attributeKey, activeEvents },
     }),
-    [search, pagination, attributeKey, activeEvents],
+    [search, pagination, where],
   );
   // Só o total, para as contagens das abas.
-  const countQuery = useMemo<ListQuery>(() => ({ size: 1, filters: { attribute: attributeKey, activeEvents } }), [attributeKey, activeEvents]);
+  const countQuery = useMemo<ListQuery>(() => ({ size: 1, where }), [where]);
 
   const items = useContentList<ItemDocument>(gameId, "items", query, { enabled: tab === "items" });
   const entities = useContentList<EntityDocument>(gameId, "entities", query, { enabled: tab === "entities" });

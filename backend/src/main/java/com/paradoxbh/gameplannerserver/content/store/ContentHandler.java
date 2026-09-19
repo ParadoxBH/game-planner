@@ -6,6 +6,7 @@ import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.model.ContentDocument;
 import com.paradoxbh.gameplannerserver.content.model.ContentPage;
 import com.paradoxbh.gameplannerserver.content.model.ContentQuery;
+import com.paradoxbh.gameplannerserver.query.QuerySchema;
 
 /**
  * Persistência de um tipo de conteúdo. Sem regra de negócio nem autorização: isso fica
@@ -22,6 +23,9 @@ public interface ContentHandler<D extends ContentDocument<D>> {
     boolean exists(String gameId, String extId);
 
     ContentPage<D> list(String gameId, ContentQuery query);
+
+    /** Campos que o filtro da listagem aceita e chaves de ordenação. */
+    QuerySchema querySchema();
 
     /** Etiquetas que o documento carrega; tipos sem categoria ou atributo devolvem listas vazias. */
     ContentTags tagsOf(D document);

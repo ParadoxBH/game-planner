@@ -13,6 +13,8 @@ import com.paradoxbh.gameplannerserver.content.model.Reference;
 import com.paradoxbh.gameplannerserver.content.model.ShopCategoryDocument;
 import com.paradoxbh.gameplannerserver.content.model.ShopItem;
 import com.paradoxbh.gameplannerserver.content.store.ChildRows.Table;
+import com.paradoxbh.gameplannerserver.query.FieldType;
+import com.paradoxbh.gameplannerserver.query.QueryField;
 
 /** Categoria de loja e seus itens, que são linhas-filhas posicionais. */
 @Component
@@ -86,12 +88,13 @@ public class ShopCategoryHandler extends AbstractContentHandler<ShopCategoryDocu
         children.delete(ITEMS, gameId, extId);
     }
 
-    /** shop é o código da loja; sells aceita "tipo:id" ou "id". */
+    /** shop é o código da loja; sells é "tipo:id" ou "id". */
     @Override
-    protected Map<String, Filter> specificFilters() {
-        return Map.of(
-                "shop", codeColumn("t.shop_ext_id"),
-                "sells", childReference("shop_category_item", "category_ext_id", null));
+    protected List<QueryField> specificFields() {
+        return List.of(
+                QueryField.code("shop", "Loja", "shop", "t.shop_ext_id"),
+                QueryField.column("resetType", "Reposição", FieldType.TEXT, "t.reset_type"),
+                childReference("sells", "Vende", "shop_category_item", "category_ext_id", null));
     }
 
     private static Map<String, Object> itemRow(ShopItem item) {

@@ -34,6 +34,16 @@ export function mapThumbnail(map: MapDocument): string | null {
   return id ? mediaUrl(id, "thumb") : null;
 }
 
+/**
+ * Imagem de fundo de um mapa "single": imageUrl quando é endereço completo; senão a variante full da
+ * miniatura. Caminhos relativos (/map/...) eram do acervo antigo em public/, que o front não serve mais.
+ */
+export function mapImageUrl(map: MapDocument): string | null {
+  if (map.imageUrl && /^(https?:|data:|blob:)/i.test(map.imageUrl)) return map.imageUrl;
+  const id = currentMedia(map.media, "thumbnail");
+  return id ? mediaUrl(id, "full") : null;
+}
+
 /** [lat, lng] de um WKT de ponto (x y ou x y z). */
 export function pointLatLng(wkt: string): [number, number] {
   const [x, y] = parseWKTPoint(wkt);

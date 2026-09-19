@@ -18,6 +18,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.paradoxbh.gameplannerserver.identity.domain.AppUser;
+import com.paradoxbh.gameplannerserver.identity.service.CurrentUser;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +28,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Limita escritas por usuário autenticado.
+ *
+ * {@code writes-per-minute} 0 ou negativo desliga o limite. platform_admin não tem limite: é quem roda
+ * importação e minerador, que mandam milhares de imagens de uma vez. O banco só é consultado quando o
+ * usuário passa do limite, então a escrita comum não ganha consulta extra.
  *
  * Contagem em memória, por instância: suficiente enquanto o deploy é um container só.
  * Se um dia houver mais de uma réplica, isto vira contador compartilhado.
@@ -36,24 +43,33 @@ public class RateLimitFilter extends OncePerRequestFilter {
     private static final Duration WINDOW = Duration.ofMinutes(1);
 
     private final int maxWrites;
+    private final CurrentUser currentUser;
     private final Map<String, Window> windows = new ConcurrentHashMap<>();
 
-    public RateLimitFilter(GamePlannerProperties properties) {
+    public RateLimitFilter(GamePlannerProperties properties, CurrentUser currentUser) {
         this.maxWrites = properties.rateLimit().writesPerMinute();
+        this.currentUser = currentUser;
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return "GET".equals(request.getMethod())
+        return maxWrites <= 0
+                || "GET".equals(request.getMethod())
                 || "HEAD".equals(request.getMethod())
-                || "OPTIONS".equals(request.getMethod());
+                || "OPTIONS".equals(request.getMethod())
+                || isQuery(request);
+    }
+
+    /** POST .../query é consulta com filtro no corpo, não escrita (ver SecurityConfig). */
+    private static boolean isQuery(HttpServletRequest request) {
+        return "POST".equals(request.getMethod()) && request.getRequestURI().endsWith("/query");
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
         String user = authenticatedUsername();
-        if (user != null && !allow(user)) {
+        if (user != null && !allow(user) && !isPlatformAdmin()) {
             ProblemDetail problem = ProblemDetail.forStatusAndDetail(
                     HttpStatus.TOO_MANY_REQUESTS,
                     "Limite de " + maxWrites + " escritas por minuto excedido");
@@ -76,6 +92,10 @@ public class RateLimitFilter extends OncePerRequestFilter {
                         ? new Window(now)
                         : current);
         return window.hits.incrementAndGet() <= maxWrites;
+    }
+
+    private boolean isPlatformAdmin() {
+        return currentUser.find().map(AppUser::isPlatformAdmin).orElse(false);
     }
 
     private String authenticatedUsername() {

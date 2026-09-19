@@ -1,5 +1,8 @@
 package com.paradoxbh.gameplannerserver.content;
 
+import static com.paradoxbh.gameplannerserver.query.QueryJson.and;
+import static com.paradoxbh.gameplannerserver.query.QueryJson.or;
+import static com.paradoxbh.gameplannerserver.query.QueryJson.rule;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.nullValue;
@@ -77,13 +80,13 @@ class CraftingEconomyApiIntegrationTest extends ContentApiTest {
     void recipesAreFoundByWhatTheyProduceConsumeAndWhereTheyAreMade() throws Exception {
         send(post(RECIPES, game), "editor", json(VERNIZ)).andExpect(status().isCreated());
 
-        mvc.perform(get(RECIPES, game).param("produces", "item:verniz_voltaico")).andExpect(jsonPath("$.total").value(1));
-        mvc.perform(get(RECIPES, game).param("produces", "verniz_voltaico")).andExpect(jsonPath("$.total").value(1));
-        mvc.perform(get(RECIPES, game).param("produces", "entity:verniz_voltaico")).andExpect(jsonPath("$.total").value(0));
-        mvc.perform(get(RECIPES, game).param("consumes", "item:pedra_mana")).andExpect(jsonPath("$.total").value(1));
-        mvc.perform(get(RECIPES, game).param("station", "Alchemy"))
+        mvc.perform(query(RECIPES, and(rule("produces", "equal", "item:verniz_voltaico")), game)).andExpect(jsonPath("$.total").value(1));
+        mvc.perform(query(RECIPES, and(rule("produces", "equal", "verniz_voltaico")), game)).andExpect(jsonPath("$.total").value(1));
+        mvc.perform(query(RECIPES, and(rule("produces", "equal", "entity:verniz_voltaico")), game)).andExpect(jsonPath("$.total").value(0));
+        mvc.perform(query(RECIPES, and(rule("consumes", "equal", "item:pedra_mana")), game)).andExpect(jsonPath("$.total").value(1));
+        mvc.perform(query(RECIPES, and(rule("station", "equal", "Alchemy")), game))
                 .andExpect(jsonPath("$.content[0].extId").value("verniz"));
-        mvc.perform(get(RECIPES, game).param("station", "Cooking")).andExpect(jsonPath("$.total").value(0));
+        mvc.perform(query(RECIPES, and(rule("station", "equal", "Cooking")), game)).andExpect(jsonPath("$.total").value(0));
 
         // O slot repetido conta três vezes na fila do que falta cadastrar.
         mvc.perform(get("/api/v1/games/{game}/pending-references", game))
@@ -99,7 +102,8 @@ class CraftingEconomyApiIntegrationTest extends ContentApiTest {
         mvc.perform(get("/api/v1/games/{game}/search", game).param("q", "voltaico").param("kind", "recipe"))
                 .andExpect(jsonPath("$[0].extId").value("verniz"))
                 .andExpect(jsonPath("$[0].name").value("Verniz voltaico"));
-        mvc.perform(get(RECIPES, game).param("search", "voltaico")).andExpect(jsonPath("$.total").value(1));
+        mvc.perform(query(RECIPES, or(rule("name", "contains", "voltaico"), rule("extId", "contains", "voltaico")), game))
+                .andExpect(jsonPath("$.total").value(1));
     }
 
     @Test
@@ -120,9 +124,9 @@ class CraftingEconomyApiIntegrationTest extends ContentApiTest {
                 .andExpect(jsonPath("$.drops[1].chance").value(0.33))
                 .andExpect(jsonPath("$.drops[1].maxAmount").value(3));
 
-        mvc.perform(get(ENTITIES, game).param("drops", "item:couro")).andExpect(jsonPath("$.total").value(1));
-        mvc.perform(get(ENTITIES, game).param("requires", "machado")).andExpect(jsonPath("$.total").value(1));
-        mvc.perform(get(ENTITIES, game).param("drops", "item:machado")).andExpect(jsonPath("$.total").value(0));
+        mvc.perform(query(ENTITIES, and(rule("drops", "equal", "item:couro")), game)).andExpect(jsonPath("$.total").value(1));
+        mvc.perform(query(ENTITIES, and(rule("requires", "equal", "machado")), game)).andExpect(jsonPath("$.total").value(1));
+        mvc.perform(query(ENTITIES, and(rule("drops", "equal", "item:machado")), game)).andExpect(jsonPath("$.total").value(0));
 
         // O documento é inteiro: sem "drops", a entidade fica sem drops.
         send(put(ENTITIES + "/{id}", game, "arvore"), "editor", json("{ 'name': 'Arvore' }"))
@@ -192,10 +196,10 @@ class CraftingEconomyApiIntegrationTest extends ContentApiTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.npc").value("doris"));
 
-        mvc.perform(get(SHOP_CATEGORIES, game).param("shop", "loja_cash")).andExpect(jsonPath("$.total").value(1));
-        mvc.perform(get(SHOP_CATEGORIES, game).param("sells", "item:amorita")).andExpect(jsonPath("$.total").value(1));
-        mvc.perform(get(SHOP_CATEGORIES, game).param("sells", "item:rmt_br")).andExpect(jsonPath("$.total").value(0));
-        mvc.perform(get(SHOPS, game).param("npc", "doris"))
+        mvc.perform(query(SHOP_CATEGORIES, and(rule("shop", "equal", "loja_cash")), game)).andExpect(jsonPath("$.total").value(1));
+        mvc.perform(query(SHOP_CATEGORIES, and(rule("sells", "equal", "item:amorita")), game)).andExpect(jsonPath("$.total").value(1));
+        mvc.perform(query(SHOP_CATEGORIES, and(rule("sells", "equal", "item:rmt_br")), game)).andExpect(jsonPath("$.total").value(0));
+        mvc.perform(query(SHOPS, and(rule("npc", "equal", "doris")), game))
                 .andExpect(jsonPath("$.content[0].extId").value("loja_cash"));
     }
 
@@ -264,8 +268,8 @@ class CraftingEconomyApiIntegrationTest extends ContentApiTest {
                 """))
                 .andExpect(status().isCreated());
 
-        mvc.perform(get(RECIPES, game)).andExpect(jsonPath("$.references").doesNotExist());
-        mvc.perform(get(RECIPES, game).param("references", "true"))
+        mvc.perform(list(RECIPES, game)).andExpect(jsonPath("$.references").doesNotExist());
+        mvc.perform(list(RECIPES, game).param("references", "true"))
                 .andExpect(jsonPath("$.references[?(@.extId == 'madeira')].name", hasItem("Madeira")))
                 .andExpect(jsonPath("$.references[?(@.extId == 'tabua')].resolvedKind", hasItem(nullValue())));
 

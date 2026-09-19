@@ -13,6 +13,7 @@ import {
 } from "../../api/content";
 import { currentMedia, mediaUrl, ReferenceIndex, resolvedFrom } from "../../api/references";
 import { useContentDetails, useContentList, useRarities } from "../../api/useContent";
+import { and, rule } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
 import { useViewMode } from "../../hooks/useViewMode";
 import { formatReset } from "../../utils/format";
@@ -57,7 +58,7 @@ export function ShopsDetailsPage({ gameId, shopId }: ShopsDetailsPageProps) {
   const npcSpawns = useContentList<SpawnPointDocument>(
     gameId,
     "spawn-points",
-    { size: MAX_PAGE_SIZE, filters: { occupant: `entity:${npc}`, references: "true" } },
+    { size: MAX_PAGE_SIZE, where: and(rule("occupant", "equal", `entity:${npc}`)), references: true },
     { enabled: npc !== null },
   );
   const spawnReferences = useMemo(() => new ReferenceIndex(npcSpawns.data?.references), [npcSpawns.data]);

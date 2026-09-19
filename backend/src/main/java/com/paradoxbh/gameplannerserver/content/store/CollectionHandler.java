@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.model.CollectionDocument;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
-import com.paradoxbh.gameplannerserver.content.model.Reference;
+import com.paradoxbh.gameplannerserver.query.FieldType;
+import com.paradoxbh.gameplannerserver.query.QueryField;
 
 @Component
 public class CollectionHandler extends AbstractContentHandler<CollectionDocument, Void> {
@@ -56,21 +57,13 @@ public class CollectionHandler extends AbstractContentHandler<CollectionDocument
         return new ContentTags(List.of(), collection.events(), Map.of(), collection.media());
     }
 
-    /** member aceita "tipo:id" ou "id": coleções com um grupo que tem o alvo. */
+    /** member é "tipo:id" ou "id": coleções com um grupo que tem o alvo. */
     @Override
-    protected Map<String, Filter> specificFilters() {
-        return Map.of("member", (name, value, param, params) -> {
-            Reference target = Reference.parse(value, name);
-            params.put(param, target.extId());
-            String kind = "";
-            if (target.kind() != null) {
-                kind = " AND (m.target_kind IS NULL OR m.target_kind = :" + param + "Kind)";
-                params.put(param + "Kind", target.kind());
-            }
-            return "EXISTS (SELECT 1 FROM collection_group_collection gc JOIN collection_group_member m"
-                    + " ON m.game_id = gc.game_id AND m.group_ext_id = gc.group_ext_id"
-                    + " WHERE gc.game_id = t.game_id AND gc.collection_ext_id = t.ext_id"
-                    + " AND m.target_ext_id = :" + param + kind + ")";
-        });
+    protected List<QueryField> specificFields() {
+        return List.of(QueryField.has("member", "Membro", FieldType.REFERENCE, null, match ->
+                "EXISTS (SELECT 1 FROM collection_group_collection gc JOIN collection_group_member m"
+                        + " ON m.game_id = gc.game_id AND m.group_ext_id = gc.group_ext_id"
+                        + " WHERE gc.game_id = t.game_id AND gc.collection_ext_id = t.ext_id AND "
+                        + match.reference("m.target_kind", "m.target_ext_id") + ")"));
     }
 }

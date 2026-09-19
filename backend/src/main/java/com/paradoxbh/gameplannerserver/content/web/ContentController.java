@@ -1,7 +1,6 @@
 package com.paradoxbh.gameplannerserver.content.web;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +24,8 @@ import com.paradoxbh.gameplannerserver.content.service.ContentService.Outcome;
 import com.paradoxbh.gameplannerserver.content.service.ContentService.WriteResult;
 import com.paradoxbh.gameplannerserver.content.store.ContentHandler;
 import com.paradoxbh.gameplannerserver.content.store.RevisionRepository.RevisionSummary;
+import com.paradoxbh.gameplannerserver.query.QueryJson;
+import com.paradoxbh.gameplannerserver.query.QuerySchema;
 
 /**
  * Rotas iguais para todo tipo de conteúdo. Cada subclasse só fixa o caminho e o tipo.
@@ -40,19 +41,25 @@ public abstract class ContentController<D extends ContentDocument<D>> {
         this.handler = handler;
     }
 
-    /** Além dos filtros comuns, cada tipo aceita os seus: produces em receitas, sells em categorias de loja... */
-    @GetMapping
-    public ContentPage<D> list(@PathVariable String gameId,
-                               @RequestParam(required = false) String search,
-                               @RequestParam(required = false) List<String> category,
-                               @RequestParam(required = false) String event,
-                               @RequestParam(required = false) String rarity,
-                               @RequestParam(defaultValue = "0") int page,
-                               @RequestParam(defaultValue = "50") int size,
-                               @RequestParam(defaultValue = "name") String sort,
-                               @RequestParam Map<String, String> parameters) {
-        return content.list(handler, gameId,
-                new ContentQuery(search, category, event, rarity, page, size, sort, parameters));
+    /**
+     * Listagem filtrada pelo QueryJson do corpo, um grupo; sem corpo, lista tudo. Os campos que o
+     * filtro aceita vêm de {@code GET .../query/fields}. Com references=true, a página traz também
+     * toda referência citada pelos documentos, já resolvida.
+     */
+    @PostMapping("/query")
+    public ContentPage<D> query(@PathVariable String gameId,
+                                @RequestBody(required = false) QueryJson query,
+                                @RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "50") int size,
+                                @RequestParam(defaultValue = "name") String sort,
+                                @RequestParam(defaultValue = "false") boolean references) {
+        return content.list(handler, gameId, new ContentQuery(query, page, size, sort, references));
+    }
+
+    /** Campos do filtro (nome, tipo, operadores, opções) e chaves de ordenação. */
+    @GetMapping("/query/fields")
+    public QuerySchema queryFields(@PathVariable String gameId) {
+        return content.querySchema(handler, gameId);
     }
 
     @GetMapping("/{extId}")

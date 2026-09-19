@@ -28,6 +28,7 @@ import com.paradoxbh.gameplannerserver.content.store.RevisionRepository;
 import com.paradoxbh.gameplannerserver.content.store.RevisionRepository.RevisionSummary;
 import com.paradoxbh.gameplannerserver.identity.service.CurrentUser;
 import com.paradoxbh.gameplannerserver.identity.service.GameAccess;
+import com.paradoxbh.gameplannerserver.query.QuerySchema;
 
 import tools.jackson.databind.json.JsonMapper;
 
@@ -73,17 +74,23 @@ public class ContentService {
         this.json = json;
     }
 
-    /** Com references=true, a página traz também toda referência citada pelos documentos, já resolvida. */
+    /** Com references, a página traz também toda referência citada pelos documentos, já resolvida. */
     public <D extends ContentDocument<D>> ContentPage<D> list(ContentHandler<D> handler, String gameId,
                                                               ContentQuery query) {
         access.requireReadable(gameId);
         ContentPage<D> page = handler.list(gameId, query);
-        if (!"true".equals(query.filters().get("references"))) {
+        if (!query.references()) {
             return page;
         }
         return page.withReferences(references.resolve(gameId, page.content().stream()
                 .map(document -> new ReferenceService.Source(handler.kind(), document.extId()))
                 .toList()));
+    }
+
+    /** Campos que o filtro da listagem aceita, para o front montar o QueryJson. */
+    public <D extends ContentDocument<D>> QuerySchema querySchema(ContentHandler<D> handler, String gameId) {
+        access.requireReadable(gameId);
+        return handler.querySchema();
     }
 
     /** Id não cadastrado responde 404 com quem aponta para ele. */

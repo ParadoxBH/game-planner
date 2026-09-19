@@ -1,9 +1,9 @@
 package com.paradoxbh.gameplannerserver.content.web;
 
-import java.util.Map;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paradoxbh.gameplannerserver.content.model.ContentQuery;
 import com.paradoxbh.gameplannerserver.content.service.WorldService;
 import com.paradoxbh.gameplannerserver.content.store.SpawnPointHandler.Markers;
+import com.paradoxbh.gameplannerserver.query.QueryJson;
+import com.paradoxbh.gameplannerserver.query.QuerySchema;
 
 /** Os pontos de um mapa no formato compacto do desenho, sem paginação. */
 @RestController
@@ -23,19 +25,18 @@ public class MapSpawnPointController {
         this.world = world;
     }
 
-    /**
-     * Aceita os filtros de /spawn-points: bbox, occupant, occupantCategory, drops, yields, location, event,
-     * activeEvents e search.
-     */
-    @GetMapping
+    /** Filtra pelo QueryJson do corpo, com os mesmos campos de /spawn-points; sem corpo, traz todos. */
+    @PostMapping("/query")
     public Markers markers(@PathVariable String gameId,
                            @PathVariable String mapId,
-                           @RequestParam(required = false) String search,
-                           @RequestParam(required = false) String event,
-                           @RequestParam(defaultValue = "5000") int limit,
-                           @RequestParam Map<String, String> parameters) {
+                           @RequestBody(required = false) QueryJson query,
+                           @RequestParam(defaultValue = "5000") int limit) {
         // Página e ordenação não se aplicam aqui: o limite é o de pontos desenhados.
-        return world.markers(gameId, mapId, new ContentQuery(search, null, event, null, 0, 1, "extId", parameters),
-                limit);
+        return world.markers(gameId, mapId, new ContentQuery(query, 0, 1, "extId", false), limit);
+    }
+
+    @GetMapping("/query/fields")
+    public QuerySchema queryFields(@PathVariable String gameId) {
+        return world.markerFields(gameId);
     }
 }

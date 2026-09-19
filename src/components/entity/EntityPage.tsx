@@ -12,6 +12,7 @@ import {
 } from "../../api/content";
 import { currentMedia, mediaUrl } from "../../api/references";
 import { useContentList, useRarities } from "../../api/useContent";
+import { and, inActiveEvents, rule, textSearch } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
@@ -67,15 +68,15 @@ export function EntityPage() {
     const excluded = states.filter(([, state]) => state === "exclude").map(([id]) => id);
     const primary = criteria.primaryCategory && criteria.primaryCategory !== "all" ? [criteria.primaryCategory] : [];
     return {
-      search: search || undefined,
-      categories: [...primary, ...included],
-      rarity: criteria.rarity ?? undefined,
+      where: and(
+        textSearch(search),
+        ...[...primary, ...included].map((category) => rule("category", "equal", category)),
+        excluded.length > 0 && rule("category", "not_in", excluded),
+        criteria.rarity && rule("rarity", "equal", criteria.rarity),
+        inActiveEvents(activeEventIds),
+      ),
       page: pagination.page - 1,
       size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
-      filters: {
-        withoutCategory: excluded.length ? excluded.join(",") : undefined,
-        activeEvents: activeEventIds.join(","),
-      },
     };
   }, [search, criteria, pagination, activeEventIds]);
 

@@ -31,6 +31,7 @@ import {
 } from "../../api/content";
 import { ReferenceIndex } from "../../api/references";
 import { useContentList, useCraftingTree } from "../../api/useContent";
+import { and, rule } from "../../api/query";
 import { formatAmount, formatDuration } from "../../utils/format";
 import { ContentChip } from "../common/ContentChip";
 import { CurrencyValue, CurrencyValues, currencyReference, sameCurrency } from "../common/CurrencyValue";
@@ -378,7 +379,7 @@ function RecipeChoiceDialog({
   const recipes = useContentList<RecipeDocument>(
     gameId,
     "recipes",
-    { size: 50, filters: { produces: target ? referenceParam(target) : undefined, references: "true" } },
+    { size: 50, where: and(target && rule("produces", "equal", referenceParam(target))), references: true },
     { enabled: target !== null },
   );
   const references = useMemo(() => new ReferenceIndex(recipes.data?.references), [recipes.data]);

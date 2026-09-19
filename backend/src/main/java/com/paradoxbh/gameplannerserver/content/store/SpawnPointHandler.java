@@ -11,17 +11,17 @@ import java.util.Objects;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
-import com.paradoxbh.gameplannerserver.common.ApiException;
 import com.paradoxbh.gameplannerserver.content.ContentKind;
-import com.paradoxbh.gameplannerserver.content.ExtIds;
 import com.paradoxbh.gameplannerserver.content.Geometries;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 import com.paradoxbh.gameplannerserver.content.model.ContentQuery;
 import com.paradoxbh.gameplannerserver.content.model.Drop;
 import com.paradoxbh.gameplannerserver.content.model.Occupant;
-import com.paradoxbh.gameplannerserver.content.model.Reference;
 import com.paradoxbh.gameplannerserver.content.model.SpawnPointDocument;
 import com.paradoxbh.gameplannerserver.content.store.ChildRows.Table;
+import com.paradoxbh.gameplannerserver.query.FieldType;
+import com.paradoxbh.gameplannerserver.query.QueryField;
+import com.paradoxbh.gameplannerserver.query.QueryField.Membership;
 
 @Component
 public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument, SpawnPointHandler.Parts> {
@@ -141,40 +141,37 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
     }
 
     /**
-     * map e location são códigos (location também pega os pontos dentro da área do local);
-     * occupant e drops aceitam "tipo:id" ou "id"; yields também, e soma aos drops do ponto os das
-     * entidades que aparecem nele; occupantCategory é a categoria do ocupante;
-     * bbox é "minX,minY,maxX,maxY" em coordenadas de jogo.
+     * map é código; location também pega os pontos dentro da área do local; occupant e drops são
+     * "tipo:id" ou "id"; yields também, e soma aos drops do ponto os das entidades que aparecem nele;
+     * occupantCategory é a categoria de algum ocupante; position intersects recebe [minX, minY, maxX, maxY]
+     * em coordenadas de jogo.
      */
     @Override
-    protected Map<String, Filter> specificFilters() {
-        return Map.of(
-                "map", codeColumn("t.map_ext_id"),
-                "location", inLocation(),
-                "occupant", childReference("spawn_occupant", "spawn_ext_id", null),
-                "drops", childReference("drop_entry", "source_ext_id", "x.source_kind = 'spawn_point'"),
-                "yields", yields(),
-                "occupantCategory", occupantCategory(),
-                "bbox", bbox());
+    protected List<QueryField> specificFields() {
+        return List.of(
+                QueryField.code("map", "Mapa", "map", "t.map_ext_id"),
+                QueryField.has("location", "Local", FieldType.CODE, "location", inLocation()),
+                QueryField.column("position", "Posição", FieldType.GEOMETRY, "t.position"),
+                QueryField.column("respawnMode", "Modo de renascimento", FieldType.TEXT, "t.respawn_mode"),
+                QueryField.column("respawnDelayMinutes", "Renascimento (min)", FieldType.NUMBER,
+                        "t.respawn_delay_minutes"),
+                childReference("occupant", "Ocupante", "spawn_occupant", "spawn_ext_id", null),
+                childReference("drops", "Dropa", "drop_entry", "source_ext_id", "x.source_kind = 'spawn_point'"),
+                QueryField.has("yields", "Rende", FieldType.REFERENCE, null, yields()),
+                QueryField.has("occupantCategory", "Categoria do ocupante", FieldType.CODE, "category",
+                        occupantCategory()));
     }
 
     /** O ponto rende o alvo: drop do próprio ponto ou drop de uma entidade que aparece nele. */
-    private static Filter yields() {
-        return (name, value, param, params) -> {
-            Reference target = Reference.parse(value, name);
-            params.put(param, target.extId());
-            String kind = "";
-            if (target.kind() != null) {
-                params.put(param + "Kind", target.kind());
-                kind = " AND (d.target_kind IS NULL OR d.target_kind = :" + param + "Kind)";
-            }
+    private static Membership yields() {
+        return match -> {
+            String target = match.reference("d.target_kind", "d.target_ext_id");
             return "(EXISTS (SELECT 1 FROM drop_entry d WHERE d.game_id = t.game_id AND d.source_kind = 'spawn_point'"
-                    + " AND d.source_ext_id = t.ext_id AND d.target_ext_id = :" + param + kind + ")"
+                    + " AND d.source_ext_id = t.ext_id AND " + target + ")"
                     + " OR EXISTS (SELECT 1 FROM spawn_occupant o JOIN drop_entry d ON d.game_id = o.game_id"
                     + " AND d.source_kind = 'entity' AND d.source_ext_id = o.target_ext_id"
                     + " WHERE o.game_id = t.game_id AND o.spawn_ext_id = t.ext_id"
-                    + " AND (o.target_kind IS NULL OR o.target_kind = 'entity')"
-                    + " AND d.target_ext_id = :" + param + kind + "))";
+                    + " AND (o.target_kind IS NULL OR o.target_kind = 'entity') AND " + target + "))";
         };
     }
 
@@ -267,53 +264,20 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
     }
 
     /** Ligado ao local pelo código, ou com posição dentro da área dele (no mesmo mapa, quando os dois dizem). */
-    private static Filter inLocation() {
-        return (name, value, param, params) -> {
-            params.put(param, ExtIds.require(value, name));
-            return "(t.location_ext_id = :" + param + " OR EXISTS (SELECT 1 FROM location l"
-                    + " WHERE l.game_id = t.game_id AND l.ext_id = :" + param
-                    + " AND l.area IS NOT NULL AND t.position IS NOT NULL"
-                    + " AND (l.map_ext_id IS NULL OR t.map_ext_id IS NULL OR l.map_ext_id = t.map_ext_id)"
-                    + " AND ST_Within(t.position, l.area)))";
-        };
+    private static Membership inLocation() {
+        return match -> "(" + match.code("t.location_ext_id") + " OR EXISTS (SELECT 1 FROM location l"
+                + " WHERE l.game_id = t.game_id AND " + match.code("l.ext_id")
+                + " AND l.area IS NOT NULL AND t.position IS NOT NULL"
+                + " AND (l.map_ext_id IS NULL OR t.map_ext_id IS NULL OR l.map_ext_id = t.map_ext_id)"
+                + " AND ST_Within(t.position, l.area)))";
     }
 
     /** Algum ocupante tem a categoria. Ocupante sem tipo casa com conteúdo de qualquer tipo. */
-    private static Filter occupantCategory() {
-        return (name, value, param, params) -> {
-            params.put(param, ExtIds.require(value, name));
-            return "EXISTS (SELECT 1 FROM spawn_occupant x JOIN content_category c ON c.game_id = x.game_id"
-                    + " AND c.ext_id = x.target_ext_id AND (x.target_kind IS NULL OR c.kind = x.target_kind)"
-                    + " WHERE x.game_id = t.game_id AND x.spawn_ext_id = t.ext_id AND c.category_ext_id = :" + param + ")";
-        };
-    }
-
-    private static Filter bbox() {
-        return (name, value, param, params) -> {
-            String[] parts = value.split(",");
-            if (parts.length != 4) {
-                throw ApiException.badRequest(name + " precisa ser minX,minY,maxX,maxY");
-            }
-            double[] numbers = new double[4];
-            for (int i = 0; i < 4; i++) {
-                try {
-                    numbers[i] = Double.parseDouble(parts[i].strip());
-                } catch (NumberFormatException ex) {
-                    throw ApiException.badRequest(name + " precisa ser minX,minY,maxX,maxY, com números");
-                }
-                if (!Double.isFinite(numbers[i])) {
-                    throw ApiException.badRequest(name + " precisa ser minX,minY,maxX,maxY, com números");
-                }
-            }
-            if (numbers[0] > numbers[2] || numbers[1] > numbers[3]) {
-                throw ApiException.badRequest(name + ": o mínimo não pode passar do máximo");
-            }
-            for (int i = 0; i < 4; i++) {
-                params.put(param + i, numbers[i]);
-            }
-            return "(t.position IS NOT NULL AND t.position && ST_MakeEnvelope(:" + param + "0, :" + param + "1, :"
-                    + param + "2, :" + param + "3, 0))";
-        };
+    private static Membership occupantCategory() {
+        return match -> "EXISTS (SELECT 1 FROM spawn_occupant x JOIN content_category c ON c.game_id = x.game_id"
+                + " AND c.ext_id = x.target_ext_id AND (x.target_kind IS NULL OR c.kind = x.target_kind)"
+                + " WHERE x.game_id = t.game_id AND x.spawn_ext_id = t.ext_id AND " + match.code("c.category_ext_id")
+                + ")";
     }
 
     private static Map<String, Object> occupantRow(Occupant occupant) {

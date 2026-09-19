@@ -30,6 +30,7 @@ import com.paradoxbh.gameplannerserver.content.ExtIds;
 import com.paradoxbh.gameplannerserver.content.model.ContentDocument;
 import com.paradoxbh.gameplannerserver.content.model.ContentPage;
 import com.paradoxbh.gameplannerserver.content.model.ContentQuery;
+import com.paradoxbh.gameplannerserver.query.QueryJson;
 import com.paradoxbh.gameplannerserver.content.model.ResolvedReference;
 import com.paradoxbh.gameplannerserver.content.store.ContentHandler;
 import com.paradoxbh.gameplannerserver.identity.service.GameAccess;
@@ -174,26 +175,27 @@ public class DetailsService {
         return members;
     }
 
-    /** Conteúdos de {@code kind} cujo filtro de referência aponta para "tipoAlvo:id". */
-    private Relation targeting(String name, ContentKind kind, String filter, ContentKind target) {
-        return new Relation(name, handler(kind), id -> query(Map.of(filter, target.code() + ":" + id), null, null));
+    /** Conteúdos de {@code kind} cujo campo de referência aponta para "tipoAlvo:id". */
+    private Relation targeting(String name, ContentKind kind, String field, ContentKind target) {
+        return related(name, kind, field, id -> target.code() + ":" + id);
     }
 
-    /** Conteúdos de {@code kind} cujo filtro de código recebe o id. */
-    private Relation coded(String name, ContentKind kind, String filter) {
-        return new Relation(name, handler(kind), id -> query(Map.of(filter, id), null, null));
+    /** Conteúdos de {@code kind} cujo campo de código tem o id. */
+    private Relation coded(String name, ContentKind kind, String field) {
+        return related(name, kind, field, id -> id);
     }
 
     private Relation inCategory(String name, ContentKind kind) {
-        return new Relation(name, handler(kind), id -> query(Map.of(), List.of(id), null));
+        return coded(name, kind, "category");
     }
 
     private Relation inEvent(String name, ContentKind kind) {
-        return new Relation(name, handler(kind), id -> query(Map.of(), null, id));
+        return coded(name, kind, "event");
     }
 
-    private static ContentQuery query(Map<String, String> filters, List<String> categories, String event) {
-        return new ContentQuery(null, categories, event, null, 0, RELATED_LIMIT, "name", filters);
+    private Relation related(String name, ContentKind kind, String field, Function<String, String> value) {
+        return new Relation(name, handler(kind), id -> new ContentQuery(
+                QueryJson.and(QueryJson.rule(field, "equal", value.apply(id))), 0, RELATED_LIMIT, "name", false));
     }
 
     private ContentHandler<?> handler(ContentKind kind) {

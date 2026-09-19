@@ -5,6 +5,7 @@ import { ApiError } from "../../api/ApiError";
 import { MAX_PAGE_SIZE, type ListQuery, type ShopDocument } from "../../api/content";
 import { ReferenceIndex } from "../../api/references";
 import { useContentList } from "../../api/useContent";
+import { and, inActiveEvents, textSearch } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
@@ -41,11 +42,11 @@ function ShopList({ gameId }: { gameId: string }) {
 
   const query = useMemo<ListQuery>(
     () => ({
-      search: search || undefined,
+      where: and(textSearch(search), inActiveEvents(activeEventIds)),
       page: pagination.page - 1,
       size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
       sort: "name",
-      filters: { activeEvents: activeEventIds.join(","), references: "true" },
+      references: true,
     }),
     [search, pagination, activeEventIds],
   );

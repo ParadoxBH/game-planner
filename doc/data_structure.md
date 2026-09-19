@@ -16,6 +16,10 @@ script de importação na base:
 - `img/`, `icon/`, `map/`: imagens, ícones e mapas/tiles. Os JSON apontam para eles com caminhos relativos à raiz
   do acervo, com ou sem `/` inicial (`/img/heartopia/logo.png` ou `img/heartopia/logo.png`).
 
+O importador fica no próprio acervo, em `C:\Dev\game-planner-data\importer` (Python, só biblioteca padrão):
+converte o modelo antigo nos documentos da API, envia as imagens e grava os recursos em lote. Uso e
+conversões em `importer/README.md`.
+
 O histórico desses arquivos continua no git deste repositório (até o commit `4a5c031`).
 
 Em `public/` ficam só assets da aplicação (`vite.svg`, `img/add.png`).

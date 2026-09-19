@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { MAX_PAGE_SIZE, type ShopDocument } from "../../api/content";
 import { contentRoute, currentMedia, mediaUrl, ReferenceIndex } from "../../api/references";
 import { useContentList } from "../../api/useContent";
+import { inActiveEvents } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
 import { usePlatform } from "../../hooks/usePlatform";
 import { formatReset } from "../../utils/format";
@@ -162,7 +163,8 @@ export function ShopPicker({ gameId, value }: { gameId: string; value: string | 
   const shops = useContentList<ShopDocument>(gameId, "shops", {
     size: MAX_PAGE_SIZE,
     sort: "name",
-    filters: { activeEvents: activeEventIds.join(","), references: "true" },
+    where: inActiveEvents(activeEventIds),
+    references: true,
   });
   const references = useMemo(() => new ReferenceIndex(shops.data?.references), [shops.data]);
 

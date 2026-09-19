@@ -6,6 +6,7 @@ import { ApiError } from "../../api/ApiError";
 import { MAX_PAGE_SIZE, type ListQuery, type RecipeDocument } from "../../api/content";
 import { contentRoute, mediaUrl, ReferenceIndex } from "../../api/references";
 import { useContentList, useRecipeStations } from "../../api/useContent";
+import { and, inActiveEvents, rule, textSearch } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
@@ -47,10 +48,10 @@ export function RecipesPage() {
 
   const query = useMemo<ListQuery>(
     () => ({
-      search: search || undefined,
+      where: and(textSearch(search), station && rule("station", "equal", station), inActiveEvents(activeEventIds)),
       page: pagination.page - 1,
       size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
-      filters: { station, activeEvents: activeEventIds.join(","), references: "true" },
+      references: true,
     }),
     [search, pagination, station, activeEventIds],
   );

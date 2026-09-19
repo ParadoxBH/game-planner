@@ -20,8 +20,7 @@ import CropIcon from "@mui/icons-material/Crop";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import type { MapDocument } from "../../api/content";
-import { getPublicUrl } from "../../utils/pathUtils";
-import { boundsDocument, leafletBounds, mapThumbnail } from "./mapGeometry";
+import { boundsDocument, leafletBounds, mapImageUrl, mapThumbnail } from "./mapGeometry";
 
 export type Bounds = [[number, number], [number, number]];
 
@@ -127,8 +126,7 @@ export const BoundBoxEditorPanel = ({
   };
 
   // Derive image source
-  const imgSrc =
-    selectedMap.mapType === "single" && selectedMap.imageUrl ? getPublicUrl(selectedMap.imageUrl) : mapThumbnail(selectedMap);
+  const imgSrc = (selectedMap.mapType === "single" && mapImageUrl(selectedMap)) || mapThumbnail(selectedMap);
 
   // Preview dimensions
   const PREVIEW_W = 300;

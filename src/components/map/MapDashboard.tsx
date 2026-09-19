@@ -8,6 +8,8 @@ import CategoryIcon from "@mui/icons-material/Category";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import PlaceIcon from "@mui/icons-material/Place";
+import LaunchIcon from "@mui/icons-material/Launch";
+import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import {
   MAX_PAGE_SIZE,
   type LocationDocument,
@@ -18,6 +20,7 @@ import {
 } from "../../api/content";
 import { contentRoute, currentMedia, mediaUrl, ReferenceIndex } from "../../api/references";
 import { useContentList } from "../../api/useContent";
+import {  } from "../../api/query";
 import { usePlatform } from "../../hooks/usePlatform";
 import { ContentChip } from "../common/ContentChip";
 import { DataCard } from "../common/DataCard";
@@ -26,6 +29,7 @@ import { DetainItem } from "../common/DetainItem";
 import { StyledContainer } from "../common/StyledContainer";
 import { ApiShopCard, type ShopListView } from "../shop/ApiShopRenderers";
 import { locationTypeOf, occupantCategory, typeLabel, UNCATEGORIZED } from "./MapFilterDrawer";
+import { MapFocusedSpawns, type MapFocus } from "./MapFocusedSpawns";
 
 interface OccupantCount {
   occupant: MarkerOccupant;
@@ -40,15 +44,20 @@ interface MapDashboardProps {
   categoryNames: Map<string, string>;
   availableViews: string[];
   onSwitchToMap: () => void;
+  /** Filtro da URL (?entity= ou ?item=): em vez da visão geral, mostra onde esse conteúdo aparece. */
+  focus?: MapFocus & { name: string | null; onOpen: () => void; onClear: () => void };
 }
 
-/** Visão geral do mapa: ocorrências, ocupantes por categoria, lojas dos NPCs que aparecem nele e locais. */
-export const MapDashboard = ({ gameId, map, markers, locations, categoryNames, availableViews, onSwitchToMap }: MapDashboardProps) => {
+/**
+ * Visão geral do mapa: ocorrências, ocupantes por categoria, lojas dos NPCs que aparecem nele e locais.
+ * Com focus, detalha só as ocorrências daquele item ou entidade, agrupadas por local.
+ */
+export const MapDashboard = ({ gameId, map, markers, locations, categoryNames, availableViews, onSwitchToMap, focus }: MapDashboardProps) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const { isMobile } = usePlatform();
   const { spacing: dtSpacing, borderRadius: dtRadius } = theme.designTokens;
-  const shops = useContentList<ShopDocument>(gameId, "shops", { size: MAX_PAGE_SIZE, filters: { references: "true" } });
+  const shops = useContentList<ShopDocument>(gameId, "shops", { size: MAX_PAGE_SIZE, references: true });
 
   const occupants = useMemo(() => {
     const counts = new Map<string, OccupantCount>();
@@ -88,6 +97,35 @@ export const MapDashboard = ({ gameId, map, markers, locations, categoryNames, a
 
   const categoryLabel = (category: string) =>
     category === UNCATEGORIZED ? "Sem categoria" : categoryNames.get(category) ?? category.replace(/_/g, " ");
+
+  if (focus) {
+    const buttonSx = { borderRadius: 2, px: 2, textTransform: "none", fontWeight: 700, flex: isMobile ? 1 : undefined } as const;
+    return (
+      <StyledContainer
+        title={focus.name ?? focus.value}
+        label={`Onde aparece em ${map.name}: cada local com quantidade, chance, reaparecimento e condições.`}
+        actionsEnd={
+          <Stack direction="row" spacing={1} sx={{ flex: isMobile ? 1 : undefined }}>
+            <Button variant="outlined" size="small" startIcon={<LaunchIcon />} onClick={focus.onOpen} sx={buttonSx}>
+              Detalhar
+            </Button>
+            <Button variant="outlined" size="small" startIcon={<FilterAltOffIcon />} onClick={focus.onClear} sx={buttonSx}>
+              Ver todo o mapa
+            </Button>
+            {availableViews.includes("map") && (
+              <Button variant="contained" size="small" startIcon={<MapIcon />} onClick={onSwitchToMap} sx={buttonSx}>
+                Ver no mapa
+              </Button>
+            )}
+          </Stack>
+        }
+      >
+        <Stack flex={1} sx={{ overflowY: "auto" }}>
+          <MapFocusedSpawns gameId={gameId} mapId={map.extId} focus={focus} />
+        </Stack>
+      </StyledContainer>
+    );
+  }
 
   return (
     <StyledContainer

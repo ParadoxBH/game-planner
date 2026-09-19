@@ -46,6 +46,7 @@ import {
 } from "../../api/content";
 import { contentRoute, currentMedia, mediaUrl } from "../../api/references";
 import { useContentDocument, useContentList, useGame, useMapMarkers } from "../../api/useContent";
+import { and, inActiveEvents, rule } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
 import { useStoredState } from "../../hooks/useCollectedMembers";
 import { usePlatform } from "../../hooks/usePlatform";
@@ -60,7 +61,7 @@ import { MapInfoOverlay } from "./MapInfoOverlay";
 import { MapSpawnPopup } from "./MapSpawnPopup";
 import { MapToolbox } from "./MapToolbox";
 import { MapWeatherPanel } from "./MapWeatherPanel";
-import { createMapCRS, leafletBounds, type LatLngBounds } from "./mapGeometry";
+import { createMapCRS, leafletBounds, mapImageUrl, type LatLngBounds } from "./mapGeometry";
 import markerTemplate from "./marker-icon.html?raw";
 import { draftsJson, PointMarkerPanel, type DraftConfig, type MapDraft } from "./PointMarkerPanel";
 
@@ -267,22 +268,22 @@ export const MapView = () => {
   const mapList = maps.data?.content;
   const selectedMap = mapList?.find((map) => map.extId === urlMapId);
   const selectedMapId = selectedMap?.extId;
-  const activeEvents = activeEventIds.join(",");
   const urlFiltered = Boolean(filterItemId || filterEntityId);
 
-  const markerFilters = useMemo(
-    () => ({
-      activeEvents,
-      yields: filterItemId ? `item:${filterItemId}` : undefined,
-      occupant: filterEntityId ? `entity:${filterEntityId}` : undefined,
-    }),
-    [activeEvents, filterItemId, filterEntityId],
+  const markerFilter = useMemo(
+    () =>
+      and(
+        inActiveEvents(activeEventIds),
+        filterItemId && rule("yields", "equal", `item:${filterItemId}`),
+        filterEntityId && rule("occupant", "equal", `entity:${filterEntityId}`),
+      ),
+    [activeEventIds, filterItemId, filterEntityId],
   );
-  const markers = useMapMarkers(gameId, selectedMapId, markerFilters);
+  const markers = useMapMarkers(gameId, selectedMapId, markerFilter);
   const locations = useContentList<LocationDocument>(
     gameId,
     "locations",
-    { size: MAX_PAGE_SIZE, filters: { map: selectedMapId, activeEvents } },
+    { size: MAX_PAGE_SIZE, where: and(selectedMapId && rule("map", "equal", selectedMapId), inActiveEvents(activeEventIds)) },
     { enabled: Boolean(selectedMapId) },
   );
   const events = useContentList<EventDocument>(gameId, "events", { size: MAX_PAGE_SIZE, sort: "name" });
@@ -519,6 +520,7 @@ export const MapView = () => {
 
   const center: [number, number] = [(bounds[0][0] + bounds[1][0]) / 2, (bounds[0][1] + bounds[1][1]) / 2];
   const imageBounds = (previewBounds ?? bounds) as LatLngBoundsExpression;
+  const singleImageUrl = mapImageUrl(selectedMap);
   const displayCoords: [number, number] = rotate ? rotateLatLng(cursorCoords, bounds, -rotate) : cursorCoords;
 
   const weathers = (events.data?.content ?? []).filter((event) =>
@@ -682,9 +684,7 @@ export const MapView = () => {
                     bounds={imageBounds}
                   />
                 ))}
-              {selectedMap.mapType === "single" && selectedMap.imageUrl && (
-                <ImageOverlay url={getPublicUrl(selectedMap.imageUrl)} bounds={imageBounds} />
-              )}
+              {selectedMap.mapType === "single" && singleImageUrl && <ImageOverlay url={singleImageUrl} bounds={imageBounds} />}
               {selectedMap.mapType === "tile" && (selectedMap.urlPattern ?? selectedMap.imageUrl) && (
                 <TileLayer
                   url={getPublicUrl(selectedMap.urlPattern ?? selectedMap.imageUrl)}
@@ -722,6 +722,25 @@ export const MapView = () => {
             categoryNames={categoryNames}
             availableViews={availableViews}
             onSwitchToMap={() => setViewMode("map")}
+            focus={
+              filterEntityId
+                ? {
+                    param: "entity",
+                    value: filterEntityId,
+                    name: filterEntity.data?.name ?? null,
+                    onOpen: () => navigate(contentRoute(gameId, "entity", filterEntityId)!),
+                    onClear: () => clearUrlFilter("entity"),
+                  }
+                : filterItemId
+                  ? {
+                      param: "item",
+                      value: filterItemId,
+                      name: filterItem.data?.name ?? null,
+                      onOpen: () => navigate(contentRoute(gameId, "item", filterItemId)!),
+                      onClear: () => clearUrlFilter("item"),
+                    }
+                  : undefined
+            }
           />
         )}
 

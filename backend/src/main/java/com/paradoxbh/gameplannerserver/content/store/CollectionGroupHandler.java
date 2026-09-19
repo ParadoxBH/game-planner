@@ -11,6 +11,7 @@ import com.paradoxbh.gameplannerserver.content.model.CollectionGroupDocument;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 import com.paradoxbh.gameplannerserver.content.model.Reference;
 import com.paradoxbh.gameplannerserver.content.store.ChildRows.Table;
+import com.paradoxbh.gameplannerserver.query.QueryField;
 
 @Component
 public class CollectionGroupHandler extends AbstractContentHandler<CollectionGroupDocument, CollectionGroupHandler.Parts> {
@@ -91,11 +92,11 @@ public class CollectionGroupHandler extends AbstractContentHandler<CollectionGro
         children.delete(MEMBERS, gameId, extId);
     }
 
-    /** collection é o código da coleção; member aceita "tipo:id" ou "id". */
     @Override
-    protected Map<String, Filter> specificFilters() {
-        return Map.of(
-                "collection", childCode("collection_group_collection", "group_ext_id", "collection_ext_id"),
-                "member", childReference("collection_group_member", "group_ext_id", null));
+    protected List<QueryField> specificFields() {
+        return List.of(
+                childCode("collection", "Coleção", "collection", "collection_group_collection", "group_ext_id",
+                        "collection_ext_id"),
+                childReference("member", "Membro", "collection_group_member", "group_ext_id", null));
     }
 }

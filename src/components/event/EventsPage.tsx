@@ -4,6 +4,7 @@ import { CircularProgress, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { ApiError } from "../../api/ApiError";
 import { MAX_PAGE_SIZE, type EventDocument, type ListQuery } from "../../api/content";
 import { useContentList } from "../../api/useContent";
+import { and, rule, textSearch } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
@@ -34,11 +35,10 @@ export function EventsPage() {
 
   const query = useMemo<ListQuery>(
     () => ({
-      search: search || undefined,
+      where: and(textSearch(search), criteria.type && rule("type", "equal", criteria.type)),
       page: pagination.page - 1,
       size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
       sort: "-periodStart",
-      filters: { type: criteria.type ?? undefined },
     }),
     [search, pagination, criteria.type],
   );

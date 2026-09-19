@@ -160,7 +160,8 @@ Itens, entidades, categorias e eventos usam as mesmas rotas e as mesmas regras.
 
 | Método | Rota | Quem |
 |---|---|---|
-| GET | `/api/v1/games/{jogo}/{recurso}?search=&category=&event=&rarity=&page=&size=&sort=` | quem lê o jogo |
+| POST | `/api/v1/games/{jogo}/{recurso}/query?page=&size=&sort=&references=`, corpo = QueryJson | quem lê o jogo |
+| GET | `/api/v1/games/{jogo}/{recurso}/query/fields` | quem lê o jogo |
 | GET | `/api/v1/games/{jogo}/{recurso}/{extId}` | quem lê o jogo |
 | POST | `/api/v1/games/{jogo}/{recurso}` | quem edita o jogo |
 | PUT | `/api/v1/games/{jogo}/{recurso}/{extId}` | quem edita o jogo |
@@ -224,16 +225,31 @@ apaga as ligações.
 **Atributos** aceitam número, texto ou booleano, com ou sem definição. Se a chave tem
 definição em `/attributes`, o tipo é conferido e divergência dá `422`.
 
-**Paginação** começa em `page=0`. `sort` aceita `name`, `extId`, `createdAt` e `updatedAt`
-(mais `level` em item e entidade, `periodStart` em evento e `craftTimeSeconds` em receita), com `-` na frente para ordem
-decrescente. Várias `category` combinam com E. Toda listagem aceita também `withoutCategory` (exclui categorias),
-`exclude` (esconde esses códigos, ex.: os códigos de resgate já coletados) e
-`activeEvents` (esconde conteúdo de evento fora da lista; vazio mostra só o que não tem evento), com códigos
-separados por vírgula. Itens aceitam `trade`: `buyable` (preço base de compra ou vendido em loja), `sellable`,
-`traded` ou `untraded`. Itens e entidades aceitam `variantOf` (código do conteúdo base) e `attribute` (tem o atributo, com
-qualquer valor). Eventos aceitam `type` (tipo do
-evento) e categorias, `appliesTo` (`item` e `entity` trazem também as categorias de ambos). Com `references=true`, a página traz
-também `references`: toda referência citada pelos documentos da página, com nome e ícone, como no detalhe.
+**Listagem e filtro.** A listagem é `POST .../query`, aberta sem login como os `GET`, com o filtro no
+corpo: um **QueryJson**, sempre um grupo na raiz. Grupo junta regras (`rules`) e subgrupos (`groups`)
+com `and` ou `or`; regra compara um campo. Sem corpo, lista tudo.
+
+```json
+{ "type": "group", "operator": "and",
+  "rules": [ { "type": "rule", "field": "category", "operator": "equal", "value": "flor" },
+             { "type": "rule", "field": "level", "operator": "between", "value": [1, 10] } ],
+  "groups": [ { "type": "group", "operator": "or", "groups": [],
+                "rules": [ { "type": "rule", "field": "event", "operator": "is_null" },
+                           { "type": "rule", "field": "event", "operator": "in", "value": ["natal"] } ] } ] }
+```
+
+`GET .../query/fields` diz o que cada recurso aceita: os campos (`name`, `label`, `type`, `operators` e,
+quando se aplica, `kind` do código ou `options` do enum) e as chaves de `sort`. Campo, operador ou valor
+fora do que o campo aceita dá `400` dizendo onde está a regra, ex.: `query.groups[0].rules[1]: ...`.
+Todo recurso tem `name`, `extId`, `createdAt`, `updatedAt`, `createdBy` e `updatedBy`; quem tem, também
+`rarity`, `category`, `event` e `attribute` (tem o atributo). Campo de lista é "tem": `equal` é ter o
+valor, `in` ter algum, `not_in` não ter nenhum deles, `is_null` não ter nenhum; "todas as categorias" é
+um `and` de `equal`. Ver `doc/backend_plan.md`, seção 5, para tipos e operadores.
+
+**Paginação** começa em `page=0`. `sort` aceita as chaves de `query/fields` (`name`, `extId`,
+`createdAt`, `updatedAt`, mais `level` em item e entidade, `periodStart` em evento...), com `-` na
+frente para ordem decrescente. Com `references=true`, a página traz também `references`: toda
+referência citada pelos documentos da página, com nome e ícone, como no detalhe.
 
 ## Crafting e economia (Fase 3)
 
@@ -268,15 +284,19 @@ tipo.
 - `resetType` e `unlock.type` são códigos livres em minúsculas, ex.: `daily`, `weekly`, `unique`,
   `event`, `quest`, `station_level`.
 
-**O que produz, consome, vende ou dropa.** Alvo como `tipo:id`, ou só `id` para qualquer tipo:
+**O que produz, consome, vende ou dropa.** Campos do QueryJson; alvo como `tipo:id`, ou só `id`
+para qualquer tipo:
 
-| Rota | Filtros |
+| Recurso | Campos |
 |---|---|
-| `GET /api/v1/games/{jogo}/recipes` | `produces`, `consumes`, `station` |
-| `GET /api/v1/games/{jogo}/entities` | `drops`, `requires` |
-| `GET /api/v1/games/{jogo}/shop-categories` | `sells`, `shop` |
-| `GET /api/v1/games/{jogo}/shops` | `npc` |
-| `GET /api/v1/games/{jogo}/references?target=&field=` | toda origem que aponta para o alvo, de qualquer tipo |
+| `recipes` | `produces`, `consumes`, `station`, `craftTimeSeconds` |
+| `entities` | `drops`, `requires`, `variantOf`, `level`, preços |
+| `items` | `buyable` (preço base de compra ou vendido em loja), `sellable`, `variantOf`, `level`, preços |
+| `shop-categories` | `sells`, `shop` |
+| `shops` | `npc` |
+
+`GET /api/v1/games/{jogo}/references?target=&field=` lista toda origem que aponta para o alvo, de
+qualquer tipo.
 
 ## Mundo (Fase 4)
 
@@ -305,13 +325,18 @@ revisão.
   `categories`, `entities`) e `weathers` (eventos de clima). Nos JSON antigos, `bounds` estava na
   ordem do Leaflet, `[[minY, minX], [maxY, maxX]]`.
 
-| Rota | Filtros |
+| Recurso | Campos |
 |---|---|
-| `GET /api/v1/games/{jogo}/spawn-points` | `map`, `location` (ligados ao local ou dentro da área), `occupant`, `occupantCategory`, `drops`, `yields` (drop do ponto ou das entidades que aparecem nele), `bbox` |
-| `GET /api/v1/games/{jogo}/locations` | `containing` (código de ponto), `parent`, `type`, `map` |
-| `GET /api/v1/games/{jogo}/maps/{mapa}/spawn-points` | marcadores compactos, sem página: mesmos filtros, mais `limit` (até 10000); `truncated` avisa se cortou. Cada marcador traz ícone, `respawnDelayMinutes` (do ponto ou do primeiro ocupante que tem) e os ocupantes com categorias |
+| `spawn-points` | `map`, `location` (ligados ao local ou dentro da área), `occupant`, `occupantCategory`, `drops`, `yields` (drop do ponto ou das entidades que aparecem nele), `position` |
+| `locations` | `containing` (código de ponto), `parent`, `type`, `map`, `area` |
 
-`bbox` é `minX,minY,maxX,maxY` em coordenadas de jogo. Alvos como `entity:bau` ou só `bau`.
+`position` e `area` usam `intersects` com `[minX, minY, maxX, maxY]` em coordenadas de jogo. Alvos
+como `entity:bau` ou só `bau`.
+
+**Marcadores compactos:** `POST /api/v1/games/{jogo}/maps/{mapa}/spawn-points/query?limit=`, com o
+mesmo QueryJson de `spawn-points`, sem página e até 10000 pontos; `truncated` avisa se cortou. Cada
+marcador traz ícone, `respawnDelayMinutes` (do ponto ou do primeiro ocupante que tem) e os ocupantes
+com categorias.
 
 ## Coleções e códigos (Fase 5)
 
@@ -333,11 +358,11 @@ datas, e o código vale até o fim de `expiresOn`.
   "rewards": [ { "target": { "kind": "item", "extId": "estrela_desejavel" }, "amount": 3 } ] }
 ```
 
-| Rota | Filtros |
+| Recurso | Campos |
 |---|---|
-| `GET /api/v1/games/{jogo}/collections` | `member` (coleções com um grupo que tem o alvo) |
-| `GET /api/v1/games/{jogo}/collection-groups` | `collection`, `member` |
-| `GET /api/v1/games/{jogo}/codes` | `active` (`true` = ainda vale hoje), `rewards`; `sort` aceita `addedOn` e `expiresOn` |
+| `collections` | `member` (coleções com um grupo que tem o alvo) |
+| `collection-groups` | `collection`, `member` |
+| `codes` | `active` (`true` = ainda vale hoje), `rewards`, `addedOn`, `expiresOn`; `sort` aceita `addedOn` e `expiresOn` |
 
 ## Agregações (Fase 6)
 

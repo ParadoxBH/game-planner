@@ -7,12 +7,13 @@ import java.util.Map;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
-import com.paradoxbh.gameplannerserver.common.ApiException;
 import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 import com.paradoxbh.gameplannerserver.content.model.RedemptionCodeDocument;
 import com.paradoxbh.gameplannerserver.content.model.Reward;
 import com.paradoxbh.gameplannerserver.content.store.ChildRows.Table;
+import com.paradoxbh.gameplannerserver.query.FieldType;
+import com.paradoxbh.gameplannerserver.query.QueryField;
 
 @Component
 public class RedemptionCodeHandler extends AbstractContentHandler<RedemptionCodeDocument, Map<String, List<Reward>>> {
@@ -89,19 +90,19 @@ public class RedemptionCodeHandler extends AbstractContentHandler<RedemptionCode
         children.delete(REWARDS, gameId, extId);
     }
 
-    /**
-     * rewards aceita "tipo:id" ou "id". active=true são os que ainda valem hoje (sem validade ou
-     * vencendo hoje ou depois); active=false, os vencidos.
-     */
     @Override
-    protected Map<String, Filter> specificFilters() {
-        return Map.of(
-                "rewards", childReference("redemption_reward", "code_ext_id", null),
-                "active", (name, value, param, params) -> switch (value) {
-                    case "true" -> "(t.expires_on IS NULL OR t.expires_on >= current_date)";
-                    case "false" -> "t.expires_on < current_date";
-                    default -> throw ApiException.badRequest(name + " precisa ser true ou false");
-                });
+    protected boolean hasEvents() {
+        return false;
+    }
+
+    /** active: ainda vale hoje, sem validade ou vencendo hoje ou depois. rewards é "tipo:id" ou "id". */
+    @Override
+    protected List<QueryField> specificFields() {
+        return List.of(
+                QueryField.column("addedOn", "Adicionado em", FieldType.DATE, "t.added_on"),
+                QueryField.column("expiresOn", "Vence em", FieldType.DATE, "t.expires_on"),
+                QueryField.flag("active", "Válido", "t.expires_on IS NULL OR t.expires_on >= current_date"),
+                childReference("rewards", "Recompensa", "redemption_reward", "code_ext_id", null));
     }
 
     @Override

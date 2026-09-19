@@ -54,6 +54,9 @@ public class SecurityConfig {
                         // é barrado adiante, por GameAccess, porque a regra é por jogo e
                         // não dá para expressá-la num matcher de rota.
                         .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
+                        // Consulta filtrada leva o QueryJson no corpo, por isso é POST, mas é leitura.
+                        .requestMatchers(HttpMethod.POST, "/api/v1/games/*/*/query",
+                                "/api/v1/games/*/maps/*/spawn-points/query").permitAll()
                         .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login",
                                 "/api/v1/auth/refresh").permitAll()
                         .requestMatchers("/media/**").permitAll()

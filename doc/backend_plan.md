@@ -713,24 +713,75 @@ isso exige a flag `verified` (o vínculo descrito em 4.2). Dois controles acompa
 ### Leitura — pública, sem login
 
 ```
-GET /api/v1/games
-GET /api/v1/games/{game}
-GET /api/v1/games/{game}/items?search=&category=&rarity=&event=&attr.peso=&page=&size=&sort=
-GET /api/v1/games/{game}/items/{extId}
-GET /api/v1/games/{game}/{resource}/{extId}/details   <- agregado de qualquer tipo
-GET /api/v1/games/{game}/entities | /locations | /spawn-points | /maps | /recipes | /shops | /shop-categories | /categories | /events | /collections | /collection-groups | /codes
-GET /api/v1/games/{game}/collections?member=item:x | /collection-groups?collection=&member=
-GET /api/v1/games/{game}/codes?active=true&rewards=item:x&sort=-addedOn
-GET /api/v1/games/{game}/recipes?produces=item:x&consumes=&station=
-GET /api/v1/games/{game}/entities?drops=item:x&requires=
-GET /api/v1/games/{game}/shop-categories?sells=item:x&shop=
-GET /api/v1/games/{game}/references?target=item:x&field=    <- quem aponta para um alvo, de qualquer tipo
-GET /api/v1/games/{game}/maps/{mapId}/spawn-points?bbox=&occupant=&occupantCategory=&event=&limit=   <- marcadores compactos
-GET /api/v1/games/{game}/spawn-points?location=&map=&occupant=&drops=&bbox=   <- location inclui ponto dentro da área
-GET /api/v1/games/{game}/locations?containing=&parent=&type=&map=
-GET /api/v1/games/{game}/crafting-tree?target=item:x&amount=&choices=
-GET /api/v1/games/{game}/search?q=                          <- sobre content_ref
+GET  /api/v1/games
+GET  /api/v1/games/{game}
+POST /api/v1/games/{game}/{resource}/query?page=&size=&sort=&references=   <- listagem; corpo = QueryJson
+GET  /api/v1/games/{game}/{resource}/query/fields                         <- campos do filtro e sorts
+GET  /api/v1/games/{game}/{resource}/{extId}
+GET  /api/v1/games/{game}/{resource}/{extId}/details   <- agregado de qualquer tipo
+POST /api/v1/games/{game}/maps/{mapId}/spawn-points/query?limit=           <- marcadores compactos; corpo = QueryJson
+GET  /api/v1/games/{game}/maps/{mapId}/spawn-points/query/fields
+GET  /api/v1/games/{game}/references?target=item:x&field=    <- quem aponta para um alvo, de qualquer tipo
+GET  /api/v1/games/{game}/crafting-tree?target=item:x&amount=&choices=
+GET  /api/v1/games/{game}/search?q=                          <- sobre content_ref
 ```
+
+`{resource}` é items, entities, categories, events, recipes, shops, shop-categories, maps, locations,
+spawn-points, collections, collection-groups ou codes. A listagem é `POST` porque o filtro vai no corpo,
+mas é leitura: aberta sem login como os `GET`, e fora do rate limit de escrita.
+
+### Filtro de consulta — QueryJson
+
+Toda listagem recebe um **QueryJson**, sempre um grupo na raiz. Grupo junta regras (`rules`, só
+regras) e subgrupos (`groups`, só grupos) com `operator` `and` ou `or`; regra compara um campo:
+
+```json
+{ "type": "group", "operator": "and",
+  "rules": [ { "type": "rule", "field": "rarity", "operator": "in", "value": ["rare", "epic"] } ],
+  "groups": [ { "type": "group", "operator": "or", "groups": [],
+                "rules": [ { "type": "rule", "field": "event", "operator": "is_null" },
+                           { "type": "rule", "field": "event", "operator": "in", "value": ["natal"] } ] } ] }
+```
+
+O **QueryBuilder** do tipo gera o `WHERE` e descreve os campos em `.../query/fields`:
+`{ fields: [{ name, label, type, operators, kind?, options? }], sorts: [...] }`. Nome e código de
+tabela vêm de código; o JSON só escolhe campo, operador e valor, que vai por parâmetro.
+
+| Tipo | Valor | Operadores |
+|---|---|---|
+| `text` | texto | equal, not_equal, in, not_in, contains, not_contains, begins_with, ends_with, is_null, is_not_null |
+| `number` | número | equal, not_equal, in, not_in, less, less_or_equal, greater, greater_or_equal, between, is_null, is_not_null |
+| `date` | `"2026-09-18"` | equal, not_equal, less..., between, is_null, is_not_null |
+| `datetime` | ISO-8601 com fuso | less..., between, is_null, is_not_null |
+| `boolean` | true/false | equal |
+| `enum` | uma das `options` | equal, not_equal, in, not_in |
+| `code` | código de um registro do tipo `kind` | equal, not_equal, in, not_in, is_null, is_not_null |
+| `reference` | `"tipo:id"` ou `"id"` | equal, not_equal, in, not_in, is_null, is_not_null |
+| `geometry` | `[minX, minY, maxX, maxY]` | intersects, is_null, is_not_null |
+
+Campo de lista (categoria, evento, atributo, drops, ocupante, produto...) é "tem": `equal` é ter o
+valor, `in` ter algum, `not_equal`/`not_in` não ter, `is_null` não ter nenhum. "Todas as categorias"
+é um `and` de `equal`. `not_equal` e `not_in` incluem quem não tem valor. `in []` não casa nada e
+`not_in []` casa tudo. Subgrupo vazio é ignorado. Limites: 8 níveis, 200 regras, 1.000 valores num `in`.
+
+Comuns a todo tipo: `name`, `extId`, `createdAt`, `updatedAt`, `createdBy`, `updatedBy` e, quando o tipo
+tem, `rarity`, `category`, `event` e `attribute` (tem o atributo). Próprios:
+
+| Recurso | Campos |
+|---|---|
+| items | level, baseBuyPrice, baseSellPrice, variantOf, buyable (preço de compra ou vendido em loja), sellable |
+| entities | level, respawnDelayMinutes, baseBuyPrice, baseSellPrice, variantOf, drops, requires |
+| categories | appliesTo (enum item, entity, both) |
+| events | type, periodStart, periodEnd |
+| recipes | craftTimeSeconds, produces, consumes, station |
+| shops | npc, resetType |
+| shop-categories | shop, resetType, sells |
+| maps | type, weather |
+| locations | type, parent, map, area, containing (código de ponto: os locais que o contêm) |
+| spawn-points | map, location (inclui ponto dentro da área), position, respawnMode, respawnDelayMinutes, occupant, drops, yields (drop do ponto ou das entidades nele), occupantCategory |
+| collections | member |
+| collection-groups | collection, member |
+| codes | addedOn, expiresOn, active (sem validade ou vencendo hoje ou depois), rewards |
 
 ### Referências pendentes — o fluxo de cadastro
 
@@ -915,7 +966,7 @@ Decisões tomadas na implementação, que ajustam o plano acima:
 - **"Pontos do local"** é o filtro `spawn-points?location=`: os ligados pelo código e os que têm
   posição dentro da área, no mesmo mapa. O inverso é `locations?containing=`. Não criei a rota
   `/locations/{id}/spawn-points` do contrato: o filtro faz o mesmo.
-- **Marcadores compactos** em `GET /maps/{mapa}/spawn-points`: sem paginação, até 10.000 pontos
+- **Marcadores compactos** em `/maps/{mapa}/spawn-points` (hoje `POST .../query`, ver Fase 8): sem paginação, até 10.000 pontos
   (o maior mapa tem 2.354), com nome e ícone do ocupante já resolvidos e os mesmos filtros da
   listagem. `truncated` avisa quando o limite cortou.
 - **Mapa tipado:** imagem, camadas, bounds, zoom, tiles, rotação, views, filtros iniciais e climas.
@@ -1021,6 +1072,27 @@ TanStack Query e o ETag da API.
 
 Próximos passos, fora desta fase: telas que o backend já habilita e o front ainda não tem — gestão de
 membros, fila de `pending-references`, cadastro a partir do 404 e histórico de revisões.
+
+### Fase 8 — QueryBuilder
+**Status: concluída.** Os filtros soltos na URL (`search`, `category`, `produces`, `activeEvents`,
+`trade`, `bbox`...) deram lugar a um formato só, o QueryJson (ver 5), com `and`, `or` e grupos
+aninhados. Decisões:
+
+- **Listagem por `POST .../query`**, com o QueryJson no corpo e página, ordenação e `references` na
+  URL. `GET` com o JSON na URL ficaria longo com listas de eventos e ocupantes. Por ser leitura, a
+  rota é liberada sem login no `SecurityConfig` e fica fora do `RateLimitFilter`; o ETag, que só vale
+  para `GET`, não se aplica a ela.
+- **Os parâmetros antigos saíram**, sem período de convivência: o único cliente é o front, migrado
+  junto. O `GET` da coleção (`/items`) deixou de existir.
+- **Cada handler declara seus campos** (`specificFields()`), e o `AbstractContentHandler` junta os
+  comuns. `hasCategories()`, `hasEvents()` e `hasAttributes()` dizem quais etiquetas o tipo tem,
+  como já fazia `hasRarity()`. Os `/details` montam suas relações com o mesmo QueryJson.
+- **Filtros viraram campos genéricos:** `trade` virou `buyable` e `sellable`; `active` de código, um
+  booleano; `withoutCategory` é `category not_in`; `exclude` é `extId not_in`; `activeEvents` é
+  `event is_null or event in [...]`; `bbox` é `position intersects`; `appliesTo=item` é
+  `appliesTo in [item, both]`; `search` é `name contains or extId contains`.
+- **Fora desta fase:** `/crafting-profits`, `/changes`, `/pending-references` e `/references`, que têm
+  SQL próprio fora dos handlers, continuam com parâmetros na URL.
 
 ---
 

@@ -1,4 +1,5 @@
 import { apiRequest } from "./http";
+import { and, type QueryGroup, type QuerySchema } from "./query";
 
 /** Página máxima aceita pela API. */
 export const MAX_PAGE_SIZE = 200;
@@ -9,7 +10,7 @@ export interface Reference {
   extId: string;
 }
 
-/** Referência como parâmetro de URL: "tipo:id", ou só "id" quando o tipo não é conhecido. */
+/** Referência como texto, para parâmetro ou valor de filtro: "tipo:id", ou só "id" quando o tipo não é conhecido. */
 export function referenceParam(target: Reference): string {
   return target.kind ? `${target.kind}:${target.extId}` : target.extId;
 }
@@ -47,7 +48,7 @@ export interface ContentPage<T> {
   size: number;
   total: number;
   totalPages: number;
-  /** Só quando a listagem pede references=true. */
+  /** Só quando a listagem pede references. */
   references?: ResolvedReference[];
 }
 
@@ -571,46 +572,49 @@ export type ContentResource =
   | "codes";
 
 /**
- * Filtros de listagem: os comuns e, em `filters`, os próprios de cada tipo
- * (produces, sells, trade, activeEvents, withoutCategory, references...). Valor undefined não é enviado.
+ * Listagem: o filtro (QueryJson, montado com and/or/rule de ./query), a página e a ordenação. Os campos que
+ * cada tipo aceita vêm de contentApi.queryFields.
  */
 export interface ListQuery {
-  search?: string;
-  /** Todas precisam estar no conteúdo. */
-  categories?: string[];
-  event?: string;
-  rarity?: string;
+  /** Sem filtro, lista tudo. */
+  where?: QueryGroup;
   /** Começa em 0. */
   page?: number;
   size?: number;
   /** Com "-" na frente para decrescente, ex.: "-updatedAt". */
   sort?: string;
-  filters?: Record<string, string | undefined>;
+  /** Traz junto toda referência citada pelos documentos, já com nome e ícone. */
+  references?: boolean;
 }
 
 function gamePath(gameId: string): string {
   return `/games/${encodeURIComponent(gameId)}`;
 }
 
-function queryString(query: ListQuery): string {
+/** Página, ordenação e references vão na URL; o filtro, no corpo. */
+function pageString(query: ListQuery): string {
   const params = new URLSearchParams();
-  if (query.search) params.set("search", query.search);
-  query.categories?.forEach((category) => params.append("category", category));
-  if (query.event) params.set("event", query.event);
-  if (query.rarity) params.set("rarity", query.rarity);
   if (query.page !== undefined) params.set("page", String(query.page));
   if (query.size !== undefined) params.set("size", String(query.size));
   if (query.sort) params.set("sort", query.sort);
-  Object.entries(query.filters ?? {}).forEach(([key, value]) => {
-    if (value !== undefined) params.set(key, value);
-  });
+  if (query.references) params.set("references", "true");
   const text = params.toString();
   return text ? `?${text}` : "";
 }
 
 export const contentApi = {
+  /** POST, porque o filtro vai no corpo; é leitura, aberta sem login como as demais. */
   list<T>(gameId: string, resource: ContentResource, query: ListQuery, signal?: AbortSignal) {
-    return apiRequest<ContentPage<T>>(`${gamePath(gameId)}/${resource}${queryString(query)}`, { signal });
+    return apiRequest<ContentPage<T>>(`${gamePath(gameId)}/${resource}/query${pageString(query)}`, {
+      method: "POST",
+      body: query.where ?? and(),
+      signal,
+    });
+  },
+
+  /** Campos que o filtro da listagem aceita (nome, tipo, operadores, opções) e chaves de ordenação. */
+  queryFields(gameId: string, resource: ContentResource, signal?: AbortSignal) {
+    return apiRequest<QuerySchema>(`${gamePath(gameId)}/${resource}/query/fields`, { signal });
   },
 
   get<T>(gameId: string, resource: ContentResource, extId: string, signal?: AbortSignal) {
@@ -634,13 +638,11 @@ export const contentApi = {
     return apiRequest<CraftingTree>(`${gamePath(gameId)}/crafting-tree?${params}`, { signal });
   },
 
-  /** Pontos de spawn de um mapa, compactos para desenhar; aceita os filtros de /spawn-points. */
-  markers(gameId: string, mapId: string, filters: Record<string, string | undefined>, signal?: AbortSignal) {
-    const params = new URLSearchParams({ limit: "10000" });
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined) params.set(key, value);
-    });
-    return apiRequest<MapMarkers>(`${gamePath(gameId)}/maps/${encodeURIComponent(mapId)}/spawn-points?${params}`, {
+  /** Pontos de spawn de um mapa, compactos para desenhar; o filtro usa os campos de /spawn-points. */
+  markers(gameId: string, mapId: string, where: QueryGroup, signal?: AbortSignal) {
+    return apiRequest<MapMarkers>(`${gamePath(gameId)}/maps/${encodeURIComponent(mapId)}/spawn-points/query?limit=10000`, {
+      method: "POST",
+      body: where,
       signal,
     });
   },

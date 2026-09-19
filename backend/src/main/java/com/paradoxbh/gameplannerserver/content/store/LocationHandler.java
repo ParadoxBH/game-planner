@@ -8,10 +8,12 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
 import com.paradoxbh.gameplannerserver.content.ContentKind;
-import com.paradoxbh.gameplannerserver.content.ExtIds;
 import com.paradoxbh.gameplannerserver.content.Geometries;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 import com.paradoxbh.gameplannerserver.content.model.LocationDocument;
+import com.paradoxbh.gameplannerserver.query.FieldType;
+import com.paradoxbh.gameplannerserver.query.QueryField;
+import com.paradoxbh.gameplannerserver.query.QueryField.Membership;
 
 @Component
 public class LocationHandler extends AbstractContentHandler<LocationDocument, Void> {
@@ -73,24 +75,22 @@ public class LocationHandler extends AbstractContentHandler<LocationDocument, Vo
         return new ContentTags(List.of(), location.events(), Map.of(), location.media());
     }
 
-    /** type, parent e map são códigos; containing é o código de um ponto de spawn. */
+    /** type é texto livre; parent e map são códigos; containing é o código de um ponto de spawn. */
     @Override
-    protected Map<String, Filter> specificFilters() {
-        return Map.of(
-                "type", codeColumn("t.location_type"),
-                "parent", codeColumn("t.parent_ext_id"),
-                "map", codeColumn("t.map_ext_id"),
-                "containing", containing());
+    protected List<QueryField> specificFields() {
+        return List.of(
+                QueryField.column("type", "Tipo", FieldType.TEXT, "t.location_type"),
+                QueryField.code("parent", "Dentro de", "location", "t.parent_ext_id"),
+                QueryField.code("map", "Mapa", "map", "t.map_ext_id"),
+                QueryField.column("area", "Área", FieldType.GEOMETRY, "t.area"),
+                QueryField.has("containing", "Contém o ponto", FieldType.CODE, "spawn_point", containing()));
     }
 
     /** Locais de um ponto: o ligado a ele pelo código e os que têm a posição dele dentro da área. */
-    private static Filter containing() {
-        return (name, value, param, params) -> {
-            params.put(param, ExtIds.require(value, name));
-            return "EXISTS (SELECT 1 FROM spawn_point p WHERE p.game_id = t.game_id AND p.ext_id = :" + param
-                    + " AND (p.location_ext_id = t.ext_id OR (p.position IS NOT NULL AND t.area IS NOT NULL"
-                    + " AND (p.map_ext_id IS NULL OR t.map_ext_id IS NULL OR p.map_ext_id = t.map_ext_id)"
-                    + " AND ST_Within(p.position, t.area))))";
-        };
+    private static Membership containing() {
+        return match -> "EXISTS (SELECT 1 FROM spawn_point p WHERE p.game_id = t.game_id AND " + match.code("p.ext_id")
+                + " AND (p.location_ext_id = t.ext_id OR (p.position IS NOT NULL AND t.area IS NOT NULL"
+                + " AND (p.map_ext_id IS NULL OR t.map_ext_id IS NULL OR p.map_ext_id = t.map_ext_id)"
+                + " AND ST_Within(p.position, t.area))))";
     }
 }
