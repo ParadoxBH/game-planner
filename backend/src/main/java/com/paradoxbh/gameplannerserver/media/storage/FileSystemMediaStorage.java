@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -43,12 +44,24 @@ public class FileSystemMediaStorage implements MediaStorage {
 
         Files.createDirectories(target.getParent());
         // Grava ao lado e move de uma vez: quem pedir a URL nunca recebe arquivo pela metade.
-        Path partial = target.resolveSibling(target.getFileName() + ".part");
-        Files.copy(source, partial, StandardCopyOption.REPLACE_EXISTING);
+        // O temporário tem nome próprio por chamada: duas requisições com a mesma imagem chegam juntas
+        // (o id é o hash do conteúdo) e, com um .part em comum, uma sobrescrevia ou movia o da outra.
+        Path partial = target.resolveSibling(target.getFileName() + "." + UUID.randomUUID() + ".part");
         try {
-            Files.move(partial, target, StandardCopyOption.ATOMIC_MOVE);
-        } catch (AtomicMoveNotSupportedException ex) {
-            Files.move(partial, target, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(source, partial);
+            try {
+                Files.move(partial, target, StandardCopyOption.ATOMIC_MOVE);
+            } catch (AtomicMoveNotSupportedException ex) {
+                Files.move(partial, target, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException ex) {
+            // A outra requisição venceu: no Windows, substituir o arquivo que ela acabou de gravar (ou que
+            // alguém está lendo) falha. O conteúdo é o mesmo, porque a chave vem do hash.
+            if (!Files.isRegularFile(target)) {
+                throw ex;
+            }
+        } finally {
+            Files.deleteIfExists(partial);
         }
         return key;
     }

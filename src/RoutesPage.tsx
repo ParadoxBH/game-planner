@@ -5,6 +5,7 @@ import { MainLayout } from "./layouts/MainLayout";
 import { GameDashboard } from "./components/GameDashboard";
 import { MapSelectorPage } from "./components/map/MapSelectorPage";
 import { ItemsPage } from "./components/item/ItemsPage";
+import { CategoryPanelPage } from "./components/common/CategoryPanelPage";
 import { RecipesPage } from "./components/recipe/RecipesPage";
 import { EntityPage } from "./components/entity/EntityPage";
 import { EntityDetailsPage } from "./components/entity/EntityDetailsPage";
@@ -50,12 +51,66 @@ export function RoutesPage() {
           </Route>
 
           {/* Placeholders adicionais baseados nos novos botões da Header */}
+          <Route
+            path="items"
+            element={
+              <CategoryPanelPage
+                resource="items"
+                filterKey="category"
+                kind="item"
+                optionKind="category"
+                listPath="items/list"
+                title={(gameId) => `Itens de ${gameId}`}
+                label="Escolha uma categoria para explorar os itens."
+                allLabel="Todos os itens"
+                searchPlaceholder="Pesquisar categorias..."
+                emptyMessage="Nenhuma categoria encontrada."
+                unit={["item", "itens"]}
+              />
+            }
+          />
           <Route path="items/list/:category?" element={<ItemsPage />} />
           <Route path="items/view/:itemId" element={<ItemDetailsPage />} />
+          <Route
+            path="recipes"
+            element={
+              <CategoryPanelPage
+                resource="recipes"
+                filterKey="station"
+                kind="recipe"
+                optionKind="recipe"
+                listPath="recipes/list"
+                title={(gameId) => `Receitas de ${gameId}`}
+                label="Escolha uma bancada para explorar as receitas."
+                allLabel="Todas as receitas"
+                searchPlaceholder="Pesquisar bancadas..."
+                emptyMessage="Nenhuma bancada encontrada."
+                unit={["receita", "receitas"]}
+              />
+            }
+          />
           <Route path="recipes/list/:category?" element={<RecipesPage />} />
           <Route path="recipes/view/:recipeId" element={<RecipeDetailsPage />} />
           <Route path="conjuntos" element={<ConjuntosPage />} />
           <Route path="conjuntos/:conjuntoId" element={<ConjuntosDetain />} />
+          <Route
+            path="entity"
+            element={
+              <CategoryPanelPage
+                resource="entities"
+                filterKey="category"
+                kind="entity"
+                optionKind="category"
+                listPath="entity/list"
+                title={(gameId) => `Entidades de ${gameId}`}
+                label="Escolha uma categoria para explorar as entidades."
+                allLabel="Todas as entidades"
+                searchPlaceholder="Pesquisar categorias..."
+                emptyMessage="Nenhuma categoria encontrada."
+                unit={["entidade", "entidades"]}
+              />
+            }
+          />
           <Route path="entity/list/:category?" element={<EntityPage />} />
           <Route path="entity/view/:entityId" element={<EntityDetailsPage />} />
           <Route path="shops/list/:category?" element={<ShopsPage />} />

@@ -151,7 +151,7 @@ export function RecipeDetailsPage() {
         !isMobile ? (
           <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
             <Link to={`/game/${gameId}`}>Dashboard</Link>
-            <Link to={`/game/${gameId}/recipes/list`}>Receitas</Link>
+            <Link to={`/game/${gameId}/recipes`}>Receitas</Link>
             <Typography color="primary">{title}</Typography>
           </Breadcrumbs>
         ) : undefined

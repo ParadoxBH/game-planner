@@ -88,7 +88,7 @@ export function ItemDetailsPage() {
       actionsStart={
         <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
           <Link to={`/game/${gameId}`}>Dashboard</Link>
-          <Link to={`/game/${gameId}/items/list`}>Itens</Link>
+          <Link to={`/game/${gameId}/items`}>Itens</Link>
           <Typography color="primary">{item.name}</Typography>
         </Breadcrumbs>
       }

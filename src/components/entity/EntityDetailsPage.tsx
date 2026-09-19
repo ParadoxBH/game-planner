@@ -93,7 +93,7 @@ export function EntityDetailsPage() {
       actionsStart={
         <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
           <Link to={`/game/${gameId}`}>Dashboard</Link>
-          <Link to={`/game/${gameId}/entity/list`}>Entidades</Link>
+          <Link to={`/game/${gameId}/entity`}>Entidades</Link>
           <Typography color="primary">{entity.name}</Typography>
         </Breadcrumbs>
       }

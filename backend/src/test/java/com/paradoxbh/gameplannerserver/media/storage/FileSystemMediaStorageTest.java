@@ -7,6 +7,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -46,6 +53,43 @@ class FileSystemMediaStorageTest {
 
         storage.delete(key);
         assertThat(storage.load(key)).isEmpty();
+    }
+
+    /** A mesma imagem enviada em paralelo (id = hash) não pode derrubar nenhuma das requisições. */
+    @Test
+    void concurrentStoresOfTheSameMediaAllSucceed() throws Exception {
+        FileSystemMediaStorage storage = storage();
+        int writers = 8;
+        List<Path> sources = new ArrayList<>();
+        for (int i = 0; i < writers; i++) {
+            sources.add(Files.write(root.resolve("entrada" + i + ".webp"), new byte[256 * 1024]));
+        }
+
+        ExecutorService pool = Executors.newFixedThreadPool(writers);
+        try {
+            for (int round = 0; round < 20; round++) {
+                MediaVariant variant = MediaVariant.values()[round % MediaVariant.values().length];
+                String id = String.format("%064x", round);
+                CountDownLatch start = new CountDownLatch(1);
+                List<Future<String>> results = new ArrayList<>();
+                for (Path source : sources) {
+                    results.add(pool.submit(() -> {
+                        start.await();
+                        return storage.store(id, variant, source);
+                    }));
+                }
+                start.countDown();
+                for (Future<String> result : results) {
+                    assertThat(root.resolve(result.get())).exists();
+                }
+            }
+        } finally {
+            pool.shutdownNow();
+        }
+
+        try (Stream<Path> files = Files.walk(root)) {
+            assertThat(files.filter(p -> p.toString().endsWith(".part"))).isEmpty();
+        }
     }
 
     @Test

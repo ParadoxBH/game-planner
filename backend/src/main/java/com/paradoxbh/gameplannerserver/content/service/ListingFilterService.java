@@ -160,25 +160,26 @@ public class ListingFilterService {
     }
 
     /**
-     * Categorias principais que o tipo usa, incluindo as de ambos, pelo nome. Escolher uma traz o que
-     * a tem, em qualquer posição.
+     * Categorias principais que o tipo usa, incluindo as de ambos, pelo nome, com quantos registros
+     * cada uma tem. Escolher uma traz o que a tem, em qualquer posição.
      */
     private Spec primaryCategories(ContentKind kind) {
         return new Spec(new ListingFilter("category", "Categoria", Display.SELECT, null, null, "category", null, null,
                 List.of()),
                 gameId -> jdbc.sql("""
-                        SELECT c.ext_id, r.name, r.icon_media_id
+                        SELECT c.ext_id, r.name, r.icon_media_id, u.total
                         FROM category c
                         JOIN content_ref r ON r.game_id = c.game_id AND r.kind = 'category' AND r.ext_id = c.ext_id
+                        JOIN (SELECT category_ext_id, count(DISTINCT ext_id) AS total FROM content_category
+                              WHERE game_id = :game AND kind = :kind GROUP BY category_ext_id) u
+                          ON u.category_ext_id = c.ext_id
                         WHERE c.game_id = :game AND c.is_primary AND c.applies_to IN (:kind, 'both')
-                          AND EXISTS (SELECT 1 FROM content_category u WHERE u.game_id = c.game_id
-                                      AND u.kind = :kind AND u.category_ext_id = c.ext_id)
                         ORDER BY r.name, c.ext_id
                         """)
                         .param("game", gameId).param("kind", kind.code())
                         .query((rs, rowNum) -> new Option(rs.getString("ext_id"),
                                 labelOr(rs.getString("name"), rs.getString("ext_id")), rs.getString("icon_media_id"),
-                                null, null, null, null))
+                                rs.getLong("total"), null, null, null))
                         .list());
     }
 
