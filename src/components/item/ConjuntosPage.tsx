@@ -19,7 +19,7 @@ import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
 import { ContentIcon } from "../common/ContentIcon";
 import { ListingDataView } from "../common/ListingDataView";
-import { ListingFilterBar } from "../common/ListingFilterBar";
+import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { CollectionProgress } from "./CollectionProgress";
 
@@ -71,19 +71,16 @@ export function ConjuntosPage() {
     <StyledContainer
       title="Conjuntos"
       label="Explore coleções e conjuntos de itens temáticos."
-      searchValue={pages.info.search}
-      onChangeSearch={pages.setSearch}
-      search={{ placeholder: listing.data?.search.placeholder }}
-      pages={pages}
-      actionsStart={
-        <Stack alignItems="center" spacing={1} direction="row">
-          <ListingFilterBar
-            filters={listing.data?.filters}
-            values={criteria}
-            onChange={(key, value) => pages.setCriteria({ [key]: value })}
-          />
-        </Stack>
+      searchEnd={
+        <QueryBuilder
+          schema={listing.data}
+          search={pages.info.search}
+          onSearchChange={pages.setSearch}
+          values={criteria}
+          onChange={(key, value) => pages.setCriteria({ [key]: value })}
+        />
       }
+      pages={pages}
     >
       {collections.isPending ? (
         <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>

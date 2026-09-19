@@ -10,14 +10,22 @@ import {
   type ItemDocument,
   type ShopDocument,
 } from "../../api/content";
-import { useAttributeDefinitions, useContentList, useListing, useRarities, type ListingQuery } from "../../api/useContent";
-import { and, rule } from "../../api/query";
+import {
+  useAttributeDefinitions,
+  useContentList,
+  useListing,
+  useListingFilters,
+  useRarities,
+  type ListingQuery,
+} from "../../api/useContent";
+import { and, resetFilterValues, rule, type FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
 import { useViewMode } from "../../hooks/useViewMode";
 import { DataChip } from "../common/DataChip";
 import { ListingDataView } from "../common/ListingDataView";
+import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { ApiEntityCard, ApiEntityIcon, entityListCells, entityRarityColor, type EntityListView } from "../entity/ApiEntityRenderers";
@@ -25,7 +33,7 @@ import { ApiItemCard, ApiItemIcon, attributeLabel, itemListCells, rarityColorOf,
 
 type MetadataTab = "items" | "entities";
 
-const NO_CRITERIA = {};
+const NO_CRITERIA: FilterValues = {};
 
 function Loading() {
   return (
@@ -62,17 +70,25 @@ export function MetadataDetailsPage() {
   }, [pages.info.pagination.pageSize, pages.setPageSize]);
 
   const search = useDebouncedValue(pages.info.search);
-  const { pagination } = pages.info;
+  const { criteria, pagination } = pages.info;
   const where = useMemo(
     () => and(attributeKey && rule("attribute", "equal", attributeKey)),
     [attributeKey],
   );
 
-  // A busca procura nos campos que o backend indica para cada listagem.
+  // A busca e os filtros do QueryBuilder são os da listagem da aba (itens ou entidades), somados ao atributo.
   const query = useMemo<ListingQuery>(
-    () => ({ search, where, page: pagination.page - 1, size: Math.min(pagination.pageSize, MAX_PAGE_SIZE), sort: "name" }),
-    [search, pagination, where],
+    () => ({
+      search,
+      values: criteria,
+      where,
+      page: pagination.page - 1,
+      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+      sort: "name",
+    }),
+    [search, criteria, pagination, where],
   );
+  const listing = useListingFilters(gameId, tab);
   // Só o total, para as contagens das abas.
   const countQuery = useMemo<ListingQuery>(() => ({ size: 1, where }), [where]);
 
@@ -117,9 +133,10 @@ export function MetadataDetailsPage() {
   const definition = definitions.get(attributeKey);
   const label = definition?.label ?? attributeKey;
 
+  // Os filtros são os da listagem da aba: trocar de aba os limpa; a busca continua.
   const changeTab = (next: MetadataTab) => {
     setTab(next);
-    pages.setPage(1);
+    pages.setCriteria(resetFilterValues(criteria));
   };
 
   return (
@@ -127,9 +144,18 @@ export function MetadataDetailsPage() {
       prefix={<Bookmarks sx={{ height: 60, width: 60, color: "primary.main" }} />}
       title={label}
       label={`Itens e entidades com o atributo "${label}"${definition?.unit ? `, em ${definition.unit}` : ""}.`}
-      searchValue={pages.info.search}
-      onChangeSearch={pages.setSearch}
-      search={{ placeholder: tab === "items" ? "Pesquisar itens..." : "Pesquisar entidades..." }}
+      searchEnd={
+        <>
+          <ViewModeSelector mode={viewMode} onChange={setViewMode} />
+          <QueryBuilder
+            schema={listing.data}
+            search={pages.info.search}
+            onSearchChange={pages.setSearch}
+            values={criteria}
+            onChange={(key, value) => pages.setCriteria({ [key]: value })}
+          />
+        </>
+      }
       pages={pages}
       actionsStart={
         <Stack spacing={1} sx={{ minWidth: 0 }}>
@@ -144,11 +170,6 @@ export function MetadataDetailsPage() {
             <Tab value="items" icon={<Inventory />} iconPosition="start" label={`Itens (${itemCount.data?.total ?? "…"})`} />
             <Tab value="entities" icon={<Bolt />} iconPosition="start" label={`Entidades (${entityCount.data?.total ?? "…"})`} />
           </Tabs>
-        </Stack>
-      }
-      actionsEnd={
-        <Stack direction="row" flex={1} justifyContent={isMobile ? "flex-start" : "flex-end"}>
-          <ViewModeSelector mode={viewMode} onChange={setViewMode} />
         </Stack>
       }
     >

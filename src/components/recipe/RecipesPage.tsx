@@ -15,7 +15,7 @@ import { ContentChip } from "../common/ContentChip";
 import { ContentIcon } from "../common/ContentIcon";
 import { DataChip } from "../common/DataChip";
 import { ListingDataView } from "../common/ListingDataView";
-import { ListingFilterBar } from "../common/ListingFilterBar";
+import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { ApiRecipeCard, recipeTitle, unlockLabel } from "./ApiRecipeCard";
@@ -26,8 +26,8 @@ function stationFilter(station: string | undefined): FilterValues {
 }
 
 /**
- * Lista de receitas, lida da API com as referências já resolvidas. A busca e os filtros acima da lista vêm do
- * backend (GET /recipes/query/filters).
+ * Lista de receitas, lida da API com as referências já resolvidas. A busca e os filtros ficam no QueryBuilder e
+ * vêm do backend (GET /recipes/query/filters).
  */
 export function RecipesPage() {
   const { gameId = "", category: urlStation } = useParams<{ gameId: string; category?: string }>();
@@ -74,18 +74,19 @@ export function RecipesPage() {
     <StyledContainer
       title={`Receitas de ${gameId}`}
       label="Descubra como fabricar todos os itens do jogo."
-      searchValue={pages.info.search}
-      onChangeSearch={pages.setSearch}
-      search={{ placeholder: listing.data?.search.placeholder }}
-      pages={pages}
-      actionsStart={
-        <Stack direction="row" spacing={1} justifyContent="space-between" flex={1} alignItems="center">
-          <Stack direction="row" spacing={1} alignItems="center">
-            <ListingFilterBar filters={listing.data?.filters} values={criteria} onChange={changeFilter} />
-          </Stack>
+      searchEnd={
+        <>
           <ViewModeSelector mode={viewMode} onChange={setViewMode} />
-        </Stack>
+          <QueryBuilder
+            schema={listing.data}
+            search={pages.info.search}
+            onSearchChange={pages.setSearch}
+            values={criteria}
+            onChange={changeFilter}
+          />
+        </>
       }
+      pages={pages}
     >
       {recipes.isPending ? (
         <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>

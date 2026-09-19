@@ -11,13 +11,12 @@ import { usePlatform } from "../../hooks/usePlatform";
 import { useViewMode } from "../../hooks/useViewMode";
 import { categoryUrlFilters } from "../../utils/urlFilters";
 import { ListingDataView } from "../common/ListingDataView";
-import { ListingFilterBar } from "../common/ListingFilterBar";
 import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { ApiItemCard, ApiItemIcon, itemListCells, rarityColorOf, type ItemListView } from "./ApiItemRenderers";
 
-/** Lista de itens, lida da API. A busca e os filtros acima da lista vêm do backend (GET /items/query/filters). */
+/** Lista de itens, lida da API. A busca e os filtros ficam no QueryBuilder e vêm do backend (GET /items/query/filters). */
 export function ItemsPage() {
   const { gameId = "", category: urlCategory } = useParams<{ gameId: string; category?: string }>();
   const navigate = useNavigate();
@@ -82,35 +81,31 @@ export function ItemsPage() {
     <StyledContainer
       title={`Itens de ${gameId}`}
       label="Explore e descubra todos os itens disponíveis."
-      searchValue={pages.info.search}
-      onChangeSearch={pages.setSearch}
-      search={{ placeholder: listing.data?.search.placeholder }}
       searchEnd={
-        <QueryBuilder
-          schema={listing.data}
-          search={pages.info.search}
-          onSearchChange={pages.setSearch}
-          values={criteria}
-          onChange={changeFilter}
-        />
+        <>
+          <Stack flex={1} direction="row" justifyContent={isMobile ? "space-between" : "end"} alignItems="center">
+            <FormControlLabel
+              control={
+                <Switch checked={showPrices} onChange={(event) => setShowPrices(event.target.checked)} color="primary" size="small" />
+              }
+              label={
+                <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600 }}>
+                  Mostrar preços
+                </Typography>
+              }
+            />
+            <ViewModeSelector mode={viewMode} onChange={setViewMode} />
+          </Stack>
+          <QueryBuilder
+            schema={listing.data}
+            search={pages.info.search}
+            onSearchChange={pages.setSearch}
+            values={criteria}
+            onChange={changeFilter}
+          />
+        </>
       }
       pages={pages}
-      actionsStart={<ListingFilterBar filters={listing.data?.filters} values={criteria} onChange={changeFilter} />}
-      actionsEnd={
-        <Stack flex={1} direction="row" justifyContent={isMobile ? "space-between" : "end"} alignItems="center">
-          <FormControlLabel
-            control={
-              <Switch checked={showPrices} onChange={(event) => setShowPrices(event.target.checked)} color="primary" size="small" />
-            }
-            label={
-              <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600 }}>
-                Mostrar preços
-              </Typography>
-            }
-          />
-          <ViewModeSelector mode={viewMode} onChange={setViewMode} />
-        </Stack>
-      }
     >
       {items.isPending ? (
         <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>

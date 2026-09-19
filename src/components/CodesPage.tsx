@@ -25,7 +25,7 @@ import { redemptionService } from "../services/redemptionService";
 import { formatDate, isoDate } from "../utils/format";
 import { ContentChip } from "./common/ContentChip";
 import { ListingDataView } from "./common/ListingDataView";
-import { ListingFilterBar } from "./common/ListingFilterBar";
+import { QueryBuilder } from "./common/QueryBuilder";
 import { StyledContainer } from "./common/StyledContainer";
 import { Ribbon } from "./Ribbon";
 
@@ -211,21 +211,16 @@ export function CodesPage() {
     <StyledContainer
       title={`Códigos de resgate - ${gameId}`}
       label="Aproveite recompensas gratuitas com os códigos abaixo."
-      searchValue={pages.info.search}
-      onChangeSearch={pages.setSearch}
-      search={{ placeholder: listing.data?.search.placeholder }}
-      pages={pages}
-      actionsStart={
-        <Stack flex={1} px={1} direction="row" alignItems="center" justifyContent="space-between">
-          <Stack direction="row" spacing={1} alignItems="center">
-            <ListingFilterBar
-              filters={listing.data?.filters}
-              values={criteria}
-              onChange={(key, value) => pages.setCriteria({ [key]: value })}
-            />
-          </Stack>
-        </Stack>
+      searchEnd={
+        <QueryBuilder
+          schema={listing.data}
+          search={pages.info.search}
+          onSearchChange={pages.setSearch}
+          values={criteria}
+          onChange={(key, value) => pages.setCriteria({ [key]: value })}
+        />
       }
+      pages={pages}
     >
       {codes.isPending ? (
         <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>

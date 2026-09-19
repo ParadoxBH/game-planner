@@ -25,7 +25,7 @@ interface StyledContainerProps {
   search?: {
     placeholder?: string;
   };
-  /** À direita da busca, ex.: o QueryBuilder. */
+  /** À direita da busca, ou no lugar dela quando a tela não tem busca; ex.: o QueryBuilder. */
   searchEnd?: ReactNode;
   actionsStart?: ReactNode;
   actionsEnd?: ReactNode;
@@ -120,7 +120,7 @@ export function StyledContainer({
             </Stack>
 
             {(onChangeSearch || searchEnd) && (
-              <Stack direction="row" spacing={1} alignItems="center" sx={{ width: { xs: "100%", md: "auto" } }}>
+              <Stack direction="row" spacing={1} alignItems="center" justifyContent="flex-end" sx={{ width: { xs: "100%", md: "auto" } }}>
                 {onChangeSearch && (
                   <Box sx={{ flex: { xs: 1, md: "none" }, width: { md: "400px" } }}>
                     <TextField

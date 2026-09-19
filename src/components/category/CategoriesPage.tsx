@@ -13,7 +13,7 @@ import { useViewMode } from "../../hooks/useViewMode";
 import { ContentIcon } from "../common/ContentIcon";
 import { DataChip } from "../common/DataChip";
 import { ListingDataView } from "../common/ListingDataView";
-import { ListingFilterBar } from "../common/ListingFilterBar";
+import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 
@@ -146,22 +146,19 @@ export function CategoriesPage() {
     <StyledContainer
       title="Explorar categorias"
       label="Navegue por todo o conteúdo organizado por tipos de itens e entidades."
-      searchValue={pages.info.search}
-      onChangeSearch={pages.setSearch}
-      search={{ placeholder: listing.data?.search.placeholder }}
-      pages={pages}
-      actionsStart={
-        <Stack direction="row" spacing={1} justifyContent="space-between" flex={1} alignItems="center">
-          <Stack direction="row" spacing={1} alignItems="center">
-            <ListingFilterBar
-              filters={listing.data?.filters}
-              values={criteria}
-              onChange={(key, value) => pages.setCriteria({ [key]: value })}
-            />
-          </Stack>
+      searchEnd={
+        <>
           <ViewModeSelector mode={viewMode} onChange={setViewMode} />
-        </Stack>
+          <QueryBuilder
+            schema={listing.data}
+            search={pages.info.search}
+            onSearchChange={pages.setSearch}
+            values={criteria}
+            onChange={(key, value) => pages.setCriteria({ [key]: value })}
+          />
+        </>
       }
+      pages={pages}
     >
       {categories.isPending ? (
         <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>

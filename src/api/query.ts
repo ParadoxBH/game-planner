@@ -234,6 +234,11 @@ export function emptyFilterValue(filter: ListingFilter): FilterValue {
   return filter.display === "multi" ? {} : null;
 }
 
+/** Todos os valores de volta ao padrão de cada filtro; somado aos atuais (setCriteria), limpa o que foi escolhido. */
+export function resetFilterValues(values: FilterValues): FilterValues {
+  return Object.fromEntries(Object.keys(values).map((key) => [key, undefined]));
+}
+
 /** Quantas escolhas de um filtro estão valendo: 0 ou 1, e em multi uma por opção marcada. */
 export function filterCount(filter: ListingFilter, values: FilterValues): number {
   const value = filterValue(filter, values);

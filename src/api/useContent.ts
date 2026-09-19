@@ -35,7 +35,7 @@ function listingFiltersQuery(gameId: string, resource: ContentResource) {
   });
 }
 
-/** Busca e filtros de tela de uma listagem, com as opções do jogo, para desenhar a barra (ListingFilterBar). */
+/** Busca e filtros de tela de uma listagem, com as opções do jogo, para desenhar o QueryBuilder. */
 export function useListingFilters(gameId: string | undefined, resource: ContentResource) {
   return useQuery({ ...listingFiltersQuery(gameId ?? "", resource), enabled: Boolean(gameId) });
 }

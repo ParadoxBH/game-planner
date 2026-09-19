@@ -11,12 +11,12 @@ import { usePlatform } from "../../hooks/usePlatform";
 import { useViewMode } from "../../hooks/useViewMode";
 import { categoryUrlFilters } from "../../utils/urlFilters";
 import { ListingDataView } from "../common/ListingDataView";
-import { ListingFilterBar } from "../common/ListingFilterBar";
+import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { ApiEntityCard, ApiEntityIcon, entityListCells, entityRarityColor, type EntityListView } from "./ApiEntityRenderers";
 
-/** Lista de entidades, lida da API. A busca e os filtros acima da lista vêm do backend (GET /entities/query/filters). */
+/** Lista de entidades, lida da API. A busca e os filtros ficam no QueryBuilder e vêm do backend (GET /entities/query/filters). */
 export function EntityPage() {
   const { gameId = "", category: urlCategory } = useParams<{ gameId: string; category?: string }>();
   const navigate = useNavigate();
@@ -84,26 +84,31 @@ export function EntityPage() {
     <StyledContainer
       title={`${currentCategoryName} de ${gameId}`}
       label="Explore e descubra todas as entidades do jogo."
-      searchValue={pages.info.search}
-      onChangeSearch={pages.setSearch}
-      search={{ placeholder: listing.data?.search.placeholder }}
-      pages={pages}
-      actionsStart={<ListingFilterBar filters={listing.data?.filters} values={criteria} onChange={changeFilter} />}
-      actionsEnd={
-        <Stack flex={1} direction="row" justifyContent={isMobile ? "space-between" : "end"} alignItems="center">
-          <FormControlLabel
-            control={
-              <Switch checked={showPrices} onChange={(event) => setShowPrices(event.target.checked)} color="primary" size="small" />
-            }
-            label={
-              <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600 }}>
-                Mostrar preços
-              </Typography>
-            }
+      searchEnd={
+        <>
+          <Stack flex={1} direction="row" justifyContent={isMobile ? "space-between" : "end"} alignItems="center">
+            <FormControlLabel
+              control={
+                <Switch checked={showPrices} onChange={(event) => setShowPrices(event.target.checked)} color="primary" size="small" />
+              }
+              label={
+                <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600 }}>
+                  Mostrar preços
+                </Typography>
+              }
+            />
+            <ViewModeSelector mode={viewMode} onChange={setViewMode} />
+          </Stack>
+          <QueryBuilder
+            schema={listing.data}
+            search={pages.info.search}
+            onSearchChange={pages.setSearch}
+            values={criteria}
+            onChange={changeFilter}
           />
-          <ViewModeSelector mode={viewMode} onChange={setViewMode} />
-        </Stack>
+        </>
       }
+      pages={pages}
     >
       {entities.isPending ? (
         <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>

@@ -11,7 +11,7 @@ import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
 import { useViewMode } from "../../hooks/useViewMode";
 import { ListingDataView } from "../common/ListingDataView";
-import { ListingFilterBar } from "../common/ListingFilterBar";
+import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { ApiShopCard, ApiShopIcon, ShopPicker, shopListCells, type ShopListView } from "./ApiShopRenderers";
@@ -58,23 +58,22 @@ function ShopList({ gameId }: { gameId: string }) {
     <StyledContainer
       title={`Lojas de ${gameId}`}
       label="Visite os NPCs locais para comprar suprimentos e trocar recursos."
-      searchValue={pages.info.search}
-      onChangeSearch={pages.setSearch}
-      search={{ placeholder: listing.data?.search.placeholder }}
-      pages={pages}
-      actionsStart={
-        <Stack direction="row" spacing={1} justifyContent="space-between" flex={1} alignItems="center">
-          <Stack direction="row" spacing={1} alignItems="center">
+      searchEnd={
+        <>
+          <Stack flex={1} direction="row" spacing={1} justifyContent={isMobile ? "space-between" : "end"} alignItems="center">
             <ShopPicker gameId={gameId} value={null} />
-            <ListingFilterBar
-              filters={listing.data?.filters}
-              values={criteria}
-              onChange={(key, value) => pages.setCriteria({ [key]: value })}
-            />
+            <ViewModeSelector mode={viewMode} onChange={setViewMode} />
           </Stack>
-          <ViewModeSelector mode={viewMode} onChange={setViewMode} />
-        </Stack>
+          <QueryBuilder
+            schema={listing.data}
+            search={pages.info.search}
+            onSearchChange={pages.setSearch}
+            values={criteria}
+            onChange={(key, value) => pages.setCriteria({ [key]: value })}
+          />
+        </>
       }
+      pages={pages}
     >
       {shops.isPending ? (
         <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>

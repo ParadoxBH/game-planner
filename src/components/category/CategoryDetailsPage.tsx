@@ -20,16 +20,18 @@ import {
   useContentDetails,
   useContentList,
   useListing,
+  useListingFilters,
   useRarities,
   type ListingQuery,
 } from "../../api/useContent";
-import { and, rule } from "../../api/query";
+import { and, resetFilterValues, rule, type FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
 import { useViewMode } from "../../hooks/useViewMode";
 import { usePlatform } from "../../hooks/usePlatform";
 import { ContentIcon } from "../common/ContentIcon";
 import { ListingDataView } from "../common/ListingDataView";
+import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { ApiEntityCard, ApiEntityIcon, entityListCells, entityRarityColor, type EntityListView } from "../entity/ApiEntityRenderers";
@@ -47,7 +49,7 @@ const TABS: Record<CategoryTab, { label: string; icon: ReactElement }> = {
   shops: { label: "Lojas", icon: <Storefront /> },
 };
 
-const NO_CRITERIA = {};
+const NO_CRITERIA: FilterValues = {};
 
 /** Abas com conteúdo: itens e entidades conforme o que a categoria agrupa, receitas e lojas quando houver. */
 function tabsFor(category: CategoryDocument, related: CategoryRelated): CategoryTab[] {
@@ -144,18 +146,20 @@ export function CategoryDetailsPage() {
   }, [pages.info.pagination.pageSize, pages.setPageSize]);
 
   const search = useDebouncedValue(pages.info.search);
-  const { pagination } = pages.info;
-  // A busca procura nos campos que o backend indica para cada listagem.
+  const { criteria, pagination } = pages.info;
+  // A busca e os filtros do QueryBuilder são os da listagem da aba (itens ou entidades), somados à categoria.
   const query = useMemo<ListingQuery>(
     () => ({
       search,
+      values: criteria,
       where: and(rule("category", "equal", categoryId)),
       page: pagination.page - 1,
       size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
       sort: "name",
     }),
-    [search, categoryId, pagination],
+    [search, criteria, categoryId, pagination],
   );
+  const listing = useListingFilters(gameId, tab === "entities" ? "entities" : "items");
 
   const items = useListing<ItemDocument>(gameId, "items", query, { enabled: tab === "items" });
   const entities = useListing<EntityDocument>(gameId, "entities", query, { enabled: tab === "entities" });
@@ -223,9 +227,10 @@ export function CategoryDetailsPage() {
   const self: Reference = { kind: "category", extId: category.extId };
   const paged = tab === "items" || tab === "entities";
 
+  // Os filtros são os da listagem da aba: trocar de aba os limpa; a busca continua.
   const changeTab = (next: CategoryTab) => {
     setSelectedTab(next);
-    pages.setPage(1);
+    pages.setCriteria(resetFilterValues(criteria));
   };
 
   return (
@@ -233,9 +238,20 @@ export function CategoryDetailsPage() {
       prefix={<ContentIcon mediaId={currentMedia(category.media, "icon")} kind="category" alt={category.name} size={60} />}
       title={category.name}
       label={category.summary ?? category.description ?? `${APPLIES_TO_LABELS[category.appliesTo]} da categoria ${category.extId}`}
-      searchValue={paged ? pages.info.search : undefined}
-      onChangeSearch={paged ? pages.setSearch : undefined}
-      search={{ placeholder: tab === "entities" ? "Pesquisar entidades da categoria..." : "Pesquisar itens da categoria..." }}
+      searchEnd={
+        paged ? (
+          <>
+            <ViewModeSelector mode={viewMode} onChange={setViewMode} />
+            <QueryBuilder
+              schema={listing.data}
+              search={pages.info.search}
+              onSearchChange={pages.setSearch}
+              values={criteria}
+              onChange={(key, value) => pages.setCriteria({ [key]: value })}
+            />
+          </>
+        ) : undefined
+      }
       pages={paged ? pages : undefined}
       actionsStart={
         <Tabs value={tab ?? false} onChange={(_, value: CategoryTab) => changeTab(value)} variant="scrollable" scrollButtons="auto">
@@ -249,13 +265,6 @@ export function CategoryDetailsPage() {
             />
           ))}
         </Tabs>
-      }
-      actionsEnd={
-        paged ? (
-          <Stack direction="row" flex={1} justifyContent={isMobile ? "flex-start" : "flex-end"}>
-            <ViewModeSelector mode={viewMode} onChange={setViewMode} />
-          </Stack>
-        ) : undefined
       }
     >
       {tab === "items" &&

@@ -9,15 +9,15 @@ import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
 import { ListingDataView } from "../common/ListingDataView";
-import { ListingFilterBar } from "../common/ListingFilterBar";
+import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { ApiEventCard } from "./ApiEventRenderers";
 
 const NO_FILTERS: FilterValues = {};
 
 /**
- * Lista de eventos, lida da API, os mais recentes primeiro. A busca e as abas por tipo vêm do backend
- * (GET /events/query/filters), com os tipos que o jogo usa.
+ * Lista de eventos, lida da API, os mais recentes primeiro. A busca e o tipo ficam no QueryBuilder e vêm do
+ * backend (GET /events/query/filters), com os tipos que o jogo usa.
  */
 export function EventsPage() {
   const { gameId = "" } = useParams<{ gameId: string }>();
@@ -49,17 +49,16 @@ export function EventsPage() {
     <StyledContainer
       title={`Eventos de ${gameId}`}
       label={isMobile ? undefined : "Central de eventos climáticos, temporadas e atividades especiais."}
-      searchValue={pages.info.search}
-      onChangeSearch={pages.setSearch}
-      search={{ placeholder: listing.data?.search.placeholder }}
-      pages={pages}
-      actionsStart={
-        <ListingFilterBar
-          filters={listing.data?.filters}
+      searchEnd={
+        <QueryBuilder
+          schema={listing.data}
+          search={pages.info.search}
+          onSearchChange={pages.setSearch}
           values={criteria}
           onChange={(key, value) => pages.setCriteria({ [key]: value })}
         />
       }
+      pages={pages}
     >
       {events.isPending ? (
         <Stack alignItems="center" justifyContent="center" sx={{ py: 10, flex: 1 }}>
