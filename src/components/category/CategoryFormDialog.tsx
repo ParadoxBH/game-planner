@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Alert,
   Button,
@@ -10,13 +10,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { CloudUpload } from "@mui/icons-material";
-import { ApiError } from "../../api/ApiError";
 import type { CategoryDocument } from "../../api/content";
 import { currentMedia } from "../../api/references";
-import { useContentWrites } from "../../api/useContent";
-import { useUploadMedia } from "../../api/useMedia";
-import { ContentIcon } from "../common/ContentIcon";
+import { slugOf, useContentSave } from "../common/contentForm";
+import { IconUploadField } from "../common/IconUploadField";
 import { StyledDialog } from "../common/StyledDialog";
 import { APPLIES_TO_LABELS } from "./CategoriesPage";
 
@@ -43,20 +40,6 @@ function formOf(category: CategoryDocument | null): CategoryForm {
   };
 }
 
-/** Código sugerido a partir do nome: minúsculo, sem acento, com "_" no lugar de espaço e pontuação. */
-function slugOf(name: string): string {
-  return name
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "_")
-    .replace(/^_+|_+$/g, "");
-}
-
-function describe(error: unknown): string {
-  return error instanceof ApiError ? error.message : "Erro inesperado.";
-}
-
 interface CategoryFormDialogProps {
   gameId: string;
   /** A categoria a editar; null, criando. Montado só enquanto aberto, então o formulário nasce dela. */
@@ -69,76 +52,42 @@ interface CategoryFormDialogProps {
  * são reenviados como estão; as imagens ficam fora do documento, e um ícone novo é anexado depois de salvar.
  */
 export function CategoryFormDialog({ gameId, category, onClose }: CategoryFormDialogProps) {
-  // Criada nesta abertura (o ícone falhou depois): tentar de novo substitui em vez de criar outra vez.
-  const [created, setCreated] = useState(false);
-  const editing = Boolean(category) || created;
   const [form, setForm] = useState<CategoryForm>(() => formOf(category));
   const [extIdTouched, setExtIdTouched] = useState(false);
-  const [icon, setIcon] = useState<{ file: File; preview: string } | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
-
-  const writes = useContentWrites(gameId, "categories");
-  const upload = useUploadMedia();
-
-  useEffect(() => () => {
-    if (icon) URL.revokeObjectURL(icon.preview);
-  }, [icon]);
+  const [icon, setIcon] = useState<File | null>(null);
+  const { save, saving, error, creating } = useContentSave(gameId, "categories", category === null);
 
   const set = <K extends keyof CategoryForm>(key: K, value: CategoryForm[K]) => setForm((current) => ({ ...current, [key]: value }));
 
   const changeName = (name: string) =>
-    setForm((current) => ({ ...current, name, extId: editing || extIdTouched ? current.extId : slugOf(name) }));
+    setForm((current) => ({ ...current, name, extId: !creating || extIdTouched ? current.extId : slugOf(name) }));
 
   const valid = form.name.trim() !== "" && form.extId.trim() !== "";
 
-  const save = async () => {
+  const submit = async () => {
     if (!valid) return;
-    setSaving(true);
-    setError(null);
     const extId = form.extId.trim();
-    const document = {
+    const saved = await save(
       extId,
-      name: form.name.trim(),
-      appliesTo: form.appliesTo,
-      primary: form.primary,
-      summary: form.summary.trim() || null,
-      description: form.description.trim() || null,
-      events: category?.events ?? [],
-    };
-    try {
-      if (editing) await writes.put.mutateAsync({ extId, document });
-      else {
-        await writes.create.mutateAsync(document);
-        setCreated(true);
-      }
-    } catch (cause) {
-      setError(describe(cause));
-      setSaving(false);
-      return;
-    }
-    if (icon) {
-      try {
-        const uploaded = await upload.mutateAsync(icon.file);
-        await writes.addMedia.mutateAsync({ extId, usage: "icon", mediaId: uploaded.media.id });
-      } catch (cause) {
-        // A categoria já foi salva: fica aberto para tentar o ícone de novo, agora como edição.
-        setError(`Categoria salva, mas o ícone não foi enviado: ${describe(cause)}`);
-        setSaving(false);
-        return;
-      }
-    }
-    setSaving(false);
-    onClose();
+      {
+        extId,
+        name: form.name.trim(),
+        appliesTo: form.appliesTo,
+        primary: form.primary,
+        summary: form.summary.trim() || null,
+        description: form.description.trim() || null,
+        events: category?.events ?? [],
+      },
+      icon,
+    );
+    if (saved) onClose();
   };
-
-  const currentIcon = category ? currentMedia(category.media, "icon") : null;
 
   return (
     <StyledDialog
       open
       onClose={saving ? () => undefined : onClose}
-      title={editing ? `Editar ${form.name || form.extId}` : "Nova categoria"}
+      title={creating ? "Nova categoria" : `Editar ${form.name || form.extId}`}
       actions={
         <>
           <Button onClick={onClose} disabled={saving} sx={{ textTransform: "none" }}>
@@ -146,37 +95,23 @@ export function CategoryFormDialog({ gameId, category, onClose }: CategoryFormDi
           </Button>
           <Button
             variant="contained"
-            onClick={save}
+            onClick={submit}
             disabled={!valid || saving}
             startIcon={saving ? <CircularProgress size={16} color="inherit" /> : undefined}
             sx={{ textTransform: "none" }}
           >
-            {editing ? "Salvar" : "Criar"}
+            {creating ? "Criar" : "Salvar"}
           </Button>
         </>
       }
     >
       <Stack spacing={2}>
-        <Stack direction="row" spacing={2} alignItems="center">
-          {icon ? (
-            <img src={icon.preview} alt="Ícone novo" style={{ width: 56, height: 56, objectFit: "contain" }} />
-          ) : (
-            <ContentIcon mediaId={currentIcon} kind="category" alt={form.name} size={56} />
-          )}
-          <Button component="label" variant="outlined" size="small" startIcon={<CloudUpload />} sx={{ textTransform: "none" }}>
-            {currentIcon || icon ? "Trocar ícone" : "Enviar ícone"}
-            <input
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(event) => {
-                const file = event.target.files?.[0];
-                if (file) setIcon({ file, preview: URL.createObjectURL(file) });
-                event.target.value = "";
-              }}
-            />
-          </Button>
-        </Stack>
+        <IconUploadField
+          currentMediaId={category ? currentMedia(category.media, "icon") : null}
+          kind="category"
+          file={icon}
+          onChange={setIcon}
+        />
 
         <TextField label="Nome" value={form.name} onChange={(event) => changeName(event.target.value)} required autoFocus fullWidth />
         <TextField
@@ -187,8 +122,8 @@ export function CategoryFormDialog({ gameId, category, onClose }: CategoryFormDi
             set("extId", event.target.value);
           }}
           required
-          disabled={editing}
-          helperText={editing ? "O código não muda depois de criado." : "Identifica a categoria nos dados do jogo."}
+          disabled={!creating}
+          helperText={creating ? "Identifica a categoria nos dados do jogo." : "O código não muda depois de criado."}
           fullWidth
           slotProps={{ htmlInput: { style: { fontFamily: "monospace" } } }}
         />

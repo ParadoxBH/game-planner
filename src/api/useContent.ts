@@ -244,15 +244,12 @@ export function useRecipeStations(gameId: string | undefined) {
 
 /**
  * Escrita de conteúdo: criar, substituir, apagar e anexar imagem. Depois de cada uma, relê tudo o que
- * é do jogo — uma categoria muda filtros, menus e contagens de outras listagens.
+ * é do jogo (toda chave com o jogo na segunda posição) — uma categoria muda filtros, menus e contagens;
+ * um item muda árvores de crafting, buscas e marcadores.
  */
 export function useContentWrites(gameId: string, resource: ContentResource) {
   const client = useQueryClient();
-  const refresh = () =>
-    Promise.all([
-      client.invalidateQueries({ queryKey: ["content", gameId] }),
-      client.invalidateQueries({ queryKey: ["game", gameId] }),
-    ]);
+  const refresh = () => client.invalidateQueries({ predicate: (query) => query.queryKey[1] === gameId });
   return {
     create: useMutation({
       mutationFn: (document: object) => contentApi.create(gameId, resource, document),

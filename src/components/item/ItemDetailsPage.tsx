@@ -1,6 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Breadcrumbs, CircularProgress, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
+import { Breadcrumbs, Button, CircularProgress, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
+import { Edit } from "@mui/icons-material";
 import {
   Architecture,
   Bolt,
@@ -17,6 +18,7 @@ import { ApiError } from "../../api/ApiError";
 import type { ItemDocument, ItemRelated, Reference } from "../../api/content";
 import { ReferenceIndex, resolvedFrom } from "../../api/references";
 import { useAttributeDefinitions, useContentDetails, useRarities } from "../../api/useContent";
+import { useGameEditor } from "../../hooks/useGameAdmin";
 import { usePlatform } from "../../hooks/usePlatform";
 import { formatAmount } from "../../utils/format";
 import {
@@ -36,6 +38,7 @@ import { StyledContainer } from "../common/StyledContainer";
 import { ApiRecipeCard } from "../recipe/ApiRecipeCard";
 import { ApiShopOffers, offersFor } from "../shop/ApiShopOffers";
 import { AttributeChips } from "./ApiItemRenderers";
+import { ItemFormDialog } from "./ItemFormDialog";
 
 /** Detalhe de item, lido do agregado /items/{id}/details da API. */
 export function ItemDetailsPage() {
@@ -46,6 +49,8 @@ export function ItemDetailsPage() {
   const rarities = useRarities(gameId);
   const attributes = useAttributeDefinitions(gameId);
   const references = useMemo(() => new ReferenceIndex(details.data?.references), [details.data]);
+  const { canEdit } = useGameEditor(gameId);
+  const [editing, setEditing] = useState(false);
 
   if (details.isPending) {
     return (
@@ -91,6 +96,13 @@ export function ItemDetailsPage() {
           <Link to={`/game/${gameId}/items`}>Itens</Link>
           <Typography color="primary">{item.name}</Typography>
         </Breadcrumbs>
+      }
+      actionsEnd={
+        canEdit && (
+          <Button variant="outlined" size="small" startIcon={<Edit />} onClick={() => setEditing(true)} sx={{ textTransform: "none" }}>
+            Editar
+          </Button>
+        )
       }
     >
       <DetainContainer>
@@ -246,6 +258,7 @@ export function ItemDetailsPage() {
           {related.rewardOf.content.length > 0 && <ApiRewardCodes codes={related.rewardOf.content} target={self} />}
         </DetainItem>
       </DetainContainer>
+      {editing && <ItemFormDialog gameId={gameId} item={item} onClose={() => setEditing(false)} />}
     </StyledContainer>
   );
 }

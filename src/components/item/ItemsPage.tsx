@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { CircularProgress, FormControlLabel, Stack, Switch, Typography } from "@mui/material";
+import { Button, CircularProgress, FormControlLabel, Stack, Switch, Typography } from "@mui/material";
+import { Add } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import { MAX_PAGE_SIZE, type CategoryDocument, type ItemDocument } from "../../api/content";
 import { useAttributeDefinitions, useContentList, useListing, useListingFilters, useRarities } from "../../api/useContent";
 import type { FilterValue, FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+import { useGameEditor } from "../../hooks/useGameAdmin";
 import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
 import { useViewMode } from "../../hooks/useViewMode";
@@ -14,6 +16,7 @@ import { ListingDataView } from "../common/ListingDataView";
 import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
+import { ItemFormDialog } from "./ItemFormDialog";
 import { ApiItemCard, ApiItemIcon, itemListCells, rarityColorOf, type ItemListView } from "./ApiItemRenderers";
 
 /** Lista de itens, lida da API. A busca e os filtros ficam no QueryBuilder e vêm do backend (GET /items/query/filters). */
@@ -27,6 +30,8 @@ export function ItemsPage() {
   const pages = usePagination<FilterValues>(categoryUrlFilters(urlCategory, subCategoryParam));
   const [showPrices, setShowPrices] = useState(false);
   const [viewMode, setViewMode] = useViewMode("items");
+  const { canEdit } = useGameEditor(gameId);
+  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     pages.setCriteria(categoryUrlFilters(urlCategory, subCategoryParam));
@@ -94,7 +99,20 @@ export function ItemsPage() {
                 </Typography>
               }
             />
-            <ViewModeSelector mode={viewMode} onChange={setViewMode} />
+            <Stack direction="row" spacing={1} alignItems="center">
+              {canEdit && (
+                <Button
+                  variant="contained"
+                  size="small"
+                  startIcon={<Add />}
+                  onClick={() => setCreating(true)}
+                  sx={{ textTransform: "none", whiteSpace: "nowrap" }}
+                >
+                  Novo item
+                </Button>
+              )}
+              <ViewModeSelector mode={viewMode} onChange={setViewMode} />
+            </Stack>
           </Stack>
           <QueryBuilder
             schema={listing.data}
@@ -137,6 +155,14 @@ export function ItemsPage() {
           renderCard={(item, variant) => <ApiItemCard item={item} variant={variant} view={view} />}
           renderListItem={(item) => itemListCells(item, view)}
           renderIconItem={(item) => <ApiItemIcon item={item} view={view} />}
+        />
+      )}
+      {creating && (
+        <ItemFormDialog
+          gameId={gameId}
+          item={null}
+          onClose={() => setCreating(false)}
+          onSaved={(extId) => navigate(`/game/${gameId}/items/view/${encodeURIComponent(extId)}`)}
         />
       )}
     </StyledContainer>
