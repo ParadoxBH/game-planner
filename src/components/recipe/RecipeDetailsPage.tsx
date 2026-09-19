@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Breadcrumbs,
   Button,
@@ -11,7 +11,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { AccountTree, AutoFixHigh, Construction, Info, Inventory, NavigateNext } from "@mui/icons-material";
+import { AccountTree, AutoFixHigh, Construction, Edit, Info, Inventory, NavigateNext } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import {
   referenceParam,
@@ -23,6 +23,7 @@ import {
 } from "../../api/content";
 import { ReferenceIndex } from "../../api/references";
 import { useContentDetails } from "../../api/useContent";
+import { useGameAdmin, useGameEditor } from "../../hooks/useGameAdmin";
 import { usePlatform } from "../../hooks/usePlatform";
 import { formatAmount, formatChance, formatDuration } from "../../utils/format";
 import { ApiRewardCodes } from "../common/ApiRelatedLists";
@@ -35,6 +36,7 @@ import { StyledContainer } from "../common/StyledContainer";
 import { ApiShopOffers, offersFor } from "../shop/ApiShopOffers";
 import { ApiCraftingTree, NO_CHOICES, type TreeChoices } from "./ApiCraftingTree";
 import { recipeTitle, unlockLabel } from "./ApiRecipeCard";
+import { RecipeFormDialog } from "./RecipeFormDialog";
 
 interface IngredientCardProps {
   input: Requirement;
@@ -101,6 +103,10 @@ export function RecipeDetailsPage() {
   const { isMobile } = usePlatform();
   const [tab, setTab] = useState<"general" | "tree">("general");
   const [choices, setChoices] = useState<TreeChoices>(NO_CHOICES);
+  const navigate = useNavigate();
+  const { canEdit } = useGameEditor(gameId);
+  const { isAdmin } = useGameAdmin(gameId);
+  const [editing, setEditing] = useState(false);
 
   const details = useContentDetails<RecipeDocument, RecipeRelated>(gameId, "recipes", recipeId);
   const references = useMemo(() => new ReferenceIndex(details.data?.references), [details.data]);
@@ -157,14 +163,21 @@ export function RecipeDetailsPage() {
         ) : undefined
       }
       actionsEnd={
-        <ButtonGroup fullWidth={isMobile}>
-          <Button variant={tab === "general" ? "contained" : "outlined"} startIcon={<Info />} onClick={() => setTab("general")}>
-            Geral
-          </Button>
-          <Button variant={tab === "tree" ? "contained" : "outlined"} startIcon={<AccountTree />} onClick={() => setTab("tree")}>
-            {isMobile ? "Árvore" : "Árvore de produção"}
-          </Button>
-        </ButtonGroup>
+        <Stack direction="row" spacing={1} sx={{ width: isMobile ? "100%" : undefined }}>
+          <ButtonGroup fullWidth={isMobile}>
+            <Button variant={tab === "general" ? "contained" : "outlined"} startIcon={<Info />} onClick={() => setTab("general")}>
+              Geral
+            </Button>
+            <Button variant={tab === "tree" ? "contained" : "outlined"} startIcon={<AccountTree />} onClick={() => setTab("tree")}>
+              {isMobile ? "Árvore" : "Árvore de produção"}
+            </Button>
+          </ButtonGroup>
+          {canEdit && (
+            <Button variant="outlined" startIcon={<Edit />} onClick={() => setEditing(true)} sx={{ textTransform: "none", flexShrink: 0 }}>
+              Editar
+            </Button>
+          )}
+        </Stack>
       }
     >
       {tab === "general" && (
@@ -308,6 +321,15 @@ export function RecipeDetailsPage() {
             Esta receita não tem produto para montar a árvore.
           </Typography>
         ))}
+      {editing && (
+        <RecipeFormDialog
+          gameId={gameId}
+          recipe={recipe}
+          onClose={() => setEditing(false)}
+          canDelete={isAdmin}
+          onDeleted={() => navigate(`/game/${gameId}/recipes`)}
+        />
+      )}
     </StyledContainer>
   );
 }

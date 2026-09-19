@@ -7,12 +7,7 @@ import { formatDuration } from "../../utils/format";
 import { ContentChip } from "../common/ContentChip";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
-
-const UNLOCK_LABELS: Record<string, string> = {
-  event: "Evento",
-  quest: "Quest",
-  station_level: "Nível da bancada",
-};
+import { UNLOCK_LABELS } from "./recipeLabels";
 
 export function unlockLabel(unlock: RecipeUnlock, references: ReferenceIndex): string {
   const parts = [unlock.target ? references.name(unlock.target) : null, unlock.value].filter(Boolean);

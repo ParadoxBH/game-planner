@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Box, Button, CircularProgress, Grid, Tab, Tabs, TextField, Typography } from "@mui/material";
-import type { EntityDocument, ItemDocument, ListQuery, MediaLink, ResolvedReference } from "../../api/content";
+import type { ListQuery, MediaLink, ResolvedReference } from "../../api/content";
 import { currentMedia } from "../../api/references";
 import { useContentList } from "../../api/useContent";
 import { and, textSearch } from "../../api/query";
@@ -10,7 +10,14 @@ import { StyledDialog } from "./StyledDialog";
 
 const PAGE = 60;
 
-type SelectorTab = "items" | "entities";
+/** Tipos que o seletor sabe listar, cada um numa aba. */
+export type SelectorKind = "items" | "entities" | "categories";
+
+const TABS: Record<SelectorKind, { kind: string; label: string; placeholder: string }> = {
+  items: { kind: "item", label: "Item", placeholder: "Pesquisar item..." },
+  entities: { kind: "entity", label: "Entidade", placeholder: "Pesquisar entidade..." },
+  categories: { kind: "category", label: "Categoria", placeholder: "Pesquisar categoria..." },
+};
 
 interface Choice {
   extId: string;
@@ -26,11 +33,23 @@ interface ApiContentSelectorProps {
   title?: string;
   /** Só fecha por Cancelar ou pelo X (ver StyledDialog). */
   modal?: boolean;
+  /** As abas, na ordem. Padrão: item e entidade. */
+  kinds?: SelectorKind[];
 }
 
-/** Escolha de um item ou entidade cadastrado, com busca pela API. */
-export function ApiContentSelector({ open, onClose, onConfirm, gameId, title = "Selecionar item ou entidade", modal = false }: ApiContentSelectorProps) {
-  const [tab, setTab] = useState<SelectorTab>("items");
+const DEFAULT_KINDS: SelectorKind[] = ["items", "entities"];
+
+/** Escolha de um conteúdo cadastrado (item, entidade ou categoria), com busca pela API. */
+export function ApiContentSelector({
+  open,
+  onClose,
+  onConfirm,
+  gameId,
+  title = "Selecionar item ou entidade",
+  modal = false,
+  kinds = DEFAULT_KINDS,
+}: ApiContentSelectorProps) {
+  const [tab, setTab] = useState<SelectorKind>(kinds[0]);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<ResolvedReference | null>(null);
   const term = useDebouncedValue(search);
@@ -43,13 +62,12 @@ export function ApiContentSelector({ open, onClose, onConfirm, gameId, title = "
   }, [open]);
 
   const query = useMemo<ListQuery>(() => ({ where: and(textSearch(term)), size: PAGE, sort: "name" }), [term]);
-  const items = useContentList<ItemDocument>(gameId, "items", query, { enabled: open && tab === "items" });
-  const entities = useContentList<EntityDocument>(gameId, "entities", query, { enabled: open && tab === "entities" });
+  const list = useContentList<Choice>(gameId, tab, query, { enabled: open });
 
-  const kind = tab === "items" ? "item" : "entity";
-  const loading = tab === "items" ? items.isPending : entities.isPending;
-  const total = (tab === "items" ? items.data?.total : entities.data?.total) ?? 0;
-  const choices: Choice[] = (tab === "items" ? items.data?.content : entities.data?.content) ?? [];
+  const kind = TABS[tab].kind;
+  const loading = list.isPending;
+  const total = list.data?.total ?? 0;
+  const choices: Choice[] = list.data?.content ?? [];
 
   const toReference = (choice: Choice): ResolvedReference => ({
     kind,
@@ -85,24 +103,27 @@ export function ApiContentSelector({ open, onClose, onConfirm, gameId, title = "
       }
     >
       <Box sx={{ minHeight: 400, display: "flex", flexDirection: "column" }}>
-        <Tabs
-          value={tab}
-          onChange={(_, value: SelectorTab) => {
-            setTab(value);
-            setSelected(null);
-          }}
-          variant="fullWidth"
-          sx={{ mb: 2 }}
-        >
-          <Tab value="items" label="Item" />
-          <Tab value="entities" label="Entidade" />
-        </Tabs>
+        {kinds.length > 1 && (
+          <Tabs
+            value={tab}
+            onChange={(_, value: SelectorKind) => {
+              setTab(value);
+              setSelected(null);
+            }}
+            variant="fullWidth"
+            sx={{ mb: 2 }}
+          >
+            {kinds.map((option) => (
+              <Tab key={option} value={option} label={TABS[option].label} />
+            ))}
+          </Tabs>
+        )}
 
         <TextField
           fullWidth
           autoFocus
           size="small"
-          placeholder={tab === "items" ? "Pesquisar item..." : "Pesquisar entidade..."}
+          placeholder={TABS[tab].placeholder}
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           sx={{ mb: 2 }}

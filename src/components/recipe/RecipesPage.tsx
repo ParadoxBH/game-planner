@@ -1,13 +1,14 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CircularProgress, Stack, Tooltip, Typography } from "@mui/material";
-import { Science } from "@mui/icons-material";
+import { Button, CircularProgress, Stack, Tooltip, Typography } from "@mui/material";
+import { Add, Science } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import { MAX_PAGE_SIZE, type RecipeDocument } from "../../api/content";
 import { contentRoute, ReferenceIndex } from "../../api/references";
 import { useListing, useListingFilters } from "../../api/useContent";
 import type { FilterValue, FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+import { useGameEditor } from "../../hooks/useGameAdmin";
 import { usePagination } from "../../hooks/usePagination";
 import { useViewMode } from "../../hooks/useViewMode";
 import { formatDuration } from "../../utils/format";
@@ -19,6 +20,7 @@ import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { ApiRecipeCard, recipeTitle, unlockLabel } from "./ApiRecipeCard";
+import { RecipeFormDialog } from "./RecipeFormDialog";
 
 /** A bancada vem da URL, /recipes/list/:station; "all" é nenhuma. */
 function stationFilter(station: string | undefined): FilterValues {
@@ -35,6 +37,8 @@ export function RecipesPage() {
 
   const pages = usePagination<FilterValues>(stationFilter(urlStation));
   const [viewMode, setViewMode] = useViewMode("recipes");
+  const { canEdit } = useGameEditor(gameId);
+  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     pages.setCriteria(stationFilter(urlStation));
@@ -76,6 +80,17 @@ export function RecipesPage() {
       label="Descubra como fabricar todos os itens do jogo."
       searchEnd={
         <>
+          {canEdit && (
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<Add />}
+              onClick={() => setCreating(true)}
+              sx={{ textTransform: "none", whiteSpace: "nowrap" }}
+            >
+              Nova receita
+            </Button>
+          )}
           <ViewModeSelector mode={viewMode} onChange={setViewMode} />
           <QueryBuilder
             schema={listing.data}
@@ -168,6 +183,14 @@ export function RecipesPage() {
               </Tooltip>
             );
           }}
+        />
+      )}
+      {creating && (
+        <RecipeFormDialog
+          gameId={gameId}
+          recipe={null}
+          onClose={() => setCreating(false)}
+          onSaved={(extId) => navigate(contentRoute(gameId, "recipe", extId)!)}
         />
       )}
     </StyledContainer>
