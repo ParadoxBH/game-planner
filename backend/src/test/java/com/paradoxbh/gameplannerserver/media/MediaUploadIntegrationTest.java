@@ -80,6 +80,36 @@ class MediaUploadIntegrationTest extends PostgisIntegrationTest {
     }
 
     @Test
+    void largeUploadAlsoGeneratesLargeVariant() throws IOException {
+        Media stored = media.upload(png("mapa.png", 3000, 1500), "tester", true).media();
+
+        assertThat(stored.getVariants()).containsOnlyKeys("icon", "thumb", "full", "large");
+        assertThat(size(stored, "full")).isEqualTo(new Dimensions(1920, 960));
+        assertThat(size(stored, "large")).isEqualTo(new Dimensions(3000, 1500));
+    }
+
+    @Test
+    void largeUploadOfExistingImageAddsTheLargeVariant() throws IOException {
+        UploadResult plain = media.upload(png("comum.png", 2400, 1200), "tester");
+        assertThat(plain.media().getVariants()).doesNotContainKey("large");
+
+        UploadResult large = media.upload(png("mapa.png", 2400, 1200), "outra-pessoa", true);
+
+        assertThat(large.created()).isFalse();
+        assertThat(large.media().getId()).isEqualTo(plain.media().getId());
+        assertThat(size(large.media(), "large")).isEqualTo(new Dimensions(2400, 1200));
+        assertThat(media.find(plain.media().getId()).getVariants()).containsKey("large");
+    }
+
+    @Test
+    void plainUploadKeepsTheSmallerByteLimit() throws IOException {
+        MockMultipartFile big = new MockMultipartFile("file", "grande.png", "image/png", new byte[9 * 1024 * 1024]);
+
+        ApiException error = assertThrows(ApiException.class, () -> media.upload(big, "tester"));
+        assertThat(error.status()).isEqualTo(HttpStatus.PAYLOAD_TOO_LARGE);
+    }
+
+    @Test
     void rejectsFileThatIsNotAnImage() {
         MockMultipartFile text = new MockMultipartFile(
                 "file", "falso.png", "image/png", "isto nao e uma imagem".getBytes(UTF_8));

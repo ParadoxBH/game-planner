@@ -24,10 +24,12 @@ interface ApiContentSelectorProps {
   onConfirm: (selection: ResolvedReference) => void;
   gameId: string;
   title?: string;
+  /** Só fecha por Cancelar ou pelo X (ver StyledDialog). */
+  modal?: boolean;
 }
 
 /** Escolha de um item ou entidade cadastrado, com busca pela API. */
-export function ApiContentSelector({ open, onClose, onConfirm, gameId, title = "Selecionar item ou entidade" }: ApiContentSelectorProps) {
+export function ApiContentSelector({ open, onClose, onConfirm, gameId, title = "Selecionar item ou entidade", modal = false }: ApiContentSelectorProps) {
   const [tab, setTab] = useState<SelectorTab>("items");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<ResolvedReference | null>(null);
@@ -60,6 +62,7 @@ export function ApiContentSelector({ open, onClose, onConfirm, gameId, title = "
   return (
     <StyledDialog
       open={open}
+      modal={modal}
       onClose={onClose}
       title={title}
       maxWidth="md"

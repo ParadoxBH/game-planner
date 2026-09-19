@@ -78,7 +78,7 @@ export function CategoryFormDialog({ gameId, category, onClose }: CategoryFormDi
         description: form.description.trim() || null,
         events: category?.events ?? [],
       },
-      icon,
+      [{ file: icon, usage: "icon" }],
     );
     if (saved) onClose();
   };
@@ -86,6 +86,7 @@ export function CategoryFormDialog({ gameId, category, onClose }: CategoryFormDi
   return (
     <StyledDialog
       open
+      modal
       onClose={saving ? () => undefined : onClose}
       title={creating ? "Nova categoria" : `Editar ${form.name || form.extId}`}
       actions={

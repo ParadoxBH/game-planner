@@ -15,7 +15,8 @@ export function referenceParam(target: Reference): string {
   return target.kind ? `${target.kind}:${target.extId}` : target.extId;
 }
 
-export type MediaUsage = "icon" | "capsule" | "thumbnail" | "banner" | "screenshot";
+/** `map`: fundo de mapa, enviado com a variante `large`. */
+export type MediaUsage = "icon" | "capsule" | "thumbnail" | "banner" | "screenshot" | "map";
 
 export interface MediaLink {
   usage: MediaUsage;

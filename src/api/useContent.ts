@@ -291,11 +291,16 @@ export function useRarityWrites(gameId: string) {
   };
 }
 
-/** Quantos itens e quantas entidades usam a raridade: a página de uma listagem de tamanho 1, só pelo total. */
+/** Quantos registros da listagem têm `field` igual a `code`: a página de tamanho 1, só pelo total. */
+export function useCountWhere(gameId: string, resource: ContentResource, field: string, code: string | undefined) {
+  const where = code ? and(rule(field, "equal", code)) : undefined;
+  return useContentList(gameId, resource, { where, size: 1 }, { enabled: Boolean(code) });
+}
+
+/** Quantos itens e quantas entidades usam a raridade. */
 export function useRarityUsage(gameId: string, code: string | undefined) {
-  const where = code ? and(rule("rarity", "equal", code)) : undefined;
-  const items = useContentList(gameId, "items", { where, size: 1 }, { enabled: Boolean(code) });
-  const entities = useContentList(gameId, "entities", { where, size: 1 }, { enabled: Boolean(code) });
+  const items = useCountWhere(gameId, "items", "rarity", code);
+  const entities = useCountWhere(gameId, "entities", "rarity", code);
   return {
     items: items.data?.total,
     entities: entities.data?.total,

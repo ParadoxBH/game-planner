@@ -17,7 +17,7 @@ public final class MediaUsages {
     public static final String GAME_KIND = "game";
 
     /** Ordem de exibição dos usos. */
-    public static final List<String> ORDER = List.of("icon", "capsule", "thumbnail", "banner", "screenshot");
+    public static final List<String> ORDER = List.of("icon", "capsule", "thumbnail", "banner", "screenshot", "map");
 
     private static final Map<String, Set<String>> ALLOWED = Map.ofEntries(
             entry(GAME_KIND, Set.of("icon", "capsule", "thumbnail", "banner")),
@@ -28,7 +28,8 @@ public final class MediaUsages {
             entry(ContentKind.RECIPE.code(), Set.of("icon")),
             entry(ContentKind.SHOP.code(), Set.of("icon", "banner")),
             entry(ContentKind.SHOP_CATEGORY.code(), Set.of("icon", "banner")),
-            entry(ContentKind.MAP.code(), Set.of("icon", "thumbnail")),
+            // "map" é o fundo do mapa (variante large); "thumbnail", a miniatura da seleção.
+            entry(ContentKind.MAP.code(), Set.of("icon", "thumbnail", "map")),
             entry(ContentKind.LOCATION.code(), Set.of("icon", "banner", "screenshot")),
             entry(ContentKind.SPAWN_POINT.code(), Set.of("icon", "screenshot")),
             entry(ContentKind.COLLECTION.code(), Set.of("icon", "banner")),

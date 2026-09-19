@@ -35,11 +35,14 @@ export function mapThumbnail(map: MapDocument): string | null {
 }
 
 /**
- * Imagem de fundo de um mapa "single": imageUrl quando é endereço completo; senão a variante full da
- * miniatura. Caminhos relativos (/map/...) eram do acervo antigo em public/, que o front não serve mais.
+ * Imagem de fundo de um mapa "single": imageUrl quando é endereço completo; senão a imagem enviada como
+ * mapa (uso "map", variante large, até 8192 px); senão a variante full da miniatura (1920 px). Caminhos
+ * relativos (/map/...) eram do acervo antigo em public/, que o front não serve mais.
  */
 export function mapImageUrl(map: MapDocument): string | null {
   if (map.imageUrl && /^(https?:|data:|blob:)/i.test(map.imageUrl)) return map.imageUrl;
+  const uploaded = currentMedia(map.media, "map");
+  if (uploaded) return mediaUrl(uploaded, "large");
   const id = currentMedia(map.media, "thumbnail");
   return id ? mediaUrl(id, "full") : null;
 }
@@ -69,3 +72,11 @@ export function createMapCRS(bounds: LatLngBounds, tiles: MapTiles | null) {
     transformation: new Transformation(scaleX, -min[1] * scaleX, scaleY, -max[0] * scaleY),
   });
 }
+
+/** Nome e explicação de cada tipo de mapa, para o painel de gerenciamento. */
+export const MAP_TYPE_LABELS: Record<MapDocument["mapType"], { label: string; hint: string }> = {
+  single: { label: "Imagem única", hint: "Uma imagem cobre o mapa todo, esticada nos limites." },
+  layered: { label: "Camadas", hint: "Uma imagem por andar ou camada, pelo padrão de URL com {layer}." },
+  tile: { label: "Tiles", hint: "Mosaico de tiles por zoom, pelo padrão de URL com {z}, {x} e {y}." },
+  procedural: { label: "Procedural", hint: "Sem imagem: o mapa é gerado, só a grade e os pontos." },
+};

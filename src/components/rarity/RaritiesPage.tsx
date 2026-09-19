@@ -71,6 +71,7 @@ function RarityFormDialog({ gameId, rarity, existing, onClose }: RarityFormDialo
   return (
     <StyledDialog
       open
+      modal
       onClose={put.isPending ? () => undefined : onClose}
       title={creating ? "Nova raridade" : `Editar ${rarity.name}`}
       maxWidth="xs"
@@ -169,6 +170,7 @@ function DeleteRarityDialog({ gameId, rarity, onClose }: { gameId: string; rarit
   return (
     <StyledDialog
       open
+      modal
       onClose={remove.isPending ? () => undefined : onClose}
       title="Apagar raridade"
       maxWidth="xs"

@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.springframework.util.unit.DataSize;
 
 import com.paradoxbh.gameplannerserver.config.GamePlannerProperties;
 import com.paradoxbh.gameplannerserver.media.domain.MediaVariant;
@@ -30,7 +31,9 @@ class FileSystemMediaStorageTest {
 
     private FileSystemMediaStorage storage() throws IOException {
         GamePlannerProperties.Media media = new GamePlannerProperties.Media(
-                root.toString(), 40, 300, Duration.ofSeconds(20), "ffmpeg", "ffprobe", 85, 128, 512, 1920);
+                root.toString(), 40, 300, Duration.ofSeconds(20), "ffmpeg", "ffprobe", 85, 128, 512, 1920,
+                DataSize.ofMegabytes(8),
+                new GamePlannerProperties.Media.Large(8192, DataSize.ofMegabytes(40), 70, Duration.ofSeconds(120)));
         return new FileSystemMediaStorage(new GamePlannerProperties(null, null, null, media));
     }
 

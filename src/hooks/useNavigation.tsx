@@ -128,6 +128,7 @@ export function useNavigation(gameId: string | null) {
               options: [
                 { label: "Categorias", path: `${base}/categories`, icon: <Category fontSize="small" /> },
                 { label: "Raridades", path: `${base}/rarities`, icon: <Diamond fontSize="small" /> },
+                { label: "Mapas", path: `${base}/manage/maps`, icon: <MapIcon fontSize="small" /> },
               ],
             },
           ]

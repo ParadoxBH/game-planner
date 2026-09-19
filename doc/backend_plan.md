@@ -564,7 +564,7 @@ CREATE TABLE media (
 
 CREATE TABLE media_variant (
   media_id   text NOT NULL REFERENCES media(id) ON DELETE CASCADE,
-  variant    text NOT NULL,             -- icon|thumb|full
+  variant    text NOT NULL,             -- icon|thumb|full, e large só em imagem de mapa (V12)
   width int, height int, byte_size bigint,
   storage_path text NOT NULL,
   PRIMARY KEY (media_id, variant)
@@ -589,7 +589,7 @@ CREATE TABLE content_media (
   game_id  text NOT NULL,        -- sem FK nesta tabela (ver abaixo)
   kind     text NOT NULL,        -- game | item | entity | category | event
   ext_id   text NOT NULL,        -- para kind = game, igual a game_id
-  usage    text NOT NULL,        -- icon | capsule | thumbnail | banner | screenshot
+  usage    text NOT NULL,        -- icon | capsule | thumbnail | banner | screenshot | map
   media_id text NOT NULL,
   ordinal  int  NOT NULL,        -- posição entre as mídias do mesmo uso
   added_by text NOT NULL,
@@ -611,6 +611,7 @@ CREATE TABLE content_media (
   | jogo | `icon`, `capsule`, `thumbnail`, `banner` |
   | item, entidade | `icon`, `screenshot` |
   | categoria, evento | `icon`, `banner` |
+  | mapa | `icon`, `thumbnail`, `map` (fundo do mapa, com a variante `large`) |
 
 - **Sem chave estrangeira (V6).** A ligação pertence ao **código** do registro, não ao registro:
   durante o cadastro o usuário anexa imagens antes de o conteúdo existir, já que o código não se
@@ -649,6 +650,18 @@ Padrões propostos, todos configuráveis:
 | `thumb` | 512 px |
 | `full` | 1920 px |
 | Timeout do FFmpeg | 20 s por variante |
+
+**Imagem de mapa (`POST /media?large=true`, V12).** Mapa precisa de detalhe no zoom, e 1920 px não
+basta. Com `large=true`, o upload gera também a variante `large` e tem limites próprios; sem, nada muda.
+O id continua sendo o hash do `full`: se a imagem já existia sem `large`, a variante é acrescentada a ela.
+
+| Parâmetro | Valor |
+|---|---|
+| Tamanho máximo do upload | 40 MB (o multipart barra em 40 MB; o limite de 8 MB do upload comum é conferido no serviço) |
+| Teto de megapixels na entrada | 70 MP |
+| Animação | recusada |
+| `large` | 8192 px |
+| Timeout do FFmpeg | 120 s para a variante `large` |
 
 FFmpeg em vez de uma biblioteca de imagem tem uma vantagem concreta aqui: GIF animado
 entra e sai como **WebP animado**, sem caminho especial.
@@ -970,8 +983,8 @@ Decisões tomadas na implementação, que ajustam o plano acima:
   (o maior mapa tem 2.354), com nome e ícone do ocupante já resolvidos e os mesmos filtros da
   listagem. `truncated` avisa quando o limite cortou.
 - **Mapa tipado:** imagem, camadas, bounds, zoom, tiles, rotação, views, filtros iniciais e climas.
-  A imagem do mapa é caminho ou URL: o pipeline de mídia reduziria a 1920 px. A miniatura, sim, é
-  mídia (`thumbnail`).
+  A imagem do mapa é caminho ou URL, ou mídia enviada com `large=true` e ligada no uso `map`
+  (V12, até 8192 px; ver 4.7). O endereço tem precedência. A miniatura é mídia (`thumbnail`).
 - **Sem `content_condition`**: clima é evento (ver 4.4).
 - **Hierarquia de local não é recursiva** nos filtros: `location=biome` pega os pontos do bioma, não
   os dos locais filhos.

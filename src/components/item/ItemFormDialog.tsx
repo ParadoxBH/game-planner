@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import {
   Alert,
-  Autocomplete,
   Button,
   Chip,
   CircularProgress,
@@ -26,10 +25,11 @@ import {
   type ItemDocument,
   type Reference,
 } from "../../api/content";
-import { currentMedia, mediaUrl } from "../../api/references";
+import { currentMedia } from "../../api/references";
 import { useAttributeDefinitions, useContentDocument, useContentList, useRarities } from "../../api/useContent";
 import { ApiContentSelector } from "../common/ApiContentSelector";
-import { slugOf, useContentSave } from "../common/contentForm";
+import { CodesField, type CodeOption } from "../common/CodesField";
+import { numberOf, slugOf, useContentSave } from "../common/contentForm";
 import { IconUploadField } from "../common/IconUploadField";
 import { StyledDialog } from "../common/StyledDialog";
 
@@ -70,14 +70,6 @@ function formOf(item: ItemDocument | null): ItemForm {
       Object.entries(item?.attributes ?? {}).map(([key, value]) => [key, typeof value === "boolean" ? value : String(value)]),
     ),
   };
-}
-
-/** Texto do campo numérico: vazio é null; o que não é número, undefined (inválido). */
-function numberOf(value: string): number | null | undefined {
-  const trimmed = value.trim().replace(",", ".");
-  if (trimmed === "") return null;
-  const number = Number(trimmed);
-  return Number.isFinite(number) ? number : undefined;
 }
 
 /** Nome de um registro citado, lido pelo código; enquanto não chega ou se não existe, o código. */
@@ -141,71 +133,6 @@ function ReferenceField({
         },
         inputLabel: { shrink: true },
       }}
-    />
-  );
-}
-
-interface CodeOption {
-  extId: string;
-  name: string;
-  iconMediaId: string | null;
-}
-
-/** Escolha de vários códigos (categorias, eventos). Código selecionado que não está na lista aparece pelo próprio código. */
-function CodesField({
-  label,
-  options,
-  value,
-  onChange,
-  loading,
-  helperText,
-}: {
-  label: string;
-  options: CodeOption[];
-  value: string[];
-  onChange: (value: string[]) => void;
-  loading: boolean;
-  helperText?: string;
-}) {
-  const byId = useMemo(() => new Map(options.map((option) => [option.extId, option])), [options]);
-  const optionOf = (extId: string): CodeOption => byId.get(extId) ?? { extId, name: extId, iconMediaId: null };
-  return (
-    <Autocomplete
-      multiple
-      loading={loading}
-      options={options.map((option) => option.extId)}
-      value={value}
-      onChange={(_, next) => onChange(next)}
-      getOptionLabel={(extId) => optionOf(extId).name}
-      filterOptions={(ids, state) => {
-        const term = state.inputValue.trim().toLowerCase();
-        return term
-          ? ids.filter((extId) => optionOf(extId).name.toLowerCase().includes(term) || extId.toLowerCase().includes(term))
-          : ids;
-      }}
-      renderOption={({ key, ...props }, extId) => {
-        const option = optionOf(extId);
-        return (
-          <li key={key} {...props}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              {option.iconMediaId && (
-                <img src={mediaUrl(option.iconMediaId)} alt="" style={{ width: 20, height: 20, objectFit: "contain" }} />
-              )}
-              <span>{option.name}</span>
-              <Typography variant="caption" color="text.secondary" sx={{ fontFamily: "monospace" }}>
-                {extId}
-              </Typography>
-            </Stack>
-          </li>
-        );
-      }}
-      renderValue={(ids, getItemProps) =>
-        ids.map((extId, index) => {
-          const { key, ...props } = getItemProps({ index });
-          return <Chip key={key} size="small" label={optionOf(extId).name} {...props} />;
-        })
-      }
-      renderInput={(params) => <TextField {...params} label={label} helperText={helperText} />}
     />
   );
 }
@@ -323,7 +250,7 @@ export function ItemFormDialog({ gameId, item, onClose, onSaved }: ItemFormDialo
         events: form.events,
         attributes: attributesOut(),
       },
-      icon,
+      [{ file: icon, usage: "icon" }],
     );
     if (saved) {
       onClose();
@@ -338,6 +265,7 @@ export function ItemFormDialog({ gameId, item, onClose, onSaved }: ItemFormDialo
   return (
     <StyledDialog
       open
+      modal
       onClose={saving ? () => undefined : onClose}
       title={creating ? "Novo item" : `Editar ${form.name || form.extId}`}
       maxWidth="md"
@@ -555,6 +483,7 @@ export function ItemFormDialog({ gameId, item, onClose, onSaved }: ItemFormDialo
 
       <ApiContentSelector
         open={picking !== null}
+        modal
         gameId={gameId}
         title={picking === "currency" ? "Selecionar moeda" : "Selecionar item base"}
         onClose={() => setPicking(null)}

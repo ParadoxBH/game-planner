@@ -1,7 +1,8 @@
 import { API_ORIGIN } from "./config";
 import { apiRequest } from "./http";
 
-export type MediaVariantCode = "icon" | "thumb" | "full";
+/** `large` só existe na imagem enviada como mapa (upload com large). */
+export type MediaVariantCode = "icon" | "thumb" | "full" | "large";
 
 export interface MediaVariantFile {
   /** Relativa à origem da API. Use mediaFileUrl para montar o endereço completo. */
@@ -34,10 +35,14 @@ export function mediaFileUrl(relativeUrl: string): string {
 }
 
 export const mediaApi = {
-  upload(file: File) {
+  /**
+   * Envia e converte. Com `large` (imagem de mapa), gera também a variante `large`, de até 8192 px,
+   * com limite de 40 MB e sem animação; sem, o limite é 8 MB e o maior tamanho é o `full` (1920 px).
+   */
+  upload(file: File, large = false) {
     const form = new FormData();
     form.append("file", file);
-    return apiRequest<UploadMediaResponse>("/media", { method: "POST", body: form });
+    return apiRequest<UploadMediaResponse>(`/media${large ? "?large=true" : ""}`, { method: "POST", body: form });
   },
 
   remove(id: string) {

@@ -171,6 +171,7 @@ function DeleteCategoryDialog({ gameId, category, onClose }: { gameId: string; c
   return (
     <StyledDialog
       open
+      modal
       onClose={remove.isPending ? () => undefined : onClose}
       title="Apagar categoria"
       maxWidth="xs"

@@ -65,6 +65,11 @@ public class FfmpegTranscoder {
 
     /** Reconverte para WebP no tamanho pedido, sem metadados (EXIF, GPS) e com saída reprodutível. */
     public void toWebp(Path source, ProbeResult probe, Dimensions size, Path target) {
+        toWebp(source, probe, size, target, config.ffmpegTimeout());
+    }
+
+    /** Idem, com outro limite de tempo: imagem grande (mapa) demora mais para converter. */
+    public void toWebp(Path source, ProbeResult probe, Dimensions size, Path target, Duration timeout) {
         List<String> command = new ArrayList<>(List.of(
                 config.ffmpegPath(),
                 "-nostdin", "-hide_banner", "-v", "error",
@@ -89,7 +94,7 @@ public class FfmpegTranscoder {
         }
         command.addAll(List.of("-f", "webp", "-y", target.toString()));
 
-        ProcessRunner.Result result = run(command);
+        ProcessRunner.Result result = run(command, timeout);
         if (result.exitCode() != 0 || !isNonEmptyFile(target)) {
             log.warn("FFmpeg falhou (código {}): {}", result.exitCode(), result.stderr().strip());
             throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "media-conversion-failed",
@@ -112,8 +117,12 @@ public class FfmpegTranscoder {
     }
 
     private ProcessRunner.Result run(List<String> command) {
+        return run(command, config.ffmpegTimeout());
+    }
+
+    private ProcessRunner.Result run(List<String> command, Duration timeout) {
         try {
-            return ProcessRunner.run(command, config.ffmpegTimeout());
+            return ProcessRunner.run(command, timeout);
         } catch (ProcessRunner.ToolUnavailableException ex) {
             throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "media-unavailable",
                     "Processamento de imagem indisponível: FFmpeg não está instalado no servidor");

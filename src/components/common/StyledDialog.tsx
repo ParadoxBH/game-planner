@@ -18,6 +18,8 @@ interface StyledDialogProps extends Omit<DialogProps, 'title'> {
   onClose: () => void;
   maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
   fullWidth?: boolean;
+  /** Só fecha pelo X ou por uma ação: clicar fora e Esc não fecham. Para formulários, que perderiam o que foi digitado. */
+  modal?: boolean;
 }
 
 export function StyledDialog({
@@ -28,6 +30,7 @@ export function StyledDialog({
   actions,
   maxWidth = 'sm',
   fullWidth = true,
+  modal = false,
   ...props
 }: StyledDialogProps) {
   const theme = useTheme();
@@ -35,7 +38,10 @@ export function StyledDialog({
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={(_, reason) => {
+        if (modal && (reason === "backdropClick" || reason === "escapeKeyDown")) return;
+        onClose();
+      }}
       maxWidth={maxWidth}
       fullWidth={fullWidth}
       PaperProps={{

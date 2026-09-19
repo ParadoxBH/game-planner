@@ -3,6 +3,8 @@ package com.paradoxbh.gameplannerserver.config;
 import java.time.Duration;
 import java.util.List;
 
+import org.springframework.util.unit.DataSize;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /** Configuração da aplicação, agrupada por assunto. Ver application.properties. */
@@ -29,5 +31,14 @@ public record GamePlannerProperties(Jwt jwt, Cors cors, RateLimit rateLimit, Med
             int webpQuality,
             int iconSize,
             int thumbSize,
-            int fullSize) {}
+            int fullSize,
+            DataSize maxBytes,
+            Large large) {
+
+        /**
+         * Upload de imagem grande ({@code ?large=true}), para mapa: gera também a variante
+         * {@code large}, com limites próprios de bytes, megapixels e tempo de conversão.
+         */
+        public record Large(int size, DataSize maxBytes, int maxMegapixels, Duration ffmpegTimeout) {}
+    }
 }

@@ -59,7 +59,7 @@ export function MediaUploadTool() {
 
   const send = () => {
     if (!selected) return;
-    upload.mutate(selected.file, {
+    upload.mutate({ file: selected.file }, {
       onSuccess: (result) =>
         setResults((previous) => [result, ...previous.filter((item) => item.media.id !== result.media.id)]),
     });

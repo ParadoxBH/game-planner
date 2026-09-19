@@ -1,7 +1,7 @@
 import { API_ORIGIN } from "./config";
 import type { MediaLink, MediaUsage, Reference, ResolvedReference } from "./content";
 
-export type MediaVariant = "icon" | "thumb" | "full";
+export type MediaVariant = "icon" | "thumb" | "full" | "large";
 
 /** Endereço do arquivo convertido de uma mídia: icon (128 px), thumb (512 px) ou full (1920 px). */
 export function mediaUrl(mediaId: string, variant: MediaVariant = "icon"): string {

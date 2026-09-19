@@ -36,11 +36,15 @@ public class MediaController {
         this.currentUser = currentUser;
     }
 
-    /** 201 quando a imagem é nova; 200 quando já existia (mesmo hash) e nada foi gravado. */
+    /**
+     * 201 quando a imagem é nova; 200 quando já existia (mesmo hash). Com {@code large=true}
+     * (imagem de mapa), gera também a variante {@code large}, com limites próprios.
+     */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UploadResponse> upload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<UploadResponse> upload(@RequestParam("file") MultipartFile file,
+                                                 @RequestParam(defaultValue = "false") boolean large) {
         String uploader = currentUser.requireWriter().getUsername();
-        MediaService.UploadResult result = media.upload(file, uploader);
+        MediaService.UploadResult result = media.upload(file, uploader, large);
         return ResponseEntity.status(result.created() ? HttpStatus.CREATED : HttpStatus.OK)
                 .body(new UploadResponse(result.created(), MediaResponse.of(result.media())));
     }
@@ -72,7 +76,7 @@ public class MediaController {
     public record VariantResponse(String url, int width, int height, long bytes) {
     }
 
-    /** {@code variants} sempre na ordem icon, thumb, full. URLs relativas à origem da API. */
+    /** {@code variants} na ordem icon, thumb, full e, quando existe, large. URLs relativas à origem da API. */
     public record MediaResponse(String id, int width, int height, boolean animated,
                                 Map<String, VariantResponse> variants, String uploadedBy, Instant uploadedAt) {
 

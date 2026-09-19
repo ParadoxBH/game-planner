@@ -21,6 +21,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.unit.DataSize;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.paradoxbh.gameplannerserver.common.ApiException;
@@ -69,10 +70,25 @@ public class MediaService {
     /**
      * Identifica, converte, deduplica e grava. O trabalho pesado (FFmpeg) acontece fora
      * de transação de banco; só a gravação final toca o banco.
+     *
+     * Com {@code large}, é imagem de mapa: vale o limite próprio de bytes e megapixels, não
+     * aceita animação e gera também a variante {@code large}. Se a imagem já existia sem ela
+     * (enviada antes como imagem comum), a variante é acrescentada à existente.
      */
     public UploadResult upload(MultipartFile file, String uploadedBy) {
+        return upload(file, uploadedBy, false);
+    }
+
+    /** Ver {@link #upload(MultipartFile, String)}; {@code large} é imagem de mapa. */
+    public UploadResult upload(MultipartFile file, String uploadedBy, boolean large) {
         if (file == null || file.isEmpty()) {
             throw ApiException.badRequest("Envie a imagem no campo 'file'");
+        }
+        DataSize maxBytes = large ? config.large().maxBytes() : config.maxBytes();
+        if (file.getSize() > maxBytes.toBytes()) {
+            throw new ApiException(HttpStatus.PAYLOAD_TOO_LARGE, "payload-too-large",
+                    "Arquivo maior que o limite de %d MB%s"
+                            .formatted(maxBytes.toMegabytes(), large ? " para imagem de mapa" : ""));
         }
 
         Path workDir = createWorkDir();
@@ -82,22 +98,27 @@ public class MediaService {
             file.transferTo(source);
 
             ProbeResult probe = transcoder.probe(source);
-            enforceLimits(probe);
+            enforceLimits(probe, large);
 
             Map<MediaVariant, Path> outputs = new EnumMap<>(MediaVariant.class);
             Map<MediaVariant, Dimensions> sizes = new EnumMap<>(MediaVariant.class);
-            for (MediaVariant variant : MediaVariant.values()) {
-                Dimensions size = Dimensions.fit(probe.width(), probe.height(), maxSide(variant));
-                Path output = workDir.resolve(variant.code() + ".webp");
-                transcoder.toWebp(source, probe, size, output);
-                outputs.put(variant, output);
-                sizes.put(variant, size);
+            for (MediaVariant variant : MediaVariant.STANDARD) {
+                convert(source, probe, variant, workDir, outputs, sizes);
             }
 
             String id = sha256(outputs.get(MediaVariant.FULL));
             Optional<Media> existing = repository.findById(id);
             if (existing.isPresent()) {
-                return new UploadResult(existing.get(), false);
+                Media media = existing.get();
+                if (large && !media.getVariants().containsKey(MediaVariant.LARGE.code())) {
+                    convert(source, probe, MediaVariant.LARGE, workDir, outputs, sizes);
+                    addVariant(media, MediaVariant.LARGE, outputs, sizes);
+                    return new UploadResult(repository.saveAndFlush(media), false);
+                }
+                return new UploadResult(media, false);
+            }
+            if (large) {
+                convert(source, probe, MediaVariant.LARGE, workDir, outputs, sizes);
             }
 
             Media media = new Media();
@@ -110,12 +131,8 @@ public class MediaService {
             media.setSourceBytes(file.getSize());
             media.setUploadedBy(uploadedBy);
 
-            for (MediaVariant variant : MediaVariant.values()) {
-                Path output = outputs.get(variant);
-                Dimensions size = sizes.get(variant);
-                String key = storage.store(id, variant, output);
-                media.getVariants().put(variant.code(),
-                        new MediaFile(size.width(), size.height(), Files.size(output), key));
+            for (MediaVariant variant : outputs.keySet()) {
+                addVariant(media, variant, outputs, sizes);
             }
 
             try {
@@ -132,6 +149,29 @@ public class MediaService {
             // O arquivo original some aqui: só o WebP gerado sobrevive ao upload.
             deleteRecursively(workDir);
         }
+    }
+
+    /** Converte uma variante para dentro de {@code workDir}, anotando arquivo e dimensões. */
+    private void convert(Path source, ProbeResult probe, MediaVariant variant, Path workDir,
+                         Map<MediaVariant, Path> outputs, Map<MediaVariant, Dimensions> sizes) {
+        Dimensions size = Dimensions.fit(probe.width(), probe.height(), maxSide(variant));
+        Path output = workDir.resolve(variant.code() + ".webp");
+        if (variant == MediaVariant.LARGE) {
+            transcoder.toWebp(source, probe, size, output, config.large().ffmpegTimeout());
+        } else {
+            transcoder.toWebp(source, probe, size, output);
+        }
+        outputs.put(variant, output);
+        sizes.put(variant, size);
+    }
+
+    /** Grava o arquivo da variante no storage e a registra na mídia. */
+    private void addVariant(Media media, MediaVariant variant, Map<MediaVariant, Path> outputs,
+                            Map<MediaVariant, Dimensions> sizes) throws IOException {
+        Path output = outputs.get(variant);
+        Dimensions size = sizes.get(variant);
+        String key = storage.store(media.getId(), variant, output);
+        media.getVariants().put(variant.code(), new MediaFile(size.width(), size.height(), Files.size(output), key));
     }
 
     public Media find(String id) {
@@ -181,12 +221,16 @@ public class MediaService {
         }
     }
 
-    private void enforceLimits(ProbeResult probe) {
-        long maxPixels = config.maxMegapixels() * 1_000_000L;
-        if (probe.pixels() > maxPixels) {
+    private void enforceLimits(ProbeResult probe, boolean large) {
+        int megapixels = large ? config.large().maxMegapixels() : config.maxMegapixels();
+        if (probe.pixels() > megapixels * 1_000_000L) {
             throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "media-too-large",
                     "Imagem de %dx%d passa do limite de %d megapixels"
-                            .formatted(probe.width(), probe.height(), config.maxMegapixels()));
+                            .formatted(probe.width(), probe.height(), megapixels));
+        }
+        if (large && probe.animated()) {
+            throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "media-animated-large",
+                    "Imagem de mapa não pode ser animada");
         }
         if (probe.frames() > config.maxFrames()) {
             throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "media-too-many-frames",
@@ -200,6 +244,7 @@ public class MediaService {
             case ICON -> config.iconSize();
             case THUMB -> config.thumbSize();
             case FULL -> config.fullSize();
+            case LARGE -> config.large().size();
         };
     }
 

@@ -3,7 +3,7 @@ import { mediaApi } from "./media";
 
 export function useUploadMedia() {
   return useMutation({
-    mutationFn: (file: File) => mediaApi.upload(file),
+    mutationFn: ({ file, large = false }: { file: File; large?: boolean }) => mediaApi.upload(file, large),
   });
 }
 
