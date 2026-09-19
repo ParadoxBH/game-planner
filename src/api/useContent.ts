@@ -7,7 +7,7 @@ import {
   useQueryClient,
   type UseQueryResult,
 } from "@tanstack/react-query";
-import { contentApi, gameApi, type ContentResource, type ListQuery, type MediaUsage, type ProfitQuery, type Rarity } from "./content";
+import { contentApi, gameApi, type ContentResource, type GamePatch, type ListQuery, type MediaUsage, type ProfitQuery, type Rarity } from "./content";
 import { useEventFilter } from "../context/EventFilterContext";
 import { and, inActiveEvents, listingWhere, rule, type FilterValues, type QueryGroup } from "./query";
 
@@ -306,4 +306,17 @@ export function useRarityUsage(gameId: string, code: string | undefined) {
     entities: entities.data?.total,
     isPending: items.isPending || entities.isPending,
   };
+}
+
+/** Salva dados do jogo. Relê o jogo, a lista de jogos (nome e capa na tela inicial) e o que é dele. */
+export function useUpdateGame(gameId: string) {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: (changes: GamePatch) => gameApi.patch(gameId, changes),
+    onSuccess: () =>
+      Promise.all([
+        client.invalidateQueries({ queryKey: ["games"] }),
+        client.invalidateQueries({ predicate: (query) => query.queryKey[1] === gameId }),
+      ]),
+  });
 }

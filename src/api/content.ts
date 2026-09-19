@@ -544,6 +544,22 @@ export interface GameInfo {
   media: MediaLink[];
 }
 
+export type GameStatus = "draft" | "published" | "coming_soon";
+
+export interface GamePatch {
+  name?: string;
+  summary?: string;
+  description?: string;
+  status?: GameStatus;
+  readPolicy?: "public" | "members";
+  writePolicy?: "community" | "members";
+  /** "HH:mm". */
+  dailyResetTime?: string;
+  /** 0 = domingo ... 6 = sábado. */
+  weeklyResetDay?: number;
+  media?: { usage: MediaUsage; mediaId: string }[];
+}
+
 export interface Rarity {
   code: string;
   name: string;
@@ -716,6 +732,11 @@ export const gameApi = {
 
   rarities(gameId: string, signal?: AbortSignal) {
     return apiRequest<Rarity[]>(`${gamePath(gameId)}/rarities`, { signal });
+  },
+
+  /** Dados, políticas e imagens do jogo; só owner. Campo ausente não muda; `media` presente substitui a lista toda. */
+  patch(gameId: string, changes: GamePatch) {
+    return apiRequest<GameInfo>(gamePath(gameId), { method: "PATCH", body: changes });
   },
 
   /** Cria ou substitui a raridade pelo código. Cor em hexadecimal (#RRGGBB ou #RRGGBBAA). */

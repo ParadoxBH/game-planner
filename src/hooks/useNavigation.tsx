@@ -12,6 +12,7 @@ import {
   Category,
   Diamond,
   Settings,
+  SportsEsports,
 } from "@mui/icons-material";
 import { useTheme } from "@mui/material";
 import { MAX_PAGE_SIZE, type ShopDocument } from "../api/content";
@@ -55,7 +56,7 @@ export function useNavigation(gameId: string | null) {
   const entityFilters = useListingFilters(id, "entities");
   const shops = useContentList<ShopDocument>(id, "shops", { size: MAX_PAGE_SIZE, sort: "name" });
   const stations = useRecipeStations(id);
-  const { isAdmin } = useGameAdmin(id);
+  const { isAdmin, isOwner } = useGameAdmin(id);
 
   const menuItems = useMemo<NavigationItem[]>(() => {
     if (!gameId) return [];
@@ -126,6 +127,8 @@ export function useNavigation(gameId: string | null) {
               isDropdown: true,
               showAll: false,
               options: [
+                // Os dados do próprio jogo são do owner; moderador gerencia só o conteúdo.
+                ...(isOwner ? [{ label: "Jogo", path: `${base}/settings`, icon: <SportsEsports fontSize="small" /> }] : []),
                 { label: "Categorias", path: `${base}/categories`, icon: <Category fontSize="small" /> },
                 { label: "Raridades", path: `${base}/rarities`, icon: <Diamond fontSize="small" /> },
               ],
@@ -159,7 +162,7 @@ export function useNavigation(gameId: string | null) {
     };
     // O mapa aparece para admin mesmo sem nenhum: é na seleção de mapas que se cria o primeiro.
     return all.filter((item) => !kindOf[item.id] || count(kindOf[item.id]) > 0 || (item.id === "map" && isAdmin));
-  }, [gameId, theme, counts.data, itemFilters.data, entityFilters.data, shops.data, stations.data, isAdmin]);
+  }, [gameId, theme, counts.data, itemFilters.data, entityFilters.data, shops.data, stations.data, isAdmin, isOwner]);
 
   return { menuItems };
 }

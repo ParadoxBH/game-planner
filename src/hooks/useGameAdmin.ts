@@ -3,13 +3,15 @@ import { useGame } from "../api/useContent";
 
 /**
  * Administra o jogo quem é platform_admin ou owner/moderator dele: os mesmos que o backend deixa
- * apagar conteúdo. É só de interface — cada escrita é validada pelo backend.
+ * apagar conteúdo. `isOwner` é quem pode mudar o próprio jogo (dados, políticas, imagens):
+ * platform_admin ou owner. É só de interface — cada escrita é validada pelo backend.
  */
 export function useGameAdmin(gameId: string | undefined) {
   const me = useMe();
   const role = gameId ? me.data?.roles[gameId] : undefined;
   return {
     isAdmin: Boolean(me.data?.platformAdmin || role === "owner" || role === "moderator"),
+    isOwner: Boolean(me.data?.platformAdmin || role === "owner"),
     isPending: me.isFetching && !me.data,
   };
 }

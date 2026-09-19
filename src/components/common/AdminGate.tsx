@@ -9,6 +9,8 @@ interface AdminGateProps {
   title: string;
   /** Rota da tela, para voltar a ela depois de entrar. */
   from: string;
+  /** Só owner do jogo ou platform_admin, e não moderador. */
+  ownerOnly?: boolean;
   children: ReactNode;
 }
 
@@ -16,7 +18,7 @@ interface AdminGateProps {
  * Painel de administração do jogo: mostra o conteúdo só para quem administra (ver useGameAdmin); aos
  * demais, o aviso com o botão de entrar. É de interface — cada escrita é validada pelo backend.
  */
-export function AdminGate({ gameId, title, from, children }: AdminGateProps) {
+export function AdminGate({ gameId, title, from, ownerOnly = false, children }: AdminGateProps) {
   const admin = useGameAdmin(gameId);
 
   if (admin.isPending) {
@@ -28,7 +30,7 @@ export function AdminGate({ gameId, title, from, children }: AdminGateProps) {
       </StyledContainer>
     );
   }
-  if (!admin.isAdmin) {
+  if (!(ownerOnly ? admin.isOwner : admin.isAdmin)) {
     return (
       <StyledContainer title={title}>
         <Alert
@@ -39,8 +41,9 @@ export function AdminGate({ gameId, title, from, children }: AdminGateProps) {
             </Button>
           }
         >
-          Esta tela é restrita a administradores do jogo. Entre com uma conta de moderador, owner ou administrador da
-          plataforma.
+          {ownerOnly
+            ? "Esta tela é restrita ao owner do jogo. Entre com a conta de owner ou de administrador da plataforma."
+            : "Esta tela é restrita a administradores do jogo. Entre com uma conta de moderador, owner ou administrador da plataforma."}
         </Alert>
       </StyledContainer>
     );
