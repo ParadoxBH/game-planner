@@ -3,10 +3,11 @@ import {
   queryOptions,
   useQueries,
   useQuery,
+  useMutation,
   useQueryClient,
   type UseQueryResult,
 } from "@tanstack/react-query";
-import { contentApi, gameApi, type ContentResource, type ListQuery, type ProfitQuery } from "./content";
+import { contentApi, gameApi, type ContentResource, type ListQuery, type MediaUsage, type ProfitQuery } from "./content";
 import { useEventFilter } from "../context/EventFilterContext";
 import { and, inActiveEvents, listingWhere, type FilterValues, type QueryGroup } from "./query";
 
@@ -239,4 +240,37 @@ export function useRecipeStations(gameId: string | undefined) {
     enabled: Boolean(gameId),
     staleTime: RARELY_CHANGES,
   });
+}
+
+/**
+ * Escrita de conteúdo: criar, substituir, apagar e anexar imagem. Depois de cada uma, relê tudo o que
+ * é do jogo — uma categoria muda filtros, menus e contagens de outras listagens.
+ */
+export function useContentWrites(gameId: string, resource: ContentResource) {
+  const client = useQueryClient();
+  const refresh = () =>
+    Promise.all([
+      client.invalidateQueries({ queryKey: ["content", gameId] }),
+      client.invalidateQueries({ queryKey: ["game", gameId] }),
+    ]);
+  return {
+    create: useMutation({
+      mutationFn: (document: object) => contentApi.create(gameId, resource, document),
+      onSuccess: refresh,
+    }),
+    put: useMutation({
+      mutationFn: ({ extId, document }: { extId: string; document: object }) =>
+        contentApi.put(gameId, resource, extId, document),
+      onSuccess: refresh,
+    }),
+    remove: useMutation({
+      mutationFn: (extId: string) => contentApi.remove(gameId, resource, extId),
+      onSuccess: refresh,
+    }),
+    addMedia: useMutation({
+      mutationFn: ({ extId, usage, mediaId }: { extId: string; usage: MediaUsage; mediaId: string }) =>
+        contentApi.addMedia(gameId, resource, extId, { usage, mediaId }),
+      onSuccess: refresh,
+    }),
+  };
 }

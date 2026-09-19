@@ -9,11 +9,13 @@ import {
   Redeem,
   Calculate,
   AutoAwesomeMosaic,
+  Category,
 } from "@mui/icons-material";
 import { useTheme } from "@mui/material";
 import { MAX_PAGE_SIZE, type ShopDocument } from "../api/content";
 import type { ListingSchema } from "../api/query";
 import { contentRoute, mediaUrl } from "../api/references";
+import { useGameAdmin } from "./useGameAdmin";
 import { useContentCounts, useContentList, useListingFilters, useRecipeStations } from "../api/useContent";
 
 export interface NavigationOption {
@@ -49,6 +51,7 @@ export function useNavigation(gameId: string | null) {
   const entityFilters = useListingFilters(id, "entities");
   const shops = useContentList<ShopDocument>(id, "shops", { size: MAX_PAGE_SIZE, sort: "name" });
   const stations = useRecipeStations(id);
+  const { isAdmin } = useGameAdmin(id);
 
   const menuItems = useMemo<NavigationItem[]>(() => {
     if (!gameId) return [];
@@ -107,6 +110,10 @@ export function useNavigation(gameId: string | null) {
       },
       { id: "events", label: "Eventos", icon: <Event />, path: `${base}/events`, color: "#e91e63" },
       { id: "codes", label: "Códigos", icon: <Redeem />, path: `${base}/codes`, color: "#795548" },
+      // Painel de administração: só aparece para quem administra o jogo.
+      ...(isAdmin
+        ? [{ id: "categories", label: "Categorias", icon: <Category />, path: `${base}/categories`, color: "#607d8b" }]
+        : []),
       {
         id: "calculator",
         label: "Calculadora",
@@ -133,7 +140,7 @@ export function useNavigation(gameId: string | null) {
       codes: "redemption_code",
     };
     return all.filter((item) => !kindOf[item.id] || count(kindOf[item.id]) > 0);
-  }, [gameId, theme, counts.data, itemFilters.data, entityFilters.data, shops.data, stations.data]);
+  }, [gameId, theme, counts.data, itemFilters.data, entityFilters.data, shops.data, stations.data, isAdmin]);
 
   return { menuItems };
 }

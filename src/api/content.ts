@@ -628,6 +628,28 @@ export const contentApi = {
     return apiRequest<T>(`${gamePath(gameId)}/${resource}/${encodeURIComponent(extId)}`, { signal });
   },
 
+  /** Cria; 409 se o código já existe. `media` ausente deixa as imagens do código como estão. */
+  create<T>(gameId: string, resource: ContentResource, document: object) {
+    return apiRequest<T>(`${gamePath(gameId)}/${resource}`, { method: "POST", body: document });
+  },
+
+  /** Substitui o documento inteiro: campo ausente vira vazio, exceto `media`, que ausente fica como está. */
+  put<T>(gameId: string, resource: ContentResource, extId: string, document: object) {
+    return apiRequest<T>(`${gamePath(gameId)}/${resource}/${encodeURIComponent(extId)}`, { method: "PUT", body: document });
+  },
+
+  remove(gameId: string, resource: ContentResource, extId: string) {
+    return apiRequest<void>(`${gamePath(gameId)}/${resource}/${encodeURIComponent(extId)}`, { method: "DELETE" });
+  },
+
+  /** Anexa uma imagem ao código, no fim do uso; a mais nova passa a ser a atual. */
+  addMedia(gameId: string, resource: ContentResource, extId: string, link: { usage: MediaUsage; mediaId: string }) {
+    return apiRequest<MediaLink[]>(`${gamePath(gameId)}/${resource}/${encodeURIComponent(extId)}/media`, {
+      method: "POST",
+      body: link,
+    });
+  },
+
   /** O documento, os conteúdos ligados a ele e toda referência citada, já com nome e ícone. */
   details<D, R>(gameId: string, resource: ContentResource, extId: string, signal?: AbortSignal) {
     return apiRequest<Details<D, R>>(`${gamePath(gameId)}/${resource}/${encodeURIComponent(extId)}/details`, {
