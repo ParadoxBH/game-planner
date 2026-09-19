@@ -3,6 +3,7 @@ package com.paradoxbh.gameplannerserver.query;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -48,6 +49,8 @@ public record QueryJson(Type type, String operator, String field, Object value,
         return of(OR, items);
     }
 
+    /** Fora do JSON: o tipo já diz. Sem isso, cada nó sairia com "group": true ou false. */
+    @JsonIgnore
     public boolean isGroup() {
         return type == Type.GROUP;
     }

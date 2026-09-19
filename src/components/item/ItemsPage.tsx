@@ -1,60 +1,35 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { CircularProgress, FormControlLabel, Stack, Switch, Typography } from "@mui/material";
-import { SwapHoriz } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
-import { MAX_PAGE_SIZE, type CategoryDocument, type ItemDocument, type ListQuery } from "../../api/content";
-import { currentMedia, mediaUrl } from "../../api/references";
-import { useAttributeDefinitions, useContentList, useRarities } from "../../api/useContent";
-import { and, inActiveEvents, or, rule, textSearch, type QueryGroup } from "../../api/query";
-import { useEventFilter } from "../../context/EventFilterContext";
+import { MAX_PAGE_SIZE, type CategoryDocument, type ItemDocument } from "../../api/content";
+import { useAttributeDefinitions, useContentList, useListing, useListingFilters, useRarities } from "../../api/useContent";
+import type { FilterValue, FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
 import { useViewMode } from "../../hooks/useViewMode";
-import type { ItemCriteria } from "../../types/filterTypes";
+import { categoryUrlFilters } from "../../utils/urlFilters";
 import { ListingDataView } from "../common/ListingDataView";
-import { PickSelector } from "../common/PickSelector";
+import { ListingFilterBar } from "../common/ListingFilterBar";
 import { StyledContainer } from "../common/StyledContainer";
-import { TriplePickSelector, type TripleState } from "../common/TriplePickSelector";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { ApiItemCard, ApiItemIcon, itemListCells, rarityColorOf, type ItemListView } from "./ApiItemRenderers";
 
-/** Opções do filtro "Status" e o filtro trade da API correspondente. */
-const TRADE_FILTERS: Record<string, QueryGroup> = {
-  Compraveis: and(rule("buyable", "equal", true)),
-  Vendiveis: and(rule("sellable", "equal", true)),
-  Comercializados: or(rule("buyable", "equal", true), rule("sellable", "equal", true)),
-  "Não Comercializados": and(rule("buyable", "equal", false), rule("sellable", "equal", false)),
-};
-
-function categoryOption(category: CategoryDocument) {
-  const iconId = currentMedia(category.media, "icon");
-  return { value: category.extId, label: category.name, icon: iconId ? mediaUrl(iconId) : undefined };
-}
-
-/** Lista de itens, lida da API. */
+/** Lista de itens, lida da API. A busca e os filtros acima da lista vêm do backend (GET /items/query/filters). */
 export function ItemsPage() {
   const { gameId = "", category: urlCategory } = useParams<{ gameId: string; category?: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const subCategoryParam = searchParams.get("subCategory");
   const { isMobile } = usePlatform();
-  const { activeEventIds } = useEventFilter();
 
-  const pages = usePagination<ItemCriteria>({
-    primaryCategory: urlCategory || "all",
-    subCategoryStates: {},
-    tradeStatus: null,
-  });
+  const pages = usePagination<FilterValues>(categoryUrlFilters(urlCategory, subCategoryParam));
   const [showPrices, setShowPrices] = useState(false);
   const [viewMode, setViewMode] = useViewMode("items");
 
   useEffect(() => {
-    pages.setCriteria({
-      primaryCategory: urlCategory || "all",
-      subCategoryStates: subCategoryParam ? { [subCategoryParam]: "include" } : {},
-    });
+    pages.setCriteria(categoryUrlFilters(urlCategory, subCategoryParam));
   }, [urlCategory, subCategoryParam]);
 
   // A API devolve no máximo 200 por página.
@@ -65,26 +40,13 @@ export function ItemsPage() {
   const search = useDebouncedValue(pages.info.search);
   const { criteria, pagination } = pages.info;
 
-  const query = useMemo<ListQuery>(() => {
-    const states = Object.entries(criteria.subCategoryStates ?? {});
-    const included = states.filter(([, state]) => state === "include").map(([id]) => id);
-    const excluded = states.filter(([, state]) => state === "exclude").map(([id]) => id);
-    const primary = criteria.primaryCategory && criteria.primaryCategory !== "all" ? [criteria.primaryCategory] : [];
-    return {
-      where: and(
-        textSearch(search),
-        ...[...primary, ...included].map((category) => rule("category", "equal", category)),
-        excluded.length > 0 && rule("category", "not_in", excluded),
-        criteria.rarity && rule("rarity", "equal", criteria.rarity),
-        criteria.tradeStatus && TRADE_FILTERS[criteria.tradeStatus],
-        inActiveEvents(activeEventIds),
-      ),
-      page: pagination.page - 1,
-      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
-    };
-  }, [search, criteria, pagination, activeEventIds]);
-
-  const items = useContentList<ItemDocument>(gameId, "items", query);
+  const listing = useListingFilters(gameId, "items");
+  const items = useListing<ItemDocument>(gameId, "items", {
+    search,
+    values: criteria,
+    page: pagination.page - 1,
+    size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+  });
   const categories = useContentList<CategoryDocument>(gameId, "categories", { size: MAX_PAGE_SIZE, sort: "name" });
   const rarities = useRarities(gameId);
   const attributes = useAttributeDefinitions(gameId);
@@ -109,11 +71,11 @@ export function ItemsPage() {
     [gameId, showPrices, rarities.data, itemCategories, attributes.data],
   );
 
-  const handleSubCategoryStateChange = (option: string, state: TripleState) => {
-    pages.setCriteria({ subCategoryStates: { ...criteria.subCategoryStates, [option]: state } });
+  // A categoria fica na URL, para o link ser compartilhável; o resto, no estado da página.
+  const changeFilter = (key: string, value: FilterValue) => {
+    if (key === "category") navigate(`/game/${gameId}/items/list/${value || "all"}`);
+    else pages.setCriteria({ [key]: value });
   };
-
-  const sortedRarities = [...(rarities.data ?? [])].sort((a, b) => a.ordinal - b.ordinal);
 
   return (
     <StyledContainer
@@ -121,45 +83,9 @@ export function ItemsPage() {
       label="Explore e descubra todos os itens disponíveis."
       searchValue={pages.info.search}
       onChangeSearch={pages.setSearch}
-      search={{ placeholder: "Pesquisar itens..." }}
+      search={{ placeholder: listing.data?.search.placeholder }}
       pages={pages}
-      actionsStart={
-        <>
-          <PickSelector
-            label="Categoria"
-            value={urlCategory && urlCategory !== "all" ? urlCategory : null}
-            options={itemCategories.map(categoryOption)}
-            onChange={(category) => navigate(`/game/${gameId}/items/list/${category || "all"}`)}
-            fullWidth={isMobile}
-          />
-          {itemCategories.length > 1 && (
-            <TriplePickSelector
-              label="Sub-categoria"
-              states={criteria.subCategoryStates || {}}
-              options={itemCategories.filter((category) => category.extId !== urlCategory).map(categoryOption)}
-              onChange={handleSubCategoryStateChange}
-              fullWidth={isMobile}
-            />
-          )}
-          <PickSelector
-            label="Status"
-            value={criteria.tradeStatus || null}
-            options={Object.keys(TRADE_FILTERS)}
-            onChange={(status) => pages.setCriteria({ tradeStatus: status })}
-            icon={<SwapHoriz sx={{ fontSize: 18 }} />}
-            fullWidth={isMobile}
-          />
-          {sortedRarities.length > 0 && (
-            <PickSelector
-              label="Raridade"
-              value={criteria.rarity || null}
-              options={sortedRarities.map((rarity) => ({ value: rarity.code, label: rarity.name }))}
-              onChange={(rarity) => pages.setCriteria({ rarity })}
-              fullWidth={isMobile}
-            />
-          )}
-        </>
-      }
+      actionsStart={<ListingFilterBar filters={listing.data?.filters} values={criteria} onChange={changeFilter} />}
       actionsEnd={
         <Stack flex={1} direction="row" justifyContent={isMobile ? "space-between" : "end"} alignItems="center">
           <FormControlLabel

@@ -4,9 +4,7 @@ import { ChevronRight, Storefront } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { MAX_PAGE_SIZE, type ShopDocument } from "../../api/content";
 import { contentRoute, currentMedia, mediaUrl, ReferenceIndex } from "../../api/references";
-import { useContentList } from "../../api/useContent";
-import { inActiveEvents } from "../../api/query";
-import { useEventFilter } from "../../context/EventFilterContext";
+import { useListing } from "../../api/useContent";
 import { usePlatform } from "../../hooks/usePlatform";
 import { formatReset } from "../../utils/format";
 import { ContentIcon } from "../common/ContentIcon";
@@ -158,14 +156,8 @@ export function ApiShopIcon({ shop, view }: { shop: ShopDocument; view: ShopList
 export function ShopPicker({ gameId, value }: { gameId: string; value: string | null }) {
   const navigate = useNavigate();
   const { isMobile } = usePlatform();
-  const { activeEventIds } = useEventFilter();
 
-  const shops = useContentList<ShopDocument>(gameId, "shops", {
-    size: MAX_PAGE_SIZE,
-    sort: "name",
-    where: inActiveEvents(activeEventIds),
-    references: true,
-  });
+  const shops = useListing<ShopDocument>(gameId, "shops", { size: MAX_PAGE_SIZE, sort: "name", references: true });
   const references = useMemo(() => new ReferenceIndex(shops.data?.references), [shops.data]);
 
   const options = (shops.data?.content ?? []).map((shop) => {

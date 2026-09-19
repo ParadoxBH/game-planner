@@ -86,13 +86,24 @@ export function rule(field: string, operator: QueryOperator, value?: QueryValue)
   return value === undefined ? { type: "rule", field, operator } : { type: "rule", field, operator, value };
 }
 
+/**
+ * Junta as partes sem aninhar à toa: grupo vazio sai, e grupo com o mesmo operador do pai ou com um filho só se
+ * desfaz nele. and(a, and(b, c)) vira and(a, b, c); and(a, or(b)) vira and(a, b).
+ */
 function group(operator: "and" | "or", parts: QueryPart[]): QueryGroup {
   const rules: QueryRule[] = [];
   const groups: QueryGroup[] = [];
+  const add = (part: QueryJson) => {
+    if (part.type === "rule") {
+      rules.push(part);
+      return;
+    }
+    const children = [...part.rules, ...part.groups];
+    if (part.operator === operator || children.length === 1) children.forEach(add);
+    else if (children.length > 0) groups.push(part);
+  };
   parts.forEach((part) => {
-    if (!part) return;
-    if (part.type === "group") groups.push(part);
-    else rules.push(part);
+    if (part) add(part);
   });
   return { type: "group", operator, rules, groups };
 }
@@ -116,4 +127,88 @@ export function textSearch(term: string | undefined): QueryGroup | undefined {
 /** Disponível agora: sem evento, ou com algum dos eventos ativos. Sem eventos ativos, só o que não tem evento. */
 export function inActiveEvents(eventIds: string[]): QueryGroup {
   return or(rule("event", "is_null"), eventIds.length > 0 && rule("event", "in", eventIds));
+}
+
+/** Controle de um filtro de tela: select escolhe uma opção; multi marca conter ou não conter em cada uma; tabs é select em abas; switch liga a única opção. */
+export type FilterDisplay = "select" | "multi" | "tabs" | "switch";
+
+export interface ListingFilterOption {
+  value: string;
+  label: string;
+  iconMediaId?: string;
+  /** Quantos registros a opção tem, para exibir junto do rótulo. */
+  count?: number;
+  /** O que a opção aplica; ausente, `field equal value`. */
+  query?: QueryGroup;
+  /** Em multi, o que "não conter" aplica; ausente, `field not_equal value`. */
+  exclude?: QueryGroup;
+}
+
+/** Filtro de tela descrito pelo backend (GET .../query/filters). O front desenha e aplica sem conhecê-lo. */
+export interface ListingFilter {
+  /** Nome do valor escolhido. */
+  key: string;
+  label: string;
+  display: FilterDisplay;
+  /** Nome curto de ícone ("trade", "station"); ausente, o padrão. */
+  icon?: string;
+  /** Rótulo de "nenhuma opção" em select e tabs. */
+  allLabel?: string;
+  /** Campo do QueryJson das opções sem query. Com ele, um valor fora das opções (vindo da URL) ainda filtra. */
+  field?: string;
+  /** Valor antes de o usuário mexer. */
+  defaultValue?: string;
+  options: ListingFilterOption[];
+}
+
+/** A barra de uma listagem: a busca, que procura o texto em cada campo, e os filtros na ordem de exibição. */
+export interface ListingSchema {
+  search: { placeholder: string; fields: string[] };
+  /** A listagem segue o filtro global de eventos ativos: toda consulta leva o grupo de inActiveEvents na raiz. */
+  activeEvents: boolean;
+  filters: ListingFilter[];
+}
+
+export type IncludeState = "include" | "exclude" | "indifferent";
+
+/** Valor de um filtro de tela: a opção escolhida (select, tabs, switch) ou o estado de cada opção (multi). null: nenhuma. */
+export type FilterValue = string | null | Record<string, IncludeState>;
+
+/** Valores da barra pela `key` de cada filtro. Ausente: vale o padrão do filtro. */
+export type FilterValues = Record<string, FilterValue | undefined>;
+
+/** O valor em vigor: o escolhido ou, antes de o usuário mexer, o padrão do filtro. */
+export function filterValue(filter: ListingFilter, values: FilterValues): FilterValue {
+  const value = values[filter.key];
+  return value !== undefined ? value : (filter.defaultValue ?? null);
+}
+
+function optionWhere(filter: ListingFilter, value: string, exclude: boolean): QueryPart {
+  const option = filter.options.find((candidate) => candidate.value === value);
+  const query = exclude ? option?.exclude : option?.query;
+  if (query) return query;
+  return filter.field ? rule(filter.field, exclude ? "not_equal" : "equal", value) : undefined;
+}
+
+/** O texto da busca em qualquer dos campos que o backend indica. Em branco, não filtra. */
+export function searchWhere(search: ListingSchema["search"], term: string | undefined): QueryGroup | undefined {
+  const text = term?.trim();
+  return text ? or(...search.fields.map((field) => rule(field, "contains", text))) : undefined;
+}
+
+/** QueryJson da barra: a busca e o valor em vigor de cada filtro, juntos com "and". */
+export function listingWhere(schema: ListingSchema, term: string | undefined, values: FilterValues): QueryGroup {
+  const parts: QueryPart[] = [searchWhere(schema.search, term)];
+  schema.filters.forEach((filter) => {
+    const value = filterValue(filter, values);
+    if (value === null) return;
+    if (typeof value === "string") {
+      parts.push(optionWhere(filter, value, false));
+      return;
+    }
+    Object.entries(value).forEach(([option, state]) => {
+      if (state !== "indifferent") parts.push(optionWhere(filter, option, state === "exclude"));
+    });
+  });
+  return and(...parts);
 }

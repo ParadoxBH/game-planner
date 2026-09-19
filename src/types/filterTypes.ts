@@ -14,21 +14,3 @@ export interface GenericFilter<T> {
   search: string;
   criteria: T;
 }
-
-export interface ItemCriteria {
-  primaryCategory?: string;
-  subCategoryStates?: Record<string, 'include' | 'exclude' | 'indifferent'>;
-  tradeStatus?: string | null;
-  rarity?: string | null;
-}
-
-export interface EntityCriteria {
-  primaryCategory?: string;
-  subCategoryStates?: Record<string, 'include' | 'exclude' | 'indifferent'>;
-  rarity?: string | null;
-}
-
-export interface RecipeCriteria {
-  primaryStation?: string;
-  subStationStates?: Record<string, 'include' | 'exclude' | 'indifferent'>;
-}

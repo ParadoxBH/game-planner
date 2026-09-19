@@ -8,12 +8,10 @@ import {
   type CategoryDocument,
   type EntityDocument,
   type ItemDocument,
-  type ListQuery,
   type ShopDocument,
 } from "../../api/content";
-import { useAttributeDefinitions, useContentList, useRarities } from "../../api/useContent";
-import { and, inActiveEvents, rule, textSearch } from "../../api/query";
-import { useEventFilter } from "../../context/EventFilterContext";
+import { useAttributeDefinitions, useContentList, useListing, useRarities, type ListingQuery } from "../../api/useContent";
+import { and, rule } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
@@ -54,7 +52,6 @@ function ListError({ error }: { error: Error }) {
 export function MetadataDetailsPage() {
   const { gameId = "", type: attributeKey = "" } = useParams<{ gameId: string; type: string }>();
   const { isMobile } = usePlatform();
-  const { activeEventIds } = useEventFilter();
   const [tab, setTab] = useState<MetadataTab>("items");
   const [viewMode, setViewMode] = useViewMode("metadata_details");
   const pages = usePagination(NO_CRITERIA);
@@ -67,26 +64,22 @@ export function MetadataDetailsPage() {
   const search = useDebouncedValue(pages.info.search);
   const { pagination } = pages.info;
   const where = useMemo(
-    () => and(attributeKey && rule("attribute", "equal", attributeKey), inActiveEvents(activeEventIds)),
-    [attributeKey, activeEventIds],
+    () => and(attributeKey && rule("attribute", "equal", attributeKey)),
+    [attributeKey],
   );
 
-  const query = useMemo<ListQuery>(
-    () => ({
-      where: and(textSearch(search), where),
-      page: pagination.page - 1,
-      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
-      sort: "name",
-    }),
+  // A busca procura nos campos que o backend indica para cada listagem.
+  const query = useMemo<ListingQuery>(
+    () => ({ search, where, page: pagination.page - 1, size: Math.min(pagination.pageSize, MAX_PAGE_SIZE), sort: "name" }),
     [search, pagination, where],
   );
   // Só o total, para as contagens das abas.
-  const countQuery = useMemo<ListQuery>(() => ({ size: 1, where }), [where]);
+  const countQuery = useMemo<ListingQuery>(() => ({ size: 1, where }), [where]);
 
-  const items = useContentList<ItemDocument>(gameId, "items", query, { enabled: tab === "items" });
-  const entities = useContentList<EntityDocument>(gameId, "entities", query, { enabled: tab === "entities" });
-  const itemCount = useContentList<ItemDocument>(gameId, "items", countQuery);
-  const entityCount = useContentList<EntityDocument>(gameId, "entities", countQuery);
+  const items = useListing<ItemDocument>(gameId, "items", query, { enabled: tab === "items" });
+  const entities = useListing<EntityDocument>(gameId, "entities", query, { enabled: tab === "entities" });
+  const itemCount = useListing<ItemDocument>(gameId, "items", countQuery);
+  const entityCount = useListing<EntityDocument>(gameId, "entities", countQuery);
   const categories = useContentList<CategoryDocument>(gameId, "categories", { size: MAX_PAGE_SIZE, sort: "name" });
   const shops = useContentList<ShopDocument>(gameId, "shops", { size: MAX_PAGE_SIZE }, { enabled: tab === "entities" });
   const rarities = useRarities(gameId);

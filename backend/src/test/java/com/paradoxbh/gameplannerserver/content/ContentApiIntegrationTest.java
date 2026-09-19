@@ -453,6 +453,42 @@ class ContentApiIntegrationTest extends ContentApiTest {
     }
 
     @Test
+    void listingFiltersComeWithTheGameOptions() throws Exception {
+        send(put(CATEGORIES, game), "editor", json("""
+                [ { 'extId': 'flor', 'name': 'Flor', 'appliesTo': 'item' },
+                  { 'extId': 'npc', 'name': 'NPC', 'appliesTo': 'entity' },
+                  { 'extId': 'raro', 'name': 'Raro' } ]
+                """))
+                .andExpect(status().isOk());
+
+        mvc.perform(get(ITEMS + "/query/filters", game))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.search.placeholder").value("Pesquisar itens..."))
+                .andExpect(jsonPath("$.search.fields", contains("name", "extId")))
+                .andExpect(jsonPath("$.activeEvents").value(true))
+                .andExpect(jsonPath("$.filters[*].key", contains("category", "subCategory", "status", "rarity")))
+                .andExpect(jsonPath("$.filters[0].display").value("select"))
+                .andExpect(jsonPath("$.filters[0].field").value("category"))
+                .andExpect(jsonPath("$.filters[0].options[*].value", contains("flor", "raro")))
+                .andExpect(jsonPath("$.filters[1].display").value("multi"))
+                .andExpect(jsonPath("$.filters[2].options[0].query.rules[0].field").value("buyable"))
+                .andExpect(jsonPath("$.filters[3].options").isEmpty());
+
+        // Categoria nova entra no filtro sem mudança no front.
+        send(post(CATEGORIES, game), "editor", json("{ 'extId': 'arvore', 'name': 'Arvore', 'appliesTo': 'item' }"))
+                .andExpect(status().isCreated());
+        mvc.perform(get(ITEMS + "/query/filters", game))
+                .andExpect(jsonPath("$.filters[0].options[*].value", contains("arvore", "flor", "raro")));
+        mvc.perform(get("/api/v1/games/{game}/entities/query/filters", game))
+                .andExpect(jsonPath("$.filters[0].options[*].value", contains("npc", "raro")));
+
+        mvc.perform(get("/api/v1/games/{game}/maps/query/filters", game)).andExpect(jsonPath("$.filters").isEmpty());
+        // Evento e código de resgate não têm eventos: o filtro global não vale para eles.
+        mvc.perform(get("/api/v1/games/{game}/codes/query/filters", game)).andExpect(jsonPath("$.activeEvents").value(false));
+        mvc.perform(get("/api/v1/games/{game}/planetas/query/filters", game)).andExpect(status().isNotFound());
+    }
+
+    @Test
     void queryFieldsDescribeWhatEachListingAccepts() throws Exception {
         mvc.perform(get(ITEMS + "/query/fields", game))
                 .andExpect(status().isOk())

@@ -45,8 +45,8 @@ import {
   type MediaLink,
 } from "../../api/content";
 import { contentRoute, currentMedia, mediaUrl } from "../../api/references";
-import { useContentDocument, useContentList, useGame, useMapMarkers } from "../../api/useContent";
-import { and, inActiveEvents, rule } from "../../api/query";
+import { useContentDocument, useContentList, useGame, useListing, useMapMarkers } from "../../api/useContent";
+import { and, rule } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
 import { useStoredState } from "../../hooks/useCollectedMembers";
 import { usePlatform } from "../../hooks/usePlatform";
@@ -273,17 +273,16 @@ export const MapView = () => {
   const markerFilter = useMemo(
     () =>
       and(
-        inActiveEvents(activeEventIds),
         filterItemId && rule("yields", "equal", `item:${filterItemId}`),
         filterEntityId && rule("occupant", "equal", `entity:${filterEntityId}`),
       ),
-    [activeEventIds, filterItemId, filterEntityId],
+    [filterItemId, filterEntityId],
   );
   const markers = useMapMarkers(gameId, selectedMapId, markerFilter);
-  const locations = useContentList<LocationDocument>(
+  const locations = useListing<LocationDocument>(
     gameId,
     "locations",
-    { size: MAX_PAGE_SIZE, where: and(selectedMapId && rule("map", "equal", selectedMapId), inActiveEvents(activeEventIds)) },
+    { size: MAX_PAGE_SIZE, where: and(selectedMapId && rule("map", "equal", selectedMapId)) },
     { enabled: Boolean(selectedMapId) },
   );
   const events = useContentList<EventDocument>(gameId, "events", { size: MAX_PAGE_SIZE, sort: "name" });

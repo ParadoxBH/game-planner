@@ -1,5 +1,5 @@
 import { apiRequest } from "./http";
-import { and, type QueryGroup, type QuerySchema } from "./query";
+import { and, type ListingSchema, type QueryGroup, type QuerySchema } from "./query";
 
 /** Página máxima aceita pela API. */
 export const MAX_PAGE_SIZE = 200;
@@ -610,6 +610,11 @@ export const contentApi = {
       body: query.where ?? and(),
       signal,
     });
+  },
+
+  /** Busca e filtros de tela da listagem, com as opções do jogo: o que a barra acima da lista desenha. */
+  listingFilters(gameId: string, resource: ContentResource, signal?: AbortSignal) {
+    return apiRequest<ListingSchema>(`${gamePath(gameId)}/${resource}/query/filters`, { signal });
   },
 
   /** Campos que o filtro da listagem aceita (nome, tipo, operadores, opções) e chaves de ordenação. */

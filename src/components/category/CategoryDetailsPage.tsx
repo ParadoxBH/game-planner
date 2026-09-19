@@ -10,15 +10,20 @@ import {
   type ContentPage,
   type EntityDocument,
   type ItemDocument,
-  type ListQuery,
   type RecipeDocument,
   type Reference,
   type ShopDocument,
 } from "../../api/content";
 import { currentMedia, ReferenceIndex } from "../../api/references";
-import { useAttributeDefinitions, useContentDetails, useContentList, useRarities } from "../../api/useContent";
-import { and, inActiveEvents, rule, textSearch } from "../../api/query";
-import { useEventFilter } from "../../context/EventFilterContext";
+import {
+  useAttributeDefinitions,
+  useContentDetails,
+  useContentList,
+  useListing,
+  useRarities,
+  type ListingQuery,
+} from "../../api/useContent";
+import { and, rule } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
 import { useViewMode } from "../../hooks/useViewMode";
@@ -125,7 +130,6 @@ function RecipeSection({
 export function CategoryDetailsPage() {
   const { gameId = "", categoryId = "" } = useParams<{ gameId: string; categoryId: string }>();
   const { isMobile } = usePlatform();
-  const { activeEventIds } = useEventFilter();
   const [selectedTab, setSelectedTab] = useState<CategoryTab>("items");
   const [viewMode, setViewMode] = useViewMode("category_details");
   const pages = usePagination(NO_CRITERIA);
@@ -141,18 +145,20 @@ export function CategoryDetailsPage() {
 
   const search = useDebouncedValue(pages.info.search);
   const { pagination } = pages.info;
-  const query = useMemo<ListQuery>(
+  // A busca procura nos campos que o backend indica para cada listagem.
+  const query = useMemo<ListingQuery>(
     () => ({
-      where: and(textSearch(search), rule("category", "equal", categoryId), inActiveEvents(activeEventIds)),
+      search,
+      where: and(rule("category", "equal", categoryId)),
       page: pagination.page - 1,
       size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
       sort: "name",
     }),
-    [search, categoryId, pagination, activeEventIds],
+    [search, categoryId, pagination],
   );
 
-  const items = useContentList<ItemDocument>(gameId, "items", query, { enabled: tab === "items" });
-  const entities = useContentList<EntityDocument>(gameId, "entities", query, { enabled: tab === "entities" });
+  const items = useListing<ItemDocument>(gameId, "items", query, { enabled: tab === "items" });
+  const entities = useListing<EntityDocument>(gameId, "entities", query, { enabled: tab === "entities" });
   const categories = useContentList<CategoryDocument>(gameId, "categories", { size: MAX_PAGE_SIZE, sort: "name" });
   const shops = useContentList<ShopDocument>(gameId, "shops", { size: MAX_PAGE_SIZE }, { enabled: tab === "entities" });
   const rarities = useRarities(gameId);

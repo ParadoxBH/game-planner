@@ -8,17 +8,16 @@ import {
   IconButton,
   Snackbar,
   Stack,
-  Switch,
   Tooltip,
   Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { CalendarToday, CheckCircle, ContentCopy, RadioButtonUnchecked, TimerOff } from "@mui/icons-material";
 import { ApiError } from "../api/ApiError";
-import { MAX_PAGE_SIZE, type ListQuery, type RedemptionCodeDocument } from "../api/content";
+import { MAX_PAGE_SIZE, type RedemptionCodeDocument } from "../api/content";
 import { ReferenceIndex } from "../api/references";
-import { useContentList } from "../api/useContent";
-import { and, rule, textSearch } from "../api/query";
+import { useListing, useListingFilters } from "../api/useContent";
+import type { FilterValues } from "../api/query";
 import { useDebouncedValue } from "../hooks/useDebouncedValue";
 import { usePagination } from "../hooks/usePagination";
 import { usePlatform } from "../hooks/usePlatform";
@@ -26,10 +25,11 @@ import { redemptionService } from "../services/redemptionService";
 import { formatDate, isoDate } from "../utils/format";
 import { ContentChip } from "./common/ContentChip";
 import { ListingDataView } from "./common/ListingDataView";
+import { ListingFilterBar } from "./common/ListingFilterBar";
 import { StyledContainer } from "./common/StyledContainer";
 import { Ribbon } from "./Ribbon";
 
-const NO_CRITERIA = {};
+const NO_FILTERS: FilterValues = {};
 
 interface CodeCardProps {
   code: RedemptionCodeDocument;
@@ -152,12 +152,14 @@ function CodeCard({ code, references, collected, onToggle, onCopy }: CodeCardPro
   );
 }
 
-/** Códigos de resgate lidos da API, os mais novos primeiro, com a marcação de coletado guardada no navegador. */
+/**
+ * Códigos de resgate lidos da API, os mais novos primeiro, com a marcação de coletado guardada no navegador. A
+ * busca e os filtros vêm do backend (GET /codes/query/filters); "ocultar coletados" é daqui, porque o que foi
+ * coletado só o navegador sabe.
+ */
 export function CodesPage() {
   const { gameId = "" } = useParams<{ gameId: string }>();
-  const pages = usePagination(NO_CRITERIA);
-  const [hideExpired, setHideExpired] = useState(true);
-  const [hideCollected, setHideCollected] = useState(false);
+  const pages = usePagination(NO_FILTERS);
   const [collectedCodes, setCollectedCodes] = useState<string[]>(() => redemptionService.getCollectedCodes(gameId));
   const [copied, setCopied] = useState<string | null>(null);
 
@@ -171,24 +173,17 @@ export function CodesPage() {
   }, [pages.info.pagination.pageSize, pages.setPageSize]);
 
   const search = useDebouncedValue(pages.info.search);
-  const { pagination } = pages.info;
+  const { criteria, pagination } = pages.info;
 
-  const query = useMemo<ListQuery>(
-    () => ({
-      where: and(
-        textSearch(search),
-        hideExpired && rule("active", "equal", true),
-        hideCollected && collectedCodes.length > 0 && rule("extId", "not_in", collectedCodes),
-      ),
-      page: pagination.page - 1,
-      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
-      sort: "-addedOn",
-      references: true,
-    }),
-    [search, pagination, hideExpired, hideCollected, collectedCodes],
-  );
-
-  const codes = useContentList<RedemptionCodeDocument>(gameId, "codes", query);
+  const listing = useListingFilters(gameId, "codes");
+  const codes = useListing<RedemptionCodeDocument>(gameId, "codes", {
+    search,
+    values: criteria,
+    page: pagination.page - 1,
+    size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+    sort: "-addedOn",
+    references: true,
+  });
   const references = useMemo(() => new ReferenceIndex(codes.data?.references), [codes.data]);
 
   useEffect(() => {
@@ -218,21 +213,16 @@ export function CodesPage() {
       label="Aproveite recompensas gratuitas com os códigos abaixo."
       searchValue={pages.info.search}
       onChangeSearch={pages.setSearch}
-      search={{ placeholder: "Pesquisar códigos..." }}
+      search={{ placeholder: listing.data?.search.placeholder }}
       pages={pages}
       actionsStart={
         <Stack flex={1} px={1} direction="row" alignItems="center" justifyContent="space-between">
-          <Stack direction="row" alignItems="center">
-            <Switch size="small" checked={hideExpired} onChange={(event) => setHideExpired(event.target.checked)} />
-            <Typography variant="caption" sx={{ color: "text.secondary" }}>
-              Ocultar expirados
-            </Typography>
-          </Stack>
-          <Stack direction="row" alignItems="center">
-            <Switch size="small" checked={hideCollected} onChange={(event) => setHideCollected(event.target.checked)} />
-            <Typography variant="caption" sx={{ color: "text.secondary" }}>
-              Ocultar coletados
-            </Typography>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <ListingFilterBar
+              filters={listing.data?.filters}
+              values={criteria}
+              onChange={(key, value) => pages.setCriteria({ [key]: value })}
+            />
           </Stack>
         </Stack>
       }

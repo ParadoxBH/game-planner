@@ -1,19 +1,17 @@
 import { useEffect, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Card, CircularProgress, Stack, Switch, Typography } from "@mui/material";
+import { Box, Card, CircularProgress, Stack, Typography } from "@mui/material";
 import { ApiError } from "../../api/ApiError";
-import { MAX_PAGE_SIZE, type CollectionDocument, type CollectionGroupDocument, type ListQuery } from "../../api/content";
+import { MAX_PAGE_SIZE, type CollectionDocument, type CollectionGroupDocument } from "../../api/content";
 import { contentRoute, currentMedia } from "../../api/references";
-import { useContentList } from "../../api/useContent";
-import { and, inActiveEvents, textSearch } from "../../api/query";
-import { useEventFilter } from "../../context/EventFilterContext";
+import { useListing, useListingFilters } from "../../api/useContent";
+import type { FilterValues } from "../../api/query";
 import {
   addProgress,
   groupProgress,
   isComplete,
   NO_PROGRESS,
   useCollectedMembers,
-  useStoredState,
   type Progress,
 } from "../../hooks/useCollectedMembers";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
@@ -21,20 +19,19 @@ import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
 import { ContentIcon } from "../common/ContentIcon";
 import { ListingDataView } from "../common/ListingDataView";
+import { ListingFilterBar } from "../common/ListingFilterBar";
 import { StyledContainer } from "../common/StyledContainer";
 import { CollectionProgress } from "./CollectionProgress";
 
-const NO_CRITERIA = {};
+const NO_FILTERS: FilterValues = {};
 
 /** Lista de coleções (conjuntos), lida da API, com o progresso marcado no navegador. */
 export function ConjuntosPage() {
   const { gameId = "" } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
   const { isMobile } = usePlatform();
-  const { activeEventIds } = useEventFilter();
   const { collected } = useCollectedMembers(gameId);
-  const [hideCompleted, setHideCompleted] = useStoredState(`gp_hide_completed_${gameId}`, false);
-  const pages = usePagination(NO_CRITERIA);
+  const pages = usePagination(NO_FILTERS);
 
   // A API devolve no máximo 200 por página.
   useEffect(() => {
@@ -42,20 +39,18 @@ export function ConjuntosPage() {
   }, [pages.info.pagination.pageSize, pages.setPageSize]);
 
   const search = useDebouncedValue(pages.info.search);
-  const { pagination } = pages.info;
-  const query = useMemo<ListQuery>(
-    () => ({
-      where: and(textSearch(search), inActiveEvents(activeEventIds)),
-      page: pagination.page - 1,
-      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
-      sort: "name",
-    }),
-    [search, pagination, activeEventIds],
-  );
+  const { criteria, pagination } = pages.info;
 
-  const collections = useContentList<CollectionDocument>(gameId, "collections", query);
+  const listing = useListingFilters(gameId, "collections");
+  const collections = useListing<CollectionDocument>(gameId, "collections", {
+    search,
+    values: criteria,
+    page: pagination.page - 1,
+    size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+    sort: "name",
+  });
   // O progresso soma os grupos dos eventos ativos; uma página cheia cobre os grupos do jogo.
-  const groups = useContentList<CollectionGroupDocument>(gameId, "collection-groups", { size: MAX_PAGE_SIZE, where: inActiveEvents(activeEventIds) });
+  const groups = useListing<CollectionGroupDocument>(gameId, "collection-groups", { size: MAX_PAGE_SIZE });
 
   useEffect(() => {
     if (collections.data) pages.setTotalItems(collections.data.total);
@@ -70,9 +65,7 @@ export function ConjuntosPage() {
     return progress;
   }, [groups.data, collected]);
 
-  const visible = (collections.data?.content ?? []).filter(
-    (collection) => !hideCompleted || !isComplete(progressByCollection.get(collection.extId) ?? NO_PROGRESS),
-  );
+  const visible = collections.data?.content ?? [];
 
   return (
     <StyledContainer
@@ -80,14 +73,15 @@ export function ConjuntosPage() {
       label="Explore coleções e conjuntos de itens temáticos."
       searchValue={pages.info.search}
       onChangeSearch={pages.setSearch}
-      search={{ placeholder: "Pesquisar conjuntos..." }}
+      search={{ placeholder: listing.data?.search.placeholder }}
       pages={pages}
       actionsStart={
         <Stack alignItems="center" spacing={1} direction="row">
-          <Switch size="small" checked={hideCompleted} onChange={(event) => setHideCompleted(event.target.checked)} />
-          <Typography variant="body2" sx={{ fontWeight: 600, whiteSpace: "nowrap" }}>
-            Esconder completos
-          </Typography>
+          <ListingFilterBar
+            filters={listing.data?.filters}
+            values={criteria}
+            onChange={(key, value) => pages.setCriteria({ [key]: value })}
+          />
         </Stack>
       }
     >

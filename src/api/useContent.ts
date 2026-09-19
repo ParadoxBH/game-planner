@@ -1,6 +1,14 @@
-import { keepPreviousData, useQueries, useQuery, type UseQueryResult } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  queryOptions,
+  useQueries,
+  useQuery,
+  useQueryClient,
+  type UseQueryResult,
+} from "@tanstack/react-query";
 import { contentApi, gameApi, type ContentResource, type ListQuery, type ProfitQuery } from "./content";
-import type { QueryGroup } from "./query";
+import { useEventFilter } from "../context/EventFilterContext";
+import { and, inActiveEvents, listingWhere, type FilterValues, type QueryGroup } from "./query";
 
 /** Dados que mudam pouco (raridades, definições de atributo, bancadas) não são relidos a cada tela. */
 const RARELY_CHANGES = 5 * 60_000;
@@ -15,6 +23,59 @@ export function useContentList<T>(
   return useQuery({
     queryKey: ["content", gameId, resource, "list", query],
     queryFn: ({ signal }) => contentApi.list<T>(gameId!, resource, query, signal),
+    enabled: Boolean(gameId) && (options.enabled ?? true),
+    placeholderData: keepPreviousData,
+  });
+}
+
+function listingFiltersQuery(gameId: string, resource: ContentResource) {
+  return queryOptions({
+    queryKey: ["content", gameId, resource, "query-filters"],
+    queryFn: ({ signal }) => contentApi.listingFilters(gameId, resource, signal),
+  });
+}
+
+/** Busca e filtros de tela de uma listagem, com as opções do jogo, para desenhar a barra (ListingFilterBar). */
+export function useListingFilters(gameId: string | undefined, resource: ContentResource) {
+  return useQuery({ ...listingFiltersQuery(gameId ?? "", resource), enabled: Boolean(gameId) });
+}
+
+/** Listagem pela barra de filtros do backend: busca e valores escolhidos viram QueryJson pelo schema da listagem. */
+export interface ListingQuery extends Omit<ListQuery, "where"> {
+  /** Texto da caixa de busca. */
+  search?: string;
+  /** Valores da barra, pela `key` de cada filtro. */
+  values?: FilterValues;
+  /** Filtro de fora da barra, somado com "and": eventos ativos, códigos já coletados... */
+  where?: QueryGroup;
+}
+
+/**
+ * Página de uma listagem com barra de filtros. Lê antes o schema da barra (o mesmo cache de useListingFilters),
+ * então um filtro que veio pela URL já vale na primeira busca, e erro no schema aparece como erro da listagem.
+ * Quando a listagem tem eventos, o filtro global de eventos ativos (cabeçalho) entra aqui, como um grupo na
+ * raiz: as telas não o repassam.
+ */
+export function useListing<T>(
+  gameId: string | undefined,
+  resource: ContentResource,
+  query: ListingQuery,
+  options: { enabled?: boolean } = {},
+) {
+  const client = useQueryClient();
+  const { activeEventIds } = useEventFilter();
+  return useQuery({
+    queryKey: ["content", gameId, resource, "listing", query, activeEventIds],
+    queryFn: async ({ signal }) => {
+      const schema = await client.ensureQueryData(listingFiltersQuery(gameId!, resource));
+      const { search, values, where, ...page } = query;
+      const filter = and(
+        schema.activeEvents && inActiveEvents(activeEventIds),
+        listingWhere(schema, search, values ?? {}),
+        where,
+      );
+      return contentApi.list<T>(gameId!, resource, { ...page, where: filter }, signal);
+    },
     enabled: Boolean(gameId) && (options.enabled ?? true),
     placeholderData: keepPreviousData,
   });
@@ -85,11 +146,15 @@ export function useQueryFields(gameId: string | undefined, resource: ContentReso
   });
 }
 
-/** Marcadores de um mapa. Ao mudar filtro no mesmo mapa, mantém os anteriores até chegar a resposta. */
+/**
+ * Marcadores de um mapa, com o filtro global de eventos ativos na raiz (ponto de spawn sempre tem eventos). Ao mudar
+ * filtro no mesmo mapa, mantém os anteriores até chegar a resposta.
+ */
 export function useMapMarkers(gameId: string | undefined, mapId: string | undefined, where: QueryGroup) {
+  const { activeEventIds } = useEventFilter();
   return useQuery({
-    queryKey: ["map-markers", gameId, mapId, where],
-    queryFn: ({ signal }) => contentApi.markers(gameId!, mapId!, where, signal),
+    queryKey: ["map-markers", gameId, mapId, where, activeEventIds],
+    queryFn: ({ signal }) => contentApi.markers(gameId!, mapId!, and(inActiveEvents(activeEventIds), where), signal),
     enabled: Boolean(gameId && mapId),
     placeholderData: (previous, previousQuery) => (previousQuery?.queryKey[2] === mapId ? previous : undefined),
   });

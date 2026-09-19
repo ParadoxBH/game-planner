@@ -1094,6 +1094,29 @@ aninhados. Decisões:
 - **Fora desta fase:** `/crafting-profits`, `/changes`, `/pending-references` e `/references`, que têm
   SQL próprio fora dos handlers, continuam com parâmetros na URL.
 
+### Fase 9 — Filtros de tela vindos do backend
+**Status: concluída.** A busca e os seletores acima de cada lista (categoria, sub-categoria, status,
+raridade, bancada, tipo de evento, "ocultar expirados") saíram do front: `GET /{recurso}/query/filters`
+descreve a barra, e o front a desenha com um componente só (`ListingFilterBar`). Decisões:
+
+- **Declarados num lugar só**, `ListingFilterService`, como as relações do `DetailsService`. Opção
+  fixa leva o QueryJson que aplica (Status, Agrupa); opção que é dado do jogo (categorias,
+  raridades, bancadas, tipos de evento) é lida a cada pedido e usa `field equal valor`.
+- **`field` no filtro**, e não só QueryJson pronto em cada opção: um valor que chega pela URL
+  (`/items/list/flor`) e não está entre as opções ainda filtra, e as opções de dados ficam leves.
+- **Validação na subida:** campo que não existe, campo sem `equal`/`not_equal` ou opção com QueryJson
+  inválido impede a aplicação de subir, com o recurso e o filtro na mensagem.
+- **O front espera o schema antes da primeira busca** (`useListing` lê o schema pelo mesmo cache da
+  barra), para o filtro da URL já valer; erro no schema aparece como erro da listagem.
+- **Filtro global de eventos ativos na raiz.** O schema diz se a listagem tem eventos (`activeEvents`,
+  deduzido do campo `event`), e o hook de listagem do front põe na raiz de toda consulta um grupo só:
+  `event is_null or event in [ativos]`. As telas não repassam mais o filtro. "Ocultar coletados" e
+  "esconder completos" saíram por enquanto.
+- **QueryJson sem ruído:** o JSON não leva mais `"group"` (vinha do `isGroup()` do record), e o front
+  desfaz grupo vazio, grupo com um filho só e grupo com o mesmo operador do pai.
+- Os rótulos dos tipos de evento conhecidos (clima, season, mapa, event) estão no serviço; tipo novo
+  aparece com o próprio código.
+
 ---
 
 ## 7. Riscos e itens em aberto

@@ -2,22 +2,22 @@ import { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { CircularProgress, Stack, Typography } from "@mui/material";
 import { ApiError } from "../../api/ApiError";
-import { MAX_PAGE_SIZE, type ListQuery, type ShopDocument } from "../../api/content";
+import { MAX_PAGE_SIZE, type ShopDocument } from "../../api/content";
 import { ReferenceIndex } from "../../api/references";
-import { useContentList } from "../../api/useContent";
-import { and, inActiveEvents, textSearch } from "../../api/query";
-import { useEventFilter } from "../../context/EventFilterContext";
+import { useListing, useListingFilters } from "../../api/useContent";
+import type { FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
 import { useViewMode } from "../../hooks/useViewMode";
 import { ListingDataView } from "../common/ListingDataView";
+import { ListingFilterBar } from "../common/ListingFilterBar";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { ApiShopCard, ApiShopIcon, ShopPicker, shopListCells, type ShopListView } from "./ApiShopRenderers";
 import { ShopsDetailsPage } from "./ShopsDetailsPage";
 
-const NO_CRITERIA = {};
+const NO_FILTERS: FilterValues = {};
 
 /** Lojas: a lista ou, com o código na URL, a loja aberta. */
 export function ShopsPage() {
@@ -28,8 +28,7 @@ export function ShopsPage() {
 /** Lista de lojas, lida da API com o NPC de cada uma já resolvido. */
 function ShopList({ gameId }: { gameId: string }) {
   const { isMobile } = usePlatform();
-  const { activeEventIds } = useEventFilter();
-  const pages = usePagination(NO_CRITERIA);
+  const pages = usePagination(NO_FILTERS);
   const [viewMode, setViewMode] = useViewMode("shops");
 
   // A API devolve no máximo 200 por página.
@@ -38,20 +37,17 @@ function ShopList({ gameId }: { gameId: string }) {
   }, [pages.info.pagination.pageSize, pages.setPageSize]);
 
   const search = useDebouncedValue(pages.info.search);
-  const { pagination } = pages.info;
+  const { criteria, pagination } = pages.info;
 
-  const query = useMemo<ListQuery>(
-    () => ({
-      where: and(textSearch(search), inActiveEvents(activeEventIds)),
-      page: pagination.page - 1,
-      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
-      sort: "name",
-      references: true,
-    }),
-    [search, pagination, activeEventIds],
-  );
-
-  const shops = useContentList<ShopDocument>(gameId, "shops", query);
+  const listing = useListingFilters(gameId, "shops");
+  const shops = useListing<ShopDocument>(gameId, "shops", {
+    search,
+    values: criteria,
+    page: pagination.page - 1,
+    size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+    sort: "name",
+    references: true,
+  });
   const view = useMemo<ShopListView>(() => ({ gameId, references: new ReferenceIndex(shops.data?.references) }), [gameId, shops.data]);
 
   useEffect(() => {
@@ -64,11 +60,18 @@ function ShopList({ gameId }: { gameId: string }) {
       label="Visite os NPCs locais para comprar suprimentos e trocar recursos."
       searchValue={pages.info.search}
       onChangeSearch={pages.setSearch}
-      search={{ placeholder: "Pesquisar lojas..." }}
+      search={{ placeholder: listing.data?.search.placeholder }}
       pages={pages}
       actionsStart={
         <Stack direction="row" spacing={1} justifyContent="space-between" flex={1} alignItems="center">
-          <ShopPicker gameId={gameId} value={null} />
+          <Stack direction="row" spacing={1} alignItems="center">
+            <ShopPicker gameId={gameId} value={null} />
+            <ListingFilterBar
+              filters={listing.data?.filters}
+              values={criteria}
+              onChange={(key, value) => pages.setCriteria({ [key]: value })}
+            />
+          </Stack>
           <ViewModeSelector mode={viewMode} onChange={setViewMode} />
         </Stack>
       }

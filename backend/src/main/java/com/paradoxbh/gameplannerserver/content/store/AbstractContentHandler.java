@@ -145,7 +145,8 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
     }
 
     /** Montado uma vez: os campos não mudam depois que o handler existe. */
-    protected QueryBuilder queryBuilder() {
+    @Override
+    public QueryBuilder queryBuilder() {
         QueryBuilder builder = queryBuilder;
         if (builder == null) {
             builder = new QueryBuilder(queryFields());

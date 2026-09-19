@@ -1,29 +1,28 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { CircularProgress, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { CircularProgress, Stack, Typography } from "@mui/material";
 import { ApiError } from "../../api/ApiError";
-import { MAX_PAGE_SIZE, type EventDocument, type ListQuery } from "../../api/content";
-import { useContentList } from "../../api/useContent";
-import { and, rule, textSearch } from "../../api/query";
+import { MAX_PAGE_SIZE, type EventDocument } from "../../api/content";
+import { useListing, useListingFilters } from "../../api/useContent";
+import type { FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
 import { ListingDataView } from "../common/ListingDataView";
+import { ListingFilterBar } from "../common/ListingFilterBar";
 import { StyledContainer } from "../common/StyledContainer";
-import { ApiEventCard, EVENT_TYPES } from "./ApiEventRenderers";
+import { ApiEventCard } from "./ApiEventRenderers";
 
-interface EventCriteria {
-  type: string | null;
-}
+const NO_FILTERS: FilterValues = {};
 
-const INITIAL_CRITERIA: EventCriteria = { type: null };
-const ALL = "all";
-
-/** Lista de eventos, lida da API, com abas por tipo e os mais recentes primeiro. */
+/**
+ * Lista de eventos, lida da API, os mais recentes primeiro. A busca e as abas por tipo vêm do backend
+ * (GET /events/query/filters), com os tipos que o jogo usa.
+ */
 export function EventsPage() {
   const { gameId = "" } = useParams<{ gameId: string }>();
   const { isMobile } = usePlatform();
-  const pages = usePagination(INITIAL_CRITERIA);
+  const pages = usePagination(NO_FILTERS);
 
   // A API devolve no máximo 200 por página.
   useEffect(() => {
@@ -33,17 +32,14 @@ export function EventsPage() {
   const search = useDebouncedValue(pages.info.search);
   const { criteria, pagination } = pages.info;
 
-  const query = useMemo<ListQuery>(
-    () => ({
-      where: and(textSearch(search), criteria.type && rule("type", "equal", criteria.type)),
-      page: pagination.page - 1,
-      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
-      sort: "-periodStart",
-    }),
-    [search, pagination, criteria.type],
-  );
-
-  const events = useContentList<EventDocument>(gameId, "events", query);
+  const listing = useListingFilters(gameId, "events");
+  const events = useListing<EventDocument>(gameId, "events", {
+    search,
+    values: criteria,
+    page: pagination.page - 1,
+    size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+    sort: "-periodStart",
+  });
 
   useEffect(() => {
     if (events.data) pages.setTotalItems(events.data.total);
@@ -55,20 +51,14 @@ export function EventsPage() {
       label={isMobile ? undefined : "Central de eventos climáticos, temporadas e atividades especiais."}
       searchValue={pages.info.search}
       onChangeSearch={pages.setSearch}
-      search={{ placeholder: "Pesquisar eventos..." }}
+      search={{ placeholder: listing.data?.search.placeholder }}
       pages={pages}
       actionsStart={
-        <Tabs
-          value={criteria.type ?? ALL}
-          onChange={(_, value: string) => pages.setCriteria({ type: value === ALL ? null : value })}
-          variant="scrollable"
-          scrollButtons="auto"
-        >
-          <Tab value={ALL} label="Todos" />
-          {Object.entries(EVENT_TYPES).map(([type, info]) => (
-            <Tab key={type} value={type} label={info.label} />
-          ))}
-        </Tabs>
+        <ListingFilterBar
+          filters={listing.data?.filters}
+          values={criteria}
+          onChange={(key, value) => pages.setCriteria({ [key]: value })}
+        />
       }
     >
       {events.isPending ? (

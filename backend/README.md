@@ -162,6 +162,7 @@ Itens, entidades, categorias e eventos usam as mesmas rotas e as mesmas regras.
 |---|---|---|
 | POST | `/api/v1/games/{jogo}/{recurso}/query?page=&size=&sort=&references=`, corpo = QueryJson | quem lê o jogo |
 | GET | `/api/v1/games/{jogo}/{recurso}/query/fields` | quem lê o jogo |
+| GET | `/api/v1/games/{jogo}/{recurso}/query/filters` | quem lê o jogo |
 | GET | `/api/v1/games/{jogo}/{recurso}/{extId}` | quem lê o jogo |
 | POST | `/api/v1/games/{jogo}/{recurso}` | quem edita o jogo |
 | PUT | `/api/v1/games/{jogo}/{recurso}/{extId}` | quem edita o jogo |
@@ -245,6 +246,27 @@ Todo recurso tem `name`, `extId`, `createdAt`, `updatedAt`, `createdBy` e `updat
 `rarity`, `category`, `event` e `attribute` (tem o atributo). Campo de lista é "tem": `equal` é ter o
 valor, `in` ter algum, `not_in` não ter nenhum deles, `is_null` não ter nenhum; "todas as categorias" é
 um `and` de `equal`. Ver `doc/backend_plan.md`, seção 5, para tipos e operadores.
+
+**Filtros de tela.** `GET .../query/filters` descreve a barra acima da lista: a busca (`placeholder` e
+os campos em que o texto é procurado) e os seletores, na ordem de exibição. Cada seletor tem `key`,
+`label`, `display` (`select`, `multi` com conter/não conter, `tabs` ou `switch`), `options` e, quando
+se aplica, `field`, `allLabel`, `defaultValue` e `icon`. Opção com `query` aplica esse QueryJson; sem
+ela, vale `field equal valor` (e `not_equal` para "não conter"). O front desenha o que vier e monta o
+QueryJson da seleção, então filtro ou opção nova se declara só em `ListingFilterService`. Opções que
+são dados do jogo (categorias, raridades, bancadas, tipos de evento) são lidas a cada pedido:
+cadastrar uma categoria já a põe no filtro. Na subida, cada filtro é conferido contra os campos do
+tipo, e filtro inválido impede a aplicação de subir. `activeEvents` diz se a listagem tem eventos: com
+ele, o front põe na raiz de toda consulta o grupo do filtro global de eventos ativos,
+`event is_null or event in [ativos]`.
+
+| Recurso | Filtros de tela |
+|---|---|
+| `items` | Categoria (`select`), Sub-categoria (`multi`), Status (compráveis, vendíveis, comercializados, não comercializados), Raridade |
+| `entities` | Categoria, Sub-categoria, Raridade |
+| `categories` | Agrupa (itens, entidades) |
+| `recipes` | Bancada, com a contagem de receitas |
+| `events` | Tipo (`tabs`), com os tipos que o jogo usa |
+| `codes` | Ocultar expirados (`switch`, ligado por padrão) |
 
 **Paginação** começa em `page=0`. `sort` aceita as chaves de `query/fields` (`name`, `extId`,
 `createdAt`, `updatedAt`, mais `level` em item e entidade, `periodStart` em evento...), com `-` na

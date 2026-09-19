@@ -160,6 +160,14 @@ class QueryBuilderTest {
                 .contains("\"type\":\"code\"", "\"kind\":\"rarity\"").doesNotContain("options");
     }
 
+    @Test
+    void writesOnlyTheShapeOfTheQueryJson() {
+        assertThat(JsonMapper.builder().build().writeValueAsString(and(rule("level", "equal", 1))))
+                .isEqualTo("{\"type\":\"group\",\"operator\":\"and\",\"rules\":["
+                        + "{\"type\":\"rule\",\"operator\":\"equal\",\"field\":\"level\",\"value\":1}],"
+                        + "\"groups\":[]}");
+    }
+
     private void assertBadRequest(QueryJson query, String message) {
         assertThatThrownBy(() -> BUILDER.where(query, new HashMap<>()))
                 .isInstanceOf(ApiException.class)

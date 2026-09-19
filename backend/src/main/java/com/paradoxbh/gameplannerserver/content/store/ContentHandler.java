@@ -6,6 +6,7 @@ import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.model.ContentDocument;
 import com.paradoxbh.gameplannerserver.content.model.ContentPage;
 import com.paradoxbh.gameplannerserver.content.model.ContentQuery;
+import com.paradoxbh.gameplannerserver.query.QueryBuilder;
 import com.paradoxbh.gameplannerserver.query.QuerySchema;
 
 /**
@@ -26,6 +27,9 @@ public interface ContentHandler<D extends ContentDocument<D>> {
 
     /** Campos que o filtro da listagem aceita e chaves de ordenação. */
     QuerySchema querySchema();
+
+    /** O QueryBuilder da listagem, para validar um QueryJson sem consultar. */
+    QueryBuilder queryBuilder();
 
     /** Etiquetas que o documento carrega; tipos sem categoria ou atributo devolvem listas vazias. */
     ContentTags tagsOf(D document);

@@ -1,57 +1,35 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { CircularProgress, FormControlLabel, Stack, Switch, Typography } from "@mui/material";
-import { FilterList } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
-import {
-  MAX_PAGE_SIZE,
-  type CategoryDocument,
-  type EntityDocument,
-  type ListQuery,
-  type ShopDocument,
-} from "../../api/content";
-import { currentMedia, mediaUrl } from "../../api/references";
-import { useContentList, useRarities } from "../../api/useContent";
-import { and, inActiveEvents, rule, textSearch } from "../../api/query";
-import { useEventFilter } from "../../context/EventFilterContext";
+import { MAX_PAGE_SIZE, type CategoryDocument, type EntityDocument, type ShopDocument } from "../../api/content";
+import { useContentList, useListing, useListingFilters, useRarities } from "../../api/useContent";
+import type { FilterValue, FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
 import { useViewMode } from "../../hooks/useViewMode";
-import type { EntityCriteria } from "../../types/filterTypes";
+import { categoryUrlFilters } from "../../utils/urlFilters";
 import { ListingDataView } from "../common/ListingDataView";
-import { PickSelector } from "../common/PickSelector";
+import { ListingFilterBar } from "../common/ListingFilterBar";
 import { StyledContainer } from "../common/StyledContainer";
-import { TriplePickSelector, type TripleState } from "../common/TriplePickSelector";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { ApiEntityCard, ApiEntityIcon, entityListCells, entityRarityColor, type EntityListView } from "./ApiEntityRenderers";
 
-function categoryOption(category: CategoryDocument) {
-  const iconId = currentMedia(category.media, "icon");
-  return { value: category.extId, label: category.name, icon: iconId ? mediaUrl(iconId) : undefined };
-}
-
-/** Lista de entidades, lida da API. */
+/** Lista de entidades, lida da API. A busca e os filtros acima da lista vêm do backend (GET /entities/query/filters). */
 export function EntityPage() {
   const { gameId = "", category: urlCategory } = useParams<{ gameId: string; category?: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const subCategoryParam = searchParams.get("subCategory");
   const { isMobile } = usePlatform();
-  const { activeEventIds } = useEventFilter();
 
-  const pages = usePagination<EntityCriteria>({
-    primaryCategory: urlCategory || "all",
-    subCategoryStates: subCategoryParam ? { [subCategoryParam]: "include" } : {},
-  });
+  const pages = usePagination<FilterValues>(categoryUrlFilters(urlCategory, subCategoryParam));
   const [viewMode, setViewMode] = useViewMode("entities");
   const [showPrices, setShowPrices] = useState(false);
 
   useEffect(() => {
-    pages.setCriteria({
-      primaryCategory: urlCategory || "all",
-      subCategoryStates: subCategoryParam ? { [subCategoryParam]: "include" } : {},
-    });
+    pages.setCriteria(categoryUrlFilters(urlCategory, subCategoryParam));
   }, [urlCategory, subCategoryParam]);
 
   // A API devolve no máximo 200 por página.
@@ -62,25 +40,13 @@ export function EntityPage() {
   const search = useDebouncedValue(pages.info.search);
   const { criteria, pagination } = pages.info;
 
-  const query = useMemo<ListQuery>(() => {
-    const states = Object.entries(criteria.subCategoryStates ?? {});
-    const included = states.filter(([, state]) => state === "include").map(([id]) => id);
-    const excluded = states.filter(([, state]) => state === "exclude").map(([id]) => id);
-    const primary = criteria.primaryCategory && criteria.primaryCategory !== "all" ? [criteria.primaryCategory] : [];
-    return {
-      where: and(
-        textSearch(search),
-        ...[...primary, ...included].map((category) => rule("category", "equal", category)),
-        excluded.length > 0 && rule("category", "not_in", excluded),
-        criteria.rarity && rule("rarity", "equal", criteria.rarity),
-        inActiveEvents(activeEventIds),
-      ),
-      page: pagination.page - 1,
-      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
-    };
-  }, [search, criteria, pagination, activeEventIds]);
-
-  const entities = useContentList<EntityDocument>(gameId, "entities", query);
+  const listing = useListingFilters(gameId, "entities");
+  const entities = useListing<EntityDocument>(gameId, "entities", {
+    search,
+    values: criteria,
+    page: pagination.page - 1,
+    size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+  });
   const categories = useContentList<CategoryDocument>(gameId, "categories", { size: MAX_PAGE_SIZE, sort: "name" });
   const shops = useContentList<ShopDocument>(gameId, "shops", { size: MAX_PAGE_SIZE });
   const rarities = useRarities(gameId);
@@ -107,10 +73,11 @@ export function EntityPage() {
 
   const currentCategoryName =
     urlCategory && urlCategory !== "all" ? view.categories.get(urlCategory)?.name ?? urlCategory : "Entidades";
-  const sortedRarities = [...(rarities.data ?? [])].sort((a, b) => a.ordinal - b.ordinal);
 
-  const handleSubCategoryStateChange = (option: string, state: TripleState) => {
-    pages.setCriteria({ subCategoryStates: { ...criteria.subCategoryStates, [option]: state } });
+  // A categoria fica na URL, para o link ser compartilhável; o resto, no estado da página.
+  const changeFilter = (key: string, value: FilterValue) => {
+    if (key === "category") navigate(`/game/${gameId}/entity/list/${value || "all"}`);
+    else pages.setCriteria({ [key]: value });
   };
 
   return (
@@ -119,39 +86,9 @@ export function EntityPage() {
       label="Explore e descubra todas as entidades do jogo."
       searchValue={pages.info.search}
       onChangeSearch={pages.setSearch}
-      search={{ placeholder: "Pesquisar entidades..." }}
+      search={{ placeholder: listing.data?.search.placeholder }}
       pages={pages}
-      actionsStart={
-        <>
-          <PickSelector
-            label="Categoria"
-            value={urlCategory && urlCategory !== "all" ? urlCategory : null}
-            options={entityCategories.map(categoryOption)}
-            onChange={(category) => navigate(`/game/${gameId}/entity/list/${category || "all"}`)}
-            icon={<FilterList sx={{ fontSize: 18 }} />}
-            fullWidth={isMobile}
-          />
-          {entityCategories.length > 1 && (
-            <TriplePickSelector
-              label="Sub-categoria"
-              states={criteria.subCategoryStates || {}}
-              options={entityCategories.filter((category) => category.extId !== urlCategory).map(categoryOption)}
-              onChange={handleSubCategoryStateChange}
-              fullWidth={isMobile}
-            />
-          )}
-          {sortedRarities.length > 0 && (
-            <PickSelector
-              label="Raridade"
-              value={criteria.rarity || null}
-              options={sortedRarities.map((rarity) => ({ value: rarity.code, label: rarity.name }))}
-              onChange={(rarity) => pages.setCriteria({ rarity })}
-              icon={<FilterList sx={{ fontSize: 18 }} />}
-              fullWidth={isMobile}
-            />
-          )}
-        </>
-      }
+      actionsStart={<ListingFilterBar filters={listing.data?.filters} values={criteria} onChange={changeFilter} />}
       actionsEnd={
         <Stack flex={1} direction="row" justifyContent={isMobile ? "space-between" : "end"} alignItems="center">
           <FormControlLabel

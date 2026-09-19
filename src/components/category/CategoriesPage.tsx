@@ -1,13 +1,11 @@
-import { useEffect, useMemo, type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Card, CircularProgress, Stack, Tooltip, Typography } from "@mui/material";
-import { FilterList } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
-import { MAX_PAGE_SIZE, type CategoryDocument, type ListQuery } from "../../api/content";
+import { MAX_PAGE_SIZE, type CategoryDocument } from "../../api/content";
 import { contentRoute, currentMedia } from "../../api/references";
-import { useContentList } from "../../api/useContent";
-import { and, inActiveEvents, rule, textSearch } from "../../api/query";
-import { useEventFilter } from "../../context/EventFilterContext";
+import { useListing, useListingFilters } from "../../api/useContent";
+import type { FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
@@ -15,7 +13,7 @@ import { useViewMode } from "../../hooks/useViewMode";
 import { ContentIcon } from "../common/ContentIcon";
 import { DataChip } from "../common/DataChip";
 import { ListingDataView } from "../common/ListingDataView";
-import { PickSelector } from "../common/PickSelector";
+import { ListingFilterBar } from "../common/ListingFilterBar";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 
@@ -25,11 +23,7 @@ export const APPLIES_TO_LABELS: Record<CategoryDocument["appliesTo"], string> = 
   both: "Itens e entidades",
 };
 
-interface CategoryCriteria {
-  appliesTo: string | null;
-}
-
-const INITIAL_CRITERIA: CategoryCriteria = { appliesTo: null };
+const NO_FILTERS: FilterValues = {};
 
 function categoryRoute(gameId: string, category: CategoryDocument): string {
   return contentRoute(gameId, "category", category.extId)!;
@@ -109,8 +103,7 @@ function CategoryIconItem({ category, gameId }: { category: CategoryDocument; ga
 export function CategoriesPage() {
   const { gameId = "" } = useParams<{ gameId: string }>();
   const { isMobile } = usePlatform();
-  const { activeEventIds } = useEventFilter();
-  const pages = usePagination(INITIAL_CRITERIA);
+  const pages = usePagination(NO_FILTERS);
   const [viewMode, setViewMode] = useViewMode("categories");
 
   // A API devolve no máximo 200 por página.
@@ -121,23 +114,14 @@ export function CategoriesPage() {
   const search = useDebouncedValue(pages.info.search);
   const { criteria, pagination } = pages.info;
 
-  const query = useMemo<ListQuery>(
-    () => ({
-      where: and(
-        textSearch(search),
-        // Categoria "both" vale para item e para entidade.
-        criteria.appliesTo &&
-          rule("appliesTo", "in", criteria.appliesTo === "both" ? ["both"] : [criteria.appliesTo, "both"]),
-        inActiveEvents(activeEventIds),
-      ),
-      page: pagination.page - 1,
-      size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
-      sort: "name",
-    }),
-    [search, pagination, criteria.appliesTo, activeEventIds],
-  );
-
-  const categories = useContentList<CategoryDocument>(gameId, "categories", query);
+  const listing = useListingFilters(gameId, "categories");
+  const categories = useListing<CategoryDocument>(gameId, "categories", {
+    search,
+    values: criteria,
+    page: pagination.page - 1,
+    size: Math.min(pagination.pageSize, MAX_PAGE_SIZE),
+    sort: "name",
+  });
 
   useEffect(() => {
     if (categories.data) pages.setTotalItems(categories.data.total);
@@ -149,22 +133,17 @@ export function CategoriesPage() {
       label="Navegue por todo o conteúdo organizado por tipos de itens e entidades."
       searchValue={pages.info.search}
       onChangeSearch={pages.setSearch}
-      search={{ placeholder: "Pesquisar categorias..." }}
+      search={{ placeholder: listing.data?.search.placeholder }}
       pages={pages}
       actionsStart={
         <Stack direction="row" spacing={1} justifyContent="space-between" flex={1} alignItems="center">
-          <PickSelector
-            label="Agrupa"
-            value={criteria.appliesTo}
-            options={[
-              { value: "item", label: "Itens" },
-              { value: "entity", label: "Entidades" },
-            ]}
-            onChange={(appliesTo) => pages.setCriteria({ appliesTo })}
-            allLabel="Tudo"
-            icon={<FilterList sx={{ fontSize: 18 }} />}
-            fullWidth={isMobile}
-          />
+          <Stack direction="row" spacing={1} alignItems="center">
+            <ListingFilterBar
+              filters={listing.data?.filters}
+              values={criteria}
+              onChange={(key, value) => pages.setCriteria({ [key]: value })}
+            />
+          </Stack>
           <ViewModeSelector mode={viewMode} onChange={setViewMode} />
         </Stack>
       }

@@ -174,6 +174,9 @@ Content-Type: application/json
 ### Campos que o filtro de itens aceita: nome, tipo, operadores, opções e chaves de ordenação
 GET {{api}}/games/heartopia/items/query/fields
 
+### Barra da tela de itens: busca e filtros (categoria, sub-categoria, status, raridade) com as opções do jogo
+GET {{api}}/games/heartopia/items/query/filters
+
 ### Filtro com grupos: (nível acima de 10, ou flor rara ou épica) e (sem evento, ou do natal)
 POST {{api}}/games/heartopia/items/query?sort=name
 Content-Type: application/json
