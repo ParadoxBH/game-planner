@@ -49,6 +49,7 @@ import { useContentDocument, useContentList, useGame, useListing, useMapMarkers 
 import { and, rule } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
 import { useStoredState } from "../../hooks/useCollectedMembers";
+import { useGameAdmin } from "../../hooks/useGameAdmin";
 import { usePlatform } from "../../hooks/usePlatform";
 import { getPublicUrl } from "../../utils/pathUtils";
 import { getDailyResetTimes, getWeeklyResetTimes } from "../../utils/timeUtils";
@@ -57,6 +58,7 @@ import { BoundBoxEditorPanel, type Bounds as BoundBoxBounds } from "./BoundBoxEd
 import { InfoDrawer } from "./InfoDrawer";
 import { MapDashboard } from "./MapDashboard";
 import { computeFilterStats, locationTypeOf, MapFilterDrawer, occupantCategory, SPAWN_TYPE } from "./MapFilterDrawer";
+import { MapFormDialog } from "./MapFormDialog";
 import { MapInfoOverlay } from "./MapInfoOverlay";
 import { MapSpawnPopup } from "./MapSpawnPopup";
 import { MapToolbox } from "./MapToolbox";
@@ -246,6 +248,8 @@ export const MapView = () => {
   const [activeTool, setActiveTool] = useState<"point" | "polygon" | null>(null);
   const [currentPoints, setCurrentPoints] = useState<[number, number][]>([]);
   const [isBoundBoxEditorOpen, setIsBoundBoxEditorOpen] = useState(false);
+  const { isAdmin } = useGameAdmin(gameId);
+  const [isEditingMap, setIsEditingMap] = useState(false);
   const [previewBounds, setPreviewBounds] = useState<BoundBoxBounds | null>(null);
   const [drafts, setDrafts] = useStoredState<MapDraft[]>(`map_drafts_${gameId}`, []);
   const [draftConfig, setDraftConfig] = useState<DraftConfig>({ type: SPAWN_TYPE, target: null, name: "" });
@@ -831,9 +835,19 @@ export const MapView = () => {
               onTogglePanel={() => setIsMarkerPanelOpen(!isMarkerPanelOpen)}
               isBoundBoxEditorOpen={isBoundBoxEditorOpen}
               onToggleBoundBoxEditor={() => setIsBoundBoxEditorOpen((open) => !open)}
+              onEditMap={isAdmin ? () => setIsEditingMap(true) : undefined}
             />
           </Box>
         </Box>
+      )}
+
+      {isEditingMap && selectedMap && (
+        <MapFormDialog
+          gameId={gameId}
+          map={selectedMap}
+          onClose={() => setIsEditingMap(false)}
+          onDeleted={() => navigate(`/game/${gameId}/map`)}
+        />
       )}
 
       <PointMarkerPanel

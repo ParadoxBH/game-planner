@@ -6,6 +6,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import PlaceIcon from "@mui/icons-material/Place";
 import ListIcon from "@mui/icons-material/List";
 import CropIcon from "@mui/icons-material/Crop";
+import EditIcon from "@mui/icons-material/Edit";
 import { usePlatform } from "../../hooks/usePlatform";
 
 interface MapToolboxProps {
@@ -20,6 +21,8 @@ interface MapToolboxProps {
   onTogglePanel?: () => void;
   isBoundBoxEditorOpen?: boolean;
   onToggleBoundBoxEditor?: () => void;
+  /** Abre a edição do mapa. Sem ele (quem não administra o jogo), o botão não aparece. */
+  onEditMap?: () => void;
 }
 
 export const MapToolbox = ({
@@ -34,6 +37,7 @@ export const MapToolbox = ({
   onTogglePanel,
   isBoundBoxEditorOpen = false,
   onToggleBoundBoxEditor,
+  onEditMap,
 }: MapToolboxProps) => {
 
   const { isMobile } = usePlatform();
@@ -138,6 +142,13 @@ export const MapToolbox = ({
                 <CropIcon />
               </IconButton>
             </Tooltip>
+            {onEditMap && (
+              <Tooltip title="Editar mapa" placement="left">
+                <IconButton onClick={onEditMap} size="medium">
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            )}
           </>
         )}
       </Stack>

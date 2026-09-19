@@ -128,7 +128,6 @@ export function useNavigation(gameId: string | null) {
               options: [
                 { label: "Categorias", path: `${base}/categories`, icon: <Category fontSize="small" /> },
                 { label: "Raridades", path: `${base}/rarities`, icon: <Diamond fontSize="small" /> },
-                { label: "Mapas", path: `${base}/manage/maps`, icon: <MapIcon fontSize="small" /> },
               ],
             },
           ]
@@ -158,7 +157,8 @@ export function useNavigation(gameId: string | null) {
       events: "event",
       codes: "redemption_code",
     };
-    return all.filter((item) => !kindOf[item.id] || count(kindOf[item.id]) > 0);
+    // O mapa aparece para admin mesmo sem nenhum: é na seleção de mapas que se cria o primeiro.
+    return all.filter((item) => !kindOf[item.id] || count(kindOf[item.id]) > 0 || (item.id === "map" && isAdmin));
   }, [gameId, theme, counts.data, itemFilters.data, entityFilters.data, shops.data, stations.data, isAdmin]);
 
   return { menuItems };

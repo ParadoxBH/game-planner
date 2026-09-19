@@ -13,6 +13,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { Delete } from "@mui/icons-material";
 import { MAX_PAGE_SIZE, type CategoryDocument, type EventDocument, type MapDocument } from "../../api/content";
 import { currentMedia } from "../../api/references";
 import { useContentList } from "../../api/useContent";
@@ -20,6 +21,7 @@ import { CodesField, type CodeOption } from "../common/CodesField";
 import { numberOf, slugOf, useContentSave } from "../common/contentForm";
 import { IconUploadField } from "../common/IconUploadField";
 import { StyledDialog } from "../common/StyledDialog";
+import { DeleteMapDialog } from "./DeleteMapDialog";
 import { MAP_TYPE_LABELS } from "./mapGeometry";
 
 /** Visões que a tela do mapa sabe mostrar. */
@@ -161,6 +163,8 @@ interface MapFormDialogProps {
   /** O mapa a editar; null, criando. Montado só enquanto aberto, então o formulário nasce dele. */
   map: MapDocument | null;
   onClose: () => void;
+  /** Depois de apagar o mapa pela edição. Padrão: onClose. */
+  onDeleted?: () => void;
 }
 
 /**
@@ -168,11 +172,12 @@ interface MapFormDialogProps {
  * salvar: a miniatura (uso "thumbnail", 1920 px no máximo) e, em mapa de imagem única, o fundo (uso "map",
  * enviado com a variante large, de até 8192 px). Um endereço em imageUrl tem precedência sobre o fundo enviado.
  */
-export function MapFormDialog({ gameId, map, onClose }: MapFormDialogProps) {
+export function MapFormDialog({ gameId, map, onClose, onDeleted = onClose }: MapFormDialogProps) {
   const [form, setForm] = useState<MapForm>(() => formOf(map));
   const [extIdTouched, setExtIdTouched] = useState(false);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [background, setBackground] = useState<File | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const { save, saving, error, creating } = useContentSave(gameId, "maps", map === null);
 
   const categories = useContentList<CategoryDocument>(gameId, "categories", { size: MAX_PAGE_SIZE, sort: "name" });
@@ -295,6 +300,17 @@ export function MapFormDialog({ gameId, map, onClose }: MapFormDialogProps) {
       maxWidth="md"
       actions={
         <>
+          {map && (
+            <Button
+              color="error"
+              startIcon={<Delete />}
+              onClick={() => setDeleting(true)}
+              disabled={saving}
+              sx={{ textTransform: "none", mr: "auto" }}
+            >
+              Apagar mapa
+            </Button>
+          )}
           <Button onClick={onClose} disabled={saving} sx={{ textTransform: "none" }}>
             Cancelar
           </Button>
@@ -597,6 +613,9 @@ export function MapFormDialog({ gameId, map, onClose }: MapFormDialogProps) {
 
         {error && <Alert severity="error">{error}</Alert>}
       </Stack>
+      {map && deleting && (
+        <DeleteMapDialog gameId={gameId} map={map} onClose={() => setDeleting(false)} onDeleted={onDeleted} />
+      )}
     </StyledDialog>
   );
 }
