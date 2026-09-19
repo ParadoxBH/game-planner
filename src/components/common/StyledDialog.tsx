@@ -48,9 +48,10 @@ export function StyledDialog({
         sx: {
           backgroundColor: theme.designTokens.colors.glassBg,
           backdropFilter: 'blur(10px)',
-          border: '1px solid',
+          // Em tela cheia, a janela encosta nas bordas: sem canto arredondado nem borda.
+          border: props.fullScreen ? 'none' : '1px solid',
           borderColor: theme.designTokens.colors.glassBorder,
-          borderRadius: 2,
+          borderRadius: props.fullScreen ? 0 : 2,
           boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
         }
       }}
