@@ -717,6 +717,16 @@ export const gameApi = {
     return apiRequest<Rarity[]>(`${gamePath(gameId)}/rarities`, { signal });
   },
 
+  /** Cria ou substitui a raridade pelo código. Cor em hexadecimal (#RRGGBB ou #RRGGBBAA). */
+  putRarity(gameId: string, rarity: Rarity) {
+    const { code, ...body } = rarity;
+    return apiRequest<Rarity>(`${gamePath(gameId)}/rarities/${encodeURIComponent(code)}`, { method: "PUT", body });
+  },
+
+  deleteRarity(gameId: string, code: string) {
+    return apiRequest<void>(`${gamePath(gameId)}/rarities/${encodeURIComponent(code)}`, { method: "DELETE" });
+  },
+
   attributes(gameId: string, signal?: AbortSignal) {
     return apiRequest<AttributeDefinition[]>(`${gamePath(gameId)}/attributes`, { signal });
   },

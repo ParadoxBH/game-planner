@@ -24,6 +24,7 @@ import { ConjuntosPage } from "./components/item/ConjuntosPage";
 import { ConjuntosDetain } from "./components/item/ConjuntosDetain";
 import { CategoriesPage } from "./components/category/CategoriesPage";
 import { CategoryDetailsPage } from "./components/category/CategoryDetailsPage";
+import { RaritiesPage } from "./components/rarity/RaritiesPage";
 import { MetadataDetailsPage } from "./components/item/MetadataDetailsPage";
 import { LoginPage } from "./components/auth/LoginPage";
 import { ToolsPage } from "./components/tools/ToolsPage";
@@ -118,6 +119,7 @@ export function RoutesPage() {
           <Route path="events/view/:eventId" element={<EventDetailsPage />} />
           <Route path="categories" element={<CategoriesPage />} />
           <Route path="categories/view/:categoryId" element={<CategoryDetailsPage />} />
+          <Route path="rarities" element={<RaritiesPage />} />
           <Route path="metadado/view/:type" element={<MetadataDetailsPage />} />
           <Route path="codes" element={<CodesPage />} />
           <Route path="calculator">

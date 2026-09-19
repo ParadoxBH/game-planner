@@ -10,6 +10,8 @@ import {
   Calculate,
   AutoAwesomeMosaic,
   Category,
+  Diamond,
+  Settings,
 } from "@mui/icons-material";
 import { useTheme } from "@mui/material";
 import { MAX_PAGE_SIZE, type ShopDocument } from "../api/content";
@@ -32,6 +34,8 @@ export interface NavigationItem {
   color: string;
   isDropdown?: boolean;
   options?: NavigationOption[];
+  /** No dropdown, a entrada "Todas" que leva a `path`. Padrão true. */
+  showAll?: boolean;
 }
 
 function optionIcon(mediaId: string | null | undefined, label: string): React.ReactNode {
@@ -110,9 +114,23 @@ export function useNavigation(gameId: string | null) {
       },
       { id: "events", label: "Eventos", icon: <Event />, path: `${base}/events`, color: "#e91e63" },
       { id: "codes", label: "Códigos", icon: <Redeem />, path: `${base}/codes`, color: "#795548" },
-      // Painel de administração: só aparece para quem administra o jogo.
+      // Telas de administração: só aparecem para quem administra o jogo.
       ...(isAdmin
-        ? [{ id: "categories", label: "Categorias", icon: <Category />, path: `${base}/categories`, color: "#607d8b" }]
+        ? [
+            {
+              id: "manage",
+              label: "Gerenciar",
+              icon: <Settings />,
+              path: `${base}/categories`,
+              color: "#607d8b",
+              isDropdown: true,
+              showAll: false,
+              options: [
+                { label: "Categorias", path: `${base}/categories`, icon: <Category fontSize="small" /> },
+                { label: "Raridades", path: `${base}/rarities`, icon: <Diamond fontSize="small" /> },
+              ],
+            },
+          ]
         : []),
       {
         id: "calculator",

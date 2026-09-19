@@ -16,6 +16,8 @@ interface HeaderNavDropdownProps {
   label: string;
   icon: React.ReactNode;
   rootPath: string;
+  /** A entrada "Todas", que leva a rootPath. Padrão true. */
+  showAll?: boolean;
   options: {
     label: string;
     path: string;
@@ -27,6 +29,7 @@ export function HeaderNavDropdown({
   label,
   icon,
   rootPath,
+  showAll = true,
   options
 }: HeaderNavDropdownProps) {
   const theme = useTheme();
@@ -42,7 +45,8 @@ export function HeaderNavDropdown({
     setAnchorEl(null);
   };
 
-  const isActive = location.pathname.startsWith(rootPath);
+  const isActive =
+    location.pathname.startsWith(rootPath) || options.some((option) => location.pathname.startsWith(option.path));
 
   return (
     <Box
@@ -138,14 +142,16 @@ export function HeaderNavDropdown({
           }
         }}
       >
-        <MenuItem 
-          component={Link}
-          to={rootPath}
-          onClick={handleClose}
-          selected={location.pathname === rootPath}
-        >
-          Todas
-        </MenuItem>
+        {showAll && (
+          <MenuItem 
+            component={Link}
+            to={rootPath}
+            onClick={handleClose}
+            selected={location.pathname === rootPath}
+          >
+            Todas
+          </MenuItem>
+        )}
         {options.map((option) => (
           <MenuItem 
             key={option.path}

@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Alert, Box, Button, Card, CircularProgress, IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import { Add, Delete, Edit, Visibility } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
@@ -8,10 +8,10 @@ import { contentRoute, currentMedia } from "../../api/references";
 import { useContentWrites, useListing, useListingFilters } from "../../api/useContent";
 import type { FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
-import { useGameAdmin } from "../../hooks/useGameAdmin";
 import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
 import { useViewMode } from "../../hooks/useViewMode";
+import { AdminGate } from "../common/AdminGate";
 import { ContentIcon } from "../common/ContentIcon";
 import { DataChip } from "../common/DataChip";
 import { ListingDataView } from "../common/ListingDataView";
@@ -212,35 +212,11 @@ function DeleteCategoryDialog({ gameId, category, onClose }: { gameId: string; c
  */
 export function CategoriesPage() {
   const { gameId = "" } = useParams<{ gameId: string }>();
-  const admin = useGameAdmin(gameId);
-
-  if (admin.isPending) {
-    return (
-      <StyledContainer title="Categorias">
-        <Stack alignItems="center" sx={{ py: 10 }}>
-          <CircularProgress color="primary" />
-        </Stack>
-      </StyledContainer>
-    );
-  }
-  if (!admin.isAdmin) {
-    return (
-      <StyledContainer title="Categorias">
-        <Alert
-          severity="info"
-          action={
-            <Button component={Link} to="/login" state={{ from: `/game/${gameId}/categories` }} color="inherit" sx={{ textTransform: "none" }}>
-              Entrar
-            </Button>
-          }
-        >
-          O painel de categorias é restrito a administradores do jogo. Entre com uma conta de moderador, owner ou
-          administrador da plataforma.
-        </Alert>
-      </StyledContainer>
-    );
-  }
-  return <CategoriesPanel gameId={gameId} />;
+  return (
+    <AdminGate gameId={gameId} title="Categorias" from={`/game/${gameId}/categories`}>
+      <CategoriesPanel gameId={gameId} />
+    </AdminGate>
+  );
 }
 
 function CategoriesPanel({ gameId }: { gameId: string }) {

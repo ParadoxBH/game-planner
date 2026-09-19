@@ -7,9 +7,9 @@ import {
   useQueryClient,
   type UseQueryResult,
 } from "@tanstack/react-query";
-import { contentApi, gameApi, type ContentResource, type ListQuery, type MediaUsage, type ProfitQuery } from "./content";
+import { contentApi, gameApi, type ContentResource, type ListQuery, type MediaUsage, type ProfitQuery, type Rarity } from "./content";
 import { useEventFilter } from "../context/EventFilterContext";
-import { and, inActiveEvents, listingWhere, type FilterValues, type QueryGroup } from "./query";
+import { and, inActiveEvents, listingWhere, rule, type FilterValues, type QueryGroup } from "./query";
 
 /** Dados que mudam pouco (raridades, definições de atributo, bancadas) não são relidos a cada tela. */
 const RARELY_CHANGES = 5 * 60_000;
@@ -269,5 +269,36 @@ export function useContentWrites(gameId: string, resource: ContentResource) {
         contentApi.addMedia(gameId, resource, extId, { usage, mediaId }),
       onSuccess: refresh,
     }),
+  };
+}
+
+/**
+ * Escrita de raridades: salvar (cria ou substitui) e apagar. Depois, relê tudo o que é do jogo — a raridade
+ * dá nome e cor a itens e entidades em todas as telas.
+ */
+export function useRarityWrites(gameId: string) {
+  const client = useQueryClient();
+  const refresh = () => client.invalidateQueries({ predicate: (query) => query.queryKey[1] === gameId });
+  return {
+    put: useMutation({
+      mutationFn: (rarity: Rarity) => gameApi.putRarity(gameId, rarity),
+      onSuccess: refresh,
+    }),
+    remove: useMutation({
+      mutationFn: (code: string) => gameApi.deleteRarity(gameId, code),
+      onSuccess: refresh,
+    }),
+  };
+}
+
+/** Quantos itens e quantas entidades usam a raridade: a página de uma listagem de tamanho 1, só pelo total. */
+export function useRarityUsage(gameId: string, code: string | undefined) {
+  const where = code ? and(rule("rarity", "equal", code)) : undefined;
+  const items = useContentList(gameId, "items", { where, size: 1 }, { enabled: Boolean(code) });
+  const entities = useContentList(gameId, "entities", { where, size: 1 }, { enabled: Boolean(code) });
+  return {
+    items: items.data?.total,
+    entities: entities.data?.total,
+    isPending: items.isPending || entities.isPending,
   };
 }

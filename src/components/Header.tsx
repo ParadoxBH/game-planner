@@ -117,6 +117,7 @@ export function Header() {
                         label={item.label} 
                         icon={item.icon} 
                         rootPath={item.path} 
+                        showAll={item.showAll}
                         options={item.options} 
                       />
                     );

@@ -180,15 +180,17 @@ export function MobileMenu({ open, onClose, gameId, menuItems }: MobileMenuProps
                   {item.isDropdown && item.options && (
                     <Collapse in={isDropdownOpen} timeout="auto" unmountOnExit>
                       <List component="div" disablePadding sx={{ backgroundColor: "rgba(255, 255, 255, 0.02)" }}>
-                        <ListItemButton
-                          component={Link}
-                          to={item.path}
-                          onClick={onClose}
-                          sx={{ pl: 7, py: 1 }}
-                          selected={location.pathname === item.path}
-                        >
-                          <ListItemText primary="Ver todos" primaryTypographyProps={{ fontSize: "0.875rem" }} />
-                        </ListItemButton>
+                        {item.showAll !== false && (
+                          <ListItemButton
+                            component={Link}
+                            to={item.path}
+                            onClick={onClose}
+                            sx={{ pl: 7, py: 1 }}
+                            selected={location.pathname === item.path}
+                          >
+                            <ListItemText primary="Ver todos" primaryTypographyProps={{ fontSize: "0.875rem" }} />
+                          </ListItemButton>
+                        )}
                         {item.options.map((option) => (
                           <ListItemButton
                             key={option.path}
