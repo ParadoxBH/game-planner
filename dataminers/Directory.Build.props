@@ -1,0 +1,33 @@
+﻿<Project>
+
+  <!--
+    Aplicado automaticamente a todo .csproj abaixo desta pasta: os projetos no
+    estilo antigo pegam este arquivo via Microsoft.Common.props (o <Import> no
+    topo de cada .csproj), e os SDK-style pegam nativamente.
+
+    POR QUE ISTO EXISTE
+    ===================
+
+    Por padrao o MSBuild copia para a pasta de saida toda <Reference> marcada
+    como "Copy Local", e junto vai a arvore de dependencias dela. Como os mods
+    referenciam as DLLs do jogo em libs\, bastava UMA referencia sem
+    <Private>False</Private> para bin\ receber assembly_valheim.dll e, por
+    tabela, PlayFab.dll, PlayFabParty.dll, assembly_googleanalytics.dll,
+    assembly_postprocessing.dll e assembly_sunshafts.dll.
+
+    Nada disso pode ser distribuido: o jogo ja tem essas DLLs carregadas, e
+    copiar versoes defasadas para BepInEx\plugins so causa conflito. Em bin\
+    deve sair apenas a DLL do proprio mod.
+
+    O ItemDefinitionGroup abaixo define Private=False como PADRAO para todas as
+    <Reference>. Referencias que declaram <Private> explicitamente continuam
+    mandando no proprio valor, entao nada existente quebra, e referencia nova
+    adicionada pelo Visual Studio ja nasce sem copiar.
+  -->
+  <ItemDefinitionGroup>
+    <Reference>
+      <Private>False</Private>
+    </Reference>
+  </ItemDefinitionGroup>
+
+</Project>

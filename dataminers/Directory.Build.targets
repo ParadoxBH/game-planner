@@ -1,0 +1,18 @@
+﻿<Project>
+
+  <!--
+    Importado DEPOIS do corpo de cada .csproj, entao o que esta aqui vence as
+    PropertyGroup por configuracao dos projetos. Serve para normalizar coisas
+    que estavam inconsistentes entre os mods sem ter que editar 16 arquivos.
+
+    Sem .pdb: mod de Harmony nao se depura com debugger anexado, e os simbolos
+    so sujavam bin\ (ParadoxBH.MoreShipController.pdb, paradoxbh.smartdoor.pdb).
+    A maioria dos projetos ja fazia isso nas tres configuracoes; agora vale para
+    todos. Se algum dia precisar dos simbolos, comente este PropertyGroup.
+  -->
+  <PropertyGroup>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+</Project>

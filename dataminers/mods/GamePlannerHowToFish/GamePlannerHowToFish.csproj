@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Minerador do How to Fish para o Game Planner: F7 abre o painel da conta, minera os itens do jogo
+    (Resources/Items, Baits e Attachments), as melhorias e os desbloqueáveis e envia tudo como itens para a API.
+
+    Toda a parte genérica (imagem, JSON, API, painel) está em GamePlannerCore. Copie as duas DLLs
+    para BepInEx\plugins: ParadoxBH.GamePlanner.Core.dll e ParadoxBH.GamePlanner.HowToFish.dll.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>ParadoxBH.GamePlanner.HowToFish</AssemblyName>
+    <RootNamespace>GamePlanner.HowToFish</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <OutputPath>..\..\bin\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GamePlannerCore\GamePlannerCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath>..\..\libs\Common\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\libs\Common\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\libs\HowToFish\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="FishNet.Runtime">
+      <HintPath>..\..\libs\HowToFish\FishNet.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Localization">
+      <HintPath>..\..\libs\HowToFish\Unity.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.InputSystem">
+      <HintPath>..\..\libs\HowToFish\Unity.InputSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\libs\HowToFish\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\libs\HowToFish\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\..\libs\HowToFish\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>..\..\libs\HowToFish\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIElementsModule">
+      <HintPath>..\..\libs\HowToFish\UnityEngine.UIElementsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>..\..\libs\HowToFish\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Minerador do Valheim para o Game Planner: F7 abre o painel da conta, minera ObjectDB e ZNetScene
+    (itens, receitas, criaturas, construções e recursos do mundo) e envia para a API.
+
+    Toda a parte genérica (imagem, JSON, API, painel) está em GamePlannerCore. Copie as duas DLLs
+    para BepInEx\plugins: ParadoxBH.GamePlanner.Core.dll e ParadoxBH.GamePlanner.Valheim.dll.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>ParadoxBH.GamePlanner.Valheim</AssemblyName>
+    <RootNamespace>GamePlanner.Valheim</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <OutputPath>..\..\bin\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GamePlannerCore\GamePlannerCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath>..\..\libs\Common\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\libs\Common\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="assembly_valheim">
+      <HintPath>..\..\libs\Valheim\assembly_valheim.dll</HintPath>
+    </Reference>
+    <Reference Include="assembly_utils">
+      <HintPath>..\..\libs\Valheim\assembly_utils.dll</HintPath>
+    </Reference>
+    <Reference Include="assembly_guiutils">
+      <HintPath>..\..\libs\Valheim\assembly_guiutils.dll</HintPath>
+    </Reference>
+    <Reference Include="gui_framework">
+      <HintPath>..\..\libs\Valheim\gui_framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Splatform">
+      <HintPath>..\..\libs\Valheim\Splatform.dll</HintPath>
+    </Reference>
+    <Reference Include="SoftReferenceableAssets">
+      <HintPath>..\..\libs\Valheim\SoftReferenceableAssets.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\libs\Valheim\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\libs\Valheim\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\..\libs\Valheim\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\libs\Valheim\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>..\..\libs\Valheim\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>..\..\libs\Valheim\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

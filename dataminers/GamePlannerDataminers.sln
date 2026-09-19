@@ -1,0 +1,69 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mods", "mods", "{ED7DE66D-1FF1-BCCD-393E-2D4AFCA661A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamePlannerCore", "mods\GamePlannerCore\GamePlannerCore.csproj", "{B32E1E0B-FFA0-4428-ACB6-CFFF28BA7730}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamePlannerValheim", "mods\GamePlannerValheim\GamePlannerValheim.csproj", "{AA244A58-430D-4528-8B0A-680E3F7F0A58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamePlannerHowToFish", "mods\GamePlannerHowToFish\GamePlannerHowToFish.csproj", "{1721F6E4-6E8F-43D9-B662-04CF91334E54}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B32E1E0B-FFA0-4428-ACB6-CFFF28BA7730}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B32E1E0B-FFA0-4428-ACB6-CFFF28BA7730}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B32E1E0B-FFA0-4428-ACB6-CFFF28BA7730}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B32E1E0B-FFA0-4428-ACB6-CFFF28BA7730}.Debug|x64.Build.0 = Debug|Any CPU
+		{B32E1E0B-FFA0-4428-ACB6-CFFF28BA7730}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B32E1E0B-FFA0-4428-ACB6-CFFF28BA7730}.Debug|x86.Build.0 = Debug|Any CPU
+		{B32E1E0B-FFA0-4428-ACB6-CFFF28BA7730}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B32E1E0B-FFA0-4428-ACB6-CFFF28BA7730}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B32E1E0B-FFA0-4428-ACB6-CFFF28BA7730}.Release|x64.ActiveCfg = Release|Any CPU
+		{B32E1E0B-FFA0-4428-ACB6-CFFF28BA7730}.Release|x64.Build.0 = Release|Any CPU
+		{B32E1E0B-FFA0-4428-ACB6-CFFF28BA7730}.Release|x86.ActiveCfg = Release|Any CPU
+		{B32E1E0B-FFA0-4428-ACB6-CFFF28BA7730}.Release|x86.Build.0 = Release|Any CPU
+		{AA244A58-430D-4528-8B0A-680E3F7F0A58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA244A58-430D-4528-8B0A-680E3F7F0A58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA244A58-430D-4528-8B0A-680E3F7F0A58}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AA244A58-430D-4528-8B0A-680E3F7F0A58}.Debug|x64.Build.0 = Debug|Any CPU
+		{AA244A58-430D-4528-8B0A-680E3F7F0A58}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AA244A58-430D-4528-8B0A-680E3F7F0A58}.Debug|x86.Build.0 = Debug|Any CPU
+		{AA244A58-430D-4528-8B0A-680E3F7F0A58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA244A58-430D-4528-8B0A-680E3F7F0A58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA244A58-430D-4528-8B0A-680E3F7F0A58}.Release|x64.ActiveCfg = Release|Any CPU
+		{AA244A58-430D-4528-8B0A-680E3F7F0A58}.Release|x64.Build.0 = Release|Any CPU
+		{AA244A58-430D-4528-8B0A-680E3F7F0A58}.Release|x86.ActiveCfg = Release|Any CPU
+		{AA244A58-430D-4528-8B0A-680E3F7F0A58}.Release|x86.Build.0 = Release|Any CPU
+		{1721F6E4-6E8F-43D9-B662-04CF91334E54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1721F6E4-6E8F-43D9-B662-04CF91334E54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1721F6E4-6E8F-43D9-B662-04CF91334E54}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1721F6E4-6E8F-43D9-B662-04CF91334E54}.Debug|x64.Build.0 = Debug|Any CPU
+		{1721F6E4-6E8F-43D9-B662-04CF91334E54}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1721F6E4-6E8F-43D9-B662-04CF91334E54}.Debug|x86.Build.0 = Debug|Any CPU
+		{1721F6E4-6E8F-43D9-B662-04CF91334E54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1721F6E4-6E8F-43D9-B662-04CF91334E54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1721F6E4-6E8F-43D9-B662-04CF91334E54}.Release|x64.ActiveCfg = Release|Any CPU
+		{1721F6E4-6E8F-43D9-B662-04CF91334E54}.Release|x64.Build.0 = Release|Any CPU
+		{1721F6E4-6E8F-43D9-B662-04CF91334E54}.Release|x86.ActiveCfg = Release|Any CPU
+		{1721F6E4-6E8F-43D9-B662-04CF91334E54}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B32E1E0B-FFA0-4428-ACB6-CFFF28BA7730} = {ED7DE66D-1FF1-BCCD-393E-2D4AFCA661A0}
+		{AA244A58-430D-4528-8B0A-680E3F7F0A58} = {ED7DE66D-1FF1-BCCD-393E-2D4AFCA661A0}
+		{1721F6E4-6E8F-43D9-B662-04CF91334E54} = {ED7DE66D-1FF1-BCCD-393E-2D4AFCA661A0}
+	EndGlobalSection
+EndGlobal

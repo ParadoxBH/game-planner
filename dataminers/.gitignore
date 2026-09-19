@@ -1,0 +1,9 @@
+# Saída de build
+bin/
+obj/
+
+# DLLs dos jogos e do BepInEx: não são nossas, vêm do libs\copy-libs.ps1
+libs/**/*.dll
+
+# O .gitignore da raiz ignora *.sln; a solução dos mineradores vai para o repositório
+!*.sln

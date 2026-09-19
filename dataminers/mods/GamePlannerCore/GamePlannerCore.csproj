@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Base do Game Planner para qualquer jogo Unity (Mono): conversão de imagens da Unity,
+    JSON, cliente da API, envio do que foi minerado e o painel de conta em IMGUI.
+
+    De propósito NÃO referencia BepInEx, Harmony nem nada do Valheim: só módulos da
+    UnityEngine. O mod de cada jogo implementa IDataMiner e liga o painel ao próprio loader.
+    Vai para BepInEx\plugins junto com o mod do jogo.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>ParadoxBH.GamePlanner.Core</AssemblyName>
+    <RootNamespace>GamePlanner.Core</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <OutputPath>..\..\bin\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\libs\Common\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>..\..\libs\Common\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\..\libs\Common\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>..\..\libs\Common\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
