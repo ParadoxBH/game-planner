@@ -17,6 +17,7 @@ import static com.paradoxbh.gameplannerserver.query.QueryJson.and;
 import static com.paradoxbh.gameplannerserver.query.QueryJson.or;
 import static com.paradoxbh.gameplannerserver.query.QueryJson.rule;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -53,6 +54,9 @@ import com.paradoxbh.gameplannerserver.query.QueryJson;
  */
 @Service
 public class ListingFilterService {
+
+    /** Valor da opção "Sem bancada" na URL da listagem; não é código de entidade. */
+    private static final String NO_STATION = "none";
 
     private static final List<String> SEARCH_FIELDS = List.of("name", "extId");
 
@@ -235,12 +239,30 @@ public class ListingFilterService {
                         .toList());
     }
 
-    /** Bancadas citadas por receitas, com quantas receitas cada uma tem. */
+    /**
+     * Bancadas citadas por receitas, com quantas receitas cada uma tem, e no fim as receitas que
+     * não pedem bancada nenhuma — feitas à mão. Essa última opção leva a própria consulta, porque
+     * não é o código de uma bancada; fica de fora quando toda receita do jogo tem bancada.
+     */
     private List<Option> stations(String gameId) {
-        return references.recipeStations(gameId).stream()
+        List<Option> options = new ArrayList<>(references.recipeStations(gameId).stream()
                 .map(station -> new Option(station.extId(), labelOr(station.name(), station.extId()),
                         station.iconMediaId(), station.recipeCount(), null, null, null))
-                .toList();
+                .toList());
+        Long loose = jdbc.sql("""
+                SELECT count(*) FROM recipe r
+                WHERE r.game_id = :game
+                  AND NOT EXISTS (SELECT 1 FROM recipe_station s
+                                  WHERE s.game_id = r.game_id AND s.recipe_ext_id = r.ext_id)
+                """)
+                .param("game", gameId)
+                .query(Long.class)
+                .single();
+        if (loose != null && loose > 0) {
+            options.add(new Option(NO_STATION, "Sem bancada", null, loose, and(rule("station", "is_null")), null,
+                    null));
+        }
+        return options;
     }
 
     /** Tipos de evento em uso no jogo, pelo rótulo. */

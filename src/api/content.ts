@@ -407,15 +407,6 @@ export interface ShopRelated {
   categories: ContentPage<ShopCategoryDocument>;
 }
 
-/** Bancada citada por receitas do jogo. */
-export interface RecipeStation {
-  extId: string;
-  name: string | null;
-  iconMediaId: string | null;
-  registered: boolean;
-  recipeCount: number;
-}
-
 export type CraftSource = "recipe" | "shop" | "price" | "base" | "stock" | "category" | "cycle";
 
 /** Nó da árvore de crafting calculada no servidor. Campos ausentes não se aplicam ao nó. */
@@ -774,9 +765,5 @@ export const gameApi = {
     const params = new URLSearchParams({ q: term, limit: "20" });
     if (kind) params.set("kind", kind);
     return apiRequest<SearchHit[]>(`${gamePath(gameId)}/search?${params}`, { signal });
-  },
-
-  recipeStations(gameId: string, signal?: AbortSignal) {
-    return apiRequest<RecipeStation[]>(`${gamePath(gameId)}/recipe-stations`, { signal });
   },
 };

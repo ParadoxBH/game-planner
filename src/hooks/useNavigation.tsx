@@ -19,7 +19,7 @@ import { MAX_PAGE_SIZE, type ShopDocument } from "../api/content";
 import type { ListingSchema } from "../api/query";
 import { contentRoute, mediaUrl } from "../api/references";
 import { useGameAdmin, useGameEditor } from "./useGameAdmin";
-import { useContentCounts, useContentList, useListingFilters, useRecipeStations } from "../api/useContent";
+import { useContentCounts, useContentList, useListingFilters } from "../api/useContent";
 
 export interface NavigationOption {
   label: string;
@@ -58,7 +58,7 @@ export function useNavigation(gameId: string | null) {
   const itemFilters = useListingFilters(id, "items");
   const entityFilters = useListingFilters(id, "entities");
   const shops = useContentList<ShopDocument>(id, "shops", { size: MAX_PAGE_SIZE, sort: "name" });
-  const stations = useRecipeStations(id);
+  const recipeFilters = useListingFilters(id, "recipes");
   const { isAdmin, isOwner } = useGameAdmin(id);
   const { canEdit } = useGameEditor(id);
 
@@ -67,8 +67,8 @@ export function useNavigation(gameId: string | null) {
     const base = `/game/${gameId}`;
     const count = (kind: string) => counts.data?.[kind] ?? 0;
 
-    const categoryOptions = (schema: ListingSchema | undefined, listPath: string): NavigationOption[] =>
-      (schema?.filters.find((filter) => filter.key === "category")?.options ?? []).map((option) => ({
+    const filterOptions = (schema: ListingSchema | undefined, listPath: string, key = "category"): NavigationOption[] =>
+      (schema?.filters.find((filter) => filter.key === key)?.options ?? []).map((option) => ({
         label: option.label,
         path: `${listPath}/${encodeURIComponent(option.value)}`,
         icon: optionIcon(option.iconMediaId, option.label),
@@ -83,7 +83,7 @@ export function useNavigation(gameId: string | null) {
         path: `${base}/entity`,
         color: "#ff9800",
         isDropdown: true,
-        options: categoryOptions(entityFilters.data, `${base}/entity/list`),
+        options: filterOptions(entityFilters.data, `${base}/entity/list`),
       },
       {
         id: "items",
@@ -92,7 +92,7 @@ export function useNavigation(gameId: string | null) {
         path: `${base}/items`,
         color: "#4caf50",
         isDropdown: true,
-        options: categoryOptions(itemFilters.data, `${base}/items/list`),
+        options: filterOptions(itemFilters.data, `${base}/items/list`),
       },
       { id: "conjuntos", label: "Conjuntos", icon: <AutoAwesomeMosaic />, path: `${base}/conjuntos`, color: "#ffca28" },
       {
@@ -102,11 +102,9 @@ export function useNavigation(gameId: string | null) {
         path: `${base}/recipes`,
         color: "#f44336",
         isDropdown: true,
-        options: (stations.data ?? []).map((station) => ({
-          label: station.name ?? station.extId,
-          path: `${base}/recipes/list/${encodeURIComponent(station.extId)}`,
-          icon: optionIcon(station.iconMediaId, station.name ?? station.extId),
-        })),
+        // As bancadas do filtro da listagem, que terminam em "Sem bancada" quando alguma receita
+        // não pede nenhuma.
+        options: filterOptions(recipeFilters.data, `${base}/recipes/list`, "station"),
       },
       {
         id: "shops",
@@ -169,7 +167,7 @@ export function useNavigation(gameId: string | null) {
     return all.filter(
       (item) => !kindOf[item.id] || count(kindOf[item.id]) > 0 || (canEdit && CREATABLE.has(item.id)),
     );
-  }, [gameId, theme, counts.data, itemFilters.data, entityFilters.data, shops.data, stations.data, isAdmin, isOwner, canEdit]);
+  }, [gameId, theme, counts.data, itemFilters.data, entityFilters.data, shops.data, recipeFilters.data, isAdmin, isOwner, canEdit]);
 
   return { menuItems };
 }

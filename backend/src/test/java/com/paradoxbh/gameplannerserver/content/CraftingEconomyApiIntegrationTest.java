@@ -4,6 +4,7 @@ import static com.paradoxbh.gameplannerserver.query.QueryJson.and;
 import static com.paradoxbh.gameplannerserver.query.QueryJson.or;
 import static com.paradoxbh.gameplannerserver.query.QueryJson.rule;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -348,6 +349,36 @@ class CraftingEconomyApiIntegrationTest extends ContentApiTest {
                 .andExpect(jsonPath("$.stations[0].extId").value("Alchemy"))
                 .andExpect(jsonPath("$.unlock[2].value").value("1"))
                 .andExpect(jsonPath("$.meta.revision").value(3));
+    }
+
+    @Test
+    void stationFilterEndsWithTheRecipesThatNeedNoStation() throws Exception {
+        send(post(RECIPES, game), "editor", json("""
+                { 'extId': 'tabua', 'stations': ['bancada'],
+                  'outputs': [ { 'target': { 'kind': 'item', 'extId': 'tabua' }, 'amount': 1 } ] }
+                """))
+                .andExpect(status().isCreated());
+
+        // Toda receita tem bancada: a opção não aparece.
+        mvc.perform(get(RECIPES + "/query/filters", game))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.filters[0].options[*].value", contains("bancada")));
+
+        send(post(RECIPES, game), "editor", json("""
+                { 'extId': 'corda', 'outputs': [ { 'target': { 'kind': 'item', 'extId': 'corda' }, 'amount': 1 } ] }
+                """))
+                .andExpect(status().isCreated());
+
+        mvc.perform(get(RECIPES + "/query/filters", game))
+                .andExpect(jsonPath("$.filters[0].options[*].value", contains("bancada", "none")))
+                .andExpect(jsonPath("$.filters[0].options[1].label").value("Sem bancada"))
+                .andExpect(jsonPath("$.filters[0].options[1].count").value(1))
+                .andExpect(jsonPath("$.filters[0].options[1].query.rules[0].field").value("station"))
+                .andExpect(jsonPath("$.filters[0].options[1].query.rules[0].operator").value("is_null"));
+
+        // A consulta que a opção carrega traz só a receita feita à mão.
+        mvc.perform(query(RECIPES, and(rule("station", "is_null")), game))
+                .andExpect(jsonPath("$.content[*].extId", contains("corda")));
     }
 
     @Test

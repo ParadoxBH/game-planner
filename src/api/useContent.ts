@@ -233,15 +233,6 @@ export function useAttributeDefinitions(gameId: string | undefined) {
   });
 }
 
-export function useRecipeStations(gameId: string | undefined) {
-  return useQuery({
-    queryKey: ["game", gameId, "recipe-stations"],
-    queryFn: ({ signal }) => gameApi.recipeStations(gameId!, signal),
-    enabled: Boolean(gameId),
-    staleTime: RARELY_CHANGES,
-  });
-}
-
 /**
  * Escrita de conteúdo: criar, substituir, apagar e anexar imagem. Depois de cada uma, relê tudo o que
  * é do jogo (toda chave com o jogo na segunda posição) — uma categoria muda filtros, menus e contagens;
