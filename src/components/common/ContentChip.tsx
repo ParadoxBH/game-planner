@@ -1,8 +1,8 @@
 import { Box, Paper, Tooltip, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import type { Reference, ResolvedReference } from "../../api/content";
+import type { LevelOperator, Reference, ResolvedReference } from "../../api/content";
 import { contentRoute } from "../../api/references";
-import { formatChance, formatRange } from "../../utils/format";
+import { formatChance, formatLevelRequirement, formatRange } from "../../utils/format";
 import { ContentIcon } from "./ContentIcon";
 import { LevelBadge } from "./LevelBadge";
 
@@ -20,6 +20,8 @@ export interface ContentChipProps {
   amount?: number | null;
   maxAmount?: number | null;
   level?: number | null;
+  /** Com level, diz que o nível é exigência: "nível 2 ou mais" no tooltip e "2+" no selo. */
+  levelOperator?: LevelOperator | null;
   chance?: number | null;
   notConsumed?: boolean;
   /** Produto de receita: selo de quantidade destacado. */
@@ -41,6 +43,7 @@ export function ContentChip({
   amount,
   maxAmount = null,
   level,
+  levelOperator = null,
   chance,
   notConsumed = false,
   product = false,
@@ -61,7 +64,7 @@ export function ContentChip({
 
   const details = [
     hasAmount ? `${formatRange(amount, maxAmount)}x` : null,
-    level ? `nível ${level}` : null,
+    level ? formatLevelRequirement(level, levelOperator) : null,
     chance !== null && chance !== undefined ? formatChance(chance) : null,
     notConsumed ? "não é gasto" : null,
     registered ? null : "não cadastrado",
@@ -101,7 +104,7 @@ export function ContentChip({
         >
           <ContentIcon mediaId={resolved?.iconMediaId} kind={kind} alt={name} size={config.icon} />
         </Paper>
-        <LevelBadge level={level} size={size === "extraLarge" ? "large" : "small"} />
+        <LevelBadge level={level} operator={levelOperator} size={size === "extraLarge" ? "large" : "small"} />
         {hasAmount && (
           <Box
             sx={{

@@ -55,6 +55,8 @@ export function ApiRecipeCard({ recipe, references, highlight, onClick }: ApiRec
             target={input.target}
             resolved={references.find(input.target)}
             amount={input.amount}
+            level={input.level}
+            levelOperator={input.levelOperator}
             notConsumed={input.notConsumed}
             highlight={isHighlight(input.target)}
             size="medium"

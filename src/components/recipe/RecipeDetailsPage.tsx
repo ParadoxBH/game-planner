@@ -64,6 +64,8 @@ function IngredientCard({ input, references, members, chosen, onChoose }: Ingred
           target={chosen ?? input.target}
           resolved={chosenMember ?? references.find(input.target)}
           amount={input.amount}
+          level={input.level}
+          levelOperator={input.levelOperator}
           notConsumed={input.notConsumed}
         />
         <Stack sx={{ minWidth: 0 }}>
