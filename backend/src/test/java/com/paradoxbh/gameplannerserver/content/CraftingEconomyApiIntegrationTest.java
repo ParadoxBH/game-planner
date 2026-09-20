@@ -61,6 +61,35 @@ class CraftingEconomyApiIntegrationTest extends ContentApiTest {
             """;
 
     @Test
+    void stationKeepsTheLevelAndAcceptsThePlainCode() throws Exception {
+        // Texto (formato antigo e dos dataminers) e objeto com nível convivem na mesma lista.
+        send(post(RECIPES, game), "editor", json("""
+                { 'extId': 'forjar_espada_lendaria',
+                  'stations': [ 'bancada', { 'extId': 'forja', 'level': 4 } ],
+                  'outputs': [ { 'target': { 'kind': 'item', 'extId': 'espada' }, 'amount': 1 } ] }
+                """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.stations[0].extId").value("bancada"))
+                .andExpect(jsonPath("$.stations[0].level").doesNotExist())
+                .andExpect(jsonPath("$.stations[1].extId").value("forja"))
+                .andExpect(jsonPath("$.stations[1].level").value(4));
+
+        // O filtro por bancada continua achando a receita pelo código.
+        mvc.perform(query(RECIPES, and(rule("station", "equal", "forja")), game))
+                .andExpect(jsonPath("$.content[0].extId").value("forjar_espada_lendaria"));
+    }
+
+    @Test
+    void spawnPointOccupantKeepsTheLevel() throws Exception {
+        send(post("/api/v1/games/{game}/spawn-points", game), "editor", json("""
+                { 'extId': 'forja_da_vila', 'map': 'mundo', 'position': 'POINT (10 20)',
+                  'occupants': [ { 'target': { 'kind': 'entity', 'extId': 'forja' }, 'level': 4 } ] }
+                """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.occupants[0].level").value(4));
+    }
+
+    @Test
     void requirementKeepsTheLevelAndDefaultsTheOperatorToExact() throws Exception {
         send(post(RECIPES, game), "editor", json(MELHORAR_ESPADA))
                 .andExpect(status().isCreated())
@@ -316,7 +345,7 @@ class CraftingEconomyApiIntegrationTest extends ContentApiTest {
         mvc.perform(post(RECIPE + "/revisions/{revision}/restore", game, "verniz", 1).with(as("moderador")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.inputs.length()").value(5))
-                .andExpect(jsonPath("$.stations[0]").value("Alchemy"))
+                .andExpect(jsonPath("$.stations[0].extId").value("Alchemy"))
                 .andExpect(jsonPath("$.unlock[2].value").value("1"))
                 .andExpect(jsonPath("$.meta.revision").value(3));
     }

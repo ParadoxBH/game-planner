@@ -11,6 +11,7 @@ import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 import com.paradoxbh.gameplannerserver.content.model.RecipeDocument;
 import com.paradoxbh.gameplannerserver.content.model.RecipeOutput;
+import com.paradoxbh.gameplannerserver.content.model.RecipeStation;
 import com.paradoxbh.gameplannerserver.content.model.RecipeUnlock;
 import com.paradoxbh.gameplannerserver.content.model.Requirement;
 import com.paradoxbh.gameplannerserver.content.store.ChildRows.Table;
@@ -26,7 +27,7 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
     private static final Table UNLOCK = Table.of("recipe_unlock", "recipe_ext_id");
 
     /** Linhas-filhas de uma página de receitas, por ext_id. */
-    record Parts(Map<String, List<String>> stations, Map<String, List<Requirement>> inputs,
+    record Parts(Map<String, List<RecipeStation>> stations, Map<String, List<Requirement>> inputs,
                  Map<String, List<RecipeOutput>> outputs, Map<String, List<RecipeUnlock>> unlock) {
     }
 
@@ -84,7 +85,8 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
     @Override
     protected Parts loadChildren(String gameId, List<String> extIds) {
         return new Parts(
-                children.load(STATIONS, gameId, extIds, row -> Rows.string(row, "station_ext_id")),
+                children.load(STATIONS, gameId, extIds,
+                        row -> new RecipeStation(Rows.string(row, "station_ext_id"), Rows.integer(row, "level"))),
                 children.load(INPUTS, gameId, extIds, ChildMappers::requirement),
                 children.load(OUTPUTS, gameId, extIds, RecipeHandler::output),
                 children.load(UNLOCK, gameId, extIds, RecipeHandler::unlock));
@@ -93,8 +95,9 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
     @Override
     protected void replaceChildren(String gameId, RecipeDocument recipe) {
         String id = recipe.extId();
-        children.replace(STATIONS, gameId, id,
-                recipe.stations().stream().map(station -> ChildRows.row("station_ext_id", station)).toList());
+        children.replace(STATIONS, gameId, id, recipe.stations().stream()
+                .map(station -> ChildRows.row("station_ext_id", station.extId(), "level", station.level()))
+                .toList());
         children.replace(INPUTS, gameId, id, recipe.inputs().stream().map(ChildMappers::requirementRow).toList());
         children.replace(OUTPUTS, gameId, id, recipe.outputs().stream().map(RecipeHandler::outputRow).toList());
         children.replace(UNLOCK, gameId, id, recipe.unlock().stream().map(RecipeHandler::unlockRow).toList());

@@ -102,6 +102,8 @@ export interface Occupant {
   chance: number | null;
   amount: number | null;
   maxAmount: number | null;
+  /** Nível em que o alvo está ali, ex.: a forja nível 4; null, sem nível. */
+  level: number | null;
 }
 
 export interface EntityDocument extends ContentBase {
@@ -132,9 +134,15 @@ export interface RecipeUnlock {
   value: string | null;
 }
 
+/** Bancada exigida pela receita; `level` é o nível mínimo, quando o jogo tem bancada que sobe. */
+export interface RecipeStation {
+  extId: string;
+  level: number | null;
+}
+
 export interface RecipeDocument extends ContentBase {
   craftTimeSeconds: number | null;
-  stations: string[];
+  stations: RecipeStation[];
   inputs: Requirement[];
   outputs: RecipeOutput[];
   unlock: RecipeUnlock[];
@@ -271,6 +279,8 @@ export interface MarkerOccupant {
   categories: string[];
   /** Respawn da entidade, em minutos. */
   respawnDelayMinutes: number | null;
+  /** Nível em que o ocupante está ali. */
+  level: number | null;
 }
 
 /** Ponto de spawn compacto para desenhar no mapa. */

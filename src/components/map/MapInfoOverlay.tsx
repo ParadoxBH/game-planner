@@ -9,6 +9,8 @@ import { MAP_PLACEHOLDER, mapThumbnail } from "./mapGeometry";
 interface MapInfoOverlayProps {
   gameName?: string;
   coords: [number, number];
+  /** Nível de zoom do mapa agora; nulo antes de o mapa montar. */
+  zoom?: number | null;
   region?: string;
   maps: MapDocument[];
   selectedMapId: string;
@@ -18,6 +20,7 @@ interface MapInfoOverlayProps {
 export const MapInfoOverlay = ({
   gameName,
   coords,
+  zoom = null,
   region = "Desconhecido",
   maps,
   selectedMapId,
@@ -124,6 +127,7 @@ export const MapInfoOverlay = ({
           <Stack direction={"row"} spacing={1.5}>
             <OutputField label="Região" values={[region]} flex={1} />
             <OutputField label="Coordenadas" values={[`X: ${coords[1].toFixed(1)}`, `Y: ${coords[0].toFixed(1)}`]} flex={1.5} />
+            <OutputField label="Zoom" values={[zoom === null ? "—" : String(zoom)]} flex={0.6} />
           </Stack>
         )}
       </Stack>

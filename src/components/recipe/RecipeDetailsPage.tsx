@@ -205,11 +205,21 @@ export function RecipeDetailsPage() {
             <Stack spacing={2}>
               <DetailField label="Bancadas">
                 {recipe.stations.length > 0 ? (
-                  <ReferenceChips
-                    targets={recipe.stations.map((station) => ({ kind: "entity", extId: station }))}
-                    references={references}
-                    size="medium"
-                  />
+                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                    {recipe.stations.map((station) => {
+                      const target = { kind: "entity", extId: station.extId };
+                      return (
+                        <ContentChip
+                          key={station.extId}
+                          target={target}
+                          resolved={references.find(target)}
+                          level={station.level}
+                          levelOperator="min"
+                          size="medium"
+                        />
+                      );
+                    })}
+                  </Stack>
                 ) : (
                   <Typography variant="body2" color="text.secondary">
                     Feita sem bancada

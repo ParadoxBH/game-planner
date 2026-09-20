@@ -27,7 +27,7 @@ import {
   type ResolvedReference,
 } from "../../api/content";
 import { currentMedia } from "../../api/references";
-import { useContentList, useContentWrites, useRecipeStations } from "../../api/useContent";
+import { useContentList, useContentWrites } from "../../api/useContent";
 import { ApiContentSelector, type SelectorKind } from "../common/ApiContentSelector";
 import { CodesField, type CodeOption } from "../common/CodesField";
 import { LevelFields } from "../common/LevelFields";
@@ -67,13 +67,20 @@ interface UnlockRow {
   value: string;
 }
 
+interface StationRow {
+  key: number;
+  extId: string;
+  /** Vazio: serve em qualquer nível. */
+  level: string;
+}
+
 interface RecipeForm {
   extId: string;
   name: string;
   summary: string;
   description: string;
   craftTime: string;
-  stations: string[];
+  stations: StationRow[];
   inputs: InputRow[];
   outputs: OutputRow[];
   unlock: UnlockRow[];
@@ -92,7 +99,11 @@ function formOf(recipe: RecipeDocument | null): RecipeForm {
     summary: recipe?.summary ?? "",
     description: recipe?.description ?? "",
     craftTime: text(recipe?.craftTimeSeconds),
-    stations: recipe?.stations ?? [],
+    stations: (recipe?.stations ?? []).map((station) => ({
+      key: key(),
+      extId: station.extId,
+      level: station.level === null ? "" : String(station.level),
+    })),
     inputs: (recipe?.inputs ?? []).map((input) => ({
       key: key(),
       target: input.target,
@@ -160,25 +171,13 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
   const [icon, setIcon] = useState<File | null>(null);
   const [picking, setPicking] = useState<Picking>(null);
   const [pickingStation, setPickingStation] = useState(false);
-  // Bancadas escolhidas agora: ainda não estão em recipe-stations, que só lista as já usadas.
-  const [pickedStations, setPickedStations] = useState<CodeOption[]>([]);
   const [deleting, setDeleting] = useState(false);
   const [tab, setTab] = useState<RecipeTab>("data");
   const { save, saving, error, creating } = useContentSave(gameId, "recipes", recipe === null);
   const { remove } = useContentWrites(gameId, "recipes");
 
-  const stations = useRecipeStations(gameId);
   const events = useContentList<EventDocument>(gameId, "events", { size: MAX_PAGE_SIZE, sort: "name" });
 
-  const stationOptions = useMemo<CodeOption[]>(() => {
-    const options = (stations.data ?? []).map((station) => ({
-      extId: station.extId,
-      name: station.name ?? station.extId,
-      iconMediaId: station.iconMediaId,
-    }));
-    const known = new Set(options.map((option) => option.extId));
-    return [...options, ...pickedStations.filter((station) => !known.has(station.extId))];
-  }, [stations.data, pickedStations]);
   const eventOptions = useMemo<CodeOption[]>(
     () =>
       (events.data?.content ?? []).map((event) => ({
@@ -237,7 +236,8 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
   const inputsInvalid = form.inputs.some((row) => !isPositive(row.amount) || !isLevel(row.level));
   const outputsInvalid = form.outputs.some((row) => !isPositive(row.amount) || !isChance(row.chance) || !isOptionalInteger(row.level));
   const unlockInvalid = form.unlock.some((row) => !row.type.trim() || (!row.target && !row.value.trim()));
-  const dataInvalid = form.extId.trim() === "" || craftTimeInvalid || unlockInvalid;
+  const stationsInvalid = form.stations.some((station) => !isLevel(station.level));
+  const dataInvalid = form.extId.trim() === "" || craftTimeInvalid || unlockInvalid || stationsInvalid;
   const valid = !dataInvalid && !inputsInvalid && !outputsInvalid;
 
   const submit = async () => {
@@ -251,7 +251,7 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
         summary: form.summary.trim() || null,
         description: form.description.trim() || null,
         craftTimeSeconds: craftTime,
-        stations: form.stations,
+        stations: form.stations.map((station) => ({ extId: station.extId, level: levelOut(station.level) })),
         inputs: form.inputs.map((row) => ({
           target: row.target,
           amount: numberOf(row.amount),
@@ -380,27 +380,56 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
                 />
               </Grid>
               <Grid size={{ xs: 12, sm: 8 }}>
-                <CodesField
-                  label="Bancadas"
-                  options={stationOptions}
-                  value={form.stations}
-                  onChange={(value) => set("stations", value)}
-                  loading={stations.isPending}
-                  freeSolo
-                  helperText="A lista traz as bancadas já usadas por alguma receita; use Escolher para qualquer entidade."
+                <FormSection
+                  title="Bancadas"
                   action={
                     <Button
                       size="small"
                       startIcon={<Add />}
                       onClick={() => setPickingStation(true)}
-                      sx={{ textTransform: "none", whiteSpace: "nowrap", mt: 1 }}
+                      sx={{ textTransform: "none", whiteSpace: "nowrap" }}
                     >
                       Escolher
                     </Button>
                   }
                 />
+                {form.stations.length === 0 && (
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                    Sem bancada: feito à mão.
+                  </Typography>
+                )}
+                <Stack spacing={1} sx={{ mt: 1 }}>
+                  {form.stations.map((station, index) => (
+                    <TargetRow
+                      key={station.key}
+                      gameId={gameId}
+                      target={{ kind: "entity", extId: station.extId }}
+                      onPick={() => setPickingStation(true)}
+                      onRemove={() => set("stations", form.stations.filter((_, position) => position !== index))}
+                    >
+                      <TextField
+                        label="Nível"
+                        size="small"
+                        value={station.level}
+                        onChange={(event) =>
+                          set(
+                            "stations",
+                            form.stations.map((row, position) =>
+                              position === index ? { ...row, level: event.target.value } : row,
+                            ),
+                          )
+                        }
+                        error={!isLevel(station.level)}
+                        helperText={isLevel(station.level) ? "Vazio: qualquer nível." : "Inteiro."}
+                        sx={{ width: 150 }}
+                        slotProps={{ htmlInput: { inputMode: "numeric" } }}
+                      />
+                    </TargetRow>
+                  ))}
+                </Stack>
               </Grid>
             </Grid>
+
             <FormSection title="Descrição e eventos" />
             <TextField label="Resumo" value={form.summary} onChange={(event) => set("summary", event.target.value)} fullWidth />
             <TextField
@@ -642,11 +671,9 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
           title="Selecionar bancada"
           onClose={() => setPickingStation(false)}
           onConfirm={(selection) => {
-            setPickedStations((current) => [
-              ...current,
-              { extId: selection.extId, name: selection.name ?? selection.extId, iconMediaId: selection.iconMediaId ?? null },
-            ]);
-            if (!form.stations.includes(selection.extId)) set("stations", [...form.stations, selection.extId]);
+            if (!form.stations.some((station) => station.extId === selection.extId)) {
+              set("stations", [...form.stations, { key: key(), extId: selection.extId, level: "" }]);
+            }
             setPickingStation(false);
           }}
         />

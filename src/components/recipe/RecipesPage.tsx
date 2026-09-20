@@ -157,9 +157,18 @@ export function RecipesPage() {
                 ))}
               </Stack>,
               <Stack key="stations" direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                {recipe.stations.map((code) => {
-                  const target = { kind: "entity", extId: code };
-                  return <ContentChip key={code} target={target} resolved={references.find(target)} size="small" />;
+                {recipe.stations.map((station) => {
+                  const target = { kind: "entity", extId: station.extId };
+                  return (
+                    <ContentChip
+                      key={station.extId}
+                      target={target}
+                      resolved={references.find(target)}
+                      level={station.level}
+                      levelOperator="min"
+                      size="small"
+                    />
+                  );
                 })}
               </Stack>,
               <Typography key="unlock" variant="caption" color="text.secondary" sx={{ display: "block", textAlign: "right", fontWeight: 700 }}>

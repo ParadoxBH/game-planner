@@ -85,12 +85,18 @@ const DEFAULT_BOUNDS: LatLngBounds = [
 const LABELED_LOCATION_TYPES = new Set(["location", "region"]);
 const TRANSPARENT_PIXEL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'></svg>";
 
-const CursorTracker = ({ onMouseMove }: { onMouseMove: (coords: [number, number]) => void }) => {
-  useMapEvents({
+/** Segue o cursor e o zoom do mapa, para a barra de coordenadas. */
+const CursorTracker = ({ onMouseMove, onZoom }: { onMouseMove: (coords: [number, number]) => void; onZoom: (zoom: number) => void }) => {
+  const map = useMapEvents({
     mousemove(event) {
       onMouseMove([event.latlng.lat, event.latlng.lng]);
     },
+    zoomend() {
+      onZoom(map.getZoom());
+    },
   });
+  // O zoom inicial vem do mapa, antes de qualquer movimento.
+  useEffect(() => onZoom(map.getZoom()), [map, onZoom]);
   return null;
 };
 
@@ -272,6 +278,7 @@ export const MapView = () => {
   const [previewBounds, setPreviewBounds] = useState<BoundBoxBounds | null>(null);
   // O que acabou de ser desenhado e espera o registro; nulo, nada em aberto.
   const [drawn, setDrawn] = useState<DrawnGeometry | null>(null);
+  const [zoom, setZoom] = useState<number | null>(null);
   // O registro aberto para edição, e o que espera um desenho novo no lugar da geometria dele.
   const [editing, setEditing] = useState<EditingContent | null>(null);
   const [redrawFor, setRedrawFor] = useState<EditingContent | null>(null);
@@ -649,7 +656,7 @@ export const MapView = () => {
               style={{ height: "100%", width: "100%", cursor: activeTool ? "crosshair" : "grab" }}
             >
               <Pane name="locationLabels" style={{ zIndex: 500 }} />
-              <CursorTracker onMouseMove={setCursorCoords} />
+              <CursorTracker onMouseMove={setCursorCoords} onZoom={setZoom} />
               <MapEventsHandler onClick={handleMapClick} onDoubleClick={finishPolygon} />
               {activeTool === "polygon" && (
                 <DrawKeyboard
@@ -791,6 +798,7 @@ export const MapView = () => {
             <MapInfoOverlay
               gameName={game.data?.name ?? ""}
               coords={displayCoords}
+              zoom={zoom}
               maps={maps.data.content}
               selectedMapId={selectedMap.extId}
               onSelectMap={selectMap}

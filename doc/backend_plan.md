@@ -391,10 +391,16 @@ CREATE TABLE recipe (
 -- ordinal = o slot da bancada quando o jogo é baseado em slot (Outward, Minecraft)
 CREATE TABLE recipe_input   (game_id, recipe_ext_id, ordinal int, target_kind, target_ext_id, amount numeric, not_consumed boolean DEFAULT false, level int, level_operator text, PRIMARY KEY (game_id, recipe_ext_id, ordinal));
 CREATE TABLE recipe_output  (game_id, recipe_ext_id, ordinal int, target_kind, target_ext_id, amount numeric, chance numeric, level int,        PRIMARY KEY (game_id, recipe_ext_id, ordinal));
-CREATE TABLE recipe_station (game_id, recipe_ext_id, ordinal int, station_ext_id,                                                              PRIMARY KEY (game_id, recipe_ext_id, ordinal));
+CREATE TABLE recipe_station (game_id, recipe_ext_id, ordinal int, station_ext_id, level int,                                                              PRIMARY KEY (game_id, recipe_ext_id, ordinal));
 -- desbloqueio: evento, quest, nível de bancada... target = o conteúdo envolvido; value = o que não é conteúdo
 CREATE TABLE recipe_unlock  (game_id, recipe_ext_id, ordinal int, unlock_type, target_kind, target_ext_id, value text,                         PRIMARY KEY (game_id, recipe_ext_id, ordinal));
 
+
+**Bancada com nível (V14).** `recipe_station.level` é o nível mínimo da bancada para a receita valer
+("forja nível 4"); sem ele, qualquer nível serve. No documento, `stations` é lista de `{extId, level}`,
+e a entrada aceita também só o código em texto, que é como os dados antigos e os dataminers escrevem.
+O par disso no mundo é `spawn_occupant.level`: o ponto de spawn marca em que nível aquela bancada está
+ali, então o mapa mostra onde fica a forja nível 4.
 
 **Nível no requisito (V13).** `level` com `level_operator` (`exact`, `min` ou `max`) exige o alvo num
 nível: a receita de melhoria consome a espada no nível 1 e produz a espada no nível 2 (`recipe_output.level`),

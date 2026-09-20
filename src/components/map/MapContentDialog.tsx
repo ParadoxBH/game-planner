@@ -28,7 +28,7 @@ import { ConfirmDeleteDialog } from "../common/ConfirmDeleteDialog";
 import { CodesField, type CodeOption } from "../common/CodesField";
 import { describeError, numberOf, slugOf, useContentSave } from "../common/contentForm";
 import { FormSection, TargetRow } from "../common/formLayout";
-import { chanceIn, chanceOut, isChance, isOptionalInteger, move } from "../common/formValues";
+import { chanceIn, chanceOut, isChance, isLevel, isOptionalInteger, levelOut, move } from "../common/formValues";
 import { IconUploadField } from "../common/IconUploadField";
 import { StyledDialog } from "../common/StyledDialog";
 
@@ -60,6 +60,8 @@ interface OccupantRow {
   chance: string;
   amount: string;
   maxAmount: string;
+  /** Nível em que o alvo está ali: é assim que se marca a bancada num nível. */
+  level: string;
 }
 
 let nextKey = 1;
@@ -175,6 +177,7 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
       chance: chanceIn(occupant.chance),
       amount: occupant.amount === null ? "" : String(occupant.amount),
       maxAmount: occupant.maxAmount === null ? "" : String(occupant.maxAmount),
+      level: occupant.level === null ? "" : String(occupant.level),
     })),
   );
   const [respawnMode, setRespawnMode] = useState(saved?.respawnMode ?? "");
@@ -223,6 +226,7 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
       !isChance(row.chance) ||
       !isOptionalInteger(row.amount) ||
       !isOptionalInteger(row.maxAmount) ||
+      !isLevel(row.level) ||
       (numberOf(row.maxAmount) !== null && (numberOf(row.maxAmount) ?? 0) < (numberOf(row.amount) ?? 0)),
   );
   const delayInvalid = !isOptionalInteger(respawnDelay) || (numberOf(respawnDelay) ?? 0) < 0;
@@ -249,6 +253,7 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
               chance: chanceOut(row.chance),
               amount: numberOf(row.amount),
               maxAmount: numberOf(row.maxAmount),
+              level: levelOut(row.level),
             })),
             drops: [],
             events,
@@ -427,6 +432,16 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
                   slotProps={{ htmlInput: { inputMode: "decimal" } }}
                 />
                 <TextField
+                  label="Nível"
+                  size="small"
+                  value={row.level}
+                  onChange={(event) => updateOccupant(index, { level: event.target.value })}
+                  error={!isLevel(row.level)}
+                  placeholder="—"
+                  sx={{ width: 90 }}
+                  slotProps={{ htmlInput: { inputMode: "numeric" } }}
+                />
+                <TextField
                   label="Chance"
                   size="small"
                   value={row.chance}
@@ -574,7 +589,7 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
           onConfirm={(selection: ResolvedReference) => {
             const target: Reference = { kind: selection.kind, extId: selection.extId };
             if (picking.index !== null) updateOccupant(picking.index, { target });
-            else setOccupants((current) => [...current, { key: key(), target, chance: "", amount: "", maxAmount: "" }]);
+            else setOccupants((current) => [...current, { key: key(), target, chance: "", amount: "", maxAmount: "", level: "" }]);
             setPicking(null);
           }}
         />

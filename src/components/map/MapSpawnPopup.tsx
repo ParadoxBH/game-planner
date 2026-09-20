@@ -60,6 +60,7 @@ export function MapSpawnPopup({ gameId, marker, isCollected, onToggleCollected, 
                   name: occupant.name,
                   iconMediaId: occupant.iconMediaId,
                 }}
+                level={occupant.level}
                 size="medium"
               />
               <Stack sx={{ flex: 1, minWidth: 0 }}>

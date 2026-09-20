@@ -9,7 +9,8 @@ import com.paradoxbh.gameplannerserver.content.ExtIds;
 /**
  * Receita. {@code name} é opcional: sem ele, a exibição e a busca usam o nome do primeiro produto
  * cadastrado. {@code inputs} é posicional: nos jogos baseados em slot, cada linha é um slot.
- * {@code stations} são códigos de entidade.
+ * {@code stations} são bancadas (entidades), cada uma com o nível exigido quando o jogo tem bancada
+ * que sobe de nível.
  */
 public record RecipeDocument(
         String extId,
@@ -18,7 +19,7 @@ public record RecipeDocument(
         String description,
         List<MediaLink> media,
         Integer craftTimeSeconds,
-        List<String> stations,
+        List<RecipeStation> stations,
         List<Requirement> inputs,
         List<RecipeOutput> outputs,
         List<RecipeUnlock> unlock,
@@ -37,7 +38,7 @@ public record RecipeDocument(
                 Canon.text(description),
                 Canon.media(media, ContentKind.RECIPE.code()),
                 craftTimeSeconds,
-                Canon.ids(stations, "stations"),
+                Canon.rows(stations, "stations", RecipeStation::canonical),
                 Canon.rows(inputs, "inputs", Requirement::canonical),
                 Canon.rows(outputs, "outputs", RecipeOutput::canonical),
                 Canon.rows(unlock, "unlock", RecipeUnlock::canonical),

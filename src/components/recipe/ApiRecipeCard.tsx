@@ -83,9 +83,17 @@ export function ApiRecipeCard({ recipe, references, highlight, onClick }: ApiRec
       {(recipe.stations.length > 0 || recipe.unlock.length > 0) && (
         <Stack direction="row" alignItems="center" spacing={1} flexWrap="wrap" useFlexGap>
           {recipe.stations.map((station) => {
-            const target = { kind: "entity", extId: station };
+            const target = { kind: "entity", extId: station.extId };
             return (
-              <ContentChip key={station} target={target} resolved={references.find(target)} size="small" disableLink={Boolean(onClick)} />
+              <ContentChip
+                key={station.extId}
+                target={target}
+                resolved={references.find(target)}
+                level={station.level}
+                levelOperator="min"
+                size="small"
+                disableLink={Boolean(onClick)}
+              />
             );
           })}
           {recipe.unlock.map((unlock, index) => (

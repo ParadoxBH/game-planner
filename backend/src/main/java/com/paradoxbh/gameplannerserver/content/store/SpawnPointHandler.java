@@ -49,7 +49,7 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
      * cadastrado. {@code respawnDelayMinutes} é o da entidade.
      */
     public record MarkerOccupant(String kind, String extId, String name, String iconMediaId, BigDecimal chance,
-                                 List<String> categories, Integer respawnDelayMinutes) {
+                                 List<String> categories, Integer respawnDelayMinutes, Integer level) {
     }
 
     /** {@code truncated} diz se ficou ponto de fora por causa do limite. */
@@ -209,7 +209,7 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
 
         Map<String, List<MarkerOccupant>> occupants = new HashMap<>();
         jdbc.sql("""
-                SELECT o.spawn_ext_id, o.target_kind, o.target_ext_id, o.chance, r.name, r.icon_media_id,
+                SELECT o.spawn_ext_id, o.target_kind, o.target_ext_id, o.chance, o.level, r.name, r.icon_media_id,
                        ARRAY(SELECT DISTINCT cc.category_ext_id FROM content_category cc
                              WHERE cc.game_id = o.game_id AND cc.ext_id = o.target_ext_id
                                AND (o.target_kind IS NULL OR cc.kind = o.target_kind)
@@ -233,7 +233,7 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
                             .add(new MarkerOccupant(rs.getString("target_kind"), rs.getString("target_ext_id"),
                                     rs.getString("name"), rs.getString("icon_media_id"), rs.getBigDecimal("chance"),
                                     List.of((String[]) rs.getArray("categories").getArray()),
-                                    (Integer) rs.getObject("respawn_delay_minutes")));
+                                    (Integer) rs.getObject("respawn_delay_minutes"), (Integer) rs.getObject("level")));
                 });
 
         Map<String, List<String>> events = new HashMap<>();
@@ -286,11 +286,12 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
                 "target_ext_id", occupant.target().extId(),
                 "chance", occupant.chance(),
                 "amount", occupant.amount(),
-                "max_amount", occupant.maxAmount());
+                "max_amount", occupant.maxAmount(),
+                "level", occupant.level());
     }
 
     private static Occupant occupant(Map<String, Object> row) {
         return new Occupant(Rows.reference(row, "target_kind", "target_ext_id"), Rows.decimal(row, "chance"),
-                Rows.decimal(row, "amount"), Rows.decimal(row, "max_amount"));
+                Rows.decimal(row, "amount"), Rows.decimal(row, "max_amount"), Rows.integer(row, "level"));
     }
 }
