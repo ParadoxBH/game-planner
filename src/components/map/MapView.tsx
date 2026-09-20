@@ -3,6 +3,7 @@ import {
   Alert,
   Avatar,
   Box,
+  Button,
   CircularProgress,
   IconButton,
   Paper,
@@ -14,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
 import LaunchIcon from "@mui/icons-material/Launch";
 import MapIcon from "@mui/icons-material/Map";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -65,7 +67,7 @@ import { MapToolbox } from "./MapToolbox";
 import { MapWeatherPanel } from "./MapWeatherPanel";
 import { createMapCRS, leafletBounds, mapImageUrl, type LatLngBounds } from "./mapGeometry";
 import markerTemplate from "./marker-icon.html?raw";
-import { MapContentDialog, type DrawnGeometry } from "./MapContentDialog";
+import { MapContentDialog, type DrawnGeometry, type EditingContent } from "./MapContentDialog";
 
 export interface NavigationItem {
   type: "entity" | "item";
@@ -270,6 +272,9 @@ export const MapView = () => {
   const [previewBounds, setPreviewBounds] = useState<BoundBoxBounds | null>(null);
   // O que acabou de ser desenhado e espera o registro; nulo, nada em aberto.
   const [drawn, setDrawn] = useState<DrawnGeometry | null>(null);
+  // O registro aberto para edição, e o que espera um desenho novo no lugar da geometria dele.
+  const [editing, setEditing] = useState<EditingContent | null>(null);
+  const [redrawFor, setRedrawFor] = useState<EditingContent | null>(null);
   const [visibleTypes, setVisibleTypes] = useState<string[]>([]);
   const [visibleCategories, setVisibleCategories] = useState<string[]>([]);
   const [visibleEntities, setVisibleEntities] = useState<string[]>([]);
@@ -436,6 +441,7 @@ export const MapView = () => {
                 isCollected={state.collected}
                 onToggleCollected={() => toggleCollected(marker.extId, state.collected)}
                 onExpand={(type, id) => pushNavigation({ type, id })}
+                onEdit={canEdit ? () => setEditing({ kind: "spawn", extId: marker.extId }) : undefined}
               />
             </Popup>
           </StableMarker>
@@ -468,15 +474,30 @@ export const MapView = () => {
         const name = location.name ?? location.extId;
         const labeled = LABELED_LOCATION_TYPES.has(type);
         const color = type === "biome" ? theme.palette.success.main : theme.palette.primary.main;
-        const content = labeled ? (
-          <Tooltip permanent direction="center" className="location-label" pane="locationLabels">
-            {name}
-          </Tooltip>
-        ) : (
-          <Popup>
-            <Typography variant="subtitle2">{name}</Typography>
-            {location.summary && <Typography variant="caption">{location.summary}</Typography>}
-          </Popup>
+        const content = (
+          <>
+            {labeled && (
+              <Tooltip permanent direction="center" className="location-label" pane="locationLabels">
+                {name}
+              </Tooltip>
+            )}
+            <Popup>
+              <Stack spacing={0.5} alignItems="flex-start">
+                <Typography variant="subtitle2">{name}</Typography>
+                {location.summary && <Typography variant="caption">{location.summary}</Typography>}
+                {canEdit && (
+                  <Button
+                    size="small"
+                    startIcon={<EditIcon />}
+                    onClick={() => setEditing({ kind: "location", extId: location.extId })}
+                    sx={{ textTransform: "none" }}
+                  >
+                    Editar local
+                  </Button>
+                )}
+              </Stack>
+            </Popup>
+          </>
         );
 
         if (location.area.trim().toUpperCase().startsWith("POINT")) {
@@ -487,7 +508,7 @@ export const MapView = () => {
               center={toLatLng(x, y)}
               radius={6}
               pathOptions={{ color, fillColor: color, fillOpacity: 0.6, weight: 2 }}
-              interactive={!activeTool && !labeled}
+              interactive={!activeTool && (!labeled || canEdit)}
             >
               {content}
             </CircleMarker>
@@ -500,7 +521,7 @@ export const MapView = () => {
             key={location.extId}
             positions={positions}
             pathOptions={{ color, fillOpacity: 0.1, weight: 2 }}
-            interactive={!activeTool && !labeled}
+            interactive={!activeTool && (!labeled || canEdit)}
           >
             {content}
           </Polygon>
@@ -555,6 +576,11 @@ export const MapView = () => {
 
   const finishDrawing = (geometry: DrawnGeometry) => {
     setDrawn(geometry);
+    // Redesenho: volta para a edição do registro, agora com a geometria nova.
+    if (redrawFor) {
+      setEditing(redrawFor);
+      setRedrawFor(null);
+    }
     setActiveTool(null);
     setCurrentPoints([]);
   };
@@ -830,15 +856,36 @@ export const MapView = () => {
         />
       )}
 
-      {drawn && selectedMap && (
+      {(drawn || editing) && selectedMap && (
         <MapContentDialog
           gameId={gameId}
           mapId={selectedMap.extId}
           geometry={drawn}
-          onClose={() => setDrawn(null)}
-          onSaved={(kind) => {
+          edit={editing ?? undefined}
+          canDelete={isAdmin}
+          onRedraw={(target, isPoint) => {
+            // Fecha a janela, liga a ferramenta e espera o desenho novo.
+            setEditing(null);
             setDrawn(null);
-            setSnackbar(kind === "spawn" ? "Ponto de spawn salvo no mapa!" : "Local salvo no mapa!");
+            setRedrawFor(target);
+            setActiveTool(isPoint ? "point" : "polygon");
+            setSnackbar(isPoint ? "Clique no mapa para a nova posição." : "Desenhe a área e feche com dois cliques ou Enter.");
+          }}
+          onClose={() => {
+            setDrawn(null);
+            setEditing(null);
+          }}
+          onSaved={(kind) => {
+            const wasEditing = editing !== null;
+            setDrawn(null);
+            setEditing(null);
+            setSnackbar(
+              wasEditing
+                ? "Alteração salva no mapa!"
+                : kind === "spawn"
+                  ? "Ponto de spawn salvo no mapa!"
+                  : "Local salvo no mapa!",
+            );
           }}
         />
       )}

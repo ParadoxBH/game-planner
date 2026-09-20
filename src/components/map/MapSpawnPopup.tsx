@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Box, Button, CircularProgress, Divider, IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
+import EditIcon from "@mui/icons-material/Edit";
 import type { MapMarker, SpawnPointDocument } from "../../api/content";
 import { currentMedia, mediaUrl, ReferenceIndex } from "../../api/references";
 import { useContentDetails } from "../../api/useContent";
@@ -21,10 +22,12 @@ interface MapSpawnPopupProps {
   isCollected: boolean;
   onToggleCollected: () => void;
   onExpand: (type: "entity" | "item", id: string) => void;
+  /** Edição do ponto; sem isto (quem não edita o jogo), o botão não aparece. */
+  onEdit?: () => void;
 }
 
 /** Conteúdo do popup de um ponto: ocupantes, respawn e, carregados ao abrir, screenshot e drops do ponto. */
-export function MapSpawnPopup({ gameId, marker, isCollected, onToggleCollected, onExpand }: MapSpawnPopupProps) {
+export function MapSpawnPopup({ gameId, marker, isCollected, onToggleCollected, onExpand, onEdit }: MapSpawnPopupProps) {
   const details = useContentDetails<SpawnPointDocument, unknown>(gameId, "spawn-points", marker.extId);
   const references = useMemo(() => new ReferenceIndex(details.data?.references), [details.data]);
   const point = details.data?.document;
@@ -34,6 +37,11 @@ export function MapSpawnPopup({ gameId, marker, isCollected, onToggleCollected, 
   return (
     <Box sx={{ minWidth: 240, maxWidth: 300 }}>
       <Stack spacing={1.5}>
+        {onEdit && (
+          <Button size="small" startIcon={<EditIcon />} onClick={onEdit} sx={{ textTransform: "none", alignSelf: "flex-start" }}>
+            Editar ponto
+          </Button>
+        )}
         {marker.name && (
           <Typography variant="subtitle2" fontWeight={800}>
             {marker.name}

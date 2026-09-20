@@ -12,21 +12,23 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Add, Place, Polyline } from "@mui/icons-material";
+import { Add, Delete, Gesture, Place, Polyline } from "@mui/icons-material";
 import {
   MAX_PAGE_SIZE,
   type EventDocument,
   type LocationDocument,
   type Reference,
+  type SpawnPointDocument,
   type ResolvedReference,
 } from "../../api/content";
 import { currentMedia } from "../../api/references";
-import { useContentList } from "../../api/useContent";
+import { useContentDocument, useContentList, useContentWrites } from "../../api/useContent";
 import { ApiContentSelector } from "../common/ApiContentSelector";
+import { ConfirmDeleteDialog } from "../common/ConfirmDeleteDialog";
 import { CodesField, type CodeOption } from "../common/CodesField";
-import { numberOf, slugOf, useContentSave } from "../common/contentForm";
+import { describeError, numberOf, slugOf, useContentSave } from "../common/contentForm";
 import { FormSection, TargetRow } from "../common/formLayout";
-import { chanceOut, isChance, isOptionalInteger, move } from "../common/formValues";
+import { chanceIn, chanceOut, isChance, isOptionalInteger, move } from "../common/formValues";
 import { IconUploadField } from "../common/IconUploadField";
 import { StyledDialog } from "../common/StyledDialog";
 
@@ -72,43 +74,122 @@ export interface DrawnGeometry {
   vertices: number;
 }
 
+/** O que está sendo editado; sem isto, é cadastro novo. */
+export interface EditingContent {
+  kind: "spawn" | "location";
+  extId: string;
+}
+
 interface MapContentDialogProps {
   gameId: string;
   mapId: string;
-  geometry: DrawnGeometry;
+  /** Do desenho novo, ou do redesenho de um registro que já existe. */
+  geometry: DrawnGeometry | null;
+  edit?: EditingContent;
   onClose: () => void;
   /** Depois de gravar: o mapa recarrega e mostra o que entrou. */
   onSaved: (kind: "spawn" | "location") => void;
+  /** Pede para desenhar de novo a geometria deste registro. */
+  onRedraw?: (editing: EditingContent, isPoint: boolean) => void;
+  /** Mostra "Apagar" (quem pode apagar: moderador ou acima). */
+  canDelete?: boolean;
+}
+
+/** Ponto ou área, a partir do WKT gravado. */
+function geometryOf(wkt: string | null): DrawnGeometry | null {
+  if (!wkt) return null;
+  const isPoint = wkt.trim().toUpperCase().startsWith("POINT");
+  return { wkt, isPoint, vertices: isPoint ? 1 : (wkt.match(/,/g)?.length ?? 0) + 1 };
 }
 
 /**
- * Registro do que foi desenhado no mapa: ponto de spawn (o que aparece ali) ou local (bioma, região,
- * POI). A geometria vem pronta do desenho; aqui se escolhe o tipo e se preenchem os dados. Polígono
- * só pode ser local, porque ponto de spawn exige uma posição em ponto.
+ * Cadastro novo ou edição: editando, espera o documento chegar para nascer preenchido; a geometria é a
+ * do registro, ou a do desenho novo quando se pede para redesenhar.
  */
-export function MapContentDialog({ gameId, mapId, geometry, onClose, onSaved }: MapContentDialogProps) {
-  const [kind, setKind] = useState<"spawn" | "location">(geometry.isPoint ? "spawn" : "location");
-  const [extId, setExtId] = useState("");
-  const [extIdTouched, setExtIdTouched] = useState(false);
-  const [name, setName] = useState("");
-  const [summary, setSummary] = useState("");
-  const [description, setDescription] = useState("");
+export function MapContentDialog({ gameId, mapId, geometry, edit, onClose, onSaved, onRedraw, canDelete = false }: MapContentDialogProps) {
+  const resource = edit?.kind === "location" ? "locations" : "spawn-points";
+  const document = useContentDocument<SpawnPointDocument & LocationDocument>(gameId, resource, edit?.extId);
+
+  if (!edit) {
+    return (
+      <MapContentForm
+        gameId={gameId}
+        mapId={mapId}
+        geometry={geometry!}
+        onClose={onClose}
+        onSaved={onSaved}
+        onRedraw={onRedraw}
+      />
+    );
+  }
+  if (document.isPending || !document.data) {
+    return (
+      <StyledDialog open modal onClose={onClose} title="Abrindo..." maxWidth="sm">
+        <Stack alignItems="center" sx={{ py: 6 }}>
+          {document.isError ? <Alert severity="error">{describeError(document.error)}</Alert> : <CircularProgress color="primary" />}
+        </Stack>
+      </StyledDialog>
+    );
+  }
+  const saved = document.data;
+  return (
+    <MapContentForm
+      gameId={gameId}
+      mapId={mapId}
+      // Redesenhando, vale o desenho novo; senão, a geometria gravada.
+      geometry={geometry ?? geometryOf(edit.kind === "spawn" ? saved.position : saved.area)}
+      edit={edit}
+      saved={saved}
+      onClose={onClose}
+      onSaved={onSaved}
+      onRedraw={onRedraw}
+      canDelete={canDelete}
+    />
+  );
+}
+
+interface MapContentFormProps extends MapContentDialogProps {
+  saved?: SpawnPointDocument & LocationDocument;
+}
+
+/**
+ * Registro do que está no mapa: ponto de spawn (o que aparece ali) ou local (bioma, região, POI). A
+ * geometria vem do desenho ou do que já estava gravado; aqui se escolhe o tipo e se preenchem os
+ * dados. Área só pode ser local, porque ponto de spawn exige uma posição em ponto.
+ */
+function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved, onRedraw, canDelete = false }: MapContentFormProps) {
+  const [kind, setKind] = useState<"spawn" | "location">(edit?.kind ?? (geometry?.isPoint ? "spawn" : "location"));
+  const [extId, setExtId] = useState(saved?.extId ?? "");
+  const [extIdTouched, setExtIdTouched] = useState(Boolean(saved));
+  const [name, setName] = useState(saved?.name ?? "");
+  const [summary, setSummary] = useState(saved?.summary ?? "");
+  const [description, setDescription] = useState(saved?.description ?? "");
   const [icon, setIcon] = useState<File | null>(null);
-  const [events, setEvents] = useState<string[]>([]);
+  const [events, setEvents] = useState<string[]>(saved?.events ?? []);
+  const [deleting, setDeleting] = useState(false);
   // Ponto de spawn
-  const [occupants, setOccupants] = useState<OccupantRow[]>([]);
-  const [respawnMode, setRespawnMode] = useState("");
-  const [respawnDelay, setRespawnDelay] = useState("");
-  const [location, setLocation] = useState<string | null>(null);
+  const [occupants, setOccupants] = useState<OccupantRow[]>(
+    (saved?.occupants ?? []).map((occupant) => ({
+      key: key(),
+      target: occupant.target,
+      chance: chanceIn(occupant.chance),
+      amount: occupant.amount === null ? "" : String(occupant.amount),
+      maxAmount: occupant.maxAmount === null ? "" : String(occupant.maxAmount),
+    })),
+  );
+  const [respawnMode, setRespawnMode] = useState(saved?.respawnMode ?? "");
+  const [respawnDelay, setRespawnDelay] = useState(saved?.respawnDelayMinutes === null || saved?.respawnDelayMinutes === undefined ? "" : String(saved.respawnDelayMinutes));
+  const [location, setLocation] = useState<string | null>(saved?.location ?? null);
   // Local
-  const [locationType, setLocationType] = useState(geometry.isPoint ? "poi" : "region");
-  const [parent, setParent] = useState<string | null>(null);
+  const [locationType, setLocationType] = useState(saved?.locationType ?? (geometry?.isPoint ? "poi" : "region"));
+  const [parent, setParent] = useState<string | null>(saved?.parent ?? null);
   const [picking, setPicking] = useState<{ index: number | null } | null>(null);
   // Fixado na abertura: o código sugerido não pode mudar a cada render.
   const [stamp] = useState(() => Date.now());
 
   const resource = kind === "spawn" ? "spawn-points" : "locations";
-  const { save, saving, error } = useContentSave(gameId, resource, true);
+  const { save, saving, error } = useContentSave(gameId, resource, !edit);
+  const { remove } = useContentWrites(gameId, resource);
   const eventList = useContentList<EventDocument>(gameId, "events", { size: MAX_PAGE_SIZE, sort: "name" });
   const locations = useContentList<LocationDocument>(gameId, "locations", { size: MAX_PAGE_SIZE, sort: "name" });
 
@@ -160,7 +241,7 @@ export function MapContentDialog({ gameId, mapId, geometry, onClose, onSaved }: 
             description: description.trim() || null,
             map: mapId,
             location,
-            position: geometry.wkt,
+            position: geometry?.wkt ?? null,
             respawnMode: respawnMode || null,
             respawnDelayMinutes: numberOf(respawnDelay),
             occupants: occupants.map((row) => ({
@@ -180,11 +261,11 @@ export function MapContentDialog({ gameId, mapId, geometry, onClose, onSaved }: 
             locationType,
             parent,
             map: mapId,
-            area: geometry.wkt,
+            area: geometry?.wkt ?? null,
             events,
           };
-    const saved = await save(id, document, [{ file: icon, usage: "icon" }]);
-    if (saved) onSaved(kind);
+    const ok = await save(id, document, [{ file: icon, usage: "icon" }]);
+    if (ok) onSaved(kind);
   };
 
   return (
@@ -192,10 +273,21 @@ export function MapContentDialog({ gameId, mapId, geometry, onClose, onSaved }: 
       open
       modal
       onClose={saving ? () => undefined : onClose}
-      title={kind === "spawn" ? "Novo ponto de spawn" : "Novo local"}
+      title={edit ? `Editar ${name || extId}` : kind === "spawn" ? "Novo ponto de spawn" : "Novo local"}
       maxWidth="sm"
       actions={
         <>
+          {edit && canDelete && (
+            <Button
+              color="error"
+              startIcon={<Delete />}
+              onClick={() => setDeleting(true)}
+              disabled={saving}
+              sx={{ textTransform: "none", mr: "auto" }}
+            >
+              Apagar
+            </Button>
+          )}
           <Button onClick={onClose} disabled={saving} sx={{ textTransform: "none" }}>
             Cancelar
           </Button>
@@ -206,7 +298,7 @@ export function MapContentDialog({ gameId, mapId, geometry, onClose, onSaved }: 
             startIcon={saving ? <CircularProgress size={16} color="inherit" /> : undefined}
             sx={{ textTransform: "none" }}
           >
-            Salvar no mapa
+            {edit ? "Salvar" : "Salvar no mapa"}
           </Button>
         </>
       }
@@ -214,14 +306,24 @@ export function MapContentDialog({ gameId, mapId, geometry, onClose, onSaved }: 
       <Stack spacing={2}>
         <Stack direction="row" spacing={1} alignItems="center">
           <Chip
-            icon={geometry.isPoint ? <Place /> : <Polyline />}
-            label={geometry.isPoint ? "Ponto desenhado" : `Área com ${geometry.vertices} vértices`}
-            color="primary"
+            icon={geometry?.isPoint ? <Place /> : <Polyline />}
+            label={!geometry ? "Sem geometria" : geometry.isPoint ? "Ponto no mapa" : `Área com ${geometry.vertices} vértices`}
+            color={geometry ? "primary" : "default"}
             variant="outlined"
           />
-          <Typography variant="caption" color="text.secondary" sx={{ fontFamily: "monospace", overflow: "hidden", textOverflow: "ellipsis" }}>
-            {geometry.wkt.length > 60 ? `${geometry.wkt.slice(0, 60)}…` : geometry.wkt}
+          <Typography variant="caption" color="text.secondary" sx={{ flex: 1, fontFamily: "monospace", overflow: "hidden", textOverflow: "ellipsis" }}>
+            {geometry ? (geometry.wkt.length > 48 ? `${geometry.wkt.slice(0, 48)}…` : geometry.wkt) : "—"}
           </Typography>
+          {edit && onRedraw && (
+            <Button
+              size="small"
+              startIcon={<Gesture />}
+              onClick={() => onRedraw(edit, kind === "spawn")}
+              sx={{ textTransform: "none", whiteSpace: "nowrap" }}
+            >
+              Redesenhar
+            </Button>
+          )}
         </Stack>
 
         <TextField
@@ -229,16 +331,28 @@ export function MapContentDialog({ gameId, mapId, geometry, onClose, onSaved }: 
           label="O que é"
           value={kind}
           onChange={(event) => setKind(event.target.value as "spawn" | "location")}
-          helperText={geometry.isPoint ? undefined : "Área só pode ser local: ponto de spawn precisa de uma posição."}
+          disabled={Boolean(edit)}
+          helperText={
+            edit
+              ? "O tipo não muda depois de criado."
+              : geometry?.isPoint
+                ? undefined
+                : "Área só pode ser local: ponto de spawn precisa de uma posição."
+          }
           fullWidth
         >
-          <MenuItem value="spawn" disabled={!geometry.isPoint}>
+          <MenuItem value="spawn" disabled={!geometry?.isPoint}>
             Ponto de spawn — o que aparece aqui
           </MenuItem>
           <MenuItem value="location">Local — bioma, região, ponto de interesse</MenuItem>
         </TextField>
 
-        <IconUploadField currentMediaId={null} kind={kind === "spawn" ? "spawn_point" : "location"} file={icon} onChange={setIcon} />
+        <IconUploadField
+          currentMediaId={saved ? currentMedia(saved.media, "icon") : null}
+          kind={kind === "spawn" ? "spawn_point" : "location"}
+          file={icon}
+          onChange={setIcon}
+        />
 
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, sm: 6 }}>
@@ -261,7 +375,8 @@ export function MapContentDialog({ gameId, mapId, geometry, onClose, onSaved }: 
                 setExtId(event.target.value);
               }}
               required
-              helperText="Identifica o registro; sugerido pelo nome."
+              disabled={Boolean(edit)}
+              helperText={edit ? "O código não muda depois de criado." : "Identifica o registro; sugerido pelo nome."}
               fullWidth
               slotProps={{ htmlInput: { style: { fontFamily: "monospace" } } }}
             />
@@ -431,6 +546,22 @@ export function MapContentDialog({ gameId, mapId, geometry, onClose, onSaved }: 
 
         {error && <Alert severity="error">{error}</Alert>}
       </Stack>
+
+      {deleting && edit && (
+        <ConfirmDeleteDialog
+          title={kind === "spawn" ? "Apagar ponto de spawn" : "Apagar local"}
+          message={
+            <>
+              Apagar <strong>{name || extId}</strong> (<code>{extId}</code>) do mapa? O último estado fica guardado como
+              revisão.
+            </>
+          }
+          pending={remove.isPending}
+          error={remove.error}
+          onClose={() => setDeleting(false)}
+          onConfirm={() => remove.mutate(extId, { onSuccess: () => onSaved(kind) })}
+        />
+      )}
 
       {picking && (
         <ApiContentSelector
