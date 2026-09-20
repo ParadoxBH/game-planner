@@ -26,12 +26,12 @@ export function isChance(value: string): boolean {
   return number === null || (number !== undefined && number > 0 && number <= 100);
 }
 
-/** Nível exigido: vazio (qualquer um) ou inteiro zero ou mais. */
+/** Inteiro zero ou mais, opcional: o nível exigido, a posição na lista. Vazio vale. */
 export function isLevel(value: string): boolean {
   return value.trim() === "" || /^\d+$/.test(value.trim());
 }
 
-/** Nível para o documento: vazio vira null. */
+/** O mesmo inteiro para o documento: vazio vira null. */
 export function levelOut(value: string): number | null {
   return value.trim() === "" ? null : Number(value.trim());
 }

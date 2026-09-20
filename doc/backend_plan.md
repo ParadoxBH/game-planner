@@ -396,6 +396,8 @@ CREATE TABLE recipe_station (game_id, recipe_ext_id, ordinal int, station_ext_id
 CREATE TABLE recipe_unlock  (game_id, recipe_ext_id, ordinal int, unlock_type, target_kind, target_ext_id, value text,                         PRIMARY KEY (game_id, recipe_ext_id, ordinal));
 
 
+**Ordem dos grupos de coleção (V15).** `collection_group.ordinal` é a posição do grupo dentro da coleção, definida por quem administra; é uma só para o grupo, mesmo quando ele aparece em mais de uma coleção. O agregado `/collections/{id}/details` devolve os grupos por ela, e quem não tem posição cai no fim, em ordem alfabética. A tela reordena com o `PUT` em lote da coleção de grupos, que renumera todos numa transação só.
+
 **Bancada com nível (V14).** `recipe_station.level` é o nível mínimo da bancada para a receita valer
 ("forja nível 4"); sem ele, qualquer nível serve. No documento, `stations` é lista de `{extId, level}`,
 e a entrada aceita também só o código em texto, que é como os dados antigos e os dataminers escrevem.
@@ -450,7 +452,7 @@ Coleções e códigos de resgate:
 
 ```sql
 CREATE TABLE collection        (game_id, ext_id, ... base ..., PRIMARY KEY (game_id, ext_id));
-CREATE TABLE collection_group  (game_id, ext_id, ... base ..., PRIMARY KEY (game_id, ext_id));
+CREATE TABLE collection_group  (game_id, ext_id, ... base ..., ordinal int, PRIMARY KEY (game_id, ext_id));
 -- um grupo pode estar em mais de uma coleção
 CREATE TABLE collection_group_collection (game_id, group_ext_id, ordinal int, collection_ext_id,       PRIMARY KEY (game_id, group_ext_id, ordinal));
 CREATE TABLE collection_group_member     (game_id, group_ext_id, ordinal int, target_kind, target_ext_id, PRIMARY KEY (game_id, group_ext_id, ordinal));

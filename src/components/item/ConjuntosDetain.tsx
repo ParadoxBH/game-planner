@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
+  Alert,
   alpha,
   Box,
   Button,
@@ -13,17 +14,27 @@ import {
   IconButton,
   Paper,
   Stack,
-  Switch,
   ToggleButton,
   ToggleButtonGroup,
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Add, ArrowBack, CheckCircle, CheckCircleOutline, Edit, GridView, ViewList } from "@mui/icons-material";
+import {
+  Add,
+  ArrowBack,
+  ArrowDownward,
+  ArrowUpward,
+  CheckCircle,
+  CheckCircleOutline,
+  Edit,
+  GridView,
+  ViewList,
+} from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import type { CollectionDocument, CollectionGroupDocument, CollectionRelated, Reference } from "../../api/content";
 import { currentMedia, ReferenceIndex } from "../../api/references";
-import { useContentDetails } from "../../api/useContent";
+import { useContentDetails, useContentWrites } from "../../api/useContent";
+import type { FilterValue, FilterValues, ListingSchema } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
 import {
   addProgress,
@@ -36,7 +47,10 @@ import {
 import { useGameAdmin, useGameEditor } from "../../hooks/useGameAdmin";
 import { usePlatform } from "../../hooks/usePlatform";
 import { ContentChip } from "../common/ContentChip";
+import { move } from "../common/formValues";
 import { ContentIcon } from "../common/ContentIcon";
+import { QueryBuilder } from "../common/QueryBuilder";
+import { describeError } from "../common/contentForm";
 import { DataCard } from "../common/DataCard";
 import { StyledContainer } from "../common/StyledContainer";
 import { StyledDialog } from "../common/StyledDialog";
@@ -45,6 +59,57 @@ import { CollectionGroupFormDialog } from "./CollectionGroupFormDialog";
 import { CollectionProgress } from "./CollectionProgress";
 
 type Layout = "list" | "grid";
+
+/** Como os grupos são ordenados na tela. "ordem" é a que o admin definiu e a API devolve. */
+type GroupSort = "ordem" | "nome" | "progresso" | "membros";
+
+/**
+ * Os filtros desta tela, no mesmo formato que o backend descreve para as listagens, para o
+ * QueryBuilder desenhar igual ao das outras telas. Só que aqui os grupos vieram no agregado do
+ * conjunto, então quem aplica é a própria tela, e não uma consulta.
+ */
+const GROUP_FILTERS: ListingSchema = {
+  search: { placeholder: "Pesquisar grupos ou membros...", fields: [] },
+  activeEvents: false,
+  filters: [
+    {
+      key: "sort",
+      label: "Ordenar",
+      display: "select",
+      allLabel: "Ordem do conjunto",
+      options: [
+        { value: "nome", label: "Nome" },
+        { value: "progresso", label: "Progresso (faltando antes)" },
+        { value: "membros", label: "Mais membros" },
+      ],
+    },
+    {
+      key: "completed",
+      label: "Completos",
+      display: "switch",
+      options: [{ value: "hide", label: "Esconder completos" }],
+    },
+  ],
+};
+
+/** O grupo como documento de escrita: sem media nem meta, que não são do formulário. */
+function groupPayload(group: CollectionGroupDocument, ordinal: number) {
+  return {
+    extId: group.extId,
+    name: group.name,
+    summary: group.summary,
+    description: group.description,
+    collections: group.collections,
+    members: group.members,
+    events: group.events,
+    ordinal,
+  };
+}
+
+/** Quanto falta, de 0 a 1; grupo vazio conta como completo. */
+function ratio(progress: { done: number; total: number }): number {
+  return progress.total === 0 ? 1 : progress.done / progress.total;
+}
 
 interface MemberGridProps {
   members: Reference[];
@@ -118,11 +183,22 @@ export function ConjuntosDetain() {
   const [layout, setLayout] = useStoredState<Layout>(`gp_conjuntos_layout_${gameId}`, "list");
   const [search, setSearch] = useState("");
   const [openGroup, setOpenGroup] = useState<CollectionGroupDocument | null>(null);
+  const [sort, setSort] = useStoredState<GroupSort>(`gp_conjuntos_sort_${gameId}`, "ordem");
+  // O QueryBuilder fala em FilterValues; a tela guarda cada escolha no navegador, como antes.
+  const filterValues: FilterValues = {
+    sort: sort === "ordem" ? null : sort,
+    completed: hideCompleted ? "hide" : null,
+  };
+  const changeFilter = (key: string, value: FilterValue) => {
+    if (key === "sort") setSort(typeof value === "string" ? (value as GroupSort) : "ordem");
+    if (key === "completed") setHideCompleted(value === "hide");
+  };
   const { canEdit } = useGameEditor(gameId);
   const { isAdmin } = useGameAdmin(gameId);
   const [editing, setEditing] = useState(false);
   // O grupo em edição; "new" é um grupo novo já dentro deste conjunto.
   const [editingGroup, setEditingGroup] = useState<CollectionGroupDocument | "new" | null>(null);
+  const { putAll } = useContentWrites(gameId, "collection-groups");
 
   const details = useContentDetails<CollectionDocument, CollectionRelated>(gameId, "collections", conjuntoId);
   const references = useMemo(() => new ReferenceIndex(details.data?.references), [details.data]);
@@ -158,7 +234,7 @@ export function ConjuntosDetain() {
   );
   const total = groups.reduce((sum, group) => addProgress(sum, groupProgress(group, collected)), NO_PROGRESS);
   const term = search.trim().toLowerCase();
-  const visible = groups
+  const filtered = groups
     .filter(
       (group) =>
         !term ||
@@ -166,68 +242,97 @@ export function ConjuntosDetain() {
         group.members.some((member) => references.name(member).toLowerCase().includes(term)),
     )
     .filter((group) => !hideCompleted || !isComplete(groupProgress(group, collected)));
+  // "ordem" é a que veio da API, já pela posição do grupo no conjunto.
+  const visible =
+    sort === "ordem"
+      ? filtered
+      : [...filtered].sort((a, b) => {
+          if (sort === "nome") return a.name.localeCompare(b.name);
+          if (sort === "membros") return b.members.length - a.members.length;
+          return ratio(groupProgress(a, collected)) - ratio(groupProgress(b, collected));
+        });
+
+  // Reordenar exige ver o conjunto inteiro: com filtro ou página cortada, as setas somem.
+  const everyGroup = related.groups.content;
+  const canReorder =
+    canEdit && sort === "ordem" && layout === "list" && visible.length === everyGroup.length
+    && everyGroup.length === related.groups.total;
+
+  /** Troca o grupo de lugar e renumera o conjunto, num lote só. */
+  const moveGroup = (group: CollectionGroupDocument, direction: -1 | 1) => {
+    const from = everyGroup.indexOf(group);
+    if (from < 0 || from + direction < 0 || from + direction >= everyGroup.length) return;
+    const changed = move(everyGroup, from, direction)
+      .map((row, position) => ({ row, position }))
+      .filter(({ row, position }) => row.ordinal !== position)
+      .map(({ row, position }) => groupPayload(row, position));
+    if (changed.length > 0) putAll.mutate(changed);
+  };
 
   return (
     <StyledContainer
       prefix={<ContentIcon mediaId={currentMedia(collection.media, "icon")} kind="collection" alt={collection.name} size={60} />}
       title={collection.name}
       label={collection.summary ?? collection.description ?? `Grupos do conjunto ${collection.extId}`}
-      searchValue={search}
-      onChangeSearch={setSearch}
-      search={{ placeholder: "Pesquisar grupos ou membros..." }}
-      actionsStart={
-        <Stack direction="row" alignItems="center" spacing={2} flex={1} justifyContent={isMobile ? "space-between" : "flex-start"}>
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Switch size="small" checked={hideCompleted} onChange={(event) => setHideCompleted(event.target.checked)} />
-            <Typography variant="body2" sx={{ fontWeight: 600, whiteSpace: "nowrap" }}>
-              Esconder completos
-            </Typography>
+      searchEnd={
+        <>
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems="center"
+            flex={1}
+            justifyContent={isMobile ? "space-between" : "flex-end"}
+          >
+            <Chip
+              label={`${total.done} / ${total.total}`}
+              color={isComplete(total) ? "success" : "primary"}
+              variant={isComplete(total) ? "filled" : "outlined"}
+              sx={{ fontWeight: 800, borderRadius: 1 }}
+            />
+            <Button size="small" startIcon={<ArrowBack />} onClick={() => navigate(`/game/${gameId}/conjuntos`)} sx={{ textTransform: "none" }}>
+              Voltar
+            </Button>
+            {canEdit && (
+              <>
+                <Button size="small" startIcon={<Edit />} onClick={() => setEditing(true)} sx={{ textTransform: "none" }}>
+                  Editar
+                </Button>
+                <Button
+                  size="small"
+                  variant="contained"
+                  startIcon={<Add />}
+                  onClick={() => setEditingGroup("new")}
+                  sx={{ textTransform: "none", whiteSpace: "nowrap" }}
+                >
+                  Novo grupo
+                </Button>
+              </>
+            )}
+            <ToggleButtonGroup value={layout} exclusive size="small" onChange={(_, next: Layout | null) => next && setLayout(next)}>
+              <Tooltip title="Grupos em lista">
+                <ToggleButton value="list">
+                  <ViewList sx={{ fontSize: 20 }} />
+                </ToggleButton>
+              </Tooltip>
+              <Tooltip title="Grupos em grade">
+                <ToggleButton value="grid">
+                  <GridView sx={{ fontSize: 20 }} />
+                </ToggleButton>
+              </Tooltip>
+            </ToggleButtonGroup>
           </Stack>
-          <ToggleButtonGroup value={layout} exclusive size="small" onChange={(_, next: Layout | null) => next && setLayout(next)}>
-            <Tooltip title="Grupos em lista">
-              <ToggleButton value="list">
-                <ViewList sx={{ fontSize: 20 }} />
-              </ToggleButton>
-            </Tooltip>
-            <Tooltip title="Grupos em grade">
-              <ToggleButton value="grid">
-                <GridView sx={{ fontSize: 20 }} />
-              </ToggleButton>
-            </Tooltip>
-          </ToggleButtonGroup>
-        </Stack>
-      }
-      actionsEnd={
-        <Stack direction="row" alignItems="center" justifyContent={isMobile ? "space-between" : "flex-end"} flex={1} spacing={1}>
-          <Chip
-            label={`${total.done} / ${total.total}`}
-            color={isComplete(total) ? "success" : "primary"}
-            variant={isComplete(total) ? "filled" : "outlined"}
-            sx={{ fontWeight: 800, borderRadius: 1 }}
+          <QueryBuilder
+            schema={GROUP_FILTERS}
+            search={search}
+            onSearchChange={setSearch}
+            values={filterValues}
+            onChange={changeFilter}
           />
-          {canEdit && (
-            <>
-              <Button size="small" startIcon={<Edit />} onClick={() => setEditing(true)} sx={{ textTransform: "none" }}>
-                Editar
-              </Button>
-              <Button
-                size="small"
-                variant="contained"
-                startIcon={<Add />}
-                onClick={() => setEditingGroup("new")}
-                sx={{ textTransform: "none", whiteSpace: "nowrap" }}
-              >
-                Novo grupo
-              </Button>
-            </>
-          )}
-          <Button startIcon={<ArrowBack />} onClick={() => navigate(`/game/${gameId}/conjuntos`)}>
-            Voltar
-          </Button>
-        </Stack>
+        </>
       }
     >
       <Stack spacing={2} sx={{ overflowY: "auto", flex: 1, minHeight: 0 }}>
+        {putAll.isError && <Alert severity="error">A ordem não foi salva: {describeError(putAll.error)}</Alert>}
         {visible.length === 0 && (
           <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", py: 6 }}>
             {groups.length === 0 ? "Nenhum grupo disponível neste conjunto com os eventos ativos." : "Nenhum grupo encontrado com estes filtros."}
@@ -246,6 +351,32 @@ export function ConjuntosDetain() {
                   <Typography variant="body2" color="text.secondary">
                     ({progress.done}/{progress.total})
                   </Typography>
+                  {canReorder && (
+                    <>
+                      <Tooltip title="Subir">
+                        <span>
+                          <IconButton
+                            size="small"
+                            disabled={putAll.isPending || everyGroup.indexOf(group) === 0}
+                            onClick={() => moveGroup(group, -1)}
+                          >
+                            <ArrowUpward fontSize="small" />
+                          </IconButton>
+                        </span>
+                      </Tooltip>
+                      <Tooltip title="Descer">
+                        <span>
+                          <IconButton
+                            size="small"
+                            disabled={putAll.isPending || everyGroup.indexOf(group) === everyGroup.length - 1}
+                            onClick={() => moveGroup(group, 1)}
+                          >
+                            <ArrowDownward fontSize="small" />
+                          </IconButton>
+                        </span>
+                      </Tooltip>
+                    </>
+                  )}
                   {canEdit && (
                     <Tooltip title="Editar grupo">
                       <IconButton size="small" onClick={() => setEditingGroup(group)}>

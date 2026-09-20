@@ -59,6 +59,37 @@ class CollectionsCodesApiIntegrationTest extends ContentApiTest {
     }
 
     @Test
+    void collectionDetailsPutsTheGroupsInThePositionTheAdminChose() throws Exception {
+        send(post(COLLECTIONS, game), "editor", json("{ 'extId': 'flower', 'name': 'Flores' }"))
+                .andExpect(status().isCreated());
+        group("tulipas", "Tulipas", "'ordinal': 1");
+        group("margaridas", "Margaridas", "'ordinal': 0");
+        group("azaleias", "Azaléias", null);
+        group("bromelias", "Bromélias", null);
+
+        // Quem tem posição vem primeiro, na ordem dela; o resto cai no fim, pelo nome.
+        mvc.perform(get(COLLECTIONS + "/{id}/details", game, "flower"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.related.groups.content[*].extId",
+                        contains("margaridas", "tulipas", "azaleias", "bromelias")));
+
+        // Lote numa transação só: é assim que a tela reordena.
+        send(put(GROUPS, game), "editor", json("""
+                [ { 'extId': 'azaleias', 'name': 'Azaléias', 'collections': ['flower'], 'ordinal': 0 },
+                  { 'extId': 'margaridas', 'name': 'Margaridas', 'collections': ['flower'], 'ordinal': 1 } ]
+                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.updated").value(2));
+        mvc.perform(get(COLLECTIONS + "/{id}/details", game, "flower"))
+                .andExpect(jsonPath("$.related.groups.content[*].extId",
+                        contains("azaleias", "margaridas", "tulipas", "bromelias")));
+
+        send(post(GROUPS, game), "editor", json("{ 'extId': 'g9', 'name': 'G', 'ordinal': -1 }"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.detail").value("ordinal não pode ser negativo"));
+    }
+
+    @Test
     void codeIsItsOwnIdAndActiveMeansNotExpired() throws Exception {
         code("SPRINGFEST2026", "'addedOn': '2026-02-01', 'expiresOn': '2999-12-31'");
         code("happy2026", "'addedOn': '2020-01-01', 'expiresOn': '2020-01-10'");
@@ -94,6 +125,12 @@ class CollectionsCodesApiIntegrationTest extends ContentApiTest {
         send(post(CODES, game), "editor",
                 json("{ 'extId': 'c3', 'media': [ { 'usage': 'icon', 'mediaId': '%s' } ] }".formatted(newMedia())))
                 .andExpect(status().isBadRequest());
+    }
+
+    private void group(String extId, String name, String extra) throws Exception {
+        send(post(GROUPS, game), "editor", json("{ 'extId': '%s', 'name': '%s', 'collections': ['flower']%s }"
+                .formatted(extId, name, extra == null ? "" : ", " + extra)))
+                .andExpect(status().isCreated());
     }
 
     private void code(String code, String dates) throws Exception {

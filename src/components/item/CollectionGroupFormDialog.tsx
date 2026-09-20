@@ -15,7 +15,7 @@ import { CodesField, type CodeOption } from "../common/CodesField";
 import { ConfirmDeleteDialog } from "../common/ConfirmDeleteDialog";
 import { slugOf, useContentSave } from "../common/contentForm";
 import { FormSection, TargetRow } from "../common/formLayout";
-import { move } from "../common/formValues";
+import { isLevel, levelOut, move } from "../common/formValues";
 import { IconUploadField } from "../common/IconUploadField";
 import { StyledDialog } from "../common/StyledDialog";
 
@@ -36,11 +36,22 @@ interface GroupForm {
   collections: string[];
   members: MemberRow[];
   events: string[];
+  /** Vazio: o grupo vai para o fim do conjunto, em ordem alfabética. */
+  ordinal: string;
 }
 
 function formOf(group: CollectionGroupDocument | null, collectionExtId: string): GroupForm {
   if (!group) {
-    return { extId: "", name: "", summary: "", description: "", collections: [collectionExtId], members: [], events: [] };
+    return {
+      extId: "",
+      name: "",
+      summary: "",
+      description: "",
+      collections: [collectionExtId],
+      members: [],
+      events: [],
+      ordinal: "",
+    };
   }
   return {
     extId: group.extId,
@@ -50,6 +61,7 @@ function formOf(group: CollectionGroupDocument | null, collectionExtId: string):
     collections: group.collections,
     members: group.members.map((target) => ({ key: key(), target })),
     events: group.events,
+    ordinal: group.ordinal === null ? "" : String(group.ordinal),
   };
 }
 
@@ -137,7 +149,7 @@ export function CollectionGroupFormDialog({
     setPicking(null);
   };
 
-  const valid = form.name.trim() !== "" && form.extId.trim() !== "";
+  const valid = form.name.trim() !== "" && form.extId.trim() !== "" && isLevel(form.ordinal);
 
   const submit = async () => {
     if (!valid) return;
@@ -152,6 +164,7 @@ export function CollectionGroupFormDialog({
         collections: form.collections,
         members: form.members.map((row) => row.target),
         events: form.events,
+        ordinal: levelOut(form.ordinal),
       },
       [{ file: icon, usage: "icon" }],
     );
@@ -216,6 +229,19 @@ export function CollectionGroupFormDialog({
           slotProps={{ htmlInput: { style: { fontFamily: "monospace" } } }}
         />
         <TextField label="Resumo" value={form.summary} onChange={(event) => set("summary", event.target.value)} fullWidth />
+        <TextField
+          label="Posição"
+          value={form.ordinal}
+          onChange={(event) => set("ordinal", event.target.value)}
+          error={!isLevel(form.ordinal)}
+          helperText={
+            isLevel(form.ordinal)
+              ? "Onde o grupo aparece no conjunto. Vazio: no fim, em ordem alfabética."
+              : "Inteiro zero ou mais."
+          }
+          fullWidth
+          slotProps={{ htmlInput: { inputMode: "numeric" } }}
+        />
         <TextField
           label="Descrição"
           value={form.description}

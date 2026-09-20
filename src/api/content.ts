@@ -204,6 +204,8 @@ export interface CollectionGroupDocument extends ContentBase {
   collections: string[];
   members: Reference[];
   events: string[];
+  /** Posição do grupo dentro do conjunto; null, vai para o fim, em ordem alfabética. */
+  ordinal: number | null;
 }
 
 export interface CategoryDocument extends ContentBase {
@@ -582,6 +584,13 @@ export interface AttributeDefinition {
   ordinal: number;
 }
 
+/** Resultado do lote: quantos documentos entraram em cada situação. */
+export interface BulkResult {
+  created: number;
+  updated: number;
+  unchanged: number;
+}
+
 export type ContentResource =
   | "items"
   | "entities"
@@ -660,6 +669,11 @@ export const contentApi = {
   /** Substitui o documento inteiro: campo ausente vira vazio, exceto `media`, que ausente fica como está. */
   put<T>(gameId: string, resource: ContentResource, extId: string, document: object) {
     return apiRequest<T>(`${gamePath(gameId)}/${resource}/${encodeURIComponent(extId)}`, { method: "PUT", body: document });
+  },
+
+  /** Lote numa transação só: cada documento é criado ou substituído inteiro, como no put. */
+  putAll(gameId: string, resource: ContentResource, documents: object[]) {
+    return apiRequest<BulkResult>(`${gamePath(gameId)}/${resource}`, { method: "PUT", body: documents });
   },
 
   remove(gameId: string, resource: ContentResource, extId: string) {

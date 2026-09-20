@@ -1,5 +1,6 @@
 package com.paradoxbh.gameplannerserver.content.store;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -42,12 +43,21 @@ public class CollectionGroupHandler extends AbstractContentHandler<CollectionGro
 
     @Override
     protected List<String> specificColumns() {
-        return List.of();
+        return List.of("ordinal");
     }
 
     @Override
     protected List<Object> specificValues(CollectionGroupDocument group) {
-        return List.of();
+        return Collections.singletonList(group.ordinal());
+    }
+
+    /**
+     * A ordem que o conjunto usa: a posição definida no grupo e, empatado ou sem posição, o nome.
+     * Quem ordena acrescenta " ASC NULLS LAST, t.ext_id" ao fim, então só o nome leva o sentido.
+     */
+    @Override
+    protected Map<String, String> specificSortColumns() {
+        return Map.of("ordinal", "t.ordinal NULLS LAST, " + nameExpression());
     }
 
     @Override
@@ -62,6 +72,7 @@ public class CollectionGroupHandler extends AbstractContentHandler<CollectionGro
                 parts.collections().getOrDefault(id, List.of()),
                 parts.members().getOrDefault(id, List.of()),
                 tags.events(),
+                Rows.integer(row, "ordinal"),
                 meta);
     }
 

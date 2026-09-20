@@ -121,7 +121,8 @@ public class DetailsService {
                 coded("children", LOCATION, "parent")));
         relations.put(SPAWN_POINT, List.of(coded("locations", LOCATION, "containing")));
         relations.put(MAP, List.of(coded("locations", LOCATION, "map")));
-        relations.put(COLLECTION, List.of(coded("groups", COLLECTION_GROUP, "collection")));
+        // Os grupos saem na ordem que o conjunto define (V15), e não em ordem alfabética.
+        relations.put(COLLECTION, List.of(sorted(coded("groups", COLLECTION_GROUP, "collection"), "ordinal")));
     }
 
     public Details details(String gameId, String resource, String extId) {
@@ -191,6 +192,14 @@ public class DetailsService {
 
     private Relation inEvent(String name, ContentKind kind) {
         return coded(name, kind, "event");
+    }
+
+    /** A mesma relação, ordenada por outra chave que não o nome. */
+    private Relation sorted(Relation relation, String sort) {
+        return new Relation(relation.name(), relation.handler(), id -> {
+            ContentQuery query = relation.query().apply(id);
+            return new ContentQuery(query.filter(), query.page(), query.size(), sort, query.references());
+        });
     }
 
     private Relation related(String name, ContentKind kind, String field, Function<String, String> value) {

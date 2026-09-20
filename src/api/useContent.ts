@@ -251,6 +251,10 @@ export function useContentWrites(gameId: string, resource: ContentResource) {
         contentApi.put(gameId, resource, extId, document),
       onSuccess: refresh,
     }),
+    putAll: useMutation({
+      mutationFn: (documents: object[]) => contentApi.putAll(gameId, resource, documents),
+      onSuccess: refresh,
+    }),
     remove: useMutation({
       mutationFn: (extId: string) => contentApi.remove(gameId, resource, extId),
       onSuccess: refresh,
