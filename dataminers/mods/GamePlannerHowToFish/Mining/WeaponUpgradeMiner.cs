@@ -14,8 +14,10 @@ namespace GamePlanner.HowToFish.Mining
     /// </summary>
     internal static class WeaponUpgradeMiner
     {
-        /// <summary>Bancada da afiação. A entidade é cadastrada à mão no site; o jogo não a expõe.</summary>
+        /// <summary>Bancadas: bigorna para a afiação, caixa de munição para as armas de fogo.
+        /// As entidades são cadastradas à mão no site; o jogo não as expõe.</summary>
         private const string Anvil = "anvil";
+        private const string BulletBox = "box_bullets";
 
         private sealed class Offer
         {
@@ -41,7 +43,7 @@ namespace GamePlanner.HowToFish.Mining
                 if (entry.Key is Weapon weapon)
                 {
                     CollectAttachments(attachments, weapon, entry.Value);
-                    AddLevels(kit, entry.Value, AmmoLevels(weapon), "upgrade_ammo_", null);
+                    AddLevels(kit, entry.Value, AmmoLevels(weapon), "upgrade_ammo_", BulletBox);
                 }
                 else if (entry.Key is Melee melee)
                 {
@@ -176,7 +178,7 @@ namespace GamePlanner.HowToFish.Mining
                     Name = kit.ItemName(weaponId) + " +" + level,
                     Summary = "Dano " + levels[level - 1].Key + " -> " + damage + ".",
                 };
-                if (station != null) recipe.Stations.Add(station);
+                recipe.Stations.Add(station);
                 recipe.Inputs.Add(new Requirement(Reference.Item(weaponId), 1, level: level - 1));
                 if (cost > 0) recipe.Inputs.Add(new Requirement(MiningKit.Money, cost));
                 recipe.Outputs.Add(new RecipeOutput(Reference.Item(weaponId), 1, level));

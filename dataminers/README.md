@@ -61,7 +61,7 @@ Tudo vira **item**; as ligações entre eles vão como **receitas**:
 | Armas, varas, ferramentas, explosivos | nome do prefab — dano, cadência, pente, linha, explosão | — |
 | Iscas | `bait_<asset>` — preço, chance de perder, tempo de fisgada | `fishing_bait_<asset>`: a isca pesca cada peixe com a chance da tabela de pesos |
 | Acessórios de arma | `attachment_<asset>` — mira, cano, laser, pente estendido | `attachment_<asset>_<arma>`: preço em cada arma |
-| Munição / afiação | — (o nível é da própria arma) | `upgrade_ammo_<arma>_<n>`, `upgrade_sharpness_<arma>_<n>`: consomem a arma no nível anterior e o dinheiro, e devolvem a arma no nível `n`; a afiação pede a bancada `anvil` |
+| Munição / afiação | — (o nível é da própria arma) | `upgrade_ammo_<arma>_<n>`, `upgrade_sharpness_<arma>_<n>`: consomem a arma no nível anterior e o dinheiro, e devolvem a arma no nível `n`; na bancada `anvil` (afiação) ou `box_bullets` (munição) |
 | Bolsos extras | `upgrade_pocket_<n>` | pedem dinheiro e o bolso anterior |
 | Barco | `boat`, `upgrade_boat_motor_<n>`, `upgrade_boat_radar` | pedem dinheiro, o barco e o motor anterior |
 | Skins | `skin_<item>_<skin>` com raridade (`common`, `rare`, `legendary`), variante do item | — |
