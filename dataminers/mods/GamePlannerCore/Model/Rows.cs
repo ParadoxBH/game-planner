@@ -29,23 +29,30 @@ namespace GamePlanner.Core.Model
         public void WriteJson(JsonWriter w) => w.BeginObject().Field("kind", Kind).Field("extId", ExtId).EndObject();
     }
 
-    /// <summary>Ingrediente de receita ou requisito de entidade. Amount precisa ser positivo.</summary>
+    /// <summary>
+    /// Ingrediente de receita ou requisito de entidade. Amount precisa ser positivo.
+    /// Level exige o alvo num nível; LevelOperator diz como comparar ("exact", "min" ou "max") e,
+    /// vazio, vale exact. Sem Level, qualquer nível serve.
+    /// </summary>
     public sealed class Requirement : IJsonWritable
     {
         public Reference Target;
         public double Amount;
         public bool NotConsumed;
+        public int? Level;
+        public string LevelOperator;
 
-        public Requirement(Reference target, double amount, bool notConsumed = false)
+        public Requirement(Reference target, double amount, bool notConsumed = false, int? level = null,
+            string levelOperator = null)
         {
-            Target = target; Amount = amount; NotConsumed = notConsumed;
+            Target = target; Amount = amount; NotConsumed = notConsumed; Level = level; LevelOperator = levelOperator;
         }
 
         public void WriteJson(JsonWriter w)
         {
             w.BeginObject().Field("target", Target).Name("amount").Value(Amount);
             if (NotConsumed) w.Name("notConsumed").Value(true);
-            w.EndObject();
+            w.Field("level", Level).Field("levelOperator", LevelOperator).EndObject();
         }
     }
 

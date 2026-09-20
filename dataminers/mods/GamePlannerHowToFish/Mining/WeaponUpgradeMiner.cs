@@ -9,10 +9,14 @@ namespace GamePlanner.HowToFish.Mining
     /// <summary>
     /// O que se compra para as armas na loja da ilha. Acessórios (miras, canos, laser, pente estendido) são
     /// itens com uma receita por arma, porque o preço muda de arma para arma. Munição (armas de fogo) e
-    /// afiação (corpo a corpo) são níveis: um item por nível, com receita que pede o nível anterior.
+    /// afiação (corpo a corpo) sobem a própria arma de nível: uma receita por nível, que consome a arma no
+    /// nível anterior e devolve a mesma arma um nível acima.
     /// </summary>
     internal static class WeaponUpgradeMiner
     {
+        /// <summary>Bancada da afiação. A entidade é cadastrada à mão no site; o jogo não a expõe.</summary>
+        private const string Anvil = "anvil";
+
         private sealed class Offer
         {
             public string WeaponId;
@@ -37,11 +41,11 @@ namespace GamePlanner.HowToFish.Mining
                 if (entry.Key is Weapon weapon)
                 {
                     CollectAttachments(attachments, weapon, entry.Value);
-                    AddLevels(kit, entry.Value, AmmoLevels(weapon), "upgrade_ammo_", "Munição", HtfCategories.UpgradeAmmo);
+                    AddLevels(kit, entry.Value, AmmoLevels(weapon), "upgrade_ammo_", null);
                 }
                 else if (entry.Key is Melee melee)
                 {
-                    AddLevels(kit, entry.Value, SharpnessLevels(melee), "upgrade_sharpness_", "Afiação", HtfCategories.UpgradeSharpness);
+                    AddLevels(kit, entry.Value, SharpnessLevels(melee), "upgrade_sharpness_", Anvil);
                 }
                 if (kit.ShouldYield()) yield return null;
             }
@@ -155,40 +159,28 @@ namespace GamePlanner.HowToFish.Mining
             return levels;
         }
 
-        /// <summary>levels[0] é o dano de fábrica; cada nível seguinte vira item e receita (dano, custo).</summary>
+        /// <summary>
+        /// levels[0] é o dano de fábrica; cada nível seguinte vira uma receita que sobe a arma de nível:
+        /// entram a arma no nível anterior e o dinheiro, sai a mesma arma no nível novo. O dano fica no
+        /// resumo, porque atributo é do item, e o item aqui é um só em todos os níveis.
+        /// </summary>
         private static void AddLevels(MiningKit kit, string weaponId, List<KeyValuePair<int, int>> levels, string prefix,
-            string label, string category)
+            string station)
         {
-            string previous = null;
             for (int level = 1; level < levels.Count; level++)
             {
                 int damage = levels[level].Key, cost = levels[level].Value;
-                string id = prefix + weaponId + "_" + level;
-                var doc = new ItemDoc
+                var recipe = new RecipeDoc
                 {
-                    ExtId = id,
-                    Name = label + " " + level + " — " + kit.ItemName(weaponId),
+                    ExtId = prefix + weaponId + "_" + level,
+                    Name = kit.ItemName(weaponId) + " +" + level,
                     Summary = "Dano " + levels[level - 1].Key + " -> " + damage + ".",
-                    Level = level,
                 };
-                MiningKit.Price(doc, cost);
-                kit.Categories.Apply(doc, category, HtfCategories.Upgrade);
-                doc.Attributes["damage"] = damage;
-                doc.Attributes["previous_damage"] = levels[level - 1].Key;
-                doc.Attributes["weapon"] = weaponId;
-                kit.Dataset.Add(doc);
-
-                var recipe = new RecipeDoc { ExtId = id, Name = doc.Name };
+                if (station != null) recipe.Stations.Add(station);
+                recipe.Inputs.Add(new Requirement(Reference.Item(weaponId), 1, level: level - 1));
                 if (cost > 0) recipe.Inputs.Add(new Requirement(MiningKit.Money, cost));
-                recipe.Inputs.Add(new Requirement(Reference.Item(weaponId), 1, notConsumed: true));
-                if (previous != null)
-                {
-                    recipe.Inputs.Add(new Requirement(Reference.Item(previous), 1, notConsumed: true));
-                    recipe.Unlock.Add(new RecipeUnlock("item", Reference.Item(previous)));
-                }
-                recipe.Outputs.Add(new RecipeOutput(Reference.Item(id), 1, level));
+                recipe.Outputs.Add(new RecipeOutput(Reference.Item(weaponId), 1, level));
                 kit.Dataset.Add(recipe);
-                previous = id;
             }
         }
     }

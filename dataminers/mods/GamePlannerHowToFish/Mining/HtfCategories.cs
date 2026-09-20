@@ -30,8 +30,6 @@ namespace GamePlanner.HowToFish.Mining
         public const string Attachment = "attachment";
 
         public const string Upgrade = "upgrade";
-        public const string UpgradeSharpness = "upgrade_sharpness";
-        public const string UpgradeAmmo = "upgrade_ammo";
         public const string UpgradePocket = "upgrade_pocket";
         public const string UpgradeBoat = "upgrade_boat";
 
@@ -60,8 +58,6 @@ namespace GamePlanner.HowToFish.Mining
             { Bait, "Iscas" },
             { Attachment, "Acessórios de arma" },
             { Upgrade, "Melhorias" },
-            { UpgradeSharpness, "Afiação" },
-            { UpgradeAmmo, "Munição" },
             { UpgradePocket, "Bolsos extras" },
             { UpgradeBoat, "Melhorias do barco" },
             { Unlockable, "Desbloqueáveis" },
