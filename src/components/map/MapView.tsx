@@ -49,7 +49,7 @@ import { useContentDocument, useContentList, useGame, useListing, useMapMarkers 
 import { and, rule } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
 import { useStoredState } from "../../hooks/useCollectedMembers";
-import { useGameAdmin } from "../../hooks/useGameAdmin";
+import { useGameAdmin, useGameEditor } from "../../hooks/useGameAdmin";
 import { usePlatform } from "../../hooks/usePlatform";
 import { getPublicUrl } from "../../utils/pathUtils";
 import { getDailyResetTimes, getWeeklyResetTimes } from "../../utils/timeUtils";
@@ -65,7 +65,7 @@ import { MapToolbox } from "./MapToolbox";
 import { MapWeatherPanel } from "./MapWeatherPanel";
 import { createMapCRS, leafletBounds, mapImageUrl, type LatLngBounds } from "./mapGeometry";
 import markerTemplate from "./marker-icon.html?raw";
-import { draftsJson, PointMarkerPanel, type DraftConfig, type MapDraft } from "./PointMarkerPanel";
+import { MapContentDialog, type DrawnGeometry } from "./MapContentDialog";
 
 export interface NavigationItem {
   type: "entity" | "item";
@@ -92,10 +92,26 @@ const CursorTracker = ({ onMouseMove }: { onMouseMove: (coords: [number, number]
   return null;
 };
 
-const MapEventsHandler = ({ onClick }: { onClick: (coords: [number, number]) => void }) => {
+/** Enter fecha a zona desenhada; Esc desiste dela. O mesmo que os botões da caixa de ferramentas. */
+const DrawKeyboard = ({ onFinish, onCancel }: { onFinish: () => void; onCancel: () => void }) => {
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Enter") onFinish();
+      else if (event.key === "Escape") onCancel();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onFinish, onCancel]);
+  return null;
+};
+
+const MapEventsHandler = ({ onClick, onDoubleClick }: { onClick: (coords: [number, number]) => void; onDoubleClick: () => void }) => {
   useMapEvents({
     click(event) {
       if (!event.originalEvent.shiftKey) onClick([event.latlng.lat, event.latlng.lng]);
+    },
+    dblclick() {
+      onDoubleClick();
     },
   });
   return null;
@@ -249,11 +265,11 @@ export const MapView = () => {
   const [currentPoints, setCurrentPoints] = useState<[number, number][]>([]);
   const [isBoundBoxEditorOpen, setIsBoundBoxEditorOpen] = useState(false);
   const { isAdmin } = useGameAdmin(gameId);
+  const { canEdit } = useGameEditor(gameId);
   const [isEditingMap, setIsEditingMap] = useState(false);
   const [previewBounds, setPreviewBounds] = useState<BoundBoxBounds | null>(null);
-  const [drafts, setDrafts] = useStoredState<MapDraft[]>(`map_drafts_${gameId}`, []);
-  const [draftConfig, setDraftConfig] = useState<DraftConfig>({ type: SPAWN_TYPE, target: null, name: "" });
-  const [isMarkerPanelOpen, setIsMarkerPanelOpen] = useState(false);
+  // O que acabou de ser desenhado e espera o registro; nulo, nada em aberto.
+  const [drawn, setDrawn] = useState<DrawnGeometry | null>(null);
   const [visibleTypes, setVisibleTypes] = useState<string[]>([]);
   const [visibleCategories, setVisibleCategories] = useState<string[]>([]);
   const [visibleEntities, setVisibleEntities] = useState<string[]>([]);
@@ -537,59 +553,22 @@ export const MapView = () => {
     return [x, y];
   };
 
-  const addDraft = (wkt: string, asLocation = false) => {
-    const isSpawn = draftConfig.type === SPAWN_TYPE && !asLocation;
-    const draft: MapDraft = {
-      id: `${isSpawn ? "ponto" : "local"}_${Date.now()}`,
-      kind: isSpawn ? "spawn" : "location",
-      locationType: isSpawn ? null : draftConfig.type === SPAWN_TYPE ? "region" : draftConfig.type,
-      target: isSpawn ? draftConfig.target : null,
-      name: isSpawn ? null : draftConfig.name.trim() || null,
-      map: selectedMap.extId,
-      wkt,
-    };
-    setDrafts([...drafts, draft]);
-    setSnackbar(isSpawn ? "Ponto adicionado à lista!" : "Local adicionado à lista!");
-    if (!isMarkerPanelOpen) setIsMarkerPanelOpen(true);
+  const finishDrawing = (geometry: DrawnGeometry) => {
+    setDrawn(geometry);
+    setActiveTool(null);
+    setCurrentPoints([]);
+  };
+
+  /** Fecha o polígono do que já foi clicado; precisa de três vértices. */
+  const finishPolygon = () => {
+    if (currentPoints.length < 3) return;
+    finishDrawing({ wkt: formatWKTPolygon(currentPoints.map(toGame)), isPoint: false, vertices: currentPoints.length });
   };
 
   const handleMapClick = (latlng: [number, number]) => {
     if (activeTool === "polygon") setCurrentPoints((previous) => [...previous, latlng]);
-    else if (activeTool === "point") addDraft(formatWKTPoint(toGame(latlng)));
+    else if (activeTool === "point") finishDrawing({ wkt: formatWKTPoint(toGame(latlng)), isPoint: true, vertices: 1 });
   };
-
-  const draftColor = theme.palette.primary.main;
-  const draftElements = drafts
-    .filter((draft) => draft.map === selectedMap.extId)
-    .map((draft) => {
-      if (draft.wkt.trim().toUpperCase().startsWith("POINT")) {
-        const [x, y] = parseWKTPoint(draft.wkt);
-        return (
-          <StableMarker
-            key={draft.id}
-            position={toLatLng(x, y)}
-            size={MARKER_SIZE}
-            className="session-point-icon"
-            interactive={false}
-            iconHtml={markerIconHtml(
-              getPublicUrl("/img/add.png"),
-              { background: `background: ${draftColor};`, inner: draftColor, border: 0, image: "opacity: 0.8;" },
-              MARKER_SIZE,
-              "session-point-icon",
-            )}
-          />
-        );
-      }
-      const positions = parseWKTAreas(draft.wkt).map((polygon) => polygon.map((ring) => ring.map(([x, y]) => toLatLng(x, y))));
-      return (
-        <Polygon
-          key={draft.id}
-          positions={positions}
-          pathOptions={{ color: draftColor, fillOpacity: 0.1, weight: 2, dashArray: "5, 5" }}
-          interactive={false}
-        />
-      );
-    });
 
   const clearUrlFilter = (param: string) => {
     const next = new URLSearchParams(searchParams);
@@ -639,11 +618,22 @@ export const MapView = () => {
               center={center}
               zoom={selectedMap.minZoom ?? 0}
               maxZoom={selectedMap.maxZoom ?? undefined}
+              // Desenhando, o duplo clique fecha a zona em vez de dar zoom.
+              doubleClickZoom={activeTool === null}
               style={{ height: "100%", width: "100%", cursor: activeTool ? "crosshair" : "grab" }}
             >
               <Pane name="locationLabels" style={{ zIndex: 500 }} />
               <CursorTracker onMouseMove={setCursorCoords} />
-              <MapEventsHandler onClick={handleMapClick} />
+              <MapEventsHandler onClick={handleMapClick} onDoubleClick={finishPolygon} />
+              {activeTool === "polygon" && (
+                <DrawKeyboard
+                  onFinish={finishPolygon}
+                  onCancel={() => {
+                    setActiveTool(null);
+                    setCurrentPoints([]);
+                  }}
+                />
+              )}
               {activeTool && (
                 <CircleMarker
                   center={cursorCoords}
@@ -701,8 +691,7 @@ export const MapView = () => {
 
               {locationElements}
               {markerElements}
-              {draftElements}
-            </MapContainer>
+                          </MapContainer>
             <MapFilterDrawer
               stats={stats}
               categoryNames={categoryNames}
@@ -816,23 +805,14 @@ export const MapView = () => {
             <MapToolbox
               activeTool={activeTool}
               hasPoints={currentPoints.length > 0}
-              onSelectTool={(tool) => {
-                setActiveTool(tool);
-                if (tool !== null) setIsMarkerPanelOpen(true);
-              }}
-              onConfirm={() => {
-                if (currentPoints.length >= 3) addDraft(formatWKTPolygon(currentPoints.map(toGame)), true);
-                setActiveTool(null);
-                setCurrentPoints([]);
-              }}
+              canDraw={canEdit}
+              onSelectTool={setActiveTool}
+              onConfirm={finishPolygon}
               onClear={() => setCurrentPoints([])}
               onCancel={() => {
                 setActiveTool(null);
                 setCurrentPoints([]);
               }}
-              sessionCount={drafts.length}
-              isPanelOpen={isMarkerPanelOpen}
-              onTogglePanel={() => setIsMarkerPanelOpen(!isMarkerPanelOpen)}
               isBoundBoxEditorOpen={isBoundBoxEditorOpen}
               onToggleBoundBoxEditor={() => setIsBoundBoxEditorOpen((open) => !open)}
               onEditMap={isAdmin ? () => setIsEditingMap(true) : undefined}
@@ -850,21 +830,19 @@ export const MapView = () => {
         />
       )}
 
-      <PointMarkerPanel
-        open={isMarkerPanelOpen}
-        onClose={() => setIsMarkerPanelOpen(false)}
-        drafts={drafts}
-        onDeleteDraft={(id) => setDrafts(drafts.filter((draft) => draft.id !== id))}
-        onClearDrafts={() => setDrafts([])}
-        onCopyAll={() =>
-          navigator.clipboard
-            ?.writeText(draftsJson(drafts))
-            .then(() => setSnackbar("Toda a lista foi copiada!"))
-            .catch(() => setSnackbar("Não foi possível copiar."))
-        }
-        config={draftConfig}
-        onConfigChange={setDraftConfig}
-      />
+      {drawn && selectedMap && (
+        <MapContentDialog
+          gameId={gameId}
+          mapId={selectedMap.extId}
+          geometry={drawn}
+          onClose={() => setDrawn(null)}
+          onSaved={(kind) => {
+            setDrawn(null);
+            setSnackbar(kind === "spawn" ? "Ponto de spawn salvo no mapa!" : "Local salvo no mapa!");
+          }}
+        />
+      )}
+
       <Snackbar open={snackbar !== null} autoHideDuration={3000} onClose={() => setSnackbar(null)} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
         <Alert severity="info" variant="filled" sx={{ width: "100%", borderRadius: 2 }}>
           {snackbar}

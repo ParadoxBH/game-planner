@@ -1,24 +1,22 @@
-import { Paper, Stack, IconButton, Tooltip, Divider, Badge } from "@mui/material";
+import { Paper, Stack, IconButton, Tooltip, Divider } from "@mui/material";
 import PolylineIcon from "@mui/icons-material/Polyline";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import CancelIcon from "@mui/icons-material/Cancel";
 import PlaceIcon from "@mui/icons-material/Place";
-import ListIcon from "@mui/icons-material/List";
 import CropIcon from "@mui/icons-material/Crop";
 import EditIcon from "@mui/icons-material/Edit";
 import { usePlatform } from "../../hooks/usePlatform";
 
 interface MapToolboxProps {
   activeTool: 'point' | 'polygon' | null;
+  /** Desenhar ponto e zona é de quem pode cadastrar conteúdo do jogo. */
+  canDraw?: boolean;
   hasPoints: boolean;
   onSelectTool: (tool: 'point' | 'polygon' | null) => void;
   onConfirm: () => void;
   onClear: () => void;
   onCancel: () => void;
-  sessionCount?: number;
-  isPanelOpen?: boolean;
-  onTogglePanel?: () => void;
   isBoundBoxEditorOpen?: boolean;
   onToggleBoundBoxEditor?: () => void;
   /** Abre a edição do mapa. Sem ele (quem não administra o jogo), o botão não aparece. */
@@ -27,14 +25,12 @@ interface MapToolboxProps {
 
 export const MapToolbox = ({
   activeTool,
+  canDraw = false,
   hasPoints,
   onSelectTool,
   onConfirm,
   onClear,
   onCancel,
-  sessionCount = 0,
-  isPanelOpen = false,
-  onTogglePanel,
   isBoundBoxEditorOpen = false,
   onToggleBoundBoxEditor,
   onEditMap,
@@ -58,14 +54,14 @@ export const MapToolbox = ({
       }}
     >
       <Stack direction="row" spacing={0.5}>
-        {activeTool === null ? (
+        {!canDraw ? null : activeTool === null ? (
           <>
-            <Tooltip title="Criar Ponto" placement="left">
+            <Tooltip title="Criar ponto: clique no mapa" placement="left">
               <IconButton onClick={() => onSelectTool('point')} color="primary" size="medium">
                 <PlaceIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Criar Zona (Polígono)" placement="left">
+            <Tooltip title="Criar zona: clique nos vértices e feche com dois cliques ou Enter" placement="left">
               <IconButton onClick={() => onSelectTool('polygon')} color="primary" size="medium">
                 <PolylineIcon />
               </IconButton>
@@ -75,7 +71,7 @@ export const MapToolbox = ({
           <>
             {activeTool === 'polygon' && (
               <>
-                <Tooltip title="Confirmar Zona" placement="bottom">
+                <Tooltip title="Fechar a zona (ou dê dois cliques no mapa, ou aperte Enter)" placement="bottom">
                   <span>
                     <IconButton 
                       onClick={onConfirm} 
@@ -108,19 +104,6 @@ export const MapToolbox = ({
             <Tooltip title={activeTool === 'point' ? "Sair do modo Ponto" : "Cancelar Desenho"} placement="bottom">
               <IconButton onClick={onCancel} color="error" size="medium">
                 <CancelIcon />
-              </IconButton>
-            </Tooltip>
-          </>
-        )}
-
-        {(sessionCount > 0 || isPanelOpen || activeTool !== null) && (
-          <>
-            <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
-            <Tooltip title="Lista de Pontos" placement="left">
-              <IconButton onClick={onTogglePanel} color={isPanelOpen ? "primary" : "default"} size="medium">
-                <Badge badgeContent={sessionCount} color="primary" sx={{ "& .MuiBadge-badge": { fontSize: '0.6rem', height: 16, minWidth: 16 } }}>
-                  <ListIcon />
-                </Badge>
               </IconButton>
             </Tooltip>
           </>
