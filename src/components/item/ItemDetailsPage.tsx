@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Breadcrumbs, Button, CircularProgress, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 import {
@@ -18,7 +18,7 @@ import { ApiError } from "../../api/ApiError";
 import type { ItemDocument, ItemRelated, Reference } from "../../api/content";
 import { ReferenceIndex, resolvedFrom } from "../../api/references";
 import { useAttributeDefinitions, useContentDetails, useRarities } from "../../api/useContent";
-import { useGameEditor } from "../../hooks/useGameAdmin";
+import { useGameAdmin, useGameEditor } from "../../hooks/useGameAdmin";
 import { usePlatform } from "../../hooks/usePlatform";
 import { formatAmount } from "../../utils/format";
 import {
@@ -43,6 +43,7 @@ import { ItemFormDialog } from "./ItemFormDialog";
 /** Detalhe de item, lido do agregado /items/{id}/details da API. */
 export function ItemDetailsPage() {
   const { gameId = "", itemId = "" } = useParams<{ gameId: string; itemId: string }>();
+  const navigate = useNavigate();
   const { isMobile } = usePlatform();
 
   const details = useContentDetails<ItemDocument, ItemRelated>(gameId, "items", itemId);
@@ -50,6 +51,7 @@ export function ItemDetailsPage() {
   const attributes = useAttributeDefinitions(gameId);
   const references = useMemo(() => new ReferenceIndex(details.data?.references), [details.data]);
   const { canEdit } = useGameEditor(gameId);
+  const { isAdmin } = useGameAdmin(gameId);
   const [editing, setEditing] = useState(false);
 
   if (details.isPending) {
@@ -258,7 +260,15 @@ export function ItemDetailsPage() {
           {related.rewardOf.content.length > 0 && <ApiRewardCodes codes={related.rewardOf.content} target={self} />}
         </DetainItem>
       </DetainContainer>
-      {editing && <ItemFormDialog gameId={gameId} item={item} onClose={() => setEditing(false)} />}
+      {editing && (
+        <ItemFormDialog
+          gameId={gameId}
+          item={item}
+          onClose={() => setEditing(false)}
+          canDelete={isAdmin}
+          onDeleted={() => navigate(`/game/${gameId}/items`)}
+        />
+      )}
     </StyledContainer>
   );
 }

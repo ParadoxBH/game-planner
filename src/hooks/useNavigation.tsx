@@ -28,7 +28,7 @@ export interface NavigationOption {
 }
 
 /** Seções com tela de criação: aparecem para quem edita mesmo num jogo ainda sem nada. */
-const CREATABLE = new Set(["map", "entities", "items", "recipes"]);
+const CREATABLE = new Set(["map", "entities", "items", "recipes", "conjuntos"]);
 
 export interface NavigationItem {
   id: string;

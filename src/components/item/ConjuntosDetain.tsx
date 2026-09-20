@@ -10,6 +10,7 @@ import {
   Chip,
   CircularProgress,
   Grid,
+  IconButton,
   Paper,
   Stack,
   Switch,
@@ -18,7 +19,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { ArrowBack, CheckCircle, CheckCircleOutline, GridView, ViewList } from "@mui/icons-material";
+import { Add, ArrowBack, CheckCircle, CheckCircleOutline, Edit, GridView, ViewList } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import type { CollectionDocument, CollectionGroupDocument, CollectionRelated, Reference } from "../../api/content";
 import { currentMedia, ReferenceIndex } from "../../api/references";
@@ -32,12 +33,15 @@ import {
   useCollectedMembers,
   useStoredState,
 } from "../../hooks/useCollectedMembers";
+import { useGameAdmin, useGameEditor } from "../../hooks/useGameAdmin";
 import { usePlatform } from "../../hooks/usePlatform";
 import { ContentChip } from "../common/ContentChip";
 import { ContentIcon } from "../common/ContentIcon";
 import { DataCard } from "../common/DataCard";
 import { StyledContainer } from "../common/StyledContainer";
 import { StyledDialog } from "../common/StyledDialog";
+import { CollectionFormDialog } from "./CollectionFormDialog";
+import { CollectionGroupFormDialog } from "./CollectionGroupFormDialog";
 import { CollectionProgress } from "./CollectionProgress";
 
 type Layout = "list" | "grid";
@@ -114,6 +118,11 @@ export function ConjuntosDetain() {
   const [layout, setLayout] = useStoredState<Layout>(`gp_conjuntos_layout_${gameId}`, "list");
   const [search, setSearch] = useState("");
   const [openGroup, setOpenGroup] = useState<CollectionGroupDocument | null>(null);
+  const { canEdit } = useGameEditor(gameId);
+  const { isAdmin } = useGameAdmin(gameId);
+  const [editing, setEditing] = useState(false);
+  // O grupo em edição; "new" é um grupo novo já dentro deste conjunto.
+  const [editingGroup, setEditingGroup] = useState<CollectionGroupDocument | "new" | null>(null);
 
   const details = useContentDetails<CollectionDocument, CollectionRelated>(gameId, "collections", conjuntoId);
   const references = useMemo(() => new ReferenceIndex(details.data?.references), [details.data]);
@@ -196,6 +205,22 @@ export function ConjuntosDetain() {
             variant={isComplete(total) ? "filled" : "outlined"}
             sx={{ fontWeight: 800, borderRadius: 1 }}
           />
+          {canEdit && (
+            <>
+              <Button size="small" startIcon={<Edit />} onClick={() => setEditing(true)} sx={{ textTransform: "none" }}>
+                Editar
+              </Button>
+              <Button
+                size="small"
+                variant="contained"
+                startIcon={<Add />}
+                onClick={() => setEditingGroup("new")}
+                sx={{ textTransform: "none", whiteSpace: "nowrap" }}
+              >
+                Novo grupo
+              </Button>
+            </>
+          )}
           <Button startIcon={<ArrowBack />} onClick={() => navigate(`/game/${gameId}/conjuntos`)}>
             Voltar
           </Button>
@@ -221,6 +246,13 @@ export function ConjuntosDetain() {
                   <Typography variant="body2" color="text.secondary">
                     ({progress.done}/{progress.total})
                   </Typography>
+                  {canEdit && (
+                    <Tooltip title="Editar grupo">
+                      <IconButton size="small" onClick={() => setEditingGroup(group)}>
+                        <Edit fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                 </Stack>
                 {group.description && (
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
@@ -279,6 +311,20 @@ export function ConjuntosDetain() {
         title={openGroup ? `${openGroup.name} (${groupProgress(openGroup, collected).done}/${openGroup.members.length})` : ""}
         maxWidth="md"
         fullWidth
+        actions={
+          canEdit && openGroup ? (
+            <Button
+              startIcon={<Edit />}
+              onClick={() => {
+                setEditingGroup(openGroup);
+                setOpenGroup(null);
+              }}
+              sx={{ textTransform: "none" }}
+            >
+              Editar grupo
+            </Button>
+          ) : undefined
+        }
       >
         {openGroup && (
           <Stack spacing={2}>
@@ -291,6 +337,25 @@ export function ConjuntosDetain() {
           </Stack>
         )}
       </StyledDialog>
+
+      {editing && (
+        <CollectionFormDialog
+          gameId={gameId}
+          collection={collection}
+          onClose={() => setEditing(false)}
+          canDelete={isAdmin}
+          onDeleted={() => navigate(`/game/${gameId}/conjuntos`)}
+        />
+      )}
+      {editingGroup && (
+        <CollectionGroupFormDialog
+          gameId={gameId}
+          collectionExtId={collection.extId}
+          group={editingGroup === "new" ? null : editingGroup}
+          onClose={() => setEditingGroup(null)}
+          canDelete={isAdmin}
+        />
+      )}
     </StyledContainer>
   );
 }

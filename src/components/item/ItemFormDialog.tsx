@@ -12,7 +12,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Add, Clear, Search } from "@mui/icons-material";
+import { Add, Clear, Delete, Search } from "@mui/icons-material";
 import {
   MAX_PAGE_SIZE,
   type CategoryDocument,
@@ -21,12 +21,13 @@ import {
   type Reference,
 } from "../../api/content";
 import { currentMedia } from "../../api/references";
-import { useAttributeDefinitions, useContentDocument, useContentList, useRarities } from "../../api/useContent";
+import { useAttributeDefinitions, useContentDocument, useContentList, useContentWrites, useRarities } from "../../api/useContent";
 import { CategoryFormDialog } from "../category/CategoryFormDialog";
 import { ApiContentSelector } from "../common/ApiContentSelector";
 import { AttributeFields } from "../common/AttributeFields";
 import { attributeFormOf, attributesInvalid, attributesOut, type AttributeForm } from "../common/attributeValues";
 import { CodesField, type CodeOption } from "../common/CodesField";
+import { ConfirmDeleteDialog } from "../common/ConfirmDeleteDialog";
 import { numberOf, slugOf, useContentSave } from "../common/contentForm";
 import { IconUploadField } from "../common/IconUploadField";
 import { StyledDialog } from "../common/StyledDialog";
@@ -140,6 +141,10 @@ interface ItemFormDialogProps {
   onClose: () => void;
   /** Depois de salvar, com o código do item. */
   onSaved?: (extId: string) => void;
+  /** Mostra "Apagar item" (quem pode apagar: moderador ou acima). */
+  canDelete?: boolean;
+  /** Depois de apagar. Padrão: onClose. */
+  onDeleted?: () => void;
 }
 
 type Picking = "currency" | "variantOf" | null;
@@ -149,14 +154,23 @@ type Picking = "currency" | "variantOf" | null;
  * atributos sem definição no jogo, que ficam como estavam. As imagens ficam fora do documento, e um
  * ícone novo é anexado depois de salvar.
  */
-export function ItemFormDialog({ gameId, item, onClose, onSaved }: ItemFormDialogProps) {
+export function ItemFormDialog({
+  gameId,
+  item,
+  onClose,
+  onSaved,
+  canDelete = false,
+  onDeleted = onClose,
+}: ItemFormDialogProps) {
   const [form, setForm] = useState<ItemForm>(() => formOf(item));
   const [extIdTouched, setExtIdTouched] = useState(false);
   const [icon, setIcon] = useState<File | null>(null);
   const [picking, setPicking] = useState<Picking>(null);
   const [pickError, setPickError] = useState<string | null>(null);
   const [creatingCategory, setCreatingCategory] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const { save, saving, error, creating } = useContentSave(gameId, "items", item === null);
+  const { remove } = useContentWrites(gameId, "items");
 
   const rarities = useRarities(gameId);
   const definitions = useAttributeDefinitions(gameId);
@@ -240,6 +254,17 @@ export function ItemFormDialog({ gameId, item, onClose, onSaved }: ItemFormDialo
       maxWidth="md"
       actions={
         <>
+          {!creating && canDelete && (
+            <Button
+              color="error"
+              startIcon={<Delete />}
+              onClick={() => setDeleting(true)}
+              disabled={saving}
+              sx={{ textTransform: "none", mr: "auto" }}
+            >
+              Apagar item
+            </Button>
+          )}
           <Button onClick={onClose} disabled={saving} sx={{ textTransform: "none" }}>
             Cancelar
           </Button>
@@ -420,6 +445,21 @@ export function ItemFormDialog({ gameId, item, onClose, onSaved }: ItemFormDialo
           setPicking(null);
         }}
       />
+      {deleting && item && (
+        <ConfirmDeleteDialog
+          title="Apagar item"
+          message={
+            <>
+              Apagar <strong>{form.name || item.extId}</strong> (<code>{item.extId}</code>)? As receitas, lojas e drops
+              que citam o código continuam apontando para ele. O último estado fica guardado como revisão.
+            </>
+          }
+          pending={remove.isPending}
+          error={remove.error}
+          onClose={() => setDeleting(false)}
+          onConfirm={() => remove.mutate(item.extId, { onSuccess: onDeleted })}
+        />
+      )}
       {creatingCategory && (
         <CategoryFormDialog
           gameId={gameId}

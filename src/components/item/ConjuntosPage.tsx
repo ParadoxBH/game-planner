@@ -1,6 +1,7 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Card, CircularProgress, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, CircularProgress, Stack, Typography } from "@mui/material";
+import { Add } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import { MAX_PAGE_SIZE, type CollectionDocument, type CollectionGroupDocument } from "../../api/content";
 import { contentRoute, currentMedia } from "../../api/references";
@@ -15,12 +16,14 @@ import {
   type Progress,
 } from "../../hooks/useCollectedMembers";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+import { useGameEditor } from "../../hooks/useGameAdmin";
 import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
 import { ContentIcon } from "../common/ContentIcon";
 import { ListingDataView } from "../common/ListingDataView";
 import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
+import { CollectionFormDialog } from "./CollectionFormDialog";
 import { CollectionProgress } from "./CollectionProgress";
 
 const NO_FILTERS: FilterValues = {};
@@ -31,6 +34,8 @@ export function ConjuntosPage() {
   const navigate = useNavigate();
   const { isMobile } = usePlatform();
   const { collected } = useCollectedMembers(gameId);
+  const { canEdit } = useGameEditor(gameId);
+  const [creating, setCreating] = useState(false);
   const pages = usePagination(NO_FILTERS);
 
   // A API devolve no máximo 200 por página.
@@ -72,13 +77,28 @@ export function ConjuntosPage() {
       title="Conjuntos"
       label="Explore coleções e conjuntos de itens temáticos."
       searchEnd={
-        <QueryBuilder
-          schema={listing.data}
-          search={pages.info.search}
-          onSearchChange={pages.setSearch}
-          values={criteria}
-          onChange={(key, value) => pages.setCriteria({ [key]: value })}
-        />
+        <>
+          {canEdit && (
+            <Stack direction="row" justifyContent="flex-end" flex={1}>
+              <Button
+                variant="contained"
+                size="small"
+                startIcon={<Add />}
+                onClick={() => setCreating(true)}
+                sx={{ textTransform: "none", whiteSpace: "nowrap" }}
+              >
+                Novo conjunto
+              </Button>
+            </Stack>
+          )}
+          <QueryBuilder
+            schema={listing.data}
+            search={pages.info.search}
+            onSearchChange={pages.setSearch}
+            values={criteria}
+            onChange={(key, value) => pages.setCriteria({ [key]: value })}
+          />
+        </>
       }
       pages={pages}
     >
@@ -133,6 +153,14 @@ export function ConjuntosPage() {
               </Card>
             );
           }}
+        />
+      )}
+      {creating && (
+        <CollectionFormDialog
+          gameId={gameId}
+          collection={null}
+          onClose={() => setCreating(false)}
+          onSaved={(extId) => navigate(contentRoute(gameId, "collection", extId)!)}
         />
       )}
     </StyledContainer>

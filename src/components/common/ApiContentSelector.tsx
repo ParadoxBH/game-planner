@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Box, Button, CircularProgress, Grid, Tab, Tabs, TextField, Typography } from "@mui/material";
 import type { ListQuery, MediaLink, ResolvedReference } from "../../api/content";
 import { currentMedia } from "../../api/references";
-import { useContentList } from "../../api/useContent";
+import { useContentList, useRarities } from "../../api/useContent";
 import { and, textSearch } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { ContentChip } from "./ContentChip";
@@ -23,6 +23,8 @@ interface Choice {
   extId: string;
   name: string | null;
   media: MediaLink[];
+  /** Item e entidade têm raridade; categoria, não. */
+  rarityCode?: string | null;
 }
 
 interface ApiContentSelectorProps {
@@ -63,6 +65,12 @@ export function ApiContentSelector({
 
   const query = useMemo<ListQuery>(() => ({ where: and(textSearch(term)), size: PAGE, sort: "name" }), [term]);
   const list = useContentList<Choice>(gameId, tab, query, { enabled: open });
+  // A cor da raridade contorna o ícone, como nas listagens de item e entidade.
+  const rarities = useRarities(gameId);
+  const rarityColors = useMemo(
+    () => new Map((rarities.data ?? []).map((rarity) => [rarity.code, rarity.color])),
+    [rarities.data],
+  );
 
   const kind = TABS[tab].kind;
   const loading = list.isPending;
@@ -162,7 +170,13 @@ export function ApiContentSelector({
                         backgroundColor: isSelected ? "action.selected" : "action.hover",
                       }}
                     >
-                      <ContentChip target={{ kind, extId: choice.extId }} resolved={reference} size="medium" disableLink />
+                      <ContentChip
+                        target={{ kind, extId: choice.extId }}
+                        resolved={reference}
+                        rarityColor={choice.rarityCode ? rarityColors.get(choice.rarityCode) : undefined}
+                        size="medium"
+                        disableLink
+                      />
                       <Typography variant="caption" sx={{ fontWeight: isSelected ? 700 : 500, color: isSelected ? "primary.main" : "text.primary" }}>
                         {choice.name ?? choice.extId}
                       </Typography>
