@@ -26,6 +26,16 @@ export function isChance(value: string): boolean {
   return number === null || (number !== undefined && number > 0 && number <= 100);
 }
 
+/** Nível exigido: vazio (qualquer um) ou inteiro zero ou mais. */
+export function isLevel(value: string): boolean {
+  return value.trim() === "" || /^\d+$/.test(value.trim());
+}
+
+/** Nível para o documento: vazio vira null. */
+export function levelOut(value: string): number | null {
+  return value.trim() === "" ? null : Number(value.trim());
+}
+
 /** Chance gravada, de 0 a 1, a partir da porcentagem digitada. */
 export function chanceOut(value: string): number | null {
   const number = numberOf(value);

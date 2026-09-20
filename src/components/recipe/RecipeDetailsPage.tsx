@@ -25,7 +25,7 @@ import { ReferenceIndex } from "../../api/references";
 import { useContentDetails } from "../../api/useContent";
 import { useGameAdmin, useGameEditor } from "../../hooks/useGameAdmin";
 import { usePlatform } from "../../hooks/usePlatform";
-import { formatAmount, formatChance, formatDuration } from "../../utils/format";
+import { formatAmount, formatChance, formatDuration, formatLevelRequirement } from "../../utils/format";
 import { ApiRewardCodes } from "../common/ApiRelatedLists";
 import { ContentChip } from "../common/ContentChip";
 import { DataCard } from "../common/DataCard";
@@ -73,6 +73,7 @@ function IngredientCard({ input, references, members, chosen, onChoose }: Ingred
           <Typography variant="caption" color="text.secondary">
             Quantidade: {formatAmount(input.amount)}
             {input.notConsumed ? " · não é gasto" : ""}
+            {formatLevelRequirement(input.level, input.levelOperator) ? ` · ${formatLevelRequirement(input.level, input.levelOperator)}` : ""}
           </Typography>
         </Stack>
       </Stack>

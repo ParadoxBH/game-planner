@@ -22,7 +22,7 @@ import { contentRoute, currentMedia, ReferenceIndex } from "../../api/references
 import { useAttributeDefinitions, useContentDetails, useRarities } from "../../api/useContent";
 import { useGameAdmin, useGameEditor } from "../../hooks/useGameAdmin";
 import { usePlatform } from "../../hooks/usePlatform";
-import { formatAmount, formatChance, formatDuration, formatRange } from "../../utils/format";
+import { formatAmount, formatChance, formatDuration, formatLevelRequirement, formatRange } from "../../utils/format";
 import {
   ApiCollectionGroups,
   ApiDroppedBy,
@@ -265,16 +265,25 @@ export function EntityDetailsPage() {
                 </Typography>
               </Stack>
               <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap sx={{ pt: 0.5 }}>
-                {entity.requirements.map((requirement, index) => (
-                  <ContentChip
-                    key={index}
-                    target={requirement.target}
-                    resolved={references.find(requirement.target)}
-                    amount={requirement.amount}
-                    notConsumed={requirement.notConsumed}
-                    size="medium"
-                  />
-                ))}
+                {entity.requirements.map((requirement, index) => {
+                  const level = formatLevelRequirement(requirement.level, requirement.levelOperator);
+                  return (
+                    <Stack key={index} alignItems="center" spacing={0.25}>
+                      <ContentChip
+                        target={requirement.target}
+                        resolved={references.find(requirement.target)}
+                        amount={requirement.amount}
+                        notConsumed={requirement.notConsumed}
+                        size="medium"
+                      />
+                      {level && (
+                        <Typography variant="caption" color="text.secondary">
+                          {level}
+                        </Typography>
+                      )}
+                    </Stack>
+                  );
+                })}
               </Stack>
             </Paper>
           )}

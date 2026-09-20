@@ -389,12 +389,22 @@ CREATE TABLE recipe (
   PRIMARY KEY (game_id, ext_id)
 );
 -- ordinal = o slot da bancada quando o jogo é baseado em slot (Outward, Minecraft)
-CREATE TABLE recipe_input   (game_id, recipe_ext_id, ordinal int, target_kind, target_ext_id, amount numeric, not_consumed boolean DEFAULT false, PRIMARY KEY (game_id, recipe_ext_id, ordinal));
+CREATE TABLE recipe_input   (game_id, recipe_ext_id, ordinal int, target_kind, target_ext_id, amount numeric, not_consumed boolean DEFAULT false, level int, level_operator text, PRIMARY KEY (game_id, recipe_ext_id, ordinal));
 CREATE TABLE recipe_output  (game_id, recipe_ext_id, ordinal int, target_kind, target_ext_id, amount numeric, chance numeric, level int,        PRIMARY KEY (game_id, recipe_ext_id, ordinal));
 CREATE TABLE recipe_station (game_id, recipe_ext_id, ordinal int, station_ext_id,                                                              PRIMARY KEY (game_id, recipe_ext_id, ordinal));
 -- desbloqueio: evento, quest, nível de bancada... target = o conteúdo envolvido; value = o que não é conteúdo
 CREATE TABLE recipe_unlock  (game_id, recipe_ext_id, ordinal int, unlock_type, target_kind, target_ext_id, value text,                         PRIMARY KEY (game_id, recipe_ext_id, ordinal));
 
+
+**Nível no requisito (V13).** `level` com `level_operator` (`exact`, `min` ou `max`) exige o alvo num
+nível: a receita de melhoria consome a espada no nível 1 e produz a espada no nível 2 (`recipe_output.level`),
+e o requisito de entidade pede "picareta nível 2 ou mais". Sem `level`, serve em qualquer nível; as mesmas
+colunas valem em `entity_requirement`, porque o requisito é o mesmo documento (`Requirement`).
+
+A árvore de crafting respeita isso: com nível exigido, só entram as receitas cujo produto sai nesse nível
+(o nível do produto ou, sem ele, o do próprio item). O caminho que detecta ciclo passa a levar o nível
+junto, senão a melhoria — que consome o próprio item — pareceria um ciclo. Loja e preço base não olham
+nível: quem compra recebe o item como ele é.
 -- Loja: três informações. A loja, as categorias da loja e os itens de cada categoria.
 CREATE TABLE shop (
   game_id text, ext_id text, ... base ...,

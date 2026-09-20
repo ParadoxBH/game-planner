@@ -51,6 +51,72 @@ class CraftingEconomyApiIntegrationTest extends ContentApiTest {
                 { 'type': 'station_level', 'value': 1 } ] }
             """;
 
+    /** Melhoria de equipamento: entra a espada no nível 1, sai a espada no nível 2 (V13). */
+    private static final String MELHORAR_ESPADA = """
+            { 'extId': 'melhorar_espada',
+              'inputs': [
+                { 'target': { 'kind': 'item', 'extId': 'espada' }, 'amount': 1, 'level': 1 },
+                { 'target': { 'kind': 'item', 'extId': 'ferro' }, 'amount': 5, 'level': 2, 'levelOperator': 'min' } ],
+              'outputs': [ { 'target': { 'kind': 'item', 'extId': 'espada' }, 'amount': 1, 'level': 2 } ] }
+            """;
+
+    @Test
+    void requirementKeepsTheLevelAndDefaultsTheOperatorToExact() throws Exception {
+        send(post(RECIPES, game), "editor", json(MELHORAR_ESPADA))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.inputs[0].level").value(1))
+                .andExpect(jsonPath("$.inputs[0].levelOperator").value("exact"))
+                .andExpect(jsonPath("$.inputs[1].level").value(2))
+                .andExpect(jsonPath("$.inputs[1].levelOperator").value("min"))
+                .andExpect(jsonPath("$.outputs[0].level").value(2));
+
+        mvc.perform(get(RECIPE, game, "melhorar_espada"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.inputs[0].levelOperator").value("exact"));
+    }
+
+    @Test
+    void requirementWithoutLevelHasNoOperator() throws Exception {
+        send(post(RECIPES, game), "editor", json("""
+                { 'extId': 'simples',
+                  'inputs': [ { 'target': { 'kind': 'item', 'extId': 'ferro' }, 'amount': 1 } ],
+                  'outputs': [ { 'target': { 'kind': 'item', 'extId': 'prego' }, 'amount': 1 } ] }
+                """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.inputs[0].level").doesNotExist())
+                .andExpect(jsonPath("$.inputs[0].levelOperator").doesNotExist());
+    }
+
+    @Test
+    void requirementRejectsOperatorWithoutLevelAndUnknownOperator() throws Exception {
+        send(post(RECIPES, game), "editor", json("""
+                { 'extId': 'sem_nivel',
+                  'inputs': [ { 'target': { 'kind': 'item', 'extId': 'ferro' }, 'amount': 1, 'levelOperator': 'min' } ],
+                  'outputs': [ { 'target': { 'kind': 'item', 'extId': 'prego' }, 'amount': 1 } ] }
+                """))
+                .andExpect(status().isBadRequest());
+
+        send(post(RECIPES, game), "editor", json("""
+                { 'extId': 'operador_errado',
+                  'inputs': [ { 'target': { 'kind': 'item', 'extId': 'ferro' }, 'amount': 1, 'level': 1,
+                               'levelOperator': 'maior' } ],
+                  'outputs': [ { 'target': { 'kind': 'item', 'extId': 'prego' }, 'amount': 1 } ] }
+                """))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void entityRequirementKeepsTheLevel() throws Exception {
+        send(post(ENTITIES, game), "editor", json("""
+                { 'extId': 'veio_ferro', 'name': 'Veio de ferro',
+                  'requirements': [ { 'target': { 'kind': 'item', 'extId': 'picareta' }, 'amount': 1,
+                                      'notConsumed': true, 'level': 2, 'levelOperator': 'min' } ] }
+                """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.requirements[0].level").value(2))
+                .andExpect(jsonPath("$.requirements[0].levelOperator").value("min"));
+    }
+
     @Test
     void recipeKeepsRepeatedSlotsInOrderAndRewritingItChangesNothing() throws Exception {
         send(post(RECIPES, game), "editor", json(VERNIZ))

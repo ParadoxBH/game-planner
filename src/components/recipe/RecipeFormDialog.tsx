@@ -22,6 +22,7 @@ import {
   MAX_PAGE_SIZE,
   type EventDocument,
   type RecipeDocument,
+  type LevelOperator,
   type Reference,
   type ResolvedReference,
 } from "../../api/content";
@@ -29,12 +30,13 @@ import { currentMedia } from "../../api/references";
 import { useContentList, useContentWrites, useRecipeStations } from "../../api/useContent";
 import { ApiContentSelector, type SelectorKind } from "../common/ApiContentSelector";
 import { CodesField, type CodeOption } from "../common/CodesField";
+import { LevelFields } from "../common/LevelFields";
 import { ConfirmDeleteDialog } from "../common/ConfirmDeleteDialog";
 import { numberOf, slugOf, useContentSave } from "../common/contentForm";
 import { IconUploadField } from "../common/IconUploadField";
 import { ReferenceName } from "../common/ReferenceName";
 import { FormSection, TabLabel, TargetRow } from "../common/formLayout";
-import { chanceIn, chanceOut, isChance, isOptionalInteger, isPositive, move } from "../common/formValues";
+import { chanceIn, chanceOut, isChance, isLevel, isOptionalInteger, isPositive, levelOut, move } from "../common/formValues";
 import { StyledDialog } from "../common/StyledDialog";
 import { UNLOCK_LABELS } from "./recipeLabels";
 
@@ -44,6 +46,9 @@ interface InputRow {
   target: Reference;
   amount: string;
   notConsumed: boolean;
+  /** Vazio: qualquer nível serve. */
+  level: string;
+  levelOperator: LevelOperator;
 }
 
 interface OutputRow {
@@ -93,6 +98,8 @@ function formOf(recipe: RecipeDocument | null): RecipeForm {
       target: input.target,
       amount: String(input.amount),
       notConsumed: input.notConsumed,
+      level: input.level === null ? "" : String(input.level),
+      levelOperator: input.levelOperator ?? "exact",
     })),
     outputs: (recipe?.outputs ?? []).map((output) => ({
       key: key(),
@@ -152,6 +159,9 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
   const [extIdTouched, setExtIdTouched] = useState(false);
   const [icon, setIcon] = useState<File | null>(null);
   const [picking, setPicking] = useState<Picking>(null);
+  const [pickingStation, setPickingStation] = useState(false);
+  // Bancadas escolhidas agora: ainda não estão em recipe-stations, que só lista as já usadas.
+  const [pickedStations, setPickedStations] = useState<CodeOption[]>([]);
   const [deleting, setDeleting] = useState(false);
   const [tab, setTab] = useState<RecipeTab>("data");
   const { save, saving, error, creating } = useContentSave(gameId, "recipes", recipe === null);
@@ -160,15 +170,15 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
   const stations = useRecipeStations(gameId);
   const events = useContentList<EventDocument>(gameId, "events", { size: MAX_PAGE_SIZE, sort: "name" });
 
-  const stationOptions = useMemo<CodeOption[]>(
-    () =>
-      (stations.data ?? []).map((station) => ({
-        extId: station.extId,
-        name: station.name ?? station.extId,
-        iconMediaId: station.iconMediaId,
-      })),
-    [stations.data],
-  );
+  const stationOptions = useMemo<CodeOption[]>(() => {
+    const options = (stations.data ?? []).map((station) => ({
+      extId: station.extId,
+      name: station.name ?? station.extId,
+      iconMediaId: station.iconMediaId,
+    }));
+    const known = new Set(options.map((option) => option.extId));
+    return [...options, ...pickedStations.filter((station) => !known.has(station.extId))];
+  }, [stations.data, pickedStations]);
   const eventOptions = useMemo<CodeOption[]>(
     () =>
       (events.data?.content ?? []).map((event) => ({
@@ -209,7 +219,12 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
       return;
     }
     setForm((current) => {
-      if (list === "inputs") return { ...current, inputs: [...current.inputs, { key: key(), target, amount: "1", notConsumed: false }] };
+      if (list === "inputs") {
+        return {
+          ...current,
+          inputs: [...current.inputs, { key: key(), target, amount: "1", notConsumed: false, level: "", levelOperator: "exact" }],
+        };
+      }
       if (list === "outputs") {
         return suggestExtId({ ...current, outputs: [...current.outputs, { key: key(), target, amount: "1", chance: "", level: "" }] });
       }
@@ -219,7 +234,7 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
 
   const craftTime = numberOf(form.craftTime);
   const craftTimeInvalid = craftTime === undefined || (craftTime !== null && craftTime < 0) || !isOptionalInteger(form.craftTime);
-  const inputsInvalid = form.inputs.some((row) => !isPositive(row.amount));
+  const inputsInvalid = form.inputs.some((row) => !isPositive(row.amount) || !isLevel(row.level));
   const outputsInvalid = form.outputs.some((row) => !isPositive(row.amount) || !isChance(row.chance) || !isOptionalInteger(row.level));
   const unlockInvalid = form.unlock.some((row) => !row.type.trim() || (!row.target && !row.value.trim()));
   const dataInvalid = form.extId.trim() === "" || craftTimeInvalid || unlockInvalid;
@@ -237,7 +252,13 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
         description: form.description.trim() || null,
         craftTimeSeconds: craftTime,
         stations: form.stations,
-        inputs: form.inputs.map((row) => ({ target: row.target, amount: numberOf(row.amount), notConsumed: row.notConsumed })),
+        inputs: form.inputs.map((row) => ({
+          target: row.target,
+          amount: numberOf(row.amount),
+          notConsumed: row.notConsumed,
+          level: levelOut(row.level),
+          levelOperator: levelOut(row.level) === null ? null : row.levelOperator,
+        })),
         outputs: form.outputs.map((row) => ({
           target: row.target,
           amount: numberOf(row.amount),
@@ -366,7 +387,17 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
                   onChange={(value) => set("stations", value)}
                   loading={stations.isPending}
                   freeSolo
-                  helperText="Códigos de entidade. Bancada nova: digite o código e aperte Enter."
+                  helperText="A lista traz as bancadas já usadas por alguma receita; use Escolher para qualquer entidade."
+                  action={
+                    <Button
+                      size="small"
+                      startIcon={<Add />}
+                      onClick={() => setPickingStation(true)}
+                      sx={{ textTransform: "none", whiteSpace: "nowrap", mt: 1 }}
+                    >
+                      Escolher
+                    </Button>
+                  }
                 />
               </Grid>
             </Grid>
@@ -503,7 +534,12 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
                   sx={{ width: 120 }}
                   slotProps={{ htmlInput: { inputMode: "decimal" } }}
                 />
-                <Tooltip title="Exigido, mas não gasto (ex.: ferramenta)">
+                <LevelFields
+              level={row.level}
+              operator={row.levelOperator}
+              onChange={(changes) => updateRow("inputs", index, changes)}
+            />
+            <Tooltip title="Exigido, mas não gasto (ex.: ferramenta)">
                   <FormControlLabel
                     control={
                       <Switch size="small" checked={row.notConsumed} onChange={(event) => updateRow("inputs", index, { notConsumed: event.target.checked })} />
@@ -594,6 +630,25 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
           title={PICK_TITLES[picking.list]}
           onClose={() => setPicking(null)}
           onConfirm={pick}
+        />
+      )}
+
+      {pickingStation && (
+        <ApiContentSelector
+          open
+          modal
+          gameId={gameId}
+          kinds={["entities"]}
+          title="Selecionar bancada"
+          onClose={() => setPickingStation(false)}
+          onConfirm={(selection) => {
+            setPickedStations((current) => [
+              ...current,
+              { extId: selection.extId, name: selection.name ?? selection.extId, iconMediaId: selection.iconMediaId ?? null },
+            ]);
+            if (!form.stations.includes(selection.extId)) set("stations", [...form.stations, selection.extId]);
+            setPickingStation(false);
+          }}
         />
       )}
 

@@ -26,6 +26,7 @@ import com.paradoxbh.gameplannerserver.common.ApiException;
 import com.paradoxbh.gameplannerserver.content.ExtIds;
 import com.paradoxbh.gameplannerserver.content.model.ContentPage;
 import com.paradoxbh.gameplannerserver.content.model.Reference;
+import com.paradoxbh.gameplannerserver.content.model.Requirement;
 import com.paradoxbh.gameplannerserver.content.model.ResolvedReference;
 import com.paradoxbh.gameplannerserver.identity.service.GameAccess;
 
@@ -132,10 +133,12 @@ public class CraftingService {
     private record Candidate(Reference target, BigDecimal amount, Draft draft, Builder builder) {
     }
 
-    private record Input(Reference target, BigDecimal amount, boolean notConsumed) {
+    /** {@code level} e {@code levelOperator}: o nível em que o ingrediente é exigido (ver Requirement). */
+    private record Input(Reference target, BigDecimal amount, boolean notConsumed, Integer level, String levelOperator) {
     }
 
-    private record Output(String recipe, Reference target, BigDecimal amount, BigDecimal chance) {
+    /** {@code level}: o nível em que o produto sai; nulo, o nível do próprio alvo. */
+    private record Output(String recipe, Reference target, BigDecimal amount, BigDecimal chance, Integer level) {
     }
 
     private record RecipeRow(Integer craftTimeSeconds, List<Input> inputs, List<String> stations,
@@ -167,6 +170,8 @@ public class CraftingService {
         final Map<String, List<BasePrice>> prices = new HashMap<>();
         final Map<String, List<BasePrice>> sellPrices = new HashMap<>();
         final Map<String, List<Reference>> categoryMembers = new HashMap<>();
+        /** Nível do próprio item ou entidade, para o requisito que pede nível. */
+        final Map<String, Integer> levels = new HashMap<>();
     }
 
     /** Escolhas do usuário: membro de categoria e, por alvo, "buy", "base" ou o código da receita. */
@@ -466,6 +471,12 @@ public class CraftingService {
         }
 
         Draft node(Reference target, BigDecimal amount, boolean notConsumed, Deque<String> path, int depth) {
+            return node(target, amount, notConsumed, null, null, path, depth);
+        }
+
+        /** {@code level} e {@code levelOperator}: o nível que o pai exige do alvo; nulos, qualquer um serve. */
+        Draft node(Reference target, BigDecimal amount, boolean notConsumed, Integer level, String levelOperator,
+                   Deque<String> path, int depth) {
             if (++count > MAX_NODES || depth > MAX_DEPTH) {
                 throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "crafting-tree-too-large",
                         "A árvore passou de " + MAX_NODES + " nós ou " + MAX_DEPTH + " níveis", Map.of());
@@ -485,7 +496,7 @@ public class CraftingService {
                     draft.options = members;
                     return draft;
                 }
-                Draft resolved = node(chosen, amount, notConsumed, path, depth);
+                Draft resolved = node(chosen, amount, notConsumed, level, levelOperator, path, depth);
                 resolved.category = target.extId();
                 resolved.options = members;
                 return resolved;
@@ -499,13 +510,17 @@ public class CraftingService {
                 return draft;
             }
 
-            if (path.contains(target.extId())) {
+            // O mesmo item em níveis diferentes não é ciclo: é a cadeia de melhoria (espada 1 → espada 2).
+            String cycleKey = cycleKey(target, level, levelOperator);
+            if (path.contains(cycleKey)) {
                 draft.source = "cycle";
                 return draft;
             }
 
             String choice = choices.product(target);
+            // Com nível exigido, só entram as receitas cujo produto sai nesse nível.
             List<Output> outputs = matching(graph.producers, target, Output::target).stream()
+                    .filter(output -> Requirement.accepts(level, levelOperator, levelOf(output)))
                     .sorted(Comparator.comparing(Output::recipe)).toList();
             List<Offer> offers = matching(graph.offers, target, Offer::target).stream()
                     .sorted(Comparator.comparing(Offer::unitPrice)).toList();
@@ -521,7 +536,7 @@ public class CraftingService {
                 throw ApiException.badRequest("choices: \"" + target.extId() + "\" não é vendido em loja");
             }
 
-            path.push(target.extId());
+            path.push(cycleKey);
             try {
                 if ("base".equals(choice)) {
                     draft.source = "base";
@@ -552,6 +567,17 @@ public class CraftingService {
             return draft;
         }
 
+        /** Chave do caminho, para achar ciclo: o alvo e, quando há, o nível exigido dele. */
+        private String cycleKey(Reference target, Integer level, String levelOperator) {
+            return level == null ? target.extId()
+                    : target.extId() + "#" + (levelOperator == null ? "exact" : levelOperator) + level;
+        }
+
+        /** Nível do produto: o da receita quando ela diz, senão o do próprio alvo. */
+        private Integer levelOf(Output output) {
+            return output.level() != null ? output.level() : graph.levels.get(output.target().extId());
+        }
+
         private void craft(Draft draft, Output output, Deque<String> path, int depth) {
             RecipeRow recipe = graph.recipes.get(output.recipe());
             BigDecimal batches = draft.remainder.divide(output.amount(), 0, RoundingMode.CEILING);
@@ -568,7 +594,8 @@ public class CraftingService {
             for (Input input : recipe.inputs()) {
                 BigDecimal need = input.notConsumed() ? input.amount()
                         : input.amount().multiply(batches).stripTrailingZeros();
-                draft.children.add(node(input.target(), need, input.notConsumed(), path, depth + 1));
+                draft.children.add(node(input.target(), need, input.notConsumed(), input.level(), input.levelOperator(),
+                        path, depth + 1));
             }
 
             draft.leftover = draft.produced.subtract(draft.remainder);
@@ -650,12 +677,13 @@ public class CraftingService {
         Graph graph = new Graph();
 
         jdbc.sql("""
-                SELECT recipe_ext_id, target_kind, target_ext_id, amount, not_consumed FROM recipe_input
-                WHERE game_id = :game ORDER BY recipe_ext_id, ordinal
+                SELECT recipe_ext_id, target_kind, target_ext_id, amount, not_consumed, level, level_operator
+                FROM recipe_input WHERE game_id = :game ORDER BY recipe_ext_id, ordinal
                 """).param("game", gameId).query(rs -> {
             graph.inputs.computeIfAbsent(rs.getString("recipe_ext_id"), key -> new ArrayList<>())
                     .add(new Input(reference(rs.getString("target_kind"), rs.getString("target_ext_id")),
-                            rs.getBigDecimal("amount"), rs.getBoolean("not_consumed")));
+                            rs.getBigDecimal("amount"), rs.getBoolean("not_consumed"),
+                            (Integer) rs.getObject("level"), rs.getString("level_operator")));
         });
         jdbc.sql("SELECT recipe_ext_id, station_ext_id FROM recipe_station WHERE game_id = :game ORDER BY recipe_ext_id, ordinal")
                 .param("game", gameId).query(rs -> {
@@ -663,14 +691,22 @@ public class CraftingService {
                             .add(rs.getString("station_ext_id"));
                 });
         jdbc.sql("""
-                SELECT recipe_ext_id, target_kind, target_ext_id, amount, chance FROM recipe_output
+                SELECT recipe_ext_id, target_kind, target_ext_id, amount, chance, level FROM recipe_output
                 WHERE game_id = :game ORDER BY recipe_ext_id, ordinal
                 """).param("game", gameId).query(rs -> {
             graph.outputs.computeIfAbsent(rs.getString("recipe_ext_id"), key -> new ArrayList<>())
                     .add(new Output(rs.getString("recipe_ext_id"),
                             reference(rs.getString("target_kind"), rs.getString("target_ext_id")),
-                            rs.getBigDecimal("amount"), rs.getBigDecimal("chance")));
+                            rs.getBigDecimal("amount"), rs.getBigDecimal("chance"), (Integer) rs.getObject("level")));
         });
+        jdbc.sql("""
+                SELECT ext_id, level FROM item WHERE game_id = :game AND level IS NOT NULL
+                UNION ALL
+                SELECT ext_id, level FROM entity WHERE game_id = :game AND level IS NOT NULL
+                """).param("game", gameId)
+                .query(rs -> {
+                    graph.levels.put(rs.getString("ext_id"), rs.getInt("level"));
+                });
         jdbc.sql("SELECT ext_id, craft_time_seconds FROM recipe WHERE game_id = :game").param("game", gameId).query(rs -> {
             String id = rs.getString("ext_id");
             List<Output> outputs = graph.outputs.getOrDefault(id, List.of());

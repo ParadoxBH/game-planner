@@ -19,12 +19,14 @@ final class ChildMappers {
                 "target_kind", requirement.target().kind(),
                 "target_ext_id", requirement.target().extId(),
                 "amount", requirement.amount(),
-                "not_consumed", requirement.notConsumed());
+                "not_consumed", requirement.notConsumed(),
+                "level", requirement.level(),
+                "level_operator", requirement.levelOperator());
     }
 
     static Requirement requirement(Map<String, Object> row) {
         return new Requirement(Rows.reference(row, "target_kind", "target_ext_id"), Rows.decimal(row, "amount"),
-                Rows.bool(row, "not_consumed"));
+                Rows.bool(row, "not_consumed"), Rows.integer(row, "level"), Rows.string(row, "level_operator"));
     }
 
     static Map<String, Object> dropRow(Drop drop) {

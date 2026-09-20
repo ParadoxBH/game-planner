@@ -143,6 +143,36 @@ class AggregationsApiIntegrationTest extends ContentApiTest {
     }
 
     @Test
+    void craftingTreePicksTheRecipeThatProducesTheRequiredLevel() throws Exception {
+        create("items", "{ 'extId': 'ferro', 'name': 'Ferro' }");
+        create("items", "{ 'extId': 'espada', 'name': 'Espada' }");
+        create("items", "{ 'extId': 'escudo', 'name': 'Escudo' }");
+        // Forjar sai no nível 1; melhorar consome a espada nível 1 e sai no nível 2.
+        create("recipes", """
+                { 'extId': 'forjar_espada',
+                  'inputs': [ { 'target': { 'kind': 'item', 'extId': 'ferro' }, 'amount': 3 } ],
+                  'outputs': [ { 'target': { 'kind': 'item', 'extId': 'espada' }, 'amount': 1, 'level': 1 } ] }
+                """);
+        create("recipes", """
+                { 'extId': 'melhorar_espada',
+                  'inputs': [ { 'target': { 'kind': 'item', 'extId': 'espada' }, 'amount': 1, 'level': 1 },
+                              { 'target': { 'kind': 'item', 'extId': 'ferro' }, 'amount': 5 } ],
+                  'outputs': [ { 'target': { 'kind': 'item', 'extId': 'espada' }, 'amount': 1, 'level': 2 } ] }
+                """);
+        // O escudo pede a espada no nível 2: a árvore precisa passar pela melhoria, e não pela forja.
+        create("recipes", """
+                { 'extId': 'fazer_escudo',
+                  'inputs': [ { 'target': { 'kind': 'item', 'extId': 'espada' }, 'amount': 1, 'level': 2 } ],
+                  'outputs': [ { 'target': { 'kind': 'item', 'extId': 'escudo' }, 'amount': 1 } ] }
+                """);
+
+        mvc.perform(get(TREE, game).param("target", "item:escudo").param("amount", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.root.children[0].recipe.extId").value("melhorar_espada"))
+                .andExpect(jsonPath("$.root.children[0].children[0].recipe.extId").value("forjar_espada"));
+    }
+
+    @Test
     void craftingTreeUsesLeftoversAndByproductsBeforeCraftingAgain() throws Exception {
         create("items", "{ 'extId': 'madeira', 'name': 'Madeira' }");
         createTabua();

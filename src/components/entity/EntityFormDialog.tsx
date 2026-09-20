@@ -22,6 +22,7 @@ import {
   type CategoryDocument,
   type EntityDocument,
   type EventDocument,
+  type LevelOperator,
   type Reference,
   type ResolvedReference,
 } from "../../api/content";
@@ -37,10 +38,11 @@ import { ApiContentSelector } from "../common/ApiContentSelector";
 import { AttributeFields } from "../common/AttributeFields";
 import { attributeFormOf, attributesInvalid, attributesOut, type AttributeForm } from "../common/attributeValues";
 import { CodesField, type CodeOption } from "../common/CodesField";
+import { LevelFields } from "../common/LevelFields";
 import { ConfirmDeleteDialog } from "../common/ConfirmDeleteDialog";
 import { numberOf, slugOf, useContentSave } from "../common/contentForm";
 import { FormSection, TabLabel, TargetRow } from "../common/formLayout";
-import { chanceIn, chanceOut, isChance, isOptionalInteger, isPositive, move } from "../common/formValues";
+import { chanceIn, chanceOut, isChance, isLevel, isOptionalInteger, isPositive, levelOut, move } from "../common/formValues";
 import { IconUploadField } from "../common/IconUploadField";
 import { ReferenceName } from "../common/ReferenceName";
 import { StyledDialog } from "../common/StyledDialog";
@@ -53,6 +55,9 @@ interface RequirementRow {
   target: Reference;
   amount: string;
   notConsumed: boolean;
+  /** Vazio: qualquer nível serve. */
+  level: string;
+  levelOperator: LevelOperator;
 }
 
 interface DropRow {
@@ -107,6 +112,8 @@ function formOf(entity: EntityDocument | null): EntityForm {
       target: requirement.target,
       amount: String(requirement.amount),
       notConsumed: requirement.notConsumed,
+      level: requirement.level === null ? "" : String(requirement.level),
+      levelOperator: requirement.levelOperator ?? "exact",
     })),
     drops: (entity?.drops ?? []).map((drop) => ({
       key: key(),
@@ -225,7 +232,13 @@ export function EntityFormDialog({
     }
     setForm((current) =>
       list === "requirements"
-        ? { ...current, requirements: [...current.requirements, { key: key(), target, amount: "1", notConsumed: false }] }
+        ? {
+            ...current,
+            requirements: [
+              ...current.requirements,
+              { key: key(), target, amount: "1", notConsumed: false, level: "", levelOperator: "exact" as LevelOperator },
+            ],
+          }
         : { ...current, drops: [...current.drops, { key: key(), target, chance: "", amount: "1", maxAmount: "" }] },
     );
   };
@@ -245,7 +258,7 @@ export function EntityFormDialog({
     buy === undefined ||
     sell === undefined ||
     attributesBad;
-  const requirementsInvalid = form.requirements.some((row) => !isPositive(row.amount));
+  const requirementsInvalid = form.requirements.some((row) => !isPositive(row.amount) || !isLevel(row.level));
   const dropsInvalid = form.drops.some((row) => {
     if (!isPositive(row.amount) || !isChance(row.chance)) return true;
     const max = numberOf(row.maxAmount);
@@ -277,6 +290,8 @@ export function EntityFormDialog({
           target: row.target,
           amount: numberOf(row.amount),
           notConsumed: row.notConsumed,
+          level: levelOut(row.level),
+          levelOperator: levelOut(row.level) === null ? null : row.levelOperator,
         })),
         drops: form.drops.map((row) => ({
           target: row.target,
@@ -554,6 +569,11 @@ export function EntityFormDialog({
                   error={!isPositive(row.amount)}
                   sx={{ width: 120 }}
                   slotProps={{ htmlInput: { inputMode: "decimal" } }}
+                />
+                <LevelFields
+                  level={row.level}
+                  operator={row.levelOperator}
+                  onChange={(changes) => updateRow("requirements", index, changes)}
                 />
                 <Tooltip title="Exigido, mas não gasto (ex.: ferramenta)">
                   <FormControlLabel

@@ -77,11 +77,17 @@ export interface ItemDocument extends ContentBase {
   attributes: Record<string, AttributeValue>;
 }
 
+/** Como comparar o nível do alvo com o exigido: igual, no mínimo ou no máximo. */
+export type LevelOperator = "exact" | "min" | "max";
+
 /** Ingrediente de receita ou requisito de entidade. */
 export interface Requirement {
   target: Reference;
   amount: number;
   notConsumed: boolean;
+  /** Nível exigido do alvo; null, qualquer nível serve. */
+  level: number | null;
+  levelOperator: LevelOperator | null;
 }
 
 export interface Drop {

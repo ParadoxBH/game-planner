@@ -22,6 +22,14 @@ export function formatChance(chance: number | null | undefined): string {
   return `${Number((chance * 100).toFixed(2))}%`;
 }
 
+/** Nível exigido num requisito: "nível 2", "nível 2 ou mais", "nível 2 ou menos". */
+export function formatLevelRequirement(level: number | null | undefined, operator: string | null | undefined): string | null {
+  if (level === null || level === undefined) return null;
+  if (operator === "min") return `nível ${level} ou mais`;
+  if (operator === "max") return `nível ${level} ou menos`;
+  return `nível ${level}`;
+}
+
 /** 5400 → "1h 30min"; 45 → "45s". */
 export function formatDuration(seconds: number): string {
   const hours = Math.floor(seconds / 3600);
