@@ -30,6 +30,7 @@ import {
   Polygon,
   Polyline,
   Popup,
+  Rectangle,
   TileLayer,
   Tooltip,
   useMapEvents,
@@ -82,7 +83,21 @@ const DEFAULT_BOUNDS: LatLngBounds = [
   [1000, 1000],
 ];
 /** Locais desenhados com o nome fixo e sem clique; os demais tipos abrem popup. */
-const LABELED_LOCATION_TYPES = new Set(["location", "region"]);
+const LABELED_LOCATION_TYPES = new Set(["location", "region", "biome"]);
+
+/** Fundo do mapa procedural, que não tem imagem: tudo o que não é bioma é mar. */
+const OCEAN = "#123a4a";
+
+/**
+ * Cor de um local desenhado. Cada bioma fica com um matiz próprio, tirado do código: uma paleta
+ * fixa só serviria para um jogo, e aqui qualquer jogo pode ter bioma.
+ */
+function locationColor(type: string, extId: string, fallback: string): string {
+  if (type !== "biome") return fallback;
+  let hash = 0;
+  for (let i = 0; i < extId.length; i++) hash = (hash * 31 + extId.charCodeAt(i)) | 0;
+  return `hsl(${Math.abs(hash) % 360}, 55%, 55%)`;
+}
 const TRANSPARENT_PIXEL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'></svg>";
 
 /** Segue o cursor e o zoom do mapa, para a barra de coordenadas. */
@@ -480,7 +495,7 @@ export const MapView = () => {
         if (!visibleTypes.includes(type) || !location.area) return null;
         const name = location.name ?? location.extId;
         const labeled = LABELED_LOCATION_TYPES.has(type);
-        const color = type === "biome" ? theme.palette.success.main : theme.palette.primary.main;
+        const color = locationColor(type, location.extId, theme.palette.primary.main);
         const content = (
           <>
             {labeled && (
@@ -711,6 +726,14 @@ export const MapView = () => {
                   />
                 ))}
               {selectedMap.mapType === "single" && singleImageUrl && <ImageOverlay url={singleImageUrl} bounds={imageBounds} />}
+              {/* Mundo procedural não tem imagem: o fundo é o mar, e os biomas são a terra por cima. */}
+              {selectedMap.mapType === "procedural" && (
+                <Rectangle
+                  bounds={imageBounds}
+                  interactive={false}
+                  pathOptions={{ color: OCEAN, fillColor: OCEAN, fillOpacity: 1, weight: 0 }}
+                />
+              )}
               {selectedMap.mapType === "tile" && (selectedMap.urlPattern ?? selectedMap.imageUrl) && (
                 <TileLayer
                   url={getPublicUrl(selectedMap.urlPattern ?? selectedMap.imageUrl)}

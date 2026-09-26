@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 
 import com.paradoxbh.gameplannerserver.support.ContentApiTest;
 
@@ -28,6 +29,8 @@ class WorldApiIntegrationTest extends ContentApiTest {
     private static final String LOCATIONS = "/api/v1/games/{game}/locations";
     private static final String SPAWN_POINTS = "/api/v1/games/{game}/spawn-points";
     private static final String MARKERS = "/api/v1/games/{game}/maps/{map}/spawn-points";
+    /** Rota inteira: o helper query() acrescenta /query, e aqui o recurso já é o próprio caminho. */
+    private static final String RULES = "/api/v1/games/{game}/maps/{map}/spawn-points/rules";
 
     @Test
     void mapKeepsItsDisplaySettingsAndWeathersAreEvents() throws Exception {
@@ -200,6 +203,87 @@ class WorldApiIntegrationTest extends ContentApiTest {
                 .andExpect(jsonPath("$.content[*].extId", containsInAnyOrder("a1")));
         mvc.perform(query(MARKERS, and(rule("yields", "equal", "item:resina")), game, "main"))
                 .andExpect(jsonPath("$.content[*].extId", containsInAnyOrder("a2")));
+    }
+
+    /**
+     * Condições: as quatro formas (faixa, código, referência e bandeira), a negação, os filtros por
+     * tipo e por alvo, e a cobertura de faixa. Também o /rules, que é o que traz regra sem posição.
+     */
+    @Test
+    void spawnConditionsRoundTripAndFilterByTypeTargetAndRange() throws Exception {
+        String wolf = """
+                { 'extId': 'lobo-montanha', 'map': 'main', 'location': 'montanha',
+                  'occupants': [ { 'target': { 'kind': 'entity', 'extId': 'lobo' } } ],
+                  'conditions': [
+                    { 'type': 'altitude', 'min': 100, 'max': 1000.0 },
+                    { 'type': 'time_of_day', 'value': 'night' },
+                    { 'type': 'weather', 'target': { 'kind': 'event', 'extId': 'env_rain' } },
+                    { 'type': 'weather', 'target': { 'kind': 'event', 'extId': 'env_snow' } },
+                    { 'type': 'progress', 'value': 'KilledTroll', 'negated': false },
+                    { 'type': 'hunts_player' },
+                    { 'type': 'biome_area', 'value': 'edge', 'negated': true } ] }
+                """;
+        send(post(SPAWN_POINTS, game), "editor", json(wolf))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.conditions.length()").value(7))
+                .andExpect(jsonPath("$.conditions[0].max").value(1000))
+                .andExpect(jsonPath("$.conditions[1].value").value("night"))
+                .andExpect(jsonPath("$.conditions[2].target.extId").value("env_rain"))
+                // Chave global tem maiúscula: é texto livre, não código.
+                .andExpect(jsonPath("$.conditions[4].value").value("KilledTroll"))
+                // false e ausente são a mesma coisa, senão toda reimportação pareceria mudança.
+                .andExpect(jsonPath("$.conditions[4].negated").doesNotExist())
+                .andExpect(jsonPath("$.conditions[5].type").value("hunts_player"))
+                .andExpect(jsonPath("$.conditions[6].negated").value(true));
+
+        // Reenviar o mesmo documento, com o número escrito de outro jeito, não é mudança.
+        send(put(SPAWN_POINTS + "/{id}", game, "lobo-montanha"), "editor", json(wolf.replace("1000.0", "1000")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.meta.revision").value(1));
+
+        send(post(SPAWN_POINTS, game), "editor", json("""
+                { 'extId': 'ruim', 'location': 'montanha',
+                  'conditions': [ { 'type': 'altitude', 'min': 100, 'max': 10 } ] }
+                """))
+                .andExpect(status().isBadRequest());
+        send(post(SPAWN_POINTS, game), "editor",
+                json("{ 'extId': 'ruim2', 'location': 'montanha', 'conditions': [ { 'value': 'x' } ] }"))
+                .andExpect(status().isBadRequest());
+
+        point("sem-condicao", "'map': 'main', 'location': 'montanha', 'position': 'POINT (5 5)'");
+
+        mvc.perform(query(SPAWN_POINTS, and(rule("condition", "equal", "altitude")), game))
+                .andExpect(jsonPath("$.content[*].extId", containsInAnyOrder("lobo-montanha")));
+        mvc.perform(query(SPAWN_POINTS, and(rule("condition", "is_null")), game))
+                .andExpect(jsonPath("$.content[*].extId", containsInAnyOrder("sem-condicao")));
+        mvc.perform(query(SPAWN_POINTS, and(rule("conditionTarget", "equal", "event:env_snow")), game))
+                .andExpect(jsonPath("$.total").value(1));
+
+        // Faixa que cobre o valor. Ponto sem a condição não casa: é "tem condição que permite", e
+        // não "permite" — quem responde se nasceria ali de fato é o avaliador no cliente.
+        mvc.perform(query(SPAWN_POINTS, and(rule("conditionAltitude", "equal", 500)), game))
+                .andExpect(jsonPath("$.content[*].extId", containsInAnyOrder("lobo-montanha")));
+        mvc.perform(query(SPAWN_POINTS, and(rule("conditionAltitude", "equal", 20)), game))
+                .andExpect(jsonPath("$.total").value(0));
+        mvc.perform(query(SPAWN_POINTS, and(rule("conditionAltitude", "is_null")), game))
+                .andExpect(jsonPath("$.content[*].extId", containsInAnyOrder("sem-condicao")));
+
+        // /rules traz a regra sem posição e as condições; /query, que desenha, só o que tem posição.
+        mvc.perform(list(MARKERS, game, "main"))
+                .andExpect(jsonPath("$.content[*].extId", containsInAnyOrder("sem-condicao")))
+                .andExpect(jsonPath("$.content[0].conditions").doesNotExist());
+        mvc.perform(post(RULES, game, "main").contentType(MediaType.APPLICATION_JSON)
+                .content(json("{ 'type': 'group', 'operator': 'and', 'rules': [], 'groups': [] }")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.total").value(2))
+                .andExpect(jsonPath("$.content[0].extId").value("lobo-montanha"))
+                .andExpect(jsonPath("$.content[0].conditions.length()").value(7))
+                .andExpect(jsonPath("$.content[0].position").doesNotExist());
+
+        mvc.perform(delete(SPAWN_POINTS + "/{id}", game, "lobo-montanha").with(as("moderador")))
+                .andExpect(status().isNoContent());
+        assertThat(jdbc.sql("SELECT count(*) FROM spawn_condition WHERE game_id = :game")
+                .param("game", game).query(Long.class).single()).isZero();
     }
 
     @Test

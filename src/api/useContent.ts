@@ -161,6 +161,20 @@ export function useMapMarkers(gameId: string | undefined, mapId: string | undefi
   });
 }
 
+/**
+ * As regras de um mapa, com as condições, numa requisição só. Sem o filtro global de eventos de
+ * propósito: quem avalia as regras é dono do próprio estado de clima, e ser filtrado às escondidas
+ * pelo seletor do cabeçalho esconderia regra sem explicação.
+ */
+export function useSpawnRules(gameId: string | undefined, mapId: string | undefined) {
+  return useQuery({
+    queryKey: ["spawn-rules", gameId, mapId],
+    queryFn: ({ signal }) => contentApi.spawnRules(gameId!, mapId!, and(), signal),
+    enabled: Boolean(gameId && mapId),
+    staleTime: RARELY_CHANGES,
+  });
+}
+
 /** Busca por nome ou código, a partir de 2 letras. */
 export function useSearch(gameId: string | undefined, term: string, kind?: string) {
   return useQuery({

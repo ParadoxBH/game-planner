@@ -56,7 +56,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
                         // Consulta filtrada leva o QueryJson no corpo, por isso é POST, mas é leitura.
                         .requestMatchers(HttpMethod.POST, "/api/v1/games/*/*/query",
-                                "/api/v1/games/*/maps/*/spawn-points/query").permitAll()
+                                "/api/v1/games/*/maps/*/spawn-points/query",
+                                "/api/v1/games/*/maps/*/spawn-points/rules").permitAll()
                         .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login",
                                 "/api/v1/auth/refresh").permitAll()
                         .requestMatchers("/media/**").permitAll()

@@ -176,6 +176,20 @@ export interface ShopDocument extends ContentBase {
   events: string[];
 }
 
+/**
+ * Condição para o ponto valer. Tipos diferentes valem juntos (E); linhas do mesmo tipo, basta uma
+ * (OU) — é assim que se expressa conjunto. `negated` inverte a linha; a faixa é inclusiva e `null`
+ * é "sem limite". O vocabulário está em doc/spawn_and_spatial.md.
+ */
+export interface SpawnCondition {
+  type: string;
+  value: string | null;
+  target: Reference | null;
+  min: number | null;
+  max: number | null;
+  negated: boolean | null;
+}
+
 export interface SpawnPointDocument extends ContentBase {
   map: string | null;
   location: string | null;
@@ -185,6 +199,7 @@ export interface SpawnPointDocument extends ContentBase {
   respawnDelayMinutes: number | null;
   occupants: Occupant[];
   drops: Drop[];
+  conditions: SpawnCondition[];
   events: string[];
 }
 
@@ -298,12 +313,29 @@ export interface MapMarker {
   iconMediaId: string | null;
   occupants: MarkerOccupant[];
   events: string[];
+  /** Só vem de /rules, ou de /query com conditions=true. */
+  conditions?: SpawnCondition[];
 }
 
 export interface MapMarkers {
   content: MapMarker[];
   total: number;
   /** Ficou ponto de fora por causa do limite. */
+  truncated: boolean;
+}
+
+/**
+ * Regra de surgimento: o mesmo formato compacto do marcador, mas sem exigir posição e sempre com as
+ * condições. É o que o mundo procedural tem — regra por bioma, sem coordenada.
+ */
+export interface SpawnRule extends Omit<MapMarker, "position" | "conditions"> {
+  position: string | null;
+  conditions: SpawnCondition[];
+}
+
+export interface SpawnRules {
+  content: SpawnRule[];
+  total: number;
   truncated: boolean;
 }
 
@@ -708,6 +740,18 @@ export const contentApi = {
   /** Pontos de spawn de um mapa, compactos para desenhar; o filtro usa os campos de /spawn-points. */
   markers(gameId: string, mapId: string, where: QueryGroup, signal?: AbortSignal) {
     return apiRequest<MapMarkers>(`${gamePath(gameId)}/maps/${encodeURIComponent(mapId)}/spawn-points/query?limit=10000`, {
+      method: "POST",
+      body: where,
+      signal,
+    });
+  },
+
+  /**
+   * As regras de um mapa: os mesmos pontos e filtros, mas sem exigir posição e já com as condições.
+   * Uma requisição só — quem filtra depois é o avaliador, em memória.
+   */
+  spawnRules(gameId: string, mapId: string, where: QueryGroup, signal?: AbortSignal) {
+    return apiRequest<SpawnRules>(`${gamePath(gameId)}/maps/${encodeURIComponent(mapId)}/spawn-points/rules?limit=10000`, {
       method: "POST",
       body: where,
       signal,

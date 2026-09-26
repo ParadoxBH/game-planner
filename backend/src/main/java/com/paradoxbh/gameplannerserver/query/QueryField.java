@@ -42,6 +42,15 @@ public record QueryField(String name, String label, FieldType type, List<Operato
         String sql(Match match);
     }
 
+    /**
+     * Campo de lista com faixa: o registro tem uma linha-filha cuja faixa cobre o valor. Recebe o
+     * parâmetro já ligado, ou nulo quando a pergunta é só "tem a linha", em qualquer faixa.
+     */
+    @FunctionalInterface
+    public interface Coverage {
+        String sql(String value);
+    }
+
     /** Diz se colunas da linha casam com os valores da regra. Em is_null e is_not_null, casa com qualquer valor. */
     public interface Match {
 
@@ -87,6 +96,22 @@ public record QueryField(String name, String label, FieldType type, List<Operato
         }
         return new QueryField(name, label, type, type.operators(), kind, null,
                 (operator, values, params) -> hasSql(membership, operator, values, params));
+    }
+
+    /**
+     * Faixa de linha-filha que cobre o valor pedido, ex.: a altitude que um ponto de spawn permite.
+     * Recebe o parâmetro já ligado, ou nulo em is_null e is_not_null — aí a pergunta é só se existe
+     * a linha, com qualquer faixa.
+     */
+    public static QueryField covers(String name, String label, Coverage coverage) {
+        return new QueryField(name, label, FieldType.NUMBER,
+                List.of(Operator.EQUAL, Operator.IS_NULL, Operator.IS_NOT_NULL), null, null,
+                (operator, values, params) -> switch (operator) {
+                    case EQUAL -> coverage.sql(params.bind(values.getFirst()));
+                    case IS_NOT_NULL -> coverage.sql(null);
+                    case IS_NULL -> "NOT COALESCE(" + coverage.sql(null) + ", FALSE)";
+                    default -> throw new IllegalStateException("Operador fora da faixa: " + operator);
+                });
     }
 
     /** Sim ou não calculado por uma condição, ex.: código ainda válido. */

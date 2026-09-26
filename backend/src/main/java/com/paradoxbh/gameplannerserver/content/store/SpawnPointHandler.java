@@ -11,12 +11,16 @@ import java.util.Objects;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.Geometries;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 import com.paradoxbh.gameplannerserver.content.model.ContentQuery;
 import com.paradoxbh.gameplannerserver.content.model.Drop;
 import com.paradoxbh.gameplannerserver.content.model.Occupant;
+import com.paradoxbh.gameplannerserver.content.model.Reference;
+import com.paradoxbh.gameplannerserver.content.model.SpawnCondition;
 import com.paradoxbh.gameplannerserver.content.model.SpawnPointDocument;
 import com.paradoxbh.gameplannerserver.content.store.ChildRows.Table;
 import com.paradoxbh.gameplannerserver.query.FieldType;
@@ -28,20 +32,25 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
 
     private static final Table OCCUPANTS = Table.of("spawn_occupant", "spawn_ext_id");
 
+    private static final Table CONDITIONS = Table.of("spawn_condition", "spawn_ext_id");
+
     /** A mesma tabela guarda os drops de entidade; aqui, só os de ponto de spawn. */
     private static final Table DROPS = new Table("drop_entry", "source_ext_id", Map.of("source_kind", "spawn_point"));
 
-    /** Ocupantes e drops de uma página de pontos, por ext_id. */
-    record Parts(Map<String, List<Occupant>> occupants, Map<String, List<Drop>> drops) {
+    /** Ocupantes, drops e condições de uma página de pontos, por ext_id. */
+    record Parts(Map<String, List<Occupant>> occupants, Map<String, List<Drop>> drops,
+                 Map<String, List<SpawnCondition>> conditions) {
     }
 
     /**
      * Ponto num mapa, compacto para desenhar muitos de uma vez. {@code iconMediaId} é o ícone de exibição do
      * ponto; {@code respawnDelayMinutes}, o do ponto ou, sem ele, o do primeiro ocupante que tem.
+     * {@code conditions} só vem quando pedido: jogo com mapa cheio de marcador não paga por ele.
      */
     public record Marker(String extId, String name, String position, String location, String respawnMode,
                          Integer respawnDelayMinutes, String iconMediaId, List<MarkerOccupant> occupants,
-                         List<String> events) {
+                         List<String> events,
+                         @JsonInclude(JsonInclude.Include.NON_EMPTY) List<SpawnCondition> conditions) {
     }
 
     /**
@@ -110,6 +119,7 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
                 Rows.integer(row, "respawn_delay_minutes"),
                 parts.occupants().getOrDefault(id, List.of()),
                 parts.drops().getOrDefault(id, List.of()),
+                parts.conditions().getOrDefault(id, List.of()),
                 tags.events(),
                 meta);
     }
@@ -124,7 +134,8 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
     protected Parts loadChildren(String gameId, List<String> extIds) {
         return new Parts(
                 children.load(OCCUPANTS, gameId, extIds, SpawnPointHandler::occupant),
-                children.load(DROPS, gameId, extIds, ChildMappers::drop));
+                children.load(DROPS, gameId, extIds, ChildMappers::drop),
+                children.load(CONDITIONS, gameId, extIds, SpawnPointHandler::condition));
     }
 
     @Override
@@ -132,23 +143,27 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
         children.replace(OCCUPANTS, gameId, point.extId(),
                 point.occupants().stream().map(SpawnPointHandler::occupantRow).toList());
         children.replace(DROPS, gameId, point.extId(), point.drops().stream().map(ChildMappers::dropRow).toList());
+        children.replace(CONDITIONS, gameId, point.extId(),
+                point.conditions().stream().map(SpawnPointHandler::conditionRow).toList());
     }
 
     @Override
     protected void deleteChildren(String gameId, String extId) {
         children.delete(OCCUPANTS, gameId, extId);
         children.delete(DROPS, gameId, extId);
+        children.delete(CONDITIONS, gameId, extId);
     }
 
     /**
      * map é código; location também pega os pontos dentro da área do local; occupant e drops são
      * "tipo:id" ou "id"; yields também, e soma aos drops do ponto os das entidades que aparecem nele;
      * occupantCategory é a categoria de algum ocupante; position intersects recebe [minX, minY, maxX, maxY]
-     * em coordenadas de jogo.
+     * em coordenadas de jogo; condition é o tipo de uma condição e conditionTarget, o conteúdo que ela
+     * cita; os condition&lt;Grandeza&gt; são faixas, ver {@link #RANGE_CONDITIONS}.
      */
     @Override
     protected List<QueryField> specificFields() {
-        return List.of(
+        List<QueryField> fields = new ArrayList<>(List.of(
                 QueryField.code("map", "Mapa", "map", "t.map_ext_id"),
                 QueryField.has("location", "Local", FieldType.CODE, "location", inLocation()),
                 QueryField.column("position", "Posição", FieldType.GEOMETRY, "t.position"),
@@ -159,7 +174,37 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
                 childReference("drops", "Dropa", "drop_entry", "source_ext_id", "x.source_kind = 'spawn_point'"),
                 QueryField.has("yields", "Rende", FieldType.REFERENCE, null, yields()),
                 QueryField.has("occupantCategory", "Categoria do ocupante", FieldType.CODE, "category",
-                        occupantCategory()));
+                        occupantCategory()),
+                childCode("condition", "Condição", "condition", "spawn_condition", "spawn_ext_id", "type"),
+                childReference("conditionTarget", "Alvo da condição", "spawn_condition", "spawn_ext_id", null)));
+        for (String[] range : RANGE_CONDITIONS) {
+            fields.add(conditionCovers(range[0], range[1], range[2]));
+        }
+        return List.copyOf(fields);
+    }
+
+    /** Condições de faixa que viram filtro próprio: nome do campo, rótulo e tipo da condição. */
+    private static final List<String[]> RANGE_CONDITIONS = List.of(
+            new String[] {"conditionAltitude", "Altitude permitida", "altitude"},
+            new String[] {"conditionDepth", "Profundidade permitida", "depth"},
+            new String[] {"conditionDistance", "Distância do centro", "distance_from_center"},
+            new String[] {"conditionLevel", "Nível permitido", "level"});
+
+    /**
+     * "Tem condição deste tipo cuja faixa permite o valor" — e não "permite o valor": ponto sem a
+     * condição permite qualquer valor e mesmo assim não casa. Saber se algo nasceria de fato num
+     * lugar é do avaliador no cliente, que tem o terceiro estado (desconhecido). Linha negada fica
+     * de fora: ela diz onde não vale.
+     */
+    private static QueryField conditionCovers(String name, String label, String type) {
+        return QueryField.covers(name, label, value ->
+                "EXISTS (SELECT 1 FROM spawn_condition x WHERE x.game_id = t.game_id"
+                        + " AND x.spawn_ext_id = t.ext_id AND x.type = '" + type + "'"
+                        + " AND COALESCE(x.negated, FALSE) = FALSE"
+                        + (value == null ? ""
+                                : " AND (x.min_value IS NULL OR x.min_value <= " + value + ")"
+                                        + " AND (x.max_value IS NULL OR x.max_value >= " + value + ")")
+                        + ")");
     }
 
     /** O ponto rende o alvo: drop do próprio ponto ou drop de uma entidade que aparece nele. */
@@ -186,9 +231,24 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
      * Pontos com posição num mapa, no formato compacto do desenho: sem página, até {@code limit},
      * com os mesmos filtros da listagem.
      */
-    public Markers markers(String gameId, String mapId, ContentQuery query, int limit) {
+    public Markers markers(String gameId, String mapId, ContentQuery query, int limit, boolean withConditions) {
+        return compact(gameId, mapId, query, limit, true, withConditions);
+    }
+
+    /**
+     * As regras de um mapa: o mesmo formato compacto, mas sem exigir posição e já com as condições.
+     * É o que o mundo procedural tem — regra por bioma, sem coordenada — e o que o avaliador do
+     * cliente consome.
+     */
+    public Markers rules(String gameId, String mapId, ContentQuery query, int limit) {
+        return compact(gameId, mapId, query, limit, false, true);
+    }
+
+    private Markers compact(String gameId, String mapId, ContentQuery query, int limit, boolean requirePosition,
+                            boolean withConditions) {
         Map<String, Object> params = new HashMap<>();
-        String where = where(gameId, query, params) + " AND t.map_ext_id = :markerMap AND t.position IS NOT NULL";
+        String where = where(gameId, query, params) + " AND t.map_ext_id = :markerMap"
+                + (requirePosition ? " AND t.position IS NOT NULL" : "");
         params.put("markerMap", mapId);
 
         long total = jdbc.sql("SELECT count(*) FROM spawn_point t" + where).params(params).query(Long.class).single();
@@ -236,6 +296,26 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
                                     (Integer) rs.getObject("respawn_delay_minutes"), (Integer) rs.getObject("level")));
                 });
 
+        Map<String, List<SpawnCondition>> conditions = new HashMap<>();
+        if (withConditions) {
+            jdbc.sql("""
+                    SELECT spawn_ext_id, type, value, target_kind, target_ext_id, min_value, max_value, negated
+                    FROM spawn_condition
+                    WHERE game_id = :game AND spawn_ext_id IN (:ids)
+                    ORDER BY spawn_ext_id, ordinal
+                    """)
+                    .param("game", gameId).param("ids", ids)
+                    .query(rs -> {
+                        conditions.computeIfAbsent(rs.getString("spawn_ext_id"), key -> new ArrayList<>())
+                                .add(new SpawnCondition(rs.getString("type"), rs.getString("value"),
+                                        rs.getString("target_ext_id") == null ? null
+                                                : new Reference(rs.getString("target_kind"),
+                                                        rs.getString("target_ext_id")),
+                                        rs.getBigDecimal("min_value"), rs.getBigDecimal("max_value"),
+                                        (Boolean) rs.getObject("negated")));
+                    });
+        }
+
         Map<String, List<String>> events = new HashMap<>();
         jdbc.sql("""
                 SELECT ext_id, event_ext_id FROM content_event
@@ -258,7 +338,8 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
             }
             return new Marker(id, Rows.string(row, "name"), Geometries.fromWkb(row.get("position")),
                     Rows.string(row, "location_ext_id"), Rows.string(row, "respawn_mode"), delay,
-                    Rows.string(row, "icon_media_id"), own, events.getOrDefault(id, List.of()));
+                    Rows.string(row, "icon_media_id"), own, events.getOrDefault(id, List.of()),
+                    conditions.getOrDefault(id, List.of()));
         }).toList();
         return new Markers(content, total, total > content.size());
     }
@@ -293,5 +374,23 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
     private static Occupant occupant(Map<String, Object> row) {
         return new Occupant(Rows.reference(row, "target_kind", "target_ext_id"), Rows.decimal(row, "chance"),
                 Rows.decimal(row, "amount"), Rows.decimal(row, "max_amount"), Rows.integer(row, "level"));
+    }
+
+    private static Map<String, Object> conditionRow(SpawnCondition condition) {
+        Reference target = condition.target();
+        return ChildRows.row(
+                "type", condition.type(),
+                "value", condition.value(),
+                "target_kind", target == null ? null : target.kind(),
+                "target_ext_id", target == null ? null : target.extId(),
+                "min_value", condition.min(),
+                "max_value", condition.max(),
+                "negated", condition.negated());
+    }
+
+    private static SpawnCondition condition(Map<String, Object> row) {
+        return new SpawnCondition(Rows.string(row, "type"), Rows.string(row, "value"),
+                Rows.reference(row, "target_kind", "target_ext_id"), Rows.decimal(row, "min_value"),
+                Rows.decimal(row, "max_value"), Rows.bool(row, "negated"));
     }
 }

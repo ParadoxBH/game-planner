@@ -13,6 +13,7 @@ import { DataChip } from "../common/DataChip";
 import { DetainItem } from "../common/DetainItem";
 import { locationTypeOf, typeLabel } from "./MapFilterDrawer";
 import { respawnLabel } from "./MapSpawnPopup";
+import { SpawnConditionList } from "./SpawnConditions";
 
 export interface MapFocus {
   param: "item" | "entity";
@@ -180,6 +181,7 @@ function SpawnPointDetails({ point, focus, references }: SpawnPointDetailsProps)
         </Typography>
       )}
       {point.summary && <Typography variant="body2">{point.summary}</Typography>}
+      {point.conditions.length > 0 && <SpawnConditionList conditions={point.conditions} references={references} />}
       {others.length > 0 && (
         <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
           <Typography variant="caption" color="text.secondary" fontWeight={700}>

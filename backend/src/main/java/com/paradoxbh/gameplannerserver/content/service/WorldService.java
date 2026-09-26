@@ -33,11 +33,24 @@ public class WorldService {
         return new QuerySchema(spawnPoints.querySchema().fields(), List.of());
     }
 
-    public Markers markers(String gameId, String mapId, ContentQuery query, int limit) {
+    public Markers markers(String gameId, String mapId, ContentQuery query, int limit, boolean withConditions) {
         access.requireReadable(gameId);
+        return spawnPoints.markers(gameId, checked(mapId, limit), query, limit, withConditions);
+    }
+
+    /**
+     * As regras do mapa: os mesmos pontos, mas sem exigir posição e já com as condições. É o que o
+     * mundo procedural tem, e o que o avaliador do cliente consome.
+     */
+    public Markers rules(String gameId, String mapId, ContentQuery query, int limit) {
+        access.requireReadable(gameId);
+        return spawnPoints.rules(gameId, checked(mapId, limit), query, limit);
+    }
+
+    private static String checked(String mapId, int limit) {
         if (limit < 1 || limit > MAX_MARKERS) {
             throw ApiException.badRequest("limit precisa estar entre 1 e " + MAX_MARKERS);
         }
-        return spawnPoints.markers(gameId, ExtIds.require(mapId, "mapId"), query, limit);
+        return ExtIds.require(mapId, "mapId");
     }
 }

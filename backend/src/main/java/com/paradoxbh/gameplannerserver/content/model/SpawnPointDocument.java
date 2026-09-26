@@ -13,6 +13,10 @@ import com.paradoxbh.gameplannerserver.content.Geometries;
  * sem Z. Sem posição, o ponto vale para o {@code location} inteiro, ex.: minério que aparece num
  * bioma. {@code occupants} é o que pode aparecer ali; {@code drops}, o que o ponto larga além do
  * drop da entidade (baús, coletáveis). Sem nome, a exibição usa o do primeiro ocupante.
+ *
+ * {@code conditions} é quando o ponto vale: altitude, horário, clima, progressão... Tipos
+ * diferentes valem juntos, o mesmo tipo é "basta um"; veja {@link SpawnCondition}. Não se confunde
+ * com {@code events}, que é "basta um ativo" e mistura clima com temporada e ataque.
  */
 public record SpawnPointDocument(
         String extId,
@@ -27,6 +31,7 @@ public record SpawnPointDocument(
         Integer respawnDelayMinutes,
         List<Occupant> occupants,
         List<Drop> drops,
+        List<SpawnCondition> conditions,
         List<String> events,
         ContentMeta meta) implements ContentDocument<SpawnPointDocument> {
 
@@ -53,6 +58,7 @@ public record SpawnPointDocument(
                 respawnDelayMinutes,
                 Canon.rows(occupants, "occupants", Occupant::canonical),
                 Canon.rows(drops, "drops", Drop::canonical),
+                Canon.rows(conditions, "conditions", SpawnCondition::canonical),
                 Canon.ids(events, "events"),
                 null);
     }
@@ -60,12 +66,12 @@ public record SpawnPointDocument(
     @Override
     public SpawnPointDocument withMeta(ContentMeta meta) {
         return new SpawnPointDocument(extId, name, summary, description, media, map, location, position, respawnMode,
-                respawnDelayMinutes, occupants, drops, events, meta);
+                respawnDelayMinutes, occupants, drops, conditions, events, meta);
     }
 
     @Override
     public SpawnPointDocument withMedia(List<MediaLink> media) {
         return new SpawnPointDocument(extId, name, summary, description, media, map, location, position, respawnMode,
-                respawnDelayMinutes, occupants, drops, events, meta);
+                respawnDelayMinutes, occupants, drops, conditions, events, meta);
     }
 }

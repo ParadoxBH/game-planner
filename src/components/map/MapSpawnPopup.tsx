@@ -8,6 +8,7 @@ import { useContentDetails } from "../../api/useContent";
 import { formatChance } from "../../utils/format";
 import { ContentChip } from "../common/ContentChip";
 import { OutputField } from "../common/OutputField";
+import { SpawnConditionList } from "./SpawnConditions";
 
 const RESPAWN_LABELS: Record<string, string> = { once: "Único", daily: "Diário", weekly: "Semanal" };
 
@@ -90,6 +91,7 @@ export function MapSpawnPopup({ gameId, marker, isCollected, onToggleCollected, 
           <Box component="img" src={mediaUrl(screenshot, "thumb")} alt="Local" sx={{ width: "100%", borderRadius: 1, display: "block" }} />
         )}
         {point?.summary && <Typography variant="caption">{point.summary}</Typography>}
+        {point && point.conditions.length > 0 && <SpawnConditionList conditions={point.conditions} />}
         {respawn && <OutputField label="Respawn" values={[respawn]} />}
         {details.isPending && <CircularProgress size={16} />}
 

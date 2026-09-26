@@ -14,6 +14,7 @@ import { EventsPage } from "./components/event/EventsPage";
 import { EventDetailsPage } from "./components/event/EventDetailsPage";
 import { CodesPage } from "./components/CodesPage";
 import { CalculatorPage } from "./components/calculator/CalculatorPage";
+import { SpawnSimulatorPage } from "./components/simulator/SpawnSimulatorPage";
 import { CraftingCalculator } from "./components/calculator/CraftingCalculator";
 import { ProfitabilityCalculator } from "./components/calculator/ProfitabilityCalculator";
 import { ProfitPerTimeCalculator } from "./components/calculator/ProfitPerTimeCalculator";
@@ -130,6 +131,7 @@ export function RoutesPage() {
             <Route path="profitability" element={<ProfitabilityCalculator />} />
             <Route path="profit-per-time" element={<ProfitPerTimeCalculator />} />
           </Route>
+          <Route path="simulador" element={<SpawnSimulatorPage />} />
           <Route path="quests" element={<Typography p={4} variant="h4">Lista de Missões (Em Breve)</Typography>} />
         </Route>
 

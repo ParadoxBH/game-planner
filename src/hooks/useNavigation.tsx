@@ -8,6 +8,7 @@ import {
   Event,
   Redeem,
   Calculate,
+  Explore,
   AutoAwesomeMosaic,
   Category,
   Diamond,
@@ -138,6 +139,13 @@ export function useNavigation(gameId: string | null) {
           ]
         : []),
       {
+        id: "simulador",
+        label: "Simulador",
+        icon: <Explore />,
+        path: `${base}/simulador`,
+        color: "#8bc34a",
+      },
+      {
         id: "calculator",
         label: "Calculadora",
         icon: <Calculate />,
@@ -153,6 +161,7 @@ export function useNavigation(gameId: string | null) {
     ];
 
     const kindOf: Record<string, string> = {
+      simulador: "spawn_point",
       map: "map",
       entities: "entity",
       items: "item",
