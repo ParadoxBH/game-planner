@@ -1,0 +1,5 @@
+displayName = Game Planner DataMiner
+author = Guilherme
+version = 1.0
+side = Client
+buildIgnore = .vs\*, .git\*, bin\*, obj\*, *.csproj.user, **.md

@@ -1,5 +1,4 @@
 using System.Text;
-using GamePlanner.Core.Hashing;
 
 namespace GamePlanner.Core.Text
 {
@@ -21,15 +20,6 @@ namespace GamePlanner.Core.Text
             if (result.Length > MaxLength) result = result.Substring(0, MaxLength);
             return result.Length == 0 ? null : result;
         }
-
-        /// <summary>
-        /// Oito caracteres que resumem o conteúdo, para o id não depender da posição numa lista do
-        /// jogo: uma entrada nova no meio não desloca os ids das outras. Quem monta a assinatura
-        /// precisa formatar todo número com CultureInfo.InvariantCulture, senão a vírgula decimal
-        /// de um idioma muda o hash.
-        /// </summary>
-        public static string Fingerprint(string signature) =>
-            Sha256Hex.Of(Encoding.UTF8.GetBytes(signature ?? "")).Substring(0, 8);
 
         /// <summary>"OneHandedWeapon" -> "one_handed_weapon". Serve para códigos vindos de enum.</summary>
         public static string SnakeCase(string value)

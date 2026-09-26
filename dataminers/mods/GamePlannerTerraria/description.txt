@@ -1,0 +1,12 @@
+Le os dados do jogo (itens, NPCs, receitas, lojas, bestiario) e envia para a API do
+Game Planner, ou exporta tudo em JSON para conferir antes.
+
+Comandos no chat:
+  /gp senha <senha>   guarda a senha da conta (so na memoria, nunca em arquivo)
+  /gp minerar         minera e envia para a API
+  /gp exportar        minera e grava em tModLoader\GamePlanner\export
+  /gp status          mostra o andamento
+  /gp cancelar        interrompe
+
+Endereco da API, usuario, id do jogo e as opcoes ficam em Configuracoes de Mods.
+Funciona com os mods carregados: por padrao minera so o conteudo do Terraria.

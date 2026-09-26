@@ -1,7 +1,8 @@
 # Mineradores de dados (dataminers)
 
-Mods BepInEx que leem os dados de dentro do jogo e enviam para a API do Game Planner (ou exportam em JSON).
-Mesma arquitetura dos mods do Valheim: um núcleo genérico e um mod fino por jogo.
+Mods que leem os dados de dentro do jogo e enviam para a API do Game Planner (ou exportam em JSON).
+Mesma arquitetura dos mods do Valheim: um núcleo genérico e um mod fino por jogo. Quase todos são mods
+BepInEx de jogo Unity; o do Terraria é mod do tModLoader e tem regras próprias (veja abaixo).
 
 ```
 dataminers/
@@ -16,6 +17,9 @@ dataminers/
     GamePlannerCore/                 genérico: modelo da API, JSON, envio, imagens, painel de conta (IMGUI)
     GamePlannerValheim/              minerador do Valheim
     GamePlannerHowToFish/            minerador do How to Fish
+    GamePlannerTerraria/             minerador do Terraria (tModLoader, fora da solução)
+  tools/
+    link-modsources.ps1              liga o mod do Terraria à pasta ModSources do tModLoader
   bin/                               saída: ParadoxBH.GamePlanner.*.dll
 ```
 
@@ -45,6 +49,35 @@ O mod do jogo tem sempre as mesmas peças (veja `GamePlannerValheim` e `GamePlan
 
 Ícones: jogo com sprites usa `SpriteImageCollector`; jogo que desenha o modelo 3D no inventário (How to Fish)
 usa `MeshImageCollector`, que fotografa a malha fora da cena com `MeshSnapshot`.
+
+## Valheim
+
+Precisa do BepInEx 5 instalado na pasta do jogo. Numa partida, F7 abre o painel. Id padrão do jogo na API:
+`valheim`. Ids são os nomes de prefab, os mesmos do jogo e da wiki.
+
+As cinco fontes de regra de surgimento (`SpawnSystemList`, ataques do `RandEventSystem`, vegetação e locais do
+`ZoneSystem`, e os ninhos `SpawnArea`) viram pontos de surgimento com **condições estruturadas** — altitude,
+horário, clima, chave global, floresta, distância do centro. O vocabulário está em `doc/spawn_and_spatial.md`.
+Cada regra também guarda a frase de sempre no resumo; o que mudou é que agora dá para consultar e filtrar.
+
+**Semente de referência.** O desenho dos biomas (`MULTIPOLYGON` na área de cada local) depende da semente, e o
+mapa da API é um só para todos. Por isso o minerador só exporta a geometria quando a semente do mundo bate com
+`Mineração/ReferenceSeed` na configuração do mod (padrão `GamePlannerRef`). Minerando em qualquer outro mundo,
+os biomas vão sem área e fica um aviso no log — o resto da mineração corre normal.
+
+## Terraria
+
+Não é BepInEx: mod do tModLoader, em `net8.0`, compilado pelo próprio jogo e empacotado em `.tmod`. Por isso
+fica fora do `GamePlannerDataminers.sln` e não usa o projeto do Core — leva uma cópia da parte do Core que não
+depende da Unity, em `mods/GamePlannerTerraria/Core` (o porquê está no `Core/README.md` de lá).
+
+```powershell
+.\tools\link-modsources.ps1     # junção ModSources\GamePlannerTerraria -> este repositório
+```
+
+Depois, no jogo: Workshop → Desenvolver Mods → Compilar e recarregar. Numa partida, `/gp minerar` envia e
+`/gp exportar` grava em disco; a conta fica em Configurações de Mods e a senha em `/gp senha`. Id padrão do
+jogo na API: `terraria`. O que vira o quê está em `mods/GamePlannerTerraria/README.md`.
 
 ## How to Fish
 

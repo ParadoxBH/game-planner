@@ -1,0 +1,68 @@
+Mods: {
+	GamePlannerTerraria: {
+		Configs: {
+			GamePlannerConfig: {
+				DisplayName: Game Planner data miner
+
+				EnderecoDaApi: {
+					Label: API address
+					Tooltip: Game Planner backend origin, without /api/v1. Example: http://localhost:8080
+				}
+
+				Usuario: {
+					Label: User name
+					Tooltip:
+						'''
+						Account that uploads the content. The password is not stored here:
+						use /gp senha in chat.
+						'''
+				}
+
+				IdDoJogo: {
+					Label: Game id in the API
+					Tooltip: Lowercase letters, digits, hyphen and underscore only. Default: terraria
+				}
+
+				SomenteConteudoDoTerraria: {
+					Label: Mine vanilla content only
+					Tooltip:
+						'''
+						When on, content from other loaded mods is skipped.
+						Turn it off to mine a modpack — and use a different game id.
+						'''
+				}
+
+				EnviarImagens: {
+					Label: Extract and upload icons
+					Tooltip:
+						'''
+						When off, documents are sent without images and whatever is already
+						on the site stays as it is.
+						'''
+				}
+
+				TamanhoMaximoDaImagem: {
+					Label: Maximum icon size (pixels)
+					Tooltip:
+						'''
+						Longest side of the icon. Smaller sprites are sent as they are;
+						the server builds the 128 and 512 versions.
+						'''
+				}
+
+				EnviosSimultaneos: {
+					Label: Images uploaded at the same time
+					Tooltip: Each image that finishes frees the next one in the queue.
+				}
+			}
+		}
+
+		Mineracao: {
+			NomeDaReceita: Craft {0}
+			NomeDaTransmutacao: Shimmer {0}
+			Brilho: In Shimmer
+			NomeDaLoja: {0}'s shop
+			SempreAVenda: Always for sale
+		}
+	}
+}

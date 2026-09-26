@@ -1,0 +1,68 @@
+Mods: {
+	GamePlannerTerraria: {
+		Configs: {
+			GamePlannerConfig: {
+				DisplayName: Game Planner — minerador
+
+				EnderecoDaApi: {
+					Label: Endereço da API
+					Tooltip: Origem do backend do Game Planner, sem /api/v1. Ex.: http://localhost:8080
+				}
+
+				Usuario: {
+					Label: Usuário
+					Tooltip:
+						'''
+						Conta que vai enviar o conteúdo. A senha não fica aqui:
+						use /gp senha no chat.
+						'''
+				}
+
+				IdDoJogo: {
+					Label: Id do jogo na API
+					Tooltip: Só minúsculas, números, hífen e sublinhado. Padrão: terraria
+				}
+
+				SomenteConteudoDoTerraria: {
+					Label: Minerar só o conteúdo do Terraria
+					Tooltip:
+						'''
+						Ligado, o conteúdo dos outros mods carregados fica de fora.
+						Desligue para minerar um pacote de mods — e use outro id de jogo.
+						'''
+				}
+
+				EnviarImagens: {
+					Label: Extrair e enviar os ícones
+					Tooltip:
+						'''
+						Desligado, os documentos vão sem imagem e as que já estão no
+						site continuam como estão.
+						'''
+				}
+
+				TamanhoMaximoDaImagem: {
+					Label: Tamanho máximo do ícone (pixels)
+					Tooltip:
+						'''
+						Maior lado do ícone. Sprite menor que isso é enviado do tamanho
+						que é; o servidor gera as versões de 128 e 512.
+						'''
+				}
+
+				EnviosSimultaneos: {
+					Label: Imagens enviadas ao mesmo tempo
+					Tooltip: Cada imagem que termina libera a próxima da fila.
+				}
+			}
+		}
+
+		Mineracao: {
+			NomeDaReceita: Fabricar {0}
+			NomeDaTransmutacao: Transmutar {0} no Brilho
+			Brilho: No Brilho
+			NomeDaLoja: Loja de {0}
+			SempreAVenda: Sempre à venda
+		}
+	}
+}

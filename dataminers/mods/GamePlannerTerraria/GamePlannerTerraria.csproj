@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Mod do tModLoader: quem compila é o próprio jogo (alvo BuildMod do tMLMod.targets), que empacota o .tmod.
+    Por isso o projeto precisa enxergar o tModLoader.targets da pasta ModSources:
+
+      - jeito normal: tools\link-modsources.ps1 cria uma junção ModSources\GamePlannerTerraria -> esta pasta,
+        e aí "..\tModLoader.targets" resolve como em qualquer mod;
+      - só para conferir se compila, sem gerar o .tmod:
+        $env:tMLSteamPath = 'F:\SteamLibrary\steamapps\common\tModLoader'
+        dotnet build -p:BuildMod=false
+  -->
+  <Import Project="..\tModLoader.targets" Condition="Exists('..\tModLoader.targets')" />
+  <Import Project="$(tMLSteamPath)\tMLMod.targets"
+          Condition="!Exists('..\tModLoader.targets') And '$(tMLSteamPath)' != '' And Exists('$(tMLSteamPath)\tMLMod.targets')" />
+
+  <PropertyGroup>
+    <AssemblyName>GamePlannerTerraria</AssemblyName>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <!-- O Core veio do mod do Valheim, que é net48 e não usa nullable. -->
+    <Nullable>disable</Nullable>
+    <!--
+      O analisador do tModLoader pede constante de ID no lugar de todo 0. Aqui a comparação com 0 (ou com -1)
+      é sempre "não tem" — item nenhum, bloco nenhum, projétil nenhum —, e trocar por ItemID.None ou
+      TileID.Dirt deixaria o código pior, não melhor.
+    -->
+    <NoWarn>$(NoWarn);ChangeMagicNumberToID</NoWarn>
+  </PropertyGroup>
+
+  <Target Name="AvisoSemTModLoader" BeforeTargets="Build" Condition="'$(tMLSteamPath)' == ''">
+    <Error Text="tModLoader.targets não encontrado. Rode tools\link-modsources.ps1 e compile pelo jogo (Workshop -> Desenvolver Mods), ou defina a variável de ambiente tMLSteamPath com a pasta de instalação do tModLoader para só compilar (-p:BuildMod=false)." />
+  </Target>
+
+</Project>

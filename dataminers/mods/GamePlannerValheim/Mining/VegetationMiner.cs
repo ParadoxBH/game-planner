@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Globalization;
 using GamePlanner.Core.Model;
 using GamePlanner.Core.Text;
 using UnityEngine;
@@ -11,6 +13,9 @@ namespace GamePlanner.Valheim.Mining
     /// </summary>
     internal static class VegetationMiner
     {
+        /// <summary>Lado da zona de geração do mundo, em metros.</summary>
+        private const int ZoneSize = 64;
+
         public static IEnumerator Mine(MiningKit kit)
         {
             var vegetation = ZoneSystem.instance.m_vegetation;
@@ -22,29 +27,30 @@ namespace GamePlanner.Valheim.Mining
                 string entityId = WorldResourceMiner.EnsureEntity(kit, veg.m_prefab);
                 if (entityId == null) continue;
 
-                string summary = new SpawnConditions(kit.World)
-                    .Add(PerZone(veg.m_min, veg.m_max))
-                    .Add(veg.m_groupSizeMax > 1 ? "em grupos de " + Mathf.Max(1, veg.m_groupSizeMin) + " a " + veg.m_groupSizeMax : null)
+                SpawnRules rules = new SpawnRules(kit.World)
+                    .PerZone(veg.m_min, veg.m_max, ZoneSize)
+                    .Note(veg.m_groupSizeMax > 1 ? "em grupos de " + Mathf.Max(1, veg.m_groupSizeMin) + " a " + veg.m_groupSizeMax : null)
                     .BiomeArea(veg.m_biomeArea)
                     .Altitude(veg.m_minAltitude, veg.m_maxAltitude)
-                    .Add(veg.m_inForest ? "só em floresta" : null)
+                    // A vegetação só tem "dentro da floresta"; não existe o "fora" do surgimento.
+                    .Forest(veg.m_inForest, false)
                     .OceanDepth(veg.m_minOceanDepth, veg.m_maxOceanDepth)
-                    .Add(veg.m_snapToWater ? "na superfície da água" : null)
-                    .Add(veg.m_minDistanceFromCenter > 0 ? "a partir de " + Mathf.RoundToInt(veg.m_minDistanceFromCenter) + " m do centro do mundo" : null)
-                    .Add(veg.m_maxDistanceFromCenter > 0 ? "até " + Mathf.RoundToInt(veg.m_maxDistanceFromCenter) + " m do centro do mundo" : null)
-                    .Text;
+                    .WaterSurface(veg.m_snapToWater)
+                    .DistanceFromCenter(veg.m_minDistanceFromCenter, veg.m_maxDistanceFromCenter);
 
                 int groupMin = Mathf.Max(1, veg.m_groupSizeMin);
                 int groupMax = Mathf.Max(groupMin, veg.m_groupSizeMax);
+                string fingerprint = ExtId.Fingerprint(Signature(veg));
                 foreach (Heightmap.Biome biome in ValheimWorld.Split(veg.m_biome))
                 {
                     var point = new SpawnPointDoc
                     {
-                        ExtId = ExtId.Sanitize("veg_" + ExtId.SnakeCase(biome.ToString()) + "_" + entityId + "_" + index),
+                        ExtId = ExtId.Sanitize("veg_" + ExtId.SnakeCase(biome.ToString()) + "_" + entityId + "_" + fingerprint),
                         Map = ValheimWorld.MapId,
                         Location = ValheimWorld.BiomeId(biome),
-                        Summary = summary,
+                        Summary = rules.Text,
                     };
+                    point.Conditions.AddRange(rules.Rows);
                     point.Occupants.Add(new Occupant(Reference.Entity(entityId), null, groupMin, groupMax > groupMin ? groupMax : (double?)null));
                     kit.Dataset.Add(point);
                 }
@@ -53,14 +59,23 @@ namespace GamePlanner.Valheim.Mining
             }
         }
 
-        /// <summary>m_min e m_max são tentativas por zona; abaixo de 1 é a chance de haver uma.</summary>
-        private static string PerZone(float min, float max)
+        /// <summary>O que distingue uma entrada da outra, para o id não vir do índice na lista. Ver ExtId.Fingerprint.</summary>
+        private static string Signature(ZoneSystem.ZoneVegetation veg)
         {
-            if (max <= 0f) return null;
-            if (max < 1f) return ValheimWorld.Percent(max) + " de chance por zona";
-            int low = Mathf.RoundToInt(min);
-            int high = Mathf.RoundToInt(max);
-            return (low == high ? high.ToString() : low + " a " + high) + " por zona de 64×64 m";
+            return string.Join("|", new[]
+            {
+                ((int)veg.m_biome).ToString(CultureInfo.InvariantCulture),
+                ((int)veg.m_biomeArea).ToString(CultureInfo.InvariantCulture),
+                Number(veg.m_min), Number(veg.m_max),
+                veg.m_groupSizeMin.ToString(CultureInfo.InvariantCulture),
+                veg.m_groupSizeMax.ToString(CultureInfo.InvariantCulture),
+                Number(veg.m_minAltitude), Number(veg.m_maxAltitude),
+                Number(veg.m_minOceanDepth), Number(veg.m_maxOceanDepth),
+                Number(veg.m_minDistanceFromCenter), Number(veg.m_maxDistanceFromCenter),
+                veg.m_inForest.ToString(), veg.m_snapToWater.ToString(),
+            });
         }
+
+        private static string Number(float value) => Math.Round(value, 4).ToString(CultureInfo.InvariantCulture);
     }
 }

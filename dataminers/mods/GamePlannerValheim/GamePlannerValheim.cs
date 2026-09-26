@@ -38,6 +38,7 @@ namespace GamePlanner.Valheim
         private ConfigEntry<bool> _includeImages;
         private ConfigEntry<int> _maxImageSize;
         private ConfigEntry<int> _parallelUploads;
+        private ConfigEntry<string> _referenceSeed;
 
         private readonly UploadProgress _progress = new UploadProgress();
         private readonly ValheimDataMiner _miner = new ValheimDataMiner();
@@ -61,6 +62,9 @@ namespace GamePlanner.Valheim
             _parallelUploads = Config.Bind("Envio", "ParallelUploads", 4,
                 new ConfigDescription("Imagens enviadas ao mesmo tempo. Cada uma que termina libera a próxima da fila.",
                     new AcceptableValueRange<int>(1, DatasetUploader.MaxParallelism)));
+            _referenceSeed = Config.Bind("Mineração", "ReferenceSeed", ValheimWorld.ReferenceSeed,
+                "Semente do mundo cujo desenho de biomas vai para a API. Minerando noutro mundo, os biomas vão sem área.");
+            ValheimWorld.ReferenceSeed = _referenceSeed.Value;
 
             var form = new AccountForm
             {

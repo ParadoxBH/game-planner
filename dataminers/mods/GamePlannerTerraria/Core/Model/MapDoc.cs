@@ -7,24 +7,6 @@ namespace GamePlanner.Core.Model
     /// Mapa. Mundo gerado por semente não tem imagem: use MapType procedural, que abre no dashboard e agrupa
     /// o conteúdo pelos locais (biomas).
     /// </summary>
-    /// <summary>Retângulo em coordenadas de jogo.</summary>
-    public sealed class MapBounds : IJsonWritable
-    {
-        public double MinX, MinY, MaxX, MaxY;
-
-        public MapBounds(double minX, double minY, double maxX, double maxY)
-        {
-            MinX = minX; MinY = minY; MaxX = maxX; MaxY = maxY;
-        }
-
-        public void WriteJson(JsonWriter w) => w.BeginObject()
-            .Name("minX").Value(MinX)
-            .Name("minY").Value(MinY)
-            .Name("maxX").Value(MaxX)
-            .Name("maxY").Value(MaxY)
-            .EndObject();
-    }
-
     public sealed class MapDoc : ContentDoc
     {
         public const string Procedural = "procedural";
@@ -32,12 +14,6 @@ namespace GamePlanner.Core.Model
         public string MapType = Procedural;
         public string DefaultView;
         public List<string> AvailableViews = new List<string>();
-
-        /// <summary>Extensão do mundo. Sem ela o desenho cai num retângulo padrão de 1000 × 1000.</summary>
-        public MapBounds Bounds;
-
-        /// <summary>Lado da grade do mundo, em unidades de jogo (a zona do Valheim é 64).</summary>
-        public double? GridSize;
 
         /// <summary>Ids dos eventos de clima que o mapa oferece no filtro.</summary>
         public List<string> Weathers = new List<string>();
@@ -50,8 +26,6 @@ namespace GamePlanner.Core.Model
             w.Field("mapType", MapType)
                 .Field("defaultView", DefaultView)
                 .Field("availableViews", AvailableViews)
-                .Field("bounds", Bounds)
-                .Field("gridSize", GridSize)
                 .Field("weathers", Weathers);
         }
     }

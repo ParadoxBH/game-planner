@@ -13,6 +13,8 @@ namespace GamePlanner.Core.Model
         public const string Map = "map";
         public const string Location = "location";
         public const string SpawnPoint = "spawn_point";
+        public const string Shop = "shop";
+        public const string ShopCategory = "shop_category";
     }
 
     /// <summary>Referência a outro conteúdo, que pode ainda não estar cadastrado.</summary>
@@ -77,22 +79,17 @@ namespace GamePlanner.Core.Model
             .EndObject();
     }
 
-    /// <summary>
-    /// O que pode aparecer num ponto de surgimento. Chance de 0 a 1; quantidades opcionais e positivas.
-    /// Level é o nível em que o alvo está ali — só quando é um só, porque faixa vira condição "level".
-    /// </summary>
+    /// <summary>O que pode aparecer num ponto de surgimento. Chance de 0 a 1; quantidades opcionais e positivas.</summary>
     public sealed class Occupant : IJsonWritable
     {
         public Reference Target;
         public double? Chance;
         public double? Amount;
         public double? MaxAmount;
-        public int? Level;
 
-        public Occupant(Reference target, double? chance = null, double? amount = null, double? maxAmount = null,
-                        int? level = null)
+        public Occupant(Reference target, double? chance = null, double? amount = null, double? maxAmount = null)
         {
-            Target = target; Chance = chance; Amount = amount; MaxAmount = maxAmount; Level = level;
+            Target = target; Chance = chance; Amount = amount; MaxAmount = maxAmount;
         }
 
         public void WriteJson(JsonWriter w) => w.BeginObject()
@@ -100,102 +97,7 @@ namespace GamePlanner.Core.Model
             .Field("chance", Chance)
             .Field("amount", Amount)
             .Field("maxAmount", MaxAmount)
-            .Field("level", Level)
             .EndObject();
-    }
-
-    /// <summary>
-    /// Vocabulário de condições de surgimento, compartilhado entre os jogos. O que cada tipo
-    /// significa e como as linhas se combinam está em doc/spawn_and_spatial.md.
-    /// </summary>
-    public static class ConditionTypes
-    {
-        // Filtram: valem contra uma amostra do mundo.
-        public const string Altitude = "altitude";
-        public const string Depth = "depth";
-        public const string TimeOfDay = "time_of_day";
-        public const string BiomeArea = "biome_area";
-        public const string Forest = "forest";
-        public const string Weather = "weather";
-        public const string Progress = "progress";
-        public const string DistanceFromCenter = "distance_from_center";
-        public const string WaterSurface = "water_surface";
-        public const string NearBase = "near_base";
-        public const string KnownItem = "known_item";
-
-        // Descritivos: aparecem na tela, não filtram.
-        public const string Level = "level";
-        public const string LevelUpChance = "level_up_chance";
-        public const string MaxAlive = "max_alive";
-        public const string MaxTotal = "max_total";
-        public const string SpawnInterval = "spawn_interval";
-        public const string PerZone = "per_zone";
-        public const string HuntsPlayer = "hunts_player";
-        public const string Duration = "duration";
-        public const string DungeonRoom = "dungeon_room";
-
-        // Valores fechados dos tipos de código.
-        public const string Day = "day";
-        public const string Night = "night";
-        public const string Edge = "edge";
-        public const string Interior = "interior";
-        public const string Inside = "inside";
-        public const string Outside = "outside";
-    }
-
-    /// <summary>
-    /// Condição para o ponto valer. Linhas de tipos diferentes valem juntas (E); do mesmo tipo,
-    /// basta uma (OU) — é assim que se expressa conjunto. Negated inverte a linha.
-    ///
-    /// Use Value para código, Target para conteúdo (clima, chefe), Min/Max para faixa inclusiva
-    /// (nulo é sem limite) e só o Type para bandeira. Grandeza única vai com Min igual a Max.
-    /// </summary>
-    public sealed class SpawnConditionRow : IJsonWritable
-    {
-        public string Type;
-        public string Value;
-        public Reference Target;
-        public double? Min;
-        public double? Max;
-        public bool Negated;
-
-        public SpawnConditionRow(string type)
-        {
-            Type = type;
-        }
-
-        public static SpawnConditionRow Flag(string type) => new SpawnConditionRow(type);
-
-        public static SpawnConditionRow Code(string type, string value) =>
-            new SpawnConditionRow(type) { Value = value };
-
-        public static SpawnConditionRow Of(string type, Reference target) =>
-            new SpawnConditionRow(type) { Target = target };
-
-        public static SpawnConditionRow Range(string type, double? min, double? max) =>
-            new SpawnConditionRow(type) { Min = min, Max = max };
-
-        public static SpawnConditionRow Scalar(string type, double value) =>
-            new SpawnConditionRow(type) { Min = value, Max = value };
-
-        /// <summary>Marca a linha como "não vale quando isto acontece".</summary>
-        public SpawnConditionRow Not()
-        {
-            Negated = true;
-            return this;
-        }
-
-        public void WriteJson(JsonWriter w)
-        {
-            w.BeginObject()
-                .Field("type", Type)
-                .Field("value", Value)
-                .Field("target", Target)
-                .Field("min", Min)
-                .Field("max", Max);
-            if (Negated) w.Name("negated").Value(true);
-            w.EndObject();
-        }
     }
 
     /// <summary>Produto de receita. Level é a qualidade do que sai (upgrade).</summary>

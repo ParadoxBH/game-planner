@@ -22,9 +22,6 @@ namespace GamePlanner.Core.Model
         public List<Occupant> Occupants = new List<Occupant>();
         public List<Drop> Drops = new List<Drop>();
 
-        /// <summary>Quando o ponto vale. Ver SpawnConditionRow e doc/spawn_and_spatial.md.</summary>
-        public List<SpawnConditionRow> Conditions = new List<SpawnConditionRow>();
-
         public override string Resource => "spawn-points";
         public override string Kind => ContentKinds.SpawnPoint;
 
@@ -36,8 +33,7 @@ namespace GamePlanner.Core.Model
                 .Field("respawnMode", RespawnMode)
                 .Field("respawnDelayMinutes", RespawnDelayMinutes)
                 .Field("occupants", Occupants)
-                .Field("drops", Drops)
-                .Field("conditions", Conditions);
+                .Field("drops", Drops);
         }
     }
 }

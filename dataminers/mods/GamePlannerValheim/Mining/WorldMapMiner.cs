@@ -10,6 +10,9 @@ namespace GamePlanner.Valheim.Mining
     /// </summary>
     internal static class WorldMapMiner
     {
+        /// <summary>Lado da zona de geração do mundo, em metros.</summary>
+        private const double ZoneSize = 64;
+
         public static IEnumerator Mine(MiningKit kit)
         {
             EnvMan env = EnvMan.instance;
@@ -26,6 +29,21 @@ namespace GamePlanner.Valheim.Mining
                 }
             }
 
+            // A área do bioma depende da semente, então só sai do mundo de referência: publicar o
+            // mundo pessoal de quem minerou como o mapa de todos seria errado.
+            BiomeGeometry geometry = null;
+            string seed = CurrentSeed();
+            string reference = ValheimWorld.ReferenceSeed;
+            if (seed != null && seed == reference)
+            {
+                yield return BiomeGeometry.Sample(kit, grid => geometry = grid);
+            }
+            else if (!string.IsNullOrEmpty(reference))
+            {
+                kit.Dataset.Warn("Biomas sem área: a semente deste mundo é '" + (seed ?? "?") + "' e a de referência é '"
+                                 + reference + "'. Minere no mundo de referência para desenhar o mapa.");
+            }
+
             var weathers = new List<string>();
             foreach (Heightmap.Biome biome in ValheimWorld.Biomes)
             {
@@ -36,6 +54,7 @@ namespace GamePlanner.Valheim.Mining
                     LocationType = "biome",
                     Map = ValheimWorld.MapId,
                     Summary = BiomeWeathers(env, biome, weathers),
+                    Area = Area(kit, geometry, biome),
                 };
                 kit.Dataset.Add(doc);
             }
@@ -44,13 +63,42 @@ namespace GamePlanner.Valheim.Mining
             {
                 ExtId = ValheimWorld.MapId,
                 Name = "Mundo",
-                Summary = "Mundo gerado pela semente: o conteúdo é agrupado por bioma e por local.",
-                DefaultView = "dashboard",
+                Summary = "Mundo gerado pela semente: o conteúdo é agrupado por bioma e por local."
+                          + (geometry != null ? " O desenho é o da semente " + seed + "." : ""),
+                DefaultView = geometry != null ? "map" : "dashboard",
+                Bounds = new MapBounds(-BiomeGeometry.Radius, -BiomeGeometry.Radius,
+                    BiomeGeometry.Radius, BiomeGeometry.Radius),
+                GridSize = ZoneSize,
             };
+            if (geometry != null) map.AvailableViews.Add("map");
             map.AvailableViews.Add("dashboard");
             map.Weathers.AddRange(weathers);
             kit.Dataset.Add(map);
-            yield break;
+        }
+
+        /// <summary>
+        /// O desenho do bioma, ou null. O Ocean fica de fora de propósito: ele é o complemento de
+        /// todo o resto, seria a maior geometria das nove e não diz nada que a cor de fundo já não diga.
+        /// </summary>
+        private static string Area(MiningKit kit, BiomeGeometry geometry, Heightmap.Biome biome)
+        {
+            if (geometry == null || biome == Heightmap.Biome.Ocean) return null;
+            int vertices;
+            string wkt = geometry.AreaOf(biome, out vertices);
+            if (wkt == null) return null;
+            if (wkt.Length > 200_000)
+                kit.Dataset.Warn("Área de " + ValheimWorld.BiomeName(biome) + " tem " + wkt.Length
+                                 + " caracteres (" + vertices + " vértices): o envio pode recusar.");
+            kit.Context.Log.Info("Área de " + ValheimWorld.BiomeName(biome) + ": " + vertices + " vértices, "
+                                 + wkt.Length + " caracteres.");
+            return wkt;
+        }
+
+        /// <summary>A semente do mundo carregado, ou null fora de uma partida.</summary>
+        private static string CurrentSeed()
+        {
+            WorldGenerator generator = WorldGenerator.instance;
+            return generator != null && generator.m_world != null ? generator.m_world.m_seedName : null;
         }
 
         /// <summary>"Climas: Clear 40%, Rain 20%...". Acrescenta os ids em weathers para o filtro do mapa.</summary>

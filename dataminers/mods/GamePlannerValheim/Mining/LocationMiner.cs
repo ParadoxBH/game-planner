@@ -83,10 +83,10 @@ namespace GamePlanner.Valheim.Mining
                 LocationType = generator != null ? "dungeon" : "poi",
                 Map = ValheimWorld.MapId,
                 Parent = ValheimWorld.SingleBiomeId(biomes),
-                Summary = new SpawnConditions(kit.World)
-                    .Add(biomes != Heightmap.Biome.None ? "biomas: " + ValheimWorld.BiomeNames(biomes) : null)
-                    .Add(unique ? "só um por mundo" : quantity > 0 ? "até " + quantity + " por mundo" : null)
-                    .Add(location != null && location.m_hasInterior ? "tem interior" : null)
+                Summary = new SpawnRules(kit.World)
+                    .Note(biomes != Heightmap.Biome.None ? "biomas: " + ValheimWorld.BiomeNames(biomes) : null)
+                    .Note(unique ? "só um por mundo" : quantity > 0 ? "até " + quantity + " por mundo" : null)
+                    .Note(location != null && location.m_hasInterior ? "tem interior" : null)
                     .Text,
             };
             if (!kit.Dataset.Add(doc)) return;
@@ -234,36 +234,43 @@ namespace GamePlanner.Valheim.Mining
                         Location = location.ExtId,
                     };
 
-                    var conditions = new SpawnConditions(kit.World);
+                    var rules = new SpawnRules(kit.World);
+                    int? level = null;
                     if (found.Creature)
                     {
                         int min = found.MinLevel == int.MaxValue ? 1 : found.MinLevel;
                         int max = found.MaxLevel;
                         if (component != null && component.m_enemyMinLevelOverride >= 0) min = component.m_enemyMinLevelOverride;
                         if (component != null && component.m_enemyMaxLevelOverride >= 0) max = component.m_enemyMaxLevelOverride;
-                        conditions.Levels(min, max, found.LevelUpChance).Time(found.Day, found.Night)
+                        min = Mathf.Max(1, min);
+                        max = Mathf.Max(min, max);
+                        rules.Levels(min, max, found.LevelUpChance).Time(found.Day, found.Night)
                             .RequiredKey(found.RequiredKey).BlockingKey(found.BlockingKey);
+                        // A faixa já é condição; o nível do ocupante só quando é um só.
+                        if (min == max) level = min;
                         if (found.RespawnMinutes > 0)
                         {
+                            // Aqui o tempo é de renascimento mesmo: CreatureSpawner.m_respawnTimeMinuts.
                             point.RespawnMode = "respawn";
                             point.RespawnDelayMinutes = Mathf.RoundToInt(found.RespawnMinutes);
                         }
                     }
                     if (found.RoomCount > 0)
-                        conditions.Add(found.Count > 0 ? "também em salas da masmorra" : "em salas da masmorra, conforme a geração");
-                    point.Summary = conditions.Text;
+                        rules.DungeonRoom(found.Count > 0 ? "também em salas da masmorra" : "em salas da masmorra, conforme a geração");
+                    point.Summary = rules.Text;
+                    point.Conditions.AddRange(rules.Rows);
 
                     Reference target = Reference.Entity(found.TargetId);
                     if (found.Count == 0)
                     {
-                        point.Occupants.Add(new Occupant(target));
+                        point.Occupants.Add(new Occupant(target, null, null, null, level));
                     }
                     else
                     {
                         double chance = Math.Round(1 - found.NoneChance, 4);
                         double? amount = found.Guaranteed > 0 ? found.Guaranteed : (double?)null;
                         double? maxAmount = found.Count > found.Guaranteed ? found.Count : (double?)null;
-                        point.Occupants.Add(new Occupant(target, chance >= 1 ? (double?)null : chance, amount, maxAmount));
+                        point.Occupants.Add(new Occupant(target, chance >= 1 ? (double?)null : chance, amount, maxAmount, level));
                     }
                     kit.Dataset.Add(point);
                 }

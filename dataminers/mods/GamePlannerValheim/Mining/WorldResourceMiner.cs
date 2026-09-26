@@ -107,9 +107,9 @@ namespace GamePlanner.Valheim.Mining
                 doc.Categories.Add(kit.Categories.Entity(ValheimCategories.LootSpawner));
                 doc.Drops.AddRange(ValheimDrops.FromTable(lootSpawner.m_items));
                 if (lootSpawner.m_respawnTimeMinuts > 0) doc.RespawnDelayMinutes = (int)Math.Round(lootSpawner.m_respawnTimeMinuts);
-                doc.Summary = new SpawnConditions(kit.World)
+                doc.Summary = new SpawnRules(kit.World)
                     .Time(lootSpawner.m_spawnAtDay, lootSpawner.m_spawnAtNight)
-                    .Add(lootSpawner.m_spawnWhenEnemiesCleared ? "reaparece quando os inimigos por perto morrem" : null)
+                    .Note(lootSpawner.m_spawnWhenEnemiesCleared ? "reaparece quando os inimigos por perto morrem" : null)
                     .Text;
                 return doc;
             }
@@ -236,15 +236,24 @@ namespace GamePlanner.Valheim.Mining
             {
                 string creatureId = ValheimNames.PrefabId(data?.m_prefab);
                 if (creatureId == null) continue;
+                SpawnRules rules = new SpawnRules(kit.World)
+                    .Levels(data.m_minLevel, data.m_maxLevel, area.m_levelupChance)
+                    .SpawnInterval(area.m_spawnIntervalSec)
+                    .MaxAlive(area.m_maxNear)
+                    .MaxTotal(area.m_maxTotal);
                 var point = new SpawnPointDoc
                 {
                     ExtId = locationId + "_" + creatureId,
                     Location = locationId,
                     RespawnMode = "respawn",
-                    Summary = new SpawnConditions(kit.World).Levels(data.m_minLevel, data.m_maxLevel, area.m_levelupChance).Text,
+                    Summary = rules.Text,
                 };
+                point.Conditions.AddRange(rules.Rows);
+                int levelMin = Mathf.Max(1, data.m_minLevel);
+                int levelMax = Mathf.Max(levelMin, data.m_maxLevel);
                 double? chance = totalWeight > 0f ? Math.Round(Mathf.Max(0f, data.m_weight) / totalWeight, 4) : (double?)null;
-                point.Occupants.Add(new Occupant(Reference.Entity(creatureId), chance >= 1 ? null : chance));
+                point.Occupants.Add(new Occupant(Reference.Entity(creatureId), chance >= 1 ? null : chance, null, null,
+                    levelMin == levelMax ? levelMin : (int?)null));
                 kit.Dataset.Add(point);
             }
         }
