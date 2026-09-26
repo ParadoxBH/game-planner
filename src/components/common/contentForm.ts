@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ApiError } from "../../api/ApiError";
-import type { ContentResource, MediaUsage } from "../../api/content";
+import type { ContentResource, MediaLink, MediaUsage } from "../../api/content";
 import { useContentWrites } from "../../api/useContent";
 import { useUploadMedia } from "../../api/useMedia";
 
@@ -28,6 +28,8 @@ export interface ImageUpload {
   usage: MediaUsage;
   /** Gera a variante `large` (imagem de mapa). */
   large?: boolean;
+  /** Imagens a desligar do código antes do envio, ex.: ao remover a imagem do uso. */
+  remove?: MediaLink[];
 }
 
 export function describeError(error: unknown): string {
@@ -64,6 +66,15 @@ export function useContentSave(gameId: string, resource: ContentResource, isNew:
       return false;
     }
     for (const image of images) {
+      try {
+        for (const link of image.remove ?? []) {
+          await writes.removeMedia.mutateAsync({ extId, usage: link.usage, mediaId: link.mediaId });
+        }
+      } catch (cause) {
+        setError(`Salvo, mas a imagem não foi removida: ${describeError(cause)}`);
+        setSaving(false);
+        return false;
+      }
       if (!image.file) continue;
       try {
         const uploaded = await upload.mutateAsync({ file: image.file, large: image.large });

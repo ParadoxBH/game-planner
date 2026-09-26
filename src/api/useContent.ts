@@ -278,6 +278,11 @@ export function useContentWrites(gameId: string, resource: ContentResource) {
         contentApi.addMedia(gameId, resource, extId, { usage, mediaId }),
       onSuccess: refresh,
     }),
+    removeMedia: useMutation({
+      mutationFn: ({ extId, usage, mediaId }: { extId: string; usage: MediaUsage; mediaId: string }) =>
+        contentApi.removeMedia(gameId, resource, extId, { usage, mediaId }),
+      onSuccess: refresh,
+    }),
   };
 }
 

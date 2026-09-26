@@ -167,6 +167,9 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
   const [summary, setSummary] = useState(saved?.summary ?? "");
   const [description, setDescription] = useState(saved?.description ?? "");
   const [icon, setIcon] = useState<File | null>(null);
+  // Foto do lugar, a primeira coisa no popup do ponto; "removida" só sai de fato ao salvar.
+  const [screenshot, setScreenshot] = useState<File | null>(null);
+  const [screenshotRemoved, setScreenshotRemoved] = useState(false);
   const [events, setEvents] = useState<string[]>(saved?.events ?? []);
   const [deleting, setDeleting] = useState(false);
   // Ponto de spawn
@@ -255,7 +258,9 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
               maxAmount: numberOf(row.maxAmount),
               level: levelOut(row.level),
             })),
-            drops: [],
+            // O PUT substitui o documento inteiro: o que o formulário não edita volta como estava.
+            drops: saved?.drops ?? [],
+            conditions: saved?.conditions ?? [],
             events,
           }
         : {
@@ -269,7 +274,11 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
             area: geometry?.wkt ?? null,
             events,
           };
-    const ok = await save(id, document, [{ file: icon, usage: "icon" }]);
+    const oldScreenshots = screenshotRemoved ? (saved?.media ?? []).filter((link) => link.usage === "screenshot") : [];
+    const ok = await save(id, document, [
+      { file: icon, usage: "icon" },
+      { file: screenshot, usage: "screenshot", remove: oldScreenshots },
+    ]);
     if (ok) onSaved(kind);
   };
 
@@ -357,6 +366,15 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
           kind={kind === "spawn" ? "spawn_point" : "location"}
           file={icon}
           onChange={setIcon}
+        />
+        <IconUploadField
+          currentMediaId={saved && !screenshotRemoved ? currentMedia(saved.media, "screenshot") : null}
+          kind={kind === "spawn" ? "spawn_point" : "location"}
+          file={screenshot}
+          onChange={setScreenshot}
+          noun="imagem do local"
+          wide
+          onRemove={() => (screenshot ? setScreenshot(null) : setScreenshotRemoved(true))}
         />
 
         <Grid container spacing={2}>

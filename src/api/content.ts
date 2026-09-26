@@ -720,6 +720,12 @@ export const contentApi = {
     });
   },
 
+  /** Desliga uma imagem do código; o arquivo continua no acervo de mídia. */
+  removeMedia(gameId: string, resource: ContentResource, extId: string, link: { usage: MediaUsage; mediaId: string }) {
+    const path = `${encodeURIComponent(extId)}/media/${encodeURIComponent(link.usage)}/${encodeURIComponent(link.mediaId)}`;
+    return apiRequest<void>(`${gamePath(gameId)}/${resource}/${path}`, { method: "DELETE" });
+  },
+
   /** O documento, os conteúdos ligados a ele e toda referência citada, já com nome e ícone. */
   details<D, R>(gameId: string, resource: ContentResource, extId: string, signal?: AbortSignal) {
     return apiRequest<Details<D, R>>(`${gamePath(gameId)}/${resource}/${encodeURIComponent(extId)}/details`, {

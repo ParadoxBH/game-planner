@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { Button, Stack } from "@mui/material";
-import { CloudUpload } from "@mui/icons-material";
+import { CloudUpload, DeleteOutline } from "@mui/icons-material";
 import { mediaUrl } from "../../api/references";
 import { ContentIcon } from "./ContentIcon";
 
@@ -16,10 +16,12 @@ interface IconUploadFieldProps {
   noun?: string;
   /** Prévia larga (miniatura de mapa) em vez de quadrada. */
   wide?: boolean;
+  /** Com isto, mostra "Remover" quando há imagem: tira a escolhida ou marca a atual para sair ao salvar. */
+  onRemove?: () => void;
 }
 
 /** Mostra o ícone atual ou o escolhido e deixa escolher outro. O envio fica com o formulário, ao salvar. */
-export function IconUploadField({ currentMediaId, kind, file, onChange, noun = "ícone", wide = false }: IconUploadFieldProps) {
+export function IconUploadField({ currentMediaId, kind, file, onChange, noun = "ícone", wide = false, onRemove }: IconUploadFieldProps) {
   const preview = useMemo(() => (file ? URL.createObjectURL(file) : null), [file]);
   useEffect(() => () => {
     if (preview) URL.revokeObjectURL(preview);
@@ -47,6 +49,11 @@ export function IconUploadField({ currentMediaId, kind, file, onChange, noun = "
           }}
         />
       </Button>
+      {onRemove && (currentMediaId || file) && (
+        <Button color="error" size="small" startIcon={<DeleteOutline />} onClick={onRemove} sx={{ textTransform: "none" }}>
+          Remover
+        </Button>
+      )}
     </Stack>
   );
 }
