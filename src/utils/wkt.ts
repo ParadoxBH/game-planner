@@ -172,3 +172,33 @@ export function rotateLatLng(
   return [ry + cy, rx + cx];
 }
 
+
+/** O ponto [x, y] está dentro do anel (ray casting; a borda conta como qualquer um dos lados). */
+function ringContains(ring: [number, number][], [x, y]: [number, number]): boolean {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i];
+    const [xj, yj] = ring[j];
+    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+/** O ponto [x, y] cai em algum dos polígonos de parseWKTAreas: dentro do anel externo e fora dos furos. */
+export function areasContain(areas: [number, number][][][], point: [number, number]): boolean {
+  return areas.some(
+    ([outer, ...holes]) => outer && ringContains(outer, point) && !holes.some((hole) => ringContains(hole, point)),
+  );
+}
+
+/** Área dos anéis externos (fórmula do laço), para achar o local mais específico entre os que se sobrepõem. */
+export function areasSize(areas: [number, number][][][]): number {
+  return areas.reduce((total, [outer]) => {
+    if (!outer) return total;
+    let sum = 0;
+    for (let i = 0, j = outer.length - 1; i < outer.length; j = i++) {
+      sum += (outer[j][0] + outer[i][0]) * (outer[j][1] - outer[i][1]);
+    }
+    return total + Math.abs(sum) / 2;
+  }, 0);
+}

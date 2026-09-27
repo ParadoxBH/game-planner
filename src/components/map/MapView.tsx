@@ -62,7 +62,7 @@ import { useGameAdmin, useGameEditor } from "../../hooks/useGameAdmin";
 import { usePlatform } from "../../hooks/usePlatform";
 import { getPublicUrl } from "../../utils/pathUtils";
 import { getDailyResetTimes, getWeeklyResetTimes } from "../../utils/timeUtils";
-import { formatWKTPoint, formatWKTPolygon, parseWKTAreas, parseWKTPoint, rotateLatLng } from "../../utils/wkt";
+import { areasContain, areasSize, formatWKTPoint, formatWKTPolygon, parseWKTAreas, parseWKTPoint, rotateLatLng } from "../../utils/wkt";
 import { BoundBoxEditorPanel, type Bounds as BoundBoxBounds } from "./BoundBoxEditorPanel";
 import { InfoDrawer } from "./InfoDrawer";
 import { MapDashboard } from "./MapDashboard";
@@ -368,6 +368,17 @@ export const MapView = () => {
   const markerList = markers.data?.content ?? EMPTY_MARKERS;
   const locationList = locations.data?.content ?? EMPTY_LOCATIONS;
   const stats = useMemo(() => computeFilterStats(markerList, locationList), [markerList, locationList]);
+  // Zonas do mapa (locais com polígono), da menor para a maior: a primeira que contém o cursor é a
+  // mais específica.
+  const zones = useMemo(
+    () =>
+      locationList
+        .map((location) => ({ name: location.name ?? location.extId, areas: parseWKTAreas(location.area) }))
+        .filter((zone) => zone.areas.length > 0)
+        .map((zone) => ({ ...zone, size: areasSize(zone.areas) }))
+        .sort((a, b) => a.size - b.size),
+    [locationList],
+  );
   const categoryNames = useMemo(
     () => new Map((categories.data?.content ?? []).map((category) => [category.extId, category.name])),
     [categories.data],
@@ -645,6 +656,8 @@ export const MapView = () => {
     const [y, x] = rotate ? rotateLatLng(latlng, bounds, -rotate) : latlng;
     return [x, y];
   };
+  const cursorGame = toGame(cursorCoords);
+  const cursorZone = zones.find((zone) => areasContain(zone.areas, cursorGame));
 
   const finishDrawing = (geometry: DrawnGeometry) => {
     setDrawn(geometry);
@@ -898,6 +911,7 @@ export const MapView = () => {
               gameName={game.data?.name ?? ""}
               coords={displayCoords}
               zoom={zoom}
+              region={cursorZone?.name}
               maps={maps.data.content}
               selectedMapId={selectedMap.extId}
               onSelectMap={selectMap}
