@@ -47,6 +47,20 @@ export function locationTypeOf(location: LocationDocument): string {
   return location.locationType ?? "region";
 }
 
+/** Chave do filtro de uma categoria de local dentro de um tipo: "region|rio". */
+export function locationCategoryKey(type: string, category: string): string {
+  return `${type}|${category}`;
+}
+
+/** Chaves de filtro de um local: uma por categoria, ou a de "sem categoria". */
+export function locationFilterKeys(location: LocationDocument): string[] {
+  const type = locationTypeOf(location);
+  const categories = location.categories ?? [];
+  return categories.length > 0
+    ? categories.map((category) => locationCategoryKey(type, category))
+    : [locationCategoryKey(type, UNCATEGORIZED)];
+}
+
 /** Categoria usada no filtro: a principal do ocupante (a API a manda primeiro), ou a primeira. */
 export function occupantCategory(occupant: MarkerOccupant): string {
   return occupant.categories[0] ?? UNCATEGORIZED;
@@ -60,6 +74,11 @@ export interface FilterEntity {
 
 export interface FilterStats {
   types: [string, number][];
+  /**
+   * Categorias dos locais de cada tipo, com as contagens. Só aparece o tipo em que algum local tem
+   * categoria; os sem categoria entram como UNCATEGORIZED.
+   */
+  locationCategories: Record<string, [string, number][]>;
   categories: [string, { count: number; entities: Record<string, FilterEntity> }][];
 }
 
@@ -67,9 +86,21 @@ export interface FilterStats {
 export function computeFilterStats(markers: MapMarker[], locations: LocationDocument[]): FilterStats {
   const typeCount: Record<string, number> = {};
   if (markers.length > 0) typeCount[SPAWN_TYPE] = markers.length;
+  const typeCategories: Record<string, Record<string, number>> = {};
   locations.forEach((location) => {
     const type = locationTypeOf(location);
     typeCount[type] = (typeCount[type] ?? 0) + 1;
+    const counts = (typeCategories[type] ??= {});
+    const categories = location.categories ?? [];
+    (categories.length > 0 ? categories : [UNCATEGORIZED]).forEach((category) => {
+      counts[category] = (counts[category] ?? 0) + 1;
+    });
+  });
+  const locationCategories: Record<string, [string, number][]> = {};
+  Object.entries(typeCategories).forEach(([type, counts]) => {
+    if (Object.keys(counts).some((category) => category !== UNCATEGORIZED)) {
+      locationCategories[type] = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    }
   });
 
   const categories: Record<string, { count: number; entities: Record<string, FilterEntity> }> = {};
@@ -88,6 +119,7 @@ export function computeFilterStats(markers: MapMarker[], locations: LocationDocu
 
   return {
     types: Object.entries(typeCount).sort((a, b) => b[1] - a[1]),
+    locationCategories,
     categories: Object.entries(categories).sort((a, b) => b[1].count - a[1].count),
   };
 }
@@ -97,6 +129,9 @@ interface MapFilterDrawerProps {
   categoryNames: Map<string, string>;
   visibleTypes: string[];
   setVisibleTypes: (types: string[]) => void;
+  /** Chaves de locationCategoryKey visíveis. */
+  visibleLocationCategories: string[];
+  setVisibleLocationCategories: (keys: string[]) => void;
   visibleCategories: string[];
   setVisibleCategories: (categories: string[]) => void;
   visibleEntities: string[];
@@ -110,6 +145,8 @@ export const MapFilterDrawer = ({
   categoryNames,
   visibleTypes,
   setVisibleTypes,
+  visibleLocationCategories,
+  setVisibleLocationCategories,
   visibleCategories,
   setVisibleCategories,
   visibleEntities,
@@ -119,12 +156,35 @@ export const MapFilterDrawer = ({
 }: MapFilterDrawerProps) => {
   const [open, setOpen] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
+  const [expandedTypes, setExpandedTypes] = useState<Record<string, boolean>>({});
 
   const categoryLabel = (category: string) => categoryNames.get(category) ?? category.replace(/_/g, " ");
 
+  const locationCategoryLabel = (category: string) => (category === UNCATEGORIZED ? "Sem categoria" : categoryLabel(category));
+  const childKeysOf = (type: string) =>
+    (stats.locationCategories[type] ?? []).map(([category]) => locationCategoryKey(type, category));
+
   const toggleType = (type: string) => {
-    if (visibleTypes.includes(type)) setVisibleTypes(visibleTypes.filter((t) => t !== type));
-    else setVisibleTypes([...visibleTypes, type]);
+    const childKeys = childKeysOf(type);
+    if (visibleTypes.includes(type)) {
+      setVisibleTypes(visibleTypes.filter((t) => t !== type));
+      setVisibleLocationCategories(visibleLocationCategories.filter((key) => !childKeys.includes(key)));
+    } else {
+      setVisibleTypes([...visibleTypes, type]);
+      setVisibleLocationCategories(Array.from(new Set([...visibleLocationCategories, ...childKeys])));
+    }
+  };
+
+  const toggleLocationCategory = (type: string, key: string) => {
+    const next = visibleLocationCategories.includes(key)
+      ? visibleLocationCategories.filter((other) => other !== key)
+      : [...visibleLocationCategories, key];
+    setVisibleLocationCategories(next);
+
+    // O tipo acompanha as categorias: marcado se alguma está visível.
+    const anyVisible = childKeysOf(type).some((childKey) => next.includes(childKey));
+    if (anyVisible && !visibleTypes.includes(type)) setVisibleTypes([...visibleTypes, type]);
+    else if (!anyVisible && visibleTypes.includes(type)) setVisibleTypes(visibleTypes.filter((t) => t !== type));
   };
 
   const toggleCategory = (category: string) => {
@@ -161,12 +221,14 @@ export const MapFilterDrawer = ({
 
   const selectAll = () => {
     setVisibleTypes(stats.types.map((t) => t[0]));
+    setVisibleLocationCategories(stats.types.flatMap(([type]) => childKeysOf(type)));
     setVisibleCategories(stats.categories.map((c) => c[0]));
     setVisibleEntities(Array.from(new Set(stats.categories.flatMap(([, data]) => Object.keys(data.entities)))));
   };
 
   const clearAll = () => {
     setVisibleTypes([]);
+    setVisibleLocationCategories([]);
     setVisibleCategories([]);
     setVisibleEntities([]);
   };
@@ -267,22 +329,85 @@ export const MapFilterDrawer = ({
               Tipos
             </Typography>
             <List dense disablePadding sx={{ mb: 3 }}>
-              {stats.types.map(([type, count]) => (
-                <ListItem key={type} disablePadding sx={{ mb: 0.5 }}>
-                  <FormControlLabel
-                    sx={{ width: "100%", ml: 0, mr: 0, px: 1, borderRadius: 1, "&:hover": { bgcolor: "rgba(255,255,255,0.05)" } }}
-                    control={<Checkbox size="small" checked={visibleTypes.includes(type)} onChange={() => toggleType(type)} />}
-                    label={
-                      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ width: "100%", ml: 1 }}>
-                        <Typography variant="body2" sx={{ fontSize: "0.85rem" }}>
-                          {typeLabel(type)}
-                        </Typography>
-                        <Chip label={count} size="small" sx={{ height: 18, fontSize: "0.6rem", bgcolor: "rgba(255,255,255,0.1)" }} />
-                      </Stack>
-                    }
-                  />
-                </ListItem>
-              ))}
+              {stats.types.map(([type, count]) => {
+                const children = stats.locationCategories[type] ?? [];
+                const childKeys = childKeysOf(type);
+                const visibleChildren = childKeys.filter((key) => visibleLocationCategories.includes(key));
+                const hasChildren = children.length > 0;
+                const allSelected = hasChildren ? visibleChildren.length === childKeys.length : visibleTypes.includes(type);
+                const someSelected = hasChildren && visibleChildren.length > 0 && !allSelected;
+                const isExpanded = !!expandedTypes[type];
+
+                return (
+                  <Box key={type} sx={{ mb: 0.5 }}>
+                    <Stack direction="row" alignItems="center" sx={{ px: 1, borderRadius: 1, "&:hover": { bgcolor: "rgba(255,255,255,0.05)" } }}>
+                      {hasChildren ? (
+                        <IconButton
+                          size="small"
+                          onClick={() => setExpandedTypes((prev) => ({ ...prev, [type]: !prev[type] }))}
+                          sx={{ p: 0.5, mr: 0.5 }}
+                        >
+                          {isExpanded ? <ExpandMoreIcon fontSize="small" /> : <ChevronRightIcon fontSize="small" />}
+                        </IconButton>
+                      ) : (
+                        <Box sx={{ width: 32 }} />
+                      )}
+                      <FormControlLabel
+                        sx={{ flexGrow: 1, ml: 0, mr: 0 }}
+                        control={
+                          <Checkbox size="small" checked={allSelected} indeterminate={someSelected} onChange={() => toggleType(type)} />
+                        }
+                        label={
+                          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ ml: 1 }}>
+                            <Typography variant="body2" sx={{ fontSize: "0.85rem" }}>
+                              {typeLabel(type)}
+                            </Typography>
+                            <Chip label={count} size="small" sx={{ height: 18, fontSize: "0.6rem", bgcolor: "rgba(255,255,255,0.1)" }} />
+                          </Stack>
+                        }
+                      />
+                    </Stack>
+                    {hasChildren && (
+                      <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                        <List dense disablePadding sx={{ pl: 5 }}>
+                          {children.map(([category, categoryCount]) => {
+                            const key = locationCategoryKey(type, category);
+                            return (
+                              <ListItem key={key} disablePadding>
+                                <FormControlLabel
+                                  sx={{ width: "100%", ml: 0, mr: 0, pr: 1, borderRadius: 1, "&:hover": { bgcolor: "rgba(255,255,255,0.05)" } }}
+                                  control={
+                                    <Checkbox
+                                      size="small"
+                                      checked={visibleLocationCategories.includes(key)}
+                                      onChange={() => toggleLocationCategory(type, key)}
+                                    />
+                                  }
+                                  label={
+                                    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ width: "100%", ml: 1 }}>
+                                      <Typography
+                                        variant="body2"
+                                        sx={{ fontSize: "0.8rem", fontStyle: category === UNCATEGORIZED ? "italic" : undefined }}
+                                      >
+                                        {locationCategoryLabel(category)}
+                                      </Typography>
+                                      <Chip
+                                        label={categoryCount}
+                                        size="small"
+                                        sx={{ height: 18, fontSize: "0.6rem", bgcolor: "rgba(255,255,255,0.1)" }}
+                                      />
+                                    </Stack>
+                                  }
+                                />
+                              </ListItem>
+                            );
+                          })}
+                        </List>
+                      </Collapse>
+                    )}
+                  </Box>
+                );
+              })}
             </List>
 
             <Typography

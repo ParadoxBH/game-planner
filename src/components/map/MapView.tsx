@@ -75,7 +75,17 @@ import { areasContain, areasSize, formatWKTPoint, formatWKTPolygon, parseWKTArea
 import { BoundBoxEditorPanel, type Bounds as BoundBoxBounds } from "./BoundBoxEditorPanel";
 import { InfoDrawer } from "./InfoDrawer";
 import { MapDashboard } from "./MapDashboard";
-import { computeFilterStats, locationTypeOf, MapFilterDrawer, occupantCategory, SPAWN_TYPE, typeLabel } from "./MapFilterDrawer";
+import {
+  computeFilterStats,
+  locationCategoryKey,
+  locationFilterKeys,
+  locationTypeOf,
+  MapFilterDrawer,
+  occupantCategory,
+  SPAWN_TYPE,
+  typeLabel,
+  type FilterStats,
+} from "./MapFilterDrawer";
 import { ContentIcon } from "../common/ContentIcon";
 import { MapFormDialog } from "./MapFormDialog";
 import { MapInfoOverlay } from "./MapInfoOverlay";
@@ -168,9 +178,17 @@ const MapEventsHandler = ({ onClick, onDoubleClick, onContextMenu }: MapEventsHa
   return null;
 };
 
+/** Todas as chaves de categoria de local dos tipos dados (padrão: todos). */
+function allLocationCategoryKeys(stats: FilterStats, types?: string[]): string[] {
+  return Object.entries(stats.locationCategories)
+    .filter(([type]) => !types || types.includes(type))
+    .flatMap(([type, categories]) => categories.map(([category]) => locationCategoryKey(type, category)));
+}
+
 /** Valores de cada filtro do mapa, para perceber o que surgiu depois de um cadastro. */
 interface KnownFilters {
   types: Set<string>;
+  locationCategories: Set<string>;
   categories: Set<string>;
   entities: Set<string>;
 }
@@ -353,6 +371,7 @@ export const MapView = () => {
   const [newRule, setNewRule] = useState(false);
   const [redrawFor, setRedrawFor] = useState<EditingContent | null>(null);
   const [visibleTypes, setVisibleTypes] = useState<string[]>([]);
+  const [visibleLocationCategories, setVisibleLocationCategories] = useState<string[]>([]);
   const [visibleCategories, setVisibleCategories] = useState<string[]>([]);
   const [visibleEntities, setVisibleEntities] = useState<string[]>([]);
   const [filtersFor, setFiltersFor] = useState<string | null>(null);
@@ -463,7 +482,9 @@ export const MapView = () => {
         Object.keys(data.entities).forEach((id) => entities.add(id));
       }
     });
-    setVisibleTypes(defaults.types.length > 0 ? defaults.types : stats.types.map(([type]) => type));
+    const types = defaults.types.length > 0 ? defaults.types : stats.types.map(([type]) => type);
+    setVisibleTypes(types);
+    setVisibleLocationCategories(allLocationCategoryKeys(stats, types));
     setVisibleCategories(defaults.categories.length > 0 ? defaults.categories : stats.categories.map(([category]) => category));
     setVisibleEntities([...entities]);
     setFiltersFor(selectedMap.extId);
@@ -476,6 +497,7 @@ export const MapView = () => {
     if (!selectedMap || filtersFor !== selectedMap.extId) return;
     const current: KnownFilters = {
       types: new Set(stats.types.map(([type]) => type)),
+      locationCategories: new Set(allLocationCategoryKeys(stats)),
       categories: new Set(stats.categories.map(([category]) => category)),
       entities: new Set(stats.categories.flatMap(([, data]) => Object.keys(data.entities))),
     };
@@ -484,9 +506,11 @@ export const MapView = () => {
     if (!known) return;
     const added = (key: keyof KnownFilters) => [...current[key]].filter((value) => !known[key].has(value));
     const types = added("types");
+    const newLocationCategories = added("locationCategories");
     const newCategories = added("categories");
     const entities = added("entities");
     if (types.length) setVisibleTypes((visible) => [...visible, ...types]);
+    if (newLocationCategories.length) setVisibleLocationCategories((visible) => [...visible, ...newLocationCategories]);
     if (newCategories.length) setVisibleCategories((visible) => [...visible, ...newCategories]);
     if (entities.length) setVisibleEntities((visible) => [...visible, ...entities]);
   }, [selectedMap, filtersFor, stats]);
@@ -627,7 +651,12 @@ export const MapView = () => {
     () =>
       (urlFiltered ? EMPTY_LOCATIONS : locationList).map((location) => {
         const type = locationTypeOf(location);
-        if (!visibleTypes.includes(type) || !location.area) return null;
+        if (!location.area) return null;
+        // Tipo com categorias filtra pelas categorias do local; sem categorias, só pelo tipo.
+        const visible = stats.locationCategories[type]
+          ? locationFilterKeys(location).some((key) => visibleLocationCategories.includes(key))
+          : visibleTypes.includes(type);
+        if (!visible) return null;
         const name = location.name ?? location.extId;
         const labeled = LABELED_LOCATION_TYPES.has(type);
         const color = locationColor(type, location.extId, theme.palette.primary.main);
@@ -689,7 +718,7 @@ export const MapView = () => {
           </Polygon>
         );
       }),
-    [urlFiltered, locationList, visibleTypes, toLatLng, activeTool, theme, canEdit, pickable],
+    [urlFiltered, locationList, visibleTypes, visibleLocationCategories, stats, toLatLng, activeTool, theme, canEdit, pickable],
   );
 
   if (maps.isPending) return <Loading text="Carregando mapa..." />;
@@ -932,6 +961,8 @@ export const MapView = () => {
               categoryNames={categoryNames}
               visibleTypes={visibleTypes}
               setVisibleTypes={setVisibleTypes}
+              visibleLocationCategories={visibleLocationCategories}
+              setVisibleLocationCategories={setVisibleLocationCategories}
               visibleCategories={visibleCategories}
               setVisibleCategories={setVisibleCategories}
               visibleEntities={visibleEntities}
