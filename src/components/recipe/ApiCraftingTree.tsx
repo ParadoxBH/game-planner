@@ -88,7 +88,7 @@ function SourceBadges({ node }: { node: CraftTreeNode }) {
         <>
           <DataChip label={`${formatAmount(node.recipe.batches)} ${node.recipe.batches === 1 ? "lote" : "lotes"}`} />
           {node.recipe.craftTimeSeconds ? <DataChip label={formatDuration(node.recipe.craftTimeSeconds)} /> : null}
-          <ContentReferences entries={node.recipe.stations.map((station) => ({ target: station, resolved: station }))} />
+          <ContentReferences entries={node.recipe.stations.map((station) => ({ target: station, resolved: station }))} labelMax={1} inline />
         </>
       ) : null;
     case "shop":
@@ -301,7 +301,7 @@ function TotalsView({ totals, revenue }: { totals: CraftTotals; revenue?: Curren
       )}
       {totals.stations.length > 0 && (
         <DetailField label="Bancadas">
-          <ContentReferences entries={totals.stations.map((station) => ({ target: station, resolved: station }))} labelMax={3} />
+          <ContentReferences entries={totals.stations.map((station) => ({ target: station, resolved: station }))} />
         </DetailField>
       )}
       {totals.craftTimeSeconds > 0 && (

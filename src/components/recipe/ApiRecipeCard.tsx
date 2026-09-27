@@ -30,10 +30,12 @@ interface ApiRecipeCardProps {
   highlight?: Reference;
   /** Substitui a navegação para o detalhe, ex.: escolher a receita num diálogo. */
   onClick?: () => void;
+  /** Bancadas lado a lado em vez da lista vertical, ex.: na página da entidade. */
+  inlineStations?: boolean;
 }
 
 /** Receita vinda da API: ingredientes, produtos, bancadas, desbloqueio e tempo. */
-export function ApiRecipeCard({ recipe, references, highlight, onClick }: ApiRecipeCardProps) {
+export function ApiRecipeCard({ recipe, references, highlight, onClick, inlineStations = false }: ApiRecipeCardProps) {
   const navigate = useNavigate();
   const { gameId = "" } = useParams<{ gameId: string }>();
   const isHighlight = (target: Reference) => Boolean(highlight && sameTarget(target, highlight));
@@ -83,11 +85,15 @@ export function ApiRecipeCard({ recipe, references, highlight, onClick }: ApiRec
       </Stack>
 
       {(recipe.stations.length > 0 || recipe.unlock.length > 0) && (
-        <Stack direction="row" alignItems="center" spacing={1} flexWrap="wrap" useFlexGap>
-          <ContentReferences entries={stationEntries(recipe, references, Boolean(onClick))} />
-          {recipe.unlock.map((unlock, index) => (
-            <DataChip key={`unlock-${index}`} label={unlockLabel(unlock, references)} />
-          ))}
+        <Stack spacing={1}>
+          <ContentReferences entries={stationEntries(recipe, references, Boolean(onClick))} inline={inlineStations} />
+          {recipe.unlock.length > 0 && (
+            <Stack direction="row" alignItems="center" spacing={1} flexWrap="wrap" useFlexGap>
+              {recipe.unlock.map((unlock, index) => (
+                <DataChip key={`unlock-${index}`} label={unlockLabel(unlock, references)} />
+              ))}
+            </Stack>
+          )}
         </Stack>
       )}
     </DataCard>

@@ -113,25 +113,42 @@ export function ContentLabel({
 
 export interface ContentReferencesProps {
   entries: ContentChipProps[];
-  /** Até quantos conteúdos cada um aparece com nome (ContentLabel); acima disso, só os ícones. */
+  /** Até quantos conteúdos aparecem com nome (ContentLabel); acima disso, só os ícones. */
   labelMax?: number;
   variant?: ContentLabelVariant;
   size?: "small" | "medium";
+  /**
+   * Com nome, lado a lado no tamanho do conteúdo em vez da lista vertical de largura cheia; para
+   * linhas que já têm outros selos, como o nó da árvore de produção.
+   */
+  inline?: boolean;
 }
 
+const entryKey = (entry: ContentChipProps, index: number) => `${entry.target.kind ?? ""}:${entry.target.extId}:${index}`;
+
 /**
- * Lista de conteúdos citados que escolhe o formato pela quantidade: poucos, com ícone e nome; muitos,
- * só os ícones lado a lado.
+ * Lista de conteúdos citados que escolhe o formato pela quantidade: até labelMax, uma lista vertical
+ * de cartões com ícone e nome ocupando a largura; acima disso, só os ícones lado a lado.
  */
-export function ContentReferences({ entries, labelMax = 1, variant = "text", size = "small" }: ContentReferencesProps) {
+export function ContentReferences({ entries, labelMax = 3, variant = "text", size = "small", inline = false }: ContentReferencesProps) {
+  if (entries.length === 0) return null;
+  if (entries.length <= labelMax && !inline) {
+    return (
+      <Stack spacing={0.5} sx={{ width: "100%", minWidth: 0 }}>
+        {entries.map((entry, index) => (
+          <ContentLabel key={entryKey(entry, index)} {...entry} variant={variant} size={size} fullWidth />
+        ))}
+      </Stack>
+    );
+  }
   const labeled = entries.length <= labelMax;
   return (
     <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap sx={{ minWidth: 0 }}>
       {entries.map((entry, index) =>
         labeled ? (
-          <ContentLabel key={`${entry.target.kind ?? ""}:${entry.target.extId}:${index}`} {...entry} variant={variant} size={size} />
+          <ContentLabel key={entryKey(entry, index)} {...entry} variant={variant} size={size} />
         ) : (
-          <ContentChip key={`${entry.target.kind ?? ""}:${entry.target.extId}:${index}`} {...entry} size={size} />
+          <ContentChip key={entryKey(entry, index)} {...entry} size={size} />
         ),
       )}
     </Stack>

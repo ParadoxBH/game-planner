@@ -29,6 +29,7 @@ import {
   ApiVariants,
 } from "../common/ApiRelatedLists";
 import { ContentChip } from "../common/ContentChip";
+import { ContentReferences } from "../common/ContentLabel";
 import { DataChip } from "../common/DataChip";
 import { DetailField, ReferenceChips } from "../common/DetailField";
 import { DetainContainer } from "../common/DetainContainer";
@@ -132,7 +133,14 @@ export function ItemDetailsPage() {
           <Stack spacing={2}>
             {item.categories.length > 0 && (
               <DetailField label="Categorias">
-                <ReferenceChips targets={item.categories.map((id) => ({ kind: "category", extId: id }))} references={references} />
+                <ContentReferences
+                  entries={item.categories.map((id) => {
+                    const target = { kind: "category", extId: id };
+                    return { target, resolved: references.find(target) };
+                  })}
+                  variant="outlined"
+                  size="medium"
+                />
               </DetailField>
             )}
 

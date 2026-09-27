@@ -31,6 +31,7 @@ import {
   ApiVariants,
 } from "../common/ApiRelatedLists";
 import { ContentChip } from "../common/ContentChip";
+import { ContentReferences } from "../common/ContentLabel";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
 import { DetailField, ReferenceChips } from "../common/DetailField";
@@ -150,9 +151,13 @@ export function EntityDetailsPage() {
             <Stack spacing={2}>
               {entity.categories.length > 0 && (
                 <DetailField label="Categorias">
-                  <ReferenceChips
-                    targets={entity.categories.map((id) => ({ kind: "category", extId: id }))}
-                    references={references}
+                  <ContentReferences
+                    entries={entity.categories.map((id) => {
+                      const target = { kind: "category", extId: id };
+                      return { target, resolved: references.find(target) };
+                    })}
+                    variant="outlined"
+                    size="medium"
                   />
                 </DetailField>
               )}
@@ -309,7 +314,7 @@ export function EntityDetailsPage() {
             <Grid container spacing={1}>
               {related.producedBy.content.map((recipe) => (
                 <Grid size={{ xs: 12, lg: 6 }} key={recipe.extId}>
-                  <ApiRecipeCard recipe={recipe} references={references} highlight={self} />
+                  <ApiRecipeCard recipe={recipe} references={references} inlineStations highlight={self} />
                 </Grid>
               ))}
             </Grid>
@@ -321,7 +326,7 @@ export function EntityDetailsPage() {
             <Grid container spacing={1}>
               {related.craftedHere.content.map((recipe) => (
                 <Grid size={{ xs: 12, lg: 6 }} key={recipe.extId}>
-                  <ApiRecipeCard recipe={recipe} references={references} />
+                  <ApiRecipeCard recipe={recipe} references={references} inlineStations />
                 </Grid>
               ))}
             </Grid>
@@ -333,7 +338,7 @@ export function EntityDetailsPage() {
             <Grid container spacing={1}>
               {related.usedIn.content.map((recipe) => (
                 <Grid size={{ xs: 12, lg: 6 }} key={recipe.extId}>
-                  <ApiRecipeCard recipe={recipe} references={references} highlight={self} />
+                  <ApiRecipeCard recipe={recipe} references={references} inlineStations highlight={self} />
                 </Grid>
               ))}
             </Grid>

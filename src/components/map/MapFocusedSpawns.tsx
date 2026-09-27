@@ -183,7 +183,7 @@ function SpawnPointDetails({ point, focus, references }: SpawnPointDetailsProps)
       {point.summary && <Typography variant="body2">{point.summary}</Typography>}
       {point.conditions.length > 0 && <SpawnConditionList conditions={point.conditions} references={references} />}
       {others.length > 0 && (
-        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+        <Stack spacing={0.5}>
           <Typography variant="caption" color="text.secondary" fontWeight={700}>
             {focus.param === "item" && !shown ? "Através de" : "Junto com"}
           </Typography>

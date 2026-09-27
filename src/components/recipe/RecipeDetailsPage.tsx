@@ -207,7 +207,7 @@ export function RecipeDetailsPage() {
             <Stack spacing={2}>
               <DetailField label="Bancadas">
                 {recipe.stations.length > 0 ? (
-                  <ContentReferences entries={stationEntries(recipe, references)} labelMax={3} variant="outlined" size="medium" />
+                  <ContentReferences entries={stationEntries(recipe, references)} variant="outlined" size="medium" />
                 ) : (
                   <Typography variant="body2" color="text.secondary">
                     Feita sem bancada

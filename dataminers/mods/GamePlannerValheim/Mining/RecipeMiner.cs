@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Globalization;
 using GamePlanner.Core.Model;
 using GamePlanner.Core.Text;
 
@@ -58,8 +57,9 @@ namespace GamePlanner.Valheim.Mining
             if (stationId != null)
             {
                 doc.Stations.Add(stationId);
-                doc.Unlock.Add(new RecipeUnlock("station_level", null,
-                    recipe.GetRequiredStationLevel(quality).ToString(CultureInfo.InvariantCulture)));
+                // Nível 1 é a bancada recém-construída: serve qualquer uma, então fica sem nível.
+                int level = recipe.GetRequiredStationLevel(quality);
+                if (level > 1) doc.StationLevels[stationId] = level;
             }
             if (recipe.m_requireOnlyOneIngredient) doc.Summary = "Precisa de só um dos ingredientes.";
             return doc;

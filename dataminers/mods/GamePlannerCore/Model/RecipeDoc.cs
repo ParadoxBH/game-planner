@@ -15,6 +15,11 @@ namespace GamePlanner.Core.Model
         /// (martelo, enxada, bandeja do Valheim). Vão na frente das bancadas, como bancada do tipo item.
         /// </summary>
         public List<string> ToolStations = new List<string>();
+        /// <summary>
+        /// Nível mínimo de uma bancada de Stations, pelo id, quando o jogo tem bancada que sobe de nível
+        /// (forja nível 2). Bancada fora daqui serve em qualquer nível.
+        /// </summary>
+        public Dictionary<string, int> StationLevels = new Dictionary<string, int>();
         public List<Requirement> Inputs = new List<Requirement>();
         public List<RecipeOutput> Outputs = new List<RecipeOutput>();
         public List<RecipeUnlock> Unlock = new List<RecipeUnlock>();
@@ -35,7 +40,13 @@ namespace GamePlanner.Core.Model
         {
             var all = new List<object>(ToolStations.Count + Stations.Count);
             foreach (string tool in ToolStations) all.Add(Reference.Item(tool));
-            foreach (string station in Stations) all.Add(station);
+            foreach (string station in Stations)
+            {
+                if (StationLevels.TryGetValue(station, out int level))
+                    all.Add(new Dictionary<string, object> { { "extId", station }, { "level", level } });
+                else
+                    all.Add(station);
+            }
             return all;
         }
     }
