@@ -3,6 +3,7 @@ import { WarningAmber } from "@mui/icons-material";
 import type { CraftProfit } from "../../api/content";
 import { formatAmount } from "../../utils/format";
 import { ContentChip } from "../common/ContentChip";
+import { ContentReferences } from "../common/ContentLabel";
 
 export function profitColor(profit: number): string {
   return profit > 0 ? "success.main" : profit < 0 ? "error.main" : "text.secondary";
@@ -52,10 +53,6 @@ export function ProfitStations({ row }: { row: CraftProfit }) {
     );
   }
   return (
-    <Stack direction="row" spacing={0.5}>
-      {row.stations.map((station) => (
-        <ContentChip key={station.extId} target={{ kind: "entity", extId: station.extId }} resolved={station} size="small" />
-      ))}
-    </Stack>
+    <ContentReferences entries={row.stations.map((station) => ({ target: station, resolved: station }))} />
   );
 }

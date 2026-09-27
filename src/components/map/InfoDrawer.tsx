@@ -20,6 +20,7 @@ import { useContentDetails } from "../../api/useContent";
 import { formatAmount, formatChance, formatRange } from "../../utils/format";
 import { BaseDrawer } from "../BaseDrawer";
 import { ContentChip } from "../common/ContentChip";
+import { ContentLabel } from "../common/ContentLabel";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
 import { ReferenceChips } from "../common/DetailField";
@@ -117,25 +118,17 @@ function TargetRow({
   const kind = resolved?.resolvedKind ?? target.kind;
   const type = kind === "entity" || kind === "item" ? kind : null;
   return (
-    <DataCard
+    <ContentLabel
+      variant="contained"
+      fullWidth
+      target={target}
+      resolved={resolved}
+      label={references.name(target)}
+      caption={caption}
+      endAdornment={label && <DataChip label={label} />}
+      disableLink
       onClick={type ? () => onPush({ type, id: target.extId }) : undefined}
-      sx={{ p: 1.5, gap: 1.5, justifyContent: "space-between" }}
-    >
-      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ minWidth: 0 }}>
-        <ContentChip target={target} resolved={resolved} size="small" disableLink />
-        <Stack sx={{ minWidth: 0 }}>
-          <Typography variant="body2" fontWeight={600}>
-            {references.name(target)}
-          </Typography>
-          {caption && (
-            <Typography variant="caption" color="text.secondary">
-              {caption}
-            </Typography>
-          )}
-        </Stack>
-      </Stack>
-      {label && <DataChip label={label} />}
-    </DataCard>
+    />
   );
 }
 

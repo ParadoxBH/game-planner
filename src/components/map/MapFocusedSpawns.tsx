@@ -7,7 +7,7 @@ import { ReferenceIndex } from "../../api/references";
 import { useContentDocuments, useContentList } from "../../api/useContent";
 import { and, rule } from "../../api/query";
 import { formatChance, formatRange } from "../../utils/format";
-import { ContentChip } from "../common/ContentChip";
+import { ContentReferences } from "../common/ContentLabel";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
 import { DetainItem } from "../common/DetainItem";
@@ -187,17 +187,16 @@ function SpawnPointDetails({ point, focus, references }: SpawnPointDetailsProps)
           <Typography variant="caption" color="text.secondary" fontWeight={700}>
             {focus.param === "item" && !shown ? "Através de" : "Junto com"}
           </Typography>
-          {others.map((entry, index) => (
-            <ContentChip
-              key={index}
-              target={entry.target}
-              resolved={references.find(entry.target)}
-              amount={entry.amount}
-              maxAmount={entry.maxAmount}
-              chance={entry.chance}
-              size="small"
-            />
-          ))}
+          <ContentReferences
+            variant="outlined"
+            entries={others.map((entry) => ({
+              target: entry.target,
+              resolved: references.find(entry.target),
+              amount: entry.amount,
+              maxAmount: entry.maxAmount,
+              chance: entry.chance,
+            }))}
+          />
         </Stack>
       )}
     </Stack>

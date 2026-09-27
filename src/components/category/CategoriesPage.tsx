@@ -13,6 +13,7 @@ import { usePlatform } from "../../hooks/usePlatform";
 import { useViewMode } from "../../hooks/useViewMode";
 import { AdminGate } from "../common/AdminGate";
 import { ContentIcon } from "../common/ContentIcon";
+import { ContentLabel } from "../common/ContentLabel";
 import { DataChip } from "../common/DataChip";
 import { ListingDataView } from "../common/ListingDataView";
 import { QueryBuilder } from "../common/QueryBuilder";
@@ -128,12 +129,17 @@ function PrimaryChip() {
 function CategoryNameCell({ category, gameId }: { category: CategoryDocument; gameId: string }) {
   const navigate = useNavigate();
   return (
-    <Stack direction="row" spacing={2} alignItems="center" sx={{ cursor: "pointer" }} onClick={() => navigate(categoryRoute(gameId, category))}>
-      <ContentIcon mediaId={currentMedia(category.media, "icon")} kind="category" alt={category.name} size={28} />
-      <Typography variant="body2" sx={{ fontWeight: 700, "&:hover": { color: "primary.main" } }}>
-        {category.name}
-      </Typography>
-    </Stack>
+    <ContentLabel
+      target={{ kind: "category", extId: category.extId }}
+      resolved={{
+        kind: "category",
+        extId: category.extId,
+        resolvedKind: "category",
+        name: category.name,
+        iconMediaId: currentMedia(category.media, "icon"),
+      }}
+      onClick={() => navigate(categoryRoute(gameId, category))}
+    />
   );
 }
 

@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { Avatar, Button, Grid, Stack, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import MapIcon from "@mui/icons-material/Map";
@@ -18,11 +17,11 @@ import {
   type MarkerOccupant,
   type ShopDocument,
 } from "../../api/content";
-import { contentRoute, currentMedia, mediaUrl, ReferenceIndex } from "../../api/references";
+import { currentMedia, mediaUrl, ReferenceIndex } from "../../api/references";
 import { useContentList } from "../../api/useContent";
 import {  } from "../../api/query";
 import { usePlatform } from "../../hooks/usePlatform";
-import { ContentChip } from "../common/ContentChip";
+import { ContentLabel } from "../common/ContentLabel";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
 import { DetainItem } from "../common/DetainItem";
@@ -53,7 +52,6 @@ interface MapDashboardProps {
  * Com focus, detalha só as ocorrências daquele item ou entidade, agrupadas por local.
  */
 export const MapDashboard = ({ gameId, map, markers, locations, categoryNames, availableViews, onSwitchToMap, focus }: MapDashboardProps) => {
-  const navigate = useNavigate();
   const theme = useTheme();
   const { isMobile } = usePlatform();
   const { spacing: dtSpacing, borderRadius: dtRadius } = theme.designTokens;
@@ -181,34 +179,28 @@ export const MapDashboard = ({ gameId, map, markers, locations, categoryNames, a
             >
               <Grid container spacing={dtSpacing.itemGap}>
                 {entries.map(({ occupant, count }) => {
-                  const route = occupant.name ? contentRoute(gameId, occupant.kind ?? "entity", occupant.extId) : null;
                   return (
                     <Grid size={{ xs: 12, sm: 6, md: 4 }} key={`${occupant.kind ?? ""}:${occupant.extId}`}>
-                      <DataCard
-                        onClick={route ? () => navigate(route) : undefined}
-                        sx={{ p: dtSpacing.cardPadding, borderRadius: dtRadius, gap: 1.5 }}
-                      >
-                        <ContentChip
-                          target={{ kind: occupant.kind, extId: occupant.extId }}
-                          resolved={{
-                            kind: occupant.kind,
-                            extId: occupant.extId,
-                            resolvedKind: occupant.name ? occupant.kind ?? "entity" : null,
-                            name: occupant.name,
-                            iconMediaId: occupant.iconMediaId,
-                          }}
-                          size="medium"
-                          disableLink
-                        />
-                        <Typography variant="subtitle2" noWrap fontWeight={700} sx={{ flex: 1, minWidth: 0 }}>
-                          {occupant.name ?? occupant.extId}
-                        </Typography>
-                        {count > 1 && (
-                          <Typography variant="caption" sx={{ color: "primary.main", fontWeight: 800 }}>
-                            x{count}
-                          </Typography>
-                        )}
-                      </DataCard>
+                      <ContentLabel
+                        variant="contained"
+                        size="medium"
+                        fullWidth
+                        target={{ kind: occupant.kind, extId: occupant.extId }}
+                        resolved={{
+                          kind: occupant.kind,
+                          extId: occupant.extId,
+                          resolvedKind: occupant.name ? occupant.kind ?? "entity" : null,
+                          name: occupant.name,
+                          iconMediaId: occupant.iconMediaId,
+                        }}
+                        endAdornment={
+                          count > 1 && (
+                            <Typography variant="caption" sx={{ color: "primary.main", fontWeight: 800 }}>
+                              x{count}
+                            </Typography>
+                          )
+                        }
+                      />
                     </Grid>
                   );
                 })}

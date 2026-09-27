@@ -14,12 +14,14 @@ import { useViewMode } from "../../hooks/useViewMode";
 import { formatDuration } from "../../utils/format";
 import { ContentChip } from "../common/ContentChip";
 import { ContentIcon } from "../common/ContentIcon";
+import { ContentLabel, ContentReferences } from "../common/ContentLabel";
 import { DataChip } from "../common/DataChip";
 import { ListingDataView } from "../common/ListingDataView";
 import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
 import { ApiRecipeCard, recipeTitle, unlockLabel } from "./ApiRecipeCard";
+import { stationEntries } from "./recipeStations";
 import { RecipeFormDialog } from "./RecipeFormDialog";
 
 /** A bancada vem da URL, /recipes/list/:station; "all" é nenhuma. */
@@ -133,16 +135,22 @@ export function RecipesPage() {
           renderListItem={(recipe) => {
             const output = recipe.outputs[0];
             return [
-              <Stack key="name" direction="row" spacing={2} alignItems="center" sx={{ cursor: "pointer" }} onClick={() => openRecipe(recipe)}>
-                {output ? (
-                  <ContentChip target={output.target} resolved={references.find(output.target)} size="small" disableLink />
-                ) : (
+              output ? (
+                <ContentLabel
+                  key="name"
+                  target={output.target}
+                  resolved={references.find(output.target)}
+                  label={recipeTitle(recipe, references)}
+                  onClick={() => openRecipe(recipe)}
+                />
+              ) : (
+                <Stack key="name" direction="row" spacing={1} alignItems="center" sx={{ cursor: "pointer" }} onClick={() => openRecipe(recipe)}>
                   <Science sx={{ color: "text.disabled" }} />
-                )}
-                <Typography variant="body2" fontWeight={700} sx={{ "&:hover": { color: "primary.main" } }}>
-                  {recipeTitle(recipe, references)}
-                </Typography>
-              </Stack>,
+                  <Typography variant="body2" fontWeight={700} sx={{ "&:hover": { color: "primary.main" } }}>
+                    {recipeTitle(recipe, references)}
+                  </Typography>
+                </Stack>
+              ),
               <Stack key="inputs" direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
                 {recipe.craftTimeSeconds ? <DataChip label={formatDuration(recipe.craftTimeSeconds)} /> : null}
                 {recipe.inputs.map((input, index) => (
@@ -156,21 +164,7 @@ export function RecipesPage() {
                   />
                 ))}
               </Stack>,
-              <Stack key="stations" direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                {recipe.stations.map((station) => {
-                  const target = { kind: station.kind, extId: station.extId };
-                  return (
-                    <ContentChip
-                      key={`${station.kind}:${station.extId}`}
-                      target={target}
-                      resolved={references.find(target)}
-                      level={station.level}
-                      levelOperator="min"
-                      size="small"
-                    />
-                  );
-                })}
-              </Stack>,
+              <ContentReferences key="stations" entries={stationEntries(recipe, references)} />,
               <Typography key="unlock" variant="caption" color="text.secondary" sx={{ display: "block", textAlign: "right", fontWeight: 700 }}>
                 {recipe.unlock[0] ? unlockLabel(recipe.unlock[0], references) : "-"}
               </Typography>,

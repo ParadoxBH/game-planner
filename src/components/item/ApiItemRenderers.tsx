@@ -6,6 +6,7 @@ import type { AttributeDefinition, AttributeValue, CategoryDocument, ItemDocumen
 import { contentRoute, currentMedia } from "../../api/references";
 import { formatAmount } from "../../utils/format";
 import { ContentIcon } from "../common/ContentIcon";
+import { ContentLabel } from "../common/ContentLabel";
 import { DataChip } from "../common/DataChip";
 import { LevelBadge } from "../common/LevelBadge";
 
@@ -175,17 +176,14 @@ export function ApiItemCard({ item, variant, view }: ApiItemCardProps) {
 
 function ItemNameCell({ item, view }: { item: ItemDocument; view: ItemListView }) {
   const navigate = useNavigate();
-  const color = rarityColorOf(view, item);
   return (
-    <Stack direction="row" alignItems="center" spacing={2} sx={{ cursor: "pointer" }} onClick={() => navigate(itemRoute(view, item))}>
-      <IconFrame size={32} color={color}>
-        <ContentIcon mediaId={currentMedia(item.media, "icon")} kind="item" alt={item.name} size={26} />
-        <LevelBadge level={item.level} />
-      </IconFrame>
-      <Typography variant="body2" sx={{ fontWeight: 700, color: color ?? "text.primary", "&:hover": { color: color ?? "primary.main" } }}>
-        {item.name}
-      </Typography>
-    </Stack>
+    <ContentLabel
+      target={{ kind: "item", extId: item.extId }}
+      resolved={{ kind: "item", extId: item.extId, resolvedKind: "item", name: item.name, iconMediaId: currentMedia(item.media, "icon") }}
+      level={item.level}
+      rarityColor={rarityColorOf(view, item)}
+      onClick={() => navigate(itemRoute(view, item))}
+    />
   );
 }
 

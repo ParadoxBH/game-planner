@@ -5,9 +5,11 @@ import type { RecipeDocument, RecipeUnlock, Reference } from "../../api/content"
 import { contentRoute, sameTarget, type ReferenceIndex } from "../../api/references";
 import { formatDuration } from "../../utils/format";
 import { ContentChip } from "../common/ContentChip";
+import { ContentReferences } from "../common/ContentLabel";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
 import { UNLOCK_LABELS } from "./recipeLabels";
+import { stationEntries } from "./recipeStations";
 
 export function unlockLabel(unlock: RecipeUnlock, references: ReferenceIndex): string {
   const parts = [unlock.target ? references.name(unlock.target) : null, unlock.value].filter(Boolean);
@@ -82,20 +84,7 @@ export function ApiRecipeCard({ recipe, references, highlight, onClick }: ApiRec
 
       {(recipe.stations.length > 0 || recipe.unlock.length > 0) && (
         <Stack direction="row" alignItems="center" spacing={1} flexWrap="wrap" useFlexGap>
-          {recipe.stations.map((station) => {
-            const target = { kind: station.kind, extId: station.extId };
-            return (
-              <ContentChip
-                key={`${station.kind}:${station.extId}`}
-                target={target}
-                resolved={references.find(target)}
-                level={station.level}
-                levelOperator="min"
-                size="small"
-                disableLink={Boolean(onClick)}
-              />
-            );
-          })}
+          <ContentReferences entries={stationEntries(recipe, references, Boolean(onClick))} />
           {recipe.unlock.map((unlock, index) => (
             <DataChip key={`unlock-${index}`} label={unlockLabel(unlock, references)} />
           ))}

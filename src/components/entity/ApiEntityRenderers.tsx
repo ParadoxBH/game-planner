@@ -6,6 +6,7 @@ import type { CategoryDocument, EntityDocument, Rarity } from "../../api/content
 import { contentRoute, currentMedia } from "../../api/references";
 import { formatAmount } from "../../utils/format";
 import { ContentIcon } from "../common/ContentIcon";
+import { ContentLabel } from "../common/ContentLabel";
 import { DataChip } from "../common/DataChip";
 import { LevelBadge } from "../common/LevelBadge";
 
@@ -177,18 +178,15 @@ export function ApiEntityCard({ entity, variant, view }: ApiEntityCardProps) {
 
 function EntityNameCell({ entity, view }: { entity: EntityDocument; view: EntityListView }) {
   const navigate = useNavigate();
-  const color = entityRarityColor(view, entity);
   return (
-    <Stack direction="row" alignItems="center" spacing={2} sx={{ cursor: "pointer" }} onClick={() => navigate(entityRoute(view, entity))}>
-      <IconFrame size={32} color={color}>
-        <ContentIcon mediaId={entityIcon(entity)} kind="entity" alt={entity.name} size={26} />
-        <LevelBadge level={entity.level} />
-      </IconFrame>
-      <Typography variant="body2" sx={{ fontWeight: 700, color: color ?? "text.primary", "&:hover": { color: color ?? "primary.main" } }}>
-        {entity.name}
-      </Typography>
-      {view.shopNpcs.has(entity.extId) && <ShopMark />}
-    </Stack>
+    <ContentLabel
+      target={{ kind: "entity", extId: entity.extId }}
+      resolved={{ kind: "entity", extId: entity.extId, resolvedKind: "entity", name: entity.name, iconMediaId: entityIcon(entity) }}
+      level={entity.level}
+      rarityColor={entityRarityColor(view, entity)}
+      endAdornment={view.shopNpcs.has(entity.extId) && <ShopMark />}
+      onClick={() => navigate(entityRoute(view, entity))}
+    />
   );
 }
 

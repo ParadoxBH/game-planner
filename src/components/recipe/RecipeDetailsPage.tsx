@@ -28,6 +28,7 @@ import { usePlatform } from "../../hooks/usePlatform";
 import { formatAmount, formatChance, formatDuration, formatLevelRequirement } from "../../utils/format";
 import { ApiRewardCodes } from "../common/ApiRelatedLists";
 import { ContentChip } from "../common/ContentChip";
+import { ContentReferences } from "../common/ContentLabel";
 import { DataCard } from "../common/DataCard";
 import { DetailField, ReferenceChips } from "../common/DetailField";
 import { DetainContainer } from "../common/DetainContainer";
@@ -36,6 +37,7 @@ import { StyledContainer } from "../common/StyledContainer";
 import { ApiShopOffers, offersFor } from "../shop/ApiShopOffers";
 import { ApiCraftingTree, NO_CHOICES, type TreeChoices } from "./ApiCraftingTree";
 import { recipeTitle, unlockLabel } from "./ApiRecipeCard";
+import { stationEntries } from "./recipeStations";
 import { RecipeFormDialog } from "./RecipeFormDialog";
 
 interface IngredientCardProps {
@@ -205,21 +207,7 @@ export function RecipeDetailsPage() {
             <Stack spacing={2}>
               <DetailField label="Bancadas">
                 {recipe.stations.length > 0 ? (
-                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                    {recipe.stations.map((station) => {
-                      const target = { kind: station.kind, extId: station.extId };
-                      return (
-                        <ContentChip
-                          key={`${station.kind}:${station.extId}`}
-                          target={target}
-                          resolved={references.find(target)}
-                          level={station.level}
-                          levelOperator="min"
-                          size="medium"
-                        />
-                      );
-                    })}
-                  </Stack>
+                  <ContentReferences entries={stationEntries(recipe, references)} labelMax={3} variant="outlined" size="medium" />
                 ) : (
                   <Typography variant="body2" color="text.secondary">
                     Feita sem bancada

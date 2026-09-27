@@ -8,6 +8,7 @@ import { useListing } from "../../api/useContent";
 import { usePlatform } from "../../hooks/usePlatform";
 import { formatReset } from "../../utils/format";
 import { ContentIcon } from "../common/ContentIcon";
+import { ContentLabel } from "../common/ContentLabel";
 import { DataChip } from "../common/DataChip";
 import { PickSelector } from "../common/PickSelector";
 
@@ -100,21 +101,13 @@ export function ApiShopCard({ shop, variant, view }: { shop: ShopDocument; varia
 
 function ShopNameCell({ shop, view }: { shop: ShopDocument; view: ShopListView }) {
   const navigate = useNavigate();
-  const npc = npcName(shop, view.references);
   return (
-    <Stack direction="row" alignItems="center" spacing={2} sx={{ cursor: "pointer" }} onClick={() => navigate(shopRoute(view, shop))}>
-      <ShopAvatar shop={shop} references={view.references} size={32} />
-      <Stack sx={{ minWidth: 0 }}>
-        <Typography variant="body2" sx={{ fontWeight: 700, "&:hover": { color: "primary.main" } }}>
-          {shop.name}
-        </Typography>
-        {npc && (
-          <Typography variant="caption" color="text.secondary">
-            {npc}
-          </Typography>
-        )}
-      </Stack>
-    </Stack>
+    <ContentLabel
+      target={{ kind: "shop", extId: shop.extId }}
+      resolved={{ kind: "shop", extId: shop.extId, resolvedKind: "shop", name: shop.name, iconMediaId: shopIconId(shop, view.references) }}
+      caption={npcName(shop, view.references)}
+      onClick={() => navigate(shopRoute(view, shop))}
+    />
   );
 }
 

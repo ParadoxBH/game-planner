@@ -34,6 +34,7 @@ import { useContentList, useCraftingTree } from "../../api/useContent";
 import { and, rule } from "../../api/query";
 import { formatAmount, formatDuration } from "../../utils/format";
 import { ContentChip } from "../common/ContentChip";
+import { ContentReferences } from "../common/ContentLabel";
 import { CurrencyValue, CurrencyValues, currencyReference, sameCurrency } from "../common/CurrencyValue";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
@@ -87,9 +88,7 @@ function SourceBadges({ node }: { node: CraftTreeNode }) {
         <>
           <DataChip label={`${formatAmount(node.recipe.batches)} ${node.recipe.batches === 1 ? "lote" : "lotes"}`} />
           {node.recipe.craftTimeSeconds ? <DataChip label={formatDuration(node.recipe.craftTimeSeconds)} /> : null}
-          {node.recipe.stations.map((station) => (
-            <ContentChip key={station.extId} target={{ kind: "entity", extId: station.extId }} resolved={station} size="small" />
-          ))}
+          <ContentReferences entries={node.recipe.stations.map((station) => ({ target: station, resolved: station }))} />
         </>
       ) : null;
     case "shop":
@@ -302,11 +301,7 @@ function TotalsView({ totals, revenue }: { totals: CraftTotals; revenue?: Curren
       )}
       {totals.stations.length > 0 && (
         <DetailField label="Bancadas">
-          <ChipRow>
-            {totals.stations.map((station) => (
-              <ContentChip key={station.extId} target={{ kind: "entity", extId: station.extId }} resolved={station} size="small" />
-            ))}
-          </ChipRow>
+          <ContentReferences entries={totals.stations.map((station) => ({ target: station, resolved: station }))} labelMax={3} />
         </DetailField>
       )}
       {totals.craftTimeSeconds > 0 && (

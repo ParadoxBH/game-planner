@@ -6,6 +6,7 @@ import { contentRoute, type ReferenceIndex } from "../../api/references";
 import { formatAmount, formatReset } from "../../utils/format";
 import { ContentChip } from "../common/ContentChip";
 import { ContentIcon } from "../common/ContentIcon";
+import { ContentLabel } from "../common/ContentLabel";
 import { DataChip } from "../common/DataChip";
 
 /** O que os renderers de oferta precisam além dela. */
@@ -135,13 +136,12 @@ function OfferNameCell({ item, view }: { item: ShopItem; view: ShopItemView }) {
   const color = shopItemRarityColor(view, item);
   const pack = packSize(item);
   return (
-    <Stack direction="row" alignItems="center" spacing={2}>
-      <ContentChip target={item.target} resolved={resolved} rarityColor={color} size="small" />
-      <Typography variant="body2" sx={{ fontWeight: 700, color: color ?? "text.primary" }}>
-        {resolved?.name ?? item.target.extId}
-      </Typography>
-      {pack && <DataChip label={`Pacote com ${formatAmount(pack)}`} color="primary" />}
-    </Stack>
+    <ContentLabel
+      target={item.target}
+      resolved={resolved}
+      rarityColor={color}
+      endAdornment={pack && <DataChip label={`Pacote com ${formatAmount(pack)}`} color="primary" />}
+    />
   );
 }
 
