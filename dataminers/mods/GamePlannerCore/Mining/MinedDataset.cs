@@ -21,6 +21,12 @@ namespace GamePlanner.Core.Mining
         public readonly List<LocationDoc> Locations = new List<LocationDoc>();
         public readonly List<SpawnPointDoc> SpawnPoints = new List<SpawnPointDoc>();
 
+        /// <summary>
+        /// Rótulo, unidade e grupo dos atributos de itens e entidades, pela chave. Vão antes dos documentos; o tipo
+        /// vazio é deduzido dos valores (CompleteAttributeTypes).
+        /// </summary>
+        public readonly List<AttributeDefinitionDoc> AttributeDefinitions = new List<AttributeDefinitionDoc>();
+
         /// <summary>Chave da imagem -> PNG. Os documentos apontam para a chave em IconImage.</summary>
         public readonly Dictionary<string, byte[]> Images = new Dictionary<string, byte[]>();
 
@@ -55,6 +61,53 @@ namespace GamePlanner.Core.Mining
         public bool Add(MapDoc doc) => Add(Maps, doc);
         public bool Add(LocationDoc doc) => Add(Locations, doc);
         public bool Add(SpawnPointDoc doc) => Add(SpawnPoints, doc);
+
+        /// <summary>Definição de atributo; chave repetida fica a primeira.</summary>
+        public void Define(AttributeDefinitionDoc definition)
+        {
+            if (definition == null || string.IsNullOrEmpty(definition.Key)) return;
+            foreach (AttributeDefinitionDoc existing in AttributeDefinitions)
+                if (existing.Key == definition.Key) return;
+            AttributeDefinitions.Add(definition);
+        }
+
+        /// <summary>
+        /// As definições que valem para o envio: só as de atributos que algum item ou entidade tem, com o tipo
+        /// deduzido dos valores quando a definição não diz. Chave com valores de tipos diferentes fica sem
+        /// definição (vira aviso): com ela, o servidor recusaria os valores do outro tipo.
+        /// </summary>
+        public List<AttributeDefinitionDoc> CompleteAttributeTypes()
+        {
+            var types = new Dictionary<string, string>();
+            var mixed = new HashSet<string>();
+            void Scan(Dictionary<string, object> attributes)
+            {
+                foreach (KeyValuePair<string, object> attribute in attributes)
+                {
+                    string type = attribute.Value is bool ? AttributeDefinitionDoc.Boolean
+                        : attribute.Value is string ? AttributeDefinitionDoc.Text
+                        : AttributeDefinitionDoc.Number;
+                    if (types.TryGetValue(attribute.Key, out string seen) && seen != type) mixed.Add(attribute.Key);
+                    else types[attribute.Key] = type;
+                }
+            }
+            foreach (ItemDoc item in Items) Scan(item.Attributes);
+            foreach (EntityDoc entity in Entities) Scan(entity.Attributes);
+
+            var used = new List<AttributeDefinitionDoc>();
+            foreach (AttributeDefinitionDoc definition in AttributeDefinitions)
+            {
+                if (!types.TryGetValue(definition.Key, out string type)) continue;
+                if (mixed.Contains(definition.Key))
+                {
+                    Warn("Atributo '" + definition.Key + "' tem valores de tipos diferentes: enviado sem definição");
+                    continue;
+                }
+                if (definition.DataType == null) definition.DataType = type;
+                used.Add(definition);
+            }
+            return used;
+        }
 
         /// <summary>resource é o segmento da URL: "entities", "spawn-points"...</summary>
         public bool Contains(string resource, string extId) => _ids.Contains(resource + "/" + extId);

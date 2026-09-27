@@ -177,6 +177,73 @@ class ContentApiIntegrationTest extends ContentApiTest {
     }
 
     @Test
+    void listFiltersAndSortsByAttributeValue() throws Exception {
+        send(put(ITEMS, game), "editor", json("""
+                [ { 'extId': 'arco', 'name': 'Arco', 'attributes': { 'damage_pierce': 26, 'weight': 1 } },
+                  { 'extId': 'arco_draugr', 'name': 'Arco draugr', 'attributes': { 'damage_pierce': 52 } },
+                  { 'extId': 'lanca', 'name': 'Lança', 'attributes': { 'damage_pierce': 20, 'skill': 'spears' } },
+                  { 'extId': 'machado', 'name': 'Machado', 'attributes': { 'damage_slash': 30 } } ]
+                """))
+                .andExpect(status().isOk());
+
+        // Do maior para o menor; quem não tem o atributo vai para o fim.
+        mvc.perform(list(ITEMS, game).param("sort", "-attr.damage_pierce"))
+                .andExpect(jsonPath("$.content[*].extId", contains("arco_draugr", "arco", "lanca", "machado")));
+        mvc.perform(query(ITEMS, and(rule("attr.damage_pierce", "is_not_null")), game).param("sort", "attr.damage_pierce"))
+                .andExpect(jsonPath("$.content[*].extId", contains("lanca", "arco", "arco_draugr")));
+
+        mvc.perform(query(ITEMS, and(rule("attr.damage_pierce", "greater_or_equal", 26)), game))
+                .andExpect(jsonPath("$.content[*].extId", contains("arco", "arco_draugr")));
+        mvc.perform(query(ITEMS, and(rule("attr.damage_pierce", "between", List.of(20, 30))), game))
+                .andExpect(jsonPath("$.content[*].extId", contains("arco", "lanca")));
+        mvc.perform(query(ITEMS, and(rule("attr.damage_pierce", "is_null")), game))
+                .andExpect(jsonPath("$.content[*].extId", contains("machado")));
+
+        // Chave inválida no filtro ou na ordenação é erro do pedido.
+        mvc.perform(query(ITEMS, and(rule("attr.a/b", "is_not_null")), game)).andExpect(status().isBadRequest());
+        mvc.perform(list(ITEMS, game).param("sort", "-attr.")).andExpect(status().isBadRequest());
+        mvc.perform(query(ITEMS, and(rule("attr.damage_pierce", "contains", "x")), game))
+                .andExpect(status().isBadRequest());
+        // Categoria não tem atributo: nem campo nem ordenação.
+        mvc.perform(list(CATEGORIES, game).param("sort", "attr.damage_pierce")).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void attributeFilterListsAttributesWithDefinitionGroupAndCount() throws Exception {
+        send(put("/api/v1/games/{game}/attributes", game), "editor", json("""
+                [ { 'key': 'damage_pierce', 'label': 'Perfurante', 'dataType': 'number', 'group': 'Dano', 'ordinal': 1 },
+                  { 'key': 'weight', 'label': 'Peso', 'dataType': 'number', 'unit': 'kg', 'group': 'Geral' } ]
+                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.saved").value(2));
+        send(put("/api/v1/games/{game}/attributes", game), "editor", json("[ { 'key': 'x', 'dataType': 'number' } ]"))
+                .andExpect(status().isBadRequest());
+        send(put(ITEMS, game), "editor", json("""
+                [ { 'extId': 'arco', 'name': 'Arco', 'attributes': { 'damage_pierce': 26, 'weight': 1 } },
+                  { 'extId': 'lanca', 'name': 'Lança', 'attributes': { 'damage_pierce': 20, 'skill': 'spears' } } ]
+                """))
+                .andExpect(status().isOk());
+
+        mvc.perform(get("/api/v1/games/{game}/attributes", game))
+                .andExpect(jsonPath("$[?(@.key == 'weight')].unit", contains("kg")))
+                .andExpect(jsonPath("$[?(@.key == 'weight')].group", contains("Geral")));
+        mvc.perform(get("/api/v1/games/{game}/attributes/usage", game))
+                .andExpect(jsonPath("$[*].key", contains("damage_pierce", "skill", "weight")))
+                .andExpect(jsonPath("$[0].items").value(2))
+                .andExpect(jsonPath("$[0].entities").value(0))
+                .andExpect(jsonPath("$[1].numeric").value(false));
+        mvc.perform(get(ITEMS + "/query/filters", game))
+                .andExpect(jsonPath("$.filters[?(@.key == 'attr')].display", contains("attribute")))
+                .andExpect(jsonPath("$.filters[?(@.key == 'attr')].options[*].value",
+                        contains("damage_pierce", "weight", "skill")))
+                .andExpect(jsonPath("$.filters[?(@.key == 'attr')].options[0].label", contains("Perfurante")))
+                .andExpect(jsonPath("$.filters[?(@.key == 'attr')].options[0].count", contains(2)))
+                .andExpect(jsonPath("$.filters[?(@.key == 'attr')].options[0].attribute.group", contains("Dano")))
+                .andExpect(jsonPath("$.filters[?(@.key == 'attr')].options[1].attribute.unit", contains("kg")))
+                .andExpect(jsonPath("$.filters[?(@.key == 'attr')].options[2].attribute.numeric", contains(false)));
+    }
+
+    @Test
     void rejectsIdsThatBreakUrlsAndFilePathsAsMedia() throws Exception {
         send(post(ITEMS, game), "editor", json("{ 'extId': 'a/b', 'name': 'X' }"))
                 .andExpect(status().isBadRequest());
@@ -486,7 +553,7 @@ class ContentApiIntegrationTest extends ContentApiTest {
                 .andExpect(jsonPath("$.search.placeholder").value("Pesquisar itens..."))
                 .andExpect(jsonPath("$.search.fields", contains("name", "extId")))
                 .andExpect(jsonPath("$.activeEvents").value(true))
-                .andExpect(jsonPath("$.filters[*].key", contains("category", "subCategory", "status", "rarity")))
+                .andExpect(jsonPath("$.filters[*].key", contains("category", "subCategory", "status", "rarity", "attr")))
                 .andExpect(jsonPath("$.filters[0].display").value("select"))
                 .andExpect(jsonPath("$.filters[0].field").value("category"))
                 .andExpect(jsonPath("$.filters[0].options[*].value", contains("flor", "fruta")))

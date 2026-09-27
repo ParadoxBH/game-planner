@@ -114,6 +114,29 @@ public record QueryField(String name, String label, FieldType type, List<Operato
                 });
     }
 
+    /**
+     * Valor numérico de um atributo do conteúdo ({@code content_attribute}), ex.: o dano perfurante.
+     * Comparações olham {@code value_num} e só casam com quem tem o atributo; is_not_null é ter o
+     * atributo, com qualquer valor, e is_null é não ter. A chave vai por parâmetro.
+     */
+    public static QueryField attribute(String name, String key) {
+        return new QueryField(name, "Atributo " + key, FieldType.NUMBER, ATTRIBUTE_OPERATORS, null, null,
+                (operator, values, params) -> {
+                    String row = "SELECT 1 FROM content_attribute a WHERE a.game_id = t.game_id AND a.kind = :kind"
+                            + " AND a.ext_id = t.ext_id AND a.key = " + params.bind(key);
+                    return switch (operator) {
+                        case IS_NOT_NULL -> "EXISTS (" + row + ")";
+                        case IS_NULL -> "NOT EXISTS (" + row + ")";
+                        default -> "EXISTS (" + row + " AND "
+                                + columnSql("a.value_num", FieldType.NUMBER, operator, values, params) + ")";
+                    };
+                });
+    }
+
+    private static final List<Operator> ATTRIBUTE_OPERATORS = List.of(Operator.EQUAL, Operator.IN, Operator.LESS,
+            Operator.LESS_OR_EQUAL, Operator.GREATER, Operator.GREATER_OR_EQUAL, Operator.BETWEEN, Operator.IS_NULL,
+            Operator.IS_NOT_NULL);
+
     /** Sim ou não calculado por uma condição, ex.: código ainda válido. */
     public static QueryField flag(String name, String label, String predicate) {
         return new QueryField(name, label, FieldType.BOOLEAN, FieldType.BOOLEAN.operators(), null, null,

@@ -7,9 +7,9 @@ import {
   useQueryClient,
   type UseQueryResult,
 } from "@tanstack/react-query";
-import { contentApi, gameApi, type ContentResource, type GamePatch, type ListQuery, type MediaUsage, type ProfitQuery, type Rarity } from "./content";
+import { contentApi, gameApi, type AttributeDefinition, type ContentResource, type GamePatch, type ListQuery, type MediaUsage, type ProfitQuery, type Rarity } from "./content";
 import { useEventFilter } from "../context/EventFilterContext";
-import { and, inActiveEvents, listingWhere, rule, type FilterValues, type QueryGroup } from "./query";
+import { and, inActiveEvents, listingSort, listingWhere, rule, type FilterValues, type QueryGroup } from "./query";
 
 /** Dados que mudam pouco (raridades, definições de atributo, bancadas) não são relidos a cada tela. */
 const RARELY_CHANGES = 5 * 60_000;
@@ -75,7 +75,9 @@ export function useListing<T>(
         listingWhere(schema, search, values ?? {}),
         where,
       );
-      return contentApi.list<T>(gameId!, resource, { ...page, where: filter }, signal);
+      // O atributo escolhido na barra ordena a lista, a não ser que a tela peça outra ordem.
+      const sort = listingSort(schema, values ?? {}) ?? page.sort;
+      return contentApi.list<T>(gameId!, resource, { ...page, sort, where: filter }, signal);
     },
     enabled: Boolean(gameId) && (options.enabled ?? true),
     placeholderData: keepPreviousData,
@@ -300,6 +302,31 @@ export function useRarityWrites(gameId: string) {
     }),
     remove: useMutation({
       mutationFn: (code: string) => gameApi.deleteRarity(gameId, code),
+      onSuccess: refresh,
+    }),
+  };
+}
+
+/** Toda chave de atributo usada no jogo, com quantos itens e entidades a têm. */
+export function useAttributeUsage(gameId: string | undefined) {
+  return useQuery({
+    queryKey: ["game", gameId, "attributes", "usage"],
+    queryFn: ({ signal }) => gameApi.attributeUsage(gameId!, signal),
+    enabled: Boolean(gameId),
+  });
+}
+
+/** Grava ou apaga a definição de um atributo; relê o que é do jogo (rótulos em listas, filtros e detalhes). */
+export function useAttributeWrites(gameId: string) {
+  const client = useQueryClient();
+  const refresh = () => client.invalidateQueries({ predicate: (query) => query.queryKey[1] === gameId });
+  return {
+    put: useMutation({
+      mutationFn: (definition: AttributeDefinition) => gameApi.putAttribute(gameId, definition),
+      onSuccess: refresh,
+    }),
+    remove: useMutation({
+      mutationFn: (key: string) => gameApi.deleteAttribute(gameId, key),
       onSuccess: refresh,
     }),
   };

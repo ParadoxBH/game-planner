@@ -30,6 +30,7 @@ namespace GamePlanner.Valheim.Mining
         public IEnumerator Mine(MinedDataset dataset, MiningContext context)
         {
             var kit = new MiningKit(dataset, context);
+            ValheimAttributes.Register(dataset);
 
             // Entidades primeiro: surgimento, vegetação e locais só citam o que existe.
             context.Status("Minerando itens...");

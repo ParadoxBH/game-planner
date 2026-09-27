@@ -35,8 +35,8 @@ import {
 } from "../../api/useContent";
 import { CategoryFormDialog } from "../category/CategoryFormDialog";
 import { ApiContentSelector } from "../common/ApiContentSelector";
-import { AttributeFields } from "../common/AttributeFields";
-import { attributeFormOf, attributesInvalid, attributesOut, type AttributeForm } from "../common/attributeValues";
+import { AttributeEditor } from "../common/AttributeEditor";
+import { attributeFormOf, attributesOut, invalidAttributeCount, type AttributeForm } from "../common/attributeValues";
 import { CodesField, type CodeOption } from "../common/CodesField";
 import { LevelFields } from "../common/LevelFields";
 import { ConfirmDeleteDialog } from "../common/ConfirmDeleteDialog";
@@ -47,7 +47,7 @@ import { IconUploadField } from "../common/IconUploadField";
 import { ReferenceName } from "../common/ReferenceName";
 import { StyledDialog } from "../common/StyledDialog";
 
-type EntityTab = "data" | "requirements" | "drops";
+type EntityTab = "data" | "attributes" | "requirements" | "drops";
 
 /** Linhas das listas: `key` só identifica a linha na tela; números ficam como texto enquanto se digita. */
 interface RequirementRow {
@@ -197,8 +197,6 @@ export function EntityFormDialog({
   );
 
   const set = <K extends keyof EntityForm>(field: K, value: EntityForm[K]) => setForm((current) => ({ ...current, [field]: value }));
-  const setAttribute = (attribute: string, value: string | boolean) =>
-    setForm((current) => ({ ...current, attributes: { ...current.attributes, [attribute]: value } }));
 
   const changeName = (name: string) =>
     setForm((current) => ({ ...current, name, extId: !creating || extIdTouched ? current.extId : slugOf(name) }));
@@ -249,15 +247,14 @@ export function EntityFormDialog({
   const sell = numberOf(form.baseSellPrice);
   const levelInvalid = !isOptionalInteger(form.level);
   const respawnInvalid = !isOptionalInteger(form.respawnDelayMinutes) || (respawn !== null && respawn !== undefined && respawn < 0);
-  const attributesBad = attributesInvalid(form.attributes, sortedDefinitions);
+  const attributeErrors = invalidAttributeCount(form.attributes, sortedDefinitions);
   const dataInvalid =
     form.name.trim() === "" ||
     form.extId.trim() === "" ||
     levelInvalid ||
     respawnInvalid ||
     buy === undefined ||
-    sell === undefined ||
-    attributesBad;
+    sell === undefined;
   const requirementsInvalid = form.requirements.some((row) => !isPositive(row.amount) || !isLevel(row.level));
   const dropsInvalid = form.drops.some((row) => {
     if (!isPositive(row.amount) || !isChance(row.chance)) return true;
@@ -265,7 +262,7 @@ export function EntityFormDialog({
     if (max === undefined) return true;
     return max !== null && max < (numberOf(row.amount) as number);
   });
-  const valid = !dataInvalid && !requirementsInvalid && !dropsInvalid;
+  const valid = !dataInvalid && attributeErrors === 0 && !requirementsInvalid && !dropsInvalid;
 
   const submit = async () => {
     if (!valid) return;
@@ -359,6 +356,10 @@ export function EntityFormDialog({
       >
         <Tabs value={tab} onChange={(_, value: EntityTab) => setTab(value)} variant="scrollable" allowScrollButtonsMobile>
           <Tab value="data" label={<TabLabel label="Dados" invalid={dataInvalid} />} />
+          <Tab
+            value="attributes"
+            label={<TabLabel label="Atributos" count={Object.keys(form.attributes).length} invalid={attributeErrors > 0} />}
+          />
           <Tab value="requirements" label={<TabLabel label="Requisitos" count={form.requirements.length} invalid={requirementsInvalid} />} />
           <Tab value="drops" label={<TabLabel label="Drops" count={form.drops.length} invalid={dropsInvalid} />} />
         </Tabs>
@@ -523,9 +524,11 @@ export function EntityFormDialog({
               loading={events.isPending}
               helperText="Com eventos, a entidade só aparece quando algum deles está ativo."
             />
-
-            <AttributeFields definitions={sortedDefinitions} value={form.attributes} onChange={setAttribute} />
           </>
+        )}
+
+        {tab === "attributes" && (
+          <AttributeEditor definitions={sortedDefinitions} value={form.attributes} onChange={(next) => set("attributes", next)} />
         )}
 
         {tab === "requirements" && (

@@ -119,6 +119,7 @@ export function useNavigation(gameId: string | null) {
                 ...(isOwner ? [{ label: "Jogo", path: `${base}/settings`, icon: <DataTypeIcon value="game" fontSize="small" /> }] : []),
                 { label: "Categorias", path: `${base}/categories`, icon: <DataTypeIcon value="category" fontSize="small" /> },
                 { label: "Raridades", path: `${base}/rarities`, icon: <DataTypeIcon value="rarity" fontSize="small" /> },
+                { label: "Atributos", path: `${base}/attributes`, icon: <DataTypeIcon value="attribute" fontSize="small" /> },
               ],
             },
           ]

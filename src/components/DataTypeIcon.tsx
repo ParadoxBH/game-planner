@@ -17,6 +17,7 @@ import {
   Settings,
   SportsEsports,
   Storefront,
+  Tune,
 } from "@mui/icons-material";
 import type { SvgIconComponent } from "@mui/icons-material";
 import type { SvgIconProps } from "@mui/material";
@@ -30,6 +31,7 @@ const DATA_TYPE_ICONS = {
   entity: Pets,
   category: Category,
   rarity: Diamond,
+  attribute: Tune,
   event: Event,
   recipe: Construction,
   shop: Storefront,

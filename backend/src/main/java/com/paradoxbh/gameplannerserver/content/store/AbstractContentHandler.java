@@ -14,6 +14,7 @@ import java.util.stream.IntStream;
 import org.springframework.jdbc.core.simple.JdbcClient;
 
 import com.paradoxbh.gameplannerserver.common.ApiException;
+import com.paradoxbh.gameplannerserver.content.ExtIds;
 import com.paradoxbh.gameplannerserver.content.model.ContentDocument;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 import com.paradoxbh.gameplannerserver.content.model.ContentPage;
@@ -149,7 +150,9 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
     public QueryBuilder queryBuilder() {
         QueryBuilder builder = queryBuilder;
         if (builder == null) {
-            builder = new QueryBuilder(queryFields());
+            builder = hasAttributes()
+                    ? new QueryBuilder(queryFields(), AbstractContentHandler::attributeField, ATTRIBUTE_HINT)
+                    : new QueryBuilder(queryFields());
             queryBuilder = builder;
         }
         return builder;
@@ -177,6 +180,18 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
         }
         fields.addAll(specificFields());
         return fields;
+    }
+
+    /** Prefixo dos campos e da ordenação pelo valor de um atributo: "attr.damage_pierce". */
+    public static final String ATTRIBUTE_PREFIX = "attr.";
+    private static final String ATTRIBUTE_HINT = ATTRIBUTE_PREFIX + "<chave do atributo>";
+
+    /** Campo "attr.&lt;chave&gt;": o valor numérico do atributo. Nulo quando o nome não é desse formato. */
+    private static QueryField attributeField(String name) {
+        if (!name.startsWith(ATTRIBUTE_PREFIX)) {
+            return null;
+        }
+        return QueryField.attribute(name, ExtIds.require(name.substring(ATTRIBUTE_PREFIX.length()), name));
     }
 
     /** Etiqueta do conteúdo, nas tabelas comuns a todos os tipos. */
@@ -210,7 +225,7 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
         params.put("limit", query.size());
         params.put("offset", (long) query.page() * query.size());
         List<D> content = fetch(gameId,
-                selectSql() + where + orderBy(query.sort()) + " LIMIT :limit OFFSET :offset", params);
+                selectSql() + where + orderBy(query.sort(), params) + " LIMIT :limit OFFSET :offset", params);
 
         return ContentPage.of(content, query.page(), query.size(), total);
     }
@@ -314,14 +329,26 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
                 Rows.integer(row, "revision"));
     }
 
-    private String orderBy(String sort) {
+    /**
+     * ORDER BY do sort pedido. "attr.&lt;chave&gt;" ordena pelo valor numérico do atributo (quem não o
+     * tem vai para o fim), com a chave por parâmetro em {@code params}.
+     */
+    private String orderBy(String sort, Map<String, Object> params) {
         boolean descending = sort.startsWith("-");
         String key = descending ? sort.substring(1) : sort;
-        String column = key.equals("name") ? nameExpression()
-                : BASE_SORT.containsKey(key) ? BASE_SORT.get(key) : specificSortColumns().get(key);
+        String column;
+        if (hasAttributes() && key.startsWith(ATTRIBUTE_PREFIX)) {
+            params.put("sortAttribute", ExtIds.require(key.substring(ATTRIBUTE_PREFIX.length()), "sort"));
+            params.put("kind", kind().code());
+            column = "(SELECT a.value_num FROM content_attribute a WHERE a.game_id = t.game_id AND a.kind = :kind"
+                    + " AND a.ext_id = t.ext_id AND a.key = :sortAttribute)";
+        } else {
+            column = key.equals("name") ? nameExpression()
+                    : BASE_SORT.containsKey(key) ? BASE_SORT.get(key) : specificSortColumns().get(key);
+        }
         if (column == null) {
             throw ApiException.badRequest("sort inválido: \"" + sort + "\". Use " + String.join(", ", sortKeys())
-                    + ", com - na frente para decrescente");
+                    + (hasAttributes() ? ", " + ATTRIBUTE_HINT : "") + ", com - na frente para decrescente");
         }
         return " ORDER BY " + column + (descending ? " DESC" : " ASC") + " NULLS LAST, t.ext_id";
     }

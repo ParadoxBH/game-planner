@@ -4,8 +4,8 @@ import { Button, CircularProgress, FormControlLabel, Stack, Switch, Typography }
 import { Add } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import { MAX_PAGE_SIZE, type CategoryDocument, type EntityDocument, type ShopDocument } from "../../api/content";
-import { useContentList, useListing, useListingFilters, useRarities } from "../../api/useContent";
-import type { FilterValue, FilterValues } from "../../api/query";
+import { useAttributeDefinitions, useContentList, useListing, useListingFilters, useRarities } from "../../api/useContent";
+import { chosenAttribute, type FilterValue, type FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { useGameEditor } from "../../hooks/useGameAdmin";
 import { usePagination } from "../../hooks/usePagination";
@@ -65,6 +65,7 @@ export function EntityPage() {
     [categories.data],
   );
 
+  const attributes = useAttributeDefinitions(gameId);
   const view = useMemo<EntityListView>(
     () => ({
       gameId,
@@ -72,8 +73,10 @@ export function EntityPage() {
       rarities: new Map((rarities.data ?? []).map((rarity) => [rarity.code, rarity])),
       categories: new Map(entityCategories.map((category) => [category.extId, category])),
       shopNpcs: new Set((shops.data?.content ?? []).flatMap((shop) => (shop.npc ? [shop.npc] : []))),
+      attributes: new Map((attributes.data ?? []).map((definition) => [definition.key, definition])),
+      highlightAttribute: chosenAttribute(listing.data, criteria)?.key ?? null,
     }),
-    [gameId, showPrices, rarities.data, entityCategories, shops.data],
+    [gameId, showPrices, rarities.data, entityCategories, shops.data, attributes.data, listing.data, criteria],
   );
 
   const currentCategoryName =

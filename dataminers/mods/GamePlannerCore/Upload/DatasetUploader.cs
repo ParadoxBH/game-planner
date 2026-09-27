@@ -70,6 +70,7 @@ namespace GamePlanner.Core.Upload
                     Report("Aviso: conta sem vínculo verificado; o servidor pode recusar o envio de imagens.");
 
                 EnsureGame(client, dataset, cancel);
+                SendAttributeDefinitions(client, dataset, cancel);
 
                 Dictionary<string, string> mediaIds = form.IncludeImages ? UploadImages(client, dataset, workers, cancel) : null;
                 foreach (IReadOnlyList<ContentDoc> documents in dataset.Resources())
@@ -125,6 +126,28 @@ namespace GamePlanner.Core.Upload
                 });
                 client.Write("POST", GamePlannerClient.ApiPrefix + "/games", body, cancel);
                 Report("Jogo " + dataset.GameId + " criado");
+            }
+        }
+
+        // ------------------------------------------------------------------ atributos
+
+        /// <summary>
+        /// Rótulos, unidades e grupos dos atributos, num PUT só. Falhar aqui não impede o resto: o site mostra a chave
+        /// no lugar do rótulo.
+        /// </summary>
+        private void SendAttributeDefinitions(GamePlannerClient client, MinedDataset dataset, CancellationToken cancel)
+        {
+            List<AttributeDefinitionDoc> definitions = dataset.CompleteAttributeTypes();
+            if (definitions.Count == 0) return;
+            string path = GamePlannerClient.ApiPrefix + "/games/" + GamePlannerClient.Segment(dataset.GameId) + "/attributes";
+            try
+            {
+                client.Write("PUT", path, JsonWriter.Serialize(definitions), cancel);
+                Report("attributes: " + definitions.Count + " definições enviadas");
+            }
+            catch (ApiException e) when (e.Status >= 400 && e.Status < 500)
+            {
+                Fail("attributes: " + e.Detail());
             }
         }
 

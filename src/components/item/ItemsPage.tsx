@@ -5,7 +5,7 @@ import { Add } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import { MAX_PAGE_SIZE, type CategoryDocument, type ItemDocument } from "../../api/content";
 import { useAttributeDefinitions, useContentList, useListing, useListingFilters, useRarities } from "../../api/useContent";
-import type { FilterValue, FilterValues } from "../../api/query";
+import { chosenAttribute, type FilterValue, type FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { useGameEditor } from "../../hooks/useGameAdmin";
 import { usePagination } from "../../hooks/usePagination";
@@ -72,8 +72,9 @@ export function ItemsPage() {
       rarities: new Map((rarities.data ?? []).map((rarity) => [rarity.code, rarity])),
       categories: new Map(itemCategories.map((category) => [category.extId, category])),
       attributes: new Map((attributes.data ?? []).map((definition) => [definition.key, definition])),
+      highlightAttribute: chosenAttribute(listing.data, criteria)?.key ?? null,
     }),
-    [gameId, showPrices, rarities.data, itemCategories, attributes.data],
+    [gameId, showPrices, rarities.data, itemCategories, attributes.data, listing.data, criteria],
   );
 
   // A categoria fica na URL, para o link ser compartilhável; o resto, no estado da página.

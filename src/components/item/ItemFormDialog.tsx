@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import {
   Alert,
+  Box,
   Button,
   CircularProgress,
   Divider,
@@ -9,6 +10,8 @@ import {
   InputAdornment,
   MenuItem,
   Stack,
+  Tab,
+  Tabs,
   TextField,
   Typography,
 } from "@mui/material";
@@ -24,12 +27,13 @@ import { currentMedia } from "../../api/references";
 import { useAttributeDefinitions, useContentDocument, useContentList, useContentWrites, useRarities } from "../../api/useContent";
 import { CategoryFormDialog } from "../category/CategoryFormDialog";
 import { ApiContentSelector } from "../common/ApiContentSelector";
-import { AttributeFields } from "../common/AttributeFields";
-import { attributeFormOf, attributesInvalid, attributesOut, type AttributeForm } from "../common/attributeValues";
+import { AttributeEditor } from "../common/AttributeEditor";
+import { attributeFormOf, attributesOut, invalidAttributeCount, type AttributeForm } from "../common/attributeValues";
 import { CodesField, type CodeOption } from "../common/CodesField";
 import { ConfirmDeleteDialog } from "../common/ConfirmDeleteDialog";
 import { numberOf, slugOf, useContentSave } from "../common/contentForm";
 import { IconUploadField } from "../common/IconUploadField";
+import { TabLabel } from "../common/formLayout";
 import { StyledDialog } from "../common/StyledDialog";
 
 /** Números ficam como texto enquanto se digita; vazio é "sem valor". */
@@ -149,6 +153,9 @@ interface ItemFormDialogProps {
 
 type Picking = "currency" | "variantOf" | null;
 
+/** Dados: identificação, preços e classificação; Atributos: os valores do item (dano, peso...). */
+type ItemTab = "data" | "attributes";
+
 /**
  * Cria ou edita um item. A escrita substitui o documento inteiro: todo campo vai, inclusive os
  * atributos sem definição no jogo, que ficam como estavam. As imagens ficam fora do documento, e um
@@ -169,6 +176,7 @@ export function ItemFormDialog({
   const [pickError, setPickError] = useState<string | null>(null);
   const [creatingCategory, setCreatingCategory] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [tab, setTab] = useState<ItemTab>("data");
   const { save, saving, error, creating } = useContentSave(gameId, "items", item === null);
   const { remove } = useContentWrites(gameId, "items");
 
@@ -198,8 +206,6 @@ export function ItemFormDialog({
     [events.data],
   );
   const set = <K extends keyof ItemForm>(key: K, value: ItemForm[K]) => setForm((current) => ({ ...current, [key]: value }));
-  const setAttribute = (key: string, value: string | boolean) =>
-    setForm((current) => ({ ...current, attributes: { ...current.attributes, [key]: value } }));
 
   const changeName = (name: string) =>
     setForm((current) => ({ ...current, name, extId: !creating || extIdTouched ? current.extId : slugOf(name) }));
@@ -208,14 +214,9 @@ export function ItemFormDialog({
   const buy = numberOf(form.baseBuyPrice);
   const sell = numberOf(form.baseSellPrice);
   const levelInvalid = level === undefined || (level !== null && !Number.isInteger(level));
-  const numberAttributesInvalid = attributesInvalid(form.attributes, definitions.data ?? []);
-  const valid =
-    form.name.trim() !== "" &&
-    form.extId.trim() !== "" &&
-    !levelInvalid &&
-    buy !== undefined &&
-    sell !== undefined &&
-    !numberAttributesInvalid;
+  const attributeErrors = invalidAttributeCount(form.attributes, definitions.data ?? []);
+  const dataInvalid = form.name.trim() === "" || form.extId.trim() === "" || levelInvalid || buy === undefined || sell === undefined;
+  const valid = !dataInvalid && attributeErrors === 0;
 
   const submit = async () => {
     if (!valid) return;
@@ -280,7 +281,32 @@ export function ItemFormDialog({
         </>
       }
     >
+      <Box
+        sx={{
+          position: "sticky",
+          top: 0,
+          zIndex: 2,
+          mx: -3,
+          mt: -3,
+          mb: 3,
+          px: 3,
+          bgcolor: "background.default",
+          borderBottom: 1,
+          borderColor: "divider",
+        }}
+      >
+        <Tabs value={tab} onChange={(_, value: ItemTab) => setTab(value)} variant="scrollable" allowScrollButtonsMobile>
+          <Tab value="data" label={<TabLabel label="Dados" invalid={dataInvalid} />} />
+          <Tab
+            value="attributes"
+            label={<TabLabel label="Atributos" count={Object.keys(form.attributes).length} invalid={attributeErrors > 0} />}
+          />
+        </Tabs>
+      </Box>
+
       <Stack spacing={2}>
+        {tab === "data" && (
+          <>
         <IconUploadField currentMediaId={item ? currentMedia(item.media, "icon") : null} kind="item" file={icon} onChange={setIcon} />
 
         <Grid container spacing={2}>
@@ -418,8 +444,12 @@ export function ItemFormDialog({
           helperText="O item base, quando este é uma variante dele."
         />
         {pickError && <Alert severity="warning">{pickError}</Alert>}
+          </>
+        )}
 
-        <AttributeFields definitions={definitions.data ?? []} value={form.attributes} onChange={setAttribute} />
+        {tab === "attributes" && (
+          <AttributeEditor definitions={definitions.data ?? []} value={form.attributes} onChange={(next) => set("attributes", next)} />
+        )}
 
         {error && <Alert severity="error">{error}</Alert>}
       </Stack>

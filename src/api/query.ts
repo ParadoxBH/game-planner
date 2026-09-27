@@ -129,8 +129,18 @@ export function inActiveEvents(eventIds: string[]): QueryGroup {
   return or(rule("event", "is_null"), eventIds.length > 0 && rule("event", "in", eventIds));
 }
 
-/** Controle de um filtro de tela: select escolhe uma opção; multi marca conter ou não conter em cada uma; tabs é select em abas; switch liga a única opção. */
-export type FilterDisplay = "select" | "multi" | "tabs" | "switch";
+/**
+ * Controle de um filtro de tela: select escolhe uma opção; multi marca conter ou não conter em cada uma; tabs é select
+ * em abas; switch liga a única opção; attribute escolhe um atributo e, se numérico, faixa de valor e ordem.
+ */
+export type FilterDisplay = "select" | "multi" | "tabs" | "switch" | "attribute";
+
+/** Como o atributo de uma opção do display attribute se apresenta. Só numérico aceita faixa e ordenação. */
+export interface AttributeOptionInfo {
+  group?: string;
+  unit?: string;
+  numeric: boolean;
+}
 
 export interface ListingFilterOption {
   value: string;
@@ -144,6 +154,8 @@ export interface ListingFilterOption {
   exclude?: QueryGroup;
   /** Com `dependsOn` no filtro: sob quais valores do filtro pai a opção aparece. */
   parents?: string[];
+  /** No display attribute: grupo, unidade e se é numérico. */
+  attribute?: AttributeOptionInfo;
 }
 
 /** Filtro de tela descrito pelo backend (GET .../query/filters). O front desenha e aplica sem conhecê-lo. */
@@ -206,6 +218,74 @@ function optionWhere(filter: ListingFilter, value: string, exclude: boolean): Qu
   return filter.field ? rule(filter.field, exclude ? "not_equal" : "equal", value) : undefined;
 }
 
+/** Ordem da listagem pelo atributo escolhido: do maior para o menor, do menor para o maior ou nenhuma. */
+export type AttributeSort = "desc" | "asc" | "none";
+
+/**
+ * Valores que o filtro de atributo guarda além da chave escolhida (em `values[filter.key]`): o mínimo, o máximo
+ * e a ordem, em chaves próprias da barra.
+ */
+export function attributeKeys(filter: ListingFilter) {
+  return { min: `${filter.key}Min`, max: `${filter.key}Max`, sort: `${filter.key}Sort` };
+}
+
+/** O atributo escolhido no filtro de atributo da barra, com a opção dele (rótulo, grupo, unidade), ou null. */
+export function chosenAttribute(
+  schema: ListingSchema | undefined,
+  values: FilterValues,
+): { filter: ListingFilter; key: string; option: ListingFilterOption | undefined } | null {
+  const filter = schema?.filters.find((candidate) => candidate.display === "attribute");
+  if (!filter) return null;
+  const key = filterValue(filter, values);
+  if (typeof key !== "string") return null;
+  return { filter, key, option: filter.options.find((option) => option.value === key) };
+}
+
+function numberOf(value: FilterValue | undefined): number | null {
+  if (typeof value !== "string" || value.trim() === "") return null;
+  const number = Number(value.replace(",", "."));
+  return Number.isFinite(number) ? number : null;
+}
+
+/** A faixa escolhida no filtro de atributo; nulo no lado em branco. */
+export function attributeRange(filter: ListingFilter, values: FilterValues): { min: number | null; max: number | null } {
+  const keys = attributeKeys(filter);
+  return { min: numberOf(values[keys.min]), max: numberOf(values[keys.max]) };
+}
+
+/** A ordem escolhida no filtro de atributo; sem escolha, do maior para o menor. */
+export function attributeSortOf(filter: ListingFilter, values: FilterValues): AttributeSort {
+  const sort = values[attributeKeys(filter).sort];
+  return sort === "asc" || sort === "none" ? sort : "desc";
+}
+
+/**
+ * Regras do atributo escolhido: numérico, com a faixa (between, greater_or_equal, less_or_equal) ou só ter o atributo;
+ * não numérico, ter o atributo (`field equal chave`, o mesmo de uma opção comum).
+ */
+function attributeWhere(filter: ListingFilter, key: string, values: FilterValues): QueryPart {
+  const option = filter.options.find((candidate) => candidate.value === key);
+  if (!option?.attribute?.numeric) return optionWhere(filter, key, false);
+  const field = `attr.${key}`;
+  const { min, max } = attributeRange(filter, values);
+  if (min !== null && max !== null) return rule(field, "between", [Math.min(min, max), Math.max(min, max)]);
+  if (min !== null) return rule(field, "greater_or_equal", min);
+  if (max !== null) return rule(field, "less_or_equal", max);
+  return rule(field, "is_not_null");
+}
+
+/**
+ * Ordenação que a barra pede: o atributo numérico escolhido, "-attr.chave" do maior para o menor ou "attr.chave" do
+ * menor para o maior. Sem atributo (ou com "none"), undefined, e vale a ordem da tela.
+ */
+export function listingSort(schema: ListingSchema | undefined, values: FilterValues): string | undefined {
+  const chosen = chosenAttribute(schema, values);
+  if (!chosen?.option?.attribute?.numeric) return undefined;
+  const sort = attributeSortOf(chosen.filter, values);
+  if (sort === "none") return undefined;
+  return `${sort === "desc" ? "-" : ""}attr.${chosen.key}`;
+}
+
 /** O texto da busca em qualquer dos campos que o backend indica. Em branco, não filtra. */
 export function searchWhere(search: ListingSchema["search"], term: string | undefined): QueryGroup | undefined {
   const text = term?.trim();
@@ -219,7 +299,7 @@ export function listingWhere(schema: ListingSchema, term: string | undefined, va
     const value = filterValue(filter, values);
     if (value === null) return;
     if (typeof value === "string") {
-      parts.push(optionWhere(filter, value, false));
+      parts.push(filter.display === "attribute" ? attributeWhere(filter, value, values) : optionWhere(filter, value, false));
       return;
     }
     Object.entries(value).forEach(([option, state]) => {

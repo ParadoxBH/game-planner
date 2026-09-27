@@ -38,7 +38,7 @@ import { SpawnPointsByMap } from "../common/SpawnPointsByMap";
 import { StyledContainer } from "../common/StyledContainer";
 import { ApiRecipeCard } from "../recipe/ApiRecipeCard";
 import { ApiShopOffers, offersFor } from "../shop/ApiShopOffers";
-import { AttributeChips } from "./ApiItemRenderers";
+import { AttributeTable } from "../common/AttributeTable";
 import { ItemFormDialog } from "./ItemFormDialog";
 
 /** Detalhe de item, lido do agregado /items/{id}/details da API. */
@@ -188,7 +188,7 @@ export function ItemDetailsPage() {
 
             {Object.keys(item.attributes).length > 0 && (
               <DetailField label="Atributos">
-                <AttributeChips attributes={item.attributes} definitions={definitions} />
+                <AttributeTable gameId={gameId} resource="items" attributes={item.attributes} definitions={definitions} />
               </DetailField>
             )}
 

@@ -23,7 +23,7 @@ import {
   useRarities,
   type ListingQuery,
 } from "../../api/useContent";
-import { and, resetFilterValues, rule, type FilterValues } from "../../api/query";
+import { and, chosenAttribute, resetFilterValues, rule, type FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { usePagination } from "../../hooks/usePagination";
 import { useViewMode } from "../../hooks/useViewMode";
@@ -180,15 +180,14 @@ export function CategoryDetailsPage() {
     [categories.data],
   );
   const rarityMap = useMemo(() => new Map((rarities.data ?? []).map((rarity) => [rarity.code, rarity])), [rarities.data]);
+  const definitions = useMemo(
+    () => new Map((attributes.data ?? []).map((definition) => [definition.key, definition])),
+    [attributes.data],
+  );
+  const highlightAttribute = chosenAttribute(listing.data, criteria)?.key ?? null;
   const itemView = useMemo<ItemListView>(
-    () => ({
-      gameId,
-      showPrices: false,
-      rarities: rarityMap,
-      categories: categoryMap,
-      attributes: new Map((attributes.data ?? []).map((definition) => [definition.key, definition])),
-    }),
-    [gameId, rarityMap, categoryMap, attributes.data],
+    () => ({ gameId, showPrices: false, rarities: rarityMap, categories: categoryMap, attributes: definitions, highlightAttribute }),
+    [gameId, rarityMap, categoryMap, definitions, highlightAttribute],
   );
   const entityView = useMemo<EntityListView>(
     () => ({
@@ -197,8 +196,10 @@ export function CategoryDetailsPage() {
       rarities: rarityMap,
       categories: categoryMap,
       shopNpcs: new Set((shops.data?.content ?? []).flatMap((shop) => (shop.npc ? [shop.npc] : []))),
+      attributes: definitions,
+      highlightAttribute,
     }),
-    [gameId, rarityMap, categoryMap, shops.data],
+    [gameId, rarityMap, categoryMap, shops.data, definitions, highlightAttribute],
   );
   const shopView = useMemo<ShopListView>(() => ({ gameId, references }), [gameId, references]);
 

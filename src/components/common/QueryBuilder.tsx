@@ -24,6 +24,8 @@ import {
 import { Add, Close, FilterList, Search } from "@mui/icons-material";
 import { mediaUrl } from "../../api/references";
 import {
+  attributeKeys,
+  attributeSortOf,
   emptyFilterValue,
   filterCount,
   filterValue,
@@ -112,6 +114,9 @@ interface FieldProps {
   options: ListingFilterOption[];
   value: FilterValue;
   onChange: (value: FilterValue) => void;
+  /** Todos os valores da barra e como mudar qualquer um: o filtro de atributo guarda faixa e ordem em chaves próprias. */
+  values: FilterValues;
+  setValue: (key: string, value: FilterValue) => void;
 }
 
 /** Escolha única (select e tabs): chips quando são poucas opções, campo com busca quando são muitas. */
@@ -333,8 +338,86 @@ function SwitchField({ filter, value, onChange }: FieldProps) {
   );
 }
 
+/**
+ * Atributo (display attribute): escolhe o atributo, agrupado como no detalhe do item; sendo numérico, a faixa de valor
+ * (mínimo e máximo, cada um opcional) e a ordem da lista. Não numérico filtra só por ter o atributo.
+ */
+function AttributeField({ filter, options, value, onChange, values, setValue }: FieldProps) {
+  const selected = typeof value === "string" ? value : null;
+  const option = selected === null ? null : optionOf(filter, selected);
+  const numeric = option?.attribute?.numeric ?? false;
+  const keys = attributeKeys(filter);
+  const text = (key: string) => {
+    const current = values[key];
+    return typeof current === "string" ? current : "";
+  };
+  const unit = option?.attribute?.unit;
+
+  return (
+    <Section label={filter.label}>
+      <Autocomplete
+        size="small"
+        options={options}
+        value={option}
+        onChange={(_, next) => {
+          onChange(next?.value ?? null);
+          setValue(keys.min, null);
+          setValue(keys.max, null);
+        }}
+        groupBy={(candidate) => candidate.attribute?.group ?? "Outros"}
+        getOptionLabel={optionLabel}
+        getOptionKey={(candidate) => candidate.value}
+        isOptionEqualToValue={(candidate, current) => candidate.value === current.value}
+        renderInput={(params) => <TextField {...params} placeholder="Escolha um atributo" />}
+        noOptionsText="Nenhum atributo"
+      />
+      {option && numeric && (
+        <>
+          <Stack direction="row" spacing={1}>
+            {[
+              { key: keys.min, label: "Mínimo" },
+              { key: keys.max, label: "Máximo" },
+            ].map((field) => (
+              <TextField
+                key={field.key}
+                size="small"
+                label={unit ? `${field.label} (${unit})` : field.label}
+                placeholder="Qualquer"
+                value={text(field.key)}
+                onChange={(event) => setValue(field.key, event.target.value.trim() === "" ? null : event.target.value)}
+                slotProps={{ htmlInput: { inputMode: "decimal" } }}
+                sx={{ flex: 1 }}
+              />
+            ))}
+          </Stack>
+          <ToggleButtonGroup
+            size="small"
+            exclusive
+            fullWidth
+            value={attributeSortOf(filter, values)}
+            onChange={(_, next: string | null) => next && setValue(keys.sort, next)}
+            aria-label="Ordem pelo atributo"
+            sx={{ "& .MuiToggleButton-root": { py: 0.25, fontSize: "0.7rem", textTransform: "none" } }}
+          >
+            <ToggleButton value="desc">Maior → menor</ToggleButton>
+            <ToggleButton value="asc">Menor → maior</ToggleButton>
+            <ToggleButton value="none">Sem ordem</ToggleButton>
+          </ToggleButtonGroup>
+        </>
+      )}
+      {option && !numeric && (
+        <Typography variant="caption" sx={{ color: "text.disabled" }}>
+          Mostra tudo que tem este atributo.
+        </Typography>
+      )}
+    </Section>
+  );
+}
+
 function FilterField(props: FieldProps) {
   switch (props.filter.display) {
+    case "attribute":
+      return <AttributeField {...props} />;
     case "multi":
       return <MultiField {...props} />;
     case "switch":
@@ -455,6 +538,8 @@ export function QueryBuilder({ schema, search, onSearchChange, values, onChange 
                 options={options}
                 value={filterValue(filter, values)}
                 onChange={(value) => onChange(filter.key, value)}
+                values={values}
+                setValue={onChange}
               />
             );
           })}

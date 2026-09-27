@@ -20,9 +20,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public record ListingFilter(String key, String label, Display display, String icon, String allLabel, String field,
                             String defaultValue, String dependsOn, List<Option> options) {
 
-    /** select escolhe uma opção; multi marca cada uma como conter ou não conter; tabs é select em abas; switch liga a única opção. */
+    /**
+     * select escolhe uma opção; multi marca cada uma como conter ou não conter; tabs é select em abas;
+     * switch liga a única opção; attribute escolhe um atributo (as opções) e, se numérico, faixa de valor e
+     * ordem, que o front monta como regras e sort "attr.&lt;chave&gt;". Sem o front saber disso, escolher
+     * a opção ainda filtra por ter o atributo.
+     */
     public enum Display {
-        SELECT, MULTI, TABS, SWITCH;
+        SELECT, MULTI, TABS, SWITCH, ATTRIBUTE;
 
         @JsonValue
         public String code() {
@@ -32,11 +37,17 @@ public record ListingFilter(String key, String label, Display display, String ic
 
     /**
      * {@code count}, quando vem, é quantos registros a opção tem, para exibir junto do rótulo;
-     * {@code parents}, sob quais valores do filtro de {@code dependsOn} ela aparece.
+     * {@code parents}, sob quais valores do filtro de {@code dependsOn} ela aparece;
+     * {@code attribute}, no display attribute, como o atributo se apresenta.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public record Option(String value, String label, String iconMediaId, Long count, QueryJson query,
-                         QueryJson exclude, List<String> parents) {
+                         QueryJson exclude, List<String> parents, AttributeInfo attribute) {
+
+        public Option(String value, String label, String iconMediaId, Long count, QueryJson query,
+                      QueryJson exclude, List<String> parents) {
+            this(value, label, iconMediaId, count, query, exclude, parents, null);
+        }
 
         public static Option of(String value, String label) {
             return new Option(value, label, null, null, null, null, null);
@@ -45,6 +56,14 @@ public record ListingFilter(String key, String label, Display display, String ic
         public static Option of(String value, String label, QueryJson query) {
             return new Option(value, label, null, null, query, null, null);
         }
+    }
+
+    /**
+     * Atributo de uma opção do display attribute: seção (grupo), unidade e se é numérico — só
+     * numérico aceita faixa de valor e ordenação.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public record AttributeInfo(String group, String unit, boolean numeric) {
     }
 
     public ListingFilter {

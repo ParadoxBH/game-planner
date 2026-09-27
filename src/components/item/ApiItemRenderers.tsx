@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import type { AttributeDefinition, AttributeValue, CategoryDocument, ItemDocument, Rarity } from "../../api/content";
 import { contentRoute, currentMedia } from "../../api/references";
 import { formatAmount } from "../../utils/format";
+import { AttributeHighlight, AttributeIconBadge } from "../common/AttributeHighlight";
+import { attributeText } from "../common/attributes";
 import { ContentIcon } from "../common/ContentIcon";
 import { ContentLabel } from "../common/ContentLabel";
 import { DataChip } from "../common/DataChip";
@@ -17,6 +19,8 @@ export interface ItemListView {
   rarities: Map<string, Rarity>;
   categories: Map<string, CategoryDocument>;
   attributes: Map<string, AttributeDefinition>;
+  /** Atributo escolhido no filtro da listagem: aparece em destaque em cada item que o tem. */
+  highlightAttribute?: string | null;
 }
 
 export function rarityColorOf(view: ItemListView, item: ItemDocument): string | undefined {
@@ -24,24 +28,27 @@ export function rarityColorOf(view: ItemListView, item: ItemDocument): string | 
 }
 
 export function attributeLabel(key: string, value: AttributeValue, definition?: AttributeDefinition): string {
-  const shown = typeof value === "boolean" ? (value ? "sim" : "não") : String(value);
-  return `${definition?.label ?? key}: ${shown}${definition?.unit ? ` ${definition.unit}` : ""}`;
+  return attributeText(key, value, definition);
 }
 
 interface AttributeChipsProps {
   attributes: Record<string, AttributeValue>;
   definitions: Map<string, AttributeDefinition>;
+  /** Atributo escolhido no filtro: vem primeiro, na cor de destaque. */
+  highlight?: string | null;
 }
 
 /** Atributos como chips; cada um abre a lista de itens e entidades que têm o mesmo atributo. */
-export function AttributeChips({ attributes, definitions }: AttributeChipsProps) {
+export function AttributeChips({ attributes, definitions, highlight }: AttributeChipsProps) {
   const navigate = useNavigate();
   const { gameId = "" } = useParams<{ gameId: string }>();
+  const entries = Object.entries(attributes).sort(([a], [b]) => Number(b === highlight) - Number(a === highlight));
   return (
     <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-      {Object.entries(attributes).map(([key, value]) => (
+      {entries.map(([key, value]) => (
         <DataChip
           key={key}
+          sx={key === highlight ? { bgcolor: "primary.main", color: "primary.contrastText" } : undefined}
           label={attributeLabel(key, value, definitions.get(key))}
           clickable
           onClick={(event) => {
@@ -110,6 +117,14 @@ export function ApiItemCard({ item, variant, view }: ApiItemCardProps) {
   const color = rarityColorOf(view, item);
   const iconId = currentMedia(item.media, "icon");
   const open = () => navigate(itemRoute(view, item));
+  const highlight =
+    view.highlightAttribute && view.highlightAttribute in item.attributes ? (
+      <AttributeHighlight
+        attributes={item.attributes}
+        attributeKey={view.highlightAttribute}
+        definition={view.attributes.get(view.highlightAttribute)}
+      />
+    ) : null;
 
   return (
     <Card
@@ -134,6 +149,7 @@ export function ApiItemCard({ item, variant, view }: ApiItemCardProps) {
           <Typography variant="subtitle2" sx={{ color: color ?? "text.primary", fontWeight: 700, lineHeight: 1.2 }}>
             {item.name}
           </Typography>
+          {highlight}
         </Stack>
       ) : (
         <Stack spacing={1.5} sx={{ p: 2, flex: 1 }}>
@@ -153,6 +169,7 @@ export function ApiItemCard({ item, variant, view }: ApiItemCardProps) {
               <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.2, color: color ?? "text.primary" }}>
                 {item.name}
               </Typography>
+              {highlight && <Box sx={{ mt: 0.5 }}>{highlight}</Box>}
             </Stack>
           </Stack>
           <Typography
@@ -195,7 +212,7 @@ function ItemAttributesCell({ item, view }: { item: ItemDocument; view: ItemList
       </Typography>
     );
   }
-  return <AttributeChips attributes={item.attributes} definitions={view.attributes} />;
+  return <AttributeChips attributes={item.attributes} definitions={view.attributes} highlight={view.highlightAttribute} />;
 }
 
 function ItemCategoriesCell({ item, view }: { item: ItemDocument; view: ItemListView }) {
@@ -240,6 +257,11 @@ export function ApiItemIcon({ item, view }: { item: ItemDocument; view: ItemList
       >
         <ContentIcon mediaId={currentMedia(item.media, "icon")} kind="item" alt={item.name} size={56} />
         <LevelBadge level={item.level} />
+        <AttributeIconBadge
+          attributes={item.attributes}
+          attributeKey={view.highlightAttribute}
+          definition={view.highlightAttribute ? view.attributes.get(view.highlightAttribute) : undefined}
+        />
       </Box>
     </Tooltip>
   );

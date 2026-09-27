@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Breadcrumbs, CircularProgress, Stack, Tab, Tabs, Typography } from "@mui/material";
-import { Bookmarks, NavigateNext } from "@mui/icons-material";
+import { Breadcrumbs, Button, CircularProgress, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Add, Bookmarks, Edit, NavigateNext } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import {
   MAX_PAGE_SIZE,
@@ -12,17 +12,20 @@ import {
 } from "../../api/content";
 import {
   useAttributeDefinitions,
+  useAttributeUsage,
   useContentList,
   useListing,
   useListingFilters,
   useRarities,
   type ListingQuery,
 } from "../../api/useContent";
-import { and, resetFilterValues, rule, type FilterValues } from "../../api/query";
+import { and, chosenAttribute, resetFilterValues, rule, type FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+import { useGameEditor } from "../../hooks/useGameAdmin";
 import { usePagination } from "../../hooks/usePagination";
 import { usePlatform } from "../../hooks/usePlatform";
 import { useViewMode } from "../../hooks/useViewMode";
+import { AttributeFormDialog } from "../attribute/AttributeFormDialog";
 import { DataChip } from "../common/DataChip";
 import { ListingDataView } from "../common/ListingDataView";
 import { QueryBuilder } from "../common/QueryBuilder";
@@ -116,9 +119,11 @@ export function MetadataDetailsPage() {
     [categories.data],
   );
   const rarityMap = useMemo(() => new Map((rarities.data ?? []).map((rarity) => [rarity.code, rarity])), [rarities.data]);
+  // Em destaque, o atributo desta página; um outro escolhido no filtro, se houver, toma o lugar.
+  const highlightAttribute = chosenAttribute(listing.data, criteria)?.key ?? attributeKey;
   const itemView = useMemo<ItemListView>(
-    () => ({ gameId, showPrices: false, rarities: rarityMap, categories: categoryMap, attributes: definitions }),
-    [gameId, rarityMap, categoryMap, definitions],
+    () => ({ gameId, showPrices: false, rarities: rarityMap, categories: categoryMap, attributes: definitions, highlightAttribute }),
+    [gameId, rarityMap, categoryMap, definitions, highlightAttribute],
   );
   const entityView = useMemo<EntityListView>(
     () => ({
@@ -127,12 +132,22 @@ export function MetadataDetailsPage() {
       rarities: rarityMap,
       categories: categoryMap,
       shopNpcs: new Set((shops.data?.content ?? []).flatMap((shop) => (shop.npc ? [shop.npc] : []))),
+      attributes: definitions,
+      highlightAttribute,
     }),
-    [gameId, rarityMap, categoryMap, shops.data],
+    [gameId, rarityMap, categoryMap, shops.data, definitions, highlightAttribute],
   );
 
   const definition = definitions.get(attributeKey);
   const label = definition?.label ?? attributeKey;
+  // Editar (ou definir, se ainda não tem definição) rótulo, grupo, tipo e unidade: quem pode escrever no jogo.
+  const { canEdit } = useGameEditor(gameId);
+  const usage = useAttributeUsage(canEdit ? gameId : undefined);
+  const [editing, setEditing] = useState(false);
+  const groups = useMemo(
+    () => [...new Set((attributes.data ?? []).flatMap((candidate) => (candidate.group ? [candidate.group] : [])))].sort(),
+    [attributes.data],
+  );
 
   // Os filtros são os da listagem da aba: trocar de aba os limpa; a busca continua.
   const changeTab = (next: MetadataTab) => {
@@ -147,6 +162,18 @@ export function MetadataDetailsPage() {
       label={`Itens e entidades com o atributo "${label}"${definition?.unit ? `, em ${definition.unit}` : ""}.`}
       searchEnd={
         <>
+          {canEdit && (
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={definition ? <Edit /> : <Add />}
+              onClick={() => setEditing(true)}
+              disabled={attributes.isPending}
+              sx={{ textTransform: "none", whiteSpace: "nowrap" }}
+            >
+              {definition ? "Editar atributo" : "Definir atributo"}
+            </Button>
+          )}
           <ViewModeSelector mode={viewMode} onChange={setViewMode} />
           <QueryBuilder
             schema={listing.data}
@@ -233,6 +260,15 @@ export function MetadataDetailsPage() {
             renderIconItem={(entity) => <ApiEntityIcon entity={entity} view={entityView} />}
           />
         ))}
+      {editing && (
+        <AttributeFormDialog
+          gameId={gameId}
+          row={{ key: attributeKey, definition, usage: usage.data?.find((entry) => entry.key === attributeKey) }}
+          groups={groups}
+          defined={new Set(definitions.keys())}
+          onClose={() => setEditing(false)}
+        />
+      )}
     </StyledContainer>
   );
 }

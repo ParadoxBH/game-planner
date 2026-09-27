@@ -39,7 +39,7 @@ import { DetainContainer } from "../common/DetainContainer";
 import { DetainItem } from "../common/DetainItem";
 import { SpawnPointsByMap } from "../common/SpawnPointsByMap";
 import { StyledContainer } from "../common/StyledContainer";
-import { AttributeChips } from "../item/ApiItemRenderers";
+import { AttributeTable } from "../common/AttributeTable";
 import { ApiRecipeCard } from "../recipe/ApiRecipeCard";
 import { ApiShopOffers, offersFor } from "../shop/ApiShopOffers";
 import { EntityFormDialog } from "./EntityFormDialog";
@@ -208,7 +208,7 @@ export function EntityDetailsPage() {
 
               {Object.keys(entity.attributes).length > 0 && (
                 <DetailField label="Atributos">
-                  <AttributeChips attributes={entity.attributes} definitions={definitions} />
+                  <AttributeTable gameId={gameId} resource="entities" attributes={entity.attributes} definitions={definitions} />
                 </DetailField>
               )}
 

@@ -618,7 +618,17 @@ export interface AttributeDefinition {
   label: string;
   dataType: "number" | "text" | "boolean";
   unit: string | null;
+  /** Seção em que aparece no detalhe e no filtro (Dano, Comida...); nulo cai em "Outros". */
+  group: string | null;
   ordinal: number;
+}
+
+/** Uma chave de atributo usada no jogo, definida ou não: quantos itens e entidades a têm e se todo valor é número. */
+export interface AttributeUsage {
+  key: string;
+  items: number;
+  entities: number;
+  numeric: boolean;
 }
 
 /** Resultado do lote: quantos documentos entraram em cada situação. */
@@ -827,6 +837,19 @@ export const gameApi = {
 
   attributes(gameId: string, signal?: AbortSignal) {
     return apiRequest<AttributeDefinition[]>(`${gamePath(gameId)}/attributes`, { signal });
+  },
+
+  attributeUsage(gameId: string, signal?: AbortSignal) {
+    return apiRequest<AttributeUsage[]>(`${gamePath(gameId)}/attributes/usage`, { signal });
+  },
+
+  putAttribute(gameId: string, definition: AttributeDefinition) {
+    const { key, ...body } = definition;
+    return apiRequest<AttributeDefinition>(`${gamePath(gameId)}/attributes/${encodeURIComponent(key)}`, { method: "PUT", body });
+  },
+
+  deleteAttribute(gameId: string, key: string) {
+    return apiRequest<void>(`${gamePath(gameId)}/attributes/${encodeURIComponent(key)}`, { method: "DELETE" });
   },
 
   /** Busca por nome ou código em todos os tipos cadastrados; `kind` restringe a um tipo. */

@@ -10,7 +10,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class AttributeDefinitionRepository {
 
-    public record AttributeDefinition(String key, String label, String dataType, String unit, int ordinal) {
+    /** {@code group}: seção em que o atributo aparece (Dano, Comida...), V21; nulo cai em "Outros". */
+    public record AttributeDefinition(String key, String label, String dataType, String unit, String group,
+                                      int ordinal) {
+    }
+
+    /**
+     * Uso de uma chave de atributo no jogo, com ou sem definição: quantos itens e entidades a têm e se
+     * todo valor gravado é número.
+     */
+    public record AttributeUsage(String key, long items, long entities, boolean numeric) {
     }
 
     private final JdbcClient jdbc;
@@ -21,27 +30,45 @@ public class AttributeDefinitionRepository {
 
     public List<AttributeDefinition> list(String gameId) {
         return jdbc.sql("""
-                SELECT key, label, data_type, unit, ordinal FROM attribute_definition
+                SELECT key, label, data_type, unit, group_label, ordinal FROM attribute_definition
                 WHERE game_id = :game ORDER BY ordinal, key
                 """)
                 .param("game", gameId)
                 .query((rs, rowNum) -> new AttributeDefinition(rs.getString("key"), rs.getString("label"),
-                        rs.getString("data_type"), rs.getString("unit"), rs.getInt("ordinal")))
+                        rs.getString("data_type"), rs.getString("unit"), rs.getString("group_label"),
+                        rs.getInt("ordinal")))
                 .list();
     }
 
     public void upsert(String gameId, AttributeDefinition definition) {
         jdbc.sql("""
-                INSERT INTO attribute_definition (game_id, key, label, data_type, unit, ordinal)
-                VALUES (:game, :key, :label, :type, :unit, :ordinal)
+                INSERT INTO attribute_definition (game_id, key, label, data_type, unit, group_label, ordinal)
+                VALUES (:game, :key, :label, :type, :unit, :group, :ordinal)
                 ON CONFLICT (game_id, key) DO UPDATE
                    SET label = excluded.label, data_type = excluded.data_type,
-                       unit = excluded.unit, ordinal = excluded.ordinal
+                       unit = excluded.unit, group_label = excluded.group_label, ordinal = excluded.ordinal
                 """)
                 .param("game", gameId).param("key", definition.key()).param("label", definition.label())
                 .param("type", definition.dataType()).param("unit", definition.unit())
+                .param("group", definition.group())
                 .param("ordinal", definition.ordinal())
                 .update();
+    }
+
+    public List<AttributeUsage> usage(String gameId) {
+        return jdbc.sql("""
+                SELECT key, count(*) FILTER (WHERE kind = 'item') AS items,
+                       count(*) FILTER (WHERE kind = 'entity') AS entities,
+                       bool_and(value_num IS NOT NULL) AS numeric
+                FROM content_attribute
+                WHERE game_id = :game
+                GROUP BY key
+                ORDER BY key
+                """)
+                .param("game", gameId)
+                .query((rs, rowNum) -> new AttributeUsage(rs.getString("key"), rs.getLong("items"),
+                        rs.getLong("entities"), rs.getBoolean("numeric")))
+                .list();
     }
 
     public boolean delete(String gameId, String key) {

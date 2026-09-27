@@ -24,6 +24,10 @@ namespace GamePlanner.Core.Upload
                 File.WriteAllText(Path.Combine(root, documents[0].Resource + ".json"), JsonWriter.Serialize(documents), Encoding.UTF8);
             }
 
+            List<AttributeDefinitionDoc> definitions = dataset.CompleteAttributeTypes();
+            if (definitions.Count > 0)
+                File.WriteAllText(Path.Combine(root, "attributes.json"), JsonWriter.Serialize(definitions), Encoding.UTF8);
+
             string images = Path.Combine(root, "images");
             foreach (KeyValuePair<string, byte[]> image in dataset.Images)
             {
@@ -36,6 +40,7 @@ namespace GamePlanner.Core.Upload
             report.AppendLine("Jogo " + dataset.GameId + " (" + dataset.GameName + ")");
             foreach (IReadOnlyList<ContentDoc> documents in dataset.Resources())
                 if (documents.Count > 0) report.AppendLine("  " + documents[0].Resource.PadRight(13) + documents.Count);
+            report.AppendLine("  atributos    " + definitions.Count);
             report.AppendLine("  imagens      " + dataset.Images.Count);
             report.AppendLine();
             report.AppendLine("Avisos (" + dataset.Warnings.Count + ")");

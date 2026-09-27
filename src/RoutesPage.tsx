@@ -26,6 +26,7 @@ import { ConjuntosDetain } from "./components/item/ConjuntosDetain";
 import { CategoriesPage } from "./components/category/CategoriesPage";
 import { CategoryDetailsPage } from "./components/category/CategoryDetailsPage";
 import { RaritiesPage } from "./components/rarity/RaritiesPage";
+import { AttributesPage } from "./components/attribute/AttributesPage";
 import { GameSettingsPage } from "./components/game/GameSettingsPage";
 import { MetadataDetailsPage } from "./components/item/MetadataDetailsPage";
 import { LoginPage } from "./components/auth/LoginPage";
@@ -122,6 +123,7 @@ export function RoutesPage() {
           <Route path="categories" element={<CategoriesPage />} />
           <Route path="categories/view/:categoryId" element={<CategoryDetailsPage />} />
           <Route path="rarities" element={<RaritiesPage />} />
+          <Route path="attributes" element={<AttributesPage />} />
           <Route path="settings" element={<GameSettingsPage />} />
           <Route path="metadado/view/:type" element={<MetadataDetailsPage />} />
           <Route path="codes" element={<CodesPage />} />

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.paradoxbh.gameplannerserver.common.ApiException;
@@ -24,8 +25,21 @@ public final class QueryBuilder {
     public static final int MAX_VALUES = 1000;
 
     private final Map<String, QueryField> fields = new LinkedHashMap<>();
+    /** Campo que não está na lista, montado pelo nome, ex.: "attr.damage_pierce"; nulo se não houver. */
+    private final Function<String, QueryField> dynamic;
+    private final String dynamicHint;
 
     public QueryBuilder(List<QueryField> fields) {
+        this(fields, null, null);
+    }
+
+    /**
+     * {@code dynamic} devolve o campo de um nome fora da lista, ou nulo quando o nome não é dele;
+     * {@code dynamicHint} completa a mensagem de campo desconhecido, ex.: "attr.<chave>".
+     */
+    public QueryBuilder(List<QueryField> fields, Function<String, QueryField> dynamic, String dynamicHint) {
+        this.dynamic = dynamic;
+        this.dynamicHint = dynamicHint;
         for (QueryField field : fields) {
             if (this.fields.putIfAbsent(field.name(), field) != null) {
                 throw new IllegalArgumentException("Campo de consulta repetido: " + field.name());
@@ -113,15 +127,19 @@ public final class QueryBuilder {
                 throw ApiException.badRequest(path + ": field é obrigatório");
             }
             QueryField field = fields.get(rule.field());
+            if (field == null && dynamic != null) {
+                field = dynamic.apply(rule.field());
+            }
             if (field == null) {
                 throw ApiException.badRequest(path + ": campo desconhecido \"" + rule.field() + "\". Use "
-                        + String.join(", ", fields.keySet()));
+                        + String.join(", ", fields.keySet()) + (dynamicHint == null ? "" : ", " + dynamicHint));
             }
+            QueryField known = field;
             Operator operator = Operator.fromCode(rule.operator())
-                    .filter(field.operators()::contains)
+                    .filter(known.operators()::contains)
                     .orElseThrow(() -> ApiException.badRequest(path + ": operador \"" + rule.operator()
-                            + "\" não vale para " + field.name() + " (" + field.type().code() + "). Use "
-                            + field.operators().stream().map(Operator::code).collect(Collectors.joining(", "))));
+                            + "\" não vale para " + known.name() + " (" + known.type().code() + "). Use "
+                            + known.operators().stream().map(Operator::code).collect(Collectors.joining(", "))));
 
             return "(" + field.condition().sql(operator, values(field, operator, rule.value(), path), params) + ")";
         }

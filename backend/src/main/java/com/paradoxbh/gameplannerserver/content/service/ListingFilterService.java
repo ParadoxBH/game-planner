@@ -118,11 +118,13 @@ public class ListingFilterService {
                                 or(rule("buyable", "equal", true), rule("sellable", "equal", true))),
                         Option.of("untraded", "Não comercializados",
                                 and(rule("buyable", "equal", false), rule("sellable", "equal", false)))))),
-                rarity()));
+                rarity(),
+                attributes(ITEM)));
         specs.put(ENTITY, List.of(
                 primaryCategories(ENTITY),
                 subCategories(ENTITY),
-                rarity()));
+                rarity(),
+                attributes(ENTITY)));
         // Categoria "both" vale para item e para entidade.
         specs.put(CATEGORY, List.of(
                 fixed(new ListingFilter("appliesTo", "Agrupa", Display.SELECT, null, "Tudo", null, null, null, List.of(
@@ -230,6 +232,37 @@ public class ListingFilterService {
                         .list().stream()
                         .filter(Objects::nonNull)
                         .toList());
+    }
+
+    /**
+     * Atributos que o tipo tem no jogo, com quantos registros têm cada um. Rótulo, grupo e unidade
+     * vêm da definição (sem ela, o código); numérico quando a definição diz ou, sem ela, quando todo
+     * valor gravado é número. Ordenados pelo grupo e pela ordem da definição, como no detalhe.
+     */
+    private Spec attributes(ContentKind kind) {
+        return new Spec(new ListingFilter("attr", "Atributo", Display.ATTRIBUTE, "attribute", null, "attribute", null,
+                null, List.of()),
+                gameId -> jdbc.sql("""
+                        SELECT a.key, count(*) AS total, bool_and(a.value_num IS NOT NULL) AS all_numbers,
+                               max(d.label) AS label, max(d.group_label) AS group_label, max(d.unit) AS unit,
+                               max(d.data_type) AS data_type, min(d.ordinal) AS ordinal
+                        FROM content_attribute a
+                        LEFT JOIN attribute_definition d ON d.game_id = a.game_id AND d.key = a.key
+                        WHERE a.game_id = :game AND a.kind = :kind
+                        GROUP BY a.key
+                        ORDER BY max(d.group_label) NULLS LAST, min(d.ordinal) NULLS LAST,
+                                 coalesce(max(d.label), a.key), a.key
+                        """)
+                        .param("game", gameId).param("kind", kind.code())
+                        .query((rs, rowNum) -> {
+                            String type = rs.getString("data_type");
+                            boolean numeric = type == null ? rs.getBoolean("all_numbers") : type.equals("number");
+                            return new Option(rs.getString("key"), labelOr(rs.getString("label"), rs.getString("key")),
+                                    null, rs.getLong("total"), null, null, null,
+                                    new ListingFilter.AttributeInfo(rs.getString("group_label"), rs.getString("unit"),
+                                            numeric));
+                        })
+                        .list());
     }
 
     private Spec rarity() {

@@ -2,9 +2,10 @@ import type { ReactNode } from "react";
 import { Box, Card, Chip, Stack, Tooltip, Typography } from "@mui/material";
 import { Inventory, Sell, ShoppingCart, Storefront, TravelExplore } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import type { CategoryDocument, EntityDocument, Rarity } from "../../api/content";
+import type { AttributeDefinition, CategoryDocument, EntityDocument, Rarity } from "../../api/content";
 import { contentRoute, currentMedia } from "../../api/references";
 import { formatAmount } from "../../utils/format";
+import { AttributeHighlight, AttributeIconBadge } from "../common/AttributeHighlight";
 import { ContentIcon } from "../common/ContentIcon";
 import { ContentLabel } from "../common/ContentLabel";
 import { DataChip } from "../common/DataChip";
@@ -18,6 +19,17 @@ export interface EntityListView {
   categories: Map<string, CategoryDocument>;
   /** Códigos das entidades que são NPC de alguma loja. */
   shopNpcs: Set<string>;
+  /** Definições de atributo, para o rótulo e a unidade do atributo em destaque. */
+  attributes?: Map<string, AttributeDefinition>;
+  /** Atributo escolhido no filtro da listagem: aparece em destaque em cada entidade que o tem. */
+  highlightAttribute?: string | null;
+}
+
+/** O atributo em destaque da entidade, ou null quando não há filtro de atributo ou ela não o tem. */
+function highlightOf(view: EntityListView, entity: EntityDocument) {
+  const key = view.highlightAttribute;
+  if (!key || !(key in entity.attributes)) return null;
+  return <AttributeHighlight attributes={entity.attributes} attributeKey={key} definition={view.attributes?.get(key)} />;
 }
 
 export function entityRarityColor(view: EntityListView, entity: EntityDocument): string | undefined {
@@ -93,6 +105,7 @@ export function ApiEntityCard({ entity, variant, view }: ApiEntityCardProps) {
   const iconId = entityIcon(entity);
   const hasShop = view.shopNpcs.has(entity.extId);
   const open = () => navigate(entityRoute(view, entity));
+  const highlight = highlightOf(view, entity);
 
   return (
     <Card
@@ -122,6 +135,7 @@ export function ApiEntityCard({ entity, variant, view }: ApiEntityCardProps) {
             </Typography>
             {hasShop && <ShopMark />}
           </Stack>
+          {highlight}
         </Stack>
       ) : (
         <Stack spacing={1.5} sx={{ p: 2, flex: 1 }}>
@@ -144,6 +158,7 @@ export function ApiEntityCard({ entity, variant, view }: ApiEntityCardProps) {
                 </Typography>
                 {hasShop && <ShopMark />}
               </Stack>
+              {highlight && <Box sx={{ mt: 0.5 }}>{highlight}</Box>}
             </Stack>
           </Stack>
           <Stack spacing={0.5} sx={{ flex: 1 }}>
@@ -184,7 +199,12 @@ function EntityNameCell({ entity, view }: { entity: EntityDocument; view: Entity
       resolved={{ kind: "entity", extId: entity.extId, resolvedKind: "entity", name: entity.name, iconMediaId: entityIcon(entity) }}
       level={entity.level}
       rarityColor={entityRarityColor(view, entity)}
-      endAdornment={view.shopNpcs.has(entity.extId) && <ShopMark />}
+      endAdornment={
+        <>
+          {view.shopNpcs.has(entity.extId) && <ShopMark />}
+          {highlightOf(view, entity)}
+        </>
+      }
       onClick={() => navigate(entityRoute(view, entity))}
     />
   );
@@ -205,6 +225,11 @@ export function ApiEntityIcon({ entity, view }: { entity: EntityDocument; view: 
       >
         <ContentIcon mediaId={entityIcon(entity)} kind="entity" alt={entity.name} size={56} />
         <LevelBadge level={entity.level} />
+        <AttributeIconBadge
+          attributes={entity.attributes}
+          attributeKey={view.highlightAttribute}
+          definition={view.highlightAttribute ? view.attributes?.get(view.highlightAttribute) : undefined}
+        />
       </Box>
     </Tooltip>
   );
