@@ -1,6 +1,7 @@
 import { Box, Stack, Tooltip, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import type { AttributeDefinition, AttributeValue } from "../../api/content";
+import { listRowSx } from "../../theme/listRowSx";
 import { attributeName, formatAttributeValue } from "./attributes";
 
 const OTHERS = "Outros";
@@ -53,33 +54,27 @@ export function AttributeTable({ gameId, resource, attributes, definitions }: At
   return (
     <Stack spacing={1.5} sx={{ width: "100%" }}>
       {sections(attributes, definitions).map(([group, rows]) => (
-        <Stack key={group} spacing={0.25}>
+        <Stack key={group}>
           <Typography
             variant="caption"
             sx={{ fontWeight: 700, color: "text.secondary", textTransform: "uppercase", letterSpacing: 0.5, textAlign: "left" }}
           >
             {group}
           </Typography>
-          {rows.map((row) => (
+          {rows.map((row, index) => (
             <Tooltip key={row.key} title="Encontrar outros com o mesmo atributo" placement="left">
               <Stack
                 direction="row"
-                alignItems="baseline"
+                alignItems="center"
+                justifyContent={"space-between"}
                 spacing={1}
                 onClick={() => open(row.key)}
-                sx={{
-                  px: 1,
-                  py: 0.5,
-                  borderRadius: 1,
-                  cursor: "pointer",
-                  "&:hover": { bgcolor: "rgba(255, 68, 0, 0.08)", "& .attribute-name": { color: "primary.main" } },
-                }}
+                sx={[listRowSx({ index, clickable: true }), { px: 1, py: 0.5, borderRadius: 0, "&:hover .attribute-name": { color: "primary.main" } }]}
               >
-                <Typography className="attribute-name" variant="body2" sx={{ fontWeight: 600, transition: "color 0.2s" }}>
+                <Typography className="attribute-name" variant="body2" sx={{ fontWeight: 600, textAlign: "start", transition: "color 0.2s" }}>
                   {attributeName(row.key, row.definition)}
                 </Typography>
-                <Box sx={{ flex: 1, borderBottom: "1px dotted", borderColor: "divider", minWidth: 16 }} />
-                <Typography variant="body2" sx={{ fontWeight: 800, whiteSpace: "nowrap" }}>
+                <Typography variant="body2" sx={{ fontWeight: 800, whiteSpace: "nowrap" }} color={"primary"}>
                   {formatAttributeValue(row.value, row.definition)}
                 </Typography>
               </Stack>

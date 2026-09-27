@@ -24,6 +24,7 @@ import {
   type AttributeType,
 } from "./attributeValues";
 import { slugOf } from "./contentForm";
+import { listRowSx } from "../../theme/listRowSx";
 
 const OTHERS = "Outros";
 
@@ -197,11 +198,11 @@ export function AttributeEditor({ definitions, value, onChange }: AttributeEdito
       )}
 
       {groupedRows(value, byKey).map(([group, rows]) => (
-        <Stack key={group} spacing={1}>
-          <Typography variant="caption" sx={{ fontWeight: 700, color: "text.secondary", textTransform: "uppercase", letterSpacing: 0.5 }}>
+        <Stack key={group} spacing={0.25}>
+          <Typography variant="caption" sx={{ fontWeight: 700, color: "text.secondary", textTransform: "uppercase", letterSpacing: 0.5, pb: 0.5 }}>
             {group}
           </Typography>
-          {rows.map(({ key, entry, definition }) => {
+          {rows.map(({ key, entry, definition }, index) => {
             const type = effectiveType(key, entry, byKey);
             const invalid = attributeEntryInvalid(key, entry, byKey);
             return (
@@ -210,7 +211,7 @@ export function AttributeEditor({ definitions, value, onChange }: AttributeEdito
                 direction={{ xs: "column", sm: "row" }}
                 spacing={1.5}
                 alignItems={{ sm: "center" }}
-                sx={{ p: 1, pl: 1.5, border: 1, borderColor: invalid ? "error.main" : "divider", borderRadius: 1 }}
+                sx={[listRowSx({ index, error: invalid }), { p: 1, pl: 1.5, borderRadius: 1 }]}
               >
                 <Stack sx={{ minWidth: 0, flex: { sm: "0 0 34%" } }}>
                   <Typography variant="body2" sx={{ fontWeight: 700 }} noWrap>

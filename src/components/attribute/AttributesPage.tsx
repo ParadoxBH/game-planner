@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { Add, Delete, Edit, OpenInNew } from "@mui/icons-material";
 import { useAttributeDefinitions, useAttributeUsage, useAttributeWrites } from "../../api/useContent";
+import { listRowSx } from "../../theme/listRowSx";
 import { AdminGate } from "../common/AdminGate";
 import { describeError } from "../common/contentForm";
 import { StyledContainer } from "../common/StyledContainer";
@@ -162,8 +163,8 @@ function AttributesPanel({ gameId }: { gameId: string }) {
                 </Typography>
                 <Chip size="small" label={sectionRows.length} sx={{ height: 20 }} />
               </Stack>
-              {sectionRows.map((row) => (
-                <Card key={row.key} sx={{ borderRadius: 1, border: 1, borderColor: "divider" }}>
+              {sectionRows.map((row, index) => (
+                <Card key={row.key} sx={[listRowSx({ index }), { borderRadius: 1, border: 1, borderColor: "divider" }]}>
                   <Stack direction={{ xs: "column", sm: "row" }} alignItems={{ sm: "center" }} spacing={1.5} sx={{ p: 1.5, pl: 2 }}>
                     <Stack sx={{ minWidth: 0, flex: 1 }}>
                       <Typography variant="subtitle1" sx={{ fontWeight: 800, lineHeight: 1.2 }}>

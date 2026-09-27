@@ -15,6 +15,7 @@ import {
 import { type ReactNode, useMemo } from "react";
 import { type ViewMode } from "./ViewModeSelector";
 import { usePlatform } from "../../hooks/usePlatform";
+import { listRowSx } from "../../theme/listRowSx";
 
 export interface ListDataHeader {
   label: string;
@@ -175,14 +176,9 @@ export function ListingDataView<T>({
                 const rowColor = getRowColor?.(item);
 
                 return (
-                  <TableRow 
+                  <TableRow
                     key={index}
-                    sx={{ 
-                      '&:hover': { backgroundColor: rowColor ? `${rowColor}22` : alpha(theme.palette.background.paper, 0.08) },
-                      '&:last-child td': { borderBottom: 0 },
-                      transition: 'background-color 0.2s',
-                      backgroundColor: rowColor ? `${rowColor}11` : undefined
-                    }}
+                    sx={[listRowSx({ index, color: rowColor }), { '&:last-child td': { borderBottom: 0 } }]}
                   >
                     {cells.map((cell, cellIndex) => {
                       const headerInfo = visibleHeaders[cellIndex];
