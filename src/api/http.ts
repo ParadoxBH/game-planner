@@ -1,6 +1,7 @@
 import { API_BASE_URL } from "./config";
 import { ApiError } from "./ApiError";
 import { session } from "./session";
+import { serverStatus } from "./serverStatus";
 
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
@@ -49,14 +50,17 @@ async function send(path: string, options: RequestOptions, token?: string): Prom
   }
 
   try {
-    return await fetch(`${API_BASE_URL}${path}`, {
+    const response = await fetch(`${API_BASE_URL}${path}`, {
       method,
       headers,
       body: payload,
       signal,
     });
+    serverStatus.set(true);
+    return response;
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") throw error;
+    serverStatus.set(false);
     throw new ApiError(0, "network", "Não foi possível conectar à API. O backend está rodando?");
   }
 }
