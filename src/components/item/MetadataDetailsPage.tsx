@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Breadcrumbs, CircularProgress, Stack, Tab, Tabs, Typography } from "@mui/material";
-import { Bolt, Bookmarks, Inventory, NavigateNext } from "@mui/icons-material";
+import { Bookmarks, NavigateNext } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import {
   MAX_PAGE_SIZE,
@@ -28,6 +28,7 @@ import { ListingDataView } from "../common/ListingDataView";
 import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
+import { DataTypeIcon } from "../DataTypeIcon";
 import { ApiEntityCard, ApiEntityIcon, entityListCells, entityRarityColor, type EntityListView } from "../entity/ApiEntityRenderers";
 import { ApiItemCard, ApiItemIcon, attributeLabel, itemListCells, rarityColorOf, type ItemListView } from "./ApiItemRenderers";
 
@@ -167,8 +168,8 @@ export function MetadataDetailsPage() {
             </Breadcrumbs>
           )}
           <Tabs value={tab} onChange={(_, value: MetadataTab) => changeTab(value)} variant="scrollable" scrollButtons="auto">
-            <Tab value="items" icon={<Inventory />} iconPosition="start" label={`Itens (${itemCount.data?.total ?? "…"})`} />
-            <Tab value="entities" icon={<Bolt />} iconPosition="start" label={`Entidades (${entityCount.data?.total ?? "…"})`} />
+            <Tab value="items" icon={<DataTypeIcon value="item" />} iconPosition="start" label={`Itens (${itemCount.data?.total ?? "…"})`} />
+            <Tab value="entities" icon={<DataTypeIcon value="entity" />} iconPosition="start" label={`Entidades (${entityCount.data?.total ?? "…"})`} />
           </Tabs>
         </Stack>
       }

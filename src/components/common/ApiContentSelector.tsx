@@ -7,6 +7,7 @@ import { and, textSearch } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { ContentChip } from "./ContentChip";
 import { StyledDialog } from "./StyledDialog";
+import { DataTypeIcon } from "../DataTypeIcon";
 
 const PAGE = 60;
 
@@ -122,7 +123,13 @@ export function ApiContentSelector({
             sx={{ mb: 2 }}
           >
             {kinds.map((option) => (
-              <Tab key={option} value={option} label={TABS[option].label} />
+              <Tab
+                key={option}
+                value={option}
+                label={TABS[option].label}
+                icon={<DataTypeIcon value={TABS[option].kind} fontSize="small" />}
+                iconPosition="start"
+              />
             ))}
           </Tabs>
         )}

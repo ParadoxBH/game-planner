@@ -1,34 +1,7 @@
 import { Box } from "@mui/material";
-import {
-  AutoAwesomeMosaic,
-  Bolt,
-  Category,
-  Event,
-  Inventory,
-  Map as MapIcon,
-  MenuBook,
-  Place,
-  Redeem,
-  Storefront,
-} from "@mui/icons-material";
-import type { SvgIconComponent } from "@mui/icons-material";
+import { Inventory } from "@mui/icons-material";
 import { mediaUrl } from "../../api/references";
-
-const FALLBACK_ICONS: Record<string, SvgIconComponent> = {
-  item: Inventory,
-  entity: Bolt,
-  category: Category,
-  event: Event,
-  recipe: MenuBook,
-  shop: Storefront,
-  shop_category: Storefront,
-  map: MapIcon,
-  location: Place,
-  spawn_point: Place,
-  collection: AutoAwesomeMosaic,
-  collection_group: AutoAwesomeMosaic,
-  redemption_code: Redeem,
-};
+import { DataTypeIcon } from "../DataTypeIcon";
 
 interface ContentIconProps {
   mediaId?: string | null;
@@ -49,6 +22,5 @@ export function ContentIcon({ mediaId, kind, alt, size }: ContentIconProps) {
       />
     );
   }
-  const Fallback = FALLBACK_ICONS[kind ?? "item"] ?? Inventory;
-  return <Fallback sx={{ fontSize: size * 0.7, color: "text.disabled" }} />;
+  return <DataTypeIcon value={kind ?? "item"} fallback={Inventory} sx={{ fontSize: size * 0.7, color: "text.disabled" }} />;
 }

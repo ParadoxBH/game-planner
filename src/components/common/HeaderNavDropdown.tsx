@@ -1,16 +1,16 @@
-import { 
-  Button, 
-  Menu, 
-  MenuItem, 
-  alpha, 
+import {
+  Button,
+  Menu,
+  MenuItem,
+  alpha,
   useTheme,
-  Box
+  Box,
+  Tooltip,
+  Stack,
 } from "@mui/material";
-import { 
-  KeyboardArrowDown 
-} from "@mui/icons-material";
+import { KeyboardArrowDown } from "@mui/icons-material";
 import { useState } from "react";
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
 
 interface HeaderNavDropdownProps {
   label: string;
@@ -18,6 +18,7 @@ interface HeaderNavDropdownProps {
   rootPath: string;
   /** A entrada "Todas", que leva a rootPath. Padrão true. */
   showAll?: boolean;
+  compact?: boolean;
   options: {
     label: string;
     path: string;
@@ -29,8 +30,9 @@ export function HeaderNavDropdown({
   label,
   icon,
   rootPath,
+  compact,
   showAll = true,
-  options
+  options,
 }: HeaderNavDropdownProps) {
   const theme = useTheme();
   const location = useLocation();
@@ -46,7 +48,8 @@ export function HeaderNavDropdown({
   };
 
   const isActive =
-    location.pathname.startsWith(rootPath) || options.some((option) => location.pathname.startsWith(option.path));
+    location.pathname.startsWith(rootPath) ||
+    options.some((option) => location.pathname.startsWith(option.path));
 
   return (
     <Box
@@ -61,23 +64,25 @@ export function HeaderNavDropdown({
         px: 0.5,
       }}
     >
-      <Button
-        component={Link}
-        to={rootPath}
-        startIcon={icon}
-        sx={{
-          color: isActive ? "primary.main" : "white",
-          textTransform: "none",
-          borderRadius: 0,
-          minWidth: "auto",
-          "&:hover": {
-            color: "primary.main",
-            backgroundColor: "transparent",
-          },
-        }}
-      >
-        {label}
-      </Button>
+      {!compact && (
+        <Button
+          component={Link}
+          to={rootPath}
+          startIcon={icon}
+          sx={{
+            color: isActive ? "primary.main" : "white",
+            textTransform: "none",
+            borderRadius: 0,
+            minWidth: "auto",
+            "&:hover": {
+              color: "primary.main",
+              backgroundColor: "transparent",
+            },
+          }}
+        >
+          {label}
+        </Button>
+      )}
       <Button
         id={`${label}-nav-button`}
         aria-controls={open ? `${label}-nav-menu` : undefined}
@@ -95,13 +100,22 @@ export function HeaderNavDropdown({
           },
         }}
       >
-        <KeyboardArrowDown
-          sx={{
-            transition: "transform 0.3s",
-            transform: open ? "rotate(180deg)" : "none",
-            fontSize: "1rem",
-          }}
-        />
+        {!compact && (
+          <KeyboardArrowDown
+            sx={{
+              transition: "transform 0.3s",
+              transform: open ? "rotate(180deg)" : "none",
+              fontSize: "1rem",
+            }}
+          />
+        )}
+        {compact && (
+          <Tooltip title={!compact ? "" : label}>
+            <Stack p={0} m={0}>
+              {icon}
+            </Stack>
+          </Tooltip>
+        )}
       </Button>
       <Menu
         id={`${label}-nav-menu`}
@@ -109,41 +123,41 @@ export function HeaderNavDropdown({
         open={open}
         onClose={handleClose}
         MenuListProps={{
-          'aria-labelledby': `${label}-nav-button`,
+          "aria-labelledby": `${label}-nav-button`,
         }}
         PaperProps={{
           sx: {
-            backgroundColor: 'rgba(20, 20, 20, 0.95)',
-            backdropFilter: 'blur(16px)',
+            backgroundColor: "rgba(20, 20, 20, 0.95)",
+            backdropFilter: "blur(16px)",
             borderRadius: 1,
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            border: "1px solid rgba(255, 255, 255, 0.1)",
             minWidth: 180,
             maxHeight: 400,
-            boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
-            '& .MuiMenuItem-root': {
-              fontSize: '0.9rem',
+            boxShadow: "0 10px 40px rgba(0,0,0,0.5)",
+            "& .MuiMenuItem-root": {
+              fontSize: "0.9rem",
               fontWeight: 500,
               borderRadius: 0.5,
-              transition: 'all 0.2s',
-              color: 'text.secondary',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                color: 'text.primary',
+              transition: "all 0.2s",
+              color: "text.secondary",
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.05)",
+                color: "text.primary",
               },
-              '&.Mui-selected': {
+              "&.Mui-selected": {
                 backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                color: 'primary.main',
+                color: "primary.main",
                 fontWeight: 700,
-                '&:hover': {
+                "&:hover": {
                   backgroundColor: alpha(theme.palette.primary.main, 0.15),
-                }
-              }
-            }
-          }
+                },
+              },
+            },
+          },
         }}
       >
         {showAll && (
-          <MenuItem 
+          <MenuItem
             component={Link}
             to={rootPath}
             onClick={handleClose}
@@ -153,7 +167,7 @@ export function HeaderNavDropdown({
           </MenuItem>
         )}
         {options.map((option) => (
-          <MenuItem 
+          <MenuItem
             key={option.path}
             component={Link}
             to={option.path}
@@ -161,7 +175,9 @@ export function HeaderNavDropdown({
             selected={location.pathname === option.path}
             sx={{ gap: 1 }}
           >
-            {option.icon && <Box sx={{ display: 'flex', opacity: 0.7 }}>{option.icon}</Box>}
+            {option.icon && (
+              <Box sx={{ display: "flex", opacity: 0.7 }}>{option.icon}</Box>
+            )}
             {option.label}
           </MenuItem>
         ))}

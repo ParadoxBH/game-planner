@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState, type ReactElement } from "react";
 import { Link, useParams } from "react-router-dom";
 import { CircularProgress, Grid, Paper, Stack, Tab, Tabs, Typography } from "@mui/material";
-import { Bolt, Construction, Inventory, Storefront } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import {
   MAX_PAGE_SIZE,
@@ -34,6 +33,7 @@ import { ListingDataView } from "../common/ListingDataView";
 import { QueryBuilder } from "../common/QueryBuilder";
 import { StyledContainer } from "../common/StyledContainer";
 import { ViewModeSelector } from "../common/ViewModeSelector";
+import { DataTypeIcon } from "../DataTypeIcon";
 import { ApiEntityCard, ApiEntityIcon, entityListCells, entityRarityColor, type EntityListView } from "../entity/ApiEntityRenderers";
 import { ApiItemCard, ApiItemIcon, itemListCells, rarityColorOf, type ItemListView } from "../item/ApiItemRenderers";
 import { ApiRecipeCard } from "../recipe/ApiRecipeCard";
@@ -43,10 +43,10 @@ import { APPLIES_TO_LABELS } from "./CategoriesPage";
 type CategoryTab = "items" | "entities" | "recipes" | "shops";
 
 const TABS: Record<CategoryTab, { label: string; icon: ReactElement }> = {
-  items: { label: "Itens", icon: <Inventory /> },
-  entities: { label: "Entidades", icon: <Bolt /> },
-  recipes: { label: "Receitas", icon: <Construction /> },
-  shops: { label: "Lojas", icon: <Storefront /> },
+  items: { label: "Itens", icon: <DataTypeIcon value="item" /> },
+  entities: { label: "Entidades", icon: <DataTypeIcon value="entity" /> },
+  recipes: { label: "Receitas", icon: <DataTypeIcon value="recipe" /> },
+  shops: { label: "Lojas", icon: <DataTypeIcon value="shop" /> },
 };
 
 const NO_CRITERIA: FilterValues = {};

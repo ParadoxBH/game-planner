@@ -1,21 +1,6 @@
 import { useMemo } from "react";
-import {
-  Map as MapIcon,
-  Construction,
-  Pets,
-  Assignment,
-  Storefront,
-  Event,
-  Redeem,
-  Calculate,
-  Explore,
-  AutoAwesomeMosaic,
-  Category,
-  Diamond,
-  Settings,
-  SportsEsports,
-} from "@mui/icons-material";
 import { useTheme } from "@mui/material";
+import { DataTypeIcon } from "../components/DataTypeIcon";
 import { MAX_PAGE_SIZE, type ShopDocument } from "../api/content";
 import type { ListingSchema } from "../api/query";
 import { contentRoute, mediaUrl } from "../api/references";
@@ -76,11 +61,11 @@ export function useNavigation(gameId: string | null) {
       }));
 
     const all: NavigationItem[] = [
-      { id: "map", label: "Mapa", icon: <MapIcon />, path: `${base}/map`, color: theme.palette.primary.main },
+      { id: "map", label: "Mapa", icon: <DataTypeIcon value="map" />, path: `${base}/map`, color: theme.palette.primary.main },
       {
         id: "entities",
         label: "Entidades",
-        icon: <Pets />,
+        icon: <DataTypeIcon value="entity" />,
         path: `${base}/entity`,
         color: "#ff9800",
         isDropdown: true,
@@ -89,17 +74,17 @@ export function useNavigation(gameId: string | null) {
       {
         id: "items",
         label: "Itens",
-        icon: <Construction />,
+        icon: <DataTypeIcon value="item" />,
         path: `${base}/items`,
         color: "#4caf50",
         isDropdown: true,
         options: filterOptions(itemFilters.data, `${base}/items/list`),
       },
-      { id: "conjuntos", label: "Conjuntos", icon: <AutoAwesomeMosaic />, path: `${base}/conjuntos`, color: "#ffca28" },
+      { id: "conjuntos", label: "Conjuntos", icon: <DataTypeIcon value="collection" />, path: `${base}/conjuntos`, color: "#ffca28" },
       {
         id: "recipes",
         label: "Receitas",
-        icon: <Assignment />,
+        icon: <DataTypeIcon value="recipe" />,
         path: `${base}/recipes`,
         color: "#f44336",
         isDropdown: true,
@@ -110,30 +95,30 @@ export function useNavigation(gameId: string | null) {
       {
         id: "shops",
         label: "Lojas",
-        icon: <Storefront />,
+        icon: <DataTypeIcon value="shop" />,
         path: `${base}/shops/list`,
         color: "#9c27b0",
         isDropdown: true,
         options: (shops.data?.content ?? []).map((shop) => ({ label: shop.name, path: contentRoute(gameId, "shop", shop.extId)! })),
       },
-      { id: "events", label: "Eventos", icon: <Event />, path: `${base}/events`, color: "#e91e63" },
-      { id: "codes", label: "Códigos", icon: <Redeem />, path: `${base}/codes`, color: "#795548" },
+      { id: "events", label: "Eventos", icon: <DataTypeIcon value="event" />, path: `${base}/events`, color: "#e91e63" },
+      { id: "codes", label: "Códigos", icon: <DataTypeIcon value="redemption_code" />, path: `${base}/codes`, color: "#795548" },
       // Telas de administração: só aparecem para quem administra o jogo.
       ...(isAdmin
         ? [
             {
               id: "manage",
               label: "Gerenciar",
-              icon: <Settings />,
+              icon: <DataTypeIcon value="settings" />,
               path: `${base}/categories`,
               color: "#607d8b",
               isDropdown: true,
               showAll: false,
               options: [
                 // Os dados do próprio jogo são do owner; moderador gerencia só o conteúdo.
-                ...(isOwner ? [{ label: "Jogo", path: `${base}/settings`, icon: <SportsEsports fontSize="small" /> }] : []),
-                { label: "Categorias", path: `${base}/categories`, icon: <Category fontSize="small" /> },
-                { label: "Raridades", path: `${base}/rarities`, icon: <Diamond fontSize="small" /> },
+                ...(isOwner ? [{ label: "Jogo", path: `${base}/settings`, icon: <DataTypeIcon value="game" fontSize="small" /> }] : []),
+                { label: "Categorias", path: `${base}/categories`, icon: <DataTypeIcon value="category" fontSize="small" /> },
+                { label: "Raridades", path: `${base}/rarities`, icon: <DataTypeIcon value="rarity" fontSize="small" /> },
               ],
             },
           ]
@@ -141,14 +126,14 @@ export function useNavigation(gameId: string | null) {
       {
         id: "simulador",
         label: "Simulador",
-        icon: <Explore />,
+        icon: <DataTypeIcon value="simulator" />,
         path: `${base}/simulador`,
         color: "#8bc34a",
       },
       {
         id: "calculator",
         label: "Calculadora",
-        icon: <Calculate />,
+        icon: <DataTypeIcon value="calculator" />,
         path: `${base}/calculator`,
         color: "#00bcd4",
         isDropdown: true,
