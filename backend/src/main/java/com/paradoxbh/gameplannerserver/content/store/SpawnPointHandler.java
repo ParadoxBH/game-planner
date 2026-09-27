@@ -270,10 +270,12 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
         Map<String, List<MarkerOccupant>> occupants = new HashMap<>();
         jdbc.sql("""
                 SELECT o.spawn_ext_id, o.target_kind, o.target_ext_id, o.chance, o.level, r.name, r.icon_media_id,
-                       ARRAY(SELECT DISTINCT cc.category_ext_id FROM content_category cc
+                       ARRAY(SELECT cc.category_ext_id FROM content_category cc
+                             LEFT JOIN category k ON k.game_id = cc.game_id AND k.ext_id = cc.category_ext_id
                              WHERE cc.game_id = o.game_id AND cc.ext_id = o.target_ext_id
                                AND (o.target_kind IS NULL OR cc.kind = o.target_kind)
-                             ORDER BY cc.category_ext_id) AS categories,
+                             GROUP BY cc.category_ext_id
+                             ORDER BY bool_or(coalesce(k.is_primary, false)) DESC, cc.category_ext_id) AS categories,
                        (SELECT e.respawn_delay_minutes FROM entity e
                          WHERE e.game_id = o.game_id AND e.ext_id = o.target_ext_id
                            AND (o.target_kind IS NULL OR o.target_kind = 'entity')) AS respawn_delay_minutes

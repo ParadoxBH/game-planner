@@ -13,11 +13,12 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import type { ReactNode } from "react";
 import { theme } from "../theme/theme";
 import { usePlatform } from "../hooks/usePlatform";
+import { Link, type To } from "react-router-dom";
 
 interface BaseDrawerProps {
   title: string;
   onClose: () => void;
-  onViewDetails?: () => void;
+  to?: To;
   onPop?: () => void;
   showBackButton?: boolean;
   children: ReactNode;
@@ -27,7 +28,7 @@ interface BaseDrawerProps {
 export const BaseDrawer = ({
   title,
   onClose,
-  onViewDetails,
+  to,
   onPop,
   showBackButton,
   children,
@@ -86,15 +87,16 @@ export const BaseDrawer = ({
           </Typography>
         </Stack>
         <Stack direction="row" spacing={1} alignItems="center">
-          {onViewDetails && (
+          {to && (
             <Tooltip title="Ver Detalhes">
-              <IconButton
-                onClick={onViewDetails}
-                size="small"
-                sx={{ color: "primary.main" }}
-              >
-                <OpenInNewIcon fontSize="small" />
-              </IconButton>
+              <Link to={to}>
+                <IconButton
+                  size="small"
+                  sx={{ color: "primary.main" }}
+                >
+                  <OpenInNewIcon fontSize="small" />
+                </IconButton>
+              </Link>
             </Tooltip>
           )}
           <IconButton

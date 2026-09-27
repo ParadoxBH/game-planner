@@ -45,6 +45,7 @@ import {
 } from "../common/formValues";
 import { IconUploadField } from "../common/IconUploadField";
 import { StyledDialog } from "../common/StyledDialog";
+import { DataTypeIcon } from "../DataTypeIcon";
 
 /** Tipos de local em uso nos jogos; o campo aceita um tipo novo digitado. */
 const LOCATION_TYPES = [
@@ -560,6 +561,7 @@ function MapContentForm({
                   )
                 }
               >
+                {row.target && <DataTypeIcon value={row.target.kind}/>}
                 <TextField
                   label="De"
                   size="small"

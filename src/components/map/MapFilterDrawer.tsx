@@ -47,7 +47,7 @@ export function locationTypeOf(location: LocationDocument): string {
   return location.locationType ?? "region";
 }
 
-/** Categoria usada no filtro: a primeira do ocupante. */
+/** Categoria usada no filtro: a principal do ocupante (a API a manda primeiro), ou a primeira. */
 export function occupantCategory(occupant: MarkerOccupant): string {
   return occupant.categories[0] ?? UNCATEGORIZED;
 }

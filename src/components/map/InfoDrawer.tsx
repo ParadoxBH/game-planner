@@ -329,7 +329,6 @@ interface InfoDrawerProps {
 
 /** Resumo de item ou entidade ao lado do mapa, lido do agregado /details, com pilha para ir e voltar. */
 export const InfoDrawer = ({ stack, onSelectMap, onPush, onPop, onClose }: InfoDrawerProps) => {
-  const navigate = useNavigate();
   const { gameId = "" } = useParams<{ gameId: string }>();
   const current = stack[stack.length - 1];
   if (!current) return null;
@@ -339,7 +338,7 @@ export const InfoDrawer = ({ stack, onSelectMap, onPush, onPop, onClose }: InfoD
       title={current.type === "entity" ? "Entidade" : "Item"}
       onClose={onClose}
       onPop={onPop}
-      onViewDetails={() => navigate(contentRoute(gameId, current.type, current.id)!)}
+      to={contentRoute(gameId, current.type, current.id)!}
       showBackButton={stack.length > 1}
     >
       {current.type === "entity" ? (
