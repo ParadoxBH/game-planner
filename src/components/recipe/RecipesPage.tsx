@@ -158,10 +158,10 @@ export function RecipesPage() {
               </Stack>,
               <Stack key="stations" direction="row" spacing={1} flexWrap="wrap" useFlexGap>
                 {recipe.stations.map((station) => {
-                  const target = { kind: "entity", extId: station.extId };
+                  const target = { kind: station.kind, extId: station.extId };
                   return (
                     <ContentChip
-                      key={station.extId}
+                      key={`${station.kind}:${station.extId}`}
                       target={target}
                       resolved={references.find(target)}
                       level={station.level}

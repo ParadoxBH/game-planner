@@ -39,8 +39,9 @@ public class ReferenceService {
     public record Source(ContentKind kind, String extId) {
     }
 
-    /** Bancada citada por receitas, com nome e ícone quando está cadastrada como entidade. */
-    public record RecipeStation(String extId, String name, String iconMediaId, boolean registered, long recipeCount) {
+    /** Bancada citada por receitas (entidade ou ferramenta), com nome e ícone quando está cadastrada. */
+    public record RecipeStation(String kind, String extId, String name, String iconMediaId, boolean registered,
+                                long recipeCount) {
     }
 
     public record SearchHit(String kind, String extId, String name, String iconMediaId) {
@@ -261,18 +262,20 @@ public class ReferenceService {
     public List<RecipeStation> recipeStations(String gameId) {
         access.requireReadable(gameId);
         return jdbc.sql("""
-                SELECT s.station_ext_id, count(DISTINCT s.recipe_ext_id) AS recipe_count,
+                SELECT s.station_kind, s.station_ext_id, count(DISTINCT s.recipe_ext_id) AS recipe_count,
                        max(c.name) AS name, max(c.icon_media_id) AS icon_media_id,
                        bool_or(c.ext_id IS NOT NULL) AS registered
                 FROM recipe_station s
-                LEFT JOIN content_ref c ON c.game_id = s.game_id AND c.kind = 'entity' AND c.ext_id = s.station_ext_id
+                LEFT JOIN content_ref c ON c.game_id = s.game_id AND c.kind = s.station_kind
+                                       AND c.ext_id = s.station_ext_id
                 WHERE s.game_id = :game
-                GROUP BY s.station_ext_id
+                GROUP BY s.station_kind, s.station_ext_id
                 ORDER BY coalesce(max(c.name), s.station_ext_id), s.station_ext_id
                 """)
                 .param("game", gameId)
-                .query((rs, rowNum) -> new RecipeStation(rs.getString("station_ext_id"), rs.getString("name"),
-                        rs.getString("icon_media_id"), rs.getBoolean("registered"), rs.getLong("recipe_count")))
+                .query((rs, rowNum) -> new RecipeStation(rs.getString("station_kind"), rs.getString("station_ext_id"),
+                        rs.getString("name"), rs.getString("icon_media_id"), rs.getBoolean("registered"),
+                        rs.getLong("recipe_count")))
                 .list();
     }
 

@@ -141,7 +141,7 @@ public class CraftingService {
     private record Output(String recipe, Reference target, BigDecimal amount, BigDecimal chance, Integer level) {
     }
 
-    private record RecipeRow(Integer craftTimeSeconds, List<Input> inputs, List<String> stations,
+    private record RecipeRow(Integer craftTimeSeconds, List<Input> inputs, List<Reference> stations,
                              List<Output> outputs) {
     }
 
@@ -162,7 +162,7 @@ public class CraftingService {
     /** Tudo o que a árvore consulta, carregado do jogo inteiro de uma vez. */
     private static final class Graph {
         final Map<String, List<Input>> inputs = new HashMap<>();
-        final Map<String, List<String>> stations = new HashMap<>();
+        final Map<String, List<Reference>> stations = new HashMap<>();
         final Map<String, List<Output>> outputs = new HashMap<>();
         final Map<String, RecipeRow> recipes = new HashMap<>();
         final Map<String, List<Output>> producers = new HashMap<>();
@@ -219,7 +219,7 @@ public class CraftingService {
         BigDecimal batches;
         BigDecimal produced;
         BigDecimal craftTime;
-        List<String> stations;
+        List<Reference> stations;
         List<String> alternatives = List.of();
         boolean buyable;
         Offer offer;
@@ -391,7 +391,7 @@ public class CraftingService {
                 currency == null ? null : resolved(names, currency), unitCost, sellPrice, profit, profitPerHour,
                 totals.recipes().size() + totals.purchases().size(), totals.costs(),
                 draft.stations == null ? List.of()
-                        : draft.stations.stream().map(station -> resolved(names, new Reference("entity", station))).toList(),
+                        : draft.stations.stream().map(station -> resolved(names, station)).toList(),
                 totals.baseResources(), totals.purchases(), incomplete ? Boolean.TRUE : null);
     }
 
@@ -589,7 +589,7 @@ public class CraftingService {
                     : batches.multiply(BigDecimal.valueOf(recipe.craftTimeSeconds())).stripTrailingZeros();
             draft.stations = recipe.stations();
             ids.add(output.recipe());
-            ids.addAll(recipe.stations());
+            recipe.stations().forEach(station -> ids.add(station.extId()));
 
             for (Input input : recipe.inputs()) {
                 BigDecimal need = input.notConsumed() ? input.amount()
@@ -685,11 +685,13 @@ public class CraftingService {
                             rs.getBigDecimal("amount"), rs.getBoolean("not_consumed"),
                             (Integer) rs.getObject("level"), rs.getString("level_operator")));
         });
-        jdbc.sql("SELECT recipe_ext_id, station_ext_id FROM recipe_station WHERE game_id = :game ORDER BY recipe_ext_id, ordinal")
-                .param("game", gameId).query(rs -> {
-                    graph.stations.computeIfAbsent(rs.getString("recipe_ext_id"), key -> new ArrayList<>())
-                            .add(rs.getString("station_ext_id"));
-                });
+        jdbc.sql("""
+                SELECT recipe_ext_id, station_kind, station_ext_id FROM recipe_station
+                WHERE game_id = :game ORDER BY recipe_ext_id, ordinal
+                """).param("game", gameId).query(rs -> {
+            graph.stations.computeIfAbsent(rs.getString("recipe_ext_id"), key -> new ArrayList<>())
+                    .add(new Reference(rs.getString("station_kind"), rs.getString("station_ext_id")));
+        });
         jdbc.sql("""
                 SELECT recipe_ext_id, target_kind, target_ext_id, amount, chance, level FROM recipe_output
                 WHERE game_id = :game ORDER BY recipe_ext_id, ordinal
@@ -798,7 +800,7 @@ public class CraftingService {
             NameRow recipeRow = find(names, "recipe", draft.recipe);
             recipe = new RecipeUse(draft.recipe, recipeRow == null ? null : recipeRow.name(), draft.batches,
                     draft.produced, draft.craftTime,
-                    draft.stations.stream().map(station -> resolved(names, new Reference("entity", station))).toList());
+                    draft.stations.stream().map(station -> resolved(names, station)).toList());
         }
         Purchase purchase = null;
         if (draft.offer != null) {
@@ -848,8 +850,7 @@ public class CraftingService {
             NameRow row = find(names, "recipe", entry.getKey());
             return new RecipeTotal(entry.getKey(), row == null ? null : row.name(), entry.getValue());
         }).toList();
-        List<ResolvedReference> stations = sum.stations.stream()
-                .map(station -> resolved(names, new Reference("entity", station))).toList();
+        List<ResolvedReference> stations = sum.stations.stream().map(station -> resolved(names, station)).toList();
 
         return new Totals(
                 amounts(sum.base, sum.targets, names),
@@ -879,7 +880,7 @@ public class CraftingService {
         final Map<String, BigDecimal> open = new LinkedHashMap<>();
         final Map<String, PurchaseTotal> purchases = new LinkedHashMap<>();
         final Map<String, BigDecimal> recipes = new LinkedHashMap<>();
-        final Set<String> stations = new LinkedHashSet<>();
+        final Set<Reference> stations = new LinkedHashSet<>();
         final Set<Reference> cycles = new LinkedHashSet<>();
         BigDecimal craftTime = BigDecimal.ZERO;
         BigDecimal costWithoutCurrency = BigDecimal.ZERO;

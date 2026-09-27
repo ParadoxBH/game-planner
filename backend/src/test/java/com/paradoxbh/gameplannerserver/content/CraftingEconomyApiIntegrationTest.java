@@ -81,6 +81,28 @@ class CraftingEconomyApiIntegrationTest extends ContentApiTest {
     }
 
     @Test
+    void stationCanBeAToolItem() throws Exception {
+        // A ferramenta que se segura (martelo, bandeja) é bancada do tipo item (V19); sem tipo, entidade.
+        send(post(RECIPES, game), "editor", json("""
+                { 'extId': 'build_banquete',
+                  'stations': [ { 'kind': 'item', 'extId': 'bandeja' }, 'caldeirao' ],
+                  'outputs': [ { 'target': { 'kind': 'entity', 'extId': 'banquete' }, 'amount': 1 } ] }
+                """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.stations[0].kind").value("item"))
+                .andExpect(jsonPath("$.stations[0].extId").value("bandeja"))
+                .andExpect(jsonPath("$.stations[1].kind").value("entity"));
+
+        send(post(RECIPES, game), "editor", json("""
+                { 'extId': 'receita_invalida', 'stations': [ { 'kind': 'event', 'extId': 'natal' } ] }
+                """))
+                .andExpect(status().isBadRequest());
+
+        mvc.perform(query(RECIPES, and(rule("station", "equal", "bandeja")), game))
+                .andExpect(jsonPath("$.content[0].extId").value("build_banquete"));
+    }
+
+    @Test
     void spawnPointOccupantKeepsTheLevel() throws Exception {
         send(post("/api/v1/games/{game}/spawn-points", game), "editor", json("""
                 { 'extId': 'forja_da_vila', 'map': 'mundo', 'position': 'POINT (10 20)',

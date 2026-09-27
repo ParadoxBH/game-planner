@@ -69,6 +69,8 @@ interface UnlockRow {
 
 interface StationRow {
   key: number;
+  /** "entity" (a bancada construída) ou "item" (a ferramenta que se segura, ex.: martelo). */
+  kind: string;
   extId: string;
   /** Vazio: serve em qualquer nível. */
   level: string;
@@ -101,6 +103,7 @@ function formOf(recipe: RecipeDocument | null): RecipeForm {
     craftTime: text(recipe?.craftTimeSeconds),
     stations: (recipe?.stations ?? []).map((station) => ({
       key: key(),
+      kind: station.kind ?? "entity",
       extId: station.extId,
       level: station.level === null ? "" : String(station.level),
     })),
@@ -251,7 +254,11 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
         summary: form.summary.trim() || null,
         description: form.description.trim() || null,
         craftTimeSeconds: craftTime,
-        stations: form.stations.map((station) => ({ extId: station.extId, level: levelOut(station.level) })),
+        stations: form.stations.map((station) => ({
+          kind: station.kind,
+          extId: station.extId,
+          level: levelOut(station.level),
+        })),
         inputs: form.inputs.map((row) => ({
           target: row.target,
           amount: numberOf(row.amount),
@@ -403,7 +410,7 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
                     <TargetRow
                       key={station.key}
                       gameId={gameId}
-                      target={{ kind: "entity", extId: station.extId }}
+                      target={{ kind: station.kind, extId: station.extId }}
                       onPick={() => setPickingStation(true)}
                       onRemove={() => set("stations", form.stations.filter((_, position) => position !== index))}
                     >
@@ -667,12 +674,13 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
           open
           modal
           gameId={gameId}
-          kinds={["entities"]}
-          title="Selecionar bancada"
+          kinds={["entities", "items"]}
+          title="Selecionar bancada ou ferramenta"
           onClose={() => setPickingStation(false)}
           onConfirm={(selection) => {
-            if (!form.stations.some((station) => station.extId === selection.extId)) {
-              set("stations", [...form.stations, { key: key(), extId: selection.extId, level: "" }]);
+            const kind = selection.kind ?? "entity";
+            if (!form.stations.some((station) => station.kind === kind && station.extId === selection.extId)) {
+              set("stations", [...form.stations, { key: key(), kind, extId: selection.extId, level: "" }]);
             }
             setPickingStation(false);
           }}

@@ -86,7 +86,8 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
     protected Parts loadChildren(String gameId, List<String> extIds) {
         return new Parts(
                 children.load(STATIONS, gameId, extIds,
-                        row -> new RecipeStation(Rows.string(row, "station_ext_id"), Rows.integer(row, "level"))),
+                        row -> new RecipeStation(Rows.string(row, "station_kind"), Rows.string(row, "station_ext_id"),
+                                Rows.integer(row, "level"))),
                 children.load(INPUTS, gameId, extIds, ChildMappers::requirement),
                 children.load(OUTPUTS, gameId, extIds, RecipeHandler::output),
                 children.load(UNLOCK, gameId, extIds, RecipeHandler::unlock));
@@ -96,7 +97,8 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
     protected void replaceChildren(String gameId, RecipeDocument recipe) {
         String id = recipe.extId();
         children.replace(STATIONS, gameId, id, recipe.stations().stream()
-                .map(station -> ChildRows.row("station_ext_id", station.extId(), "level", station.level()))
+                .map(station -> ChildRows.row("station_kind", station.kind(), "station_ext_id", station.extId(),
+                        "level", station.level()))
                 .toList());
         children.replace(INPUTS, gameId, id, recipe.inputs().stream().map(ChildMappers::requirementRow).toList());
         children.replace(OUTPUTS, gameId, id, recipe.outputs().stream().map(RecipeHandler::outputRow).toList());
@@ -110,7 +112,7 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
         }
     }
 
-    /** produces e consumes são "tipo:id" ou "id"; station é o código da entidade bancada. */
+    /** produces e consumes são "tipo:id" ou "id"; station é o código da bancada (entidade ou ferramenta). */
     @Override
     protected List<QueryField> specificFields() {
         return List.of(

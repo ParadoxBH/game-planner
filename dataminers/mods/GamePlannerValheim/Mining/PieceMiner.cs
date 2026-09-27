@@ -6,8 +6,9 @@ using UnityEngine;
 namespace GamePlanner.Valheim.Mining
 {
     /// <summary>
-    /// Construções das ferramentas (martelo, enxada, cultivador...: todo item com m_buildPieces). Cada peça vira
-    /// uma entidade e uma receita "build_&lt;peça&gt;" que produz a entidade, liberada pela ferramenta.
+    /// Construções das ferramentas (martelo, enxada, cultivador, bandeja...: todo item com m_buildPieces). Cada peça
+    /// vira uma entidade e uma receita "build_&lt;peça&gt;" que produz a entidade. A ferramenta é a bancada da
+    /// receita (bancada do tipo item), na frente da bancada que a peça exige por perto, quando exige.
     /// </summary>
     internal static class PieceMiner
     {
@@ -120,7 +121,7 @@ namespace GamePlanner.Valheim.Mining
             recipe.Outputs.Add(new RecipeOutput(Reference.Entity(pieceId), 1));
             string stationId = EnsureStation(kit, piece.m_craftingStation);
             if (stationId != null) recipe.Stations.Add(stationId);
-            if (toolId != null) recipe.Unlock.Add(new RecipeUnlock("tool", Reference.Item(toolId)));
+            if (toolId != null) recipe.ToolStations.Add(toolId);
             return recipe;
         }
     }

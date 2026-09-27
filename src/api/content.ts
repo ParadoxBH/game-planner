@@ -136,6 +136,8 @@ export interface RecipeUnlock {
 
 /** Bancada exigida pela receita; `level` é o nível mínimo, quando o jogo tem bancada que sobe. */
 export interface RecipeStation {
+  /** "entity" (bancada construída) ou "item" (ferramenta que se segura, ex.: o martelo do Valheim). */
+  kind: string;
   extId: string;
   level: number | null;
 }
