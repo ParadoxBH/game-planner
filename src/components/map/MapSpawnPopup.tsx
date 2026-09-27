@@ -92,6 +92,7 @@ export function MapSpawnPopup({ gameId, marker, isCollected, onToggleCollected, 
   const point = details.data?.document;
   const screenshot = point ? currentMedia(point.media, "screenshot") : null;
   const respawn = respawnLabel(marker.respawnMode, marker.respawnDelayMinutes);
+  const singleOccupants = !!marker.occupants && marker.occupants.length < 2;
 
   return (
     <Box sx={{ minWidth: 240, maxWidth: 300 }}>
@@ -111,9 +112,14 @@ export function MapSpawnPopup({ gameId, marker, isCollected, onToggleCollected, 
         )}
 
         {marker.occupants.length > 0 && (
-          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Stack direction={"row"} spacing={1} flexWrap="wrap" useFlexGap={!singleOccupants} alignItems={!singleOccupants ? undefined : "center"}>
             {marker.occupants.map((occupant, index) => (
-              <OccupantTile key={index} occupant={occupant} onExpand={onExpand} />
+              <>
+                <OccupantTile key={index} occupant={occupant} onExpand={onExpand} />
+                {singleOccupants && <Stack flex={1}>
+                  {occupant.name}
+                </Stack>}
+              </>
             ))}
           </Stack>
         )}
