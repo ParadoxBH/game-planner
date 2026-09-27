@@ -12,7 +12,8 @@ import com.paradoxbh.gameplannerserver.content.Geometries;
  * Local: bioma, região, POI, dungeon ({@code locationType}, código aberto, padrão region).
  * {@code area} é WKT em coordenadas de jogo — polígono para região, ponto para POI — e é opcional,
  * porque bioma de mundo procedural não tem. {@code parent} é o local que o contém. São do local os
- * pontos de spawn ligados a ele e os que têm posição dentro da área.
+ * pontos de spawn ligados a ele e os que têm posição dentro da área. {@code categories} agrupa locais do
+ * mesmo tipo (todos os rios, as fatias do oceano) para a condição location_category das regras.
  */
 public record LocationDocument(
         String extId,
@@ -24,6 +25,7 @@ public record LocationDocument(
         String parent,
         String map,
         String area,
+        List<String> categories,
         List<String> events,
         ContentMeta meta) implements ContentDocument<LocationDocument> {
 
@@ -44,19 +46,20 @@ public record LocationDocument(
                 parentId,
                 ExtIds.optional(map, "map"),
                 Geometries.canonical(area, "area", Set.of("Polygon", "MultiPolygon", "Point")),
+                Canon.ids(categories, "categories"),
                 Canon.ids(events, "events"),
                 null);
     }
 
     @Override
     public LocationDocument withMeta(ContentMeta meta) {
-        return new LocationDocument(extId, name, summary, description, media, locationType, parent, map, area, events,
+        return new LocationDocument(extId, name, summary, description, media, locationType, parent, map, area, categories, events,
                 meta);
     }
 
     @Override
     public LocationDocument withMedia(List<MediaLink> media) {
-        return new LocationDocument(extId, name, summary, description, media, locationType, parent, map, area, events,
+        return new LocationDocument(extId, name, summary, description, media, locationType, parent, map, area, categories, events,
                 meta);
     }
 }

@@ -25,6 +25,7 @@ export const APPLIES_TO_LABELS: Record<CategoryDocument["appliesTo"], string> = 
   item: "Itens",
   entity: "Entidades",
   both: "Itens e entidades",
+  location: "Locais do mapa",
 };
 
 const NO_FILTERS: FilterValues = {};

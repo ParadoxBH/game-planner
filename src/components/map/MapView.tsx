@@ -23,6 +23,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
+import RuleIcon from "@mui/icons-material/Rule";
 import LaunchIcon from "@mui/icons-material/Launch";
 import MapIcon from "@mui/icons-material/Map";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -348,6 +349,8 @@ export const MapView = () => {
   const [zoom, setZoom] = useState<number | null>(null);
   // O registro aberto para edição, e o que espera um desenho novo no lugar da geometria dele.
   const [editing, setEditing] = useState<EditingContent | null>(null);
+  // Cadastro de regra de surgimento sem posição (ex.: peixe que nasce em locais da categoria Rio).
+  const [newRule, setNewRule] = useState(false);
   const [redrawFor, setRedrawFor] = useState<EditingContent | null>(null);
   const [visibleTypes, setVisibleTypes] = useState<string[]>([]);
   const [visibleCategories, setVisibleCategories] = useState<string[]>([]);
@@ -1110,6 +1113,21 @@ export const MapView = () => {
             <ListItemText primary="Adicionar waypoint" />
           </MenuItem>
         )}
+        {canEdit && (
+          <MenuItem
+            onClick={() => {
+              setEditing(null);
+              setDrawn(null);
+              setNewRule(true);
+              setContextMenu(null);
+            }}
+          >
+            <ListItemIcon>
+              <RuleIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Nova regra de surgimento" secondary="Sem posição: vale por local ou condições" />
+          </MenuItem>
+        )}
       </Menu>
 
       {isEditingMap && selectedMap && (
@@ -1121,7 +1139,7 @@ export const MapView = () => {
         />
       )}
 
-      {(drawn || editing) && selectedMap && (
+      {(drawn || editing || newRule) && selectedMap && (
         <MapContentDialog
           gameId={gameId}
           mapId={selectedMap.extId}
@@ -1132,6 +1150,7 @@ export const MapView = () => {
             // Fecha a janela, liga a ferramenta e espera o desenho novo.
             setEditing(null);
             setDrawn(null);
+            setNewRule(false);
             setRedrawFor(target);
             setActiveTool(isPoint ? "point" : "polygon");
             setSnackbar(isPoint ? "Clique no mapa para a nova posição." : "Desenhe a área e feche com dois cliques ou Enter.");
@@ -1139,11 +1158,13 @@ export const MapView = () => {
           onClose={() => {
             setDrawn(null);
             setEditing(null);
+            setNewRule(false);
           }}
           onSaved={(kind) => {
             const wasEditing = editing !== null;
             setDrawn(null);
             setEditing(null);
+            setNewRule(false);
             setSnackbar(
               wasEditing
                 ? "Alteração salva no mapa!"

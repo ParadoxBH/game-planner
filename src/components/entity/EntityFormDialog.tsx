@@ -174,7 +174,7 @@ export function EntityFormDialog({
   const categoryOptions = useMemo<CodeOption[]>(
     () =>
       (categories.data?.content ?? [])
-        .filter((category) => category.appliesTo !== "item")
+        .filter((category) => (category.appliesTo === "entity" || category.appliesTo === "both"))
         .map((category) => ({
           extId: category.extId,
           name: `${category.name ?? category.extId}${category.primary ? " (principal)" : ""}`,

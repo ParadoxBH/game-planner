@@ -61,7 +61,7 @@ export function EntityPage() {
   }, [entities.data, pages.setTotalItems]);
 
   const entityCategories = useMemo(
-    () => (categories.data?.content ?? []).filter((category) => category.appliesTo !== "item"),
+    () => (categories.data?.content ?? []).filter((category) => (category.appliesTo === "entity" || category.appliesTo === "both")),
     [categories.data],
   );
 

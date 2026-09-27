@@ -8,7 +8,7 @@ import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.ExtIds;
 
 /**
- * Categoria. {@code appliesTo}: item, entity ou both (padrão). {@code primary}: categoria principal, a que
+ * Categoria. {@code appliesTo}: item, entity, both (padrão; item e entidade) ou location (locais do mapa). {@code primary}: categoria principal, a que
  * abre a listagem de itens e entidades; as demais são sub-categorias. Padrão false.
  */
 public record CategoryDocument(
@@ -22,13 +22,13 @@ public record CategoryDocument(
         List<String> events,
         ContentMeta meta) implements ContentDocument<CategoryDocument> {
 
-    private static final Set<String> TARGETS = Set.of("item", "entity", "both");
+    private static final Set<String> TARGETS = Set.of("item", "entity", "both", "location");
 
     @Override
     public CategoryDocument canonical(String extId) {
         String target = Canon.text(appliesTo) == null ? "both" : appliesTo;
         if (!TARGETS.contains(target)) {
-            throw ApiException.badRequest("appliesTo precisa ser item, entity ou both");
+            throw ApiException.badRequest("appliesTo precisa ser item, entity, both ou location");
         }
         return new CategoryDocument(
                 ExtIds.require(extId, "extId"),

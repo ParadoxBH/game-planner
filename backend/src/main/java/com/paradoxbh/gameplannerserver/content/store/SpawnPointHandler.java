@@ -352,7 +352,14 @@ public class SpawnPointHandler extends AbstractContentHandler<SpawnPointDocument
                 + " WHERE l.game_id = t.game_id AND " + match.code("l.ext_id")
                 + " AND l.area IS NOT NULL AND t.position IS NOT NULL"
                 + " AND (l.map_ext_id IS NULL OR t.map_ext_id IS NULL OR l.map_ext_id = t.map_ext_id)"
-                + " AND ST_Within(t.position, l.area)))";
+                + " AND ST_Within(t.position, l.area))"
+                // Regra sem lugar fixo que vale em locais de uma categoria (location_category).
+                + " OR EXISTS (SELECT 1 FROM spawn_condition sc JOIN content_category lc"
+                + " ON lc.game_id = sc.game_id AND lc.kind = 'location' AND lc.category_ext_id = sc.target_ext_id"
+                + " JOIN location l ON l.game_id = lc.game_id AND l.ext_id = lc.ext_id"
+                + " WHERE sc.game_id = t.game_id AND sc.spawn_ext_id = t.ext_id"
+                + " AND sc.type = 'location_category' AND sc.negated IS NOT TRUE AND " + match.code("lc.ext_id")
+                + " AND (l.map_ext_id IS NULL OR t.map_ext_id IS NULL OR l.map_ext_id = t.map_ext_id)))";
     }
 
     /** Algum ocupante tem a categoria. Ocupante sem tipo casa com conteúdo de qualquer tipo. */

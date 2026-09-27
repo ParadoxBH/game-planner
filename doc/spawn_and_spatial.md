@@ -11,7 +11,8 @@ documento trata da última parte, que é a que os jogos procedurais usam mais.
   bioma, criatura que surge numa região. Mundo gerado por semente é quase todo assim.
 
 O filtro `location` pega as duas formas: o ponto ligado pelo código do local, e o ponto com posição
-dentro da `area` dele (`ST_Within`). Por isso vale a pena um local ter área mesmo quando os pontos
+dentro da `area` dele (`ST_Within`). Pega também a regra com condição `location_category` quando o
+local tem aquela categoria — o peixe "de rio" aparece em todo local marcado como rio. Por isso vale a pena um local ter área mesmo quando os pontos
 não têm posição: o mapa passa a desenhar a regra como zona.
 
 Dois endpoints entregam o formato compacto de um mapa:
@@ -77,6 +78,8 @@ Avaliados contra uma amostra do mundo — uma posição no mapa, um horário, um
 | `water_surface` | bandeira | fica na superfície da água |
 | `near_base` | bandeira | só perto de uma base do jogador |
 | `known_item` | referência → `item` | o jogador precisa conhecer o item |
+| `location_category` | referência → `category` | o lugar fica num local com a categoria (ex.: todos os rios); dispensa `location` |
+| `bait` | referência → `item` | a isca ou atrativo usado para o ocupante aparecer |
 
 ### Tipos descritivos
 

@@ -54,8 +54,9 @@ const NO_CRITERIA: FilterValues = {};
 /** Abas com conteúdo: itens e entidades conforme o que a categoria agrupa, receitas e lojas quando houver. */
 function tabsFor(category: CategoryDocument, related: CategoryRelated): CategoryTab[] {
   const tabs: CategoryTab[] = [];
-  if (category.appliesTo !== "entity" || related.items.total > 0) tabs.push("items");
-  if (category.appliesTo !== "item" || related.entities.total > 0) tabs.push("entities");
+  const groups = (target: "item" | "entity") => category.appliesTo === target || category.appliesTo === "both";
+  if (groups("item") || related.items.total > 0) tabs.push("items");
+  if (groups("entity") || related.entities.total > 0) tabs.push("entities");
   if (related.producedBy.total + related.usedIn.total > 0) tabs.push("recipes");
   if (related.shops.total > 0) tabs.push("shops");
   return tabs;

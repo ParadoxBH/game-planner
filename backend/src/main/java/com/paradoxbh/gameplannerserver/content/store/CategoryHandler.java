@@ -68,7 +68,8 @@ public class CategoryHandler extends AbstractContentHandler<CategoryDocument, Vo
     protected List<QueryField> specificFields() {
         return List.of(
                 QueryField.options("appliesTo", "Aplica-se a", "t.applies_to",
-                        new Option("item", "Item"), new Option("entity", "Entidade"), new Option("both", "Ambos")),
+                        new Option("item", "Item"), new Option("entity", "Entidade"), new Option("both", "Ambos"),
+                        new Option("location", "Local")),
                 QueryField.column("primary", "Principal", FieldType.BOOLEAN, "t.is_primary"));
     }
 }

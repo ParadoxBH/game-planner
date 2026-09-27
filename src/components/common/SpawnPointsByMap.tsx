@@ -3,6 +3,7 @@ import { Map as MapIcon } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import type { SpawnPointDocument } from "../../api/content";
 import type { ReferenceIndex } from "../../api/references";
+import { SpawnConditionList } from "../map/SpawnConditions";
 import { DataCard } from "./DataCard";
 
 interface SpawnPointsByMapProps {
@@ -12,7 +13,11 @@ interface SpawnPointsByMapProps {
   references: ReferenceIndex;
 }
 
-/** Pontos de spawn agrupados por mapa, com atalho para o mapa já filtrado. */
+/**
+ * Pontos de spawn agrupados por mapa, com atalho para o mapa já filtrado. As regras sem posição (ex.:
+ * peixe que nasce em locais da categoria Rio) não aparecem no mapa, então vêm listadas com o local e
+ * as condições.
+ */
 export function SpawnPointsByMap({ points, filter, references }: SpawnPointsByMapProps) {
   const navigate = useNavigate();
   const { gameId = "" } = useParams<{ gameId: string }>();
@@ -38,13 +43,25 @@ export function SpawnPointsByMap({ points, filter, references }: SpawnPointsByMa
             sx={{ p: 1.5, gap: 2 }}
           >
             <MapIcon color="primary" />
-            <Stack>
-              <Typography variant="body2" fontWeight={700}>
-                {map ? references.name({ kind: "map", extId: map }) : "Sem mapa"}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {list.length} {list.length === 1 ? "ocorrência" : "ocorrências"}
-              </Typography>
+            <Stack spacing={1} sx={{ minWidth: 0 }}>
+              <Stack>
+                <Typography variant="body2" fontWeight={700}>
+                  {map ? references.name({ kind: "map", extId: map }) : "Sem mapa"}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {list.length} {list.length === 1 ? "ocorrência" : "ocorrências"}
+                </Typography>
+              </Stack>
+              {list
+                .filter((point) => !point.position)
+                .map((rule) => (
+                  <Stack key={rule.extId} spacing={0.5}>
+                    {rule.location && (
+                      <Typography variant="caption">Em {references.name({ kind: "location", extId: rule.location })}</Typography>
+                    )}
+                    <SpawnConditionList conditions={rule.conditions} references={references} />
+                  </Stack>
+                ))}
             </Stack>
           </DataCard>
         </Grid>

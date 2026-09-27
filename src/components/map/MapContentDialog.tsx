@@ -17,9 +17,11 @@ import {
 import { Add, Delete, Gesture, Place, Polyline } from "@mui/icons-material";
 import {
   MAX_PAGE_SIZE,
+  type CategoryDocument,
   type EventDocument,
   type LocationDocument,
   type Reference,
+  type SpawnCondition,
   type SpawnPointDocument,
   type ResolvedReference,
 } from "../../api/content";
@@ -46,6 +48,7 @@ import {
 import { IconUploadField } from "../common/IconUploadField";
 import { StyledDialog } from "../common/StyledDialog";
 import { DataTypeIcon } from "../DataTypeIcon";
+import { SpawnConditionsField } from "./SpawnConditionsField";
 
 /** Tipos de local em uso nos jogos; o campo aceita um tipo novo digitado. */
 const LOCATION_TYPES = [
@@ -107,7 +110,10 @@ export interface EditingContent {
 interface MapContentDialogProps {
   gameId: string;
   mapId: string;
-  /** Do desenho novo, ou do redesenho de um registro que já existe. */
+  /**
+   * Do desenho novo, ou do redesenho de um registro que já existe. Nulo no cadastro novo é regra sem
+   * posição: vale pelo local ou pelas condições (ex.: em locais da categoria Rio).
+   */
   geometry: DrawnGeometry | null;
   edit?: EditingContent;
   onClose: () => void;
@@ -156,7 +162,7 @@ export function MapContentDialog({
       <MapContentForm
         gameId={gameId}
         mapId={mapId}
-        geometry={geometry!}
+        geometry={geometry}
         onClose={onClose}
         onSaved={onSaved}
         onRedraw={onRedraw}
@@ -222,8 +228,9 @@ function MapContentForm({
   onRedraw,
   canDelete = false,
 }: MapContentFormProps) {
+  // Área só pode ser local; ponto, ou nenhuma geometria (regra sem posição), começa como spawn.
   const [kind, setKind] = useState<"spawn" | "location">(
-    edit?.kind ?? (geometry?.isPoint ? "spawn" : "location"),
+    edit?.kind ?? (geometry && !geometry.isPoint ? "location" : "spawn"),
   );
   const [extId, setExtId] = useState(saved?.extId ?? "");
   const [name, setName] = useState(saved?.name ?? "");
@@ -256,11 +263,17 @@ function MapContentForm({
   const [location, setLocation] = useState<string | null>(
     saved?.location ?? null,
   );
+  const [conditions, setConditions] = useState<SpawnCondition[]>(
+    saved?.conditions ?? [],
+  );
   // Local
   const [locationType, setLocationType] = useState(
     saved?.locationType ?? (geometry?.isPoint ? "poi" : "region"),
   );
   const [parent, setParent] = useState<string | null>(saved?.parent ?? null);
+  const [categories, setCategories] = useState<string[]>(
+    saved?.categories ?? [],
+  );
   const [picking, setPicking] = useState<{ index: number | null } | null>(null);
   // Código de quem deixa o campo vazio; fixado na abertura para que tentar salvar de novo, depois de
   // uma falha no envio da imagem, substitua o mesmo registro em vez de criar outro.
@@ -277,6 +290,10 @@ function MapContentForm({
     size: MAX_PAGE_SIZE,
     sort: "name",
   });
+  const categoryList = useContentList<CategoryDocument>(gameId, "categories", {
+    size: MAX_PAGE_SIZE,
+    sort: "name",
+  });
 
   const eventOptions = useMemo<CodeOption[]>(
     () =>
@@ -286,6 +303,17 @@ function MapContentForm({
         iconMediaId: currentMedia(event.media, "icon"),
       })),
     [eventList.data],
+  );
+  const locationCategoryOptions = useMemo<CodeOption[]>(
+    () =>
+      (categoryList.data?.content ?? [])
+        .filter((category) => category.appliesTo === "location")
+        .map((category) => ({
+          extId: category.extId,
+          name: category.name ?? category.extId,
+          iconMediaId: currentMedia(category.media, "icon"),
+        })),
+    [categoryList.data],
   );
   const locationOptions = useMemo(
     () =>
@@ -342,7 +370,7 @@ function MapContentForm({
             })),
             // O PUT substitui o documento inteiro: o que o formulário não edita volta como estava.
             drops: saved?.drops ?? [],
-            conditions: saved?.conditions ?? [],
+            conditions,
             events,
           }
         : {
@@ -354,6 +382,7 @@ function MapContentForm({
             parent,
             map: mapId,
             area: geometry?.wkt ?? null,
+            categories,
             events,
           };
     const oldScreenshots = screenshotRemoved
@@ -378,7 +407,7 @@ function MapContentForm({
           size="small"
           label={
             !geometry
-              ? " Marcação não geometrica"
+              ? "Sem posição: vale pelo local ou pelas condições"
               : geometry.isPoint
                 ? "Ponto no mapa"
                 : `Área com ${geometry.vertices} vértices`
@@ -448,13 +477,13 @@ function MapContentForm({
           helperText={
             edit
               ? "O tipo não muda depois de criado."
-              : geometry?.isPoint
-                ? undefined
-                : "Área só pode ser local: ponto de spawn precisa de uma posição."
+              : geometry && !geometry.isPoint
+                ? "Área só pode ser local: ponto de spawn precisa de uma posição."
+                : undefined
           }
           fullWidth
         >
-          <MenuItem value="spawn" disabled={!geometry?.isPoint}>
+          <MenuItem value="spawn" disabled={geometry !== null && !geometry.isPoint}>
             Ponto de spawn — o que aparece aqui
           </MenuItem>
           <MenuItem value="location">
@@ -677,6 +706,7 @@ function MapContentForm({
                 </TextField>
               </Grid>
             </Grid>
+            <SpawnConditionsField gameId={gameId} value={conditions} onChange={setConditions} />
           </>
         ) : (
           <Grid container spacing={2}>
@@ -720,6 +750,16 @@ function MapContentForm({
                   </MenuItem>
                 ))}
               </TextField>
+            </Grid>
+            <Grid size={12}>
+              <CodesField
+                label="Categorias"
+                options={locationCategoryOptions}
+                value={categories}
+                onChange={setCategories}
+                loading={categoryList.isPending}
+                helperText="Agrupa locais do mesmo tipo (ex.: Rio): regras podem valer em todos os locais da categoria."
+              />
             </Grid>
           </Grid>
         )}

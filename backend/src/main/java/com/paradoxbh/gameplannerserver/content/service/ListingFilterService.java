@@ -127,7 +127,8 @@ public class ListingFilterService {
         specs.put(CATEGORY, List.of(
                 fixed(new ListingFilter("appliesTo", "Agrupa", Display.SELECT, null, "Tudo", null, null, null, List.of(
                         Option.of("item", "Itens", and(rule("appliesTo", "in", List.of("item", "both")))),
-                        Option.of("entity", "Entidades", and(rule("appliesTo", "in", List.of("entity", "both"))))))),
+                        Option.of("entity", "Entidades", and(rule("appliesTo", "in", List.of("entity", "both")))),
+                        Option.of("location", "Locais", and(rule("appliesTo", "equal", "location")))))),
                 fixed(new ListingFilter("primary", "Nível", Display.SELECT, null, "Todas", null, null, null, List.of(
                         Option.of("primary", "Principais", and(rule("primary", "equal", true))),
                         Option.of("sub", "Sub-categorias", and(rule("primary", "equal", false))))))));

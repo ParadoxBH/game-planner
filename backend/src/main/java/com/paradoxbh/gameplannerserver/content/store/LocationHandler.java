@@ -65,14 +65,20 @@ public class LocationHandler extends AbstractContentHandler<LocationDocument, Vo
                 Rows.string(row, "parent_ext_id"),
                 Rows.string(row, "map_ext_id"),
                 Geometries.fromWkb(row.get("area")),
+                tags.categories(),
                 tags.events(),
                 meta);
     }
 
-    /** Local tem eventos e imagens; não tem categorias nem atributos. */
+    /** Local tem categorias, eventos e imagens; não tem atributos. */
     @Override
     public ContentTags tagsOf(LocationDocument location) {
-        return new ContentTags(List.of(), location.events(), Map.of(), location.media());
+        return new ContentTags(location.categories(), location.events(), Map.of(), location.media());
+    }
+
+    @Override
+    protected boolean hasCategories() {
+        return true;
     }
 
     /** type é texto livre; parent e map são códigos; containing é o código de um ponto de spawn. */

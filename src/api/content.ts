@@ -225,7 +225,8 @@ export interface CollectionGroupDocument extends ContentBase {
 
 export interface CategoryDocument extends ContentBase {
   name: string;
-  appliesTo: "item" | "entity" | "both";
+  /** location: agrupa locais do mapa (todos os rios, por exemplo). */
+  appliesTo: "item" | "entity" | "both" | "location";
   /** Categoria principal: abre a listagem de itens e entidades e o menu; as demais são sub-categorias. */
   primary: boolean;
   events: string[];
@@ -352,6 +353,8 @@ export interface LocationDocument extends ContentBase {
   map: string | null;
   /** WKT em coordenadas de jogo. */
   area: string | null;
+  /** Agrupa locais do mesmo tipo para as regras "em locais da categoria" (location_category). */
+  categories: string[];
   events: string[];
 }
 

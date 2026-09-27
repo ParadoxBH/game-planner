@@ -25,6 +25,8 @@ const CONDITION_LABELS: Record<string, Labels> = {
   water_surface: { label: "Na superfície da água" },
   near_base: { label: "Perto de uma base" },
   known_item: { label: "Conhecendo" },
+  location_category: { label: "Em local" },
+  bait: { label: "Isca" },
   level: { label: "Nível" },
   level_up_chance: { label: "Chance de estrela", unit: "%" },
   max_alive: { label: "Vivos ao mesmo tempo", unit: "no máx." },
