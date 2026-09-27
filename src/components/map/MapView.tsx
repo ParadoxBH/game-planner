@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   CircularProgress,
+  Divider,
   IconButton,
   ListItemIcon,
   ListItemText,
@@ -26,7 +27,14 @@ import LaunchIcon from "@mui/icons-material/Launch";
 import MapIcon from "@mui/icons-material/Map";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { useTheme } from "@mui/material/styles";
-import { divIcon, type LatLngBoundsExpression } from "leaflet";
+import {
+  divIcon,
+  type LatLngBoundsExpression,
+  type Layer,
+  type LeafletMouseEvent,
+  type Map as LeafletMap,
+  type Marker as LeafletMarker,
+} from "leaflet";
 import {
   CircleMarker,
   ImageOverlay,
@@ -66,7 +74,8 @@ import { areasContain, areasSize, formatWKTPoint, formatWKTPolygon, parseWKTArea
 import { BoundBoxEditorPanel, type Bounds as BoundBoxBounds } from "./BoundBoxEditorPanel";
 import { InfoDrawer } from "./InfoDrawer";
 import { MapDashboard } from "./MapDashboard";
-import { computeFilterStats, locationTypeOf, MapFilterDrawer, occupantCategory, SPAWN_TYPE } from "./MapFilterDrawer";
+import { computeFilterStats, locationTypeOf, MapFilterDrawer, occupantCategory, SPAWN_TYPE, typeLabel } from "./MapFilterDrawer";
+import { ContentIcon } from "../common/ContentIcon";
 import { MapFormDialog } from "./MapFormDialog";
 import { MapInfoOverlay } from "./MapInfoOverlay";
 import { MapSpawnPopup } from "./MapSpawnPopup";
@@ -138,11 +147,11 @@ interface MapEventsHandlerProps {
   onClick: (coords: [number, number]) => void;
   onDoubleClick: () => void;
   /** Botão direito: a posição no mapa e o ponto da tela, para abrir o menu ali. */
-  onContextMenu: (coords: [number, number], screen: { left: number; top: number }) => void;
+  onContextMenu: (event: LeafletMouseEvent, map: LeafletMap) => void;
 }
 
 const MapEventsHandler = ({ onClick, onDoubleClick, onContextMenu }: MapEventsHandlerProps) => {
-  useMapEvents({
+  const map = useMapEvents({
     click(event) {
       if (!event.originalEvent.shiftKey) onClick([event.latlng.lat, event.latlng.lng]);
     },
@@ -152,7 +161,7 @@ const MapEventsHandler = ({ onClick, onDoubleClick, onContextMenu }: MapEventsHa
     // Chega aqui também quando o clique é sobre um polígono ou marcador: o evento sobe até o mapa.
     contextmenu(event) {
       event.originalEvent.preventDefault();
-      onContextMenu([event.latlng.lat, event.latlng.lng], { left: event.originalEvent.clientX, top: event.originalEvent.clientY });
+      onContextMenu(event, map);
     },
   });
   return null;
@@ -171,13 +180,14 @@ interface StableMarkerProps {
   size: number;
   className: string;
   interactive: boolean;
+  layerRef?: React.Ref<LeafletMarker>;
   children?: React.ReactNode;
 }
 
-const StableMarker = ({ position, iconHtml, size, className, interactive, children }: StableMarkerProps) => {
+const StableMarker = ({ position, iconHtml, size, className, interactive, layerRef, children }: StableMarkerProps) => {
   const icon = useMemo(() => divIcon({ html: iconHtml, iconAnchor: [size / 2, size / 2], className }), [iconHtml, size, className]);
   return (
-    <Marker position={position} icon={icon} interactive={interactive}>
+    <Marker ref={layerRef} position={position} icon={icon} interactive={interactive}>
       {children}
     </Marker>
   );
@@ -199,6 +209,23 @@ function markerIconHtml(iconUrl: string | null, style: MarkerStyle, size: number
     .replaceAll("{{BORDER_WIDTH}}", String(style.border))
     .replaceAll("{{SIZE}}", String(size))
     .replaceAll("{{IMAGE_STYLE}}", style.image);
+}
+
+/**
+ * Camada clicável do mapa, para o menu do botão direito listar tudo o que está sob o cursor. Polígono
+ * acerta pela área (coordenadas de jogo); ponto e marcador, pela distância na tela.
+ */
+interface Pickable {
+  layer: Layer;
+  label: string;
+  secondary: string;
+  kind: "spawn_point" | "location";
+  iconMediaId: string | null;
+  areas?: [number, number][][][];
+  /** Área do polígono; ponto e marcador ficam com 0, sempre antes. */
+  size: number;
+  /** Distância na tela, em px, que ainda acerta um ponto. */
+  radius: number;
 }
 
 interface CollectedState {
@@ -330,7 +357,12 @@ export const MapView = () => {
   const [collectedPoints, setCollectedPoints] = useStoredState<Record<string, number>>(`collected_points_${gameId}`, {});
   const [now, setNow] = useState(Date.now());
   // Menu do botão direito: onde foi no mapa e onde abrir na tela.
-  const [contextMenu, setContextMenu] = useState<{ latlng: [number, number]; screen: { left: number; top: number } } | null>(null);
+  const [contextMenu, setContextMenu] = useState<{
+    latlng: [number, number];
+    screen: { left: number; top: number };
+    /** Tudo o que está sob o cursor, do mais específico para o maior. */
+    picks: Pickable[];
+  } | null>(null);
   const knownFilters = useRef<KnownFilters | null>(null);
 
   useEffect(() => {
@@ -458,6 +490,36 @@ export const MapView = () => {
 
   const pushNavigation = useCallback((item: NavigationItem) => setNavigationStack((stack) => [...stack, item]), []);
 
+  const pickables = useRef(new Map<string, Pickable>());
+  const reorderFrame = useRef(0);
+  /**
+   * Menores por cima: o clique esquerdo onde há sobreposição acerta o local mais específico. Roda a
+   * cada local que entra no mapa (agrupado num frame), porque o MapContainer só monta as camadas
+   * depois de o mapa existir.
+   */
+  const scheduleReorder = useCallback(() => {
+    cancelAnimationFrame(reorderFrame.current);
+    reorderFrame.current = requestAnimationFrame(() =>
+      [...pickables.current.values()]
+        .filter((entry) => entry.areas)
+        .sort((a, b) => b.size - a.size)
+        .forEach((entry) => (entry.layer as Layer & { bringToFront?: () => void }).bringToFront?.()),
+    );
+  }, []);
+  /** Ref que registra a camada enquanto ela está no mapa. */
+  const pickable = useCallback(
+    (key: string, entry: Omit<Pickable, "layer">) => (layer: Layer | null) => {
+      if (!layer) return;
+      pickables.current.set(key, { ...entry, layer });
+      if (entry.areas) layer.on("add", scheduleReorder);
+      return () => {
+        layer.off("add", scheduleReorder);
+        if (pickables.current.get(key)?.layer === layer) pickables.current.delete(key);
+      };
+    },
+    [scheduleReorder],
+  );
+
   const toggleCollected = useCallback(
     (id: string, wasCollected: boolean) => {
       const next = { ...collectedPoints };
@@ -515,6 +577,14 @@ export const MapView = () => {
             size={size}
             className="custom-entity-icon"
             interactive={!activeTool}
+            layerRef={pickable(`spawn:${marker.extId}`, {
+              label: marker.name ?? (marker.occupants.map((occupant) => occupant.name ?? occupant.extId).join(", ") || marker.extId),
+              secondary: typeLabel(SPAWN_TYPE),
+              kind: "spawn_point",
+              iconMediaId: iconId,
+              size: 0,
+              radius: size / 2 + 4,
+            })}
             iconHtml={markerIconHtml(iconId ? mediaUrl(iconId) : null, style, size, "custom-entity-icon")}
           >
             <Popup>
@@ -546,6 +616,7 @@ export const MapView = () => {
       gameId,
       toggleCollected,
       pushNavigation,
+      pickable,
     ],
   );
 
@@ -557,6 +628,8 @@ export const MapView = () => {
         const name = location.name ?? location.extId;
         const labeled = LABELED_LOCATION_TYPES.has(type);
         const color = locationColor(type, location.extId, theme.palette.primary.main);
+        const interactive = !activeTool && (!labeled || canEdit);
+        const entry = { label: name, secondary: typeLabel(type), kind: "location" as const, iconMediaId: null };
         const content = (
           <>
             {labeled && (
@@ -591,26 +664,29 @@ export const MapView = () => {
               center={toLatLng(x, y)}
               radius={6}
               pathOptions={{ color, fillColor: color, fillOpacity: 0.6, weight: 2 }}
-              interactive={!activeTool && (!labeled || canEdit)}
+              interactive={interactive}
+              ref={interactive ? pickable(`location:${location.extId}`, { ...entry, size: 0, radius: 10 }) : undefined}
             >
               {content}
             </CircleMarker>
           );
         }
-        const positions = parseWKTAreas(location.area).map((polygon) => polygon.map((ring) => ring.map(([x, y]) => toLatLng(x, y))));
+        const areas = parseWKTAreas(location.area);
+        const positions = areas.map((polygon) => polygon.map((ring) => ring.map(([x, y]) => toLatLng(x, y))));
         if (positions.length === 0) return null;
         return (
           <Polygon
             key={location.extId}
             positions={positions}
             pathOptions={{ color, fillOpacity: 0.1, weight: 2 }}
-            interactive={!activeTool && (!labeled || canEdit)}
+            interactive={interactive}
+            ref={interactive ? pickable(`location:${location.extId}`, { ...entry, areas, size: areasSize(areas), radius: 0 }) : undefined}
           >
             {content}
           </Polygon>
         );
       }),
-    [urlFiltered, locationList, visibleTypes, toLatLng, activeTool, theme],
+    [urlFiltered, locationList, visibleTypes, toLatLng, activeTool, theme, canEdit, pickable],
   );
 
   if (maps.isPending) return <Loading text="Carregando mapa..." />;
@@ -758,8 +834,19 @@ export const MapView = () => {
               <MapEventsHandler
                 onClick={handleMapClick}
                 onDoubleClick={finishPolygon}
-                onContextMenu={(latlng, screen) => {
-                  if (!activeTool) setContextMenu({ latlng, screen });
+                onContextMenu={(event, map) => {
+                  if (activeTool) return;
+                  const latlng: [number, number] = [event.latlng.lat, event.latlng.lng];
+                  const game = toGame(latlng);
+                  const picks = [...pickables.current.values()]
+                    .filter((entry) =>
+                      entry.areas
+                        ? areasContain(entry.areas, game)
+                        : map.latLngToContainerPoint((entry.layer as LeafletMarker).getLatLng()).distanceTo(event.containerPoint) <=
+                          entry.radius,
+                    )
+                    .sort((a, b) => a.size - b.size);
+                  setContextMenu({ latlng, screen: { left: event.originalEvent.clientX, top: event.originalEvent.clientY }, picks });
                 }}
               />
               {activeTool === "polygon" && (
@@ -978,6 +1065,21 @@ export const MapView = () => {
           setContextMenu(null);
         }}
       >
+        {contextMenu?.picks.map((entry, index) => (
+          <MenuItem
+            key={index}
+            onClick={() => {
+              entry.layer.openPopup(entry.areas ? contextMenu.latlng : undefined);
+              setContextMenu(null);
+            }}
+          >
+            <ListItemIcon>
+              <ContentIcon mediaId={entry.iconMediaId} kind={entry.kind} size={24} />
+            </ListItemIcon>
+            <ListItemText primary={entry.label} secondary={entry.secondary} />
+          </MenuItem>
+        ))}
+        {contextMenu && contextMenu.picks.length > 0 && <Divider />}
         <MenuItem
           onClick={() => {
             if (contextMenu) copyCoordinates(contextMenu.latlng);

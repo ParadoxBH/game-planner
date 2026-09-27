@@ -126,7 +126,7 @@ export const MapInfoOverlay = ({
         {!isMobile && (
           <Stack direction={"row"} spacing={1.5}>
             <OutputField label="Região" values={[region]} flex={1} />
-            <OutputField label="Coordenadas" values={[`X: ${coords[1].toFixed(1)}`, `Y: ${coords[0].toFixed(1)}`]} flex={1.5} />
+            <OutputField label="Coordenadas" values={[`X: ${coords[1].toFixed(1)}, Y: ${coords[0].toFixed(1)}`]} flex={1.5} />
             <OutputField label="Zoom" values={[zoom === null ? "—" : String(zoom)]} flex={0.6} />
           </Stack>
         )}
