@@ -2,8 +2,8 @@ import { useMemo, useState } from "react";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import {
   Alert,
+  Box,
   Button,
-  Card,
   Chip,
   CircularProgress,
   IconButton,
@@ -143,7 +143,7 @@ function AttributesPanel({ gameId }: { gameId: string }) {
           </Typography>
         </Stack>
       ) : (
-        <Stack spacing={3}>
+        <Stack spacing={3} sx={{ flexShrink: 0, pb: 2 }}>
           {undefinedCount > 0 && !term && (
             <Alert severity="info">
               {undefinedCount} {undefinedCount === 1 ? "atributo usado não tem definição" : "atributos usados não têm definição"}: aparecem pela
@@ -156,16 +156,23 @@ function AttributesPanel({ gameId }: { gameId: string }) {
             </Typography>
           )}
           {sections.map(([section, sectionRows]) => (
-            <Stack key={section} spacing={1}>
+            <Stack key={section} spacing={1} sx={{ flexShrink: 0 }}>
               <Stack direction="row" spacing={1} alignItems="center">
                 <Typography variant="subtitle2" sx={{ fontWeight: 800, textTransform: "uppercase", letterSpacing: 0.5 }}>
                   {section}
                 </Typography>
                 <Chip size="small" label={sectionRows.length} sx={{ height: 20 }} />
               </Stack>
-              {sectionRows.map((row, index) => (
-                <Card key={row.key} sx={[listRowSx({ index }), { borderRadius: 1, border: 1, borderColor: "divider" }]}>
-                  <Stack direction={{ xs: "column", sm: "row" }} alignItems={{ sm: "center" }} spacing={1.5} sx={{ p: 1.5, pl: 2 }}>
+              {/* Linhas coladas, cantos retos e cores alternadas; a borda fica só em volta da seção. */}
+              <Box sx={{ border: 1, borderColor: "divider" }}>
+                {sectionRows.map((row, index) => (
+                  <Stack
+                    key={row.key}
+                    direction={{ xs: "column", sm: "row" }}
+                    alignItems={{ sm: "center" }}
+                    spacing={1.5}
+                    sx={[listRowSx({ index }), { px: 2, py: 1, flexShrink: 0 }]}
+                  >
                     <Stack sx={{ minWidth: 0, flex: 1 }}>
                       <Typography variant="subtitle1" sx={{ fontWeight: 800, lineHeight: 1.2 }}>
                         {row.definition?.label ?? row.key}
@@ -216,8 +223,8 @@ function AttributesPanel({ gameId }: { gameId: string }) {
                       )}
                     </Stack>
                   </Stack>
-                </Card>
-              ))}
+                ))}
+              </Box>
             </Stack>
           ))}
         </Stack>
