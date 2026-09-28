@@ -57,6 +57,7 @@ export function CategoryFormDialog({ gameId, category, onClose, onSaved }: Categ
   const [form, setForm] = useState<CategoryForm>(() => formOf(category));
   const [extIdTouched, setExtIdTouched] = useState(false);
   const [icon, setIcon] = useState<File | null>(null);
+  const [pickedIcon, setPickedIcon] = useState<string | null>(null);
   const { save, saving, error, creating } = useContentSave(gameId, "categories", category === null);
 
   const set = <K extends keyof CategoryForm>(key: K, value: CategoryForm[K]) => setForm((current) => ({ ...current, [key]: value }));
@@ -80,7 +81,7 @@ export function CategoryFormDialog({ gameId, category, onClose, onSaved }: Categ
         description: form.description.trim() || null,
         events: category?.events ?? [],
       },
-      [{ file: icon, usage: "icon" }],
+      [{ file: icon, mediaId: pickedIcon, usage: "icon" }],
     );
     if (saved) {
       onClose();
@@ -116,7 +117,16 @@ export function CategoryFormDialog({ gameId, category, onClose, onSaved }: Categ
           currentMediaId={category ? currentMedia(category.media, "icon") : null}
           kind="category"
           file={icon}
-          onChange={setIcon}
+          onChange={(file) => {
+            setIcon(file);
+            setPickedIcon(null);
+          }}
+          gameId={gameId}
+          picked={pickedIcon}
+          onPick={(image) => {
+            setPickedIcon(image.mediaId);
+            setIcon(null);
+          }}
         />
 
         <TextField label="Nome" value={form.name} onChange={(event) => changeName(event.target.value)} required autoFocus fullWidth />

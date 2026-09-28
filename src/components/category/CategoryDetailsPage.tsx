@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type ReactElement } from "react";
 import { Link, useParams } from "react-router-dom";
-import { CircularProgress, Grid, Paper, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Button, CircularProgress, Grid, Paper, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Edit } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import {
   MAX_PAGE_SIZE,
@@ -25,6 +26,7 @@ import {
 } from "../../api/useContent";
 import { and, chosenAttribute, resetFilterValues, rule, type FilterValues } from "../../api/query";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+import { useGameEditor } from "../../hooks/useGameAdmin";
 import { usePagination } from "../../hooks/usePagination";
 import { useViewMode } from "../../hooks/useViewMode";
 import { usePlatform } from "../../hooks/usePlatform";
@@ -39,6 +41,7 @@ import { ApiItemCard, ApiItemIcon, itemListCells, rarityColorOf, type ItemListVi
 import { ApiRecipeCard } from "../recipe/ApiRecipeCard";
 import { ApiShopCard, type ShopListView } from "../shop/ApiShopRenderers";
 import { APPLIES_TO_LABELS } from "./CategoriesPage";
+import { CategoryFormDialog } from "./CategoryFormDialog";
 
 type CategoryTab = "items" | "entities" | "recipes" | "shops";
 
@@ -136,6 +139,8 @@ export function CategoryDetailsPage() {
   const [selectedTab, setSelectedTab] = useState<CategoryTab>("items");
   const [viewMode, setViewMode] = useViewMode("category_details");
   const pages = usePagination(NO_CRITERIA);
+  const { canEdit } = useGameEditor(gameId);
+  const [editing, setEditing] = useState(false);
 
   const details = useContentDetails<CategoryDocument, CategoryRelated>(gameId, "categories", categoryId);
   const tabs = details.data ? tabsFor(details.data.document, details.data.related) : [];
@@ -268,6 +273,13 @@ export function CategoryDetailsPage() {
           ))}
         </Tabs>
       }
+      actionsEnd={
+        canEdit && (
+          <Button variant="outlined" size="small" startIcon={<Edit />} onClick={() => setEditing(true)} sx={{ textTransform: "none" }}>
+            Editar
+          </Button>
+        )
+      }
     >
       {tab === "items" &&
         (items.isPending ? (
@@ -340,6 +352,7 @@ export function CategoryDetailsPage() {
           </Grid>
         </Stack>
       )}
+      {editing && <CategoryFormDialog gameId={gameId} category={category} onClose={() => setEditing(false)} />}
     </StyledContainer>
   );
 }
