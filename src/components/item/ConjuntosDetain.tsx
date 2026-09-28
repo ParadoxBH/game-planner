@@ -57,6 +57,7 @@ import { StyledDialog } from "../common/StyledDialog";
 import { CollectionFormDialog } from "./CollectionFormDialog";
 import { CollectionGroupFormDialog } from "./CollectionGroupFormDialog";
 import { CollectionProgress } from "./CollectionProgress";
+import { groupPayload } from "./collectionGroups";
 
 type Layout = "list" | "grid";
 
@@ -91,20 +92,6 @@ const GROUP_FILTERS: ListingSchema = {
     },
   ],
 };
-
-/** O grupo como documento de escrita: sem media nem meta, que não são do formulário. */
-function groupPayload(group: CollectionGroupDocument, ordinal: number) {
-  return {
-    extId: group.extId,
-    name: group.name,
-    summary: group.summary,
-    description: group.description,
-    collections: group.collections,
-    members: group.members,
-    events: group.events,
-    ordinal,
-  };
-}
 
 /** Quanto falta, de 0 a 1; grupo vazio conta como completo. */
 function ratio(progress: { done: number; total: number }): number {
@@ -273,7 +260,7 @@ export function ConjuntosDetain() {
     const changed = move(everyGroup, from, direction)
       .map((row, position) => ({ row, position }))
       .filter(({ row, position }) => row.ordinal !== position)
-      .map(({ row, position }) => groupPayload(row, position));
+      .map(({ row, position }) => groupPayload(row, { ordinal: position }));
     if (changed.length > 0) putAll.mutate(changed);
   };
 

@@ -18,6 +18,8 @@ import { Add, Clear, Delete, Search } from "@mui/icons-material";
 import {
   MAX_PAGE_SIZE,
   type CategoryDocument,
+  type CollectionDocument,
+  type CollectionGroupDocument,
   type EventDocument,
   type ItemDocument,
   type Reference,
@@ -30,10 +32,12 @@ import { AttributeEditor } from "../common/AttributeEditor";
 import { attributeFormOf, attributesOut, invalidAttributeCount, type AttributeForm } from "../common/attributeValues";
 import { CodesField, type CodeOption } from "../common/CodesField";
 import { ConfirmDeleteDialog } from "../common/ConfirmDeleteDialog";
-import { numberOf, slugOf, useContentSave } from "../common/contentForm";
+import { describeError, numberOf, slugOf, useContentSave } from "../common/contentForm";
 import { IconUploadField } from "../common/IconUploadField";
 import { TabLabel } from "../common/formLayout";
 import { StyledDialog } from "../common/StyledDialog";
+import { groupPayload, isMember } from "./collectionGroups";
+import { ItemCollectionsEditor } from "./ItemCollectionsEditor";
 
 /** Números ficam como texto enquanto se digita; vazio é "sem valor". */
 interface ItemForm {
@@ -153,7 +157,7 @@ interface ItemFormDialogProps {
 type Picking = "currency" | "variantOf" | null;
 
 /** Dados: identificação, preços e classificação; Atributos: os valores do item (dano, peso...). */
-type ItemTab = "data" | "attributes";
+type ItemTab = "data" | "attributes" | "collections";
 
 /**
  * Cria ou edita um item. A escrita substitui o documento inteiro: todo campo vai, inclusive os
@@ -178,11 +182,28 @@ export function ItemFormDialog({
   const [tab, setTab] = useState<ItemTab>("data");
   const { save, saving, error, creating } = useContentSave(gameId, "items", item === null);
   const { remove } = useContentWrites(gameId, "items");
+  const groupWrites = useContentWrites(gameId, "collection-groups");
+  const [groupError, setGroupError] = useState<string | null>(null);
 
   const rarities = useRarities(gameId);
   const definitions = useAttributeDefinitions(gameId);
   const categories = useContentList<CategoryDocument>(gameId, "categories", { size: MAX_PAGE_SIZE, sort: "name" });
   const events = useContentList<EventDocument>(gameId, "events", { size: MAX_PAGE_SIZE, sort: "name" });
+  const groups = useContentList<CollectionGroupDocument>(gameId, "collection-groups", { size: MAX_PAGE_SIZE, sort: "name" });
+  const collections = useContentList<CollectionDocument>(gameId, "collections", { size: MAX_PAGE_SIZE, sort: "name" });
+
+  // Grupos de conjunto em que o item já está (pelo código salvo) e os que ele terá ao salvar. Enquanto quem edita
+  // não mexe na aba, valem os de agora — os grupos chegam depois do formulário abrir.
+  const allGroups = useMemo(() => groups.data?.content ?? [], [groups.data]);
+  const originalGroups = useMemo(
+    () =>
+      new Set(
+        item ? allGroups.filter((group) => group.members.some((member) => isMember(member, { kind: "item", extId: item.extId }))).map((group) => group.extId) : [],
+      ),
+    [allGroups, item],
+  );
+  const [chosenGroups, setChosenGroups] = useState<Set<string> | null>(null);
+  const memberGroups = chosenGroups ?? originalGroups;
 
   const categoryOptions = useMemo<CodeOption[]>(
     () =>
@@ -239,10 +260,29 @@ export function ItemFormDialog({
       },
       [{ file: icon, usage: "icon" }],
     );
-    if (saved) {
-      onClose();
-      onSaved?.(extId);
+    if (!saved) return;
+
+    // Entra e sai dos grupos de conjunto: cada grupo mudado é regravado com a lista de membros nova, num lote só.
+    const target = { kind: "item", extId };
+    const changed = allGroups.flatMap((group) => {
+      const was = originalGroups.has(group.extId);
+      const will = memberGroups.has(group.extId);
+      if (was === will) return [];
+      const members = will ? [...group.members, target] : group.members.filter((member) => !isMember(member, target));
+      return [groupPayload(group, { members })];
+    });
+    if (changed.length > 0) {
+      setGroupError(null);
+      try {
+        await groupWrites.putAll.mutateAsync(changed);
+      } catch (cause) {
+        setGroupError(`Item salvo, mas os conjuntos não foram atualizados: ${describeError(cause)}`);
+        setTab("collections");
+        return;
+      }
     }
+    onClose();
+    onSaved?.(extId);
   };
 
   const tabs = (
@@ -252,6 +292,7 @@ export function ItemFormDialog({
         value="attributes"
         label={<TabLabel label="Atributos" count={Object.keys(form.attributes).length} invalid={attributeErrors > 0} />}
       />
+      <Tab value="collections" label={<TabLabel label="Conjuntos" count={memberGroups.size} invalid={Boolean(groupError)} />} />
     </Tabs>
   );
 
@@ -438,7 +479,20 @@ export function ItemFormDialog({
           <AttributeEditor definitions={definitions.data ?? []} value={form.attributes} onChange={(next) => set("attributes", next)} />
         )}
 
+        {tab === "collections" && (
+          <ItemCollectionsEditor
+            groups={allGroups}
+            collections={collections.data?.content ?? []}
+            value={memberGroups}
+            original={originalGroups}
+            onChange={setChosenGroups}
+            loading={groups.isPending || collections.isPending}
+            truncated={(groups.data?.total ?? 0) > allGroups.length}
+          />
+        )}
+
         {error && <Alert severity="error">{error}</Alert>}
+        {groupError && <Alert severity="error">{groupError}</Alert>}
       </Stack>
 
       <ApiContentSelector
