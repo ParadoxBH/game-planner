@@ -1,7 +1,6 @@
 ﻿import { createElement } from "react";
 import {
   AutoAwesomeMosaic,
-  Bolt,
   Calculate,
   Category,
   Construction,

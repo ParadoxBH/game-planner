@@ -24,7 +24,7 @@ import { ApiContentSelector } from "../common/ApiContentSelector";
 import { CodesField, type CodeOption } from "../common/CodesField";
 import { ConfirmDeleteDialog } from "../common/ConfirmDeleteDialog";
 import { slugOf, useContentSave } from "../common/contentForm";
-import { FormSection, TabLabel, TargetRow } from "../common/formLayout";
+import { TabLabel, TargetRow } from "../common/formLayout";
 import { isLevel, levelOut, move } from "../common/formValues";
 import { IconUploadField } from "../common/IconUploadField";
 import { StyledDialog } from "../common/StyledDialog";
@@ -369,7 +369,7 @@ export function CollectionGroupFormDialog({
 
         {tab === "members" && (
           <>
-            <Stack flex={1} direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
+            <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1} sx={{ width: "100%" }}>
               <Typography variant="body2" color="text.secondary">
                 O que se coleciona, na ordem de exibição. O mesmo alvo não se
                 repete.

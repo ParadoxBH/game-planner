@@ -1,4 +1,4 @@
-import { Box, Stack, Tooltip, Typography } from "@mui/material";
+import { Stack, Tooltip, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import type { AttributeDefinition, AttributeValue } from "../../api/content";
 import { listRowSx } from "../../theme/listRowSx";
