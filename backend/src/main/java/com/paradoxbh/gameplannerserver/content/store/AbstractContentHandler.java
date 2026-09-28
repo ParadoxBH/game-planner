@@ -165,7 +165,10 @@ public abstract class AbstractContentHandler<D extends ContentDocument<D>, C> im
                 QueryField.column("createdAt", "Criado em", FieldType.DATETIME, "t.created_at"),
                 QueryField.column("updatedAt", "Alterado em", FieldType.DATETIME, "t.updated_at"),
                 QueryField.column("createdBy", "Criado por", FieldType.TEXT, "t.created_by"),
-                QueryField.column("updatedBy", "Alterado por", FieldType.TEXT, "t.updated_by")));
+                QueryField.column("updatedBy", "Alterado por", FieldType.TEXT, "t.updated_by"),
+                // Tem ícone ligado ao código (content_media): o seletor de imagem lista só o que tem o que mostrar.
+                QueryField.flag("hasIcon", "Tem ícone", "EXISTS (SELECT 1 FROM content_media m WHERE m.game_id = t.game_id"
+                        + " AND m.kind = :kind AND m.ext_id = t.ext_id AND m.usage = 'icon')")));
         if (hasRarity()) {
             fields.add(QueryField.code("rarity", "Raridade", "rarity", "t.rarity_code"));
         }

@@ -4,6 +4,7 @@ import static com.paradoxbh.gameplannerserver.query.QueryJson.and;
 import static com.paradoxbh.gameplannerserver.query.QueryJson.or;
 import static com.paradoxbh.gameplannerserver.query.QueryJson.rule;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
@@ -30,6 +31,7 @@ class ContentApiIntegrationTest extends ContentApiTest {
     private static final String ITEMS = "/api/v1/games/{game}/items";
     private static final String ITEM = "/api/v1/games/{game}/items/{id}";
     private static final String CATEGORIES = "/api/v1/games/{game}/categories";
+    private static final String ENTITY_MEDIA = "/api/v1/games/{game}/entities/{id}/media";
 
     @Test
     void createsAndReadsItemWithTagsAttributesAndSpacedId() throws Exception {
@@ -308,6 +310,30 @@ class ContentApiIntegrationTest extends ContentApiTest {
                 .andExpect(status().isOk());
         mvc.perform(get("/api/v1/games/{game}/rarities", game))
                 .andExpect(jsonPath("$[0].code").value("comum"));
+    }
+
+    @Test
+    void anIconCanBeReusedAndTheListingFiltersByHavingOne() throws Exception {
+        String icon = newMedia();
+        send(post(ITEMS, game), "editor", json("""
+                { 'extId': 'espada', 'name': 'Espada', 'media': [ { 'usage': 'icon', 'mediaId': '%s' } ] }
+                """.formatted(icon)))
+                .andExpect(status().isCreated());
+        send(post(ITEMS, game), "editor", json("{ 'extId': 'foto', 'name': 'Só foto', 'media': [ { 'usage': 'screenshot', 'mediaId': '%s' } ] }"
+                .formatted(newMedia())))
+                .andExpect(status().isCreated());
+        send(post(ITEMS, game), "editor", json("{ 'extId': 'sem', 'name': 'Sem imagem' }"))
+                .andExpect(status().isCreated());
+
+        mvc.perform(query(ITEMS, and(rule("hasIcon", "equal", true)), game))
+                .andExpect(jsonPath("$.content[*].extId", contains("espada")));
+        mvc.perform(query(ITEMS, and(rule("hasIcon", "equal", false)), game))
+                .andExpect(jsonPath("$.content[*].extId", containsInAnyOrder("sem", "foto")));
+
+        // O mesmo ícone ligado a outro conteúdo, de outro tipo: a imagem é reaproveitada, não copiada.
+        send(post(ENTITY_MEDIA, game, "ferreiro"), "editor", json("{ 'usage': 'icon', 'mediaId': '%s' }".formatted(icon)))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$[0].mediaId").value(icon));
     }
 
     @Test
