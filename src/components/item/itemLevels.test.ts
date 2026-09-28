@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { AttributeDefinition, RecipeDocument, RecipeModifier } from "../../api/content";
-import { applyModifiers, changedKeys, isUpgrade, levelTable, modifiersFor, upgradeMaterials, upgradeStep } from "./itemLevels";
+import { applyModifiers, buildItem, changedKeys, isUpgrade, levelTable, modifiersFor, upgradeMaterials, upgradeStep } from "./itemLevels";
 
 const item = (extId: string) => ({ kind: "item", extId });
 
@@ -136,5 +136,36 @@ describe("levelTable", () => {
 
   it("is empty without upgrades of the item", () => {
     expect(levelTable(sword, [pistolUpgrade(1, 28)], valheimDefinitions)).toEqual([]);
+  });
+});
+
+describe("buildItem", () => {
+  const pistol = { extId: "Pistol", attributes: { damage: 25, ammo_per_mag: 10 } };
+  const upgrades = [pistolUpgrade(1, 28), pistolUpgrade(2, 30), pistolUpgrade(3, 33)];
+  const magazine = recipe("attachment_Extended Mag_Pistol", {
+    inputs: [{ ...input("Pistol", 1), notConsumed: true }, input("money", 90)],
+    outputs: [output("attachment_Extended Mag")],
+    modifiers: [{ target: item("Pistol"), attribute: "ammo_per_mag", operation: "set", value: 17 }],
+  });
+
+  it("climbs to the chosen level, adds the extras and sums the cost without the item itself", () => {
+    const built = buildItem(pistol, upgrades, [magazine], [], 2);
+    expect(built.level).toBe(2);
+    expect(built.attributes).toEqual({ damage: 30, ammo_per_mag: 17 });
+    expect(built.changes.map((change) => change.key)).toEqual(["damage", "ammo_per_mag"]);
+    // Nível 1 (100) + nível 2 (200) + pente (90).
+    expect(built.cost).toEqual([{ target: item("money"), amount: 390, notConsumed: false }]);
+    expect(built.recipes.map((entry) => entry.extId)).toEqual(["upgrade_ammo_Pistol_1", "upgrade_ammo_Pistol_2", "attachment_Extended Mag_Pistol"]);
+  });
+
+  it("stays at the base level when none is chosen and works without upgrades", () => {
+    expect(buildItem(pistol, upgrades, [], [], null)).toMatchObject({ level: 0, attributes: pistol.attributes, cost: [], changes: [] });
+    expect(buildItem(pistol, [], [magazine], [], null)).toMatchObject({ level: null, attributes: { damage: 25, ammo_per_mag: 17 } });
+  });
+
+  it("uses the per level increments of the metadata", () => {
+    const built = buildItem(sword, [swordUpgrade(2), swordUpgrade(3)], [], valheimDefinitions, 3);
+    expect(built.attributes.damage_slash).toBe(67);
+    expect(built.cost).toEqual([{ target: item("Iron"), amount: 30, notConsumed: false }]);
   });
 });

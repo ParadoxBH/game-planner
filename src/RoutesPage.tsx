@@ -18,6 +18,7 @@ import { SpawnSimulatorPage } from "./components/simulator/SpawnSimulatorPage";
 import { CraftingCalculator } from "./components/calculator/CraftingCalculator";
 import { ProfitabilityCalculator } from "./components/calculator/ProfitabilityCalculator";
 import { ProfitPerTimeCalculator } from "./components/calculator/ProfitPerTimeCalculator";
+import { ItemBuilderPage } from "./components/item/ItemBuilderPage";
 import { ItemDetailsPage } from "./components/item/ItemDetailsPage";
 import { RecipeDetailsPage } from "./components/recipe/RecipeDetailsPage";
 import { Typography } from "@mui/material";
@@ -75,6 +76,7 @@ export function RoutesPage() {
           />
           <Route path="items/list/:category?" element={<ItemsPage />} />
           <Route path="items/view/:itemId" element={<ItemDetailsPage />} />
+          <Route path="items/build/:itemId?" element={<ItemBuilderPage />} />
           <Route
             path="recipes"
             element={

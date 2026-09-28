@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Breadcrumbs, Button, CircularProgress, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
-import { Edit } from "@mui/icons-material";
+import { Build, Edit } from "@mui/icons-material";
 import {
   Architecture,
   Bolt,
@@ -110,11 +110,25 @@ export function ItemDetailsPage() {
         </Breadcrumbs>
       }
       actionsEnd={
-        canEdit && (
-          <Button variant="outlined" size="small" startIcon={<Edit />} onClick={() => setEditing(true)} sx={{ textTransform: "none" }}>
-            Editar
-          </Button>
-        )
+        <Stack direction="row" spacing={1}>
+          {(upgrades.length > 0 || modifiedBy.length > 0) && (
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<Build />}
+              component={Link}
+              to={`/game/${gameId}/items/build/${encodeURIComponent(item.extId)}`}
+              sx={{ textTransform: "none" }}
+            >
+              Montar
+            </Button>
+          )}
+          {canEdit && (
+            <Button variant="outlined" size="small" startIcon={<Edit />} onClick={() => setEditing(true)} sx={{ textTransform: "none" }}>
+              Editar
+            </Button>
+          )}
+        </Stack>
       }
     >
       <DetainContainer>

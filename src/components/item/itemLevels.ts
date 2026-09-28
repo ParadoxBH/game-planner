@@ -1,4 +1,12 @@
-import type { AttributeDefinition, AttributeValue, RecipeDocument, RecipeModifier, Reference, Requirement } from "../../api/content";
+import type {
+  AttributeDefinition,
+  AttributeValue,
+  RecipeDocument,
+  RecipeModifier,
+  RecipeStation,
+  Reference,
+  Requirement,
+} from "../../api/content";
 
 export type Attributes = Record<string, AttributeValue>;
 
@@ -153,4 +161,83 @@ export function changedKeys(rows: LevelRow[]): string[] {
     for (const change of row.changes) if (!keys.includes(change.key)) keys.push(change.key);
   }
   return keys;
+}
+
+/** Os níveis da tabela, sem repetir, do base ao maior. */
+export function levelsOf(rows: LevelRow[]): number[] {
+  return [...new Set(rows.map((row) => row.level))].sort((a, b) => a - b);
+}
+
+/** Um ingrediente no custo total: o que é gasto soma; o que só é exigido (ferramenta) conta uma vez. */
+export interface CostEntry {
+  target: Reference;
+  amount: number;
+  notConsumed: boolean;
+}
+
+export interface BuiltItem {
+  /** Nível escolhido; nulo quando o item não tem melhorias. */
+  level: number | null;
+  /** As melhorias do nível base até o escolhido, em ordem, e depois os extras. */
+  recipes: RecipeDocument[];
+  attributes: Attributes;
+  /** O que mudou em relação ao item cadastrado. */
+  changes: AttributeChange[];
+  cost: CostEntry[];
+  /** Bancadas de todas as receitas, sem repetir, com o maior nível exigido. */
+  stations: RecipeStation[];
+}
+
+function addCost(cost: Map<string, CostEntry>, inputs: Requirement[]) {
+  for (const input of inputs) {
+    const key = `${input.notConsumed ? "tool" : "use"}|${input.target.kind ?? ""}:${input.target.extId}`;
+    const current = cost.get(key);
+    if (!current) cost.set(key, { target: input.target, amount: input.amount, notConsumed: input.notConsumed });
+    else current.amount = input.notConsumed ? Math.max(current.amount, input.amount) : tidy(current.amount + input.amount);
+  }
+}
+
+/**
+ * Monta o item: sobe do nível base até `level` pela cadeia de melhorias (uma receita por nível) e aplica os extras
+ * (acessórios, pente) por cima. Devolve os atributos finais, o que mudou e o custo somado de todas as receitas, sem o
+ * próprio item.
+ */
+export function buildItem(
+  item: { kind?: string | null; extId: string; attributes?: Attributes },
+  upgrades: RecipeDocument[],
+  extras: RecipeDocument[],
+  definitions: Iterable<AttributeDefinition>,
+  level: number | null,
+): BuiltItem {
+  const self: Reference = { kind: item.kind ?? "item", extId: item.extId };
+  const base = item.attributes ?? {};
+  const rows = levelTable(item, upgrades, definitions);
+  const levels = levelsOf(rows);
+  const chosen = level !== null && levels.includes(level) ? level : (levels[0] ?? null);
+
+  const chain = levels
+    .filter((candidate) => chosen !== null && candidate > levels[0] && candidate <= chosen)
+    .map((candidate) => rows.find((row) => row.level === candidate && row.recipe)!.recipe!);
+  const reached = rows.find((row) => row.level === chosen)?.attributes ?? base;
+  const attributes = extras.reduce((current, extra) => applyModifiers(current, modifiersFor(extra, self)), reached);
+
+  const cost = new Map<string, CostEntry>();
+  const stations = new Map<string, RecipeStation>();
+  for (const recipe of [...chain, ...extras]) {
+    addCost(cost, recipe.inputs.filter((input) => !sameTarget(input.target, self)));
+    for (const station of recipe.stations) {
+      const key = `${station.kind ?? ""}:${station.extId}`;
+      const current = stations.get(key);
+      if (!current || (station.level ?? 0) > (current.level ?? 0)) stations.set(key, station);
+    }
+  }
+
+  return {
+    level: chosen,
+    recipes: [...chain, ...extras],
+    attributes,
+    changes: changesBetween(base, attributes),
+    cost: [...cost.values()],
+    stations: [...stations.values()],
+  };
 }
