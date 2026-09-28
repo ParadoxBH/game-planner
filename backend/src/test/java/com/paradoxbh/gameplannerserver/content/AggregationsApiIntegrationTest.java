@@ -1,5 +1,6 @@
 package com.paradoxbh.gameplannerserver.content;
 
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.nullValue;
@@ -78,6 +79,41 @@ class AggregationsApiIntegrationTest extends ContentApiTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.referencedBy[0].field").value("inputs"));
         mvc.perform(get(DETAILS, game, "rarities", "comum")).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void itemDetailsKeepUpgradesApartFromWhatProducesAndUsesIt() throws Exception {
+        create("items", "{ 'extId': 'espada', 'name': 'Espada' }");
+        create("items", "{ 'extId': 'ferro', 'name': 'Ferro' }");
+        create("recipes", """
+                { 'extId': 'fazer_espada', 'inputs': [ { 'target': { 'kind': 'item', 'extId': 'ferro' }, 'amount': 5 } ],
+                  'outputs': [ { 'target': { 'kind': 'item', 'extId': 'espada' }, 'amount': 1 } ] }
+                """);
+        create("recipes", """
+                { 'extId': 'espada_2',
+                  'inputs': [ { 'target': { 'kind': 'item', 'extId': 'espada' }, 'amount': 1 },
+                              { 'target': { 'kind': 'item', 'extId': 'ferro' }, 'amount': 10 } ],
+                  'outputs': [ { 'target': { 'kind': 'item', 'extId': 'espada' }, 'amount': 1, 'level': 2 } ] }
+                """);
+        create("recipes", """
+                { 'extId': 'afiar_espada',
+                  'inputs': [ { 'target': { 'kind': 'item', 'extId': 'espada' }, 'amount': 1, 'notConsumed': true } ],
+                  'outputs': [ { 'target': { 'kind': 'item', 'extId': 'pedra_afiada' }, 'amount': 1 } ],
+                  'modifiers': [ { 'target': { 'kind': 'item', 'extId': 'espada' }, 'attribute': 'damage',
+                                   'operation': 'percent', 'value': 10 } ] }
+                """);
+
+        mvc.perform(get(DETAILS, game, "items", "espada"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.related.producedBy.content[*].extId", contains("fazer_espada")))
+                .andExpect(jsonPath("$.related.usedIn.content[*].extId", contains("afiar_espada")))
+                .andExpect(jsonPath("$.related.upgrades.content[*].extId", contains("espada_2")))
+                .andExpect(jsonPath("$.related.usedInUpgrades.total").value(0))
+                .andExpect(jsonPath("$.related.modifiedBy.content[*].extId", contains("afiar_espada")));
+        mvc.perform(get(DETAILS, game, "items", "ferro"))
+                .andExpect(jsonPath("$.related.usedIn.content[*].extId", contains("fazer_espada")))
+                .andExpect(jsonPath("$.related.usedInUpgrades.content[*].extId", contains("espada_2")))
+                .andExpect(jsonPath("$.related.upgrades.total").value(0));
     }
 
     @Test

@@ -13,6 +13,7 @@ import static com.paradoxbh.gameplannerserver.content.ContentKind.REDEMPTION_COD
 import static com.paradoxbh.gameplannerserver.content.ContentKind.SHOP;
 import static com.paradoxbh.gameplannerserver.content.ContentKind.SHOP_CATEGORY;
 import static com.paradoxbh.gameplannerserver.content.ContentKind.SPAWN_POINT;
+import static com.paradoxbh.gameplannerserver.query.QueryJson.rule;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -70,9 +71,15 @@ public class DetailsService {
         this.jdbc = jdbc;
         handlers.forEach(handler -> this.handlers.put(handler.kind(), handler));
 
+        // Receitas de melhoria (a espada nível 1 vira a nível 2) saem de Produção e Utilizado em: o item as mostra
+        // como tabela de níveis, e o material, agrupadas pelo item melhorado.
         relations.put(ITEM, List.of(
-                targeting("producedBy", RECIPE, "produces", ITEM),
-                targeting("usedIn", RECIPE, "consumes", ITEM),
+                recipes("producedBy", "craft", id -> rule("produces", "equal", ITEM.code() + ":" + id)),
+                recipes("usedIn", "craft", id -> rule("consumes", "equal", ITEM.code() + ":" + id)),
+                recipes("upgrades", "upgrade", id -> rule("produces", "equal", ITEM.code() + ":" + id)),
+                recipes("usedInUpgrades", "upgrade", id -> rule("consumes", "equal", ITEM.code() + ":" + id),
+                        id -> rule("produces", "not_equal", ITEM.code() + ":" + id)),
+                recipes("modifiedBy", "craft", id -> rule("modifies", "equal", ITEM.code() + ":" + id)),
                 targeting("droppedBy", ENTITY, "drops", ITEM),
                 targeting("dropPoints", SPAWN_POINT, "drops", ITEM),
                 targeting("spawnPoints", SPAWN_POINT, "occupant", ITEM),
@@ -204,7 +211,20 @@ public class DetailsService {
 
     private Relation related(String name, ContentKind kind, String field, Function<String, String> value) {
         return new Relation(name, handler(kind), id -> new ContentQuery(
-                QueryJson.and(QueryJson.rule(field, "equal", value.apply(id))), 0, RELATED_LIMIT, "name", false));
+                QueryJson.and(rule(field, "equal", value.apply(id))), 0, RELATED_LIMIT, "name", false));
+    }
+
+    /** Receitas do tipo ({@code craft} ou {@code upgrade}) que casam com todas as regras montadas com o id. */
+    @SafeVarargs
+    private Relation recipes(String name, String type, Function<String, QueryJson>... rules) {
+        return new Relation(name, handler(RECIPE), id -> {
+            List<QueryJson> all = new ArrayList<>();
+            for (Function<String, QueryJson> rule : rules) {
+                all.add(rule.apply(id));
+            }
+            all.add(rule("type", "equal", type));
+            return new ContentQuery(QueryJson.and(all.toArray(QueryJson[]::new)), 0, RELATED_LIMIT, "name", false);
+        });
     }
 
     private ContentHandler<?> handler(ContentKind kind) {

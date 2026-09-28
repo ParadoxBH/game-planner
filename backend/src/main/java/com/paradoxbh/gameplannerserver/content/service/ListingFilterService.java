@@ -134,9 +134,13 @@ public class ListingFilterService {
                 fixed(new ListingFilter("primary", "Nível", Display.SELECT, null, "Todas", null, null, null, List.of(
                         Option.of("primary", "Principais", and(rule("primary", "equal", true))),
                         Option.of("sub", "Sub-categorias", and(rule("primary", "equal", false))))))));
+        // Melhoria: a receita sobe um item de nível (a espada nível 1 vira a nível 2); por padrão aparecem todas.
         specs.put(RECIPE, List.of(
                 new Spec(new ListingFilter("station", "Bancada", Display.SELECT, "station", "Todas as bancadas", "station",
-                        null, null, List.of()), this::stations)));
+                        null, null, List.of()), this::stations),
+                fixed(new ListingFilter("type", "Tipo", Display.SELECT, null, "Todas", null, null, null, List.of(
+                        Option.of("craft", "Fabricações", and(rule("type", "equal", "craft"))),
+                        Option.of("upgrade", "Melhorias", and(rule("type", "equal", "upgrade"))))))));
         specs.put(EVENT, List.of(
                 new Spec(new ListingFilter("type", "Tipo", Display.TABS, null, "Todos", "type", null, null, List.of()),
                         this::eventTypes)));

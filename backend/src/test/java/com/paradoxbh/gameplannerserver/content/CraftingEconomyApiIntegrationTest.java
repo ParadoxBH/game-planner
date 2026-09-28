@@ -401,6 +401,11 @@ class CraftingEconomyApiIntegrationTest extends ContentApiTest {
         // A consulta que a opção carrega traz só a receita feita à mão.
         mvc.perform(query(RECIPES, and(rule("station", "is_null")), game))
                 .andExpect(jsonPath("$.content[*].extId", contains("corda")));
+
+        // Ao lado da bancada, o tipo separa fabricação de melhoria.
+        mvc.perform(get(RECIPES + "/query/filters", game))
+                .andExpect(jsonPath("$.filters[1].key").value("type"))
+                .andExpect(jsonPath("$.filters[1].options[*].value", contains("craft", "upgrade")));
     }
 
     @Test

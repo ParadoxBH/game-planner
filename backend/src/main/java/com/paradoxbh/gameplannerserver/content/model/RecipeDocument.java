@@ -10,7 +10,7 @@ import com.paradoxbh.gameplannerserver.content.ExtIds;
  * Receita. {@code name} é opcional: sem ele, a exibição e a busca usam o nome do primeiro produto
  * cadastrado. {@code inputs} é posicional: nos jogos baseados em slot, cada linha é um slot.
  * {@code stations} são bancadas (entidades), cada uma com o nível exigido quando o jogo tem bancada
- * que sobe de nível.
+ * que sobe de nível. {@code modifiers} é o que a receita muda nos atributos de um item (melhoria, acessório).
  */
 public record RecipeDocument(
         String extId,
@@ -23,6 +23,7 @@ public record RecipeDocument(
         List<Requirement> inputs,
         List<RecipeOutput> outputs,
         List<RecipeUnlock> unlock,
+        List<RecipeModifier> modifiers,
         List<String> events,
         ContentMeta meta) implements ContentDocument<RecipeDocument> {
 
@@ -42,6 +43,7 @@ public record RecipeDocument(
                 Canon.rows(inputs, "inputs", Requirement::canonical),
                 Canon.rows(outputs, "outputs", RecipeOutput::canonical),
                 Canon.rows(unlock, "unlock", RecipeUnlock::canonical),
+                Canon.rows(modifiers, "modifiers", RecipeModifier::canonical),
                 Canon.ids(events, "events"),
                 null);
     }
@@ -49,12 +51,12 @@ public record RecipeDocument(
     @Override
     public RecipeDocument withMeta(ContentMeta meta) {
         return new RecipeDocument(extId, name, summary, description, media, craftTimeSeconds, stations, inputs,
-                outputs, unlock, events, meta);
+                outputs, unlock, modifiers, events, meta);
     }
 
     @Override
     public RecipeDocument withMedia(List<MediaLink> media) {
         return new RecipeDocument(extId, name, summary, description, media, craftTimeSeconds, stations, inputs,
-                outputs, unlock, events, meta);
+                outputs, unlock, modifiers, events, meta);
     }
 }

@@ -10,9 +10,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class AttributeDefinitionRepository {
 
-    /** {@code group}: seção em que o atributo aparece (Dano, Comida...), V21; nulo cai em "Outros". */
+    /**
+     * {@code group}: seção em que o atributo aparece (Dano, Comida...), V21; nulo cai em "Outros".
+     * {@code levelIncrementOf}: atributo que este aumenta a cada nível do item (V22), ex.: damage_per_level_slash
+     * aumenta damage_slash; nulo, nenhum.
+     */
     public record AttributeDefinition(String key, String label, String dataType, String unit, String group,
-                                      int ordinal) {
+                                      int ordinal, String levelIncrementOf) {
     }
 
     /**
@@ -30,28 +34,31 @@ public class AttributeDefinitionRepository {
 
     public List<AttributeDefinition> list(String gameId) {
         return jdbc.sql("""
-                SELECT key, label, data_type, unit, group_label, ordinal FROM attribute_definition
+                SELECT key, label, data_type, unit, group_label, ordinal, level_increment_of FROM attribute_definition
                 WHERE game_id = :game ORDER BY ordinal, key
                 """)
                 .param("game", gameId)
                 .query((rs, rowNum) -> new AttributeDefinition(rs.getString("key"), rs.getString("label"),
                         rs.getString("data_type"), rs.getString("unit"), rs.getString("group_label"),
-                        rs.getInt("ordinal")))
+                        rs.getInt("ordinal"), rs.getString("level_increment_of")))
                 .list();
     }
 
     public void upsert(String gameId, AttributeDefinition definition) {
         jdbc.sql("""
-                INSERT INTO attribute_definition (game_id, key, label, data_type, unit, group_label, ordinal)
-                VALUES (:game, :key, :label, :type, :unit, :group, :ordinal)
+                INSERT INTO attribute_definition (game_id, key, label, data_type, unit, group_label, ordinal,
+                                                  level_increment_of)
+                VALUES (:game, :key, :label, :type, :unit, :group, :ordinal, :levelIncrementOf)
                 ON CONFLICT (game_id, key) DO UPDATE
                    SET label = excluded.label, data_type = excluded.data_type,
-                       unit = excluded.unit, group_label = excluded.group_label, ordinal = excluded.ordinal
+                       unit = excluded.unit, group_label = excluded.group_label, ordinal = excluded.ordinal,
+                       level_increment_of = excluded.level_increment_of
                 """)
                 .param("game", gameId).param("key", definition.key()).param("label", definition.label())
                 .param("type", definition.dataType()).param("unit", definition.unit())
                 .param("group", definition.group())
                 .param("ordinal", definition.ordinal())
+                .param("levelIncrementOf", definition.levelIncrementOf())
                 .update();
     }
 

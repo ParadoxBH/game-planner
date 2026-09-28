@@ -1,5 +1,6 @@
 package com.paradoxbh.gameplannerserver.content.store;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.paradoxbh.gameplannerserver.content.ContentKind;
 import com.paradoxbh.gameplannerserver.content.model.ContentMeta;
 import com.paradoxbh.gameplannerserver.content.model.RecipeDocument;
+import com.paradoxbh.gameplannerserver.content.model.RecipeModifier;
 import com.paradoxbh.gameplannerserver.content.model.RecipeOutput;
 import com.paradoxbh.gameplannerserver.content.model.RecipeStation;
 import com.paradoxbh.gameplannerserver.content.model.RecipeUnlock;
@@ -17,6 +19,7 @@ import com.paradoxbh.gameplannerserver.content.model.Requirement;
 import com.paradoxbh.gameplannerserver.content.store.ChildRows.Table;
 import com.paradoxbh.gameplannerserver.query.FieldType;
 import com.paradoxbh.gameplannerserver.query.QueryField;
+import com.paradoxbh.gameplannerserver.query.QueryField.Option;
 
 @Component
 public class RecipeHandler extends AbstractContentHandler<RecipeDocument, RecipeHandler.Parts> {
@@ -25,10 +28,23 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
     private static final Table INPUTS = Table.of("recipe_input", "recipe_ext_id");
     private static final Table OUTPUTS = Table.of("recipe_output", "recipe_ext_id");
     private static final Table UNLOCK = Table.of("recipe_unlock", "recipe_ext_id");
+    private static final Table MODIFIERS = Table.of("recipe_modifier", "recipe_ext_id");
+
+    /**
+     * Receita de melhoria: um produto sai num nível e o mesmo item entra como ingrediente num nível menor (a espada
+     * nível 1 vira a nível 2). Derivado das linhas, sem coluna própria; não pega receita que consome e produz o
+     * mesmo item sem nível (no Valheim, pôr a comida na bandeja).
+     */
+    private static final String UPGRADE = "EXISTS (SELECT 1 FROM recipe_output o JOIN recipe_input i"
+            + " ON i.game_id = o.game_id AND i.recipe_ext_id = o.recipe_ext_id AND i.target_ext_id = o.target_ext_id"
+            + " AND (i.target_kind IS NULL OR o.target_kind IS NULL OR i.target_kind = o.target_kind)"
+            + " WHERE o.game_id = t.game_id AND o.recipe_ext_id = t.ext_id"
+            + " AND o.level IS NOT NULL AND o.level > COALESCE(i.level, 0))";
 
     /** Linhas-filhas de uma página de receitas, por ext_id. */
     record Parts(Map<String, List<RecipeStation>> stations, Map<String, List<Requirement>> inputs,
-                 Map<String, List<RecipeOutput>> outputs, Map<String, List<RecipeUnlock>> unlock) {
+                 Map<String, List<RecipeOutput>> outputs, Map<String, List<RecipeUnlock>> unlock,
+                 Map<String, List<RecipeModifier>> modifiers) {
     }
 
     private final ChildRows children;
@@ -72,6 +88,7 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
                 parts.inputs().getOrDefault(id, List.of()),
                 parts.outputs().getOrDefault(id, List.of()),
                 parts.unlock().getOrDefault(id, List.of()),
+                parts.modifiers().getOrDefault(id, List.of()),
                 tags.events(),
                 meta);
     }
@@ -90,7 +107,8 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
                                 Rows.integer(row, "level"))),
                 children.load(INPUTS, gameId, extIds, ChildMappers::requirement),
                 children.load(OUTPUTS, gameId, extIds, RecipeHandler::output),
-                children.load(UNLOCK, gameId, extIds, RecipeHandler::unlock));
+                children.load(UNLOCK, gameId, extIds, RecipeHandler::unlock),
+                children.load(MODIFIERS, gameId, extIds, RecipeHandler::modifier));
     }
 
     @Override
@@ -103,22 +121,29 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
         children.replace(INPUTS, gameId, id, recipe.inputs().stream().map(ChildMappers::requirementRow).toList());
         children.replace(OUTPUTS, gameId, id, recipe.outputs().stream().map(RecipeHandler::outputRow).toList());
         children.replace(UNLOCK, gameId, id, recipe.unlock().stream().map(RecipeHandler::unlockRow).toList());
+        children.replace(MODIFIERS, gameId, id, recipe.modifiers().stream().map(RecipeHandler::modifierRow).toList());
     }
 
     @Override
     protected void deleteChildren(String gameId, String extId) {
-        for (Table table : List.of(STATIONS, INPUTS, OUTPUTS, UNLOCK)) {
+        for (Table table : List.of(STATIONS, INPUTS, OUTPUTS, UNLOCK, MODIFIERS)) {
             children.delete(table, gameId, extId);
         }
     }
 
-    /** produces e consumes são "tipo:id" ou "id"; station é o código da bancada (entidade ou ferramenta). */
+    /**
+     * produces, consumes e modifies são "tipo:id" ou "id"; station é o código da bancada (entidade ou ferramenta);
+     * type separa fabricação de melhoria. modifies só vê modificador com alvo explícito.
+     */
     @Override
     protected List<QueryField> specificFields() {
         return List.of(
+                QueryField.options("type", "Tipo", "CASE WHEN " + UPGRADE + " THEN 'upgrade' ELSE 'craft' END",
+                        new Option("craft", "Fabricação"), new Option("upgrade", "Melhoria")),
                 QueryField.column("craftTimeSeconds", "Tempo de preparo (s)", FieldType.NUMBER, "t.craft_time_seconds"),
                 childReference("produces", "Produz", "recipe_output", "recipe_ext_id", null),
                 childReference("consumes", "Consome", "recipe_input", "recipe_ext_id", null),
+                childReference("modifies", "Modifica", "recipe_modifier", "recipe_ext_id", "x.target_ext_id IS NOT NULL"),
                 childCode("station", "Bancada", "entity", "recipe_station", "recipe_ext_id", "station_ext_id"));
     }
 
@@ -154,6 +179,30 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
                 "target_kind", unlock.target() == null ? null : unlock.target().kind(),
                 "target_ext_id", unlock.target() == null ? null : unlock.target().extId(),
                 "value", unlock.value());
+    }
+
+    private static Map<String, Object> modifierRow(RecipeModifier modifier) {
+        Object value = modifier.value();
+        return ChildRows.row(
+                "target_kind", modifier.target() == null ? null : modifier.target().kind(),
+                "target_ext_id", modifier.target() == null ? null : modifier.target().extId(),
+                "attribute_key", modifier.attribute(),
+                "operation", modifier.operation(),
+                "value_num", value instanceof BigDecimal number ? number : null,
+                "value_text", value instanceof String text ? text : null,
+                "value_bool", value instanceof Boolean bool ? bool : null);
+    }
+
+    private static RecipeModifier modifier(Map<String, Object> row) {
+        Object value = Rows.decimal(row, "value_num");
+        if (value == null) {
+            value = Rows.string(row, "value_text");
+        }
+        if (value == null) {
+            value = Rows.bool(row, "value_bool");
+        }
+        return new RecipeModifier(Rows.reference(row, "target_kind", "target_ext_id"), Rows.string(row, "attribute_key"),
+                Rows.string(row, "operation"), value);
     }
 
     private static RecipeUnlock unlock(Map<String, Object> row) {

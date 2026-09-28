@@ -32,6 +32,7 @@ class ContentApiIntegrationTest extends ContentApiTest {
     private static final String ITEM = "/api/v1/games/{game}/items/{id}";
     private static final String CATEGORIES = "/api/v1/games/{game}/categories";
     private static final String ENTITY_MEDIA = "/api/v1/games/{game}/entities/{id}/media";
+    private static final String RECIPES = "/api/v1/games/{game}/recipes";
 
     @Test
     void createsAndReadsItemWithTagsAttributesAndSpacedId() throws Exception {
@@ -243,6 +244,77 @@ class ContentApiIntegrationTest extends ContentApiTest {
                 .andExpect(jsonPath("$.filters[?(@.key == 'attr')].options[0].attribute.group", contains("Dano")))
                 .andExpect(jsonPath("$.filters[?(@.key == 'attr')].options[1].attribute.unit", contains("kg")))
                 .andExpect(jsonPath("$.filters[?(@.key == 'attr')].options[2].attribute.numeric", contains(false)));
+    }
+
+    @Test
+    void anAttributeCanIncreaseAnotherOnEachLevel() throws Exception {
+        send(put("/api/v1/games/{game}/attributes", game), "editor", json("""
+                [ { 'key': 'damage_slash', 'label': 'Cortante', 'dataType': 'number' },
+                  { 'key': 'damage_per_level_slash', 'label': 'Cortante por nível', 'dataType': 'number',
+                    'levelIncrementOf': 'damage_slash' } ]
+                """))
+                .andExpect(status().isOk());
+        mvc.perform(get("/api/v1/games/{game}/attributes", game))
+                .andExpect(jsonPath("$[?(@.key == 'damage_per_level_slash')].levelIncrementOf", contains("damage_slash")))
+                .andExpect(jsonPath("$[?(@.key == 'damage_slash')].levelIncrementOf", contains((Object) null)));
+
+        // Só atributo numérico aumenta outro, e nunca a si mesmo.
+        send(put("/api/v1/games/{game}/attributes/{key}", game, "skill"), "editor",
+                json("{ 'label': 'Perícia', 'dataType': 'text', 'levelIncrementOf': 'damage_slash' }"))
+                .andExpect(status().isBadRequest());
+        send(put("/api/v1/games/{game}/attributes/{key}", game, "durability"), "editor",
+                json("{ 'label': 'Durabilidade', 'dataType': 'number', 'levelIncrementOf': 'durability' }"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void recipeModifiersRoundTripAndTheListingTellsUpgradesApart() throws Exception {
+        send(put(RECIPES, game), "editor", json("""
+                [ { 'extId': 'pistola', 'inputs': [ { 'target': { 'kind': 'item', 'extId': 'ferro' }, 'amount': 3 } ],
+                    'outputs': [ { 'target': { 'kind': 'item', 'extId': 'pistol' }, 'amount': 1 } ] },
+                  { 'extId': 'pistola_3', 'name': 'Pistola +3',
+                    'inputs': [ { 'target': { 'kind': 'item', 'extId': 'pistol' }, 'amount': 1, 'level': 2 },
+                                { 'target': { 'kind': 'item', 'extId': 'money' }, 'amount': 35 } ],
+                    'outputs': [ { 'target': { 'kind': 'item', 'extId': 'pistol' }, 'amount': 1, 'level': 3 } ],
+                    'modifiers': [ { 'attribute': 'damage', 'operation': 'set', 'value': 33.0 },
+                                   { 'attribute': 'full_auto', 'value': true } ] },
+                  { 'extId': 'pente_pistola',
+                    'inputs': [ { 'target': { 'kind': 'item', 'extId': 'pistol' }, 'amount': 1, 'notConsumed': true } ],
+                    'outputs': [ { 'target': { 'kind': 'item', 'extId': 'pente' }, 'amount': 1 } ],
+                    'modifiers': [ { 'target': { 'kind': 'item', 'extId': 'pistol' }, 'attribute': 'ammo_per_mag',
+                                     'operation': 'add', 'value': 7 } ] },
+                  { 'extId': 'bandeja_pao', 'inputs': [ { 'target': { 'kind': 'item', 'extId': 'pao' }, 'amount': 1 } ],
+                    'outputs': [ { 'target': { 'kind': 'item', 'extId': 'pao' }, 'amount': 1 } ] } ]
+                """))
+                .andExpect(status().isOk());
+
+        mvc.perform(get(RECIPES + "/{id}", game, "pistola_3"))
+                .andExpect(jsonPath("$.modifiers[0].attribute").value("damage"))
+                .andExpect(jsonPath("$.modifiers[0].operation").value("set"))
+                .andExpect(jsonPath("$.modifiers[0].value").value(33))
+                .andExpect(jsonPath("$.modifiers[0].target").doesNotExist())
+                // Sem operação, é set.
+                .andExpect(jsonPath("$.modifiers[1].operation").value("set"))
+                .andExpect(jsonPath("$.modifiers[1].value").value(true));
+
+        // Melhoria: o produto sai num nível acima do mesmo item de entrada. Consumir e produzir o mesmo item sem
+        // nível (pão na bandeja) não é melhoria.
+        mvc.perform(query(RECIPES, and(rule("type", "equal", "upgrade")), game))
+                .andExpect(jsonPath("$.content[*].extId", contains("pistola_3")));
+        mvc.perform(query(RECIPES, and(rule("type", "equal", "craft")), game).param("sort", "extId"))
+                .andExpect(jsonPath("$.content[*].extId", contains("bandeja_pao", "pente_pistola", "pistola")));
+        mvc.perform(query(RECIPES, and(rule("modifies", "equal", "item:pistol")), game))
+                .andExpect(jsonPath("$.content[*].extId", contains("pente_pistola")));
+
+        // Soma e porcentagem só com número; operação fora da lista é recusada.
+        send(post(RECIPES, game), "editor", json("""
+                { 'extId': 'ruim', 'modifiers': [ { 'attribute': 'damage', 'operation': 'percent', 'value': 'alto' } ] }
+                """))
+                .andExpect(status().isBadRequest());
+        send(post(RECIPES, game), "editor", json("""
+                { 'extId': 'ruim', 'modifiers': [ { 'attribute': 'damage', 'operation': 'times', 'value': 2 } ] }
+                """))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -625,7 +697,9 @@ class ContentApiIntegrationTest extends ContentApiTest {
                 .andExpect(jsonPath("$.sorts", hasItem("level")));
         mvc.perform(get(CATEGORIES + "/query/fields", game))
                 .andExpect(jsonPath("$.fields[?(@.name == 'appliesTo')].options[*].value",
-                        contains("item", "entity", "both")));
+                        contains("item", "entity", "both", "location")));
+        mvc.perform(get(RECIPES + "/query/fields", game))
+                .andExpect(jsonPath("$.fields[?(@.name == 'type')].options[*].value", contains("craft", "upgrade")));
 
         // Tipo sem raridade não oferece o campo, e o filtro recusa.
         mvc.perform(get("/api/v1/games/{game}/events/query/fields", game))

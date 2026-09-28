@@ -23,7 +23,7 @@ import com.paradoxbh.gameplannerserver.content.store.AttributeDefinitionReposito
 import com.paradoxbh.gameplannerserver.identity.service.GameAccess;
 
 /**
- * Definições de atributo do jogo: rótulo, tipo, unidade e ordem de exibição.
+ * Definições de atributo do jogo: rótulo, tipo, unidade, ordem de exibição e o atributo que ele aumenta por nível.
  * Opcionais — conteúdo aceita atributo sem definição; com definição, o tipo é conferido.
  */
 @RestController
@@ -81,7 +81,7 @@ public class AttributeDefinitionController {
                 throw ApiException.badRequest("[" + i + "] não pode ser nulo");
             }
             valid.add(definition(request.key(), new AttributeRequest(request.label(), request.dataType(),
-                    request.unit(), request.group(), request.ordinal()), "[" + i + "]."));
+                    request.unit(), request.group(), request.ordinal(), request.levelIncrementOf()), "[" + i + "]."));
         }
         valid.forEach(definition -> definitions.upsert(gameId, definition));
         return new BulkResult(valid.size());
@@ -95,8 +95,18 @@ public class AttributeDefinitionController {
         if (request.dataType() == null || !TYPES.contains(request.dataType())) {
             throw ApiException.badRequest(path + "dataType precisa ser number, text ou boolean");
         }
+        String increments = blankToNull(request.levelIncrementOf());
+        if (increments != null) {
+            ExtIds.require(increments, path + "levelIncrementOf");
+            if (increments.equals(validKey)) {
+                throw ApiException.badRequest(path + "levelIncrementOf não pode ser o próprio atributo");
+            }
+            if (!request.dataType().equals("number")) {
+                throw ApiException.badRequest(path + "levelIncrementOf só vale para atributo number");
+            }
+        }
         return new AttributeDefinition(validKey, request.label().strip(), request.dataType(), blankToNull(request.unit()),
-                blankToNull(request.group()), request.ordinal() == null ? 0 : request.ordinal());
+                blankToNull(request.group()), request.ordinal() == null ? 0 : request.ordinal(), increments);
     }
 
     private static String blankToNull(String value) {
@@ -112,13 +122,15 @@ public class AttributeDefinitionController {
         }
     }
 
-    public record AttributeRequest(String label, String dataType, String unit, String group, Integer ordinal) {
+    /** {@code levelIncrementOf}: chave do atributo que este aumenta a cada nível do item; só para number. */
+    public record AttributeRequest(String label, String dataType, String unit, String group, Integer ordinal,
+                                   String levelIncrementOf) {
     }
 
     public record BulkResult(int saved) {
     }
 
     public record BulkAttributeRequest(String key, String label, String dataType, String unit, String group,
-                                       Integer ordinal) {
+                                       Integer ordinal, String levelIncrementOf) {
     }
 }
