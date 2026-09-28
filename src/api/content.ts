@@ -396,6 +396,8 @@ export interface ItemRelated {
   usedInUpgrades: ContentPage<RecipeDocument>;
   /** Fabricações que mudam atributos do item sem subir o nível (acessório, pente). */
   modifiedBy: ContentPage<RecipeDocument>;
+  /** Melhorias curinga pela categoria do item: sobem mais um nível, sem limite (Altar Ancestral do Valheim). */
+  categoryUpgrades: ContentPage<RecipeDocument>;
   droppedBy: ContentPage<EntityDocument>;
   dropPoints: ContentPage<SpawnPointDocument>;
   spawnPoints: ContentPage<SpawnPointDocument>;

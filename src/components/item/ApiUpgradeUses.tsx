@@ -6,7 +6,7 @@ import { listRowSx } from "../../theme/listRowSx";
 import { formatAmount } from "../../utils/format";
 import { ContentLabel } from "../common/ContentLabel";
 import { recipeTitle } from "../recipe/ApiRecipeCard";
-import { upgradeStep } from "./itemLevels";
+import { upgradeStep, wildcardUpgrade } from "./itemLevels";
 
 interface ApiUpgradeUsesProps {
   gameId: string;
@@ -19,22 +19,30 @@ interface ApiUpgradeUsesProps {
 
 interface UpgradeUse {
   item: Reference;
-  levels: { level: number; amount: number; recipe: RecipeDocument }[];
+  /** `level` nulo: melhoria curinga, mais um nível a partir de qualquer um. */
+  levels: { level: number | null; amount: number; recipe: RecipeDocument }[];
 }
 
-/** Agrupa pelo item melhorado, com os níveis em ordem e quanto do material cada um gasta. */
+/**
+ * Agrupa pelo item melhorado (ou pela categoria, na melhoria curinga), com os níveis em ordem e quanto do material
+ * cada um gasta.
+ */
 function groupByItem(recipes: RecipeDocument[], target: Reference): UpgradeUse[] {
   const groups = new Map<string, UpgradeUse>();
   for (const recipe of recipes) {
     const step = upgradeStep(recipe);
-    if (!step) continue;
+    const upgraded = step?.target ?? wildcardUpgrade(recipe);
+    if (!upgraded) continue;
     const amount = recipe.inputs.filter((input) => sameTarget(input.target, target)).reduce((sum, input) => sum + input.amount, 0);
-    const key = `${step.target.kind ?? ""}:${step.target.extId}`;
-    const group = groups.get(key) ?? { item: step.target, levels: [] };
-    group.levels.push({ level: step.to, amount, recipe });
+    const key = `${upgraded.kind ?? ""}:${upgraded.extId}`;
+    const group = groups.get(key) ?? { item: upgraded, levels: [] };
+    group.levels.push({ level: step?.to ?? null, amount, recipe });
     groups.set(key, group);
   }
-  return [...groups.values()].map((group) => ({ ...group, levels: group.levels.sort((a, b) => a.level - b.level) }));
+  return [...groups.values()].map((group) => ({
+    ...group,
+    levels: group.levels.sort((a, b) => (a.level ?? Number.MAX_SAFE_INTEGER) - (b.level ?? Number.MAX_SAFE_INTEGER)),
+  }));
 }
 
 /**
@@ -67,7 +75,7 @@ export function ApiUpgradeUses({ gameId, target, recipes, references }: ApiUpgra
                   clickable
                   component={RouterLink}
                   to={contentRoute(gameId, "recipe", recipe.extId) ?? ""}
-                  label={`nível ${level} · ×${formatAmount(amount)}`}
+                  label={`${level === null ? "nível +1" : `nível ${level}`} · ×${formatAmount(amount)}`}
                 />
               </Tooltip>
             ))}

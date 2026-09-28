@@ -97,6 +97,7 @@ export function ItemDetailsPage() {
   const upgrades = related.upgrades?.content ?? [];
   const upgradeUses = related.usedInUpgrades?.content ?? [];
   const modifiedBy = related.modifiedBy?.content ?? [];
+  const wildcards = related.categoryUpgrades?.content ?? [];
 
   return (
     <StyledContainer
@@ -259,9 +260,16 @@ export function ItemDetailsPage() {
           )}
         </DetainItem>
 
-        {upgrades.length > 0 && (
-          <DetainItem startIcon={<Upgrade color="primary" />} label="Melhorias" count={related.upgrades.total}>
-            <ApiItemUpgrades gameId={gameId} item={item} upgrades={upgrades} definitions={definitions} references={references} />
+        {(upgrades.length > 0 || wildcards.length > 0) && (
+          <DetainItem startIcon={<Upgrade color="primary" />} label="Melhorias" count={upgrades.length + wildcards.length}>
+            <ApiItemUpgrades
+              gameId={gameId}
+              item={item}
+              upgrades={upgrades}
+              wildcards={wildcards}
+              definitions={definitions}
+              references={references}
+            />
           </DetainItem>
         )}
 

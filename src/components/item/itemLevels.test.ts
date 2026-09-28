@@ -1,6 +1,16 @@
 import { describe, expect, it } from "vitest";
 import type { AttributeDefinition, RecipeDocument, RecipeModifier } from "../../api/content";
-import { applyModifiers, buildItem, changedKeys, isUpgrade, levelTable, modifiersFor, upgradeMaterials, upgradeStep } from "./itemLevels";
+import {
+  applyModifiers,
+  buildItem,
+  changedKeys,
+  isUpgrade,
+  levelTable,
+  modifiersFor,
+  upgradeMaterials,
+  upgradeStep,
+  wildcardUpgrade,
+} from "./itemLevels";
 
 const item = (extId: string) => ({ kind: "item", extId });
 
@@ -70,6 +80,18 @@ describe("upgradeStep", () => {
   it("recognizes an upgrade by the same item coming out a level higher", () => {
     expect(upgradeStep(swordUpgrade(3))).toEqual({ target: item("SwordIron"), from: 2, to: 3 });
     expect(upgradeStep(pistolUpgrade(1, 28))).toEqual({ target: item("Pistol"), from: 0, to: 1 });
+  });
+
+  it("takes a category that goes in and out as a wildcard upgrade of any of its items", () => {
+    const category = { kind: "category", extId: "altar_Upgrader2Weapon" };
+    const altar = recipe("altar_upgrade_Upgrader2Weapon", {
+      inputs: [{ ...input("x", 1), target: category }, input("Upgrader2Weapon", 1)],
+      outputs: [{ target: category, amount: 1, chance: 0.65, level: null }],
+    });
+    expect(wildcardUpgrade(altar)).toEqual(category);
+    expect(isUpgrade(altar)).toBe(true);
+    expect(upgradeStep(altar)).toBeNull();
+    expect(upgradeMaterials(altar, category).map((row) => row.target.extId)).toEqual(["Upgrader2Weapon"]);
   });
 
   it("does not take a recipe that consumes and produces the same item without a level", () => {

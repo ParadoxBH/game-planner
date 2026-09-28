@@ -36,7 +36,7 @@ import { DetainContainer } from "../common/DetainContainer";
 import { DetainItem } from "../common/DetainItem";
 import { StyledContainer } from "../common/StyledContainer";
 import { ApiShopOffers, offersFor } from "../shop/ApiShopOffers";
-import { modifierTarget, upgradeStep } from "../item/itemLevels";
+import { modifierTarget, upgradeStep, wildcardUpgrade } from "../item/itemLevels";
 import { ApiCraftingTree, NO_CHOICES, type TreeChoices } from "./ApiCraftingTree";
 import { recipeTitle, unlockLabel } from "./ApiRecipeCard";
 import { stationEntries } from "./recipeStations";
@@ -157,6 +157,7 @@ export function RecipeDetailsPage() {
   const mainOutput = recipe.outputs[0];
   const offers = offersFor(related.soldIn.content, self);
   const step = upgradeStep(recipe);
+  const wildcard = step ? null : wildcardUpgrade(recipe);
   const modifiers = recipe.modifiers ?? [];
   const definitions = new Map((attributes.data ?? []).map((definition) => [definition.key, definition]));
 
@@ -231,6 +232,15 @@ export function RecipeDetailsPage() {
                 <DetailField label="Melhoria">
                   <Typography variant="body2">
                     {references.name(step.target)}: nível {step.from} → {step.to}
+                  </Typography>
+                </DetailField>
+              )}
+
+              {wildcard && (
+                <DetailField label="Melhoria">
+                  <Typography variant="body2">
+                    Qualquer item de <Link to={`/game/${gameId}/categories/view/${encodeURIComponent(wildcard.extId)}`}>{references.name(wildcard)}</Link>{" "}
+                    sobe mais um nível, a partir de qualquer nível.
                   </Typography>
                 </DetailField>
               )}

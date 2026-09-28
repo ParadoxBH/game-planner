@@ -36,8 +36,19 @@ export function upgradeStep(recipe: RecipeDocument): UpgradeStep | null {
   return null;
 }
 
+/**
+ * Melhoria curinga: a mesma categoria entra e sai da receita, então ela sobe mais um nível qualquer item da categoria,
+ * sem limite (no Valheim, o Altar Ancestral com o ídolo do tier). Devolve a categoria.
+ */
+export function wildcardUpgrade(recipe: RecipeDocument): Reference | null {
+  const output = recipe.outputs.find(
+    (candidate) => candidate.target.kind === "category" && recipe.inputs.some((input) => sameTarget(input.target, candidate.target)),
+  );
+  return output?.target ?? null;
+}
+
 export function isUpgrade(recipe: RecipeDocument): boolean {
-  return upgradeStep(recipe) !== null;
+  return upgradeStep(recipe) !== null || wildcardUpgrade(recipe) !== null;
 }
 
 /** Ingredientes da melhoria sem o próprio item que sobe de nível: o custo. */
@@ -47,7 +58,7 @@ export function upgradeMaterials(recipe: RecipeDocument, target: Reference): Req
 
 /** O item que o modificador muda: o alvo dele, senão o item melhorado, senão o primeiro produto. */
 export function modifierTarget(recipe: RecipeDocument, modifier: RecipeModifier): Reference | null {
-  return modifier.target ?? upgradeStep(recipe)?.target ?? recipe.outputs[0]?.target ?? null;
+  return modifier.target ?? upgradeStep(recipe)?.target ?? wildcardUpgrade(recipe) ?? recipe.outputs[0]?.target ?? null;
 }
 
 /** Os modificadores da receita que mudam este item. */
