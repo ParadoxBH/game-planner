@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import {
   Alert,
-  Box,
   Button,
   CircularProgress,
   Divider,
@@ -246,8 +245,19 @@ export function ItemFormDialog({
     }
   };
 
+  const tabs = (
+    <Tabs value={tab} onChange={(_, value: ItemTab) => setTab(value)} variant="scrollable" allowScrollButtonsMobile>
+      <Tab value="data" label={<TabLabel label="Dados" invalid={dataInvalid} />} />
+      <Tab
+        value="attributes"
+        label={<TabLabel label="Atributos" count={Object.keys(form.attributes).length} invalid={attributeErrors > 0} />}
+      />
+    </Tabs>
+  );
+
   return (
     <StyledDialog
+      subHeader={tabs}
       open
       modal
       onClose={saving ? () => undefined : onClose}
@@ -281,29 +291,6 @@ export function ItemFormDialog({
         </>
       }
     >
-      <Box
-        sx={{
-          position: "sticky",
-          top: 0,
-          zIndex: 2,
-          mx: -3,
-          mt: -3,
-          mb: 3,
-          px: 3,
-          bgcolor: "background.default",
-          borderBottom: 1,
-          borderColor: "divider",
-        }}
-      >
-        <Tabs value={tab} onChange={(_, value: ItemTab) => setTab(value)} variant="scrollable" allowScrollButtonsMobile>
-          <Tab value="data" label={<TabLabel label="Dados" invalid={dataInvalid} />} />
-          <Tab
-            value="attributes"
-            label={<TabLabel label="Atributos" count={Object.keys(form.attributes).length} invalid={attributeErrors > 0} />}
-          />
-        </Tabs>
-      </Box>
-
       <Stack spacing={2}>
         {tab === "data" && (
           <>

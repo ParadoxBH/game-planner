@@ -1,4 +1,5 @@
 import {
+  Box,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -19,11 +20,21 @@ interface StyledDialogProps extends Omit<DialogProps, "title"> {
   startIcon?: ReactNode;
   subTitle?: ReactNode;
   headerActions?: ReactNode;
+  /**
+   * Fica fixo entre o cabeçalho e o conteúdo, fora da rolagem e sem o espaçamento do conteúdo: o lugar das abas de
+   * um formulário. Ocupa a largura toda, com o mesmo recuo lateral do conteúdo e uma linha embaixo.
+   */
+  subHeader?: ReactNode;
   onClose: () => void;
   maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false;
   fullWidth?: boolean;
   /** Só fecha pelo X ou por uma ação: clicar fora e Esc não fecham. Para formulários, que perderiam o que foi digitado. */
   modal?: boolean;
+  /**
+   * false: o conteúdo não rola e vira uma coluna flex do tamanho da janela, para uma lista lá dentro ter a própria
+   * rolagem (flex: 1, minHeight: 0, overflowY: auto) sem criar uma segunda barra.
+   */
+  contentScroll?: boolean;
 }
 
 export function StyledDialog({
@@ -35,9 +46,11 @@ export function StyledDialog({
   startIcon,
   subTitle,
   headerActions,
+  subHeader,
   maxWidth = "sm",
   fullWidth = true,
   modal = false,
+  contentScroll = true,
   ...props
 }: StyledDialogProps) {
   const theme = useTheme();
@@ -109,7 +122,19 @@ export function StyledDialog({
         </Stack>
       </DialogTitle>
 
-      <DialogContent sx={{ p: 3, pt: "24px !important" }}>
+      {subHeader && (
+        <Box sx={{ px: 3, flexShrink: 0, borderBottom: 1, borderColor: "divider", bgcolor: "background.default" }}>
+          {subHeader}
+        </Box>
+      )}
+
+      <DialogContent
+        sx={{
+          p: 3,
+          pt: "24px !important",
+          ...(!contentScroll && { display: "flex", flexDirection: "column", overflow: "hidden" }),
+        }}
+      >
         {children}
       </DialogContent>
 

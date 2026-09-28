@@ -285,8 +285,17 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
 
   const title = creating ? "Nova receita" : `Editar ${form.name || recipe?.extId}`;
 
+  const tabs = (
+    <Tabs value={tab} onChange={(_, value: RecipeTab) => setTab(value)} variant="scrollable" allowScrollButtonsMobile>
+      <Tab value="data" label={<TabLabel label="Dados" invalid={dataInvalid} />} />
+      <Tab value="inputs" label={<TabLabel label="Ingredientes" count={form.inputs.length} invalid={inputsInvalid} />} />
+      <Tab value="outputs" label={<TabLabel label="Produto" count={form.outputs.length} invalid={outputsInvalid} />} />
+    </Tabs>
+  );
+
   return (
     <StyledDialog
+      subHeader={tabs}
       open
       modal
       onClose={saving ? () => undefined : onClose}
@@ -320,27 +329,6 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
         </>
       }
     >
-      <Box
-        sx={{
-          position: "sticky",
-          top: 0,
-          zIndex: 2,
-          mx: -3,
-          mt: -3,
-          mb: 3,
-          px: 3,
-          bgcolor: "background.default",
-          borderBottom: 1,
-          borderColor: "divider",
-        }}
-      >
-        <Tabs value={tab} onChange={(_, value: RecipeTab) => setTab(value)} variant="scrollable" allowScrollButtonsMobile>
-          <Tab value="data" label={<TabLabel label="Dados" invalid={dataInvalid} />} />
-          <Tab value="inputs" label={<TabLabel label="Ingredientes" count={form.inputs.length} invalid={inputsInvalid} />} />
-          <Tab value="outputs" label={<TabLabel label="Produto" count={form.outputs.length} invalid={outputsInvalid} />} />
-        </Tabs>
-      </Box>
-
       <Stack spacing={2} sx={{ maxWidth: 1100, mx: "auto", width: "100%" }}>
         {tab === "data" && (
           <>
