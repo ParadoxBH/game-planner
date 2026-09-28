@@ -1,5 +1,5 @@
 import { Box, Paper, Tooltip, Typography } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import type { LevelOperator, Reference, ResolvedReference } from "../../api/content";
 import { contentRoute } from "../../api/references";
 import { formatChance, formatLevelRequirement, formatRange } from "../../utils/format";
@@ -52,7 +52,6 @@ export function ContentChip({
   size = "large",
   disableLink = false,
 }: ContentChipProps) {
-  const navigate = useNavigate();
   const { gameId = "" } = useParams<{ gameId: string }>();
   const config = SIZES[size];
 
@@ -73,17 +72,21 @@ export function ContentChip({
 
   return (
     <Tooltip title={title} arrow>
+      {/* Com rota, é um link de verdade: botão do meio, Ctrl+clique e "abrir em nova aba" funcionam. O clique não
+          sobe para o card em volta, que costuma ter o próprio onClick. */}
       <Box
-        onClick={
-          route
-            ? (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                navigate(route);
-              }
-            : undefined
-        }
-        sx={{ position: "relative", width: config.box, height: config.box, flexShrink: 0, cursor: route ? "pointer" : "default" }}
+        {...(route ? { component: RouterLink, to: route } : {})}
+        onClick={route ? (event: React.MouseEvent) => event.stopPropagation() : undefined}
+        sx={{
+          position: "relative",
+          display: "block",
+          width: config.box,
+          height: config.box,
+          flexShrink: 0,
+          cursor: route ? "pointer" : "default",
+          color: "inherit",
+          textDecoration: "none",
+        }}
       >
         <Paper
           variant="outlined"

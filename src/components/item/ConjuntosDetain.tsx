@@ -32,7 +32,7 @@ import {
 } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import type { CollectionDocument, CollectionGroupDocument, CollectionRelated, Reference } from "../../api/content";
-import { currentMedia, ReferenceIndex } from "../../api/references";
+import { contentRoute, currentMedia, ReferenceIndex } from "../../api/references";
 import { useContentDetails, useContentWrites } from "../../api/useContent";
 import type { FilterValue, FilterValues, ListingSchema } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
@@ -118,12 +118,15 @@ interface MemberGridProps {
   onToggle: (extId: string) => void;
 }
 
-/** Membros do grupo: ícone com link, nome e a marcação de obtido. */
+/** Membros do grupo: ícone e nome com link (dá para abrir em nova aba) e a marcação de obtido. */
 function MemberGrid({ members, references, collected, onToggle }: MemberGridProps) {
+  const { gameId = "" } = useParams<{ gameId: string }>();
   return (
     <Grid container spacing={1}>
       {members.map((member) => {
         const checked = collected.has(member.extId);
+        const resolved = references.find(member);
+        const route = resolved?.resolvedKind ? contentRoute(gameId, resolved.resolvedKind, member.extId) : null;
         return (
           <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={`${member.kind ?? ""}:${member.extId}`}>
             <Box sx={{ position: "relative", height: "100%" }}>
@@ -139,8 +142,13 @@ function MemberGrid({ members, references, collected, onToggle }: MemberGridProp
                   backgroundColor: checked ? (theme) => alpha(theme.palette.success.light, 0.1) : undefined,
                 }}
               >
-                <ContentChip target={member} resolved={references.find(member)} size="large" />
-                <Typography variant="caption" fontWeight={700} sx={{ lineHeight: 1.2 }}>
+                <ContentChip target={member} resolved={resolved} size="large" />
+                <Typography
+                  variant="caption"
+                  fontWeight={700}
+                  {...(route ? { component: Link, to: route } : {})}
+                  sx={{ lineHeight: 1.2, color: "inherit", textDecoration: "none", "&:hover": route ? { color: "primary.main" } : undefined }}
+                >
                   {references.name(member)}
                 </Typography>
               </DataCard>
