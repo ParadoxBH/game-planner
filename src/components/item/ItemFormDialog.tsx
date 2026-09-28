@@ -175,6 +175,8 @@ export function ItemFormDialog({
   const [form, setForm] = useState<ItemForm>(() => formOf(item));
   const [extIdTouched, setExtIdTouched] = useState(false);
   const [icon, setIcon] = useState<File | null>(null);
+  /** Ícone escolhido de outro conteúdo (mediaId): ligado ao salvar, sem envio. Enviar um arquivo o descarta. */
+  const [pickedIcon, setPickedIcon] = useState<string | null>(null);
   const [picking, setPicking] = useState<Picking>(null);
   const [pickError, setPickError] = useState<string | null>(null);
   const [creatingCategory, setCreatingCategory] = useState(false);
@@ -258,7 +260,7 @@ export function ItemFormDialog({
         events: form.events,
         attributes: attributesOut(form.attributes, definitions.data ?? []),
       },
-      [{ file: icon, usage: "icon" }],
+      [{ file: icon, mediaId: pickedIcon, usage: "icon" }],
     );
     if (!saved) return;
 
@@ -335,7 +337,21 @@ export function ItemFormDialog({
       <Stack spacing={2}>
         {tab === "data" && (
           <>
-        <IconUploadField currentMediaId={item ? currentMedia(item.media, "icon") : null} kind="item" file={icon} onChange={setIcon} />
+        <IconUploadField
+          currentMediaId={item ? currentMedia(item.media, "icon") : null}
+          kind="item"
+          file={icon}
+          onChange={(file) => {
+            setIcon(file);
+            setPickedIcon(null);
+          }}
+          gameId={gameId}
+          picked={pickedIcon}
+          onPick={(image) => {
+            setPickedIcon(image.mediaId);
+            setIcon(null);
+          }}
+        />
 
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, sm: 6 }}>

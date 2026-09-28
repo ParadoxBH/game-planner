@@ -115,6 +115,8 @@ export function CollectionGroupFormDialog({
   );
   const [extIdTouched, setExtIdTouched] = useState(false);
   const [icon, setIcon] = useState<File | null>(null);
+  /** Ícone escolhido de outro conteúdo (mediaId): ligado ao salvar, sem envio. Enviar um arquivo o descarta. */
+  const [pickedIcon, setPickedIcon] = useState<string | null>(null);
   const [picking, setPicking] = useState<{ index: number | null } | null>(null);
   const [pickError, setPickError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -208,7 +210,7 @@ export function CollectionGroupFormDialog({
         events: form.events,
         ordinal: levelOut(form.ordinal),
       },
-      [{ file: icon, usage: "icon" }],
+      [{ file: icon, mediaId: pickedIcon, usage: "icon" }],
     );
     if (saved) onClose();
   };
@@ -292,7 +294,16 @@ export function CollectionGroupFormDialog({
               currentMediaId={group ? currentMedia(group.media, "icon") : null}
               kind="collection"
               file={icon}
-              onChange={setIcon}
+              onChange={(file) => {
+                setIcon(file);
+                setPickedIcon(null);
+              }}
+              gameId={gameId}
+              picked={pickedIcon}
+              onPick={(image) => {
+                setPickedIcon(image.mediaId);
+                setIcon(null);
+              }}
             />
 
             <TextField

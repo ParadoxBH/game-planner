@@ -25,6 +25,8 @@ export function numberOf(value: string): number | null | undefined {
 /** Imagem escolhida no formulário, enviada ao salvar. Sem arquivo, nada é enviado. */
 export interface ImageUpload {
   file: File | null;
+  /** Imagem que já existe (escolhida de outro conteúdo): é ligada sem envio. O arquivo, se houver, vence. */
+  mediaId?: string | null;
   usage: MediaUsage;
   /** Gera a variante `large` (imagem de mapa). */
   large?: boolean;
@@ -63,7 +65,10 @@ export function useContentSave(gameId: string, resource: ContentResource, isNew:
     const uploaded: { usage: MediaUsage; mediaId: string }[] = [];
     try {
       for (const image of images) {
-        if (!image.file) continue;
+        if (!image.file) {
+          if (image.mediaId) uploaded.push({ usage: image.usage, mediaId: image.mediaId });
+          continue;
+        }
         const result = await upload.mutateAsync({ file: image.file, large: image.large });
         uploaded.push({ usage: image.usage, mediaId: result.media.id });
       }
