@@ -340,6 +340,7 @@ export function ConjuntosDetain() {
             return (
               <Paper key={group.extId} elevation={0} sx={{ p: isMobile ? 1.5 : 2 }}>
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+                  <ContentIcon mediaId={groupIcon(group, references)} kind="collection" alt={group.name} size={32} />
                   <Typography variant="h6" sx={{ fontWeight: 800, color: isComplete(progress) ? "success.light" : "primary.light" }}>
                     {group.name}
                   </Typography>

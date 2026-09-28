@@ -6,9 +6,10 @@ import type {
   RedemptionCodeDocument,
   Reference,
 } from "../../api/content";
-import { contentRoute, resolvedFrom, sameTarget, type ReferenceIndex } from "../../api/references";
+import { contentRoute, currentMedia, resolvedFrom, sameTarget, type ReferenceIndex } from "../../api/references";
 import { formatAmount, formatChance, formatDate, formatRange, isoDate } from "../../utils/format";
 import { ContentChip } from "./ContentChip";
+import { ContentIcon } from "./ContentIcon";
 import { DataCard } from "./DataCard";
 import { DataChip } from "./DataChip";
 
@@ -113,14 +114,26 @@ export function ApiCollectionGroups({ groups, references }: { groups: Collection
         <DataCard
           key={group.extId}
           onClick={group.collections[0] ? () => navigate(contentRoute(gameId, "collection", group.collections[0])!) : undefined}
-          sx={{ p: 1.5, flexDirection: "column", alignItems: "stretch", gap: 0.5 }}
+          sx={{ p: 1.5, gap: 1.5 }}
         >
-          <Typography variant="body2" fontWeight={700}>
-            {group.name}
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            {group.collections.map((id) => references.name({ kind: "collection", extId: id })).join(", ")}
-          </Typography>
+          {/* O ícone do grupo; sem ele, o do conjunto. */}
+          <ContentIcon
+            mediaId={
+              currentMedia(group.media, "icon") ??
+              (group.collections[0] ? references.find({ kind: "collection", extId: group.collections[0] })?.iconMediaId : null)
+            }
+            kind="collection"
+            alt={group.name}
+            size={32}
+          />
+          <Stack alignItems={"start"} flex={1}>
+            <Typography variant="body2" fontWeight={700}>
+              {group.name}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              {group.collections.map((id) => references.name({ kind: "collection", extId: id })).join(", ")}
+            </Typography>
+          </Stack>
         </DataCard>
       ))}
     </Stack>
