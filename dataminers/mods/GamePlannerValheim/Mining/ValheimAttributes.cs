@@ -62,6 +62,9 @@ namespace GamePlanner.Valheim.Mining
             dataset.Define(new AttributeDefinitionDoc("durability", "Durabilidade", Tool, 2));
             dataset.Define(new AttributeDefinitionDoc("durability_per_level", "Durabilidade por nível", Tool, 3)
                 { LevelIncrementOf = "durability" });
+            // Altar Ancestral: chance de o ídolo subir o item um nível, e de o item quebrar quando falha.
+            dataset.Define(new AttributeDefinitionDoc("upgrade_chance", "Chance de melhoria no altar", Tool, 4, "%"));
+            dataset.Define(new AttributeDefinitionDoc("upgrade_break_chance", "Chance de quebrar no altar", Tool, 5, "%"));
 
             dataset.Define(new AttributeDefinitionDoc("weight", "Peso", General, 0));
             dataset.Define(new AttributeDefinitionDoc("max_stack", "Pilha máxima", General, 1));
