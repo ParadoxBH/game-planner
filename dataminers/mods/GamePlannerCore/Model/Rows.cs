@@ -238,6 +238,38 @@ namespace GamePlanner.Core.Model
             .EndObject();
     }
 
+    /// <summary>
+    /// O que a receita muda num atributo de um item: Add soma, Percent soma a porcentagem do valor atual e Set fixa
+    /// o valor (número, texto ou booleano). Target nulo é o item que a receita melhora (o produto que também entra
+    /// como ingrediente); acessório que muda outra arma leva a arma no Target.
+    /// </summary>
+    public sealed class RecipeModifier : IJsonWritable
+    {
+        public const string Add = "add";
+        public const string Percent = "percent";
+        public const string Set = "set";
+
+        public Reference Target;
+        public string Attribute;
+        public string Operation;
+        public object Value;
+
+        public RecipeModifier(string attribute, string operation, object value, Reference target = null)
+        {
+            Attribute = attribute; Operation = operation; Value = value; Target = target;
+        }
+
+        public void WriteJson(JsonWriter w)
+        {
+            w.BeginObject()
+                .Field("target", Target)
+                .Field("attribute", Attribute)
+                .Field("operation", Operation)
+                .Name("value").Any(Value);
+            w.EndObject();
+        }
+    }
+
     /// <summary>Imagem ligada ao conteúdo. Usos aceitos dependem do tipo (item: icon, screenshot).</summary>
     public sealed class MediaLink : IJsonWritable
     {

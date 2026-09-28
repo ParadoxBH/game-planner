@@ -23,6 +23,8 @@ namespace GamePlanner.HowToFish.Mining
         {
             public string WeaponId;
             public int Cost;
+            /// <summary>O que o acessório muda na arma (o pente estendido fixa a munição por pente dela).</summary>
+            public RecipeModifier Modifier;
         }
 
         private sealed class AttachmentData
@@ -80,7 +82,15 @@ namespace GamePlanner.HowToFish.Mining
 
             AttachmentInfo magazine = HtfFields.ExtendedMagInfo.Get(attachments);
             AttachmentData data = Ensure(all, magazine, "magazine");
-            data?.Offers.Add(new Offer { WeaponId = weaponId, Cost = HtfFields.ExtendedMagCost.Get(attachments) });
+            int extended = HtfFields.ExtendedAmmoPerMag.Get(attachments);
+            data?.Offers.Add(new Offer
+            {
+                WeaponId = weaponId,
+                Cost = HtfFields.ExtendedMagCost.Get(attachments),
+                Modifier = extended > 0
+                    ? new RecipeModifier("ammo_per_mag", RecipeModifier.Set, extended, Reference.Item(weaponId))
+                    : null,
+            });
         }
 
         private static void AddOffer(Dictionary<AttachmentInfo, AttachmentData> all, Attachment attachment, string kind, string weaponId)
@@ -128,6 +138,7 @@ namespace GamePlanner.HowToFish.Mining
                 if (offer.Cost > 0) recipe.Inputs.Add(new Requirement(MiningKit.Money, offer.Cost));
                 recipe.Inputs.Add(new Requirement(Reference.Item(offer.WeaponId), 1, notConsumed: true));
                 recipe.Outputs.Add(new RecipeOutput(Reference.Item(id), 1));
+                if (offer.Modifier != null) recipe.Modifiers.Add(offer.Modifier);
                 kit.Dataset.Add(recipe);
             }
         }
@@ -163,8 +174,8 @@ namespace GamePlanner.HowToFish.Mining
 
         /// <summary>
         /// levels[0] é o dano de fábrica; cada nível seguinte vira uma receita que sobe a arma de nível:
-        /// entram a arma no nível anterior e o dinheiro, sai a mesma arma no nível novo. O dano fica no
-        /// resumo, porque atributo é do item, e o item aqui é um só em todos os níveis.
+        /// entram a arma no nível anterior e o dinheiro, sai a mesma arma no nível novo. O dano do nível vai
+        /// como modificador da receita (o item é um só em todos os níveis), e no resumo para leitura.
         /// </summary>
         private static void AddLevels(MiningKit kit, string weaponId, List<KeyValuePair<int, int>> levels, string prefix,
             string station)
@@ -182,6 +193,7 @@ namespace GamePlanner.HowToFish.Mining
                 recipe.Inputs.Add(new Requirement(Reference.Item(weaponId), 1, level: level - 1));
                 if (cost > 0) recipe.Inputs.Add(new Requirement(MiningKit.Money, cost));
                 recipe.Outputs.Add(new RecipeOutput(Reference.Item(weaponId), 1, level));
+                recipe.Modifiers.Add(new RecipeModifier("damage", RecipeModifier.Set, damage));
                 kit.Dataset.Add(recipe);
             }
         }

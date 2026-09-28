@@ -23,6 +23,8 @@ namespace GamePlanner.Core.Model
         public List<Requirement> Inputs = new List<Requirement>();
         public List<RecipeOutput> Outputs = new List<RecipeOutput>();
         public List<RecipeUnlock> Unlock = new List<RecipeUnlock>();
+        /// <summary>O que a receita muda nos atributos de um item (dano do nível, munição do pente).</summary>
+        public List<RecipeModifier> Modifiers = new List<RecipeModifier>();
 
         public override string Resource => "recipes";
         public override string Kind => ContentKinds.Recipe;
@@ -33,7 +35,8 @@ namespace GamePlanner.Core.Model
                 .Field("stations", AllStations())
                 .Field("inputs", Inputs)
                 .Field("outputs", Outputs)
-                .Field("unlock", Unlock);
+                .Field("unlock", Unlock)
+                .Field("modifiers", Modifiers);
         }
 
         private List<object> AllStations()

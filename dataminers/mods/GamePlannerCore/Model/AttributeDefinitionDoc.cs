@@ -6,6 +6,8 @@ namespace GamePlanner.Core.Model
     /// Como um atributo aparece no site: rótulo, unidade, grupo (seção do detalhe e do filtro: Dano, Comida...)
     /// e ordem dentro do grupo. Vai no PUT /attributes em lote. DataType vazio é deduzido dos valores minerados
     /// (MinedDataset.CompleteAttributeTypes): com definição, o servidor passa a conferir o tipo de cada valor.
+    /// LevelIncrementOf liga o atributo ao que ele aumenta a cada nível do item (damage_per_level_slash aumenta
+    /// damage_slash), para o site mostrar o valor em cada nível.
     /// </summary>
     public sealed class AttributeDefinitionDoc : IJsonWritable
     {
@@ -19,6 +21,7 @@ namespace GamePlanner.Core.Model
         public string Group;
         public int Ordinal;
         public string DataType;
+        public string LevelIncrementOf;
 
         public AttributeDefinitionDoc(string key, string label, string group, int ordinal, string unit = null)
         {
@@ -32,6 +35,7 @@ namespace GamePlanner.Core.Model
             .Field("unit", Unit)
             .Field("group", Group)
             .Field("ordinal", Ordinal)
+            .Field("levelIncrementOf", LevelIncrementOf)
             .EndObject();
     }
 }

@@ -41,13 +41,15 @@ namespace GamePlanner.Valheim.Mining
             for (int i = 0; i < DamageTypes.Length; i++)
             {
                 dataset.Define(new AttributeDefinitionDoc("damage_" + DamageTypes[i][0], DamageTypes[i][1], Damage, i));
-                dataset.Define(new AttributeDefinitionDoc("damage_per_level_" + DamageTypes[i][0], DamageTypes[i][1], DamagePerLevel, i));
+                dataset.Define(new AttributeDefinitionDoc("damage_per_level_" + DamageTypes[i][0], DamageTypes[i][1], DamagePerLevel, i)
+                    { LevelIncrementOf = "damage_" + DamageTypes[i][0] });
             }
 
             dataset.Define(new AttributeDefinitionDoc("armor", "Armadura", Defense, 0));
-            dataset.Define(new AttributeDefinitionDoc("armor_per_level", "Armadura por nível", Defense, 1));
+            dataset.Define(new AttributeDefinitionDoc("armor_per_level", "Armadura por nível", Defense, 1) { LevelIncrementOf = "armor" });
             dataset.Define(new AttributeDefinitionDoc("block_power", "Bloqueio", Defense, 2));
-            dataset.Define(new AttributeDefinitionDoc("block_power_per_level", "Bloqueio por nível", Defense, 3));
+            dataset.Define(new AttributeDefinitionDoc("block_power_per_level", "Bloqueio por nível", Defense, 3)
+                { LevelIncrementOf = "block_power" });
 
             dataset.Define(new AttributeDefinitionDoc("food_health", "Vida", Food, 0));
             dataset.Define(new AttributeDefinitionDoc("food_stamina", "Vigor", Food, 1));
@@ -58,7 +60,8 @@ namespace GamePlanner.Valheim.Mining
             dataset.Define(new AttributeDefinitionDoc("skill", "Habilidade", Tool, 0));
             dataset.Define(new AttributeDefinitionDoc("tool_tier", "Nível da ferramenta", Tool, 1));
             dataset.Define(new AttributeDefinitionDoc("durability", "Durabilidade", Tool, 2));
-            dataset.Define(new AttributeDefinitionDoc("durability_per_level", "Durabilidade por nível", Tool, 3));
+            dataset.Define(new AttributeDefinitionDoc("durability_per_level", "Durabilidade por nível", Tool, 3)
+                { LevelIncrementOf = "durability" });
 
             dataset.Define(new AttributeDefinitionDoc("weight", "Peso", General, 0));
             dataset.Define(new AttributeDefinitionDoc("max_stack", "Pilha máxima", General, 1));
