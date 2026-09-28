@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Button, Chip, Divider, IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import { ArrowDownward, ArrowUpward, Delete, ErrorOutline, SwapHoriz } from "@mui/icons-material";
 import type { Reference } from "../../api/content";
+import { listRowSx } from "../../theme/listRowSx";
 import { ReferenceName } from "./ReferenceName";
 
 /** Rótulo de aba de formulário: o nome, quantas linhas tem e, em vermelho, quando algo impede salvar. */
@@ -29,7 +30,10 @@ export function FormSection({ title, action }: { title: string; action?: ReactNo
   );
 }
 
-/** Linha de uma lista de conteúdo: o alvo à esquerda, os campos no meio e as ações à direita. */
+/**
+ * Linha de uma lista de conteúdo: o alvo à esquerda, os campos no meio e as ações à direita. Com `index`, a linha é
+ * da listagem colada (sem borda nem canto arredondado, cores alternadas pelo listRowSx); sem ele, uma caixa avulsa.
+ */
 export function TargetRow({
   gameId,
   target,
@@ -38,6 +42,7 @@ export function TargetRow({
   onUp,
   onDown,
   onRemove,
+  index,
 }: {
   gameId: string;
   target: Reference | null;
@@ -46,13 +51,18 @@ export function TargetRow({
   onUp?: () => void;
   onDown?: () => void;
   onRemove: () => void;
+  index?: number;
 }) {
   return (
     <Stack
       direction={{ xs: "column", sm: "row" }}
       spacing={1}
       alignItems={{ sm: "center" }}
-      sx={{ p: 1, border: 1, borderColor: "divider", borderRadius: 1 }}
+      sx={
+        index === undefined
+          ? { p: 1, border: 1, borderColor: "divider", borderRadius: 1 }
+          : [listRowSx({ index }), { p: 1, flexShrink: 0 }]
+      }
     >
       <Button
         onClick={onPick}
