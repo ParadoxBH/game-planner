@@ -32,14 +32,31 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
 
     /**
      * Receita de melhoria: um produto sai num nível e o mesmo item entra como ingrediente num nível menor (a espada
-     * nível 1 vira a nível 2). Derivado das linhas, sem coluna própria; não pega receita que consome e produz o
-     * mesmo item sem nível (no Valheim, pôr a comida na bandeja).
+     * nível 1 vira a nível 2), ou a mesma categoria entra e sai (curinga: no Valheim, o Altar Ancestral sobe mais um
+     * nível qualquer item da categoria do ídolo). Derivado das linhas, sem coluna própria; não pega receita que
+     * consome e produz o mesmo item sem nível (no Valheim, pôr a comida na bandeja).
      */
     private static final String UPGRADE = "EXISTS (SELECT 1 FROM recipe_output o JOIN recipe_input i"
             + " ON i.game_id = o.game_id AND i.recipe_ext_id = o.recipe_ext_id AND i.target_ext_id = o.target_ext_id"
             + " AND (i.target_kind IS NULL OR o.target_kind IS NULL OR i.target_kind = o.target_kind)"
             + " WHERE o.game_id = t.game_id AND o.recipe_ext_id = t.ext_id"
-            + " AND o.level IS NOT NULL AND o.level > COALESCE(i.level, 0))";
+            + " AND ((o.level IS NOT NULL AND o.level > COALESCE(i.level, 0))"
+            + " OR (o.target_kind = 'category' AND i.target_kind = 'category')))";
+
+    /**
+     * Melhoria curinga que vale para o item pedido: a categoria entra e sai da receita, e o item está nela. O item
+     * mostra essas receitas junto das melhorias dele.
+     */
+    private static QueryField wildcardUpgradeOf() {
+        return QueryField.has("wildcardUpgradeOf", "Melhora pela categoria", FieldType.CODE, "item", match ->
+                "EXISTS (SELECT 1 FROM recipe_output o JOIN recipe_input i ON i.game_id = o.game_id"
+                        + " AND i.recipe_ext_id = o.recipe_ext_id AND i.target_ext_id = o.target_ext_id"
+                        + " AND i.target_kind = 'category'"
+                        + " JOIN content_category c ON c.game_id = o.game_id AND c.category_ext_id = o.target_ext_id"
+                        + " AND c.kind = 'item'"
+                        + " WHERE o.game_id = t.game_id AND o.recipe_ext_id = t.ext_id AND o.target_kind = 'category'"
+                        + " AND " + match.code("c.ext_id") + ")");
+    }
 
     /** Linhas-filhas de uma página de receitas, por ext_id. */
     record Parts(Map<String, List<RecipeStation>> stations, Map<String, List<Requirement>> inputs,
@@ -144,6 +161,7 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
                 childReference("produces", "Produz", "recipe_output", "recipe_ext_id", null),
                 childReference("consumes", "Consome", "recipe_input", "recipe_ext_id", null),
                 childReference("modifies", "Modifica", "recipe_modifier", "recipe_ext_id", "x.target_ext_id IS NOT NULL"),
+                wildcardUpgradeOf(),
                 childCode("station", "Bancada", "entity", "recipe_station", "recipe_ext_id", "station_ext_id"));
     }
 

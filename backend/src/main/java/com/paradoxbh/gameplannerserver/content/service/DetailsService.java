@@ -80,6 +80,8 @@ public class DetailsService {
                 recipes("usedInUpgrades", "upgrade", id -> rule("consumes", "equal", ITEM.code() + ":" + id),
                         id -> rule("produces", "not_equal", ITEM.code() + ":" + id)),
                 recipes("modifiedBy", "craft", id -> rule("modifies", "equal", ITEM.code() + ":" + id)),
+                // Melhoria curinga pela categoria do item (o Altar Ancestral do Valheim: qualquer nível, mais um).
+                recipes("categoryUpgrades", "upgrade", id -> rule("wildcardUpgradeOf", "equal", id)),
                 targeting("droppedBy", ENTITY, "drops", ITEM),
                 targeting("dropPoints", SPAWN_POINT, "drops", ITEM),
                 targeting("spawnPoints", SPAWN_POINT, "occupant", ITEM),

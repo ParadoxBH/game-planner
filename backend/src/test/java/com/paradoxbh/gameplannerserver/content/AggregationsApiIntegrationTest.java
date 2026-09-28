@@ -83,7 +83,15 @@ class AggregationsApiIntegrationTest extends ContentApiTest {
 
     @Test
     void itemDetailsKeepUpgradesApartFromWhatProducesAndUsesIt() throws Exception {
-        create("items", "{ 'extId': 'espada', 'name': 'Espada' }");
+        create("items", "{ 'extId': 'espada', 'name': 'Espada', 'categories': ['altar_idolo_ferro'] }");
+        create("items", "{ 'extId': 'idolo_ferro', 'name': 'Ídolo de ferro' }");
+        // Curinga: qualquer item da categoria do ídolo, em qualquer nível, sobe mais um no altar.
+        create("recipes", """
+                { 'extId': 'altar_idolo_ferro', 'stations': ['altar'],
+                  'inputs': [ { 'target': { 'kind': 'category', 'extId': 'altar_idolo_ferro' }, 'amount': 1 },
+                              { 'target': { 'kind': 'item', 'extId': 'idolo_ferro' }, 'amount': 1 } ],
+                  'outputs': [ { 'target': { 'kind': 'category', 'extId': 'altar_idolo_ferro' }, 'amount': 1, 'chance': 0.65 } ] }
+                """);
         create("items", "{ 'extId': 'ferro', 'name': 'Ferro' }");
         create("recipes", """
                 { 'extId': 'fazer_espada', 'inputs': [ { 'target': { 'kind': 'item', 'extId': 'ferro' }, 'amount': 5 } ],
@@ -109,7 +117,12 @@ class AggregationsApiIntegrationTest extends ContentApiTest {
                 .andExpect(jsonPath("$.related.usedIn.content[*].extId", contains("afiar_espada")))
                 .andExpect(jsonPath("$.related.upgrades.content[*].extId", contains("espada_2")))
                 .andExpect(jsonPath("$.related.usedInUpgrades.total").value(0))
-                .andExpect(jsonPath("$.related.modifiedBy.content[*].extId", contains("afiar_espada")));
+                .andExpect(jsonPath("$.related.modifiedBy.content[*].extId", contains("afiar_espada")))
+                .andExpect(jsonPath("$.related.categoryUpgrades.content[*].extId", contains("altar_idolo_ferro")));
+        // O ídolo aparece nas melhorias que o usam, não como ingrediente comum.
+        mvc.perform(get(DETAILS, game, "items", "idolo_ferro"))
+                .andExpect(jsonPath("$.related.usedIn.total").value(0))
+                .andExpect(jsonPath("$.related.usedInUpgrades.content[*].extId", contains("altar_idolo_ferro")));
         mvc.perform(get(DETAILS, game, "items", "ferro"))
                 .andExpect(jsonPath("$.related.usedIn.content[*].extId", contains("fazer_espada")))
                 .andExpect(jsonPath("$.related.usedInUpgrades.content[*].extId", contains("espada_2")))
