@@ -98,7 +98,8 @@ export function StyledContainer({
                       whiteSpace: 'nowrap',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
-                      width: '100%'
+                      width: '100%',
+                      textAlign: isMobile ? "center" : "start"
                     }}
                   >
                     {title}
@@ -109,7 +110,7 @@ export function StyledContainer({
                     variant="body2" 
                     sx={{ 
                       color: "text.secondary",
-                      fontSize: { xs: '0.75rem', md: '0.875rem' }
+                      fontSize: { xs: '0.75rem', md: '0.875rem', textAlign: isMobile ? "center" : "start" }
                     }}
                   >
                     {label}
