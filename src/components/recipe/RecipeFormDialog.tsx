@@ -9,6 +9,7 @@ import {
   Grid,
   IconButton,
   InputAdornment,
+  MenuItem,
   Stack,
   Switch,
   Tab,
@@ -23,11 +24,12 @@ import {
   type EventDocument,
   type RecipeDocument,
   type LevelOperator,
+  type ModifierOperation,
   type Reference,
   type ResolvedReference,
 } from "../../api/content";
 import { currentMedia } from "../../api/references";
-import { useContentList, useContentWrites } from "../../api/useContent";
+import { useAttributeDefinitions, useContentList, useContentWrites } from "../../api/useContent";
 import { ApiContentSelector, type SelectorKind } from "../common/ApiContentSelector";
 import { CodesField, type CodeOption } from "../common/CodesField";
 import { LevelFields } from "../common/LevelFields";
@@ -39,6 +41,7 @@ import { FormSection, TabLabel, TargetRow } from "../common/formLayout";
 import { chanceIn, chanceOut, isChance, isLevel, isOptionalInteger, isPositive, levelOut, move } from "../common/formValues";
 import { StyledDialog } from "../common/StyledDialog";
 import { UNLOCK_LABELS } from "./recipeLabels";
+import { modifierInvalid, modifierOut, OPERATION_LABELS, targetKey, valueIn, type ModifierRow } from "./modifierForm";
 
 /** Linhas das listas: `key` só identifica a linha na tela; números ficam como texto enquanto se digita. */
 interface InputRow {
@@ -86,6 +89,7 @@ interface RecipeForm {
   inputs: InputRow[];
   outputs: OutputRow[];
   unlock: UnlockRow[];
+  modifiers: ModifierRow[];
   events: string[];
 }
 
@@ -128,11 +132,18 @@ function formOf(recipe: RecipeDocument | null): RecipeForm {
       target: unlock.target,
       value: unlock.value ?? "",
     })),
+    modifiers: (recipe?.modifiers ?? []).map((modifier) => ({
+      key: key(),
+      target: targetKey(modifier.target),
+      attribute: modifier.attribute,
+      operation: modifier.operation,
+      value: valueIn(modifier.value),
+    })),
     events: recipe?.events ?? [],
   };
 }
 
-type RecipeTab = "data" | "inputs" | "outputs";
+type RecipeTab = "data" | "inputs" | "outputs" | "modifiers";
 
 type Picking = { list: "inputs" | "outputs" | "unlock"; index: number | null } | null;
 
@@ -163,8 +174,8 @@ interface RecipeFormDialogProps {
 }
 
 /**
- * Cria ou edita uma receita, em tela cheia e em três abas: Dados (identificação, bancadas, descrição
- * e desbloqueio), Ingredientes e Produto. A escrita substitui o documento inteiro. Ingredientes são
+ * Cria ou edita uma receita, em tela cheia e em quatro abas: Dados (identificação, bancadas, descrição
+ * e desbloqueio), Ingredientes, Produto e Modificadores (o que a receita muda nos atributos de um item). A escrita substitui o documento inteiro. Ingredientes são
  * posicionais (em jogo de slots, cada linha é um slot), então a ordem da tela é a gravada. O ícone é
  * anexado depois de salvar.
  */
@@ -180,6 +191,11 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
   const { remove } = useContentWrites(gameId, "recipes");
 
   const events = useContentList<EventDocument>(gameId, "events", { size: MAX_PAGE_SIZE, sort: "name" });
+  const attributeDefinitions = useAttributeDefinitions(gameId);
+  const definitions = useMemo(
+    () => new Map((attributeDefinitions.data ?? []).map((definition) => [definition.key, definition])),
+    [attributeDefinitions.data],
+  );
 
   const eventOptions = useMemo<CodeOption[]>(
     () =>
@@ -240,8 +256,20 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
   const outputsInvalid = form.outputs.some((row) => !isPositive(row.amount) || !isChance(row.chance) || !isOptionalInteger(row.level));
   const unlockInvalid = form.unlock.some((row) => !row.type.trim() || (!row.target && !row.value.trim()));
   const stationsInvalid = form.stations.some((station) => !isLevel(station.level));
+  const modifiersInvalid = form.modifiers.some((row) => modifierInvalid(row, definitions));
   const dataInvalid = form.extId.trim() === "" || craftTimeInvalid || unlockInvalid || stationsInvalid;
-  const valid = !dataInvalid && !inputsInvalid && !outputsInvalid;
+  const valid = !dataInvalid && !inputsInvalid && !outputsInvalid && !modifiersInvalid;
+
+  // Alvos possíveis de um modificador: os itens e entidades da receita, sem repetir.
+  const modifierTargets = [...form.inputs, ...form.outputs]
+    .map((row) => row.target)
+    .filter((target) => target.kind !== "category")
+    .filter((target, index, all) => all.findIndex((other) => targetKey(other) === targetKey(target)) === index);
+  const updateModifier = (index: number, changes: Partial<ModifierRow>) =>
+    set(
+      "modifiers",
+      form.modifiers.map((row, position) => (position === index ? { ...row, ...changes } : row)),
+    );
 
   const submit = async () => {
     if (!valid) return;
@@ -273,6 +301,7 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
           level: numberOf(row.level),
         })),
         unlock: form.unlock.map((row) => ({ type: row.type.trim(), target: row.target, value: row.value.trim() || null })),
+        modifiers: form.modifiers.map((row) => modifierOut(row, definitions)),
         events: form.events,
       },
       [{ file: icon, usage: "icon" }],
@@ -290,6 +319,7 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
       <Tab value="data" label={<TabLabel label="Dados" invalid={dataInvalid} />} />
       <Tab value="inputs" label={<TabLabel label="Ingredientes" count={form.inputs.length} invalid={inputsInvalid} />} />
       <Tab value="outputs" label={<TabLabel label="Produto" count={form.outputs.length} invalid={outputsInvalid} />} />
+      <Tab value="modifiers" label={<TabLabel label="Modificadores" count={form.modifiers.length} invalid={modifiersInvalid} />} />
     </Tabs>
   );
 
@@ -638,6 +668,116 @@ export function RecipeFormDialog({ gameId, recipe, onClose, onSaved, canDelete =
                 />
               </TargetRow>
             ))}
+          </>
+        )}
+
+        {tab === "modifiers" && (
+          <>
+            <FormSection
+              title="Modificadores"
+              action={
+                <Button
+                  size="small"
+                  startIcon={<Add />}
+                  onClick={() => set("modifiers", [...form.modifiers, { key: key(), target: "", attribute: "", operation: "add", value: "" }])}
+                  sx={{ textTransform: "none" }}
+                >
+                  Adicionar
+                </Button>
+              }
+            />
+            <Typography variant="body2" color="text.secondary">
+              O que a receita muda nos atributos de um item: somar, somar uma porcentagem do valor atual ou fixar um valor. Numa
+              melhoria (a arma nível 2 vira nível 3), o alvo automático é o próprio item; os aumentos por nível dos metadados já
+              entram sozinhos, então aqui vai só o que não segue essa regra.
+            </Typography>
+            {form.modifiers.map((row, index) => {
+              const definition = definitions.get(row.attribute.trim());
+              const invalid = modifierInvalid(row, definitions);
+              return (
+                <Stack
+                  key={row.key}
+                  direction={{ xs: "column", md: "row" }}
+                  spacing={1}
+                  alignItems={{ md: "center" }}
+                  sx={{ p: 1, border: 1, borderColor: "divider", borderRadius: 1 }}
+                >
+                  <TextField
+                    select
+                    size="small"
+                    label="Item"
+                    value={row.target}
+                    onChange={(event) => updateModifier(index, { target: event.target.value })}
+                    sx={{ width: { md: 240 } }}
+                  >
+                    <MenuItem value="">Automático</MenuItem>
+                    {modifierTargets.map((target) => (
+                      <MenuItem key={targetKey(target)} value={targetKey(target)}>
+                        <ReferenceName gameId={gameId} target={target} />
+                      </MenuItem>
+                    ))}
+                    {row.target && !modifierTargets.some((target) => targetKey(target) === row.target) && (
+                      <MenuItem value={row.target}>{row.target.slice(row.target.indexOf(":") + 1)}</MenuItem>
+                    )}
+                  </TextField>
+                  <Autocomplete
+                    freeSolo
+                    size="small"
+                    options={[...definitions.keys()]}
+                    getOptionLabel={(option) => {
+                      const label = definitions.get(option)?.label;
+                      return label && label !== option ? `${label} (${option})` : option;
+                    }}
+                    value={row.attribute || null}
+                    onChange={(_, value) => updateModifier(index, { attribute: value ?? "" })}
+                    onInputChange={(_, value, reason) => {
+                      // Digitado: grava o texto; escolhido na lista, o onChange já gravou a chave.
+                      if (reason === "input") updateModifier(index, { attribute: value });
+                    }}
+                    sx={{ flex: 1, minWidth: 200 }}
+                    renderInput={(params) => <TextField {...params} label="Atributo" error={!row.attribute.trim()} />}
+                  />
+                  <TextField
+                    select
+                    size="small"
+                    label="Operação"
+                    value={row.operation}
+                    onChange={(event) => updateModifier(index, { operation: event.target.value as ModifierOperation })}
+                    sx={{ width: { md: 150 } }}
+                  >
+                    {(Object.keys(OPERATION_LABELS) as ModifierOperation[]).map((operation) => (
+                      <MenuItem key={operation} value={operation}>
+                        {OPERATION_LABELS[operation]}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <TextField
+                    size="small"
+                    label="Valor"
+                    value={row.value}
+                    onChange={(event) => updateModifier(index, { value: event.target.value })}
+                    error={invalid && row.attribute.trim() !== ""}
+                    helperText={row.operation !== "set" ? "Número." : definition?.dataType === "boolean" ? "sim ou não" : undefined}
+                    sx={{ width: { md: 150 } }}
+                    slotProps={{
+                      input: {
+                        endAdornment:
+                          row.operation === "percent" ? (
+                            <InputAdornment position="end">%</InputAdornment>
+                          ) : definition?.unit ? (
+                            <InputAdornment position="end">{definition.unit}</InputAdornment>
+                          ) : undefined,
+                      },
+                    }}
+                  />
+                  <Tooltip title="Remover">
+                    <IconButton size="small" color="error" onClick={() => set("modifiers", form.modifiers.filter((_, position) => position !== index))}>
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
+              );
+            })}
           </>
         )}
 

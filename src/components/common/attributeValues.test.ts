@@ -19,6 +19,7 @@ const definition = (key: string, dataType: AttributeDefinition["dataType"]): Att
   unit: null,
   group: null,
   ordinal: 0,
+  levelIncrementOf: null,
 });
 
 describe("attributeFormOf / attributesOut", () => {

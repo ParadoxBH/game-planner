@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Alert, Autocomplete, Button, CircularProgress, MenuItem, Stack, TextField } from "@mui/material";
 import type { AttributeDefinition } from "../../api/content";
-import { useAttributeWrites } from "../../api/useContent";
+import { useAttributeDefinitions, useAttributeUsage, useAttributeWrites } from "../../api/useContent";
 import { describeError, slugOf } from "../common/contentForm";
 import { StyledDialog } from "../common/StyledDialog";
 import { OTHERS, TYPE_LABELS, type AttributeRow } from "./attributeRows";
@@ -30,7 +30,23 @@ export function AttributeFormDialog({ gameId, row, groups, defined, onClose }: A
     definition?.dataType ?? (usage && !usage.numeric ? "text" : "number"),
   );
   const [ordinal, setOrdinal] = useState(String(definition?.ordinal ?? 0));
+  const [levelIncrementOf, setLevelIncrementOf] = useState<string | null>(definition?.levelIncrementOf ?? null);
   const { put } = useAttributeWrites(gameId);
+  const definitions = useAttributeDefinitions(gameId);
+  const usages = useAttributeUsage(gameId);
+
+  // Atributos numéricos do jogo (definidos como número, ou sem definição e só com números), menos este.
+  const numericKeys = useMemo(() => {
+    const labels = new Map<string, string>();
+    for (const candidate of definitions.data ?? []) {
+      if (candidate.dataType === "number") labels.set(candidate.key, candidate.label);
+    }
+    for (const candidate of usages.data ?? []) {
+      if (candidate.numeric && !(definitions.data ?? []).some((known) => known.key === candidate.key)) labels.set(candidate.key, candidate.key);
+    }
+    labels.delete(key.trim());
+    return labels;
+  }, [definitions.data, usages.data, key]);
 
   const duplicate = creating && defined.has(key.trim());
   const ordinalValid = /^-?\d+$/.test(ordinal.trim());
@@ -48,6 +64,7 @@ export function AttributeFormDialog({ gameId, row, groups, defined, onClose }: A
         unit: unit.trim() || null,
         dataType,
         ordinal: Number(ordinal.trim()),
+        levelIncrementOf: dataType === "number" ? levelIncrementOf : null,
       },
       { onSuccess: onClose },
     );
@@ -145,6 +162,24 @@ export function AttributeFormDialog({ gameId, row, groups, defined, onClose }: A
             slotProps={{ htmlInput: { inputMode: "numeric" } }}
           />
         </Stack>
+        {dataType === "number" && (
+          <Autocomplete
+            options={[...numericKeys.keys()].sort((a, b) => (numericKeys.get(a) ?? a).localeCompare(numericKeys.get(b) ?? b))}
+            value={levelIncrementOf}
+            onChange={(_, next) => setLevelIncrementOf(next)}
+            getOptionLabel={(option) => {
+              const optionLabel = numericKeys.get(option);
+              return optionLabel && optionLabel !== option ? `${optionLabel} (${option})` : option;
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Aumenta por nível o atributo"
+                helperText="O valor deste soma no atributo escolhido a cada nível do item. Ex.: dano por nível → dano."
+              />
+            )}
+          />
+        )}
         {typeConflict && (
           <Alert severity="warning">
             Há valores deste atributo que não são número. Com o tipo Número, salvar esses itens ou entidades vai falhar até o

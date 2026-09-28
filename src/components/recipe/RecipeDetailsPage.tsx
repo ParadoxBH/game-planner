@@ -22,11 +22,12 @@ import {
   type ResolvedReference,
 } from "../../api/content";
 import { ReferenceIndex } from "../../api/references";
-import { useContentDetails } from "../../api/useContent";
+import { useAttributeDefinitions, useContentDetails } from "../../api/useContent";
 import { useGameAdmin, useGameEditor } from "../../hooks/useGameAdmin";
 import { usePlatform } from "../../hooks/usePlatform";
 import { formatAmount, formatChance, formatDuration, formatLevelRequirement } from "../../utils/format";
 import { ApiRewardCodes } from "../common/ApiRelatedLists";
+import { modifierText } from "../common/attributes";
 import { ContentChip } from "../common/ContentChip";
 import { ContentReferences } from "../common/ContentLabel";
 import { DataCard } from "../common/DataCard";
@@ -35,6 +36,7 @@ import { DetainContainer } from "../common/DetainContainer";
 import { DetainItem } from "../common/DetainItem";
 import { StyledContainer } from "../common/StyledContainer";
 import { ApiShopOffers, offersFor } from "../shop/ApiShopOffers";
+import { modifierTarget, upgradeStep } from "../item/itemLevels";
 import { ApiCraftingTree, NO_CHOICES, type TreeChoices } from "./ApiCraftingTree";
 import { recipeTitle, unlockLabel } from "./ApiRecipeCard";
 import { stationEntries } from "./recipeStations";
@@ -115,6 +117,7 @@ export function RecipeDetailsPage() {
 
   const details = useContentDetails<RecipeDocument, RecipeRelated>(gameId, "recipes", recipeId);
   const references = useMemo(() => new ReferenceIndex(details.data?.references), [details.data]);
+  const attributes = useAttributeDefinitions(gameId);
 
   // A árvore parte do produto; quando outra receita também o produz, esta é a escolhida.
   const loaded = details.data?.document;
@@ -153,6 +156,9 @@ export function RecipeDetailsPage() {
   const title = recipeTitle(recipe, references);
   const mainOutput = recipe.outputs[0];
   const offers = offersFor(related.soldIn.content, self);
+  const step = upgradeStep(recipe);
+  const modifiers = recipe.modifiers ?? [];
+  const definitions = new Map((attributes.data ?? []).map((definition) => [definition.key, definition]));
 
   return (
     <StyledContainer
@@ -220,6 +226,30 @@ export function RecipeDetailsPage() {
                   <Typography variant="body2">{formatDuration(recipe.craftTimeSeconds)}</Typography>
                 </DetailField>
               ) : null}
+
+              {step && (
+                <DetailField label="Melhoria">
+                  <Typography variant="body2">
+                    {references.name(step.target)}: nível {step.from} → {step.to}
+                  </Typography>
+                </DetailField>
+              )}
+
+              {modifiers.length > 0 && (
+                <DetailField label="Modificadores">
+                  <Stack spacing={1}>
+                    {modifiers.map((modifier, index) => {
+                      const changed = modifierTarget(recipe, modifier);
+                      return (
+                        <Stack key={index} direction="row" spacing={1} alignItems="center">
+                          {changed && <ContentChip target={changed} resolved={references.find(changed)} size="small" />}
+                          <Typography variant="body2">{modifierText(modifier, definitions.get(modifier.attribute))}</Typography>
+                        </Stack>
+                      );
+                    })}
+                  </Stack>
+                </DetailField>
+              )}
 
               {recipe.unlock.length > 0 && (
                 <DetailField label="Como desbloquear">

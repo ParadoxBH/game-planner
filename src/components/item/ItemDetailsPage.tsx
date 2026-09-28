@@ -6,6 +6,8 @@ import {
   Architecture,
   Bolt,
   Construction,
+  Extension,
+  KeyboardDoubleArrowUp,
   Map as MapIcon,
   NavigateNext,
   Place,
@@ -13,6 +15,7 @@ import {
   Rule,
   Storefront,
   Style,
+  Upgrade,
 } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import type { ItemDocument, ItemRelated, Reference } from "../../api/content";
@@ -39,6 +42,9 @@ import { StyledContainer } from "../common/StyledContainer";
 import { ApiRecipeCard } from "../recipe/ApiRecipeCard";
 import { ApiShopOffers, offersFor } from "../shop/ApiShopOffers";
 import { AttributeTable } from "../common/AttributeTable";
+import { ApiItemUpgrades } from "./ApiItemUpgrades";
+import { ApiModifiedBy } from "./ApiModifiedBy";
+import { ApiUpgradeUses } from "./ApiUpgradeUses";
 import { ItemFormDialog } from "./ItemFormDialog";
 
 /** Detalhe de item, lido do agregado /items/{id}/details da API. */
@@ -88,6 +94,9 @@ export function ItemDetailsPage() {
   const rarity = item.rarityCode ? rarities.data?.find((candidate) => candidate.code === item.rarityCode) : undefined;
   const definitions = new Map((attributes.data ?? []).map((definition) => [definition.key, definition]));
   const offers = offersFor(related.soldIn.content, self);
+  const upgrades = related.upgrades?.content ?? [];
+  const upgradeUses = related.usedInUpgrades?.content ?? [];
+  const modifiedBy = related.modifiedBy?.content ?? [];
 
   return (
     <StyledContainer
@@ -235,6 +244,24 @@ export function ItemDetailsPage() {
             </Grid>
           )}
         </DetainItem>
+
+        {upgrades.length > 0 && (
+          <DetainItem startIcon={<Upgrade color="primary" />} label="Melhorias" count={related.upgrades.total}>
+            <ApiItemUpgrades gameId={gameId} item={item} upgrades={upgrades} definitions={definitions} references={references} />
+          </DetainItem>
+        )}
+
+        {modifiedBy.length > 0 && (
+          <DetainItem startIcon={<Extension color="primary" />} label="Modificado por" count={related.modifiedBy.total}>
+            <ApiModifiedBy target={self} recipes={modifiedBy} definitions={definitions} references={references} />
+          </DetainItem>
+        )}
+
+        {upgradeUses.length > 0 && (
+          <DetainItem startIcon={<KeyboardDoubleArrowUp color="primary" />} label="Usado em melhorias" count={related.usedInUpgrades.total}>
+            <ApiUpgradeUses gameId={gameId} target={self} recipes={upgradeUses} references={references} />
+          </DetainItem>
+        )}
 
         <DetainItem size={isMobile ? undefined : 6} startIcon={<Bolt color="primary" />} label="Dropado por" count={related.droppedBy.total}>
           {related.droppedBy.content.length > 0 && <ApiDroppedBy entities={related.droppedBy.content} target={self} />}

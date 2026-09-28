@@ -159,7 +159,12 @@ export function MetadataDetailsPage() {
     <StyledContainer
       prefix={<Bookmarks sx={{ height: 60, width: 60, color: "primary.main" }} />}
       title={label}
-      label={`Itens e entidades com o atributo "${label}"${definition?.unit ? `, em ${definition.unit}` : ""}.`}
+      label={
+        `Itens e entidades com o atributo "${label}"${definition?.unit ? `, em ${definition.unit}` : ""}.` +
+        (definition?.levelIncrementOf
+          ? ` Aumenta "${definitions.get(definition.levelIncrementOf)?.label ?? definition.levelIncrementOf}" a cada nível do item.`
+          : "")
+      }
       searchEnd={
         <>
           {canEdit && (

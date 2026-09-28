@@ -142,12 +142,28 @@ export interface RecipeStation {
   level: number | null;
 }
 
+/** add soma, percent soma a porcentagem do valor atual, set fixa o valor. */
+export type ModifierOperation = "add" | "percent" | "set";
+
+/**
+ * O que a receita muda num atributo de um item. `target` nulo é o item que a receita melhora (o produto que também
+ * entra como ingrediente), senão o primeiro produto.
+ */
+export interface RecipeModifier {
+  target: Reference | null;
+  attribute: string;
+  operation: ModifierOperation;
+  value: AttributeValue;
+}
+
 export interface RecipeDocument extends ContentBase {
   craftTimeSeconds: number | null;
   stations: RecipeStation[];
   inputs: Requirement[];
   outputs: RecipeOutput[];
   unlock: RecipeUnlock[];
+  /** Ausente em respostas antigas. */
+  modifiers?: RecipeModifier[];
   events: string[];
 }
 
@@ -371,8 +387,15 @@ export interface Details<D, R> {
 
 /** Relações do detalhe de item. Cada uma traz até 200 documentos e o total. */
 export interface ItemRelated {
+  /** Só fabricações: as melhorias do item vêm em `upgrades`, e as que usam o item, em `usedInUpgrades`. */
   producedBy: ContentPage<RecipeDocument>;
   usedIn: ContentPage<RecipeDocument>;
+  /** Receitas que sobem o próprio item de nível. */
+  upgrades: ContentPage<RecipeDocument>;
+  /** Melhorias de outros itens que gastam este. */
+  usedInUpgrades: ContentPage<RecipeDocument>;
+  /** Fabricações que mudam atributos do item sem subir o nível (acessório, pente). */
+  modifiedBy: ContentPage<RecipeDocument>;
   droppedBy: ContentPage<EntityDocument>;
   dropPoints: ContentPage<SpawnPointDocument>;
   spawnPoints: ContentPage<SpawnPointDocument>;
@@ -621,6 +644,8 @@ export interface AttributeDefinition {
   /** Seção em que aparece no detalhe e no filtro (Dano, Comida...); nulo cai em "Outros". */
   group: string | null;
   ordinal: number;
+  /** Atributo que este aumenta a cada nível do item (damage_per_level_slash → damage_slash); nulo, nenhum. */
+  levelIncrementOf: string | null;
 }
 
 /** Uma chave de atributo usada no jogo, definida ou não: quantos itens e entidades a têm e se todo valor é número. */

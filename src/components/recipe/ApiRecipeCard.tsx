@@ -8,6 +8,7 @@ import { ContentChip } from "../common/ContentChip";
 import { ContentReferences } from "../common/ContentLabel";
 import { DataCard } from "../common/DataCard";
 import { DataChip } from "../common/DataChip";
+import { isUpgrade } from "../item/itemLevels";
 import { UNLOCK_LABELS } from "./recipeLabels";
 import { stationEntries } from "./recipeStations";
 
@@ -49,7 +50,10 @@ export function ApiRecipeCard({ recipe, references, highlight, onClick, inlineSt
         <Typography variant="body2" fontWeight={700} noWrap>
           {recipeTitle(recipe, references)}
         </Typography>
-        {recipe.craftTimeSeconds ? <DataChip label={formatDuration(recipe.craftTimeSeconds)} /> : null}
+        <Stack direction="row" spacing={0.5} sx={{ flexShrink: 0 }}>
+          {isUpgrade(recipe) && <DataChip label="Melhoria" />}
+          {recipe.craftTimeSeconds ? <DataChip label={formatDuration(recipe.craftTimeSeconds)} /> : null}
+        </Stack>
       </Stack>
 
       <Stack direction="row" alignItems="center" spacing={1.5} flexWrap="wrap" useFlexGap sx={{ py: 0.5 }}>
