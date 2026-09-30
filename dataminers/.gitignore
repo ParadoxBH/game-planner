@@ -7,3 +7,6 @@ libs/**/*.dll
 
 # O .gitignore da raiz ignora *.sln; a solução dos mineradores vai para o repositório
 !*.sln
+
+# Saída do extrator offline do Heartopia: textos e inventário do jogo, não vão para o repositório
+tools/HeartopiaOffline/out/

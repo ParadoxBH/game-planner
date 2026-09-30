@@ -2,7 +2,8 @@
 
 Mods que leem os dados de dentro do jogo e enviam para a API do Game Planner (ou exportam em JSON).
 Mesma arquitetura dos mods do Valheim: um núcleo genérico e um mod fino por jogo. Quase todos são mods
-BepInEx de jogo Unity; o do Terraria é mod do tModLoader e tem regras próprias (veja abaixo).
+BepInEx de jogo Unity; o do Terraria é mod do tModLoader e tem regras próprias (veja abaixo). O Heartopia é
+online e tem anti-cheat, então não tem mod: tem uma ferramenta que lê os arquivos com o jogo fechado.
 
 ```
 dataminers/
@@ -20,6 +21,7 @@ dataminers/
     GamePlannerTerraria/             minerador do Terraria (tModLoader, fora da solução)
   tools/
     link-modsources.ps1              liga o mod do Terraria à pasta ModSources do tModLoader
+    HeartopiaOffline/                extração offline do Heartopia (console .NET 9, fora da solução)
   bin/                               saída: ParadoxBH.GamePlanner.*.dll
 ```
 
@@ -107,3 +109,18 @@ minerar de novo na ilha da loja completa o que faltou.
 
 Raridades de skin (`common`, `rare`, `legendary`) precisam estar cadastradas no jogo, na API, para aparecerem
 com cor no site.
+
+## Heartopia (offline)
+
+MMO com anti-cheat (`themis`, dentro do `xdt.exe`) e manifesto com o MD5 de cada arquivo: mod BepInEx aqui é
+pedido de ban. Por isso não há minerador dentro do jogo, e sim `tools/HeartopiaOffline`, um console que roda com
+o jogo e o lançador **fechados**, só lê arquivos do PC (os `.db` via cópia) e grava um relatório local.
+
+```powershell
+dotnet run --project tools\HeartopiaOffline
+```
+
+Dá para extrair: catálogo de itens pelos nomes dos ícones, todos os textos em 12 idiomas (inclusive pt-BR), os
+nomes das receitas, candidatos a conjunto e o diff entre patches. **Não** dá: ingredientes e quantidades, peças
+oficiais de conjunto, ícones — estão nos AssetBundles, que têm criptografia UnityCN e ficam de fora de propósito.
+Regras e saída no [README da ferramenta](tools/HeartopiaOffline/README.md). Ainda não envia nada para a API.

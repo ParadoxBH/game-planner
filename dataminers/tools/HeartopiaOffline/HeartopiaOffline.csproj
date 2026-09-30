@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Ferramenta de console, NÃO é mod: o Heartopia é online e tem anti-cheat, então nada roda dentro do jogo.
+    Ela lê os arquivos que o jogo deixa no PC, com o jogo fechado, e nunca escreve neles. Fica fora da
+    GamePlannerDataminers.sln (como o Terraria) para o build dos mods não depender de restaurar pacote NuGet.
+
+      dotnet run --project tools\HeartopiaOffline -- [--game <pasta>] [--cache <pasta>] [--out <pasta>]
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>HeartopiaOffline</AssemblyName>
+    <RootNamespace>GamePlanner.HeartopiaOffline</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.8" />
+  </ItemGroup>
+
+</Project>
