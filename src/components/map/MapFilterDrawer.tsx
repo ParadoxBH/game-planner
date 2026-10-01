@@ -441,7 +441,7 @@ export const MapFilterDrawer = ({
                     isExpanded={isExpanded}
                     sx={listRowSx({ index })}
                     max={childKeys.length}
-                    count={hasChildren ? visibleChildren?.length : visibleTypes.includes(type) ? 1 : 0}
+                    count={hasChildren ? visibleChildren?.length : !visibleTypes.includes(type) ? 1 : 0}
                     onClick={() => toggleType(type)}
                     label={typeLabel(type)}
                     chip={count}
