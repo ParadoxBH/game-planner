@@ -42,12 +42,12 @@ export function ContentLabel({
   const navigate = useNavigate();
   const theme = useTheme();
   const { gameId = "" } = useParams<{ gameId: string }>();
-  const { target, resolved, rarityColor, disableLink = false } = chip;
+  const { target, resolved, rarityColor, disableLink = false, linkUnregistered = false } = chip;
 
   const kind = resolved?.resolvedKind ?? target.kind ?? null;
   const registered = Boolean(resolved?.resolvedKind);
   const name = resolved?.name ?? target.extId;
-  const route = disableLink || !registered ? null : contentRoute(gameId, kind, target.extId);
+  const route = disableLink || !(registered || linkUnregistered) ? null : contentRoute(gameId, kind, target.extId);
   const action = onClick ?? (route ? () => navigate(route) : undefined);
   const framed = variant !== "text";
 

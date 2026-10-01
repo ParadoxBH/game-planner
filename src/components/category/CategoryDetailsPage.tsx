@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type ReactElement } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, CircularProgress, Grid, Paper, Stack, Tab, Tabs, Typography } from "@mui/material";
-import { Edit } from "@mui/icons-material";
+import { Add, Edit } from "@mui/icons-material";
 import { ApiError } from "../../api/ApiError";
 import {
   MAX_PAGE_SIZE,
@@ -52,12 +52,27 @@ const TABS: Record<CategoryTab, { label: string; icon: ReactElement }> = {
   shops: { label: "Lojas", icon: <DataTypeIcon value="shop" /> },
 };
 
+/** Segmento da URL de cada aba: .../categories/view/{código}/itens abre direto nos itens. */
+const TAB_SLUGS: Record<CategoryTab, string> = {
+  items: "itens",
+  entities: "entitys",
+  recipes: "receitas",
+  shops: "lojas",
+};
+
+function tabOfSlug(slug: string | undefined): CategoryTab | undefined {
+  return (Object.keys(TAB_SLUGS) as CategoryTab[]).find((tab) => TAB_SLUGS[tab] === slug);
+}
+
 const NO_CRITERIA: FilterValues = {};
 
-/** Abas com conteúdo: itens e entidades conforme o que a categoria agrupa, receitas e lojas quando houver. */
-function tabsFor(category: CategoryDocument, related: CategoryRelated): CategoryTab[] {
+/**
+ * Abas com conteúdo: itens e entidades conforme o que a categoria agrupa, receitas e lojas quando houver. Sem
+ * cadastro, só as que têm conteúdo.
+ */
+function tabsFor(category: CategoryDocument | null, related: CategoryRelated): CategoryTab[] {
   const tabs: CategoryTab[] = [];
-  const groups = (target: "item" | "entity") => category.appliesTo === target || category.appliesTo === "both";
+  const groups = (target: "item" | "entity") => category?.appliesTo === target || category?.appliesTo === "both";
   if (groups("item") || related.items.total > 0) tabs.push("items");
   if (groups("entity") || related.entities.total > 0) tabs.push("entities");
   if (related.producedBy.total + related.usedIn.total > 0) tabs.push("recipes");
@@ -132,17 +147,22 @@ function RecipeSection({
   );
 }
 
-/** Detalhe de categoria: itens e entidades paginados pela listagem, receitas e lojas do agregado /details. */
+/**
+ * Detalhe de categoria: itens e entidades paginados pela listagem, receitas e lojas do agregado /details. A
+ * categoria citada mas não cadastrada abre igual, pelo código; quem edita pode cadastrá-la dali.
+ */
 export function CategoryDetailsPage() {
-  const { gameId = "", categoryId = "" } = useParams<{ gameId: string; categoryId: string }>();
+  const { gameId = "", categoryId = "", tab: tabSlug } = useParams<{ gameId: string; categoryId: string; tab?: string }>();
+  const navigate = useNavigate();
   const { isMobile } = usePlatform();
-  const [selectedTab, setSelectedTab] = useState<CategoryTab>("items");
+  // A aba vem da URL; sem ela, ou se a categoria não tem essa aba, abre na primeira.
+  const selectedTab = tabOfSlug(tabSlug) ?? "items";
   const [viewMode, setViewMode] = useViewMode("category_details");
   const pages = usePagination(NO_CRITERIA);
   const { canEdit } = useGameEditor(gameId);
   const [editing, setEditing] = useState(false);
 
-  const details = useContentDetails<CategoryDocument, CategoryRelated>(gameId, "categories", categoryId);
+  const details = useContentDetails<CategoryDocument | null, CategoryRelated>(gameId, "categories", categoryId);
   const tabs = details.data ? tabsFor(details.data.document, details.data.related) : [];
   const tab: CategoryTab | undefined = tabs.includes(selectedTab) ? selectedTab : tabs[0];
 
@@ -231,20 +251,31 @@ export function CategoryDetailsPage() {
   }
 
   const { document: category, related } = details.data;
-  const self: Reference = { kind: "category", extId: category.extId };
+  const self: Reference = { kind: "category", extId: categoryId };
   const paged = tab === "items" || tab === "entities";
 
   // Os filtros são os da listagem da aba: trocar de aba os limpa; a busca continua.
   const changeTab = (next: CategoryTab) => {
-    setSelectedTab(next);
+    navigate(`/game/${gameId}/categories/view/${encodeURIComponent(categoryId)}/${TAB_SLUGS[next]}`, { replace: true });
     pages.setCriteria(resetFilterValues(criteria));
   };
 
   return (
     <StyledContainer
-      prefix={<ContentIcon mediaId={currentMedia(category.media, "icon")} kind="category" alt={category.name} size={60} />}
-      title={category.name}
-      label={category.summary ?? category.description ?? `${APPLIES_TO_LABELS[category.appliesTo]} da categoria ${category.extId}`}
+      prefix={
+        <ContentIcon
+          mediaId={category ? currentMedia(category.media, "icon") : null}
+          kind="category"
+          alt={category?.name ?? categoryId}
+          size={60}
+        />
+      }
+      title={category?.name ?? categoryId}
+      label={
+        category
+          ? category.summary ?? category.description ?? `${APPLIES_TO_LABELS[category.appliesTo]} da categoria ${category.extId}`
+          : `Categoria "${categoryId}" citada no conteúdo, mas ainda não cadastrada.`
+      }
       searchEnd={
         paged ? (
           <>
@@ -275,8 +306,14 @@ export function CategoryDetailsPage() {
       }
       actionsEnd={
         canEdit && (
-          <Button variant="outlined" size="small" startIcon={<Edit />} onClick={() => setEditing(true)} sx={{ textTransform: "none" }}>
-            Editar
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={category ? <Edit /> : <Add />}
+            onClick={() => setEditing(true)}
+            sx={{ textTransform: "none" }}
+          >
+            {category ? "Editar" : "Cadastrar"}
           </Button>
         )
       }
@@ -352,7 +389,7 @@ export function CategoryDetailsPage() {
           </Grid>
         </Stack>
       )}
-      {editing && <CategoryFormDialog gameId={gameId} category={category} onClose={() => setEditing(false)} />}
+      {editing && <CategoryFormDialog gameId={gameId} category={category} extId={categoryId} onClose={() => setEditing(false)} />}
     </StyledContainer>
   );
 }

@@ -49,7 +49,8 @@ public class DetailsService {
 
     /**
      * {@code related} tem uma página por relação, sempre presente, mesmo vazia. {@code categoryMembers}
-     * traz os itens e entidades das categorias usadas como ingrediente ou produto.
+     * traz os itens e entidades das categorias usadas como ingrediente ou produto. {@code document} só é nulo
+     * para categoria citada mas não cadastrada.
      */
     public record Details(String kind, ContentDocument<?> document, Map<String, ContentPage<?>> related,
                           List<ResolvedReference> references, Map<String, List<ResolvedReference>> categoryMembers) {
@@ -139,8 +140,12 @@ public class DetailsService {
         ContentKind kind = ContentKind.fromPath(resource)
                 .orElseThrow(() -> ApiException.notFound("Recurso \"" + resource + "\""));
         String id = ExtIds.require(extId, "extId");
-        ContentDocument<?> document = handlers.get(kind).find(gameId, id)
-                .orElseThrow(() -> references.unregistered(gameId, kind, id));
+        ContentDocument<?> document = handlers.get(kind).find(gameId, id).orElse(null);
+        // Categoria é só um código nos itens e entidades: sem cadastro, o detalhe sai com documento nulo enquanto
+        // houver algo ligado a ela. Os demais tipos exigem o documento.
+        if (document == null && kind != CATEGORY) {
+            throw references.unregistered(gameId, kind, id);
+        }
 
         Map<String, ContentPage<?>> related = new LinkedHashMap<>();
         List<ReferenceService.Source> sources = new ArrayList<>(List.of(new ReferenceService.Source(kind, id)));
@@ -148,6 +153,9 @@ public class DetailsService {
             ContentPage<? extends ContentDocument<?>> page = relation.handler().list(gameId, relation.query().apply(id));
             related.put(relation.name(), page);
             page.content().forEach(doc -> sources.add(new ReferenceService.Source(relation.handler().kind(), doc.extId())));
+        }
+        if (document == null && related.values().stream().allMatch(page -> page.total() == 0)) {
+            throw references.unregistered(gameId, kind, id);
         }
 
         return new Details(kind.code(), document, related, references.resolve(gameId, sources), categoryMembers(gameId, kind, id));

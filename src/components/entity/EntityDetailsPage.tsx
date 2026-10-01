@@ -154,7 +154,7 @@ export function EntityDetailsPage() {
                   <ContentReferences
                     entries={entity.categories.map((id) => {
                       const target = { kind: "category", extId: id };
-                      return { target, resolved: references.find(target) };
+                      return { target, resolved: references.find(target), linkUnregistered: true };
                     })}
                     variant="outlined"
                     size="medium"

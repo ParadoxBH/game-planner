@@ -31,6 +31,8 @@ export interface ContentChipProps {
   rarityColor?: string;
   size?: keyof typeof SIZES;
   disableLink?: boolean;
+  /** Linka mesmo sem cadastro, para telas que tratam o código não cadastrado (ex.: a da categoria). */
+  linkUnregistered?: boolean;
 }
 
 /**
@@ -51,6 +53,7 @@ export function ContentChip({
   rarityColor,
   size = "large",
   disableLink = false,
+  linkUnregistered = false,
 }: ContentChipProps) {
   const { gameId = "" } = useParams<{ gameId: string }>();
   const config = SIZES[size];
@@ -58,7 +61,7 @@ export function ContentChip({
   const kind = resolved?.resolvedKind ?? target.kind ?? null;
   const registered = Boolean(resolved?.resolvedKind);
   const name = resolved?.name ?? target.extId;
-  const route = disableLink || !registered ? null : contentRoute(gameId, kind, target.extId);
+  const route = disableLink || !(registered || linkUnregistered) ? null : contentRoute(gameId, kind, target.extId);
   const hasAmount = amount !== null && amount !== undefined && amount !== 0;
 
   const details = [

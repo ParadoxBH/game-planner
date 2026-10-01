@@ -123,7 +123,7 @@ export function RoutesPage() {
           <Route path="events" element={<EventsPage />} />
           <Route path="events/view/:eventId" element={<EventDetailsPage />} />
           <Route path="categories" element={<CategoriesPage />} />
-          <Route path="categories/view/:categoryId" element={<CategoryDetailsPage />} />
+          <Route path="categories/view/:categoryId/:tab?" element={<CategoryDetailsPage />} />
           <Route path="rarities" element={<RaritiesPage />} />
           <Route path="attributes" element={<AttributesPage />} />
           <Route path="settings" element={<GameSettingsPage />} />

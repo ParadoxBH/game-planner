@@ -146,6 +146,22 @@ class AggregationsApiIntegrationTest extends ContentApiTest {
     }
 
     @Test
+    void categoryDetailsWorkWithoutTheCategoryRegisteredWhileSomethingUsesIt() throws Exception {
+        create("items", "{ 'extId': 'quebra_cabeca', 'name': 'Quebra-cabeça', 'categories': ['puzzle'] }");
+
+        mvc.perform(get(DETAILS, game, "categories", "puzzle"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.kind").value("category"))
+                .andExpect(jsonPath("$.document").value(nullValue()))
+                .andExpect(jsonPath("$.related.items.content[*].extId", contains("quebra_cabeca")))
+                .andExpect(jsonPath("$.related.entities.total").value(0));
+        // Sem nada ligado, continua não cadastrada.
+        mvc.perform(get(DETAILS, game, "categories", "ninguem_usa"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.type").value("https://gameplanner/errors/unregistered-content"));
+    }
+
+    @Test
     void eventDetailsListEverythingInTheEventIncludingMapsWhereItIsTheWeather() throws Exception {
         create("events", "{ 'extId': 'rainy', 'name': 'Chuva', 'eventType': 'clima' }");
         create("items", "{ 'extId': 'guarda_chuva', 'name': 'Guarda-chuva', 'events': ['rainy'] }");

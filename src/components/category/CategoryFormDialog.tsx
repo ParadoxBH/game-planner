@@ -44,6 +44,8 @@ interface CategoryFormDialogProps {
   gameId: string;
   /** A categoria a editar; null, criando. Montado só enquanto aberto, então o formulário nasce dela. */
   category: CategoryDocument | null;
+  /** Código fixo ao criar, sem edição, ex.: o da categoria citada que ainda não tem cadastro. */
+  extId?: string;
   onClose: () => void;
   /** Depois de salvar, com o código da categoria. */
   onSaved?: (extId: string) => void;
@@ -53,9 +55,12 @@ interface CategoryFormDialogProps {
  * Cria ou edita uma categoria. A escrita substitui o documento inteiro, então os eventos da categoria
  * são reenviados como estão; as imagens ficam fora do documento, e um ícone novo é anexado depois de salvar.
  */
-export function CategoryFormDialog({ gameId, category, onClose, onSaved }: CategoryFormDialogProps) {
-  const [form, setForm] = useState<CategoryForm>(() => formOf(category));
-  const [extIdTouched, setExtIdTouched] = useState(false);
+export function CategoryFormDialog({ gameId, category, extId: initialExtId, onClose, onSaved }: CategoryFormDialogProps) {
+  const [form, setForm] = useState<CategoryForm>(() =>
+    category || !initialExtId ? formOf(category) : { ...EMPTY, extId: initialExtId },
+  );
+  // Com o código já definido, o nome não o troca.
+  const [extIdTouched, setExtIdTouched] = useState(Boolean(initialExtId));
   const [icon, setIcon] = useState<File | null>(null);
   const [pickedIcon, setPickedIcon] = useState<string | null>(null);
   const { save, saving, error, creating } = useContentSave(gameId, "categories", category === null);
@@ -138,8 +143,14 @@ export function CategoryFormDialog({ gameId, category, onClose, onSaved }: Categ
             set("extId", event.target.value);
           }}
           required
-          disabled={!creating}
-          helperText={creating ? "Identifica a categoria nos dados do jogo." : "O código não muda depois de criado."}
+          disabled={!creating || Boolean(initialExtId)}
+          helperText={
+            !creating
+              ? "O código não muda depois de criado."
+              : initialExtId
+                ? "O código já usado no conteúdo do jogo."
+                : "Identifica a categoria nos dados do jogo."
+          }
           fullWidth
           slotProps={{ htmlInput: { style: { fontFamily: "monospace" } } }}
         />
