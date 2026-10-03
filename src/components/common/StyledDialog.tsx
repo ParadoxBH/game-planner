@@ -65,6 +65,12 @@ export function StyledDialog({
       }}
       maxWidth={maxWidth}
       fullWidth={fullWidth}
+      sx={{
+        "& .MuiDialog-container": {
+          alignItems: "flex-start",
+        },
+        ...props.sx,
+      }}
       PaperProps={{
         sx: {
           backgroundColor: theme.designTokens.colors.glassBg,
