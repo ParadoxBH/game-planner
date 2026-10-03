@@ -89,6 +89,16 @@ interface OccupantRow {
   level: string;
 }
 
+interface DropRow {
+  key: number;
+  target: Reference;
+  chance: string;
+  amount: string;
+  maxAmount: string;
+}
+
+type Picking = { list: "occupants" | "drops"; index: number | null } | null;
+
 let nextKey = 1;
 const key = () => nextKey++;
 
@@ -253,6 +263,15 @@ function MapContentForm({
       level: occupant.level === null ? "" : String(occupant.level),
     })),
   );
+  const [drops, setDrops] = useState<DropRow[]>(
+    (saved?.drops ?? []).map((drop) => ({
+      key: key(),
+      target: drop.target,
+      chance: chanceIn(drop.chance),
+      amount: drop.amount === null ? "" : String(drop.amount),
+      maxAmount: drop.maxAmount === null ? "" : String(drop.maxAmount),
+    })),
+  );
   const [respawnMode, setRespawnMode] = useState(saved?.respawnMode ?? "");
   const [respawnDelay, setRespawnDelay] = useState(
     saved?.respawnDelayMinutes === null ||
@@ -274,7 +293,7 @@ function MapContentForm({
   const [categories, setCategories] = useState<string[]>(
     saved?.categories ?? [],
   );
-  const [picking, setPicking] = useState<{ index: number | null } | null>(null);
+  const [picking, setPicking] = useState<Picking>(null);
   // Código de quem deixa o campo vazio; fixado na abertura para que tentar salvar de novo, depois de
   // uma falha no envio da imagem, substitua o mesmo registro em vez de criar outro.
   const [randomId] = useState(() => crypto.randomUUID());
@@ -330,6 +349,13 @@ function MapContentForm({
       ),
     );
 
+  const updateDrop = (index: number, changes: Partial<DropRow>) =>
+    setDrops((current) =>
+      current.map((row, position) =>
+        position === index ? { ...row, ...changes } : row,
+      ),
+    );
+
   const occupantsInvalid = occupants.some(
     (row) =>
       !isChance(row.chance) ||
@@ -339,11 +365,19 @@ function MapContentForm({
       (numberOf(row.maxAmount) !== null &&
         (numberOf(row.maxAmount) ?? 0) < (numberOf(row.amount) ?? 0)),
   );
+  const dropsInvalid = drops.some(
+    (row) =>
+      !isChance(row.chance) ||
+      !isOptionalInteger(row.amount) ||
+      !isOptionalInteger(row.maxAmount) ||
+      (numberOf(row.maxAmount) !== null &&
+        (numberOf(row.maxAmount) ?? 0) < (numberOf(row.amount) ?? 0)),
+  );
   const delayInvalid =
     !isOptionalInteger(respawnDelay) || (numberOf(respawnDelay) ?? 0) < 0;
   const valid =
     kind === "spawn"
-      ? !occupantsInvalid && !delayInvalid
+      ? !occupantsInvalid && !dropsInvalid && !delayInvalid
       : name.trim() !== "" && locationType.trim() !== "";
 
   const submit = async () => {
@@ -368,8 +402,12 @@ function MapContentForm({
               maxAmount: numberOf(row.maxAmount),
               level: levelOut(row.level),
             })),
-            // O PUT substitui o documento inteiro: o que o formulário não edita volta como estava.
-            drops: saved?.drops ?? [],
+            drops: drops.map((row) => ({
+              target: row.target,
+              chance: chanceOut(row.chance),
+              amount: numberOf(row.amount) ?? 1,
+              maxAmount: numberOf(row.maxAmount),
+            })),
             conditions,
             events,
           }
@@ -556,7 +594,7 @@ function MapContentForm({
                 <Button
                   size="small"
                   startIcon={<Add />}
-                  onClick={() => setPicking({ index: null })}
+                  onClick={() => setPicking({ list: "occupants", index: null })}
                   sx={{ textTransform: "none" }}
                 >
                   Adicionar
@@ -573,7 +611,7 @@ function MapContentForm({
                 key={row.key}
                 gameId={gameId}
                 target={row.target}
-                onPick={() => setPicking({ index })}
+                onPick={() => setPicking({ list: "occupants", index })}
                 onUp={
                   index > 0
                     ? () => setOccupants(move(occupants, index, -1))
@@ -631,6 +669,92 @@ function MapContentForm({
                   value={row.chance}
                   onChange={(event) =>
                     updateOccupant(index, { chance: event.target.value })
+                  }
+                  error={!isChance(row.chance)}
+                  placeholder="100"
+                  sx={{ width: 110 }}
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">%</InputAdornment>
+                      ),
+                    },
+                    htmlInput: { inputMode: "decimal" },
+                  }}
+                />
+              </TargetRow>
+            ))}
+
+            <FormSection
+              title="Drops do ponto"
+              action={
+                <Button
+                  size="small"
+                  startIcon={<Add />}
+                  onClick={() => setPicking({ list: "drops", index: null })}
+                  sx={{ textTransform: "none" }}
+                >
+                  Adicionar drop
+                </Button>
+              }
+            />
+            <Typography variant="body2" color="text.secondary">
+              Drops exclusivos ou adicionais deste ponto (ex.: item único da bolha).
+            </Typography>
+            {drops.length === 0 && (
+              <Typography variant="body2" color="text.secondary">
+                Sem drops específicos no ponto.
+              </Typography>
+            )}
+            {drops.map((row, index) => (
+              <TargetRow
+                key={row.key}
+                gameId={gameId}
+                target={row.target}
+                onPick={() => setPicking({ list: "drops", index })}
+                onUp={
+                  index > 0
+                    ? () => setDrops(move(drops, index, -1))
+                    : undefined
+                }
+                onDown={
+                  index < drops.length - 1
+                    ? () => setDrops(move(drops, index, 1))
+                    : undefined
+                }
+                onRemove={() =>
+                  setDrops(drops.filter((_, position) => position !== index))
+                }
+              >
+                {row.target && <DataTypeIcon value={row.target.kind}/>}
+                <TextField
+                  label="De"
+                  size="small"
+                  value={row.amount}
+                  onChange={(event) =>
+                    updateDrop(index, { amount: event.target.value })
+                  }
+                  error={!isOptionalInteger(row.amount)}
+                  sx={{ width: 80 }}
+                  slotProps={{ htmlInput: { inputMode: "decimal" } }}
+                />
+                <TextField
+                  label="Até"
+                  size="small"
+                  value={row.maxAmount}
+                  onChange={(event) =>
+                    updateDrop(index, { maxAmount: event.target.value })
+                  }
+                  error={!isOptionalInteger(row.maxAmount)}
+                  sx={{ width: 80 }}
+                  slotProps={{ htmlInput: { inputMode: "decimal" } }}
+                />
+                <TextField
+                  label="Chance"
+                  size="small"
+                  value={row.chance}
+                  onChange={(event) =>
+                    updateDrop(index, { chance: event.target.value })
                   }
                   error={!isChance(row.chance)}
                   placeholder="100"
@@ -814,28 +938,44 @@ function MapContentForm({
           open
           modal
           gameId={gameId}
-          kinds={["entities", "items"]}
-          title="Selecionar ocupante"
+          kinds={picking.list === "drops" ? ["items"] : ["entities", "items"]}
+          title={picking.list === "drops" ? "Selecionar item do drop" : "Selecionar ocupante"}
           onClose={() => setPicking(null)}
           onConfirm={(selection: ResolvedReference) => {
             const target: Reference = {
               kind: selection.kind,
               extId: selection.extId,
             };
-            if (picking.index !== null)
-              updateOccupant(picking.index, { target });
-            else
-              setOccupants((current) => [
-                ...current,
-                {
-                  key: key(),
-                  target,
-                  chance: "",
-                  amount: "",
-                  maxAmount: "",
-                  level: "",
-                },
-              ]);
+            if (picking.list === "occupants") {
+              if (picking.index !== null)
+                updateOccupant(picking.index, { target });
+              else
+                setOccupants((current) => [
+                  ...current,
+                  {
+                    key: key(),
+                    target,
+                    chance: "",
+                    amount: "",
+                    maxAmount: "",
+                    level: "",
+                  },
+                ]);
+            } else {
+              if (picking.index !== null)
+                updateDrop(picking.index, { target });
+              else
+                setDrops((current) => [
+                  ...current,
+                  {
+                    key: key(),
+                    target,
+                    chance: "",
+                    amount: "1",
+                    maxAmount: "",
+                  },
+                ]);
+            }
             setPicking(null);
           }}
         />
