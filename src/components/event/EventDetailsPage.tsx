@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Box, Breadcrumbs, CircularProgress, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
+import { Box, Breadcrumbs, Button, CircularProgress, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
 import {
   AccessTime,
   AutoAwesomeMosaic,
@@ -8,6 +8,7 @@ import {
   Category,
   Cloud,
   Construction,
+  Edit,
   Explore,
   Inventory,
   Map as MapIcon,
@@ -20,6 +21,7 @@ import { ApiError } from "../../api/ApiError";
 import type { ContentPage, EventDocument, EventRelated } from "../../api/content";
 import { contentRoute, currentMedia, mediaUrl, ReferenceIndex, resolvedFrom } from "../../api/references";
 import { useContentDetails, useRarities } from "../../api/useContent";
+import { useGameAdmin, useGameEditor } from "../../hooks/useGameAdmin";
 import { usePlatform } from "../../hooks/usePlatform";
 import { ApiCollectionGroups } from "../common/ApiRelatedLists";
 import { ContentChip } from "../common/ContentChip";
@@ -34,6 +36,7 @@ import { StyledContainer } from "../common/StyledContainer";
 import { ApiRecipeCard } from "../recipe/ApiRecipeCard";
 import { ApiShopCard, type ShopListView } from "../shop/ApiShopRenderers";
 import { EventFilterSwitch, EventStatusChip, EventTypeChip, formatPeriod } from "./ApiEventRenderers";
+import { EventFormDialog } from "./EventFormDialog";
 
 /** Aviso de relação cortada: o agregado traz até 200 documentos por relação. */
 function Shown({ page }: { page: ContentPage<unknown> }) {
@@ -50,6 +53,10 @@ export function EventDetailsPage() {
   const { gameId = "", eventId = "" } = useParams<{ gameId: string; eventId: string }>();
   const navigate = useNavigate();
   const { isMobile } = usePlatform();
+
+  const { canEdit } = useGameEditor(gameId);
+  const { isAdmin } = useGameAdmin(gameId);
+  const [editing, setEditing] = useState(false);
 
   const details = useContentDetails<EventDocument, EventRelated>(gameId, "events", eventId);
   const rarities = useRarities(gameId);
@@ -99,7 +106,22 @@ export function EventDetailsPage() {
           </Breadcrumbs>
         ) : undefined
       }
-      actionsEnd={<EventFilterSwitch eventId={event.extId} />}
+      actionsEnd={
+        <Stack direction="row" spacing={1} alignItems="center">
+          {canEdit && (
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<Edit />}
+              onClick={() => setEditing(true)}
+              sx={{ textTransform: "none" }}
+            >
+              Editar
+            </Button>
+          )}
+          <EventFilterSwitch eventId={event.extId} />
+        </Stack>
+      }
     >
       <DetainContainer>
         <Paper elevation={0} sx={{ overflow: "hidden" }}>
@@ -281,6 +303,17 @@ export function EventDetailsPage() {
           )}
         </DetainItem>
       </DetainContainer>
+
+      {editing && (
+        <EventFormDialog
+          gameId={gameId}
+          event={event}
+          canDelete={isAdmin}
+          onClose={() => setEditing(false)}
+          onSaved={() => setEditing(false)}
+          onDeleted={() => navigate(`/game/${gameId}/events`)}
+        />
+      )}
     </StyledContainer>
   );
 }

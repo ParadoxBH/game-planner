@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
-import { Box, Card, FormControlLabel, Stack, Switch, Typography } from "@mui/material";
-import { AccessTime, Cloud, Star, Terrain, WbSunny } from "@mui/icons-material";
+import { Box, Card, FormControlLabel, IconButton, Stack, Switch, Tooltip, Typography } from "@mui/material";
+import { AccessTime, Cloud, Delete, Edit, Star, Terrain, WbSunny } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import type { EventDocument } from "../../api/content";
 import { contentRoute, currentMedia, mediaUrl } from "../../api/references";
@@ -85,11 +85,29 @@ export function EventFilterSwitch({ eventId }: { eventId: string }) {
   );
 }
 
+export interface EventActions {
+  onEdit: (event: EventDocument) => void;
+  onDelete?: (event: EventDocument) => void;
+}
+
 /** Card da listagem de eventos vindos da API. */
-export function ApiEventCard({ event, gameId }: { event: EventDocument; gameId: string }) {
+export function ApiEventCard({
+  event,
+  gameId,
+  actions,
+}: {
+  event: EventDocument;
+  gameId: string;
+  actions?: EventActions;
+}) {
   const navigate = useNavigate();
   const type = eventTypeInfo(event.eventType);
   const bannerId = currentMedia(event.media, "banner");
+
+  const handleAction = (handler: () => void) => (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handler();
+  };
 
   return (
     <Card
@@ -103,6 +121,7 @@ export function ApiEventCard({ event, gameId }: { event: EventDocument; gameId: 
         border: 1,
         borderColor: "divider",
         overflow: "hidden",
+        position: "relative",
         transition: "all 0.3s",
         "&:hover": { transform: "translateY(-4px)", borderColor: type.color },
       }}
@@ -119,17 +138,36 @@ export function ApiEventCard({ event, gameId }: { event: EventDocument; gameId: 
         />
       )}
       <Stack spacing={1.5} sx={{ p: 2, flex: 1 }}>
-        <Stack direction="row" spacing={2} alignItems="center">
-          <ContentIcon mediaId={currentMedia(event.media, "icon")} kind="event" alt={event.name} size={48} />
-          <Stack spacing={0.5} sx={{ minWidth: 0 }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2 }}>
-              {event.name}
-            </Typography>
-            <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-              <EventTypeChip type={event.eventType} />
-              <EventStatusChip event={event} />
+        <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
+          <Stack direction="row" spacing={2} alignItems="center" sx={{ minWidth: 0, flex: 1 }}>
+            <ContentIcon mediaId={currentMedia(event.media, "icon")} kind="event" alt={event.name} size={48} />
+            <Stack spacing={0.5} sx={{ minWidth: 0 }}>
+              <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2 }}>
+                {event.name}
+              </Typography>
+              <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
+                <EventTypeChip type={event.eventType} />
+                <EventStatusChip event={event} />
+              </Stack>
             </Stack>
           </Stack>
+
+          {actions && (
+            <Stack direction="row" spacing={0.5} onClick={(e) => e.stopPropagation()}>
+              <Tooltip title="Editar">
+                <IconButton size="small" onClick={handleAction(() => actions.onEdit(event))}>
+                  <Edit fontSize="small" />
+                </IconButton>
+              </Tooltip>
+              {actions.onDelete && (
+                <Tooltip title="Apagar">
+                  <IconButton size="small" color="error" onClick={handleAction(() => actions.onDelete!(event))}>
+                    <Delete fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </Stack>
+          )}
         </Stack>
         <Typography variant="body2" color="text.secondary" sx={{ flex: 1 }}>
           {event.summary ?? event.description ?? "Sem descrição."}
@@ -147,3 +185,4 @@ export function ApiEventCard({ event, gameId }: { event: EventDocument; gameId: 
     </Card>
   );
 }
+
