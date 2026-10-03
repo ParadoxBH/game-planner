@@ -300,17 +300,27 @@ export function ItemDetailsPage() {
           {offers.length > 0 && <ApiShopOffers offers={offers} references={references} />}
         </DetainItem>
 
-        <DetainItem startIcon={<MapIcon color="primary" />} label="Locais de drop" count={related.dropPoints.total}>
-          {related.dropPoints.content.length > 0 && (
-            <SpawnPointsByMap points={related.dropPoints.content} filter={{ param: "item", value: item.extId }} references={references} />
-          )}
-        </DetainItem>
+        {related.dropPoints.content.length > 0 && (
+          <SpawnPointsByMap
+            startIcon={<MapIcon color="primary" />}
+            label="Locais de drop"
+            count={related.dropPoints.total}
+            points={related.dropPoints.content}
+            filter={{ param: "item", value: item.extId }}
+            references={references}
+          />
+        )}
 
-        <DetainItem startIcon={<Place color="primary" />} label="Onde aparece" count={related.spawnPoints.total}>
-          {related.spawnPoints.content.length > 0 && (
-            <SpawnPointsByMap points={related.spawnPoints.content} filter={{ param: "item", value: item.extId }} references={references} />
-          )}
-        </DetainItem>
+        {related.spawnPoints.content.length > 0 && (
+          <SpawnPointsByMap
+            startIcon={<Place color="primary" />}
+            label="Onde aparece"
+            count={related.spawnPoints.total}
+            points={related.spawnPoints.content}
+            filter={{ param: "item", value: item.extId }}
+            references={references}
+          />
+        )}
 
         <DetainItem size={isMobile ? undefined : 6} startIcon={<Rule color="primary" />} label="Exigido para coletar" count={related.requiredBy.total}>
           {related.requiredBy.content.length > 0 && <ApiRequiredBy entities={related.requiredBy.content} target={self} />}

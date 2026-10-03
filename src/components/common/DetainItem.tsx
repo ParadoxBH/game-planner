@@ -9,11 +9,11 @@ interface DetainItemProps {
   startIcon?: ReactNode;
   children?: ReactNode;
   size?: any;
-  label: string;
+  label: ReactNode;
   count?: number;
   actions?: ReactNode;
   pages?: PaginationController<any>;
-  sx?: {label: SxProps};
+  sx?: { label?: SxProps };
 }
 
 export function DetainItem({
@@ -35,9 +35,13 @@ export function DetainItem({
           <Stack direction="row" spacing={1} alignItems="center" justifyContent={isMobile ? "space-between" : "start"}>
             <Stack direction="row" spacing={1} alignItems="center" justifyContent={"start"}>
               {startIcon}
-              <Typography variant="subtitle2" fontSize={isMobile ? undefined : 24} fontWeight={700} sx={sx?.label}>
-                {label}
-              </Typography>
+              {typeof label === "string" ? (
+                <Typography variant="subtitle2" fontSize={isMobile ? undefined : 24} fontWeight={700} sx={sx?.label}>
+                  {label}
+                </Typography>
+              ) : (
+                label
+              )}
             </Stack>
             {!!count && (
               <DataChip label={count.toString()} color="primary" size="small" />

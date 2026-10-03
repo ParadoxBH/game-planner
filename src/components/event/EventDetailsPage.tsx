@@ -294,14 +294,16 @@ export function EventDetailsPage() {
           )}
         </DetainItem>
 
-        <DetainItem size={half} startIcon={<Explore color="primary" />} label="Pontos de spawn" count={related.spawnPoints.total}>
-          {related.spawnPoints.content.length > 0 && (
-            <>
-              <SpawnPointsByMap points={related.spawnPoints.content} references={references} />
-              <Shown page={related.spawnPoints} />
-            </>
-          )}
-        </DetainItem>
+        {related.spawnPoints.content.length > 0 && (
+          <SpawnPointsByMap
+            size={half}
+            startIcon={<Explore color="primary" />}
+            label="Pontos de spawn"
+            count={related.spawnPoints.total}
+            points={related.spawnPoints.content}
+            references={references}
+          />
+        )}
       </DetainContainer>
 
       {editing && (

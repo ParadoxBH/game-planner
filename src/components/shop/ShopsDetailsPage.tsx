@@ -193,15 +193,14 @@ export function ShopsDetailsPage({ gameId, shopId }: ShopsDetailsPageProps) {
           </Paper>
 
           {shop.npc && npcSpawns.data && npcSpawns.data.content.length > 0 && (
-            <Paper elevation={0} sx={{ p: 2 }}>
-              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1.5 }}>
-                <MapIcon color="primary" sx={{ fontSize: 18 }} />
-                <Typography variant="subtitle2" fontWeight={800}>
-                  Onde encontrar
-                </Typography>
-              </Stack>
-              <SpawnPointsByMap points={npcSpawns.data.content} filter={{ param: "entity", value: shop.npc }} references={spawnReferences} />
-            </Paper>
+            <SpawnPointsByMap
+              startIcon={<MapIcon color="primary" />}
+              label="Onde encontrar"
+              count={npcSpawns.data.content.length}
+              points={npcSpawns.data.content}
+              filter={{ param: "entity", value: shop.npc }}
+              references={spawnReferences}
+            />
           )}
         </Stack>
 

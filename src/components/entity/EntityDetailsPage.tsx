@@ -352,15 +352,16 @@ export function EntityDetailsPage() {
           )}
         </DetainItem>
 
-        <DetainItem startIcon={<Place color="primary" />} label="Onde aparece" count={related.spawnPoints.total}>
-          {related.spawnPoints.content.length > 0 && (
-            <SpawnPointsByMap
-              points={related.spawnPoints.content}
-              filter={{ param: "entity", value: entity.extId }}
-              references={references}
-            />
-          )}
-        </DetainItem>
+        {related.spawnPoints.content.length > 0 && (
+          <SpawnPointsByMap
+            startIcon={<Place color="primary" />}
+            label="Onde aparece"
+            count={related.spawnPoints.total}
+            points={related.spawnPoints.content}
+            filter={{ param: "entity", value: entity.extId }}
+            references={references}
+          />
+        )}
 
         <DetainItem size={isMobile ? undefined : 6} startIcon={<Storefront color="primary" />} label="Vendido em" count={offers.length}>
           {offers.length > 0 && <ApiShopOffers offers={offers} references={references} />}
