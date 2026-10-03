@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Box, Button, CircularProgress, Grid, Tab, Tabs, TextField, Typography } from "@mui/material";
+import { Add } from "@mui/icons-material";
 import type { ListQuery, MediaLink, ResolvedReference } from "../../api/content";
 import { currentMedia } from "../../api/references";
 import { useContentList, useRarities } from "../../api/useContent";
@@ -8,6 +9,7 @@ import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { ContentChip } from "./ContentChip";
 import { StyledDialog } from "./StyledDialog";
 import { DataTypeIcon } from "../DataTypeIcon";
+import { ItemFormDialog } from "../item/ItemFormDialog";
 
 const PAGE = 60;
 
@@ -55,12 +57,14 @@ export function ApiContentSelector({
   const [tab, setTab] = useState<SelectorKind>(kinds[0]);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<ResolvedReference | null>(null);
+  const [creatingItem, setCreatingItem] = useState(false);
   const term = useDebouncedValue(search);
 
   useEffect(() => {
     if (open) {
       setSearch("");
       setSelected(null);
+      setCreatingItem(false);
     }
   }, [open]);
 
@@ -87,119 +91,149 @@ export function ApiContentSelector({
   });
 
   return (
-    <StyledDialog
-      open={open}
-      modal={modal}
-      onClose={onClose}
-      title={title}
-      maxWidth="md"
-      fullWidth
-      actions={
-        <>
-          <Button onClick={onClose} color="inherit">
-            Cancelar
-          </Button>
-          <Button
-            variant="contained"
-            disabled={!selected}
-            onClick={() => {
-              if (selected) onConfirm(selected);
-            }}
-          >
-            Confirmar
-          </Button>
-        </>
-      }
-    >
-      <Box sx={{ minHeight: 400, display: "flex", flexDirection: "column" }}>
-        {kinds.length > 1 && (
-          <Tabs
-            value={tab}
-            onChange={(_, value: SelectorKind) => {
-              setTab(value);
-              setSelected(null);
-            }}
-            variant="fullWidth"
-            sx={{ mb: 2 }}
-          >
-            {kinds.map((option) => (
-              <Tab
-                key={option}
-                value={option}
-                label={TABS[option].label}
-                icon={<DataTypeIcon value={TABS[option].kind} fontSize="small" />}
-                iconPosition="start"
-              />
-            ))}
-          </Tabs>
-        )}
+    <>
+      <StyledDialog
+        open={open}
+        modal={modal}
+        onClose={onClose}
+        title={title}
+        maxWidth="md"
+        fullWidth
+        actions={
+          <>
+            <Button onClick={onClose} color="inherit">
+              Cancelar
+            </Button>
+            <Button
+              variant="contained"
+              disabled={!selected}
+              onClick={() => {
+                if (selected) onConfirm(selected);
+              }}
+            >
+              Confirmar
+            </Button>
+          </>
+        }
+      >
+        <Box sx={{ minHeight: 400, display: "flex", flexDirection: "column" }}>
+          {kinds.length > 1 && (
+            <Tabs
+              value={tab}
+              onChange={(_, value: SelectorKind) => {
+                setTab(value);
+                setSelected(null);
+              }}
+              variant="fullWidth"
+              sx={{ mb: 2 }}
+            >
+              {kinds.map((option) => (
+                <Tab
+                  key={option}
+                  value={option}
+                  label={TABS[option].label}
+                  icon={<DataTypeIcon value={TABS[option].kind} fontSize="small" />}
+                  iconPosition="start"
+                />
+              ))}
+            </Tabs>
+          )}
 
-        <TextField
-          fullWidth
-          autoFocus
-          size="small"
-          placeholder={TABS[tab].placeholder}
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          sx={{ mb: 2 }}
+          <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+            <TextField
+              fullWidth
+              autoFocus
+              size="small"
+              placeholder={TABS[tab].placeholder}
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+            {tab === "items" && (
+              <Button
+                variant="contained"
+                size="small"
+                startIcon={<Add />}
+                onClick={() => setCreatingItem(true)}
+                sx={{ whiteSpace: "nowrap" }}
+              >
+                Adicionar
+              </Button>
+            )}
+          </Box>
+
+          {loading ? (
+            <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <CircularProgress color="primary" />
+            </Box>
+          ) : (
+            <Box sx={{ flex: 1, overflowY: "auto", maxHeight: 400, pr: 1 }}>
+              {choices.length === 0 && (
+                <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", py: 4 }}>
+                  Nada encontrado.
+                </Typography>
+              )}
+              <Grid container spacing={1}>
+                {choices.map((choice) => {
+                  const reference = toReference(choice);
+                  const isSelected = selected?.extId === choice.extId;
+                  return (
+                    <Grid size={{ xs: 6, sm: 4, md: 3 }} key={choice.extId}>
+                      <Box
+                        onClick={() => setSelected(reference)}
+                        sx={{
+                          p: 1.5,
+                          borderRadius: 1,
+                          cursor: "pointer",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          textAlign: "center",
+                          gap: 1,
+                          border: 1,
+                          borderColor: isSelected ? "primary.main" : "transparent",
+                          backgroundColor: isSelected ? "action.selected" : "action.hover",
+                        }}
+                      >
+                        <ContentChip
+                          target={{ kind, extId: choice.extId }}
+                          resolved={reference}
+                          rarityColor={choice.rarityCode ? rarityColors.get(choice.rarityCode) : undefined}
+                          size="medium"
+                          disableLink
+                        />
+                        <Typography variant="caption" sx={{ fontWeight: isSelected ? 700 : 500, color: isSelected ? "primary.main" : "text.primary" }}>
+                          {choice.name ?? choice.extId}
+                        </Typography>
+                      </Box>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+              {total > choices.length && (
+                <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 1, textAlign: "center" }}>
+                  Mostrando {choices.length} de {total}. Refine a busca para encontrar os demais.
+                </Typography>
+              )}
+            </Box>
+          )}
+        </Box>
+      </StyledDialog>
+
+      {creatingItem && (
+        <ItemFormDialog
+          gameId={gameId}
+          item={null}
+          onClose={() => setCreatingItem(false)}
+          onSaved={(extId) => {
+            setCreatingItem(false);
+            onConfirm({
+              kind: "item",
+              extId,
+              resolvedKind: "item",
+            });
+          }}
         />
-
-        {loading ? (
-          <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <CircularProgress color="primary" />
-          </Box>
-        ) : (
-          <Box sx={{ flex: 1, overflowY: "auto", maxHeight: 400, pr: 1 }}>
-            {choices.length === 0 && (
-              <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", py: 4 }}>
-                Nada encontrado.
-              </Typography>
-            )}
-            <Grid container spacing={1}>
-              {choices.map((choice) => {
-                const reference = toReference(choice);
-                const isSelected = selected?.extId === choice.extId;
-                return (
-                  <Grid size={{ xs: 6, sm: 4, md: 3 }} key={choice.extId}>
-                    <Box
-                      onClick={() => setSelected(reference)}
-                      sx={{
-                        p: 1.5,
-                        borderRadius: 1,
-                        cursor: "pointer",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        textAlign: "center",
-                        gap: 1,
-                        border: 1,
-                        borderColor: isSelected ? "primary.main" : "transparent",
-                        backgroundColor: isSelected ? "action.selected" : "action.hover",
-                      }}
-                    >
-                      <ContentChip
-                        target={{ kind, extId: choice.extId }}
-                        resolved={reference}
-                        rarityColor={choice.rarityCode ? rarityColors.get(choice.rarityCode) : undefined}
-                        size="medium"
-                        disableLink
-                      />
-                      <Typography variant="caption" sx={{ fontWeight: isSelected ? 700 : 500, color: isSelected ? "primary.main" : "text.primary" }}>
-                        {choice.name ?? choice.extId}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                );
-              })}
-            </Grid>
-            {total > choices.length && (
-              <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 1, textAlign: "center" }}>
-                Mostrando {choices.length} de {total}. Refine a busca para encontrar os demais.
-              </Typography>
-            )}
-          </Box>
-        )}
-      </Box>
-    </StyledDialog>
+      )}
+    </>
   );
 }
