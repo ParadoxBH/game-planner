@@ -224,7 +224,14 @@ export function EntityDetailsPage() {
 
               {entity.events.length > 0 && (
                 <DetailField label="Eventos">
-                  <ReferenceChips targets={entity.events.map((id) => ({ kind: "event", extId: id }))} references={references} />
+                  <ContentReferences
+                    entries={entity.events.map((id) => {
+                      const target = { kind: "event", extId: id };
+                      return { target, resolved: references.find(target), linkUnregistered: true };
+                    })}
+                    variant="outlined"
+                    size="medium"
+                  />
                 </DetailField>
               )}
 
