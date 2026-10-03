@@ -10,6 +10,8 @@ import {
   InputAdornment,
   MenuItem,
   Stack,
+  Tab,
+  Tabs,
   TextField,
   Tooltip,
   Typography,
@@ -35,7 +37,7 @@ import { ApiContentSelector } from "../common/ApiContentSelector";
 import { ConfirmDeleteDialog } from "../common/ConfirmDeleteDialog";
 import { CodesField, type CodeOption } from "../common/CodesField";
 import { describeError, numberOf, useContentSave } from "../common/contentForm";
-import { FormSection, TargetRow } from "../common/formLayout";
+import { FormSection, TabLabel, TargetRow } from "../common/formLayout";
 import {
   chanceIn,
   chanceOut,
@@ -98,6 +100,7 @@ interface DropRow {
 }
 
 type Picking = { list: "occupants" | "drops"; index: number | null } | null;
+type SpawnTab = "data" | "occupants" | "drops";
 
 let nextKey = 1;
 const key = () => nextKey++;
@@ -252,6 +255,7 @@ function MapContentForm({
   const [screenshotRemoved, setScreenshotRemoved] = useState(false);
   const [events, setEvents] = useState<string[]>(saved?.events ?? []);
   const [deleting, setDeleting] = useState(false);
+  const [tab, setTab] = useState<SpawnTab>("data");
   // Ponto de spawn
   const [occupants, setOccupants] = useState<OccupantRow[]>(
     (saved?.occupants ?? []).map((occupant) => ({
@@ -433,10 +437,46 @@ function MapContentForm({
     if (ok) onSaved(kind);
   };
 
+  const tabs =
+    kind === "spawn" ? (
+      <Tabs
+        value={tab}
+        onChange={(_, value: SpawnTab) => setTab(value)}
+        variant="scrollable"
+        allowScrollButtonsMobile
+      >
+        <Tab
+          value="data"
+          label={<TabLabel label="Dados" invalid={delayInvalid} />}
+        />
+        <Tab
+          value="occupants"
+          label={
+            <TabLabel
+              label="Ocupantes"
+              count={occupants.length}
+              invalid={occupantsInvalid}
+            />
+          }
+        />
+        <Tab
+          value="drops"
+          label={
+            <TabLabel
+              label="Drops Exclusivos"
+              count={drops.length}
+              invalid={dropsInvalid}
+            />
+          }
+        />
+      </Tabs>
+    ) : null;
+
   return (
     <StyledDialog
       open
       modal
+      subHeader={tabs}
       onClose={saving ? () => undefined : onClose}
       title={edit ? "Editar" : "Novo"}
       startIcon={geometry?.isPoint ? <Place /> : <Polyline />}
@@ -504,319 +544,466 @@ function MapContentForm({
       }
     >
       <Stack spacing={1}>
-        <TextField
-          select
-          label="Tipo"
-          value={kind}
-          onChange={(event) =>
-            setKind(event.target.value as "spawn" | "location")
-          }
-          disabled={Boolean(edit)}
-          helperText={
-            edit
-              ? "O tipo não muda depois de criado."
-              : geometry && !geometry.isPoint
-                ? "Área só pode ser local: ponto de spawn precisa de uma posição."
-                : undefined
-          }
-          fullWidth
-        >
-          <MenuItem value="spawn" disabled={geometry !== null && !geometry.isPoint}>
-            Ponto de spawn — o que aparece aqui
-          </MenuItem>
-          <MenuItem value="location">
-            Local — bioma, região, ponto de interesse
-          </MenuItem>
-        </TextField>
-        <Stack alignItems={"center"} spacing={1} direction={"row"} justifyContent={"space-between"}>
-          <IconUploadField
-            fullWidth
-            currentMediaId={saved ? currentMedia(saved.media, "icon") : null}
-            kind={kind === "spawn" ? "spawn_point" : "location"}
-            file={icon}
-            onChange={setIcon}
-          />
-          <IconUploadField
-            fullWidth
-            currentMediaId={
-              saved && !screenshotRemoved
-                ? currentMedia(saved.media, "screenshot")
-                : null
-            }
-            kind={kind === "spawn" ? "spawn_point" : "location"}
-            file={screenshot}
-            onChange={setScreenshot}
-            noun="imagem do local"
-            wide
-            onRemove={() =>
-              screenshot ? setScreenshot(null) : setScreenshotRemoved(true)
-            }
-          />
-        </Stack>
-        <Grid container spacing={2}>
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <TextField
-              label="Nome"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              required={kind === "location"}
-              autoFocus
-              helperText={
-                kind === "spawn"
-                  ? "Opcional: sem nome, vale o do primeiro ocupante."
-                  : undefined
-              }
-              fullWidth
-            />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <TextField
-              label="Código"
-              value={extId}
-              onChange={(event) => setExtId(event.target.value)}
-              disabled={Boolean(edit)}
-              helperText={
-                edit
-                  ? "O código não muda depois de criado."
-                  : "Opcional: vazio, é gerado um código aleatório."
-              }
-              fullWidth
-              slotProps={{ htmlInput: { style: { fontFamily: "monospace" } } }}
-            />
-          </Grid>
-        </Grid>
-
         {kind === "spawn" ? (
           <>
-            <FormSection
-              title="Ocupantes"
-              action={
-                <Button
-                  size="small"
-                  startIcon={<Add />}
-                  onClick={() => setPicking({ list: "occupants", index: null })}
-                  sx={{ textTransform: "none" }}
-                >
-                  Adicionar
-                </Button>
-              }
-            />
-            {occupants.length === 0 && (
-              <Typography variant="body2" color="text.secondary">
-                Sem ocupante, o ponto entra no mapa só com o nome.
-              </Typography>
-            )}
-            {occupants.map((row, index) => (
-              <TargetRow
-                key={row.key}
-                gameId={gameId}
-                target={row.target}
-                onPick={() => setPicking({ list: "occupants", index })}
-                onUp={
-                  index > 0
-                    ? () => setOccupants(move(occupants, index, -1))
-                    : undefined
-                }
-                onDown={
-                  index < occupants.length - 1
-                    ? () => setOccupants(move(occupants, index, 1))
-                    : undefined
-                }
-                onRemove={() =>
-                  setOccupants(
-                    occupants.filter((_, position) => position !== index),
-                  )
-                }
-              >
-                {row.target && <DataTypeIcon value={row.target.kind}/>}
-                <TextField
-                  label="De"
-                  size="small"
-                  value={row.amount}
-                  onChange={(event) =>
-                    updateOccupant(index, { amount: event.target.value })
-                  }
-                  error={!isOptionalInteger(row.amount)}
-                  sx={{ width: 80 }}
-                  slotProps={{ htmlInput: { inputMode: "decimal" } }}
-                />
-                <TextField
-                  label="Até"
-                  size="small"
-                  value={row.maxAmount}
-                  onChange={(event) =>
-                    updateOccupant(index, { maxAmount: event.target.value })
-                  }
-                  error={!isOptionalInteger(row.maxAmount)}
-                  sx={{ width: 80 }}
-                  slotProps={{ htmlInput: { inputMode: "decimal" } }}
-                />
-                <TextField
-                  label="Nível"
-                  size="small"
-                  value={row.level}
-                  onChange={(event) =>
-                    updateOccupant(index, { level: event.target.value })
-                  }
-                  error={!isLevel(row.level)}
-                  placeholder="—"
-                  sx={{ width: 90 }}
-                  slotProps={{ htmlInput: { inputMode: "numeric" } }}
-                />
-                <TextField
-                  label="Chance"
-                  size="small"
-                  value={row.chance}
-                  onChange={(event) =>
-                    updateOccupant(index, { chance: event.target.value })
-                  }
-                  error={!isChance(row.chance)}
-                  placeholder="100"
-                  sx={{ width: 110 }}
-                  slotProps={{
-                    input: {
-                      endAdornment: (
-                        <InputAdornment position="end">%</InputAdornment>
-                      ),
-                    },
-                    htmlInput: { inputMode: "decimal" },
-                  }}
-                />
-              </TargetRow>
-            ))}
-
-            <FormSection
-              title="Drops do ponto"
-              action={
-                <Button
-                  size="small"
-                  startIcon={<Add />}
-                  onClick={() => setPicking({ list: "drops", index: null })}
-                  sx={{ textTransform: "none" }}
-                >
-                  Adicionar drop
-                </Button>
-              }
-            />
-            <Typography variant="body2" color="text.secondary">
-              Drops exclusivos ou adicionais deste ponto (ex.: item único da bolha).
-            </Typography>
-            {drops.length === 0 && (
-              <Typography variant="body2" color="text.secondary">
-                Sem drops específicos no ponto.
-              </Typography>
-            )}
-            {drops.map((row, index) => (
-              <TargetRow
-                key={row.key}
-                gameId={gameId}
-                target={row.target}
-                onPick={() => setPicking({ list: "drops", index })}
-                onUp={
-                  index > 0
-                    ? () => setDrops(move(drops, index, -1))
-                    : undefined
-                }
-                onDown={
-                  index < drops.length - 1
-                    ? () => setDrops(move(drops, index, 1))
-                    : undefined
-                }
-                onRemove={() =>
-                  setDrops(drops.filter((_, position) => position !== index))
-                }
-              >
-                {row.target && <DataTypeIcon value={row.target.kind}/>}
-                <TextField
-                  label="De"
-                  size="small"
-                  value={row.amount}
-                  onChange={(event) =>
-                    updateDrop(index, { amount: event.target.value })
-                  }
-                  error={!isOptionalInteger(row.amount)}
-                  sx={{ width: 80 }}
-                  slotProps={{ htmlInput: { inputMode: "decimal" } }}
-                />
-                <TextField
-                  label="Até"
-                  size="small"
-                  value={row.maxAmount}
-                  onChange={(event) =>
-                    updateDrop(index, { maxAmount: event.target.value })
-                  }
-                  error={!isOptionalInteger(row.maxAmount)}
-                  sx={{ width: 80 }}
-                  slotProps={{ htmlInput: { inputMode: "decimal" } }}
-                />
-                <TextField
-                  label="Chance"
-                  size="small"
-                  value={row.chance}
-                  onChange={(event) =>
-                    updateDrop(index, { chance: event.target.value })
-                  }
-                  error={!isChance(row.chance)}
-                  placeholder="100"
-                  sx={{ width: 110 }}
-                  slotProps={{
-                    input: {
-                      endAdornment: (
-                        <InputAdornment position="end">%</InputAdornment>
-                      ),
-                    },
-                    htmlInput: { inputMode: "decimal" },
-                  }}
-                />
-              </TargetRow>
-            ))}
-
-            <FormSection title="Respawn e local" />
-            <Grid container spacing={2}>
-              <Grid size={{ xs: 12, sm: 4 }}>
+            {tab === "data" && (
+              <>
                 <TextField
                   select
-                  label="Modo"
-                  value={respawnMode}
-                  onChange={(event) => setRespawnMode(event.target.value)}
-                  fullWidth
-                >
-                  {RESPAWN_MODES.map((mode) => (
-                    <MenuItem key={mode.value} value={mode.value}>
-                      {mode.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid size={{ xs: 12, sm: 4 }}>
-                <TextField
-                  label="Tempo"
-                  value={respawnDelay}
-                  onChange={(event) => setRespawnDelay(event.target.value)}
-                  error={delayInvalid}
-                  disabled={respawnMode !== "respawn"}
+                  label="Tipo"
+                  value={kind}
+                  onChange={(event) =>
+                    setKind(event.target.value as "spawn" | "location")
+                  }
+                  disabled={Boolean(edit)}
                   helperText={
-                    respawnMode === "respawn"
-                      ? "Minutos até voltar."
-                      : undefined
+                    edit
+                      ? "O tipo não muda depois de criado."
+                      : geometry && !geometry.isPoint
+                        ? "Área só pode ser local: ponto de spawn precisa de uma posição."
+                        : undefined
                   }
                   fullWidth
-                  slotProps={{
-                    input: {
-                      endAdornment: (
-                        <InputAdornment position="end">min</InputAdornment>
-                      ),
-                    },
-                    htmlInput: { inputMode: "numeric" },
-                  }}
+                >
+                  <MenuItem value="spawn" disabled={geometry !== null && !geometry.isPoint}>
+                    Ponto de spawn — o que aparece aqui
+                  </MenuItem>
+                  <MenuItem value="location">
+                    Local — bioma, região, ponto de interesse
+                  </MenuItem>
+                </TextField>
+                <Stack alignItems={"center"} spacing={1} direction={"row"} justifyContent={"space-between"}>
+                  <IconUploadField
+                    fullWidth
+                    currentMediaId={saved ? currentMedia(saved.media, "icon") : null}
+                    kind="spawn_point"
+                    file={icon}
+                    onChange={setIcon}
+                  />
+                  <IconUploadField
+                    fullWidth
+                    currentMediaId={
+                      saved && !screenshotRemoved
+                        ? currentMedia(saved.media, "screenshot")
+                        : null
+                    }
+                    kind="spawn_point"
+                    file={screenshot}
+                    onChange={setScreenshot}
+                    noun="imagem do local"
+                    wide
+                    onRemove={() =>
+                      screenshot ? setScreenshot(null) : setScreenshotRemoved(true)
+                    }
+                  />
+                </Stack>
+                <Grid container spacing={2}>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <TextField
+                      label="Nome"
+                      value={name}
+                      onChange={(event) => setName(event.target.value)}
+                      autoFocus
+                      helperText="Opcional: sem nome, vale o do primeiro ocupante."
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <TextField
+                      label="Código"
+                      value={extId}
+                      onChange={(event) => setExtId(event.target.value)}
+                      disabled={Boolean(edit)}
+                      helperText={
+                        edit
+                          ? "O código não muda depois de criado."
+                          : "Opcional: vazio, é gerado um código aleatório."
+                      }
+                      fullWidth
+                      slotProps={{ htmlInput: { style: { fontFamily: "monospace" } } }}
+                    />
+                  </Grid>
+                </Grid>
+
+                <FormSection title="Respawn e local" />
+                <Grid container spacing={2}>
+                  <Grid size={{ xs: 12, sm: 4 }}>
+                    <TextField
+                      select
+                      label="Modo"
+                      value={respawnMode}
+                      onChange={(event) => setRespawnMode(event.target.value)}
+                      fullWidth
+                    >
+                      {RESPAWN_MODES.map((mode) => (
+                        <MenuItem key={mode.value} value={mode.value}>
+                          {mode.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 4 }}>
+                    <TextField
+                      label="Tempo"
+                      value={respawnDelay}
+                      onChange={(event) => setRespawnDelay(event.target.value)}
+                      error={delayInvalid}
+                      disabled={respawnMode !== "respawn"}
+                      helperText={
+                        respawnMode === "respawn"
+                          ? "Minutos até voltar."
+                          : undefined
+                      }
+                      fullWidth
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">min</InputAdornment>
+                          ),
+                        },
+                        htmlInput: { inputMode: "numeric" },
+                      }}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 4 }}>
+                    <TextField
+                      select
+                      label="Dentro do local"
+                      value={location ?? ""}
+                      onChange={(event) => setLocation(event.target.value || null)}
+                      fullWidth
+                    >
+                      <MenuItem value="">
+                        <em>Nenhum</em>
+                      </MenuItem>
+                      {locationOptions.map((option) => (
+                        <MenuItem key={option.extId} value={option.extId}>
+                          {option.name ?? option.extId}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
+                </Grid>
+                <SpawnConditionsField gameId={gameId} value={conditions} onChange={setConditions} />
+
+                <FormSection title="Descrição e eventos" />
+                <TextField
+                  label="Resumo"
+                  value={summary}
+                  onChange={(event) => setSummary(event.target.value)}
+                  fullWidth
+                />
+                <TextField
+                  label="Descrição"
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
+                  multiline
+                  minRows={2}
+                  fullWidth
+                />
+                <CodesField
+                  label="Eventos"
+                  options={eventOptions}
+                  value={events}
+                  onChange={setEvents}
+                  loading={eventList.isPending}
+                  helperText="Com eventos, só aparece no mapa quando algum deles está ativo."
+                />
+              </>
+            )}
+
+            {tab === "occupants" && (
+              <>
+                <FormSection
+                  title="Ocupantes"
+                  action={
+                    <Button
+                      size="small"
+                      startIcon={<Add />}
+                      onClick={() => setPicking({ list: "occupants", index: null })}
+                      sx={{ textTransform: "none" }}
+                    >
+                      Adicionar
+                    </Button>
+                  }
+                />
+                {occupants.length === 0 && (
+                  <Typography variant="body2" color="text.secondary">
+                    Sem ocupante, o ponto entra no mapa só com o nome.
+                  </Typography>
+                )}
+                {occupants.map((row, index) => (
+                  <TargetRow
+                    key={row.key}
+                    gameId={gameId}
+                    target={row.target}
+                    onPick={() => setPicking({ list: "occupants", index })}
+                    onUp={
+                      index > 0
+                        ? () => setOccupants(move(occupants, index, -1))
+                        : undefined
+                    }
+                    onDown={
+                      index < occupants.length - 1
+                        ? () => setOccupants(move(occupants, index, 1))
+                        : undefined
+                    }
+                    onRemove={() =>
+                      setOccupants(
+                        occupants.filter((_, position) => position !== index),
+                      )
+                    }
+                  >
+                    {row.target && <DataTypeIcon value={row.target.kind}/>}
+                    <TextField
+                      label="De"
+                      size="small"
+                      value={row.amount}
+                      onChange={(event) =>
+                        updateOccupant(index, { amount: event.target.value })
+                      }
+                      error={!isOptionalInteger(row.amount)}
+                      sx={{ width: 80 }}
+                      slotProps={{ htmlInput: { inputMode: "decimal" } }}
+                    />
+                    <TextField
+                      label="Até"
+                      size="small"
+                      value={row.maxAmount}
+                      onChange={(event) =>
+                        updateOccupant(index, { maxAmount: event.target.value })
+                      }
+                      error={!isOptionalInteger(row.maxAmount)}
+                      sx={{ width: 80 }}
+                      slotProps={{ htmlInput: { inputMode: "decimal" } }}
+                    />
+                    <TextField
+                      label="Nível"
+                      size="small"
+                      value={row.level}
+                      onChange={(event) =>
+                        updateOccupant(index, { level: event.target.value })
+                      }
+                      error={!isLevel(row.level)}
+                      placeholder="—"
+                      sx={{ width: 90 }}
+                      slotProps={{ htmlInput: { inputMode: "numeric" } }}
+                    />
+                    <TextField
+                      label="Chance"
+                      size="small"
+                      value={row.chance}
+                      onChange={(event) =>
+                        updateOccupant(index, { chance: event.target.value })
+                      }
+                      error={!isChance(row.chance)}
+                      placeholder="100"
+                      sx={{ width: 110 }}
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">%</InputAdornment>
+                          ),
+                        },
+                        htmlInput: { inputMode: "decimal" },
+                      }}
+                    />
+                  </TargetRow>
+                ))}
+              </>
+            )}
+
+            {tab === "drops" && (
+              <>
+                <FormSection
+                  title="Drops Exclusivos do ponto"
+                  action={
+                    <Button
+                      size="small"
+                      startIcon={<Add />}
+                      onClick={() => setPicking({ list: "drops", index: null })}
+                      sx={{ textTransform: "none" }}
+                    >
+                      Adicionar drop
+                    </Button>
+                  }
+                />
+                <Typography variant="body2" color="text.secondary">
+                  Drops exclusivos ou adicionais gerados especificamente por este ponto no mapa (ex.: item único da bolha).
+                </Typography>
+                {drops.length === 0 && (
+                  <Typography variant="body2" color="text.secondary">
+                    Sem drops específicos no ponto.
+                  </Typography>
+                )}
+                {drops.map((row, index) => (
+                  <TargetRow
+                    key={row.key}
+                    gameId={gameId}
+                    target={row.target}
+                    onPick={() => setPicking({ list: "drops", index })}
+                    onUp={
+                      index > 0
+                        ? () => setDrops(move(drops, index, -1))
+                        : undefined
+                    }
+                    onDown={
+                      index < drops.length - 1
+                        ? () => setDrops(move(drops, index, 1))
+                        : undefined
+                    }
+                    onRemove={() =>
+                      setDrops(drops.filter((_, position) => position !== index))
+                    }
+                  >
+                    {row.target && <DataTypeIcon value={row.target.kind}/>}
+                    <TextField
+                      label="De"
+                      size="small"
+                      value={row.amount}
+                      onChange={(event) =>
+                        updateDrop(index, { amount: event.target.value })
+                      }
+                      error={!isOptionalInteger(row.amount)}
+                      sx={{ width: 80 }}
+                      slotProps={{ htmlInput: { inputMode: "decimal" } }}
+                    />
+                    <TextField
+                      label="Até"
+                      size="small"
+                      value={row.maxAmount}
+                      onChange={(event) =>
+                        updateDrop(index, { maxAmount: event.target.value })
+                      }
+                      error={!isOptionalInteger(row.maxAmount)}
+                      sx={{ width: 80 }}
+                      slotProps={{ htmlInput: { inputMode: "decimal" } }}
+                    />
+                    <TextField
+                      label="Chance"
+                      size="small"
+                      value={row.chance}
+                      onChange={(event) =>
+                        updateDrop(index, { chance: event.target.value })
+                      }
+                      error={!isChance(row.chance)}
+                      placeholder="100"
+                      sx={{ width: 110 }}
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position="end">%</InputAdornment>
+                          ),
+                        },
+                        htmlInput: { inputMode: "decimal" },
+                      }}
+                    />
+                  </TargetRow>
+                ))}
+              </>
+            )}
+          </>
+        ) : (
+          <>
+            <TextField
+              select
+              label="Tipo"
+              value={kind}
+              onChange={(event) =>
+                setKind(event.target.value as "spawn" | "location")
+              }
+              disabled={Boolean(edit)}
+              fullWidth
+            >
+              <MenuItem value="spawn" disabled={geometry !== null && !geometry.isPoint}>
+                Ponto de spawn — o que aparece aqui
+              </MenuItem>
+              <MenuItem value="location">
+                Local — bioma, região, ponto de interesse
+              </MenuItem>
+            </TextField>
+            <Stack alignItems={"center"} spacing={1} direction={"row"} justifyContent={"space-between"}>
+              <IconUploadField
+                fullWidth
+                currentMediaId={saved ? currentMedia(saved.media, "icon") : null}
+                kind="location"
+                file={icon}
+                onChange={setIcon}
+              />
+              <IconUploadField
+                fullWidth
+                currentMediaId={
+                  saved && !screenshotRemoved
+                    ? currentMedia(saved.media, "screenshot")
+                    : null
+                }
+                kind="location"
+                file={screenshot}
+                onChange={setScreenshot}
+                noun="imagem do local"
+                wide
+                onRemove={() =>
+                  screenshot ? setScreenshot(null) : setScreenshotRemoved(true)
+                }
+              />
+            </Stack>
+            <Grid container spacing={2}>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField
+                  label="Nome"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  required
+                  autoFocus
+                  fullWidth
                 />
               </Grid>
-              <Grid size={{ xs: 12, sm: 4 }}>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField
+                  label="Código"
+                  value={extId}
+                  onChange={(event) => setExtId(event.target.value)}
+                  disabled={Boolean(edit)}
+                  helperText={
+                    edit
+                      ? "O código não muda depois de criado."
+                      : "Opcional: vazio, é gerado um código aleatório."
+                  }
+                  fullWidth
+                  slotProps={{ htmlInput: { style: { fontFamily: "monospace" } } }}
+                />
+              </Grid>
+            </Grid>
+            <Grid container spacing={2}>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Autocomplete
+                  freeSolo
+                  options={LOCATION_TYPES}
+                  getOptionLabel={(option) =>
+                    LOCATION_TYPE_LABELS[option] ?? option
+                  }
+                  value={locationType}
+                  onChange={(_, value) => setLocationType(value ?? "")}
+                  onInputChange={(_, value, reason) => {
+                    if (reason === "input") setLocationType(value);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Tipo do local"
+                      required
+                      error={locationType.trim() === ""}
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   select
-                  label="Dentro do local"
-                  value={location ?? ""}
-                  onChange={(event) => setLocation(event.target.value || null)}
+                  label="Dentro de"
+                  value={parent ?? ""}
+                  onChange={(event) => setParent(event.target.value || null)}
+                  helperText="Local que contém este, ex.: a região do bioma."
                   fullWidth
                 >
                   <MenuItem value="">
@@ -829,88 +1016,42 @@ function MapContentForm({
                   ))}
                 </TextField>
               </Grid>
+              <Grid size={12}>
+                <CodesField
+                  label="Categorias"
+                  options={locationCategoryOptions}
+                  value={categories}
+                  onChange={setCategories}
+                  loading={categoryList.isPending}
+                  helperText="Agrupa locais do mesmo tipo (ex.: Rio): regras podem valer em todos os locais da categoria."
+                />
+              </Grid>
             </Grid>
-            <SpawnConditionsField gameId={gameId} value={conditions} onChange={setConditions} />
+            <FormSection title="Descrição e eventos" />
+            <TextField
+              label="Resumo"
+              value={summary}
+              onChange={(event) => setSummary(event.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Descrição"
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+              multiline
+              minRows={2}
+              fullWidth
+            />
+            <CodesField
+              label="Eventos"
+              options={eventOptions}
+              value={events}
+              onChange={setEvents}
+              loading={eventList.isPending}
+              helperText="Com eventos, só aparece no mapa quando algum deles está ativo."
+            />
           </>
-        ) : (
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Autocomplete
-                freeSolo
-                options={LOCATION_TYPES}
-                getOptionLabel={(option) =>
-                  LOCATION_TYPE_LABELS[option] ?? option
-                }
-                value={locationType}
-                onChange={(_, value) => setLocationType(value ?? "")}
-                onInputChange={(_, value, reason) => {
-                  if (reason === "input") setLocationType(value);
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Tipo do local"
-                    required
-                    error={locationType.trim() === ""}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <TextField
-                select
-                label="Dentro de"
-                value={parent ?? ""}
-                onChange={(event) => setParent(event.target.value || null)}
-                helperText="Local que contém este, ex.: a região do bioma."
-                fullWidth
-              >
-                <MenuItem value="">
-                  <em>Nenhum</em>
-                </MenuItem>
-                {locationOptions.map((option) => (
-                  <MenuItem key={option.extId} value={option.extId}>
-                    {option.name ?? option.extId}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid size={12}>
-              <CodesField
-                label="Categorias"
-                options={locationCategoryOptions}
-                value={categories}
-                onChange={setCategories}
-                loading={categoryList.isPending}
-                helperText="Agrupa locais do mesmo tipo (ex.: Rio): regras podem valer em todos os locais da categoria."
-              />
-            </Grid>
-          </Grid>
         )}
-
-        <FormSection title="Descrição e eventos" />
-        <TextField
-          label="Resumo"
-          value={summary}
-          onChange={(event) => setSummary(event.target.value)}
-          fullWidth
-        />
-        <TextField
-          label="Descrição"
-          value={description}
-          onChange={(event) => setDescription(event.target.value)}
-          multiline
-          minRows={2}
-          fullWidth
-        />
-        <CodesField
-          label="Eventos"
-          options={eventOptions}
-          value={events}
-          onChange={setEvents}
-          loading={eventList.isPending}
-          helperText="Com eventos, só aparece no mapa quando algum deles está ativo."
-        />
 
         {error && <Alert severity="error">{error}</Alert>}
       </Stack>
