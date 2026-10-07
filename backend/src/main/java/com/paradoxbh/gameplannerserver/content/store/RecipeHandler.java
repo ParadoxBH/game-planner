@@ -124,7 +124,7 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
                                 Rows.integer(row, "level"))),
                 children.load(INPUTS, gameId, extIds, ChildMappers::requirement),
                 children.load(OUTPUTS, gameId, extIds, RecipeHandler::output),
-                children.load(UNLOCK, gameId, extIds, RecipeHandler::unlock),
+                children.load(UNLOCK, gameId, extIds, ChildMappers::unlock),
                 children.load(MODIFIERS, gameId, extIds, RecipeHandler::modifier));
     }
 
@@ -137,7 +137,7 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
                 .toList());
         children.replace(INPUTS, gameId, id, recipe.inputs().stream().map(ChildMappers::requirementRow).toList());
         children.replace(OUTPUTS, gameId, id, recipe.outputs().stream().map(RecipeHandler::outputRow).toList());
-        children.replace(UNLOCK, gameId, id, recipe.unlock().stream().map(RecipeHandler::unlockRow).toList());
+        children.replace(UNLOCK, gameId, id, recipe.unlock().stream().map(ChildMappers::unlockRow).toList());
         children.replace(MODIFIERS, gameId, id, recipe.modifiers().stream().map(RecipeHandler::modifierRow).toList());
     }
 
@@ -191,14 +191,6 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
                 Rows.decimal(row, "chance"), Rows.integer(row, "level"));
     }
 
-    private static Map<String, Object> unlockRow(RecipeUnlock unlock) {
-        return ChildRows.row(
-                "unlock_type", unlock.type(),
-                "target_kind", unlock.target() == null ? null : unlock.target().kind(),
-                "target_ext_id", unlock.target() == null ? null : unlock.target().extId(),
-                "value", unlock.value());
-    }
-
     private static Map<String, Object> modifierRow(RecipeModifier modifier) {
         Object value = modifier.value();
         return ChildRows.row(
@@ -221,10 +213,5 @@ public class RecipeHandler extends AbstractContentHandler<RecipeDocument, Recipe
         }
         return new RecipeModifier(Rows.reference(row, "target_kind", "target_ext_id"), Rows.string(row, "attribute_key"),
                 Rows.string(row, "operation"), value);
-    }
-
-    private static RecipeUnlock unlock(Map<String, Object> row) {
-        return new RecipeUnlock(Rows.string(row, "unlock_type"), Rows.reference(row, "target_kind", "target_ext_id"),
-                Rows.string(row, "value"));
     }
 }

@@ -5,14 +5,16 @@ import { useContentWrites, useCountWhere } from "../../api/useContent";
 import { describeError } from "../common/contentForm";
 import { StyledDialog } from "../common/StyledDialog";
 
-/** Quantos locais e pontos de spawn estão no mapa. */
+/** Quantos locais, pontos de spawn e atalhos (por qualquer das pontas) estão no mapa. */
 function useMapUsage(gameId: string, extId: string) {
   const locations = useCountWhere(gameId, "locations", "map", extId);
   const spawns = useCountWhere(gameId, "spawn-points", "map", extId);
+  const shortcuts = useCountWhere(gameId, "shortcuts", "map", extId);
   return {
     locations: locations.data?.total,
     spawns: spawns.data?.total,
-    isPending: locations.isPending || spawns.isPending,
+    shortcuts: shortcuts.data?.total,
+    isPending: locations.isPending || spawns.isPending || shortcuts.isPending,
   };
 }
 
@@ -21,7 +23,7 @@ function plural(count: number | undefined, one: string, many: string) {
 }
 
 /**
- * Confirma e apaga o mapa, avisando quantos locais e pontos de spawn ficam sem ele. `onClose` fecha só a
+ * Confirma e apaga o mapa, avisando quantos locais, pontos de spawn e atalhos ficam sem ele. `onClose` fecha só a
  * confirmação (cancelar); `onDeleted`, depois de apagar.
  */
 export function DeleteMapDialog({
@@ -37,7 +39,7 @@ export function DeleteMapDialog({
 }) {
   const { remove } = useContentWrites(gameId, "maps");
   const usage = useMapUsage(gameId, map.extId);
-  const inUse = (usage.locations ?? 0) + (usage.spawns ?? 0);
+  const inUse = (usage.locations ?? 0) + (usage.spawns ?? 0) + (usage.shortcuts ?? 0);
 
   return (
     <StyledDialog
@@ -73,7 +75,8 @@ export function DeleteMapDialog({
         ) : (
           inUse > 0 && (
             <Alert severity="warning">
-              O mapa tem {plural(usage.locations, "local", "locais")} e {plural(usage.spawns, "ponto de spawn", "pontos de spawn")}.
+              O mapa tem {plural(usage.locations, "local", "locais")}, {plural(usage.spawns, "ponto de spawn", "pontos de spawn")} e{" "}
+              {plural(usage.shortcuts, "atalho", "atalhos")}.
               Eles continuam apontando para o código dele, mas ficam sem mapa para aparecer.
             </Alert>
           )

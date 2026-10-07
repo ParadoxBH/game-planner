@@ -12,6 +12,7 @@ import static com.paradoxbh.gameplannerserver.content.ContentKind.RECIPE;
 import static com.paradoxbh.gameplannerserver.content.ContentKind.REDEMPTION_CODE;
 import static com.paradoxbh.gameplannerserver.content.ContentKind.SHOP;
 import static com.paradoxbh.gameplannerserver.content.ContentKind.SHOP_CATEGORY;
+import static com.paradoxbh.gameplannerserver.content.ContentKind.SHORTCUT;
 import static com.paradoxbh.gameplannerserver.content.ContentKind.SPAWN_POINT;
 import static com.paradoxbh.gameplannerserver.query.QueryJson.and;
 import static com.paradoxbh.gameplannerserver.query.QueryJson.or;
@@ -76,7 +77,8 @@ public class ListingFilterService {
             Map.entry(SPAWN_POINT, "Pesquisar pontos de spawn..."),
             Map.entry(COLLECTION, "Pesquisar conjuntos..."),
             Map.entry(COLLECTION_GROUP, "Pesquisar grupos..."),
-            Map.entry(REDEMPTION_CODE, "Pesquisar códigos...")));
+            Map.entry(REDEMPTION_CODE, "Pesquisar códigos..."),
+            Map.entry(SHORTCUT, "Pesquisar atalhos...")));
 
     /** Rótulos dos tipos de evento conhecidos; tipo novo aparece com o próprio código. */
     private static final Map<String, String> EVENT_TYPES = Map.of(

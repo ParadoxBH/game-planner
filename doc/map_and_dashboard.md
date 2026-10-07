@@ -29,5 +29,17 @@ O Dashboard é gerado automaticamente para qualquer mapa. Ele processa as entida
 - `defaultView`: Qual aba abrir primeiro.
 - `availableViews`: Quais abas mostrar no alternador de topo.
 
+## Atalhos
+
+Atalho (`/shortcuts`) liga dois pontos, no mesmo mapa ou em mapas diferentes, de ida e volta ou só de ida. O
+mapa busca os atalhos com alguma ponta nele (`map equal`), desenha cada ponta que está ali e, com as duas no mesmo
+mapa, uma linha tracejada entre elas. O popup diz aonde o atalho leva, os requisitos e o desbloqueio, e "Seguir o
+atalho" abre o mapa da outra ponta (quando é outro) e aproxima nela. O tipo "Atalhos" no filtro liga e desliga a
+camada, e começa sempre ligado.
+
+Quem edita cria pelo botão direito ("Adicionar atalho": a origem é o ponto clicado). No formulário, "Marcar no
+mapa" esconde a janela, abre o mapa daquela ponta e espera o clique (Esc desiste); as coordenadas também podem ser
+digitadas.
+
 ---
 **Renderização**: O componente `MapView.tsx` gerencia a alternância de estado e o redimensionamento do Leaflet ao trocar de abas.

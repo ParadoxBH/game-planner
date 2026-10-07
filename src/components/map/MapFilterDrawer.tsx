@@ -31,10 +31,12 @@ import { MapFilterDrawerItem } from "./MapFilterDrawerItem";
 import { listRowSx } from "../../theme/listRowSx";
 
 export const SPAWN_TYPE = "spawn";
+export const SHORTCUT_TYPE = "shortcut";
 export const UNCATEGORIZED = "desconhecido";
 
 const TYPE_LABELS: Record<string, string> = {
   spawn: "Pontos de spawn",
+  shortcut: "Atalhos",
   region: "Regiões",
   biome: "Biomas",
   poi: "Pontos de interesse",
@@ -89,13 +91,15 @@ export interface FilterStats {
   ][];
 }
 
-/** Tipos (spawn e tipos de local) e categorias com os ocupantes de cada uma, com as contagens. */
+/** Tipos (spawn, atalho e tipos de local) e categorias com os ocupantes de cada uma, com as contagens. */
 export function computeFilterStats(
   markers: MapMarker[],
   locations: LocationDocument[],
+  shortcuts = 0,
 ): FilterStats {
   const typeCount: Record<string, number> = {};
   if (markers.length > 0) typeCount[SPAWN_TYPE] = markers.length;
+  if (shortcuts > 0) typeCount[SHORTCUT_TYPE] = shortcuts;
   const typeCategories: Record<string, Record<string, number>> = {};
   locations.forEach((location) => {
     const type = locationTypeOf(location);

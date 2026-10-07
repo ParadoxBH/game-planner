@@ -758,7 +758,7 @@ GET  /api/v1/games/{game}/search?q=                          <- sobre content_re
 ```
 
 `{resource}` é items, entities, categories, events, recipes, shops, shop-categories, maps, locations,
-spawn-points, collections, collection-groups ou codes. A listagem é `POST` porque o filtro vai no corpo,
+spawn-points, shortcuts, collections, collection-groups ou codes. A listagem é `POST` porque o filtro vai no corpo,
 mas é leitura: aberta sem login como os `GET`, e fora do rate limit de escrita.
 
 ### Filtro de consulta — QueryJson
@@ -813,6 +813,7 @@ tem, `rarity`, `category`, `event` e `attribute` (tem o atributo). Próprios:
 | collections | member |
 | collection-groups | collection, member |
 | codes | addedOn, expiresOn, active (sem validade ou vencendo hoje ou depois), rewards |
+| shortcuts | map (qualquer ponta), originMap, destinationMap, departsFrom (de onde se pega: a origem, e o destino se for de ida e volta), arrivesAt (aonde leva: o destino, e a origem se for de ida e volta), bidirectional, requires, unlock (tipo), unlockTarget |
 
 ### Referências pendentes — o fluxo de cadastro
 
@@ -1152,6 +1153,22 @@ descreve a barra, e o front a desenha com um componente só (`ListingFilterBar`)
   do front. O filtro Categoria e o menu listam as principais que o tipo usa; a Sub-categoria, as
   demais categorias usadas (cadastradas ou não, e principais que aparecem junto de outra), com
   `parents`. `dependsOn` no filtro faz o front mostrar só as sub-categorias da categoria escolhida.
+
+### Fase 10 — Atalhos
+**Status: concluída.** 3 testes de contrato HTTP. Atalho (`shortcut`, V23) leva o jogador de um lugar a outro,
+no mesmo mapa ou entre mapas: portal, barco, elevador, porta de masmorra. Decisões:
+
+- **Tipo de conteúdo próprio, não ponto de spawn.** Tem duas pontas, cada uma `{ map, position }` com ponto
+  obrigatório; ponto de spawn é uma posição só e responde "o que aparece aqui". Origem e destino iguais dão 400.
+- **`bidirectional`** diz se vale nos dois sentidos (padrão `false` na API; o formulário do mapa começa em ida e
+  volta). No mapa, a origem e qualquer ponta de um atalho de ida e volta são entrada; o destino de um só de ida é
+  só chegada, desenhado em cinza.
+- **Dois tipos de requisito, nas formas que já existiam:** `requirements` é o que se precisa ter a cada uso, na
+  forma do requisito de entidade (a passagem é gasta, a chave tem `notConsumed`); `unlock` é o que libera o atalho
+  uma vez, na forma do desbloqueio de receita (`{ type, target, value }`, tipo aberto: quest, boss, event,
+  player_level, discovery). As linhas de desbloqueio passaram para `ChildMappers`, usadas pelos dois.
+- **Sem nome**, a exibição usa o código (`content_ref`); a tela mostra "Atalho para" o mapa do destino.
+- Mapas, requisitos e desbloqueios entram em `content_reference` e, portanto, nas pendências.
 
 ---
 

@@ -221,6 +221,26 @@ export interface SpawnPointDocument extends ContentBase {
   events: string[];
 }
 
+/** Uma ponta do atalho: o mapa e o ponto nele, em WKT de coordenadas de jogo. */
+export interface ShortcutEnd {
+  map: string;
+  position: string;
+}
+
+/**
+ * Atalho: leva da origem ao destino, no mesmo mapa ou em outro. Com `bidirectional`, também do destino
+ * de volta à origem. `requirements` é o que se precisa ter a cada uso (a passagem é gasta, a chave não);
+ * `unlock`, o que libera o atalho (quest, chefe derrotado).
+ */
+export interface ShortcutDocument extends ContentBase {
+  origin: ShortcutEnd;
+  destination: ShortcutEnd;
+  bidirectional: boolean;
+  requirements: Requirement[];
+  unlock: RecipeUnlock[];
+  events: string[];
+}
+
 export interface Reward {
   target: Reference;
   amount: number;
@@ -678,7 +698,8 @@ export type ContentResource =
   | "spawn-points"
   | "collections"
   | "collection-groups"
-  | "codes";
+  | "codes"
+  | "shortcuts";
 
 /**
  * Listagem: o filtro (QueryJson, montado com and/or/rule de ./query), a página e a ordenação. Os campos que

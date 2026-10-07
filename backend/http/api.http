@@ -480,6 +480,29 @@ Content-Type: application/json
   "occupants": [ { "target": { "kind": "entity", "extId": "minerio" }, "chance": 1 } ]
 }
 
+### Atalho entre mapas, de ida e volta, com requisito e desbloqueio
+PUT {{api}}/games/heartopia/shortcuts/barco_queda
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Barco para a Queda da Baleia",
+  "origin": { "map": "main", "position": "POINT (0 0)" },
+  "destination": { "map": "queda_baleia", "position": "POINT (50 50)" },
+  "bidirectional": true,
+  "requirements": [ { "target": { "kind": "item", "extId": "passagem" }, "amount": 1 } ],
+  "unlock": [ { "type": "quest", "value": "Tesouro de Alu" } ]
+}
+
+### Atalhos que saem de um mapa (a origem, ou o destino quando é de ida e volta)
+POST {{api}}/games/heartopia/shortcuts/query
+Content-Type: application/json
+
+{
+  "type": "group", "operator": "and",
+  "rules": [ { "type": "rule", "field": "departsFrom", "operator": "equal", "value": "main" } ]
+}
+
 ### Pontos de um local: ligados a ele ou dentro da área
 POST {{api}}/games/heartopia/spawn-points/query
 Authorization: Bearer {{accessToken}}

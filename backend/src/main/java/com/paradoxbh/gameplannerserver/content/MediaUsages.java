@@ -33,7 +33,8 @@ public final class MediaUsages {
             entry(ContentKind.LOCATION.code(), Set.of("icon", "banner", "screenshot")),
             entry(ContentKind.SPAWN_POINT.code(), Set.of("icon", "screenshot")),
             entry(ContentKind.COLLECTION.code(), Set.of("icon", "banner")),
-            entry(ContentKind.COLLECTION_GROUP.code(), Set.of("icon", "banner")));
+            entry(ContentKind.COLLECTION_GROUP.code(), Set.of("icon", "banner")),
+            entry(ContentKind.SHORTCUT.code(), Set.of("icon", "screenshot")));
 
     private MediaUsages() {
     }

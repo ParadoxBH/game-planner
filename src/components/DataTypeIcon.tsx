@@ -14,6 +14,7 @@ import {
   Place,
   Redeem,
   Settings,
+  Shortcut,
   SportsEsports,
   Storefront,
   Tune,
@@ -41,6 +42,7 @@ const DATA_TYPE_ICONS = {
   collection: AutoAwesomeMosaic,
   collection_group: AutoAwesomeMosaic,
   redemption_code: Redeem,
+  shortcut: Shortcut,
   game: SportsEsports,
   // Seções do jogo que não são conteúdo da API.
   simulator: Explore,

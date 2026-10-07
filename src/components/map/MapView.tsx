@@ -24,6 +24,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 import RuleIcon from "@mui/icons-material/Rule";
+import ShortcutIcon from "@mui/icons-material/Shortcut";
 import LaunchIcon from "@mui/icons-material/Launch";
 import MapIcon from "@mui/icons-material/Map";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -48,6 +49,7 @@ import {
   Rectangle,
   TileLayer,
   Tooltip,
+  useMap,
   useMapEvents,
 } from "react-leaflet";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
@@ -61,8 +63,9 @@ import {
   type MapDocument,
   type MapMarker,
   type MediaLink,
+  type ShortcutDocument,
 } from "../../api/content";
-import { contentRoute, currentMedia, mediaUrl } from "../../api/references";
+import { contentRoute, currentMedia, mediaUrl, ReferenceIndex } from "../../api/references";
 import { useContentDocument, useContentList, useGame, useListing, useMapMarkers } from "../../api/useContent";
 import { and, rule } from "../../api/query";
 import { useEventFilter } from "../../context/EventFilterContext";
@@ -82,6 +85,7 @@ import {
   locationTypeOf,
   MapFilterDrawer,
   occupantCategory,
+  SHORTCUT_TYPE,
   SPAWN_TYPE,
   typeLabel,
   type FilterStats,
@@ -95,6 +99,9 @@ import { MapWeatherPanel } from "./MapWeatherPanel";
 import { createMapCRS, leafletBounds, mapImageUrl, type LatLngBounds } from "./mapGeometry";
 import markerTemplate from "./marker-icon.html?raw";
 import { MapContentDialog, type DrawnGeometry, type EditingContent } from "./MapContentDialog";
+import { ShortcutDialog, type ShortcutEndDraft, type ShortcutEndName } from "./ShortcutDialog";
+import { ShortcutPopup } from "./ShortcutPopup";
+import { shortcutName } from "./shortcutLabels";
 
 export interface NavigationItem {
   type: "entity" | "item";
@@ -104,6 +111,17 @@ export interface NavigationItem {
 const MARKER_SIZE = 32;
 const EMPTY_MARKERS: MapMarker[] = [];
 const EMPTY_LOCATIONS: LocationDocument[] = [];
+const EMPTY_SHORTCUTS: ShortcutDocument[] = [];
+const SHORTCUT_SIZE = 26;
+/** Atalho que leva a algum lugar, e a ponta de chegada de um atalho só de ida. */
+const SHORTCUT_COLOR = "#7e57c2";
+const ARRIVAL_COLOR = "#78909c";
+/** Símbolos do Material: ida e volta, só ida (a saída) e a chegada. */
+const SHORTCUT_PATHS = {
+  both: "M6.99 11 3 15l3.99 4v-3H14v-2H6.99zM21 9l-3.99-4v3H10v2h7.01v3z",
+  departure: "m21 11-6-6v5H8c-2.76 0-5 2.24-5 5v4h2v-4c0-1.65 1.35-3 3-3h7v5z",
+  arrival: "M11 7 9.6 8.4l2.6 2.6H2v2h10.2l-2.6 2.6L11 17l5-5zm9 12h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-8v2h8z",
+};
 const DEFAULT_BOUNDS: LatLngBounds = [
   [0, 0],
   [1000, 1000],
@@ -140,6 +158,30 @@ const CursorTracker = ({ onMouseMove, onZoom }: { onMouseMove: (coords: [number,
   useEffect(() => onZoom(map.getZoom()), [map, onZoom]);
   return null;
 };
+
+/** Leva o mapa até o ponto, ao seguir um atalho; fecha o popup aberto e chega perto. */
+const FocusOn = ({ latlng, at }: { latlng: [number, number]; at: number }) => {
+  const map = useMap();
+  useEffect(() => {
+    map.closePopup();
+    const max = map.getMaxZoom();
+    // Mapa sem zoom máximo cadastrado: aproxima dois níveis de onde está.
+    map.setView(latlng, Number.isFinite(max) ? Math.max(map.getZoom(), max - 1) : map.getZoom() + 2);
+    // Só quando se pede de novo (at), não a cada render com a mesma posição.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, at]);
+  return null;
+};
+
+/** Marcador de uma ponta do atalho: o ícone dele, ou o símbolo do sentido. */
+function shortcutIconHtml(path: string, color: string, iconUrl: string | null): string {
+  const inner = iconUrl
+    ? `<img src="${iconUrl}" style="width: 80%; height: 80%; object-fit: contain;" />`
+    : `<svg viewBox="0 0 24 24" width="16" height="16" fill="white"><path d="${path}" /></svg>`;
+  return `<div style="width: ${SHORTCUT_SIZE}px; height: ${SHORTCUT_SIZE}px; border-radius: 50%; background: ${iconUrl ? "white" : color};
+    border: 3px solid ${color}; box-sizing: border-box; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5); overflow: hidden;">${inner}</div>`;
+}
 
 /** Enter fecha a zona desenhada; Esc desiste dela. O mesmo que os botões da caixa de ferramentas. */
 const DrawKeyboard = ({ onFinish, onCancel }: { onFinish: () => void; onCancel: () => void }) => {
@@ -238,7 +280,7 @@ interface Pickable {
   layer: Layer;
   label: string;
   secondary: string;
-  kind: "spawn_point" | "location";
+  kind: "spawn_point" | "location" | "shortcut";
   iconMediaId: string | null;
   areas?: [number, number][][][];
   /** Área do polígono; ponto e marcador ficam com 0, sempre antes. */
@@ -370,6 +412,15 @@ export const MapView = () => {
   // Cadastro de regra de surgimento sem posição (ex.: peixe que nasce em locais da categoria Rio).
   const [newRule, setNewRule] = useState(false);
   const [redrawFor, setRedrawFor] = useState<EditingContent | null>(null);
+  // Atalho aberto no formulário: edição (editId) ou cadastro novo, com as pontas já conhecidas.
+  const [shortcutForm, setShortcutForm] = useState<{
+    editId?: string;
+    initial?: { origin: ShortcutEndDraft; destination: ShortcutEndDraft };
+  } | null>(null);
+  // Ponta de atalho sendo marcada: o formulário fica escondido até o clique, que vai para `apply`.
+  const [shortcutPick, setShortcutPick] = useState<{ apply: (wkt: string) => void } | null>(null);
+  // Aonde o mapa vai depois de seguir um atalho; `at` distingue dois pedidos para o mesmo lugar.
+  const [focus, setFocus] = useState<{ mapId: string; x: number; y: number; at: number } | null>(null);
   const [visibleTypes, setVisibleTypes] = useState<string[]>([]);
   const [visibleLocationCategories, setVisibleLocationCategories] = useState<string[]>([]);
   const [visibleCategories, setVisibleCategories] = useState<string[]>([]);
@@ -414,6 +465,13 @@ export const MapView = () => {
     { size: MAX_PAGE_SIZE, where: and(selectedMapId && rule("map", "equal", selectedMapId)) },
     { enabled: Boolean(selectedMapId) },
   );
+  // Atalhos com alguma ponta neste mapa; as referências dão nome aos requisitos no popup.
+  const shortcuts = useListing<ShortcutDocument>(
+    gameId,
+    "shortcuts",
+    { size: MAX_PAGE_SIZE, references: true, where: and(selectedMapId && rule("map", "equal", selectedMapId)) },
+    { enabled: Boolean(selectedMapId) },
+  );
   const events = useContentList<EventDocument>(gameId, "events", { size: MAX_PAGE_SIZE, sort: "name" });
   const categories = useContentList<CategoryDocument>(gameId, "categories", { size: MAX_PAGE_SIZE, sort: "name" });
   const filterItem = useContentDocument<ItemDocument>(gameId, "items", filterItemId);
@@ -421,7 +479,12 @@ export const MapView = () => {
 
   const markerList = markers.data?.content ?? EMPTY_MARKERS;
   const locationList = locations.data?.content ?? EMPTY_LOCATIONS;
-  const stats = useMemo(() => computeFilterStats(markerList, locationList), [markerList, locationList]);
+  const shortcutList = shortcuts.data?.content ?? EMPTY_SHORTCUTS;
+  const shortcutReferences = useMemo(() => new ReferenceIndex(shortcuts.data?.references), [shortcuts.data]);
+  const stats = useMemo(
+    () => computeFilterStats(markerList, locationList, shortcutList.length),
+    [markerList, locationList, shortcutList.length],
+  );
   // Zonas do mapa (locais com polígono), da menor para a maior: a primeira que contém o cursor é a
   // mais específica.
   const zones = useMemo(
@@ -482,7 +545,9 @@ export const MapView = () => {
         Object.keys(data.entities).forEach((id) => entities.add(id));
       }
     });
-    const types = defaults.types.length > 0 ? defaults.types : stats.types.map(([type]) => type);
+    const types = defaults.types.length > 0 ? [...defaults.types] : stats.types.map(([type]) => type);
+    // Atalho começa sempre visível: os tipos padrão gravados nos mapas não o conhecem.
+    if (!types.includes(SHORTCUT_TYPE)) types.push(SHORTCUT_TYPE);
     setVisibleTypes(types);
     setVisibleLocationCategories(allLocationCategoryKeys(stats, types));
     setVisibleCategories(defaults.categories.length > 0 ? defaults.categories : stats.categories.map(([category]) => category));
@@ -721,6 +786,99 @@ export const MapView = () => {
     [urlFiltered, locationList, visibleTypes, visibleLocationCategories, stats, toLatLng, activeTool, theme, canEdit, pickable],
   );
 
+  const mapName = useCallback((mapId: string) => mapList?.find((map) => map.extId === mapId)?.name ?? mapId, [mapList]);
+
+  /** Segue o atalho até a ponta pedida: troca de mapa quando ela é de outro, e o mapa chega perto dela. */
+  const followShortcut = useCallback(
+    (shortcut: ShortcutDocument, end: ShortcutEndName) => {
+      const target = shortcut[end];
+      const [x, y] = parseWKTPoint(target.position);
+      setFocus({ mapId: target.map, x, y, at: Date.now() });
+      if (target.map !== selectedMapId) navigate(`/game/${gameId}/map/${encodeURIComponent(target.map)}/map`);
+    },
+    [selectedMapId, gameId, navigate],
+  );
+
+  // O destaque do ponto de chegada some depois de um tempo.
+  useEffect(() => {
+    if (!focus) return;
+    const timeout = setTimeout(() => setFocus(null), 5000);
+    return () => clearTimeout(timeout);
+  }, [focus]);
+
+  /**
+   * As pontas dos atalhos que estão neste mapa. A origem (e qualquer ponta de um atalho de ida e volta) é por
+   * onde se entra; o destino de um atalho só de ida é só chegada. Com as duas pontas aqui, uma linha as liga.
+   */
+  const shortcutElements = useMemo(() => {
+    if (urlFiltered || !selectedMapId || !visibleTypes.includes(SHORTCUT_TYPE)) return null;
+    return shortcutList.map((shortcut) => {
+      const name = shortcutName(shortcut.name, mapName(shortcut.destination.map));
+      const iconId = currentMedia(shortcut.media, "icon");
+      const ends = (["origin", "destination"] as const).filter((end) => shortcut[end].map === selectedMapId);
+      const positions = ends.map((end) => {
+        const [x, y] = parseWKTPoint(shortcut[end].position);
+        return toLatLng(x, y);
+      });
+      return (
+        <React.Fragment key={shortcut.extId}>
+          {ends.length === 2 && (
+            <Polyline
+              positions={positions}
+              interactive={false}
+              pathOptions={{ color: SHORTCUT_COLOR, weight: 2, opacity: 0.8, dashArray: "6, 6" }}
+            />
+          )}
+          {ends.map((end, index) => {
+            const arrival = end === "destination" && !shortcut.bidirectional;
+            const path = shortcut.bidirectional ? SHORTCUT_PATHS.both : arrival ? SHORTCUT_PATHS.arrival : SHORTCUT_PATHS.departure;
+            return (
+              <StableMarker
+                key={end}
+                position={positions[index]}
+                size={SHORTCUT_SIZE}
+                className="shortcut-icon"
+                interactive={!activeTool}
+                layerRef={pickable(`shortcut:${shortcut.extId}:${end}`, {
+                  label: name,
+                  secondary: arrival ? "Chegada de atalho" : "Atalho",
+                  kind: "shortcut",
+                  iconMediaId: iconId,
+                  size: 0,
+                  radius: SHORTCUT_SIZE / 2 + 4,
+                })}
+                iconHtml={shortcutIconHtml(path, arrival ? ARRIVAL_COLOR : SHORTCUT_COLOR, iconId ? mediaUrl(iconId) : null)}
+              >
+                <Popup>
+                  <ShortcutPopup
+                    shortcut={shortcut}
+                    end={end}
+                    references={shortcutReferences}
+                    mapName={mapName}
+                    onGo={(target) => followShortcut(shortcut, target)}
+                    onEdit={canEdit ? () => setShortcutForm({ editId: shortcut.extId }) : undefined}
+                  />
+                </Popup>
+              </StableMarker>
+            );
+          })}
+        </React.Fragment>
+      );
+    });
+  }, [
+    urlFiltered,
+    selectedMapId,
+    visibleTypes,
+    shortcutList,
+    shortcutReferences,
+    mapName,
+    toLatLng,
+    activeTool,
+    pickable,
+    followShortcut,
+    canEdit,
+  ]);
+
   if (maps.isPending) return <Loading text="Carregando mapa..." />;
   if (maps.isError) {
     return (
@@ -786,7 +944,26 @@ export const MapView = () => {
 
   const handleMapClick = (latlng: [number, number]) => {
     if (activeTool === "polygon") setCurrentPoints((previous) => [...previous, latlng]);
-    else if (activeTool === "point") finishDrawing({ wkt: formatWKTPoint(toGame(latlng)), isPoint: true, vertices: 1 });
+    else if (activeTool === "point" && shortcutPick) {
+      // Ponta de atalho: o ponto volta para o formulário, que reaparece.
+      shortcutPick.apply(formatWKTPoint(toGame(latlng)));
+      cancelShortcutPick();
+    } else if (activeTool === "point") finishDrawing({ wkt: formatWKTPoint(toGame(latlng)), isPoint: true, vertices: 1 });
+  };
+
+  function cancelShortcutPick() {
+    setShortcutPick(null);
+    setActiveTool(null);
+    setCurrentPoints([]);
+  }
+
+  /** Esconde o formulário do atalho e espera o clique no mapa da ponta, abrindo esse mapa quando é outro. */
+  const pickShortcutPoint = (end: ShortcutEndName, mapId: string, apply: (wkt: string) => void) => {
+    setShortcutPick({ apply });
+    setActiveTool("point");
+    setCurrentPoints([]);
+    if (mapId !== selectedMap.extId || viewMode !== "map") navigate(mapPath(mapId, "map"));
+    setSnackbar(`Clique no mapa para marcar ${end === "origin" ? "a origem" : "o destino"} do atalho. Esc desiste.`);
   };
 
   const copyCoordinates = async (latlng: [number, number]) => {
@@ -881,6 +1058,7 @@ export const MapView = () => {
                   setContextMenu({ latlng, screen: { left: event.originalEvent.clientX, top: event.originalEvent.clientY }, picks });
                 }}
               />
+              {shortcutPick && <DrawKeyboard onFinish={() => undefined} onCancel={cancelShortcutPick} />}
               {activeTool === "polygon" && (
                 <DrawKeyboard
                   onFinish={finishPolygon}
@@ -955,6 +1133,18 @@ export const MapView = () => {
 
               {locationElements}
               {markerElements}
+              {shortcutElements}
+              {focus && focus.mapId === selectedMap.extId && (
+                <>
+                  <FocusOn latlng={toLatLng(focus.x, focus.y)} at={focus.at} />
+                  <CircleMarker
+                    center={toLatLng(focus.x, focus.y)}
+                    radius={20}
+                    interactive={false}
+                    pathOptions={{ color: theme.palette.warning.main, weight: 3, fillOpacity: 0.15 }}
+                  />
+                </>
+              )}
             </MapContainer>
             <MapFilterDrawer
               stats={stats}
@@ -1074,13 +1264,14 @@ export const MapView = () => {
               activeTool={activeTool}
               hasPoints={currentPoints.length > 0}
               canDraw={canEdit}
-              onSelectTool={setActiveTool}
+              onSelectTool={(tool) => {
+                // Outra ferramenta no meio da marcação de um atalho desiste dela.
+                if (shortcutPick && tool !== "point") setShortcutPick(null);
+                setActiveTool(tool);
+              }}
               onConfirm={finishPolygon}
               onClear={() => setCurrentPoints([])}
-              onCancel={() => {
-                setActiveTool(null);
-                setCurrentPoints([]);
-              }}
+              onCancel={cancelShortcutPick}
               isBoundBoxEditorOpen={isBoundBoxEditorOpen}
               onToggleBoundBoxEditor={() => setIsBoundBoxEditorOpen((open) => !open)}
               onEditMap={isAdmin ? () => setIsEditingMap(true) : undefined}
@@ -1159,6 +1350,26 @@ export const MapView = () => {
             <ListItemText primary="Nova regra de surgimento" secondary="Sem posição: vale por local ou condições" />
           </MenuItem>
         )}
+        {canEdit && (
+          <MenuItem
+            onClick={() => {
+              if (contextMenu) {
+                setShortcutForm({
+                  initial: {
+                    origin: { map: selectedMap.extId, position: formatWKTPoint(toGame(contextMenu.latlng)) },
+                    destination: { map: selectedMap.extId, position: null },
+                  },
+                });
+              }
+              setContextMenu(null);
+            }}
+          >
+            <ListItemIcon>
+              <ShortcutIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Adicionar atalho" secondary="Leva daqui a outro lugar" />
+          </MenuItem>
+        )}
       </Menu>
 
       {isEditingMap && selectedMap && (
@@ -1203,6 +1414,26 @@ export const MapView = () => {
                   ? "Ponto de spawn salvo no mapa!"
                   : "Local salvo no mapa!",
             );
+          }}
+        />
+      )}
+
+      {shortcutForm && (
+        <ShortcutDialog
+          gameId={gameId}
+          maps={maps.data.content}
+          initial={shortcutForm.initial}
+          editId={shortcutForm.editId}
+          hidden={shortcutPick !== null}
+          onPickPoint={pickShortcutPoint}
+          canDelete={isAdmin}
+          onClose={() => {
+            setShortcutForm(null);
+            if (shortcutPick) cancelShortcutPick();
+          }}
+          onSaved={() => {
+            setSnackbar(shortcutForm.editId ? "Atalho salvo!" : "Atalho salvo no mapa!");
+            setShortcutForm(null);
           }}
         />
       )}

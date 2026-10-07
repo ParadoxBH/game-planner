@@ -19,7 +19,8 @@ public enum ContentKind {
     SPAWN_POINT("spawn_point", "spawn_point", "Ponto de spawn", "spawn-points"),
     COLLECTION("collection", "collection", "Coleção", "collections"),
     COLLECTION_GROUP("collection_group", "collection_group", "Grupo de coleção", "collection-groups"),
-    REDEMPTION_CODE("redemption_code", "redemption_code", "Código de resgate", "codes");
+    REDEMPTION_CODE("redemption_code", "redemption_code", "Código de resgate", "codes"),
+    SHORTCUT("shortcut", "shortcut", "Atalho", "shortcuts");
 
     private final String code;
     private final String table;
