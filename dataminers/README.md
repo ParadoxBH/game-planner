@@ -132,8 +132,8 @@ Regras e saída no [README da ferramenta](tools/HeartopiaOffline/README.md). Ain
 Jogo online com anti-cheat, então nada roda dentro dele. Os dados vêm do arctracker.io: itens, módulos da
 oficina e missões pela [API pública](https://arctracker.io/developers/docs), que está em dia com a 2.0, e traduções,
 árvore de habilidades e imagens do [RaidTheory/arcraiders-data](https://github.com/RaidTheory/arcraiders-data) (MIT),
-que parou antes dela. Saem itens, receitas, reciclagem, melhorias, pesquisa, módulos da oficina e lojas dos
-comerciantes, com nomes em pt-BR. `tools/ArcRaidersImport` exporta o JSON para conferir e, com `--upload`, envia
+que parou antes dela. As ARCs, que a API não tem, saem das páginas /pt-BR/arc do site. Saem itens, receitas,
+reciclagem, melhorias, pesquisa, módulos da oficina, lojas dos comerciantes e ARCs, com nomes em pt-BR. `tools/ArcRaidersImport` exporta o JSON para conferir e, com `--upload`, envia
 pelo mesmo `DatasetUploader` dos mods.
 
 ```powershell

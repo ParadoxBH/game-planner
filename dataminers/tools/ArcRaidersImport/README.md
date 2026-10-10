@@ -5,6 +5,9 @@ Duas fontes:
 
 - a [API pública do arctracker](https://arctracker.io/developers/docs) (sem autenticação, um GET por recurso) para
   **itens, módulos da oficina e missões** — é a versão em dia do jogo;
+- as **páginas das ARCs** no site (`/pt-BR/arc` e `/pt-BR/arc/{arc}`, 24 requisições em sequência), que a API não
+  tem. A página é lida pelo payload RSC do Next.js, que é JSON, guiado pelos atributos `data-arc-*` de cada seção;
+  se o site mudar o layout, a ARC sai com menos dados e o relatório avisa;
 - o clone do [RaidTheory/arcraiders-data](https://github.com/RaidTheory/arcraiders-data), o repositório comunitário
   (MIT) por trás do arctracker, para **traduções** (`arctracker-ui/pt-BR.json`), **árvore de habilidades** e **imagens**.
 
@@ -51,8 +54,9 @@ dotnet run --project tools\ArcRaidersImport -- --upload --user <usuário> --api 
 Código de saída: `0` ok, `1` erro (fonte não encontrada, login, servidor fora), `2` envio concluído com documentos ou
 imagens recusados (detalhes no console).
 
-O console mostra de onde veio cada parte. Cada resposta da API fica em `data\arctracker\api`, e as imagens baixadas em
-`data\arctracker\images`: sem rede, a ferramenta usa a última cópia; sem cópia, cai para o clone, com aviso.
+O console mostra de onde veio cada parte. Cada resposta da API fica em `data\arctracker\api`, as páginas em
+`data\arctracker\pages` e as imagens baixadas em `data\arctracker\images`: sem rede, a ferramenta usa a última cópia;
+sem cópia, cai para o clone, com aviso.
 
 O `--update` baixa só as pastas do clone que a ferramenta usa (~23 MB; o repositório inteiro passa de 230 MB por
 causa das imagens de mapa). Ele precisa do git no PATH; o equivalente à mão é:
@@ -86,6 +90,7 @@ mídia (`out\media-cache`) evita reenviar imagem que o servidor já tem.
 | módulos da oficina | entidades (categoria Oficina), com nível máximo |
 | níveis dos módulos | receita `build_{módulo}_{nível}` cujo produto é o módulo naquele nível; salas exigidas no posto avançado viram desbloqueio |
 | `vendors` dos itens | comerciantes como entidades, uma loja cada, com categorias pelo nível exigido |
+| páginas das ARCs | entidades `arc_*` (categoria ARC, sub-categoria pela classe: Voadores, Terrestres, Estacionários, Chefe): nome, subtítulo, descrição, drops ligados aos itens e atributos de resistência, placas de armadura, partes destrutíveis e saqueáveis, dano de cada ataque (`attack_*`), alcance de detecção e de perda, campo de visão, locais de aparição e mapas; o XP de destruir e saquear vem do `bots.json` do clone, quando ele tem a ARC |
 | `coins`, `creds`, pontos de pesquisa | itens de moeda criados pela ferramenta (os dados citam, mas não têm) |
 | imagens | do clone (`images/items`, `images/traders`, `images/workshop`) ou baixadas do arctracker |
 
@@ -98,18 +103,22 @@ que nem o arctracker traduz (Outpost Furniture, Outpost Room, Research) têm nom
   pesquisa, e a árvore de habilidades, o nome da habilidade exigida por uma receita.
 - **Reparo** (`repairCost`, `repairDurability`), **encaixes de modificação** (`modSlots`) e **mecânicas** (`mechanics`).
 - **`trades.json`** do clone: parou antes da 2.0; as lojas saem do `vendors` de cada item.
+- **Pontos de aparição das ARCs no mapa**: a página dá só a contagem por mapa, que vai como texto em "Onde aparece".
+  Duas ARCs (Brigão, Espreitador) têm a imagem quebrada no próprio site e saem sem ícone.
 
 ## Código
 
 | Pasta | Papel |
 | --- | --- |
-| `Source/ArcApi.cs` | API do arctracker: GET com cópia local e download das imagens que faltam |
+| `Source/ArcApi.cs` | API e páginas do arctracker: GET com cópia local e download das imagens que faltam |
+| `Source/RscPage.cs`, `Source/ArcEnemy.cs` | leitura do payload RSC das páginas e extração de cada ARC |
 | `Source/ArcSource.cs` | junta API e clone; `Localized` escolhe o idioma; `DataRepository` baixa o clone |
 | `Mapping/ArcCatalog.cs` | raridades e categorias |
 | `Mapping/ItemMapper.cs` | itens, atributos, moedas e imagens |
 | `Mapping/StationMapper.cs` | módulos da oficina e custo de cada nível |
 | `Mapping/RecipeMapper.cs` | fabricação, reciclagem, recuperação, melhoria e pesquisa |
 | `Mapping/TraderMapper.cs` | comerciantes e lojas |
+| `Mapping/ArcEnemyMapper.cs` | ARCs: entidades, drops, atributos e imagens |
 | `Mapping/ArcDatasetBuilder.cs` | ordem dos mapeadores e conferência das referências |
 
 Modelo, JSON, exportação, cache de mídia e envio vêm do `mods/GamePlannerCore`, ligados no `.csproj` (sem cópia). O

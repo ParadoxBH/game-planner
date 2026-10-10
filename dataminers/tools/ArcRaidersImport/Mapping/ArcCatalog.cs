@@ -134,6 +134,14 @@ namespace GamePlanner.ArcRaiders.Mapping
 
         public string TraderCategory() => Ensure(Traders, "Comerciantes", CategoryDoc.ForEntity, primary: true);
 
+        /// <summary>Categoria ARC e, quando o site diz, a classe ("Voadores", "Terrestres") como sub-categoria.</summary>
+        public List<string> ArcCategories(string className)
+        {
+            var result = new List<string> { Ensure("arcs", "ARC", CategoryDoc.ForEntity, primary: true) };
+            if (className != null) result.Add(Ensure("arc_class_" + Fields.Slug(className), className, CategoryDoc.ForEntity, primary: false));
+            return result;
+        }
+
         private string Ensure(string id, string name, string appliesTo, bool primary)
         {
             if (_categories.Add(id)) _context.Dataset.Add(new CategoryDoc(id, name, appliesTo, primary));

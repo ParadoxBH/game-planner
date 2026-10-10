@@ -67,6 +67,31 @@ namespace GamePlanner.ArcRaiders.Source
             }
         }
 
+        /// <summary>
+        /// Página do site (ex.: "pt-BR/arc/firefly"), para o que a API não tem. Uma requisição por vez, com uma pausa
+        /// curta entre elas; falhou a rede, vale a última cópia gravada em &lt;cache&gt;/pages. Null sem nenhuma das duas.
+        /// </summary>
+        public string FetchPage(string path, out bool fromCache)
+        {
+            string file = Path.Combine(_cache, "pages", path.Replace('/', Path.DirectorySeparatorChar) + ".html");
+            try
+            {
+                Thread.Sleep(PagePause);
+                string html = _http.GetStringAsync(Origin + "/" + path).GetAwaiter().GetResult();
+                Directory.CreateDirectory(Path.GetDirectoryName(file));
+                File.WriteAllText(file, html);
+                fromCache = false;
+                return html;
+            }
+            catch (Exception e) when (e is HttpRequestException || e is TaskCanceledException)
+            {
+                fromCache = true;
+                return File.Exists(file) ? File.ReadAllText(file) : null;
+            }
+        }
+
+        private static readonly TimeSpan PagePause = TimeSpan.FromMilliseconds(250);
+
         private static string Generated(JsonObject response) =>
             response?["generatedAt"] is JsonValue value && value.TryGetValue(out string when) ? " (gerado em " + when + ")" : "";
 

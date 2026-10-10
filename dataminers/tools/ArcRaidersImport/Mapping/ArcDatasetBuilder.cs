@@ -22,10 +22,12 @@ namespace GamePlanner.ArcRaiders.Mapping
             var catalog = new ArcCatalog(context);
             var items = new ItemMapper(context, catalog);
             var stations = new StationMapper(context, catalog);
+            var enemies = new ArcEnemyMapper(context, catalog);
 
             catalog.AddRarities();
             items.DefineAttributes();
             stations.DefineAttributes();
+            enemies.DefineAttributes();
 
             items.AddItems();
             items.AddCurrencies();
@@ -33,6 +35,7 @@ namespace GamePlanner.ArcRaiders.Mapping
             stations.AddStations();
             new RecipeMapper(context, stations).AddRecipes();
             new TraderMapper(context, catalog).AddTraders();
+            enemies.AddEnemies();
 
             CheckReferences(context);
             context.FlushWarnings();
