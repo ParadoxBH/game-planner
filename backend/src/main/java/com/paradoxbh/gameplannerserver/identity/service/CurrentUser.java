@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.paradoxbh.gameplannerserver.common.ApiException;
 import com.paradoxbh.gameplannerserver.identity.domain.AppUser;
+import com.paradoxbh.gameplannerserver.identity.domain.Usernames;
 import com.paradoxbh.gameplannerserver.identity.repo.AppUserRepository;
 
 /**
@@ -32,7 +33,8 @@ public class CurrentUser {
         if (!TokenService.TYPE_ACCESS.equals(jwt.getClaimAsString(TokenService.CLAIM_TYPE))) {
             return Optional.empty();
         }
-        return users.findById(jwt.getSubject());
+        // Token emitido antes da V24 pode ter maiúscula no subject.
+        return users.findById(Usernames.normalize(jwt.getSubject()));
     }
 
     /** O usuário autenticado, ou 401. */

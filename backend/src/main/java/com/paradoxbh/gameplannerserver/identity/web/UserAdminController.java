@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.paradoxbh.gameplannerserver.common.ApiException;
 import com.paradoxbh.gameplannerserver.identity.domain.AppUser;
+import com.paradoxbh.gameplannerserver.identity.domain.Usernames;
 import com.paradoxbh.gameplannerserver.identity.repo.AppUserRepository;
 import com.paradoxbh.gameplannerserver.identity.service.CurrentUser;
 
@@ -35,7 +36,7 @@ public class UserAdminController {
     public UserResponse patch(@PathVariable String username, @Valid @RequestBody PatchUserRequest request) {
         AppUser admin = currentUser.requirePlatformAdmin();
 
-        AppUser user = users.findById(username)
+        AppUser user = users.findById(Usernames.normalize(username))
                 .orElseThrow(() -> ApiException.notFound("Usuário " + username));
 
         if (request.verified() != null) {

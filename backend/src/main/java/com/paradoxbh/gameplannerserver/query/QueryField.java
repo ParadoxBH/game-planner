@@ -176,11 +176,12 @@ public record QueryField(String name, String label, FieldType type, List<Operato
             case IN -> values.isEmpty() ? "FALSE" : expression + " IN (" + params.bind(values) + ")";
             case NOT_IN -> values.isEmpty() ? "TRUE"
                     : "(" + expression + " IS NULL OR " + expression + " NOT IN (" + params.bind(values) + "))";
-            case CONTAINS -> expression + " ILIKE " + params.bind("%" + escapeLike(values.getFirst()) + "%");
-            case NOT_CONTAINS -> "(" + expression + " IS NULL OR " + expression + " NOT ILIKE "
-                    + params.bind("%" + escapeLike(values.getFirst()) + "%") + ")";
-            case BEGINS_WITH -> expression + " ILIKE " + params.bind(escapeLike(values.getFirst()) + "%");
-            case ENDS_WITH -> expression + " ILIKE " + params.bind("%" + escapeLike(values.getFirst()));
+            // Texto: sem diferença de maiúscula e de acento, com search_fold (V25) dos dois lados.
+            case CONTAINS -> folded(expression) + " LIKE " + foldedParam("%" + escapeLike(values.getFirst()) + "%", params);
+            case NOT_CONTAINS -> "(" + expression + " IS NULL OR " + folded(expression) + " NOT LIKE "
+                    + foldedParam("%" + escapeLike(values.getFirst()) + "%", params) + ")";
+            case BEGINS_WITH -> folded(expression) + " LIKE " + foldedParam(escapeLike(values.getFirst()) + "%", params);
+            case ENDS_WITH -> folded(expression) + " LIKE " + foldedParam("%" + escapeLike(values.getFirst()), params);
             case LESS -> expression + " < " + params.bind(values.getFirst());
             case LESS_OR_EQUAL -> expression + " <= " + params.bind(values.getFirst());
             case GREATER -> expression + " > " + params.bind(values.getFirst());
@@ -203,6 +204,14 @@ public record QueryField(String name, String label, FieldType type, List<Operato
             case IS_NULL -> "NOT COALESCE(" + membership.sql(AnyMatch.INSTANCE) + ", FALSE)";
             default -> throw new IllegalStateException("Operador de lista não tratado: " + operator);
         };
+    }
+
+    private static String folded(String expression) {
+        return "search_fold(" + expression + ")";
+    }
+
+    private static String foldedParam(String pattern, Params params) {
+        return "search_fold(" + params.bind(pattern) + ")";
     }
 
     private static String escapeLike(Object value) {

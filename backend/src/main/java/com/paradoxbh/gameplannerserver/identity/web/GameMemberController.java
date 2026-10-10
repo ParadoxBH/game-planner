@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.paradoxbh.gameplannerserver.common.ApiException;
 import com.paradoxbh.gameplannerserver.identity.domain.AppUser;
+import com.paradoxbh.gameplannerserver.identity.domain.Usernames;
 import com.paradoxbh.gameplannerserver.identity.domain.GameMember;
 import com.paradoxbh.gameplannerserver.identity.domain.GameRole;
 import com.paradoxbh.gameplannerserver.identity.repo.AppUserRepository;
@@ -53,8 +54,9 @@ public class GameMemberController {
 
     @PutMapping("/{username}")
     @Transactional
-    public MemberResponse grant(@PathVariable String gameId, @PathVariable String username,
+    public MemberResponse grant(@PathVariable String gameId, @PathVariable("username") String typedUsername,
                                 @Valid @RequestBody GrantRequest request) {
+        String username = Usernames.normalize(typedUsername);
         access.requireOwner(gameId);
         AppUser actor = currentUser.require();
 
@@ -81,7 +83,8 @@ public class GameMemberController {
     @DeleteMapping("/{username}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
-    public void revoke(@PathVariable String gameId, @PathVariable String username) {
+    public void revoke(@PathVariable String gameId, @PathVariable("username") String typedUsername) {
+        String username = Usernames.normalize(typedUsername);
         access.requireOwner(gameId);
 
         GameMember member = members.findByGameIdAndUsername(gameId, username)

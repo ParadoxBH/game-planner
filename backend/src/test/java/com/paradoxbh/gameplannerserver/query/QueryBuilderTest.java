@@ -52,7 +52,7 @@ class QueryBuilderTest {
                 rule("level", "between", List.of(1, 10)),
                 or(rule("rarity", "in", List.of("rare", "epic")), rule("rarity", "is_null"))), params);
 
-        assertThat(sql).isEqualTo("((t.name ILIKE :q0) AND (t.level BETWEEN :q1 AND :q2)"
+        assertThat(sql).isEqualTo("((search_fold(t.name) LIKE search_fold(:q0)) AND (t.level BETWEEN :q1 AND :q2)"
                 + " AND ((t.rarity_code IN (:q3)) OR (t.rarity_code IS NULL)))");
         assertThat(params).containsEntry("q0", "%50\\%\\_off%")
                 .containsEntry("q1", new BigDecimal("1"))

@@ -76,7 +76,7 @@ public class AuthController {
 
     public record RegisterRequest(
             @NotBlank @Pattern(regexp = "^[a-zA-Z0-9_.-]{3,32}$",
-                    message = "use 3 a 32 caracteres entre letras, números, ponto, hífen ou sublinhado")
+                    message = "use 3 a 32 caracteres entre letras, números, ponto, hífen ou sublinhado (fica em minúsculas)")
             String username,
 
             @NotBlank @Size(min = 10, max = 128, message = "a senha precisa de ao menos 10 caracteres")

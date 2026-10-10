@@ -151,7 +151,10 @@ public class ReferenceService {
         return ContentPage.of(content, page, size, total);
     }
 
-    /** Busca por nome ou id em todos os tipos cadastrados. Nome exato vem primeiro. */
+    /**
+     * Busca por nome ou id em todos os tipos cadastrados, sem diferença de maiúscula e de acento (search_fold, V25).
+     * Nome igual ao termo vem primeiro.
+     */
     public List<SearchHit> search(String gameId, String term, String kind, int limit) {
         access.requireReadable(gameId);
         if (term == null || term.isBlank()) {
@@ -173,8 +176,9 @@ public class ReferenceService {
         }
 
         return jdbc.sql("SELECT kind, ext_id, name, icon_media_id FROM content_ref"
-                        + " WHERE game_id = :game AND (name ILIKE :pattern OR ext_id ILIKE :pattern)" + filter
-                        + " ORDER BY (lower(name) = lower(:exact)) DESC, name, kind LIMIT :limit")
+                        + " WHERE game_id = :game AND (search_fold(name) LIKE search_fold(:pattern)"
+                        + " OR search_fold(ext_id) LIKE search_fold(:pattern))" + filter
+                        + " ORDER BY (search_fold(name) = search_fold(:exact)) DESC, name, kind LIMIT :limit")
                 .params(params)
                 .query((rs, rowNum) -> new SearchHit(rs.getString("kind"), rs.getString("ext_id"),
                         rs.getString("name"), rs.getString("icon_media_id")))

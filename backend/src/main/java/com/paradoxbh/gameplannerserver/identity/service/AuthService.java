@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.paradoxbh.gameplannerserver.common.ApiException;
 import com.paradoxbh.gameplannerserver.identity.domain.AppUser;
+import com.paradoxbh.gameplannerserver.identity.domain.Usernames;
 import com.paradoxbh.gameplannerserver.identity.repo.AppUserRepository;
 
 /** Cadastro aberto: qualquer um se registra, mas nasce sem vínculo (verified = false). */
@@ -22,15 +23,20 @@ public class AuthService {
         this.tokens = tokens;
     }
 
+    /**
+     * O username é gravado em minúsculas; o nome de exibição padrão guarda como foi digitado ("ParadoxBH" entra
+     * como paradoxbh e aparece como ParadoxBH).
+     */
     @Transactional
-    public AppUser register(String username, String password, String displayName) {
+    public AppUser register(String typedUsername, String password, String displayName) {
+        String username = Usernames.normalize(typedUsername);
         if (users.existsById(username)) {
             throw ApiException.conflict("Nome de usuário já está em uso");
         }
         AppUser user = new AppUser();
         user.setUsername(username);
         user.setPasswordHash(passwordEncoder.encode(password));
-        user.setDisplayName(displayName == null || displayName.isBlank() ? username : displayName);
+        user.setDisplayName(displayName == null || displayName.isBlank() ? typedUsername.strip() : displayName);
         // Sem vínculo, sem escrita. O primeiro usuário do sistema é promovido
         // manualmente no banco; daí em diante é platform_admin quem libera.
         user.setVerified(false);
@@ -39,7 +45,7 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public AppUser authenticate(String username, String password) {
-        AppUser user = users.findById(username)
+        AppUser user = users.findById(Usernames.normalize(username))
                 .orElseThrow(() -> ApiException.unauthorized("Usuário ou senha inválidos"));
 
         if (!passwordEncoder.matches(password, user.getPasswordHash())) {
@@ -54,7 +60,7 @@ public class AuthService {
     @Transactional(readOnly = true)
     public AppUser refresh(String refreshToken) {
         String username = tokens.usernameFromRefreshToken(refreshToken);
-        AppUser user = users.findById(username)
+        AppUser user = users.findById(Usernames.normalize(username))
                 .orElseThrow(() -> ApiException.unauthorized("Usuário não existe mais"));
         if (!user.isActive()) {
             throw ApiException.forbidden("Conta suspensa");

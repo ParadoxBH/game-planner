@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.paradoxbh.gameplannerserver.common.ApiException;
+import com.paradoxbh.gameplannerserver.common.TextFold;
 import com.paradoxbh.gameplannerserver.content.ExtIds;
 import com.paradoxbh.gameplannerserver.content.model.ContentPage;
 import com.paradoxbh.gameplannerserver.content.model.Reference;
@@ -343,11 +344,10 @@ public class CraftingService {
         }
         Map<String, List<NameRow>> names = names(gameId, ids);
 
-        String term = search == null ? "" : search.strip().toLowerCase(Locale.ROOT);
+        String term = search == null ? "" : search.strip();
         List<Profit> rows = computed.stream()
                 .map(candidate -> profit(graph, candidate, names))
-                .filter(row -> term.isEmpty() || displayName(row).toLowerCase(Locale.ROOT).contains(term)
-                        || row.target().extId().toLowerCase(Locale.ROOT).contains(term))
+                .filter(row -> TextFold.contains(displayName(row), term) || TextFold.contains(row.target().extId(), term))
                 .filter(row -> !timed || (row.craftTimeSeconds() != null && row.craftTimeSeconds().signum() > 0))
                 .sorted(order)
                 .toList();

@@ -22,6 +22,11 @@ export interface SessionState {
 
 type Tokens = Pick<StoredAccount, "accessToken" | "refreshToken">;
 
+/** O backend guarda o username em minúsculas: "ParadoxBH" e "paradoxbh" são a mesma conta. */
+export function normalizeUsername(username: string): string {
+  return username.trim().toLowerCase();
+}
+
 const STORAGE_KEY = "gp_session";
 const EMPTY: SessionState = { activeUsername: null, accounts: [] };
 
@@ -33,7 +38,17 @@ function read(): SessionState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return EMPTY;
     const parsed = JSON.parse(raw) as SessionState;
-    return Array.isArray(parsed.accounts) ? parsed : EMPTY;
+    if (!Array.isArray(parsed.accounts)) return EMPTY;
+    // Sessões gravadas antes do username minúsculo: a mesma conta com caixas diferentes vira uma (fica a última).
+    const accounts = new Map<string, StoredAccount>();
+    for (const account of parsed.accounts) {
+      const username = normalizeUsername(account.username);
+      accounts.set(username, { ...account, username });
+    }
+    return {
+      activeUsername: parsed.activeUsername ? normalizeUsername(parsed.activeUsername) : null,
+      accounts: [...accounts.values()],
+    };
   } catch {
     return EMPTY;
   }

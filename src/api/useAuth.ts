@@ -1,7 +1,7 @@
 import { useCallback, useSyncExternalStore } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { authApi } from "./auth";
-import { session } from "./session";
+import { normalizeUsername, session } from "./session";
 
 /** Conta ativa e contas salvas. Re-renderiza ao entrar, sair ou trocar — inclusive em outra aba. */
 export function useSession() {
@@ -32,7 +32,7 @@ export function useLogin() {
   return useMutation({
     mutationFn: async ({ username, password }: { username: string; password: string }) => {
       const tokens = await authApi.login(username, password);
-      return { username, tokens };
+      return { username: normalizeUsername(username), tokens };
     },
     onSuccess: ({ username, tokens }) => {
       session.signIn(username, tokens);
@@ -54,7 +54,7 @@ export function useRegister() {
       displayName?: string;
     }) => {
       const tokens = await authApi.register(username, password, displayName);
-      return { username, tokens };
+      return { username: normalizeUsername(username), tokens };
     },
     onSuccess: ({ username, tokens }) => {
       session.signIn(username, tokens);
