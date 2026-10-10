@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import { MapView } from "./components/map/MapView";
 import { Home } from "./components/Home";
 import { MainLayout } from "./layouts/MainLayout";
@@ -13,11 +13,9 @@ import { ShopsPage } from "./components/shop/ShopsPage";
 import { EventsPage } from "./components/event/EventsPage";
 import { EventDetailsPage } from "./components/event/EventDetailsPage";
 import { CodesPage } from "./components/CodesPage";
-import { CalculatorPage } from "./components/calculator/CalculatorPage";
+import { GameToolsPage } from "./components/calculator/GameToolsPage";
 import { SpawnSimulatorPage } from "./components/simulator/SpawnSimulatorPage";
-import { CraftingCalculator } from "./components/calculator/CraftingCalculator";
-import { ProfitabilityCalculator } from "./components/calculator/ProfitabilityCalculator";
-import { ProfitPerTimeCalculator } from "./components/calculator/ProfitPerTimeCalculator";
+import { GAME_TOOLS } from "./components/calculator/gameTools";
 import { ItemBuilderPage } from "./components/item/ItemBuilderPage";
 import { ItemDetailsPage } from "./components/item/ItemDetailsPage";
 import { RecipeDetailsPage } from "./components/recipe/RecipeDetailsPage";
@@ -32,6 +30,12 @@ import { GameSettingsPage } from "./components/game/GameSettingsPage";
 import { MetadataDetailsPage } from "./components/item/MetadataDetailsPage";
 import { LoginPage } from "./components/auth/LoginPage";
 import { ToolsPage } from "./components/tools/ToolsPage";
+
+/** Leva /calculator/... para o mesmo destino em /tools/..., preservando links salvos. */
+function CalculatorRedirect() {
+  const { gameId, "*": rest } = useParams();
+  return <Navigate to={`/game/${gameId}/tools/${rest ?? ""}`} replace />;
+}
 
 export function RoutesPage() {
   return (
@@ -129,12 +133,14 @@ export function RoutesPage() {
           <Route path="settings" element={<GameSettingsPage />} />
           <Route path="metadado/view/:type" element={<MetadataDetailsPage />} />
           <Route path="codes" element={<CodesPage />} />
-          <Route path="calculator">
-            <Route index element={<CalculatorPage />} />
-            <Route path="crafting" element={<CraftingCalculator />} />
-            <Route path="profitability" element={<ProfitabilityCalculator />} />
-            <Route path="profit-per-time" element={<ProfitPerTimeCalculator />} />
+          <Route path="tools">
+            <Route index element={<GameToolsPage />} />
+            {GAME_TOOLS.map(({ id, component: Tool }) => (
+              <Route key={id} path={id} element={<Tool />} />
+            ))}
           </Route>
+          {/* Endereço antigo da seção, de antes de virar Ferramentas */}
+          <Route path="calculator/*" element={<CalculatorRedirect />} />
           <Route path="simulador" element={<SpawnSimulatorPage />} />
           <Route path="quests" element={<Typography p={4} variant="h4">Lista de Missões (Em Breve)</Typography>} />
         </Route>

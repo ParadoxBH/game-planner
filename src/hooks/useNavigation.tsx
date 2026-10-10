@@ -5,6 +5,7 @@ import { MAX_PAGE_SIZE, type ShopDocument } from "../api/content";
 import type { ListingSchema } from "../api/query";
 import { contentRoute, mediaUrl } from "../api/references";
 import { useGameAdmin, useGameEditor } from "./useGameAdmin";
+import { GAME_TOOLS, TOOL_GROUPS, toolPath } from "../components/calculator/gameTools";
 import { useContentCounts, useContentList, useListingFilters } from "../api/useContent";
 
 export interface NavigationOption {
@@ -132,17 +133,17 @@ export function useNavigation(gameId: string | null) {
         color: "#8bc34a",
       },
       {
-        id: "calculator",
-        label: "Calculadora",
-        icon: <DataTypeIcon value="calculator" />,
-        path: `${base}/calculator`,
+        id: "tools",
+        label: "Ferramentas",
+        icon: <DataTypeIcon value="tools" />,
+        path: `${base}/tools`,
         color: "#00bcd4",
         isDropdown: true,
-        options: [
-          { label: "Crafting", path: `${base}/calculator/crafting` },
-          { label: "Rentabilidade", path: `${base}/calculator/profitability` },
-          { label: "Lucro por tempo", path: `${base}/calculator/profit-per-time` },
-        ],
+        // Cada ferramenta com o ícone do seu grupo.
+        options: GAME_TOOLS.map((tool) => {
+          const GroupIcon = TOOL_GROUPS[tool.group].icon;
+          return { label: tool.menuLabel, path: toolPath(gameId, tool), icon: <GroupIcon fontSize="small" /> };
+        }),
       },
     ];
 

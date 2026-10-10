@@ -1,12 +1,12 @@
 ﻿import { createElement } from "react";
 import {
   AutoAwesomeMosaic,
-  Calculate,
   Category,
   Construction,
   Diamond,
   Event,
   Explore,
+  Handyman,
   Help,
   Inventory,
   Pets,
@@ -46,7 +46,7 @@ const DATA_TYPE_ICONS = {
   game: SportsEsports,
   // Seções do jogo que não são conteúdo da API.
   simulator: Explore,
-  calculator: Calculate,
+  tools: Handyman,
   settings: Settings,
 } satisfies Record<string, SvgIconComponent>;
 
