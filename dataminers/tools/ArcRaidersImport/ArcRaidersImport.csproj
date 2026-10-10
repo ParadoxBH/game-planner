@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Ferramenta de console, NÃO é mod: lê os JSON do repositório comunitário RaidTheory/arcraiders-data (MIT) e
+    monta o dataset no formato da API. Fica fora da GamePlannerDataminers.sln (como o HeartopiaOffline e o
+    Terraria) porque é .NET 9 e os mods são net48. Como rodar: README.md desta pasta.
+
+    Reaproveita do GamePlannerCore tudo que não depende da Unity: modelo, JSON, cache de mídia, exportação e envio.
+    O cliente HTTP vem do porte do Terraria, que usa HttpClient: no .NET moderno o HttpWebRequest do Core está
+    obsoleto e ignora o limite de conexões por servidor, que o envio paralelo de imagens usa.
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>ArcRaidersImport</AssemblyName>
+    <RootNamespace>GamePlanner.ArcRaiders</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CoreDir>..\..\mods\GamePlannerCore\</CoreDir>
+    <PortableCoreDir>..\..\mods\GamePlannerTerraria\Core\</PortableCoreDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="$(CoreDir)Api\ApiException.cs;$(CoreDir)Api\MultipartBody.cs" Link="Core\Api\%(Filename)%(Extension)" />
+    <Compile Include="$(PortableCoreDir)Api\GamePlannerClient.cs" Link="Core\Api\%(Filename)%(Extension)" />
+    <Compile Include="$(CoreDir)Diagnostics\*.cs" Link="Core\Diagnostics\%(Filename)%(Extension)" />
+    <Compile Include="$(CoreDir)Hashing\*.cs" Link="Core\Hashing\%(Filename)%(Extension)" />
+    <Compile Include="$(CoreDir)Json\*.cs" Link="Core\Json\%(Filename)%(Extension)" />
+    <Compile Include="$(CoreDir)Model\*.cs" Link="Core\Model\%(Filename)%(Extension)" />
+    <Compile Include="$(CoreDir)Text\*.cs" Link="Core\Text\%(Filename)%(Extension)" />
+    <Compile Include="$(CoreDir)Upload\*.cs" Link="Core\Upload\%(Filename)%(Extension)" />
+    <Compile Include="$(CoreDir)Mining\MinedDataset.cs" Link="Core\Mining\%(Filename)%(Extension)" />
+    <Compile Include="$(CoreDir)UI\AccountForm.cs" Link="Core\UI\%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>

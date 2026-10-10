@@ -38,6 +38,12 @@ namespace GamePlanner.Core.Upload
         /// <summary>Envios de imagem simultâneos. O servidor converte cada uma com ffmpeg, então não exagere.</summary>
         public int Parallelism = 4;
 
+        /// <summary>Documentos e imagens recusados no último Run. Zero com o estado Done é envio completo.</summary>
+        public int FailureCount
+        {
+            get { lock (_failures) return _failures.Count; }
+        }
+
         public DatasetUploader(IGpLog log, UploadProgress progress, string cacheDirectory)
         {
             _log = log ?? NullLog.Instance;
@@ -70,6 +76,7 @@ namespace GamePlanner.Core.Upload
                     Report("Aviso: conta sem vínculo verificado; o servidor pode recusar o envio de imagens.");
 
                 EnsureGame(client, dataset, cancel);
+                SendRarities(client, dataset, cancel);
                 SendAttributeDefinitions(client, dataset, cancel);
 
                 Dictionary<string, string> mediaIds = form.IncludeImages ? UploadImages(client, dataset, workers, cancel) : null;
@@ -127,6 +134,33 @@ namespace GamePlanner.Core.Upload
                 client.Write("POST", GamePlannerClient.ApiPrefix + "/games", body, cancel);
                 Report("Jogo " + dataset.GameId + " criado");
             }
+        }
+
+        // ------------------------------------------------------------------ raridades
+
+        /// <summary>
+        /// Raridades antes do conteúdo: uma por vez, que é como a API expõe (PUT por código). Sem elas o
+        /// rarityCode dos itens fica sem nome e sem cor no site. Dataset sem raridades não faz nenhuma chamada.
+        /// </summary>
+        private void SendRarities(GamePlannerClient client, MinedDataset dataset, CancellationToken cancel)
+        {
+            if (dataset.Rarities.Count == 0) return;
+            string path = GamePlannerClient.ApiPrefix + "/games/" + GamePlannerClient.Segment(dataset.GameId) + "/rarities/";
+            int sent = 0;
+            foreach (RarityDoc rarity in dataset.Rarities)
+            {
+                cancel.ThrowIfCancellationRequested();
+                try
+                {
+                    client.Write("PUT", path + GamePlannerClient.Segment(rarity.Code), JsonWriter.Serialize(rarity), cancel);
+                    sent++;
+                }
+                catch (ApiException e) when (e.Status >= 400 && e.Status < 500 && e.Status != 401)
+                {
+                    Fail("raridade '" + rarity.Code + "': " + e.Detail());
+                }
+            }
+            Report("raridades: " + sent + " de " + dataset.Rarities.Count + " cadastradas");
         }
 
         // ------------------------------------------------------------------ atributos

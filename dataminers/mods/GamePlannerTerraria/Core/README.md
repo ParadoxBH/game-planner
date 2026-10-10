@@ -21,6 +21,9 @@ painel IMGUI, corrotina da Unity) não serviriam aqui de qualquer jeito.
 | `Upload/DatasetUploader.cs` | envia as raridades antes do conteúdo e fecha o cliente no fim |
 | `Upload/DatasetExporter.cs` | exporta `rarities.json` junto |
 
+Desde o importador do ARC Raiders (`tools/ArcRaidersImport`), `ShopDoc`, `RarityDoc`, `CategoryDoc.Primary`
+e o envio de raridades também existem no `GamePlannerCore`. Esta cópia continua com as suas.
+
 ## O que ficou de fora
 
 `Imaging/` (Texture2D e Sprite da Unity), `UI/AccountPanel.cs` (IMGUI), `Mining/SpriteImageCollector.cs` e

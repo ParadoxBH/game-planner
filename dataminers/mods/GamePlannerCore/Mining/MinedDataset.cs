@@ -17,6 +17,8 @@ namespace GamePlanner.Core.Mining
         public readonly List<ItemDoc> Items = new List<ItemDoc>();
         public readonly List<EntityDoc> Entities = new List<EntityDoc>();
         public readonly List<RecipeDoc> Recipes = new List<RecipeDoc>();
+        public readonly List<ShopDoc> Shops = new List<ShopDoc>();
+        public readonly List<ShopCategoryDoc> ShopCategories = new List<ShopCategoryDoc>();
         public readonly List<MapDoc> Maps = new List<MapDoc>();
         public readonly List<LocationDoc> Locations = new List<LocationDoc>();
         public readonly List<SpawnPointDoc> SpawnPoints = new List<SpawnPointDoc>();
@@ -26,6 +28,9 @@ namespace GamePlanner.Core.Mining
         /// vazio é deduzido dos valores (CompleteAttributeTypes).
         /// </summary>
         public readonly List<AttributeDefinitionDoc> AttributeDefinitions = new List<AttributeDefinitionDoc>();
+
+        /// <summary>Raridades do jogo, enviadas antes dos documentos que as citam em RarityCode.</summary>
+        public readonly List<RarityDoc> Rarities = new List<RarityDoc>();
 
         /// <summary>Chave da imagem -> PNG. Os documentos apontam para a chave em IconImage.</summary>
         public readonly Dictionary<string, byte[]> Images = new Dictionary<string, byte[]>();
@@ -48,6 +53,8 @@ namespace GamePlanner.Core.Mining
             yield return Items;
             yield return Entities;
             yield return Recipes;
+            yield return Shops;
+            yield return ShopCategories;
             yield return Maps;
             yield return Locations;
             yield return SpawnPoints;
@@ -58,9 +65,21 @@ namespace GamePlanner.Core.Mining
         public bool Add(ItemDoc doc) => Add(Items, doc);
         public bool Add(EntityDoc doc) => Add(Entities, doc);
         public bool Add(RecipeDoc doc) => Add(Recipes, doc);
+        public bool Add(ShopDoc doc) => Add(Shops, doc);
+        public bool Add(ShopCategoryDoc doc) => Add(ShopCategories, doc);
         public bool Add(MapDoc doc) => Add(Maps, doc);
         public bool Add(LocationDoc doc) => Add(Locations, doc);
         public bool Add(SpawnPointDoc doc) => Add(SpawnPoints, doc);
+
+        /// <summary>Raridade repetida fica com o primeiro cadastro.</summary>
+        public bool Add(RarityDoc rarity)
+        {
+            if (rarity == null || string.IsNullOrEmpty(rarity.Code)) return false;
+            foreach (RarityDoc existing in Rarities)
+                if (existing.Code == rarity.Code) return false;
+            Rarities.Add(rarity);
+            return true;
+        }
 
         /// <summary>Definição de atributo; chave repetida fica a primeira.</summary>
         public void Define(AttributeDefinitionDoc definition)

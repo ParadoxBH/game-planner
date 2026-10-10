@@ -3,7 +3,8 @@
 Mods que leem os dados de dentro do jogo e enviam para a API do Game Planner (ou exportam em JSON).
 Mesma arquitetura dos mods do Valheim: um núcleo genérico e um mod fino por jogo. Quase todos são mods
 BepInEx de jogo Unity; o do Terraria é mod do tModLoader e tem regras próprias (veja abaixo). O Heartopia é
-online e tem anti-cheat, então não tem mod: tem uma ferramenta que lê os arquivos com o jogo fechado.
+online e tem anti-cheat, então não tem mod: tem uma ferramenta que lê os arquivos com o jogo fechado. O ARC
+Raiders também não tem mod: os dados vêm de um repositório comunitário aberto, por uma ferramenta de importação.
 
 ```
 dataminers/
@@ -22,6 +23,7 @@ dataminers/
   tools/
     link-modsources.ps1              liga o mod do Terraria à pasta ModSources do tModLoader
     HeartopiaOffline/                extração offline do Heartopia (console .NET 9, fora da solução)
+    ArcRaidersImport/                importação do ARC Raiders do RaidTheory/arcraiders-data (console .NET 9, fora da solução)
   bin/                               saída: ParadoxBH.GamePlanner.*.dll
 ```
 
@@ -124,3 +126,19 @@ Dá para extrair: catálogo de itens pelos nomes dos ícones, todos os textos em
 nomes das receitas, candidatos a conjunto e o diff entre patches. **Não** dá: ingredientes e quantidades, peças
 oficiais de conjunto, ícones — estão nos AssetBundles, que têm criptografia UnityCN e ficam de fora de propósito.
 Regras e saída no [README da ferramenta](tools/HeartopiaOffline/README.md). Ainda não envia nada para a API.
+
+## ARC Raiders (importação)
+
+Jogo online com anti-cheat, então nada roda dentro dele. Os dados vêm do arctracker.io: itens, módulos da
+oficina e missões pela [API pública](https://arctracker.io/developers/docs), que está em dia com a 2.0, e traduções,
+árvore de habilidades e imagens do [RaidTheory/arcraiders-data](https://github.com/RaidTheory/arcraiders-data) (MIT),
+que parou antes dela. Saem itens, receitas, reciclagem, melhorias, pesquisa, módulos da oficina e lojas dos
+comerciantes, com nomes em pt-BR. `tools/ArcRaidersImport` exporta o JSON para conferir e, com `--upload`, envia
+pelo mesmo `DatasetUploader` dos mods.
+
+```powershell
+dotnet run --project tools\ArcRaidersImport -- --upload --user <usuário>
+```
+
+Clone, opções e mapeamento no [README da ferramenta](tools/ArcRaidersImport/README.md). Ela usa o Core direto
+(arquivos ligados no `.csproj`): loja, raridade e categoria principal subiram do porte do Terraria para o Core.

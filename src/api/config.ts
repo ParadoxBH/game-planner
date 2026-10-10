@@ -1,8 +1,11 @@
 /**
- * Endereço do backend. Sem VITE_API_URL, aponta para o Spring rodando local.
+ * Endereço do backend. Sem VITE_API_URL, aponta para a porta 8080 do mesmo host
+ * que serviu a página (localhost, IP da rede ou IP público).
  * Ver .env.example na raiz do projeto.
  */
-const apiOrigin: string = (import.meta.env.VITE_API_URL ?? "http://localhost:8080").replace(/\/+$/, "");
+const apiOrigin: string = (
+  import.meta.env.VITE_API_URL ?? `${window.location.protocol}//${window.location.hostname}:8080`
+).replace(/\/+$/, "");
 
 /** Origem do backend. URLs de arquivo de mídia vêm relativas a ela, ex.: /media/{id}/icon.webp. */
 export const API_ORIGIN = apiOrigin;

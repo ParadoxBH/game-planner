@@ -13,6 +13,8 @@ namespace GamePlanner.Core.Model
         public const string Map = "map";
         public const string Location = "location";
         public const string SpawnPoint = "spawn_point";
+        public const string Shop = "shop";
+        public const string ShopCategory = "shop_category";
     }
 
     /// <summary>Referência a outro conteúdo, que pode ainda não estar cadastrado.</summary>

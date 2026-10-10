@@ -1,17 +1,22 @@
-import { Box, Card, CardActionArea, CardMedia, CircularProgress, Divider, Grid, Typography } from "@mui/material";
+import { Box, Button, Card, CardActionArea, CardMedia, CircularProgress, Divider, Grid, Typography } from "@mui/material";
+import { Add } from "@mui/icons-material";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { GameInfo } from "../api/content";
 import { gameImage, isComingSoon, readAccessLog, recordAccess } from "../api/games";
+import { useMe } from "../api/useAuth";
 import { useGames } from "../api/useContent";
 import { isDev } from "../utils/mapper";
 import { StyledContainer } from "./common/StyledContainer";
+import { NewGameDialog } from "./game/NewGameDialog";
 
 /** Escolha do jogo: os que o usuário pode ver, lidos da API, com os mais acessados primeiro. */
 export function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const games = useGames();
+  const me = useMe();
+  const [creating, setCreating] = useState(false);
 
   const accessLog = useMemo(() => readAccessLog(), [games.data]);
 
@@ -129,7 +134,29 @@ export function Home() {
       searchValue={searchTerm}
       onChangeSearch={setSearchTerm}
       search={{ placeholder: "Pesquisar jogos..." }}
+      searchEnd={
+        // Só platform_admin cria jogo; o backend confere de novo.
+        me.data?.platformAdmin && (
+          <Button
+            variant="contained"
+            startIcon={<Add />}
+            onClick={() => setCreating(true)}
+            sx={{ textTransform: "none", whiteSpace: "nowrap" }}
+          >
+            Novo jogo
+          </Button>
+        )
+      }
     >
+      <NewGameDialog
+        open={creating}
+        existingIds={(games.data ?? []).map((game) => game.id)}
+        onClose={() => setCreating(false)}
+        onCreated={(game) => {
+          recordAccess(game.id);
+          navigate(`/game/${game.id}/settings`);
+        }}
+      />
       <Box sx={{ display: "flex", flexDirection: "column", gap: 6, py: 2, overflowY: "auto" }}>
         {availableGames.length > 0 && (
           <Box>

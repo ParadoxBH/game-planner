@@ -16,11 +16,21 @@ namespace GamePlanner.Core.Model
 
         public CategoryDoc() { }
 
-        public CategoryDoc(string extId, string name, string appliesTo)
+        /// <summary>
+        /// Categoria principal: é a que abre a listagem no site e aparece no menu; as demais entram como
+        /// sub-categoria. Só vai no JSON quando ligada, então quem não usa manda o mesmo documento de antes.
+        /// </summary>
+        public bool Primary;
+
+        public CategoryDoc(string extId, string name, string appliesTo, bool primary = false)
         {
-            ExtId = extId; Name = name; AppliesTo = appliesTo;
+            ExtId = extId; Name = name; AppliesTo = appliesTo; Primary = primary;
         }
 
-        protected override void WriteSpecific(JsonWriter w) => w.Field("appliesTo", AppliesTo);
+        protected override void WriteSpecific(JsonWriter w)
+        {
+            w.Field("appliesTo", AppliesTo);
+            if (Primary) w.Name("primary").Value(true);
+        }
     }
 }

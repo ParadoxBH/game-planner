@@ -27,6 +27,8 @@ namespace GamePlanner.Core.Upload
             List<AttributeDefinitionDoc> definitions = dataset.CompleteAttributeTypes();
             if (definitions.Count > 0)
                 File.WriteAllText(Path.Combine(root, "attributes.json"), JsonWriter.Serialize(definitions), Encoding.UTF8);
+            if (dataset.Rarities.Count > 0)
+                File.WriteAllText(Path.Combine(root, "rarities.json"), RaritiesJson(dataset), Encoding.UTF8);
 
             string images = Path.Combine(root, "images");
             foreach (KeyValuePair<string, byte[]> image in dataset.Images)
@@ -39,15 +41,26 @@ namespace GamePlanner.Core.Upload
             var report = new StringBuilder();
             report.AppendLine("Jogo " + dataset.GameId + " (" + dataset.GameName + ")");
             foreach (IReadOnlyList<ContentDoc> documents in dataset.Resources())
-                if (documents.Count > 0) report.AppendLine("  " + documents[0].Resource.PadRight(13) + documents.Count);
-            report.AppendLine("  atributos    " + definitions.Count);
-            report.AppendLine("  imagens      " + dataset.Images.Count);
+                if (documents.Count > 0) report.AppendLine("  " + documents[0].Resource.PadRight(16) + documents.Count);
+            if (dataset.Rarities.Count > 0) report.AppendLine("  raridades       " + dataset.Rarities.Count);
+            report.AppendLine("  atributos       " + definitions.Count);
+            report.AppendLine("  imagens         " + dataset.Images.Count);
             report.AppendLine();
             report.AppendLine("Avisos (" + dataset.Warnings.Count + ")");
             foreach (string warning in dataset.Warnings) report.AppendLine("  " + warning);
             File.WriteAllText(Path.Combine(root, "report.txt"), report.ToString(), Encoding.UTF8);
 
             return root;
+        }
+
+        /// <summary>As raridades vão uma por PUT, então o arquivo é um mapa código -> corpo do PUT.</summary>
+        private static string RaritiesJson(MinedDataset dataset)
+        {
+            var writer = new JsonWriter();
+            writer.BeginObject();
+            foreach (RarityDoc rarity in dataset.Rarities) writer.Name(rarity.Code).Value(rarity);
+            writer.EndObject();
+            return writer.ToString();
         }
     }
 }

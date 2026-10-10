@@ -10,3 +10,7 @@ libs/**/*.dll
 
 # Saída do extrator offline do Heartopia: textos e inventário do jogo, não vão para o repositório
 tools/HeartopiaOffline/out/
+
+# Importador do ARC Raiders: clone do repositório de dados e saída exportada (JSON, imagens, cache de mídia)
+tools/ArcRaidersImport/data/
+tools/ArcRaidersImport/out/

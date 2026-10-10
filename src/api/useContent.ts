@@ -7,7 +7,7 @@ import {
   useQueryClient,
   type UseQueryResult,
 } from "@tanstack/react-query";
-import { contentApi, gameApi, type AttributeDefinition, type ContentResource, type GamePatch, type ListQuery, type MediaUsage, type ProfitQuery, type Rarity } from "./content";
+import { contentApi, gameApi, type AttributeDefinition, type ContentResource, type GameCreate, type GamePatch, type ListQuery, type MediaUsage, type ProfitQuery, type Rarity } from "./content";
 import { useEventFilter } from "../context/EventFilterContext";
 import { and, inActiveEvents, listingSort, listingWhere, rule, type FilterValues, type QueryGroup } from "./query";
 
@@ -358,6 +358,19 @@ export function useUpdateGame(gameId: string) {
       Promise.all([
         client.invalidateQueries({ queryKey: ["games"] }),
         client.invalidateQueries({ predicate: (query) => query.queryKey[1] === gameId }),
+      ]),
+  });
+}
+
+/** Cria o jogo. Relê a lista de jogos e a conta atual, que passa a ser owner dele. */
+export function useCreateGame() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: (game: GameCreate) => gameApi.create(game),
+    onSuccess: () =>
+      Promise.all([
+        client.invalidateQueries({ queryKey: ["games"] }),
+        client.invalidateQueries({ queryKey: ["auth", "me"] }),
       ]),
   });
 }

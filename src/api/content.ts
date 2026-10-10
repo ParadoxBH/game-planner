@@ -637,6 +637,15 @@ export interface GameInfo {
 
 export type GameStatus = "draft" | "published" | "coming_soon";
 
+/** Jogo novo: nasce como rascunho, de leitura pública e escrita só de membros; o resto vem no PATCH. */
+export interface GameCreate {
+  /** 2 a 64 caracteres entre minúsculas, números, hífen ou sublinhado. Não muda depois. */
+  id: string;
+  name: string;
+  summary?: string;
+  description?: string;
+}
+
 export interface GamePatch {
   name?: string;
   summary?: string;
@@ -866,6 +875,11 @@ export const gameApi = {
 
   rarities(gameId: string, signal?: AbortSignal) {
     return apiRequest<Rarity[]>(`${gamePath(gameId)}/rarities`, { signal });
+  },
+
+  /** Cria o jogo; só platform_admin. Quem cria vira owner dele. */
+  create(game: GameCreate) {
+    return apiRequest<GameInfo>("/games", { method: "POST", body: game });
   },
 
   /** Dados, políticas e imagens do jogo; só owner. Campo ausente não muda; `media` presente substitui a lista toda. */
