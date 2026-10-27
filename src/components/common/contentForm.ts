@@ -37,9 +37,10 @@ export function describeError(error: unknown): string {
 }
 
 /**
- * Salvar de um formulário de conteúdo: cria ou substitui o documento e envia cada imagem escolhida,
- * anexando-a ao código no uso dela (ícone, miniatura, fundo de mapa...). Se uma imagem falha depois de criar, o registro já existe: `created` passa a
- * valer, e tentar de novo substitui em vez de criar outra vez.
+ * Salvar de um formulário de conteúdo: envia as imagens escolhidas, cria ou substitui o documento e
+ * liga cada imagem ao código no uso dela (ícone, miniatura, fundo de mapa...). O envio vem antes da
+ * gravação: se falha, nada foi criado e tentar de novo é limpo. Se a ligação falha depois de criar,
+ * o registro já existe: `created` passa a valer, e tentar de novo substitui em vez de criar outra vez.
  */
 export function useContentSave(gameId: string, resource: ContentResource, isNew: boolean) {
   const writes = useContentWrites(gameId, resource);
@@ -53,6 +54,23 @@ export function useContentSave(gameId: string, resource: ContentResource, isNew:
   const save = async (extId: string, document: object, images: ImageUpload[] = []): Promise<boolean> => {
     setSaving(true);
     setError(null);
+    const fail = (message: string) => {
+      setError(message);
+      setSaving(false);
+      return false;
+    };
+
+    const uploaded: { usage: MediaUsage; mediaId: string }[] = [];
+    try {
+      for (const image of images) {
+        if (!image.file) continue;
+        const result = await upload.mutateAsync({ file: image.file, large: image.large });
+        uploaded.push({ usage: image.usage, mediaId: result.media.id });
+      }
+    } catch (cause) {
+      return fail(`A imagem não foi enviada: ${describeError(cause)}`);
+    }
+
     try {
       if (creating) {
         await writes.create.mutateAsync(document);
@@ -61,29 +79,22 @@ export function useContentSave(gameId: string, resource: ContentResource, isNew:
         await writes.put.mutateAsync({ extId, document });
       }
     } catch (cause) {
-      setError(describeError(cause));
-      setSaving(false);
-      return false;
+      return fail(describeError(cause));
     }
-    for (const image of images) {
-      try {
-        for (const link of image.remove ?? []) {
-          await writes.removeMedia.mutateAsync({ extId, usage: link.usage, mediaId: link.mediaId });
-        }
-      } catch (cause) {
-        setError(`Salvo, mas a imagem não foi removida: ${describeError(cause)}`);
-        setSaving(false);
-        return false;
+
+    try {
+      for (const link of images.flatMap((image) => image.remove ?? [])) {
+        await writes.removeMedia.mutateAsync({ extId, usage: link.usage, mediaId: link.mediaId });
       }
-      if (!image.file) continue;
-      try {
-        const uploaded = await upload.mutateAsync({ file: image.file, large: image.large });
-        await writes.addMedia.mutateAsync({ extId, usage: image.usage, mediaId: uploaded.media.id });
-      } catch (cause) {
-        setError(`Salvo, mas a imagem não foi enviada: ${describeError(cause)}`);
-        setSaving(false);
-        return false;
+    } catch (cause) {
+      return fail(`Salvo, mas a imagem não foi removida: ${describeError(cause)}`);
+    }
+    try {
+      for (const link of uploaded) {
+        await writes.addMedia.mutateAsync({ extId, usage: link.usage, mediaId: link.mediaId });
       }
+    } catch (cause) {
+      return fail(`Salvo, mas a imagem não foi ligada ao registro: ${describeError(cause)}`);
     }
     setSaving(false);
     return true;

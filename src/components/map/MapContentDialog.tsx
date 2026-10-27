@@ -6,10 +6,12 @@ import {
   Chip,
   CircularProgress,
   Grid,
+  IconButton,
   InputAdornment,
   MenuItem,
   Stack,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { Add, Delete, Gesture, Place, Polyline } from "@mui/icons-material";
@@ -22,18 +24,37 @@ import {
   type ResolvedReference,
 } from "../../api/content";
 import { currentMedia } from "../../api/references";
-import { useContentDocument, useContentList, useContentWrites } from "../../api/useContent";
+import {
+  useContentDocument,
+  useContentList,
+  useContentWrites,
+} from "../../api/useContent";
 import { ApiContentSelector } from "../common/ApiContentSelector";
 import { ConfirmDeleteDialog } from "../common/ConfirmDeleteDialog";
 import { CodesField, type CodeOption } from "../common/CodesField";
-import { describeError, numberOf, slugOf, useContentSave } from "../common/contentForm";
+import { describeError, numberOf, useContentSave } from "../common/contentForm";
 import { FormSection, TargetRow } from "../common/formLayout";
-import { chanceIn, chanceOut, isChance, isLevel, isOptionalInteger, levelOut, move } from "../common/formValues";
+import {
+  chanceIn,
+  chanceOut,
+  isChance,
+  isLevel,
+  isOptionalInteger,
+  levelOut,
+  move,
+} from "../common/formValues";
 import { IconUploadField } from "../common/IconUploadField";
 import { StyledDialog } from "../common/StyledDialog";
 
 /** Tipos de local em uso nos jogos; o campo aceita um tipo novo digitado. */
-const LOCATION_TYPES = ["poi", "location", "biome", "region", "dungeon", "spawner"];
+const LOCATION_TYPES = [
+  "poi",
+  "location",
+  "biome",
+  "region",
+  "dungeon",
+  "spawner",
+];
 
 const LOCATION_TYPE_LABELS: Record<string, string> = {
   poi: "Ponto de interesse",
@@ -101,16 +122,33 @@ interface MapContentDialogProps {
 function geometryOf(wkt: string | null): DrawnGeometry | null {
   if (!wkt) return null;
   const isPoint = wkt.trim().toUpperCase().startsWith("POINT");
-  return { wkt, isPoint, vertices: isPoint ? 1 : (wkt.match(/,/g)?.length ?? 0) + 1 };
+  return {
+    wkt,
+    isPoint,
+    vertices: isPoint ? 1 : (wkt.match(/,/g)?.length ?? 0) + 1,
+  };
 }
 
 /**
  * Cadastro novo ou edição: editando, espera o documento chegar para nascer preenchido; a geometria é a
  * do registro, ou a do desenho novo quando se pede para redesenhar.
  */
-export function MapContentDialog({ gameId, mapId, geometry, edit, onClose, onSaved, onRedraw, canDelete = false }: MapContentDialogProps) {
+export function MapContentDialog({
+  gameId,
+  mapId,
+  geometry,
+  edit,
+  onClose,
+  onSaved,
+  onRedraw,
+  canDelete = false,
+}: MapContentDialogProps) {
   const resource = edit?.kind === "location" ? "locations" : "spawn-points";
-  const document = useContentDocument<SpawnPointDocument & LocationDocument>(gameId, resource, edit?.extId);
+  const document = useContentDocument<SpawnPointDocument & LocationDocument>(
+    gameId,
+    resource,
+    edit?.extId,
+  );
 
   if (!edit) {
     return (
@@ -126,9 +164,19 @@ export function MapContentDialog({ gameId, mapId, geometry, edit, onClose, onSav
   }
   if (document.isPending || !document.data) {
     return (
-      <StyledDialog open modal onClose={onClose} title="Abrindo..." maxWidth="sm">
+      <StyledDialog
+        open
+        modal
+        onClose={onClose}
+        title="Abrindo..."
+        maxWidth="sm"
+      >
         <Stack alignItems="center" sx={{ py: 6 }}>
-          {document.isError ? <Alert severity="error">{describeError(document.error)}</Alert> : <CircularProgress color="primary" />}
+          {document.isError ? (
+            <Alert severity="error">{describeError(document.error)}</Alert>
+          ) : (
+            <CircularProgress color="primary" />
+          )}
         </Stack>
       </StyledDialog>
     );
@@ -139,7 +187,10 @@ export function MapContentDialog({ gameId, mapId, geometry, edit, onClose, onSav
       gameId={gameId}
       mapId={mapId}
       // Redesenhando, vale o desenho novo; senão, a geometria gravada.
-      geometry={geometry ?? geometryOf(edit.kind === "spawn" ? saved.position : saved.area)}
+      geometry={
+        geometry ??
+        geometryOf(edit.kind === "spawn" ? saved.position : saved.area)
+      }
       edit={edit}
       saved={saved}
       onClose={onClose}
@@ -159,10 +210,21 @@ interface MapContentFormProps extends MapContentDialogProps {
  * geometria vem do desenho ou do que já estava gravado; aqui se escolhe o tipo e se preenchem os
  * dados. Área só pode ser local, porque ponto de spawn exige uma posição em ponto.
  */
-function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved, onRedraw, canDelete = false }: MapContentFormProps) {
-  const [kind, setKind] = useState<"spawn" | "location">(edit?.kind ?? (geometry?.isPoint ? "spawn" : "location"));
+function MapContentForm({
+  gameId,
+  mapId,
+  geometry,
+  edit,
+  saved,
+  onClose,
+  onSaved,
+  onRedraw,
+  canDelete = false,
+}: MapContentFormProps) {
+  const [kind, setKind] = useState<"spawn" | "location">(
+    edit?.kind ?? (geometry?.isPoint ? "spawn" : "location"),
+  );
   const [extId, setExtId] = useState(saved?.extId ?? "");
-  const [extIdTouched, setExtIdTouched] = useState(Boolean(saved));
   const [name, setName] = useState(saved?.name ?? "");
   const [summary, setSummary] = useState(saved?.summary ?? "");
   const [description, setDescription] = useState(saved?.description ?? "");
@@ -184,20 +246,36 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
     })),
   );
   const [respawnMode, setRespawnMode] = useState(saved?.respawnMode ?? "");
-  const [respawnDelay, setRespawnDelay] = useState(saved?.respawnDelayMinutes === null || saved?.respawnDelayMinutes === undefined ? "" : String(saved.respawnDelayMinutes));
-  const [location, setLocation] = useState<string | null>(saved?.location ?? null);
+  const [respawnDelay, setRespawnDelay] = useState(
+    saved?.respawnDelayMinutes === null ||
+      saved?.respawnDelayMinutes === undefined
+      ? ""
+      : String(saved.respawnDelayMinutes),
+  );
+  const [location, setLocation] = useState<string | null>(
+    saved?.location ?? null,
+  );
   // Local
-  const [locationType, setLocationType] = useState(saved?.locationType ?? (geometry?.isPoint ? "poi" : "region"));
+  const [locationType, setLocationType] = useState(
+    saved?.locationType ?? (geometry?.isPoint ? "poi" : "region"),
+  );
   const [parent, setParent] = useState<string | null>(saved?.parent ?? null);
   const [picking, setPicking] = useState<{ index: number | null } | null>(null);
-  // Fixado na abertura: o código sugerido não pode mudar a cada render.
-  const [stamp] = useState(() => Date.now());
+  // Código de quem deixa o campo vazio; fixado na abertura para que tentar salvar de novo, depois de
+  // uma falha no envio da imagem, substitua o mesmo registro em vez de criar outro.
+  const [randomId] = useState(() => crypto.randomUUID());
 
   const resource = kind === "spawn" ? "spawn-points" : "locations";
   const { save, saving, error } = useContentSave(gameId, resource, !edit);
   const { remove } = useContentWrites(gameId, resource);
-  const eventList = useContentList<EventDocument>(gameId, "events", { size: MAX_PAGE_SIZE, sort: "name" });
-  const locations = useContentList<LocationDocument>(gameId, "locations", { size: MAX_PAGE_SIZE, sort: "name" });
+  const eventList = useContentList<EventDocument>(gameId, "events", {
+    size: MAX_PAGE_SIZE,
+    sort: "name",
+  });
+  const locations = useContentList<LocationDocument>(gameId, "locations", {
+    size: MAX_PAGE_SIZE,
+    sort: "name",
+  });
 
   const eventOptions = useMemo<CodeOption[]>(
     () =>
@@ -209,20 +287,19 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
     [eventList.data],
   );
   const locationOptions = useMemo(
-    () => (locations.data?.content ?? []).filter((candidate) => candidate.map === null || candidate.map === mapId),
+    () =>
+      (locations.data?.content ?? []).filter(
+        (candidate) => candidate.map === null || candidate.map === mapId,
+      ),
     [locations.data, mapId],
   );
 
-  /** Código sugerido: pelo nome, pelo primeiro ocupante ou, sem os dois, pelo tipo e a hora. */
-  const suggestedExtId = () => {
-    if (name.trim()) return slugOf(name);
-    if (kind === "spawn" && occupants[0]) return `ponto_${slugOf(occupants[0].target.extId)}`;
-    return `${kind === "spawn" ? "ponto" : locationType}_${stamp}`;
-  };
-  const code = extIdTouched || extId ? extId : suggestedExtId();
-
   const updateOccupant = (index: number, changes: Partial<OccupantRow>) =>
-    setOccupants((current) => current.map((row, position) => (position === index ? { ...row, ...changes } : row)));
+    setOccupants((current) =>
+      current.map((row, position) =>
+        position === index ? { ...row, ...changes } : row,
+      ),
+    );
 
   const occupantsInvalid = occupants.some(
     (row) =>
@@ -230,15 +307,19 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
       !isOptionalInteger(row.amount) ||
       !isOptionalInteger(row.maxAmount) ||
       !isLevel(row.level) ||
-      (numberOf(row.maxAmount) !== null && (numberOf(row.maxAmount) ?? 0) < (numberOf(row.amount) ?? 0)),
+      (numberOf(row.maxAmount) !== null &&
+        (numberOf(row.maxAmount) ?? 0) < (numberOf(row.amount) ?? 0)),
   );
-  const delayInvalid = !isOptionalInteger(respawnDelay) || (numberOf(respawnDelay) ?? 0) < 0;
+  const delayInvalid =
+    !isOptionalInteger(respawnDelay) || (numberOf(respawnDelay) ?? 0) < 0;
   const valid =
-    code.trim() !== "" && (kind === "spawn" ? !occupantsInvalid && !delayInvalid : name.trim() !== "" && locationType.trim() !== "");
+    kind === "spawn"
+      ? !occupantsInvalid && !delayInvalid
+      : name.trim() !== "" && locationType.trim() !== "";
 
   const submit = async () => {
     if (!valid) return;
-    const id = code.trim();
+    const id = extId.trim() || randomId;
     const document =
       kind === "spawn"
         ? {
@@ -274,7 +355,9 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
             area: geometry?.wkt ?? null,
             events,
           };
-    const oldScreenshots = screenshotRemoved ? (saved?.media ?? []).filter((link) => link.usage === "screenshot") : [];
+    const oldScreenshots = screenshotRemoved
+      ? (saved?.media ?? []).filter((link) => link.usage === "screenshot")
+      : [];
     const ok = await save(id, document, [
       { file: icon, usage: "icon" },
       { file: screenshot, usage: "screenshot", remove: oldScreenshots },
@@ -287,8 +370,35 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
       open
       modal
       onClose={saving ? () => undefined : onClose}
-      title={edit ? `Editar ${name || extId}` : kind === "spawn" ? "Novo ponto de spawn" : "Novo local"}
-      maxWidth="sm"
+      title={edit ? "Editar" : "Novo"}
+      startIcon={geometry?.isPoint ? <Place /> : <Polyline />}
+      subTitle={
+        <Chip
+          size="small"
+          label={
+            !geometry
+              ? " Marcação não geometrica"
+              : geometry.isPoint
+                ? "Ponto no mapa"
+                : `Área com ${geometry.vertices} vértices`
+          }
+        />
+      }
+      headerActions={
+        edit &&
+        onRedraw && (
+          <Tooltip title={"Redesenhar"} placement="left">
+            <IconButton
+              size="small"
+              onClick={() => onRedraw(edit, kind === "spawn")}
+              sx={{ textTransform: "none", whiteSpace: "nowrap" }}
+            >
+              <Gesture />
+            </IconButton>
+          </Tooltip>
+        )
+      }
+      maxWidth="md"
       actions={
         <>
           {edit && canDelete && (
@@ -302,14 +412,22 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
               Apagar
             </Button>
           )}
-          <Button onClick={onClose} disabled={saving} sx={{ textTransform: "none" }}>
+          <Button
+            onClick={onClose}
+            disabled={saving}
+            sx={{ textTransform: "none" }}
+          >
             Cancelar
           </Button>
           <Button
             variant="contained"
             onClick={submit}
             disabled={!valid || saving}
-            startIcon={saving ? <CircularProgress size={16} color="inherit" /> : undefined}
+            startIcon={
+              saving ? (
+                <CircularProgress size={16} color="inherit" />
+              ) : undefined
+            }
             sx={{ textTransform: "none" }}
           >
             {edit ? "Salvar" : "Salvar no mapa"}
@@ -317,34 +435,14 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
         </>
       }
     >
-      <Stack spacing={2}>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Chip
-            icon={geometry?.isPoint ? <Place /> : <Polyline />}
-            label={!geometry ? "Sem geometria" : geometry.isPoint ? "Ponto no mapa" : `Área com ${geometry.vertices} vértices`}
-            color={geometry ? "primary" : "default"}
-            variant="outlined"
-          />
-          <Typography variant="caption" color="text.secondary" sx={{ flex: 1, fontFamily: "monospace", overflow: "hidden", textOverflow: "ellipsis" }}>
-            {geometry ? (geometry.wkt.length > 48 ? `${geometry.wkt.slice(0, 48)}…` : geometry.wkt) : "—"}
-          </Typography>
-          {edit && onRedraw && (
-            <Button
-              size="small"
-              startIcon={<Gesture />}
-              onClick={() => onRedraw(edit, kind === "spawn")}
-              sx={{ textTransform: "none", whiteSpace: "nowrap" }}
-            >
-              Redesenhar
-            </Button>
-          )}
-        </Stack>
-
+      <Stack spacing={1}>
         <TextField
           select
-          label="O que é"
+          label="Tipo"
           value={kind}
-          onChange={(event) => setKind(event.target.value as "spawn" | "location")}
+          onChange={(event) =>
+            setKind(event.target.value as "spawn" | "location")
+          }
           disabled={Boolean(edit)}
           helperText={
             edit
@@ -358,25 +456,35 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
           <MenuItem value="spawn" disabled={!geometry?.isPoint}>
             Ponto de spawn — o que aparece aqui
           </MenuItem>
-          <MenuItem value="location">Local — bioma, região, ponto de interesse</MenuItem>
+          <MenuItem value="location">
+            Local — bioma, região, ponto de interesse
+          </MenuItem>
         </TextField>
-
-        <IconUploadField
-          currentMediaId={saved ? currentMedia(saved.media, "icon") : null}
-          kind={kind === "spawn" ? "spawn_point" : "location"}
-          file={icon}
-          onChange={setIcon}
-        />
-        <IconUploadField
-          currentMediaId={saved && !screenshotRemoved ? currentMedia(saved.media, "screenshot") : null}
-          kind={kind === "spawn" ? "spawn_point" : "location"}
-          file={screenshot}
-          onChange={setScreenshot}
-          noun="imagem do local"
-          wide
-          onRemove={() => (screenshot ? setScreenshot(null) : setScreenshotRemoved(true))}
-        />
-
+        <Stack alignItems={"center"} spacing={1} direction={"row"} justifyContent={"space-between"}>
+          <IconUploadField
+            fullWidth
+            currentMediaId={saved ? currentMedia(saved.media, "icon") : null}
+            kind={kind === "spawn" ? "spawn_point" : "location"}
+            file={icon}
+            onChange={setIcon}
+          />
+          <IconUploadField
+            fullWidth
+            currentMediaId={
+              saved && !screenshotRemoved
+                ? currentMedia(saved.media, "screenshot")
+                : null
+            }
+            kind={kind === "spawn" ? "spawn_point" : "location"}
+            file={screenshot}
+            onChange={setScreenshot}
+            noun="imagem do local"
+            wide
+            onRemove={() =>
+              screenshot ? setScreenshot(null) : setScreenshotRemoved(true)
+            }
+          />
+        </Stack>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, sm: 6 }}>
             <TextField
@@ -385,21 +493,25 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
               onChange={(event) => setName(event.target.value)}
               required={kind === "location"}
               autoFocus
-              helperText={kind === "spawn" ? "Opcional: sem nome, vale o do primeiro ocupante." : undefined}
+              helperText={
+                kind === "spawn"
+                  ? "Opcional: sem nome, vale o do primeiro ocupante."
+                  : undefined
+              }
               fullWidth
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
             <TextField
               label="Código"
-              value={code}
-              onChange={(event) => {
-                setExtIdTouched(true);
-                setExtId(event.target.value);
-              }}
-              required
+              value={extId}
+              onChange={(event) => setExtId(event.target.value)}
               disabled={Boolean(edit)}
-              helperText={edit ? "O código não muda depois de criado." : "Identifica o registro; sugerido pelo nome."}
+              helperText={
+                edit
+                  ? "O código não muda depois de criado."
+                  : "Opcional: vazio, é gerado um código aleatório."
+              }
               fullWidth
               slotProps={{ htmlInput: { style: { fontFamily: "monospace" } } }}
             />
@@ -411,7 +523,12 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
             <FormSection
               title="Ocupantes"
               action={
-                <Button size="small" startIcon={<Add />} onClick={() => setPicking({ index: null })} sx={{ textTransform: "none" }}>
+                <Button
+                  size="small"
+                  startIcon={<Add />}
+                  onClick={() => setPicking({ index: null })}
+                  sx={{ textTransform: "none" }}
+                >
                   Adicionar
                 </Button>
               }
@@ -427,15 +544,29 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
                 gameId={gameId}
                 target={row.target}
                 onPick={() => setPicking({ index })}
-                onUp={index > 0 ? () => setOccupants(move(occupants, index, -1)) : undefined}
-                onDown={index < occupants.length - 1 ? () => setOccupants(move(occupants, index, 1)) : undefined}
-                onRemove={() => setOccupants(occupants.filter((_, position) => position !== index))}
+                onUp={
+                  index > 0
+                    ? () => setOccupants(move(occupants, index, -1))
+                    : undefined
+                }
+                onDown={
+                  index < occupants.length - 1
+                    ? () => setOccupants(move(occupants, index, 1))
+                    : undefined
+                }
+                onRemove={() =>
+                  setOccupants(
+                    occupants.filter((_, position) => position !== index),
+                  )
+                }
               >
                 <TextField
                   label="De"
                   size="small"
                   value={row.amount}
-                  onChange={(event) => updateOccupant(index, { amount: event.target.value })}
+                  onChange={(event) =>
+                    updateOccupant(index, { amount: event.target.value })
+                  }
                   error={!isOptionalInteger(row.amount)}
                   sx={{ width: 80 }}
                   slotProps={{ htmlInput: { inputMode: "decimal" } }}
@@ -444,7 +575,9 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
                   label="Até"
                   size="small"
                   value={row.maxAmount}
-                  onChange={(event) => updateOccupant(index, { maxAmount: event.target.value })}
+                  onChange={(event) =>
+                    updateOccupant(index, { maxAmount: event.target.value })
+                  }
                   error={!isOptionalInteger(row.maxAmount)}
                   sx={{ width: 80 }}
                   slotProps={{ htmlInput: { inputMode: "decimal" } }}
@@ -453,7 +586,9 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
                   label="Nível"
                   size="small"
                   value={row.level}
-                  onChange={(event) => updateOccupant(index, { level: event.target.value })}
+                  onChange={(event) =>
+                    updateOccupant(index, { level: event.target.value })
+                  }
                   error={!isLevel(row.level)}
                   placeholder="—"
                   sx={{ width: 90 }}
@@ -463,12 +598,18 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
                   label="Chance"
                   size="small"
                   value={row.chance}
-                  onChange={(event) => updateOccupant(index, { chance: event.target.value })}
+                  onChange={(event) =>
+                    updateOccupant(index, { chance: event.target.value })
+                  }
                   error={!isChance(row.chance)}
                   placeholder="100"
                   sx={{ width: 110 }}
                   slotProps={{
-                    input: { endAdornment: <InputAdornment position="end">%</InputAdornment> },
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">%</InputAdornment>
+                      ),
+                    },
                     htmlInput: { inputMode: "decimal" },
                   }}
                 />
@@ -478,7 +619,13 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
             <FormSection title="Respawn e local" />
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, sm: 4 }}>
-                <TextField select label="Modo" value={respawnMode} onChange={(event) => setRespawnMode(event.target.value)} fullWidth>
+                <TextField
+                  select
+                  label="Modo"
+                  value={respawnMode}
+                  onChange={(event) => setRespawnMode(event.target.value)}
+                  fullWidth
+                >
                   {RESPAWN_MODES.map((mode) => (
                     <MenuItem key={mode.value} value={mode.value}>
                       {mode.label}
@@ -493,10 +640,18 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
                   onChange={(event) => setRespawnDelay(event.target.value)}
                   error={delayInvalid}
                   disabled={respawnMode !== "respawn"}
-                  helperText={respawnMode === "respawn" ? "Minutos até voltar." : undefined}
+                  helperText={
+                    respawnMode === "respawn"
+                      ? "Minutos até voltar."
+                      : undefined
+                  }
                   fullWidth
                   slotProps={{
-                    input: { endAdornment: <InputAdornment position="end">min</InputAdornment> },
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">min</InputAdornment>
+                      ),
+                    },
                     htmlInput: { inputMode: "numeric" },
                   }}
                 />
@@ -527,13 +682,22 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
               <Autocomplete
                 freeSolo
                 options={LOCATION_TYPES}
-                getOptionLabel={(option) => LOCATION_TYPE_LABELS[option] ?? option}
+                getOptionLabel={(option) =>
+                  LOCATION_TYPE_LABELS[option] ?? option
+                }
                 value={locationType}
                 onChange={(_, value) => setLocationType(value ?? "")}
                 onInputChange={(_, value, reason) => {
                   if (reason === "input") setLocationType(value);
                 }}
-                renderInput={(params) => <TextField {...params} label="Tipo do local" required error={locationType.trim() === ""} />}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Tipo do local"
+                    required
+                    error={locationType.trim() === ""}
+                  />
+                )}
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
@@ -559,7 +723,12 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
         )}
 
         <FormSection title="Descrição e eventos" />
-        <TextField label="Resumo" value={summary} onChange={(event) => setSummary(event.target.value)} fullWidth />
+        <TextField
+          label="Resumo"
+          value={summary}
+          onChange={(event) => setSummary(event.target.value)}
+          fullWidth
+        />
         <TextField
           label="Descrição"
           value={description}
@@ -585,14 +754,16 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
           title={kind === "spawn" ? "Apagar ponto de spawn" : "Apagar local"}
           message={
             <>
-              Apagar <strong>{name || extId}</strong> (<code>{extId}</code>) do mapa? O último estado fica guardado como
-              revisão.
+              Apagar <strong>{name || extId}</strong> (<code>{extId}</code>) do
+              mapa? O último estado fica guardado como revisão.
             </>
           }
           pending={remove.isPending}
           error={remove.error}
           onClose={() => setDeleting(false)}
-          onConfirm={() => remove.mutate(extId, { onSuccess: () => onSaved(kind) })}
+          onConfirm={() =>
+            remove.mutate(extId, { onSuccess: () => onSaved(kind) })
+          }
         />
       )}
 
@@ -605,9 +776,24 @@ function MapContentForm({ gameId, mapId, geometry, edit, saved, onClose, onSaved
           title="Selecionar ocupante"
           onClose={() => setPicking(null)}
           onConfirm={(selection: ResolvedReference) => {
-            const target: Reference = { kind: selection.kind, extId: selection.extId };
-            if (picking.index !== null) updateOccupant(picking.index, { target });
-            else setOccupants((current) => [...current, { key: key(), target, chance: "", amount: "", maxAmount: "", level: "" }]);
+            const target: Reference = {
+              kind: selection.kind,
+              extId: selection.extId,
+            };
+            if (picking.index !== null)
+              updateOccupant(picking.index, { target });
+            else
+              setOccupants((current) => [
+                ...current,
+                {
+                  key: key(),
+                  target,
+                  chance: "",
+                  amount: "",
+                  maxAmount: "",
+                  level: "",
+                },
+              ]);
             setPicking(null);
           }}
         />

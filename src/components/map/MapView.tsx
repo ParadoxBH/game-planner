@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   Avatar,
@@ -6,6 +6,10 @@ import {
   Button,
   CircularProgress,
   IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
   Paper,
   Snackbar,
   Stack,
@@ -16,6 +20,8 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 import LaunchIcon from "@mui/icons-material/Launch";
 import MapIcon from "@mui/icons-material/Map";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -128,7 +134,14 @@ const DrawKeyboard = ({ onFinish, onCancel }: { onFinish: () => void; onCancel: 
   return null;
 };
 
-const MapEventsHandler = ({ onClick, onDoubleClick }: { onClick: (coords: [number, number]) => void; onDoubleClick: () => void }) => {
+interface MapEventsHandlerProps {
+  onClick: (coords: [number, number]) => void;
+  onDoubleClick: () => void;
+  /** Botão direito: a posição no mapa e o ponto da tela, para abrir o menu ali. */
+  onContextMenu: (coords: [number, number], screen: { left: number; top: number }) => void;
+}
+
+const MapEventsHandler = ({ onClick, onDoubleClick, onContextMenu }: MapEventsHandlerProps) => {
   useMapEvents({
     click(event) {
       if (!event.originalEvent.shiftKey) onClick([event.latlng.lat, event.latlng.lng]);
@@ -136,9 +149,21 @@ const MapEventsHandler = ({ onClick, onDoubleClick }: { onClick: (coords: [numbe
     dblclick() {
       onDoubleClick();
     },
+    // Chega aqui também quando o clique é sobre um polígono ou marcador: o evento sobe até o mapa.
+    contextmenu(event) {
+      event.originalEvent.preventDefault();
+      onContextMenu([event.latlng.lat, event.latlng.lng], { left: event.originalEvent.clientX, top: event.originalEvent.clientY });
+    },
   });
   return null;
 };
+
+/** Valores de cada filtro do mapa, para perceber o que surgiu depois de um cadastro. */
+interface KnownFilters {
+  types: Set<string>;
+  categories: Set<string>;
+  entities: Set<string>;
+}
 
 interface StableMarkerProps {
   position: [number, number];
@@ -304,6 +329,9 @@ export const MapView = () => {
   const [hideCollected, setHideCollected] = useState(false);
   const [collectedPoints, setCollectedPoints] = useStoredState<Record<string, number>>(`collected_points_${gameId}`, {});
   const [now, setNow] = useState(Date.now());
+  // Menu do botão direito: onde foi no mapa e onde abrir na tela.
+  const [contextMenu, setContextMenu] = useState<{ latlng: [number, number]; screen: { left: number; top: number } } | null>(null);
+  const knownFilters = useRef<KnownFilters | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => setNow(Date.now()), 60_000);
@@ -393,7 +421,29 @@ export const MapView = () => {
     setVisibleCategories(defaults.categories.length > 0 ? defaults.categories : stats.categories.map(([category]) => category));
     setVisibleEntities([...entities]);
     setFiltersFor(selectedMap.extId);
+    knownFilters.current = null;
   }, [selectedMap, markers.data, locations.data, urlFiltered, filtersFor, stats]);
+
+  // O que surge depois dos filtros de partida (entidade, categoria ou tipo de local de um cadastro
+  // novo) já entra visível; senão o que acabou de ser salvo fica escondido pelo filtro.
+  useEffect(() => {
+    if (!selectedMap || filtersFor !== selectedMap.extId) return;
+    const current: KnownFilters = {
+      types: new Set(stats.types.map(([type]) => type)),
+      categories: new Set(stats.categories.map(([category]) => category)),
+      entities: new Set(stats.categories.flatMap(([, data]) => Object.keys(data.entities))),
+    };
+    const known = knownFilters.current;
+    knownFilters.current = current;
+    if (!known) return;
+    const added = (key: keyof KnownFilters) => [...current[key]].filter((value) => !known[key].has(value));
+    const types = added("types");
+    const newCategories = added("categories");
+    const entities = added("entities");
+    if (types.length) setVisibleTypes((visible) => [...visible, ...types]);
+    if (newCategories.length) setVisibleCategories((visible) => [...visible, ...newCategories]);
+    if (entities.length) setVisibleEntities((visible) => [...visible, ...entities]);
+  }, [selectedMap, filtersFor, stats]);
 
   const pushNavigation = useCallback((item: NavigationItem) => setNavigationStack((stack) => [...stack, item]), []);
 
@@ -618,6 +668,16 @@ export const MapView = () => {
     else if (activeTool === "point") finishDrawing({ wkt: formatWKTPoint(toGame(latlng)), isPoint: true, vertices: 1 });
   };
 
+  const copyCoordinates = async (latlng: [number, number]) => {
+    const text = toGame(latlng).map((value) => value.toFixed(1)).join(", ");
+    try {
+      await navigator.clipboard.writeText(text);
+      setSnackbar(`Coordenada copiada: ${text}`);
+    } catch {
+      setSnackbar("Não foi possível copiar a coordenada.");
+    }
+  };
+
   const clearUrlFilter = (param: string) => {
     const next = new URLSearchParams(searchParams);
     next.delete(param);
@@ -626,7 +686,17 @@ export const MapView = () => {
 
   return (
     <Box sx={{ width: "100%", height: "100%", backgroundColor: "#0b0b0b", position: "relative", overflow: "hidden" }}>
-      <Box sx={{ flexGrow: 1, position: "relative", height: "100%", "& .leaflet-top": { top: "39px", transition: "top 0.3s ease-in-out" } }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          position: "relative",
+          height: "100%",
+          "& .leaflet-top": { top: "39px", transition: "top 0.3s ease-in-out" },
+          // Desenhando, marcadores e áreas não recebem clique: ele vai para o mapa e vira vértice ou ponto.
+          // O `interactive` das camadas só vale quando elas são criadas, por isso é CSS.
+          ...(activeTool && { "& .leaflet-container .leaflet-interactive": { pointerEvents: "none !important" } }),
+        }}
+      >
         {viewMode === "map" ? (
           <>
             {availableViews.length > 1 && (
@@ -672,7 +742,13 @@ export const MapView = () => {
             >
               <Pane name="locationLabels" style={{ zIndex: 500 }} />
               <CursorTracker onMouseMove={setCursorCoords} onZoom={setZoom} />
-              <MapEventsHandler onClick={handleMapClick} onDoubleClick={finishPolygon} />
+              <MapEventsHandler
+                onClick={handleMapClick}
+                onDoubleClick={finishPolygon}
+                onContextMenu={(latlng, screen) => {
+                  if (!activeTool) setContextMenu({ latlng, screen });
+                }}
+              />
               {activeTool === "polygon" && (
                 <DrawKeyboard
                   onFinish={finishPolygon}
@@ -747,7 +823,7 @@ export const MapView = () => {
 
               {locationElements}
               {markerElements}
-                          </MapContainer>
+            </MapContainer>
             <MapFilterDrawer
               stats={stats}
               categoryNames={categoryNames}
@@ -877,6 +953,48 @@ export const MapView = () => {
           </Box>
         </Box>
       )}
+
+      <Menu
+        open={contextMenu !== null}
+        onClose={() => setContextMenu(null)}
+        anchorReference="anchorPosition"
+        anchorPosition={contextMenu?.screen}
+        onContextMenu={(event) => {
+          event.preventDefault();
+          setContextMenu(null);
+        }}
+      >
+        <MenuItem
+          onClick={() => {
+            if (contextMenu) copyCoordinates(contextMenu.latlng);
+            setContextMenu(null);
+          }}
+        >
+          <ListItemIcon>
+            <ContentCopyIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText
+            primary="Copiar coordenada"
+            secondary={contextMenu ? toGame(contextMenu.latlng).map((value) => value.toFixed(1)).join(", ") : undefined}
+          />
+        </MenuItem>
+        {canEdit && (
+          <MenuItem
+            onClick={() => {
+              if (contextMenu) {
+                setEditing(null);
+                setDrawn({ wkt: formatWKTPoint(toGame(contextMenu.latlng)), isPoint: true, vertices: 1 });
+              }
+              setContextMenu(null);
+            }}
+          >
+            <ListItemIcon>
+              <AddLocationAltIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Adicionar waypoint" />
+          </MenuItem>
+        )}
+      </Menu>
 
       {isEditingMap && selectedMap && (
         <MapFormDialog
